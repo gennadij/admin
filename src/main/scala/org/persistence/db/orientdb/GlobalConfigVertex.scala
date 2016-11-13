@@ -33,8 +33,4 @@ object GlobalConfigVertex {
       new WarningStatus("class Step already exist", "")
     }
   }
-  
-  
-  
-  
 }
