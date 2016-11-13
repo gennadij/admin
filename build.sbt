@@ -43,7 +43,7 @@ lazy val commonSettings = Seq(
 lazy val root = (project in file(".")).
 	settings(commonSettings: _*).
 	settings(
-		name := "configurator",
+		name := "admin",
 		libraryDependencies ++= Seq(
 		  xml
       ,orientdbCore
