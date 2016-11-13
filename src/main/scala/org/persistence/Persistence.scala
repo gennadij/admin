@@ -182,13 +182,13 @@ object Persistence {
   }
   
 //  def setStep(adminId: String, isConnected: Boolean, step: Step, kind: String) = {
-//    
-//    
-//    
-////    val vStep = new VertexStep(
-////        step.id, step.nameToShow, step.fatherStep, step.nextStep,
-////        step.components, step.dependencies)
-//    
+    
+    
+    
+//    val vStep = new VertexStep(
+//        step.id, step.nameToShow, step.fatherStep, step.nextStep,
+//        step.components, step.dependencies)
+    
 //    /**
 //     * 1. Erstelle die Schema 
 //     * 		Vertex -> Step, Component 
@@ -268,9 +268,9 @@ object Persistence {
 //    
 //    new SuccessfulStatus("Step created", "")
 //  }
-  
-  
-  
+//  
+//  
+//  
 //  def getPersisitence = {
 //    val configSetting = scala.xml.XML.loadFile("persistence/config_settings.xml")
 //    
@@ -282,5 +282,4 @@ object Persistence {
 //    
 //    new ConfigSetting("", configTree.text.toString(), rule.text.toString(), "presentation")
 //  }
-//}
 }

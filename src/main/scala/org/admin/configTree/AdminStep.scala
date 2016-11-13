@@ -11,4 +11,8 @@ case class AdminStep (
   //first, default, final
   ,kind: String
 //  ,selectionCriterium: SelectionCriterium
-                )
+)
+
+object AdminStep {
+  implicit val format = Json.format[AdminStep]
+}

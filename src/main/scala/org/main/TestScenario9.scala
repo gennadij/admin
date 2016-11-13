@@ -14,26 +14,56 @@ import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery
 import com.orientechnologies.orient.core.record.impl.ODocument
 import org.admin.configTree.AdminNextStep
 import play.api.libs.json._
+import org.admin.AdminWeb
 
-class TestScenario9 {
+class TestScenario9 extends AdminWeb{
+  
+  
   
   def scenario9_1() = {
     
-    val json = Json.obj("hello" -> "world", "age" -> 42)
-    println(json)
-    println((json \ "hello").as[String])
+    //Server ---->> Client
+    //Server liefert die Webseite zum Anmelden oder Registrieren
     
+    //Server <<---- Client
+    //Client liefert Username und Password
+    val userNamePasswordJson = Json.obj(
+        "jsonId" -> 2, 
+        "method" -> "autheticate"
+        ,"params" -> Json.obj(
+             "username" -> "test8", 
+             "password" -> "test8"))
     
-//    val formatToJson = Json.format[AdminStep]
+    //Server ---->> Client
+    val userAdminJson: JsValue = handelMessage(userNamePasswordJson)
+    println("Server ---->> Client == " + userAdminJson)
     
+    //Server <<---- Client
+    // get current ConfigTree
     
-    
+    val configTreeJsonClient1 = Json.obj(
+        "jsonId" -> 3,
+        "method" -> "configTree"
+        ,"params"-> Json.obj(
+            "adminId" -> (userAdminJson \ "result" \ "id").toString(), 
+            "authentication" -> true))
+
+     //Server ---->> Client
+     val configTreeJsonServer1 = handelMessage(configTreeJsonClient1)    
+  }
+  
+  
+  def scenario9_2() = {
     configTree()
   }
   
+  
+  
+
+  
   def configTree() = {
     
-    val idPassword = "test8"
+    val idPassword = "test3"
 //    val register = Admin.register(idPassword, idPassword)
     
     val adminId: String = Admin.authenticate(idPassword, idPassword)
@@ -52,6 +82,8 @@ class TestScenario9 {
         println(c)
       })
     })
+    
+    println(Json.toJson(configTree))
     
     //TODO überlegen ob der aktuelle Element aktualisiert wird oder gesamte ConfigTree
 

@@ -6,8 +6,6 @@
 package org.admin
 
 import scala.xml._
-import org.admin.persistence.xml.ConfigID
-import org.admin.persistence.AdminId
 import org.status.Status
 import org.status.SuccessfulStatus
 import org.status.ErrorStatus
@@ -19,7 +17,6 @@ import org.admin.configTree.AdminComponent
 import org.admin.configTree.AdminNextStep
 import play.api.libs.json.Writes
 import play.api.libs.json.Json
-import org.admin.configTree.AdminConfigTreeStep
 
 
 
@@ -167,7 +164,7 @@ object Admin {
    *  - update
    */
   
-  def updateConfig(adminId: String, step: AdminConfigTreeStep, action: String): List[AdminConfigTreeStep] = ???
+//  def updateConfig(adminId: String, step: Step, action: String): List[Step] = ???
   
   def logout(adminId: String): Boolean = ???
   
@@ -203,17 +200,17 @@ object Admin {
    *        -> false --> adminId existiert nicht, Falsches Password
    */
   
-//  def connect(username: String, password: String): Status = {
+  def connect(username: String, password: String): Status = {
+    
+//    val admins: Seq[AdminId] = InterfaceAdminPersistence.admin(adminId, password)
 //    
-////    val admins: Seq[AdminId] = InterfaceAdminPersistence.admin(adminId, password)
-////    
-////    findAndCheckAdmin(adminId, password, admins)
-//    val adminId = AdminUserVertex.adminId(username, password)
-//    
-//    if (adminId == "") new WarningStatus("The User with thisusername and password not exist", "")
-//      else new SuccessfulStatus(s"user with id = $adminId is logged", "")
-//  }
-//  
+//    findAndCheckAdmin(adminId, password, admins)
+    val adminId = AdminUserVertex.adminId(username, password)
+    
+    if (adminId == "") new WarningStatus("The User with thisusername and password not exist", "")
+      else new SuccessfulStatus(s"user with id = $adminId is logged", "")
+  }
+  
 //  def findAndCheckAdmin(adminId: String, password: String, admins: Seq[AdminId]): Status = {
 //    
 //    if(admins.exists { admin => admin.adminId == adminId && admin.password == password })
