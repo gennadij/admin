@@ -87,15 +87,27 @@ trait AdminWeb {
    */
   
   def handelMessage(receivedMessage: JsValue): JsValue = {
-    (receivedMessage \ "method").toString() match {
-      case "autheticate" => autheticate(receivedMessage)
-      case "addFirstStep" => addFirstStep(receivedMessage)
-      case "configTree" => configTree(receivedMessage)
-      case "addComponent" => addComponent(receivedMessage)
-      case "addNextStep" => addNextStep(receivedMessage)
+    (receivedMessage \ "method").asOpt[String] match {
+      case Some("register") => register(receivedMessage)
+      case Some("autheticate") => autheticate(receivedMessage)
+      case Some("addFirstStep") => addFirstStep(receivedMessage)
+      case Some("configTree") => configTree(receivedMessage)
+      case Some("addComponent") => addComponent(receivedMessage)
+      case Some("addNextStep") => addNextStep(receivedMessage)
     }
   }
-  
+
+  private def register(receivedMessage: JsValue): JsValue = {
+    val admin = Admin.register((receivedMessage \ "params" \ "username").asOpt[String].get,
+      (receivedMessage \ "params" \ "username").asOpt[String].get)
+    Json.obj(
+      "jsonId" -> 1,
+      "method" -> "register"
+      ,"result"-> Json.toJson(admin)
+    )
+
+  }
+
   private def autheticate(receivedMessage: JsValue): JsValue = {
     val username = (receivedMessage \ "username").toString()
     val password = (receivedMessage \ "password").toString()

@@ -31,17 +31,9 @@ object AdminUserVertex {
       new AdminUser("AU" + vAdminUser.getIdentity.toString(), 
                     vAdminUser.getProperty(propKeyAdminUsername).toString(), 
                     vAdminUser.getProperty(propKeyAdminUserPassword).toString(),
-                    true
-//                    "object AdminUser with username " + 
-//                    vAdminUser.getProperty(propKeyAdminUsername).toString() + 
-//                    " und AdminUserId " + "AU" + vAdminUser.getIdentity.toString() +  
-//                    " was created"
-                    )
-//      new SuccessfulStatus("object AdminUser with " + adminUsername + " was created")
+                    true)
     }else{
-      new AdminUser("", "", "", true)
-//      new AdminUser("", "", "", "object AdminUser with Username " + adminUsername + " already exist")
-//      new WarningStatus("object AdminUser with " + adminUsername + " already exist")
+      new AdminUser("", "", "", false)
     }
   }
 
