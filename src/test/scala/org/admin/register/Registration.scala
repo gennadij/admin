@@ -14,12 +14,15 @@ class Registration extends Specification with AdminWeb{
           adminId                                                              $e3
           username                                                             $e4
           authentication                                                       $e5
-       Specification fuer die Pruefung der Registrierung nicht exestierenden Admin
+       Specification fuer die Registrierung nicht exestierenden / neuen Admins
+       Regestrierung
           jsonId                                                               $e6
           method                                                               $e7
           adminId                                                              $e8
           username                                                             $e9
           authentication                                                       $e10
+       Authentifizierung diesen neue angelegten User
+          jsonId                                                               $e11
     """
 
   val jsonClientServer1 = Json.obj(
@@ -41,18 +44,20 @@ class Registration extends Specification with AdminWeb{
   def e5 = (jsonServerClient1 \ "result" \ "authentication").asOpt[Boolean].get must_== false
 
 //  ================================================================
-
+  /*
+  Regestriere neuen User
+   */
   val random = scala.util.Random
 
   val randomUserPasword = random.nextInt(1000)
-  val userPassword = "test" + randomUserPasword
+  val usernamePassword = "test" + randomUserPasword
 
   val jsonClientServer2 = Json.obj(
     "jsonId" -> 1,
     "method" -> "register"
     ,"params" -> Json.obj(
-      "username" -> userPassword,
-      "password"-> userPassword))
+      "username" -> usernamePassword,
+      "password"-> usernamePassword))
 
 
   val jsonServerClient2 = handelMessage(jsonClientServer2)
@@ -61,16 +66,19 @@ class Registration extends Specification with AdminWeb{
 
   def e6 = (jsonServerClient2 \ "jsonId").asOpt[Int].get must_== 1
   def e7 = (jsonServerClient2 \ "method").asOpt[String].get must_== "register"
-  def e8 = (jsonServerClient2 \ "result" \ "username").asOpt[String] must_== Some(userPassword)
+  def e8 = (jsonServerClient2 \ "result" \ "username").asOpt[String] must_== Some(usernamePassword)
   def e9 = (jsonServerClient2 \ "result" \ "authentication").asOpt[Boolean].get must_== true
 
+  /*
+  Authentifizierung des neu angelegten Adminuser über Loginseite
+   */
 //  {"jsonId": 2, "method": "autheticate", params: {"username": "test", "password": "test"}}
   val jsonClientServer3 = Json.obj(
     "jsonId" -> 2,
     "method" -> "autheticate"
     ,"params" -> Json.obj(
-      "username" -> "",
-      "password" -> ""
+      "username" -> usernamePassword,
+      "password" -> usernamePassword
     )
   )
 //  {"jsonId": 2, "method": "autheticate", result: {"id": "AU#40:0", "username": "test", "authentication": true}}
