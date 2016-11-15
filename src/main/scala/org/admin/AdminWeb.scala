@@ -94,6 +94,7 @@ trait AdminWeb {
       case Some("configTree") => configTree(receivedMessage)
       case Some("addComponent") => addComponent(receivedMessage)
       case Some("addNextStep") => addNextStep(receivedMessage)
+      case _ => Json.obj("error" -> "keinen Treffer")
     }
   }
 
@@ -109,11 +110,12 @@ trait AdminWeb {
   }
 
   private def autheticate(receivedMessage: JsValue): JsValue = {
-    val username = (receivedMessage \ "username").toString()
-    val password = (receivedMessage \ "password").toString()
+    val username = (receivedMessage \ "params" \"username").asOpt[String].get
+    val password = (receivedMessage \ "params" \ "password").asOpt[String].get
     val adminId = Admin.authenticate(username, password)
     //TODO impl autentification
     val adminUser = new AdminUser(adminId, username, password, true)
+    println(adminUser)
     Json.obj(
         "jsonId"-> 2, 
         "method" -> "autheticate"

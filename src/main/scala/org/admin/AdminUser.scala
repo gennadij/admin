@@ -7,8 +7,8 @@ package org.admin
 
 import play.api.libs.json.Json
 
-case class AdminUser(  id: String,
-                       name: String,
+case class AdminUser(  adminId: String,
+                       username: String,
                        password: String,
                        authentication: Boolean)        //exist, not exist
 
