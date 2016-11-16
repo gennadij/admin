@@ -14,6 +14,9 @@
 		2. Administrator erzeugt eine Connection Pfad für die Client.
 		3. Der Client durch diesen Connection-Pfad connected mit dem Configuration.
 		4. Wenn XMLClient Datei vorhanden,  die Erzeugung neuen Clint nicht notwendig
+-- Admin unter PLay laufen lassen
+		https://www.playframework.com/documentation/2.5.x/HTTPServer
+		https://www.playframework.com/documentation/2.5.x/Deploying
 
 -spätere ToDos
 -- alle Überprüfungen in eine Methode zusammenführen
