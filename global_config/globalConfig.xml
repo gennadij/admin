@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<globalConfig>
+	<db>
+		<dbName>test</dbName>
+		<username>root</username>
+		<password>root</password>
+	</db>
+</globalConfig>
