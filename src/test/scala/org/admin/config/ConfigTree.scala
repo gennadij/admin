@@ -38,7 +38,7 @@ class ConfigTree extends Specification{
   )
 //  {"jsonId": 2, "method": "autheticate", result: {"id": "AU#40:0", "username": "test", "authentication": true}}
 //  val jsonServerClient3 = handelMessage(jsonClientServer3)
-  def e1 = (autentificationClientServer \ "jsonId").asOpt[Int] must_== Some(2)
+//  def e1 = (autentificationClientServer \ "jsonId").asOpt[Int] must_== Some(2)
 //  def e11 = (jsonServerClient3 \ "method").asOpt[String] must_== Some("autheticate")
 //  def e12 = (jsonServerClient3 \ "result" \ "adminId").asOpt[String].get must_==
 //    (jsonServerClient2 \ "result" \ "adminId").asOpt[String].get

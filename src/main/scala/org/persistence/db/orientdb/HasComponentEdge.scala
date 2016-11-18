@@ -13,6 +13,7 @@ import org.status.SuccessfulStatus
 import org.status.WarningStatus
 import com.tinkerpop.blueprints.impls.orient.OrientEdge
 import org.status.Status
+import org.persistence.DBKind
 
 object HasComponentEdge {
   

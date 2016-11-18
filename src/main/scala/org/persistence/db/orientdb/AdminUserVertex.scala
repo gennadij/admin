@@ -12,6 +12,7 @@ import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.admin.AdminUser
+import org.persistence.DBKind
 
 object AdminUserVertex {
   
@@ -22,7 +23,7 @@ object AdminUserVertex {
   
   def create(adminUsername: String, adminUserPassword: String): AdminUser = {
     // TODO impl status autentifications
-    val graph: OrientGraph = OrientDB.getGraph()
+    val graph: OrientGraph = OrientDB.getGraph
     if(graph.getVertices(propKeyAdminUsername, adminUsername).size == 0){
       val vAdminUser: OrientVertex = graph.addVertex(s"class:$className",
                       propKeyAdminUsername, adminUsername, 

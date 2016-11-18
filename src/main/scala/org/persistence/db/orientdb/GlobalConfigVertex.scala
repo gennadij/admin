@@ -7,6 +7,7 @@ import org.status.SuccessfulStatus
 import org.status.WarningStatus
 import com.tinkerpop.blueprints.impls.orient.OrientVertexType
 import com.orientechnologies.orient.core.metadata.schema.OType
+import org.persistence.DBKind
 
 object GlobalConfigVertex {
   

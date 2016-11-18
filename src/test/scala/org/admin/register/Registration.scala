@@ -28,7 +28,7 @@ class Registration extends Specification with AdminWeb{
           authentication                                                       $e14
           
     """
-
+//TODO wenn der User nicht existiert wird OrientDB immer einen neuen angelegen -> das verhindern
   val jsonClientServer1 = Json.obj(
       "jsonId" -> 1,
       "method" -> "register"
