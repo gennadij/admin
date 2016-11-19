@@ -41,7 +41,7 @@ object OrientDB {
     factory.getTx()
   }
 }
-
+  
 case class DB (
     kind: String,
     dbName: String,
