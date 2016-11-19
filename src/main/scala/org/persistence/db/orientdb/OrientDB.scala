@@ -36,13 +36,4 @@ object OrientDB {
     val factory:  OrientGraphFactory = new OrientGraphFactory(uri, username, password)
     factory.getTx()
   }
-  
-  
-  private def getDBConfig = {
-    val xmlDBConfig = scala.xml.XML.loadFile("global_config/globalConfig.xml")
-    
-    val dbName = (xmlDBConfig \ "globalConfig" \ "db" \ "dbName").text
-    val username = (xmlDBConfig \ "globalConfig" \ "db" \ "username").text
-    val password = (xmlDBConfig \ "globalConfig" \ "db" \ "password").text
-  }
 }
