@@ -12,14 +12,13 @@ import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.admin.AdminUser
-import org.persistence.DBKind
 
 object AdminUserVertex {
   
   val className = "AdminUser"
   val propKeyAdminId = "adminId"
   val propKeyAdminUsername = "username"
-  val propKeyAdminUserPassword = "userPassword"
+  val propKeyAdminUserPassword = "password"
   
   def create(adminUsername: String, adminUserPassword: String): AdminUser = {
     // TODO impl status autentifications
@@ -52,7 +51,7 @@ object AdminUserVertex {
   def adminId(username: String, adminPassword: String): String = {
     val graph: OrientGraph = OrientDB.getGraph
     val res: OrientDynaElementIterable = graph
-      .command(new OCommandSQL(s"SELECT FROM AdminUser WHERE username='$username' and userPassword='$adminPassword'")).execute()
+      .command(new OCommandSQL(s"SELECT FROM AdminUser WHERE username='$username' and password='$adminPassword'")).execute()
     val adminId = res.toList.map(_.asInstanceOf[OrientVertex].getIdentity)
 //      val vAdminUsers: List[OrientVertex] = res.toList.map(_.asInstanceOf[OrientVertex])
 //      if(vAdminUsers.length == 1) {

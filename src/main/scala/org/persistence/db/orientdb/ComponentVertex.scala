@@ -12,7 +12,6 @@ import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.admin.configTree.AdminComponent
 import org.status.Status
-import org.persistence.DBKind
 
 object ComponentVertex {
   

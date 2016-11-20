@@ -13,7 +13,6 @@ import org.admin.configTree.AdminStep
 import org.admin.configTree.AdminConfigTreeStep
 import org.status.Status
 import org.admin.configTree.AdminNextStep
-import org.persistence.DBKind
 
 
 object StepVertex {
