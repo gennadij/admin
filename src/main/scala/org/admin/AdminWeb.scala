@@ -7,6 +7,8 @@ import org.admin.configTree.AdminComponent
 import org.persistence.db.orientdb.AdminUserVertex
 import org.admin.configTree.AdminConfigTree
 import org.admin.configTree.AdminConfigTreeStep
+import org.dto.ClientServer.register.Register
+
 import scala.collection.immutable.Seq
 
 trait AdminWeb {
@@ -99,6 +101,16 @@ trait AdminWeb {
   }
 
   private def register(receivedMessage: JsValue): JsValue = {
+
+    val jsResultRegister: JsResult[Register] = Json.fromJson[Register](receivedMessage)
+
+//    val dtoRegister: Register = jsResultRegister match {
+//      case e: JsSuccess[Register] => jsResultRegister.get
+//      case error: JsError => jsResultRegister.get
+//    }
+
+    println("DTO    " + jsResultRegister)
+
     val admin = Admin.register((receivedMessage \ "params" \ "username").asOpt[String].get,
       (receivedMessage \ "params" \ "username").asOpt[String].get)
     Json.obj(
