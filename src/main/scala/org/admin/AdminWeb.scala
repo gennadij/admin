@@ -11,7 +11,7 @@ import scala.collection.immutable.Seq
 
 trait AdminWeb {
   
-  
+  //TODO Objekte für Transport erzeugen
   /**
    * 1. register => register Admin
    *   Server <- Client
@@ -124,12 +124,12 @@ trait AdminWeb {
   private def addFirstStep(receivedMessage: JsValue): JsValue = {
     //TODO impl Reads with validation show 
     // https://www.playframework.com/documentation/2.4.x/ScalaJsonCombinators
-    val adminId = (receivedMessage \ "adminId").toString()
-    val kind = (receivedMessage \ "kind").toString()
+    val adminId = (receivedMessage \ "params" \ "adminId").asOpt[String].get
+    val kind = (receivedMessage \ "params" \ "kind").asOpt[String].get
     val step = Admin.addStep(new AdminStep("", "", adminId, kind))
     Json.obj(
-        "jsonId"-> 2, 
-        "method" -> "autheticate"
+        "jsonId"-> 4,
+        "method" -> "addFirstStep"
         ,"result" -> Json.toJson(step)
         )
   }

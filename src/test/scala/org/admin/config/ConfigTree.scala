@@ -10,11 +10,12 @@ import play.api.libs.json.{JsValue, Json}
 class ConfigTree extends Specification with AdminWeb{
 
   def is = s2"""
-    Diese Specification prueft die §rzeugung eines neuen Steps
+    Diese Specification prueft die Erzeugung eines neuen Steps
       autentification                                   $e1
       jsonId                                            $e2
       method                                            $e3
-      result                                            $e4
+      adminId                                           $e4
+      kind                                              $e5
     """
 
 
@@ -27,25 +28,25 @@ class ConfigTree extends Specification with AdminWeb{
     )
   )
 
-  val autentificationServerServer = handelMessage(autentificationClientServer)
-  def e1 = (autentificationServerServer \ "result" \ "authentication").asOpt[Boolean].get === true
+  val autentificationServerClient = handelMessage(autentificationClientServer)
+  def e1 = (autentificationServerClient \ "result" \ "authentication").asOpt[Boolean].get === true
 
-  val configTreeClientServer = Json.obj(
-    "jsonId" -> 3,
-    "method" -> "configTree"
+  val firstStepConfigTreeClientServer = Json.obj(
+    "jsonId" -> 4,
+    "method" -> "addFirstStep"
     ,"params" -> Json.obj(
-      "adminId" -> (autentificationServerServer \ "result" \ "adminId").asOpt[String].get,
-      "authentication" -> (autentificationServerServer \ "result" \ "authentication").asOpt[Boolean].get
+      "adminId" -> (autentificationServerClient \ "result" \ "adminId").asOpt[String].get,
+      "kind" -> "immutable"
     )
   )
 
-  val configTreeServerClient = handelMessage(configTreeClientServer)
-  println(configTreeServerClient)
-  def e2 = (configTreeServerClient \ "jsonId").asOpt[Int].get === 3
-  def e3 = (configTreeServerClient \ "method").asOpt[String].get === "configTree"
-  def e4 = (configTreeServerClient \ "result" \ "steps").asOpt[List[JsValue]].get === List.empty
+  val firstStepConfigTreeServerClient = handelMessage(firstStepConfigTreeClientServer)
 
-  val firstStepConfigTree = Json.obj(
+  println(firstStepConfigTreeServerClient)
 
-  )
+  def e2 = (firstStepConfigTreeServerClient \ "jsonId").asOpt[Int].get === 4
+  def e3 = (firstStepConfigTreeServerClient \ "method").asOpt[String].get === "addFirstStep"
+  def e4 = (firstStepConfigTreeServerClient \ "result" \ "adminId").asOpt[String].get ===
+    (autentificationServerClient \ "result" \ "adminId").asOpt[String].get
+  def e5 = (firstStepConfigTreeServerClient \ "result" \ "kind").asOpt[String].get === "immutable"
 }
