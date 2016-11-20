@@ -18,11 +18,11 @@ object AdminUserVertex {
   val className = "AdminUser"
   val propKeyAdminId = "adminId"
   val propKeyAdminUsername = "username"
-  val propKeyAdminUserPassword = "userPassword"
+  val propKeyAdminUserPassword = "password"
   
   def create(adminUsername: String, adminUserPassword: String): AdminUser = {
     // TODO impl status autentifications
-    val graph: OrientGraph = OrientDB.getGraph()
+    val graph: OrientGraph = OrientDB.getGraph
     if(graph.getVertices(propKeyAdminUsername, adminUsername).size == 0){
       val vAdminUser: OrientVertex = graph.addVertex(s"class:$className",
                       propKeyAdminUsername, adminUsername, 
@@ -51,7 +51,7 @@ object AdminUserVertex {
   def adminId(username: String, adminPassword: String): String = {
     val graph: OrientGraph = OrientDB.getGraph
     val res: OrientDynaElementIterable = graph
-      .command(new OCommandSQL(s"SELECT FROM AdminUser WHERE username='$username' and userPassword='$adminPassword'")).execute()
+      .command(new OCommandSQL(s"SELECT FROM AdminUser WHERE username='$username' and password='$adminPassword'")).execute()
     val adminId = res.toList.map(_.asInstanceOf[OrientVertex].getIdentity)
 //      val vAdminUsers: List[OrientVertex] = res.toList.map(_.asInstanceOf[OrientVertex])
 //      if(vAdminUsers.length == 1) {

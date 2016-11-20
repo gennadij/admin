@@ -153,36 +153,13 @@ trait AdminWeb {
   }
   
   private def configTree(receivedMessage: JsValue): JsValue = {
-    val adminId = (receivedMessage \ "params" \ "adminId").toString()
-    val authentication = (receivedMessage \ "params" \ "authentication").toString().toBoolean
+    val adminId = (receivedMessage \ "params" \ "adminId").asOpt[String].get
+    val authentication = (receivedMessage \ "params" \ "authentication").asOpt[Boolean].get
     val steps = Admin.configTree(adminId)
-    Json.toJson(steps)
+    Json.obj(
+      "jsonId"-> 3,
+      "method" -> "configTree"
+      ,"result" -> Json.toJson(steps)
+    )
   }
-  
-//  implicit val adminStepWrites = new Writes[AdminStep] {
-//    def writes(adminStep: AdminStep) = Json.obj(
-//        "id" -> adminStep.id,
-//        "stepId" -> adminStep.stepId
-//        ,"adminId" -> adminStep.adminId
-//        ,"kind" -> adminStep.kind
-//      )
-//  }
-  
-//  implicit val adminComponentWrites = new Writes[AdminComponent] {
-//    def writes(adminComponent: AdminComponent) = Json.obj(
-//        "id" -> adminComponent.id,
-//        "componentId" -> adminComponent.componentId
-//        ,"adminId" -> adminComponent.adminId
-//        ,"kind" -> adminComponent.kind
-//      )
-//  }
-  
-//  implicit val adminUserWrites = new Writes[AdminUser] {
-//    def writes(adminUser: AdminUser) = Json.obj(
-//        "id" -> adminUser.id,
-//        "username" -> adminUser.name
-//        ,"password" -> adminUser.password
-//        ,"status" -> adminUser.authentication
-//      )
-//  }
 }

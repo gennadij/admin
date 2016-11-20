@@ -1,6 +1,4 @@
-create database remote:localhost/config_1 root root plocal
-
-connect remote:localhost/config_1 root root ;
+connect remote:localhost/testDB root root ;
 SET echo TRUE;
 
 CREATE CLASS Step EXTENDS V;
@@ -19,8 +17,6 @@ CREATE PROPERTY hasComponent.adminId STRING;
 CREATE CLASS nextStep EXTENDS E;
 CREATE PROPERTY nextStep.nextStepId STRING;
 CREATE PROPERTY nextStep.adminId STRING;
-
-CREATE CLASS GlobalSettings EXTENDS V;
 
 CREATE CLASS AdminUser EXTENDS V;
 CREATE PROPERTY AdminUser.username STRING;

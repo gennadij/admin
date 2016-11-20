@@ -57,7 +57,7 @@ object StepVertex {
    */
   
   def addStep(adminStep: AdminStep): AdminStep = {
-    val graph: OrientGraph = OrientDB.getGraph()
+    val graph: OrientGraph = OrientDB.getGraph
     val vStep: OrientVertex = graph.addVertex("class:Step", 
             "adminId", adminStep.adminId,
             "kind", adminStep.kind)
@@ -74,7 +74,7 @@ object StepVertex {
   }
   
     def addStep(adminStep: AdminNextStep): AdminNextStep = {
-    val graph: OrientGraph = OrientDB.getGraph()
+    val graph: OrientGraph = OrientDB.getGraph
     val vStep: OrientVertex = graph.addVertex("class:Step", 
             "adminId", adminStep.adminId,
             "kind", adminStep.kind)
@@ -95,7 +95,7 @@ object StepVertex {
   
   
   def create(props: Map[String, String]) = {
-    val graph: OrientGraph = OrientDB.getGraph()
+    val graph: OrientGraph = OrientDB.getGraph
     if(graph.getVertices(propKeyId, props(propKeyId)).size == 0){
         val vertex: OrientVertex = graph.addVertex("class:Step", 
             propKeyId, props(propKeyId), 

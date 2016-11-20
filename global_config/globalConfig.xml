@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <globalConfig>
+	<activeDB>
+		<dbName>testDB</dbName>
+	</activeDB>
 	<db>
-		<dbName>test</dbName>
+		<kind>test</kind>
+		<dbName>testDB</dbName>
+		<username>root</username>
+		<password>root</password>
+	</db>
+	<db>
+		<kind>production</kind>
+		<dbName>configDB</dbName>
 		<username>root</username>
 		<password>root</password>
 	</db>

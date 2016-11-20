@@ -3,27 +3,30 @@ package org.admin.config
 import org.admin.AdminWeb
 import org.specs2.Specification
 import play.api.libs.json.{JsValue, Json}
+import org.persistence.db.orientdb.OrientDB
+import org.specs2.json.Json
 
 /**
   * Created by gennadi on 16.11.16.
   */
-class ConfigTree extends Specification with AdminWeb{
+class ConfigTreeEmpty extends Specification with AdminWeb{
 
   def is = s2"""
-    Diese Specification prueft die §rzeugung eines neuen Steps
+    Diese Specification prueft die leere Konfiguration
+    (erste Aufruf nach der Regestrierung und Anmeldung)
       autentification                                   $e1
       jsonId                                            $e2
       method                                            $e3
       result                                            $e4
     """
-
-
+  
+  
   val autentificationClientServer = Json.obj(
     "jsonId" -> 2,
     "method" -> "autheticate"
     ,"params" -> Json.obj(
-      "username" -> "firstStepConfigTree",
-      "password" -> "firstStepConfigTree"
+      "username" -> "testEmptyConfigTree",
+      "password" -> "testEmptyConfigTree"
     )
   )
 
@@ -44,8 +47,4 @@ class ConfigTree extends Specification with AdminWeb{
   def e2 = (configTreeServerClient \ "jsonId").asOpt[Int].get === 3
   def e3 = (configTreeServerClient \ "method").asOpt[String].get === "configTree"
   def e4 = (configTreeServerClient \ "result" \ "steps").asOpt[List[JsValue]].get === List.empty
-
-  val firstStepConfigTree = Json.obj(
-
-  )
 }
