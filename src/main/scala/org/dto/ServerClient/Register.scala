@@ -1,11 +1,16 @@
 package org.dto.ServerClient
 
+import play.api.libs.json.Json
+
 /**
   * Created by gennadi on 20.11.16.
   */
-class Register {
-//  {"jsonId": 1, "method": "register", "params": {"username": "test", "password": "test"}}
-  val jsonid = 1
-  val dto = "register"
+case class Register (
+    jsonid: Int = 1,
+    val dto: String = "Register",
+    result: ResultRegister
+)
 
+object Register {
+  implicit val format = Json.reads[Register]
 }

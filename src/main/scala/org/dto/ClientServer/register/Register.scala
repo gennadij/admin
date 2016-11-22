@@ -7,7 +7,7 @@ import play.api.libs.json.Json
   */
 case class Register (
                       jsonId: Int = 1,
-                      val method: String = "register",
+                      val dto: String = "Register",
                       val params: RegisterParams
                     )
 
