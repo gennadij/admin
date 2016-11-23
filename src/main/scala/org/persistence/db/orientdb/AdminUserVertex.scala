@@ -11,7 +11,6 @@ import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.admin.AdminUser
-import org.dto.ServerClient.register.{Register, ResultRegister}
 
 object AdminUserVertex {
   
@@ -28,10 +27,6 @@ object AdminUserVertex {
                       propKeyAdminUsername, adminUsername, 
                       propKeyAdminUserPassword, adminUserPassword)
       graph.commit
-      new Register(result = new ResultRegister(
-        "AU" + vAdminUser.getIdentity.toString(),
-        vAdminUser.getProperty(propKeyAdminUsername).toString()))
-
       new AdminUser("AU" + vAdminUser.getIdentity.toString(),
                     vAdminUser.getProperty(propKeyAdminUsername).toString(), 
                     vAdminUser.getProperty(propKeyAdminUserPassword).toString(),
@@ -44,10 +39,6 @@ object AdminUserVertex {
   
   def update = ???
   
-  def getAll = {
-    
-  }
-  
   def get(adminUsername: String, adminPassword: String) = {
     val graph: OrientGraph = OrientDB.getGraph
   }
@@ -57,50 +48,6 @@ object AdminUserVertex {
     val res: OrientDynaElementIterable = graph
       .command(new OCommandSQL(s"SELECT FROM AdminUser WHERE username='$username' and password='$adminPassword'")).execute()
     val adminId = res.toList.map(_.asInstanceOf[OrientVertex].getIdentity)
-//      val vAdminUsers: List[OrientVertex] = res.toList.map(_.asInstanceOf[OrientVertex])
-//      if(vAdminUsers.length == 1) {
-//        if(vAdminUsers.head.getProperty(""))
-//      }
-      
     if(adminId.size == 1) adminId.head.toString else ""
   }
-
-//  def create(adminUserId: String, adminUsername: String, adminUserPassword: String) = {
-//    val vAdminUser = new VertexAdminUser(adminUserId, adminUsername, adminUserPassword)
-//    vAdminUser.create
-//  }
 }
-
-
-//class VertexAdminUser(adminUserId: String, adminUserName: String, adminUserPassword: String){
-//  val propKeyForId = "adminUserId"
-//  val propKeyAdminUsername = "username"
-//  val propKeyAdminUserPassword = "userPassword"
-//  
-//  private def create() {
-//    val graph: OrientGraph = OrientDB.getGraph()
-//    if(graph.getVertices(propKeyForId, adminUserId).size == 0){
-//        graph.addVertex("class:Step", propKeyForId, adminUserId, 
-//        propKeyAdminUsername, adminUserName, propKeyAdminUserPassword, adminUserPassword)
-//        graph.commit
-//        new SuccessfulStatus("object AdminUser with " + adminUserId + " was created")
-//    }else{
-//      new WarningStatus("object AdminUser with " + adminUserId + "already exist")
-//    }
-//  }
-//
-//}
-//
-//  def createSchema = {
-//    val graph: OrientGraph = OrientDB.getGraph
-//    if(graph.getVertexType(className) == null){
-//      val vStep: OrientVertexType = graph.createVertexType(className)
-//      vStep.createProperty(propKeyAdminId, OType.STRING)
-//      vStep.createProperty(propKeyAdminUsername, OType.STRING)
-//      vStep.createProperty(propKeyAdminUserPassword, OType.STRING)
-//      graph.commit
-//      new SuccessfulStatus("class AdminUser was created")
-//    }else {
-//      new WarningStatus("class AdminUser already exist")
-//    }
-//  }

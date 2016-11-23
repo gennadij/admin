@@ -15,9 +15,10 @@ import org.status.WarningStatus
 import org.admin.configTree.AdminStep
 import org.admin.configTree.AdminComponent
 import org.admin.configTree.AdminNextStep
-import org.dto.ServerClient.register.Register
+import org.dto.{RegisterCS, RegisterSC, ResultRegisterSC}
 import play.api.libs.json.Writes
 import play.api.libs.json.Json
+import org.dto.AuthenticateCS
 
 
 
@@ -50,14 +51,14 @@ object Admin {
    * 
    */
   
-  def testJavaCall(arg: String) = {
-    println("test")
-    println(arg)
+  def registAdminUser(registerCS: RegisterCS): RegisterSC = {
+
+    val adminUser: AdminUser = Persistence.registAdminUser(registerCS)
+    new RegisterSC(result = new ResultRegisterSC(adminUser.adminId, adminUser.username))
   }
   
-  def register(adminUsername: String,  adminUserPassword: String): Register = {
-    // TODO Püfen ob der AdminUser schon exestiert
-    Persistence.registAdminUser(adminUsername, adminUserPassword)
+  def authenticate(authentificationCS: AuthenticateCS): String = {
+    Persistence.authenticate(authentificationCS.params.username, authentificationCS.params.password)
   }
   
   /**
@@ -70,16 +71,6 @@ object Admin {
    * 
    * 
    */
-  
-  
-  /*
-   * return UserId für den Client. Bei der nächsten Anfragen wird diese 
-   * UserId verwendet
-   * 
-   */
-  def authenticate(username: String, password: String): String = {
-    Persistence.authenticate(username, password)
-  }
   
   /**
    * 

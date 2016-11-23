@@ -7,9 +7,11 @@ import org.admin.configTree.AdminComponent
 import org.persistence.db.orientdb.AdminUserVertex
 import org.admin.configTree.AdminConfigTree
 import org.admin.configTree.AdminConfigTreeStep
-import org.dto.ClientServer.register.Register
+import org.dto.RegisterCS
 
 import scala.collection.immutable.Seq
+import org.dto.RegisterSC
+import org.dto.AuthenticateCS
 
 trait AdminWeb {
   
@@ -101,25 +103,26 @@ trait AdminWeb {
   }
 
   private def register(receivedMessage: JsValue): JsValue = {
-    val register: Register = Json.fromJson[Register](receivedMessage).get
-
-    val admin = Admin.register(register.params.username, register.params.password)
-
-
-    Json.obj(
-      "jsonId" -> 1,
-      "method" -> "register"
-      ,"result"-> Json.toJson(admin)
-    )
+    val register: RegisterCS = Json.fromJson[RegisterCS](receivedMessage).get
+    val admin: RegisterSC = Admin.registAdminUser(register)
+    Json.toJson(admin)
+    
+//    Json.obj(
+//      "jsonId" -> 1,
+//      "method" -> "register"
+//      ,"result"-> Json.toJson(admin)
+//    )
 
   }
 
   private def autheticate(receivedMessage: JsValue): JsValue = {
-    val username = (receivedMessage \ "params" \"username").asOpt[String].get
-    val password = (receivedMessage \ "params" \ "password").asOpt[String].get
-    val adminId = Admin.authenticate(username, password)
+    val authenticationDTO: AuthenticateCS = Json.fromJson[AuthenticateCS](receivedMessage).get
+//    val username = (receivedMessage \ "params" \"username").asOpt[String].get
+//    val password = (receivedMessage \ "params" \ "password").asOpt[String].get
+    val adminId = Admin.authenticate(authenticationDTO)
     //TODO impl autentification
-    val adminUser = new AdminUser(adminId, username, password, true)
+    val adminUser = new AdminUser(adminId, authenticationDTO.params.username, 
+        authenticationDTO.params.password, true)
     println(adminUser)
     Json.obj(
         "jsonId"-> 2, 

@@ -1,16 +1,16 @@
-package org.dto.ClientServer.register
+package org.dto
 
 import play.api.libs.json.Json
 
 /**
   * Created by gennadi on 20.11.16.
   */
-case class Register (
+case class RegisterCS (
                       jsonId: Int = 1,
                       val dto: String = "Register",
-                      val params: RegisterParams
+                      val params: RegisterParamsCS
                     )
 
-object Register {
-  implicit val format = Json.reads[Register]
+object RegisterCS {
+  implicit val format = Json.reads[RegisterCS]
 }

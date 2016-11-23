@@ -1,16 +1,16 @@
-package org.dto.ServerClient.authenticate
+package org.dto
 
 import play.api.libs.json.Json
 
 /**
   * Created by gennadi on 22.11.16.
   */
-class Authenticate (
+case class AuthenticateSC (
                    jsonId: Int = 2,
                    dto: String = "Autheticate",
-                   result: ResultAuthenticate
+                   result: ResultAuthenticateSC
                    )
 
-object Authenticate {
-  implicit val format = Json.format[Authenticate]
+object AuthenticateSC {
+  implicit val format = Json.writes[AuthenticateSC]
 }
