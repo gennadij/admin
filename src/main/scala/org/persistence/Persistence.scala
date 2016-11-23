@@ -30,6 +30,7 @@ import org.admin.configTree.AdminNextStep
 import org.admin.configTree.AdminConfigTreeStep
 import org.admin.configTree.AdminConfigTree
 import org.admin.configTree.AdminConfigTreeComponent
+import org.dto.ServerClient.register.Register
 import org.status.Status
 
 object Persistence {
@@ -39,7 +40,7 @@ object Persistence {
   def firstStep = {
   }
   
-  def registAdminUser(username: String, password: String): AdminUser = {
+  def registAdminUser(username: String, password: String): Register = {
     
     AdminUserVertex.create(username, password)
   }

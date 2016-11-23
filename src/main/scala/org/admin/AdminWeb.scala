@@ -101,18 +101,11 @@ trait AdminWeb {
   }
 
   private def register(receivedMessage: JsValue): JsValue = {
-    println(receivedMessage)
-    val jsResultRegister: JsResult[Register] = Json.fromJson[Register](receivedMessage)
+    val register: Register = Json.fromJson[Register](receivedMessage).get
 
-//    val dtoRegister: Register = jsResultRegister match {
-//      case e: JsSuccess[Register] => jsResultRegister.get
-//      case error: JsError => jsResultRegister.get
-//    }
+    val admin = Admin.register(register.params.username, register.params.password)
 
-    println("DTO    " + jsResultRegister.get)
 
-    val admin = Admin.register((receivedMessage \ "params" \ "username").asOpt[String].get,
-      (receivedMessage \ "params" \ "username").asOpt[String].get)
     Json.obj(
       "jsonId" -> 1,
       "method" -> "register"

@@ -1,7 +1,6 @@
 package org.persistence.db.orientdb
 
 import scala.collection.JavaConversions._
-
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import com.tinkerpop.blueprints.impls.orient.OrientVertexType
 import org.status.SuccessfulStatus
@@ -12,6 +11,7 @@ import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.admin.AdminUser
+import org.dto.ServerClient.register.{Register, ResultRegister}
 
 object AdminUserVertex {
   
@@ -28,7 +28,11 @@ object AdminUserVertex {
                       propKeyAdminUsername, adminUsername, 
                       propKeyAdminUserPassword, adminUserPassword)
       graph.commit
-      new AdminUser("AU" + vAdminUser.getIdentity.toString(), 
+      new Register(result = new ResultRegister(
+        "AU" + vAdminUser.getIdentity.toString(),
+        vAdminUser.getProperty(propKeyAdminUsername).toString()))
+
+      new AdminUser("AU" + vAdminUser.getIdentity.toString(),
                     vAdminUser.getProperty(propKeyAdminUsername).toString(), 
                     vAdminUser.getProperty(propKeyAdminUserPassword).toString(),
                     true)

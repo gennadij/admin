@@ -15,6 +15,7 @@ import org.status.WarningStatus
 import org.admin.configTree.AdminStep
 import org.admin.configTree.AdminComponent
 import org.admin.configTree.AdminNextStep
+import org.dto.ServerClient.register.Register
 import play.api.libs.json.Writes
 import play.api.libs.json.Json
 
@@ -54,8 +55,7 @@ object Admin {
     println(arg)
   }
   
-  def register(adminUsername: String,  adminUserPassword: String): AdminUser = {
-    // TODO Alle Resourcen einstellen (AdminID, Datenbankverbindung usw.)
+  def register(adminUsername: String,  adminUserPassword: String): Register = {
     // TODO Püfen ob der AdminUser schon exestiert
     Persistence.registAdminUser(adminUsername, adminUserPassword)
   }

@@ -1,4 +1,4 @@
-package org.dto.ServerClient
+package org.dto.ServerClient.register
 
 import play.api.libs.json.Json
 
