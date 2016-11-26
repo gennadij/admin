@@ -66,24 +66,24 @@ class TestScenario9 extends AdminWeb{
     val idPassword = "test3"
 //    val register = Admin.register(idPassword, idPassword)
     
-    val adminId: String = Admin.authenticate(idPassword, idPassword)
+//    val adminId: String = Admin.authenticate(idPassword, idPassword)
     
-    println("AdminId : " + adminId)
+//    println("AdminId : " + adminId)
     
     /*
      * Server --> Client
      */
-    val configTree: AdminConfigTree = Admin.configTree(adminId)
+//    val configTree: AdminConfigTree = Admin.configTree(adminId)
     
-    configTree.steps.foreach(s =>{
-      println(s.stepId)
-      println(s.kind)
-      s.components.foreach (c => {
-        println(c)
-      })
-    })
+//    configTree.steps.foreach(s =>{
+//      println(s.stepId)
+//      println(s.kind)
+//      s.components.foreach (c => {
+//        println(c)
+//      })
+//    })
     
-    println(Json.toJson(configTree))
+//    println(Json.toJson(configTree))
     
     //TODO überlegen ob der aktuelle Element aktualisiert wird oder gesamte ConfigTree
 

@@ -1,8 +1,8 @@
 
-val mockito = "org.mockito" % "mockito-all" % "1.9.5" % "test"
-val junit = "junit" % "junit" % "4.8.1" % "test"
-val specs2Junit = "org.specs2" %% "specs2-junit" % "3.8.2" % "test"
-val orientdbServer = "com.orientechnologies" % "orientdb-server" % "2.1.+"
+//val mockito = "org.mockito" % "mockito-all" % "1.9.5" % "test"
+//val junit = "junit" % "junit" % "4.8.1" % "test"
+//val specs2Junit = "org.specs2" %% "specs2-junit" % "3.8.2" % "test"
+//val orientdbServer = "com.orientechnologies" % "orientdb-server" % "2.1.+"
 
 
 

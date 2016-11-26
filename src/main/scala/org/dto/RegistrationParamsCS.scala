@@ -5,12 +5,12 @@ import play.api.libs.json.Json
 /**
   * Created by gennadi on 20.11.16.
   */
-case class RegisterParamsCS (
+case class RegistrationParamsCS (
                           username: String,
                           password: String
                           )
 
 
-object RegisterParamsCS {
-  implicit val format = Json.reads[RegisterParamsCS]
+object RegistrationParamsCS {
+  implicit val format = Json.reads[RegistrationParamsCS]
 }

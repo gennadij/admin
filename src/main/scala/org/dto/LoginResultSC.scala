@@ -5,12 +5,12 @@ import play.api.libs.json.Json
 /**
   * Created by gennadi on 22.11.16.
   */
-case class ResultAuthenticateSC (
+case class LoginResultSC (
                           adminId: String,
                           username: String,
                           authentication: Boolean
                          )
 
-object ResultAuthenticateSC{
-  implicit val format = Json.writes[ResultAuthenticateSC]
+object LoginResultSC{
+  implicit val format = Json.writes[LoginResultSC]
 }

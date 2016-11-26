@@ -40,7 +40,7 @@ object Persistence {
   def firstStep = {
   }
   
-  def registAdminUser(registerCS: RegisterCS): AdminUser = {
+  def registAdminUser(registerCS: RegistrationCS): AdminUser = {
     AdminUserVertex.create(registerCS.params.username, registerCS.params.password)
   }
   

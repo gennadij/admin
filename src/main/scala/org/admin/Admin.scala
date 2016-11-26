@@ -15,10 +15,12 @@ import org.status.WarningStatus
 import org.admin.configTree.AdminStep
 import org.admin.configTree.AdminComponent
 import org.admin.configTree.AdminNextStep
-import org.dto.{RegisterCS, RegisterSC, ResultRegisterSC}
 import play.api.libs.json.Writes
 import play.api.libs.json.Json
-import org.dto.AuthenticateCS
+import org.dto.RegistrationSC
+import org.dto.RegistrationResultSC
+import org.dto.RegistrationCS
+import org.dto.LoginCS
 
 
 
@@ -51,14 +53,14 @@ object Admin {
    * 
    */
   
-  def registAdminUser(registerCS: RegisterCS): RegisterSC = {
+  def registAdminUser(registerCS: RegistrationCS): RegistrationSC = {
 
     val adminUser: AdminUser = Persistence.registAdminUser(registerCS)
-    new RegisterSC(result = new ResultRegisterSC(adminUser.adminId, adminUser.username))
+    new RegistrationSC(result = new RegistrationResultSC(adminUser.adminId, adminUser.username))
   }
   
-  def authenticate(authentificationCS: AuthenticateCS): String = {
-    Persistence.authenticate(authentificationCS.params.username, authentificationCS.params.password)
+  def authenticate(loginCS: LoginCS): String = {
+    Persistence.authenticate(loginCS.params.username, loginCS.params.password)
   }
   
   /**
