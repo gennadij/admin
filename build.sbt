@@ -35,6 +35,15 @@ val jsonFromPLay = "com.typesafe.play" % "play-json_2.11" % "2.5.9"
 // https://mvnrepository.com/artifact/org.specs2/specs2-core_2.11
 val specs2 = "org.specs2" % "specs2-core_2.11" % "3.8.6" % "test"
 
+// https://mvnrepository.com/artifact/junit/junit
+val junit = "junit" % "junit" % "4.12" % "test"
+
+// https://mvnrepository.com/artifact/org.scala-tools/maven-scala-plugin
+val scalaTools = "org.scala-tools" % "maven-scala-plugin" % "2.15.2"
+
+// https://mvnrepository.com/artifact/org.specs2/specs2-junit_2.11
+val specs2JUnit = "org.specs2" % "specs2-junit_2.11" % "3.8.6"
+
 lazy val commonSettings = Seq(
 	organization := "org.generic_configurator", 	
 	version := "0.1.0",
@@ -55,6 +64,8 @@ lazy val root = (project in file(".")).
 		,orientdbTools
 		,jsonFromPLay
 		,specs2
+		,junit
+		,specs2JUnit
 		),
 		fork := true
 	)

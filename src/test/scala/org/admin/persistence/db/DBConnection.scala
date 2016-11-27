@@ -8,7 +8,7 @@ class DBConnection extends Specification{
   def is = 
   
   s2"""
-       Specification zum DB Connection testen
+         Specification zum DB Connection testen
        connection                   $e1
           
     """
