@@ -7,11 +7,10 @@ import org.admin.configTree.AdminComponent
 import org.persistence.db.orientdb.AdminUserVertex
 import org.admin.configTree.AdminConfigTree
 import org.admin.configTree.AdminConfigTreeStep
-import org.dto.RegisterCS
-
 import scala.collection.immutable.Seq
-import org.dto.RegisterSC
-import org.dto.AuthenticateCS
+import org.dto.RegistrationCS
+import org.dto.RegistrationSC
+import org.dto.LoginCS
 
 trait AdminWeb {
   
@@ -91,9 +90,9 @@ trait AdminWeb {
    */
   
   def handelMessage(receivedMessage: JsValue): JsValue = {
-    (receivedMessage \ "method").asOpt[String] match {
-      case Some("register") => register(receivedMessage)
-      case Some("autheticate") => autheticate(receivedMessage)
+    (receivedMessage \ "dto").asOpt[String] match {
+      case Some("Registration") => register(receivedMessage)
+      case Some("Login") => login(receivedMessage)
       case Some("addFirstStep") => addFirstStep(receivedMessage)
       case Some("configTree") => configTree(receivedMessage)
       case Some("addComponent") => addComponent(receivedMessage)
@@ -103,8 +102,8 @@ trait AdminWeb {
   }
 
   private def register(receivedMessage: JsValue): JsValue = {
-    val register: RegisterCS = Json.fromJson[RegisterCS](receivedMessage).get
-    val admin: RegisterSC = Admin.registAdminUser(register)
+    val register: RegistrationCS = Json.fromJson[RegistrationCS](receivedMessage).get
+    val admin: RegistrationSC = Admin.registAdminUser(register)
     Json.toJson(admin)
     
 //    Json.obj(
@@ -115,18 +114,19 @@ trait AdminWeb {
 
   }
 
-  private def autheticate(receivedMessage: JsValue): JsValue = {
-    val authenticationDTO: AuthenticateCS = Json.fromJson[AuthenticateCS](receivedMessage).get
+  private def login(receivedMessage: JsValue): JsValue = {
+    val loginDTO: LoginCS = Json.fromJson[LoginCS](receivedMessage).get
 //    val username = (receivedMessage \ "params" \"username").asOpt[String].get
 //    val password = (receivedMessage \ "params" \ "password").asOpt[String].get
-    val adminId = Admin.authenticate(authenticationDTO)
+    val adminId = Admin.authenticate(loginDTO)
     //TODO impl autentification
-    val adminUser = new AdminUser(adminId, authenticationDTO.params.username, 
-        authenticationDTO.params.password, true)
+    val adminUser = new AdminUser(adminId, loginDTO.params.username, 
+        loginDTO.params.password, true)
     println(adminUser)
+    //TODO impl LoginDTO
     Json.obj(
         "jsonId"-> 2, 
-        "method" -> "autheticate"
+        "dto" -> "Login"
         ,"result" -> Json.toJson(adminUser))
   }
   private def addFirstStep(receivedMessage: JsValue): JsValue = {

@@ -74,7 +74,6 @@ class TestScenario9 extends AdminWeb{
 //     * Server --> Client
 //     */
 //    val configTree: AdminConfigTree = Admin.configTree(adminId)
-//    
 //    configTree.steps.foreach(s =>{
 //      println(s.stepId)
 //      println(s.kind)
@@ -82,7 +81,6 @@ class TestScenario9 extends AdminWeb{
 //        println(c)
 //      })
 //    })
-//    
 //    println(Json.toJson(configTree))
     
     //TODO überlegen ob der aktuelle Element aktualisiert wird oder gesamte ConfigTree
