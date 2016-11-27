@@ -40,8 +40,9 @@ object Persistence {
   def firstStep = {
   }
   
-  def registAdminUser(registerCS: RegistrationCS): AdminUser = {
-    AdminUserVertex.create(registerCS.params.username, registerCS.params.password)
+  def register(registrationCS: RegistrationCS): RegistrationSC = {
+//    AdminUserVertex.create(registerCS.params.username, registerCS.params.password)
+    AdminUserVertex.register(registrationCS)
   }
   
   def authenticate(username: String, password: String): String = {
@@ -49,6 +50,12 @@ object Persistence {
     if(adminId.isEmpty()) "" else "AU" + adminId
   }
   
+  
+  def login(loginCS: LoginCS): LoginSC = {
+    AdminUserVertex.login(loginCS)
+//    val adminId: String = AdminUserVertex.adminId(username, password)
+//    if(adminId.isEmpty()) "" else "AU" + adminId
+  }
     /**
    * 
    * fuegt Vertex Step zu ConfigTree hinzu

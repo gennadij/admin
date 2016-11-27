@@ -53,10 +53,11 @@ object Admin {
    * 
    */
   
-  def registAdminUser(registerCS: RegistrationCS): RegistrationSC = {
+  def register(registrationCS: RegistrationCS): RegistrationSC = {
 
-    val adminUser: AdminUser = Persistence.registAdminUser(registerCS)
-    new RegistrationSC(result = new RegistrationResultSC(adminUser.adminId, adminUser.username))
+//    val adminUser: AdminUser = Persistence.register(registrationCS)
+//    new RegistrationSC(result = new RegistrationResultSC(adminUser.adminId, adminUser.username))
+    Persistence.register(registrationCS)
   }
   
   def authenticate(loginCS: LoginCS): String = {

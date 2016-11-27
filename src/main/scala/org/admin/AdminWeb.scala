@@ -102,8 +102,8 @@ trait AdminWeb {
   }
 
   private def register(receivedMessage: JsValue): JsValue = {
-    val register: RegistrationCS = Json.fromJson[RegistrationCS](receivedMessage).get
-    val admin: RegistrationSC = Admin.registAdminUser(register)
+    val registrationCS: RegistrationCS = Json.fromJson[RegistrationCS](receivedMessage).get
+    val admin: RegistrationSC = Admin.register(registrationCS)
     Json.toJson(admin)
     
 //    Json.obj(
