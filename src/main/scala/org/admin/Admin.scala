@@ -54,9 +54,6 @@ object Admin {
    */
   
   def register(registrationCS: RegistrationCS): RegistrationSC = {
-
-//    val adminUser: AdminUser = Persistence.register(registrationCS)
-//    new RegistrationSC(result = new RegistrationResultSC(adminUser.adminId, adminUser.username))
     Persistence.register(registrationCS)
   }
   

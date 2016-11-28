@@ -41,7 +41,6 @@ object Persistence {
   }
   
   def register(registrationCS: RegistrationCS): RegistrationSC = {
-//    AdminUserVertex.create(registerCS.params.username, registerCS.params.password)
     AdminUserVertex.register(registrationCS)
   }
   

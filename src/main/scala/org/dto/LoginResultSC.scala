@@ -8,7 +8,8 @@ import play.api.libs.json.Json
 case class LoginResultSC (
                           adminId: String,
                           username: String,
-                          authentication: Boolean
+                          status: Boolean,
+                          message: String
                          )
 
 object LoginResultSC{

@@ -43,7 +43,7 @@ class Registration extends Specification with AdminWeb{
   def e2 = (jsonServerClient1 \ "dto").asOpt[String].get must_== "Registration"
   def e3 = (jsonServerClient1 \ "result" \ "adminId").asOpt[String].get must_== ""
   def e4 = (jsonServerClient1 \ "result" \ "username").asOpt[String].get must_== ""
-//  def e5 = (jsonServerClient1 \ "result" \ "authentication").asOpt[Boolean].get must_== false
+  def e5 = (jsonServerClient1 \ "result" \ "authentication").asOpt[Boolean].get must_== false
 
 //  ================================================================
   /*
@@ -67,7 +67,8 @@ class Registration extends Specification with AdminWeb{
   def e6 = (jsonServerClient2 \ "jsonId").asOpt[Int].get must_== 1
   def e7 = (jsonServerClient2 \ "dto").asOpt[String].get must_== "Registration"
   def e8 = (jsonServerClient2 \ "result" \ "username").asOpt[String] must_== Some(usernamePassword)
-//  def e9 = (jsonServerClient2 \ "result" \ "authentication").asOpt[Boolean].get must_== true
+  def e9 = (jsonServerClient2 \ "result" \ "status").asOpt[Boolean].get must_== true
+  def e15 = (jsonServerClient2 \ "result" \ "message").asOpt[String].get must_== ""
 
   /*
   Authentifizierung des neu angelegten Adminuser über Loginseite
@@ -90,6 +91,7 @@ class Registration extends Specification with AdminWeb{
     (jsonServerClient2 \ "result" \ "adminId").asOpt[String].get
   def e13 = (jsonServerClient3 \ "result" \ "username").asOpt[String].get must_==
     (jsonServerClient2 \ "result" \ "username").asOpt[String].get
-//  def e14 = (jsonServerClient3 \ "result" \ "authentication").asOpt[Boolean].get must_==
-//    (jsonServerClient2 \ "result" \ "authentication").asOpt[Boolean].get
+  def e14 = (jsonServerClient3 \ "result" \ "status").asOpt[Boolean].get must_==
+    (jsonServerClient2 \ "result" \ "authentication").asOpt[Boolean].get
+  def e16 = (jsonServerClient3 \ "result" \ "status").asOpt[Boolean].get must_== ""
 }

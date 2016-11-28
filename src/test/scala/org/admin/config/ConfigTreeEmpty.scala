@@ -21,7 +21,7 @@ class ConfigTreeEmpty extends Specification with AdminWeb{
     """
   
   
-  val autentificationClientServer = Json.obj(
+  val loginClientServer = Json.obj(
     "jsonId" -> 2,
     "method" -> "autheticate"
     ,"params" -> Json.obj(
@@ -30,15 +30,15 @@ class ConfigTreeEmpty extends Specification with AdminWeb{
     )
   )
 
-  val autentificationServerServer = handelMessage(autentificationClientServer)
-  def e1 = (autentificationServerServer \ "result" \ "authentication").asOpt[Boolean].get === true
+  val loginServerClient = handelMessage(loginClientServer)
+  def e1 = (loginServerClient \ "result" \ "authentication").asOpt[Boolean].get === true
 
   val configTreeClientServer = Json.obj(
     "jsonId" -> 3,
     "method" -> "configTree"
     ,"params" -> Json.obj(
-      "adminId" -> (autentificationServerServer \ "result" \ "adminId").asOpt[String].get,
-      "authentication" -> (autentificationServerServer \ "result" \ "authentication").asOpt[Boolean].get
+      "adminId" -> (loginServerClient \ "result" \ "adminId").asOpt[String].get,
+      "authentication" -> (loginServerClient \ "result" \ "authentication").asOpt[Boolean].get
     )
   )
 

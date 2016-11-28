@@ -52,10 +52,17 @@ object AdminUserVertex {
       graph.commit
       new RegistrationSC(result = new RegistrationResultSC(
           "AU" + vAdminUser.getIdentity.toString(),
-          vAdminUser.getProperty(propKeyAdminUsername).toString()
+          vAdminUser.getProperty(propKeyAdminUsername).toString(),
+          true,
+          "Registrierung war erfolgreich"
       ))
     }else{
-      new RegistrationSC(result = null)
+      new RegistrationSC(result = new RegistrationResultSC(
+          "", 
+          registrationCS.params.username,
+          false,
+          "Registrierung war nicht erfolgreich. Username existiert bereits"
+      ))
     }
   }
   
@@ -67,16 +74,23 @@ object AdminUserVertex {
     val password : String = loginCS.params.password
     val res: OrientDynaElementIterable = graph
       .command(new OCommandSQL(s"SELECT FROM AdminUser WHERE username='$username' and password='$password'")).execute()
-    val loginSC: List[LoginSC] = res.toList.map(login => {
+    if(res.size == 1){
+      val loginSC: List[LoginSC] = res.toList.map(login => {
       new LoginSC(result = new LoginResultSC(
           "AU" + login.asInstanceOf[OrientVertex].getIdentity,
           login.asInstanceOf[OrientVertex].getProperty("username"),
-          true
+          true,
+          "Anmeldung mit Username " + loginCS.params.username + "war erfolgreich"
       ))
     })
-    if(loginSC.size == 1) loginSC(0) else new LoginSC(result = new LoginResultSC("", "", false))
-      
-      new LoginSC(result = new LoginResultSC("","",true))
+    loginSC(0)
+    }else{
+      new LoginSC(result = new LoginResultSC(
+          "", 
+          "", 
+          false, 
+          "Anmeldung mit Username " + loginCS.params.username + "war nicht erfolgreich"))
+    }
   }
   
   def adminId(username: String, adminPassword: String): String = {
