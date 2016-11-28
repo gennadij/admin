@@ -21,6 +21,7 @@ import org.dto.RegistrationSC
 import org.dto.RegistrationResultSC
 import org.dto.RegistrationCS
 import org.dto.LoginCS
+import org.dto.LoginSC
 
 
 
@@ -57,8 +58,8 @@ object Admin {
     Persistence.register(registrationCS)
   }
   
-  def authenticate(loginCS: LoginCS): String = {
-    Persistence.authenticate(loginCS.params.username, loginCS.params.password)
+  def login(loginCS: LoginCS): LoginSC = {
+    Persistence.login(loginCS: LoginCS)
   }
   
   /**

@@ -74,22 +74,24 @@ object AdminUserVertex {
     val password : String = loginCS.params.password
     val res: OrientDynaElementIterable = graph
       .command(new OCommandSQL(s"SELECT FROM AdminUser WHERE username='$username' and password='$password'")).execute()
-    if(res.size == 1){
-      val loginSC: List[LoginSC] = res.toList.map(login => {
-      new LoginSC(result = new LoginResultSC(
+    val adminUsers = res.toList
+    if(adminUsers.size == 1){
+      val loginSC: List[LoginSC] = adminUsers.map(login => {
+        println(login)
+        new LoginSC(result = new LoginResultSC(
           "AU" + login.asInstanceOf[OrientVertex].getIdentity,
           login.asInstanceOf[OrientVertex].getProperty("username"),
           true,
-          "Anmeldung mit Username " + loginCS.params.username + "war erfolgreich"
-      ))
-    })
+          "Anmeldung mit Username " + loginCS.params.username + " war erfolgreich"
+        ))
+      })
     loginSC(0)
     }else{
       new LoginSC(result = new LoginResultSC(
           "", 
           "", 
           false, 
-          "Anmeldung mit Username " + loginCS.params.username + "war nicht erfolgreich"))
+          "Anmeldung mit Username " + loginCS.params.username + " war nicht erfolgreich"))
     }
   }
   

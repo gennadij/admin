@@ -11,6 +11,7 @@ import scala.collection.immutable.Seq
 import org.dto.RegistrationCS
 import org.dto.RegistrationSC
 import org.dto.LoginCS
+import org.dto.LoginSC
 
 trait AdminWeb {
   
@@ -108,20 +109,12 @@ trait AdminWeb {
   }
 
   private def login(receivedMessage: JsValue): JsValue = {
-    val loginDTO: LoginCS = Json.fromJson[LoginCS](receivedMessage).get
-//    val username = (receivedMessage \ "params" \"username").asOpt[String].get
-//    val password = (receivedMessage \ "params" \ "password").asOpt[String].get
-    val adminId = Admin.authenticate(loginDTO)
-    //TODO impl autentification
-    val adminUser = new AdminUser(adminId, loginDTO.params.username, 
-        loginDTO.params.password, true)
-    println(adminUser)
-    //TODO impl LoginDTO
-    Json.obj(
-        "jsonId"-> 2, 
-        "dto" -> "Login"
-        ,"result" -> Json.toJson(adminUser))
+    val loginCS: LoginCS = Json.fromJson[LoginCS](receivedMessage).get
+    val loginSC: LoginSC = Admin.login(loginCS)
+    Json.toJson(loginSC)
   }
+  
+  
   private def addFirstStep(receivedMessage: JsValue): JsValue = {
     //TODO impl Reads with validation show 
     // https://www.playframework.com/documentation/2.4.x/ScalaJsonCombinators

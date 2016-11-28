@@ -52,8 +52,6 @@ object Persistence {
   
   def login(loginCS: LoginCS): LoginSC = {
     AdminUserVertex.login(loginCS)
-//    val adminId: String = AdminUserVertex.adminId(username, password)
-//    if(adminId.isEmpty()) "" else "AU" + adminId
   }
     /**
    * 
