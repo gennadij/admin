@@ -89,7 +89,7 @@ object AdminUserVertex {
     }else{
       new LoginSC(result = new LoginResultSC(
           "", 
-          "", 
+          loginCS.params.username, 
           false, 
           "Anmeldung mit Username " + loginCS.params.username + " war nicht erfolgreich"))
     }

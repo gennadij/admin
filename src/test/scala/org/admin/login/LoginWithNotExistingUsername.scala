@@ -1,11 +1,11 @@
 package org.admin.login
 
 import org.specs2.Specification
-import org.admin.AdminWeb
 import play.api.libs.json.Json
 import play.api.libs.json.JsValue
+import org.admin.AdminWeb
 
-class LoginWithExistingUsernameAndPassword extends Specification with AdminWeb{
+class LoginWithNotExistingUsername extends Specification with AdminWeb {
   def is = 
   
   s2"""
@@ -14,9 +14,9 @@ class LoginWithExistingUsernameAndPassword extends Specification with AdminWeb{
           dto=Login                                                      $e2
           username=userexist                                             $e4
           status=true                                                    $e5
-          message="Anmeldung war erfolgreich"                            $e6
+          message="Anmeldung war nicht erfolgreich"                      $e6
     """
-  val user = "userexist"
+  val user = "usernotexist"
   
   val jsonClientServer = Json.obj(
       "jsonId" -> 2,
@@ -29,7 +29,8 @@ class LoginWithExistingUsernameAndPassword extends Specification with AdminWeb{
   val jsonServerClient: JsValue = handelMessage(jsonClientServer)
   def e1 = (jsonServerClient \ "jsonId").asOpt[Int].get must_== 2
   def e2 = (jsonServerClient \ "dto").asOpt[String].get must_== "Login"
-  def e4 = (jsonServerClient \ "result" \ "username").asOpt[String].get must_== "userexist"
-  def e5 = (jsonServerClient \ "result" \ "status").asOpt[Boolean].get must_== true
-  def e6 = (jsonServerClient \ "result" \ "message").asOpt[String].get must_== s"Anmeldung mit Username $user war erfolgreich"
+  def e4 = (jsonServerClient \ "result" \ "username").asOpt[String].get must_== user
+  def e5 = (jsonServerClient \ "result" \ "status").asOpt[Boolean].get must_== false
+  def e6 = (jsonServerClient \ "result" \ "message").asOpt[String].get must_== 
+    s"Anmeldung mit Username $user war nicht erfolgreich"
 }
