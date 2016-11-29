@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ */
+
 package org.admin
 
 import play.api.libs.json._
@@ -22,17 +26,20 @@ trait AdminWeb {
    *   {"jsonId": 1, "method": "register", "params": {"username": "test", "password": "test"}}
    *   Server -> Client
    *   {"jsonId": 1, "method": "register", result": {"adminId": "AU#40:0", "username": "test"}}
-   * 2. => authenticate Admin
+   * 2. => login Admin
    *   Server <- Client
    *   {"jsonId": 2, "method": "autheticate", params: {"username": "test", "password": "test"}}
    *   Server -> Client
    *   {"jsonId": 2, "method": "autheticate", 
    *       result: {"id": "AU#40:0", "username": "test", "password": "test", "authentication": true}}
-   * 3. => configTree
+   * 3. => updateUser
+   * 4. => updatePassword
+   * 5. => removeAdmin
+   * 6. => configTree
    *   Server <- Client
-   *   {"jsonId": 3, "method": "configTree", params: {"adminId": "AU#40:0", "authentication": true}}
+   *   {"jsonId": 6, "method": "configTree", params: {"adminId": "AU#40:0", "authentication": true}}
    *   Server -> Client
-   *   {"jsonId": 3, "method": "configTree", result: {"steps":
+   *   {"jsonId": 7, "method": "configTree", result: {"steps":
                   	[
                   		{
                   			"id":"#19:1","stepId":"#19:1","adminId":"AU#37:0","kind":"first",

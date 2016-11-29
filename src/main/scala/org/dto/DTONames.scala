@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ */
+
 package org.dto
 
 object DTONames {
@@ -5,4 +9,6 @@ object DTONames {
   val registerId: Int = 1
   val login: String = "Login"
   val loginId: Int = 2
+  val configTree: String = "ConfigTree"
+  val configTreeId: Int = 6
 }
