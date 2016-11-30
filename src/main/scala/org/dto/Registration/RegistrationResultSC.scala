@@ -2,7 +2,7 @@
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  */
 
-package org.dto
+package org.dto.Registration
 
 import play.api.libs.json.Json
 

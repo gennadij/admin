@@ -17,11 +17,12 @@ import org.admin.configTree.AdminComponent
 import org.admin.configTree.AdminNextStep
 import play.api.libs.json.Writes
 import play.api.libs.json.Json
-import org.dto.RegistrationSC
-import org.dto.RegistrationResultSC
-import org.dto.RegistrationCS
-import org.dto.LoginCS
-import org.dto.LoginSC
+import org.dto.Registration.RegistrationSC
+import org.dto.Registration.RegistrationResultSC
+import org.dto.Registration.RegistrationCS
+import org.dto.Login.LoginCS
+import org.dto.Login.LoginSC
+import org.dto.ConfigTree.ConfigTreeCS
 
 
 
@@ -139,8 +140,8 @@ object Admin {
 //      Persistence.setStep(user, isConnected, step, kind)
 //  }
   
-  def configTree(adminId: String) = {
-    Persistence.getConfigTree(adminId)
+  def configTree(configTreeCS: ConfigTreeCS) = {
+    Persistence.getConfigTree(configTreeCS)
   }
   
   def component(id: String): AdminComponent = {

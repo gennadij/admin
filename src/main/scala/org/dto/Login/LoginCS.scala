@@ -2,15 +2,17 @@
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  */
 
-package org.dto
+package org.dto.Login
 
+import org.dto.DTONames
 import play.api.libs.json.Json
+import org.dto.DTOIds
 
 /**
   * Created by gennadi on 20.11.16.
   */
 case class LoginCS (
-    jsonId: Int = DTONames.loginId,
+    jsonId: Int = DTOIds.loginId,
     dto: String = DTONames.login,
     params: LoginParamsCS
 )

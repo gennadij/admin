@@ -6,9 +6,7 @@ import play.api.libs.json.{JsValue, Json}
 import org.persistence.db.orientdb.OrientDB
 import org.specs2.json.Json
 
-/**
-  * Created by gennadi on 16.11.16.
-  */
+//TODO loginStatus true und false
 class ConfigTreeEmpty extends Specification with AdminWeb{
 
   def is = s2"""

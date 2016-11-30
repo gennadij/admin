@@ -4,7 +4,6 @@
 
 package org.persistence
 
-
 import org.status.SuccessfulStatus
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
@@ -16,7 +15,6 @@ import org.persistence.db.orientdb.StepVertex
 import org.persistence.db.orientdb.ComponentVertex
 import org.persistence.db.orientdb.HasComponentEdge
 import org.persistence.db.orientdb.NextStepEdge
-import org.admin.AdminUser
 import org.persistence.db.orientdb.AdminUserVertex
 import org.admin.configTree.AdminStep
 import org.admin.configTree.AdminComponent
@@ -32,6 +30,12 @@ import org.admin.configTree.AdminConfigTree
 import org.admin.configTree.AdminConfigTreeComponent
 import org.dto._
 import org.status.Status
+import org.dto.Registration.RegistrationSC
+import org.dto.Registration.RegistrationCS
+import org.dto.Login.LoginSC
+import org.dto.Login.LoginCS
+import org.dto.ConfigTree.ConfigTreeCS
+import org.persistence.db.orientdb.ConfigTree
 
 object Persistence {
   
@@ -43,15 +47,13 @@ object Persistence {
   def register(registrationCS: RegistrationCS): RegistrationSC = {
     AdminUserVertex.register(registrationCS)
   }
-  
-  def authenticate(username: String, password: String): String = {
-    val adminId: String = AdminUserVertex.adminId(username, password)
-    if(adminId.isEmpty()) "" else "AU" + adminId
-  }
-  
-  
+
   def login(loginCS: LoginCS): LoginSC = {
     AdminUserVertex.login(loginCS)
+  }
+  
+  def getConfigTree(configTreeCS: ConfigTreeCS): AdminConfigTree = {
+    ConfigTree.getConfigTree(configTreeCS)
   }
     /**
    * 
@@ -70,6 +72,11 @@ object Persistence {
     StepVertex.addStep(adminStep)
   }
   
+  
+  def authenticate(username: String, password: String): String = {
+    val adminId: String = AdminUserVertex.adminId(username, password)
+    if(adminId.isEmpty()) "" else "AU" + adminId
+  }
    /**
    * 
    * fuegt Vertex Step zu ConfigTree hinzu
@@ -94,66 +101,32 @@ object Persistence {
    * TODO korrektur fue falsche IDs 
    */
   
-  def getConfigTree(adminId: String): AdminConfigTree = {
-    val graph: OrientGraph = OrientDB.getGraph
-    
-    val res: OrientDynaElementIterable = graph
-      .command(new OCommandSQL("select from " + 
-          "(SELECT FROM " + 
-                "(traverse out(hasComponent) from " + 
-                      "(select from Step where kind='first') STRATEGY BREADTH_FIRST)" + 
-                 s" where @class='Step') where adminId='$adminId'")).execute()
-      
-    val vSteps: List[OrientVertex] = res.toList.map(_.asInstanceOf[OrientVertex])
-    
-    new AdminConfigTree(vSteps.map(getAdminStep(_, graph, adminId)))
-  }
+//  def getConfigTree(adminId: String): AdminConfigTree = {
+//    val graph: OrientGraph = OrientDB.getGraph
+//    
+//    val res: OrientDynaElementIterable = graph
+//      .command(new OCommandSQL("select from " + 
+//          "(SELECT FROM " + 
+//                "(traverse out(hasComponent) from " + 
+//                      "(select from Step where kind='first') STRATEGY BREADTH_FIRST)" + 
+//                 s" where @class='Step') where adminId='$adminId'")).execute()
+//      
+//    val vSteps: List[OrientVertex] = res.toList.map(_.asInstanceOf[OrientVertex])
+//    
+//    new AdminConfigTree(vSteps.map(getAdminStep(_, graph, adminId)))
+//  }
 
-  def getAdminStep(vStep: OrientVertex, graph: OrientGraph, adminId: String): AdminConfigTreeStep = {
-      val eHasComponent: List[Edge] = vStep.getEdges(Direction.OUT).toList
-      val vComponents: List[Vertex] = eHasComponent.map { hC => hC.getVertex(Direction.IN) }
-      
-      val stepId = if(vStep.getProperty("stepId").toString().substring(1) == vStep.getId.toString()){
-          vStep.getProperty("stepId").toString().substring(1)}
-        else {
-          vStep.setProperty("stepId", vStep.getId.toString())
-          graph.commit()
-          "S" + vStep.getProperty("stepId").toString
-        }
-      
-      new AdminConfigTreeStep(
-          vStep.getIdentity.toString,
-          stepId,
-          adminId,
-          vStep.getProperty("kind").toString(),
-          getAdminComponents(vComponents)
-      )
-  }
+
+  
   
   /**
    * TODO wenn keinen nextStep exestiert
    * entweder Fehler oder Ende von ConfigTree
    * bei NextStep einen StepObjekt hinzufügen
    */
-  def getNextStep(component: Vertex): String = {
-    val eNextStep: List[Edge] = component.getEdges(Direction.OUT).toList
-    val vNextStep: List[Vertex] = eNextStep.map ( { eNS => 
-      eNS.getVertex(Direction.IN)
-    })
-    if(vNextStep.size == 1) "NS" + vNextStep.head.getId.toString() else "no nextStep"
-  }
+
   
-  def getAdminComponents(vComponents: List[Vertex]): List[AdminConfigTreeComponent] = {
-    vComponents.map({ vC => 
-        new AdminConfigTreeComponent(
-            vC.getId.toString(),
-            vC.getProperty("componentId"),
-            vC.getProperty("adminId").toString,
-            vC.getProperty("kind").toString(),
-            getNextStep(vC)
-        )
-      })
-  }
+
   
   def addHasComponent(adminId: String, outStep: String, inComponents: List[String]): Status = {
     HasComponentEdge.add(adminId, outStep, inComponents)

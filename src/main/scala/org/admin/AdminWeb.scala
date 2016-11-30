@@ -12,10 +12,11 @@ import org.persistence.db.orientdb.AdminUserVertex
 import org.admin.configTree.AdminConfigTree
 import org.admin.configTree.AdminConfigTreeStep
 import scala.collection.immutable.Seq
-import org.dto.RegistrationCS
-import org.dto.RegistrationSC
-import org.dto.LoginCS
-import org.dto.LoginSC
+import org.dto.Registration.RegistrationCS
+import org.dto.Registration.RegistrationSC
+import org.dto.Login.LoginCS
+import org.dto.Login.LoginSC
+import org.dto.ConfigTree.ConfigTreeCS
 
 trait AdminWeb {
   
@@ -154,9 +155,12 @@ trait AdminWeb {
   }
   
   private def configTree(receivedMessage: JsValue): JsValue = {
-    val adminId = (receivedMessage \ "params" \ "adminId").asOpt[String].get
-    val authentication = (receivedMessage \ "params" \ "authentication").asOpt[Boolean].get
-    val steps = Admin.configTree(adminId)
+    val configTreeCS: ConfigTreeCS = Json.fromJson[ConfigTreeCS](receivedMessage).get
+//    val adminId = (receivedMessage \ "params" \ "adminId").asOpt[String].get
+//    val authentication = (receivedMessage \ "params" \ "authentication").asOpt[Boolean].get
+    
+    
+    val steps = Admin.configTree(configTreeCS)
     Json.obj(
       "jsonId"-> 3,
       "method" -> "configTree"

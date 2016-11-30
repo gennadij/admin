@@ -1,4 +1,4 @@
-package org.dto
+package org.dto.ConfigTree
 
 import play.api.libs.json.Json
 

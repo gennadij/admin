@@ -10,13 +10,12 @@ import org.status.Status
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
-import org.admin.AdminUser
-import org.dto.RegistrationSC
-import org.dto.RegistrationResultSC
-import org.dto.RegistrationCS
-import org.dto.LoginSC
-import org.dto.LoginCS
-import org.dto.LoginResultSC
+import org.dto.Registration.RegistrationSC
+import org.dto.Registration.RegistrationResultSC
+import org.dto.Registration.RegistrationCS
+import org.dto.Login.LoginSC
+import org.dto.Login.LoginCS
+import org.dto.Login.LoginResultSC
 
 object AdminUserVertex {
   
