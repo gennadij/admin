@@ -13,9 +13,9 @@ class ConfigTreeEmpty extends Specification with AdminWeb{
     Diese Specification prueft die leere Konfiguration
     (erste Aufruf nach der Regestrierung und Anmeldung)
       loginStatus=true                                   $e1
-      jsonId                                            $e2
-      method                                            $e3
-      result                                            $e4
+      jsonId = 6                                            $e2
+      dto=ConfigTree                                            $e3
+      result = None                                            $e4
     """
   
   
@@ -32,7 +32,6 @@ class ConfigTreeEmpty extends Specification with AdminWeb{
   
   def e1 = (loginServerClient \ "result" \ "status").asOpt[Boolean].get === true
   
-  println(loginServerClient)
   val configTreeClientServer = Json.obj(
     "jsonId" -> 6,
     "dto" -> "ConfigTree"
@@ -43,8 +42,7 @@ class ConfigTreeEmpty extends Specification with AdminWeb{
   )
 
   val configTreeServerClient = handelMessage(configTreeClientServer)
-  println(configTreeServerClient)
   def e2 = (configTreeServerClient \ "jsonId").asOpt[Int].get === 6
   def e3 = (configTreeServerClient \ "dto").asOpt[String].get === "ConfigTree"
-  def e4 = (configTreeServerClient \ "result" \ "steps").asOpt[List[JsValue]].get === List.empty
+  def e4 = (configTreeServerClient \ "result" \ "steps").asOpt[List[JsValue]] === None
 }

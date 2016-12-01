@@ -156,19 +156,7 @@ trait AdminWeb {
   
   private def configTree(receivedMessage: JsValue): JsValue = {
     val configTreeCS: ConfigTreeCS = Json.fromJson[ConfigTreeCS](receivedMessage).get
-//    val adminId = (receivedMessage \ "params" \ "adminId").asOpt[String].get
-//    val authentication = (receivedMessage \ "params" \ "authentication").asOpt[Boolean].get
-    
-    
-    
     val steps = Admin.configTree(configTreeCS)
-    
     Json.toJson(steps)
-    
-//    Json.obj(
-//      "jsonId"-> 3,
-//      "method" -> "configTree"
-//      ,"result" -> Json.toJson(steps)
-//    )
   }
 }

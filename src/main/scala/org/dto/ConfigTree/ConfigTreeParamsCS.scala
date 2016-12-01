@@ -4,7 +4,7 @@ import play.api.libs.json.Json
 
 case class ConfigTreeParamsCS (
     adminId: String,
-    loginStatus: String
+    loginStatus: Boolean
 )
 
 object ConfigTreeParamsCS {

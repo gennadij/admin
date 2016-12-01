@@ -20,4 +20,4 @@ CREATE PROPERTY nextStep.adminId STRING;
 
 CREATE CLASS AdminUser EXTENDS V;
 CREATE PROPERTY AdminUser.username STRING;
-CREATE PROPERTY AdminUser.userPassword STRING;
+CREATE PROPERTY AdminUser.password STRING;

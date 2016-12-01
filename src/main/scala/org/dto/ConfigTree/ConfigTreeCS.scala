@@ -9,8 +9,8 @@ import org.dto.DTONames
 import org.dto.DTOIds
 
 case class ConfigTreeCS (
-    jsonId: Int = DTOIds.configTreeId,
-    dto: String = DTONames.configTree,
+    jsonId: Int,
+    dto: String,
     params: ConfigTreeParamsCS
 )
 

@@ -7,35 +7,35 @@ import play.api.libs.json.{JsValue, Json}
 /**
   * Created by gennadi on 16.11.16.
   */
-class ConfigTree extends Specification with AdminWeb{
+class ConfigTreeFirstStep extends Specification with AdminWeb{
 
   def is = s2"""
     Diese Specification prueft die Erzeugung eines neuen Steps
-      autentification                                   $e1
-      jsonId                                            $e2
-      method                                            $e3
+      loginStatus=true                                   $e1
+      jsonId = 6                                            $e2
+      dto = ConfigTree                                            $e3
       adminId                                           $e4
       kind                                              $e5
     """
 
-
-  val autentificationClientServer = Json.obj(
+  
+  val loginClientServer = Json.obj(
     "jsonId" -> 2,
-    "method" -> "autheticate"
+    "dto" -> "Login"
     ,"params" -> Json.obj(
       "username" -> "firstStepConfigTree",
       "password" -> "firstStepConfigTree"
     )
   )
 
-  val autentificationServerClient = handelMessage(autentificationClientServer)
-  def e1 = (autentificationServerClient \ "result" \ "authentication").asOpt[Boolean].get === true
+  val loginServerClient = handelMessage(loginClientServer)
+  def e1 = (loginServerClient \ "result" \ "authentication").asOpt[Boolean].get === true
 
   val firstStepConfigTreeClientServer = Json.obj(
     "jsonId" -> 4,
     "method" -> "addFirstStep"
     ,"params" -> Json.obj(
-      "adminId" -> (autentificationServerClient \ "result" \ "adminId").asOpt[String].get,
+      "adminId" -> (loginServerClient \ "result" \ "adminId").asOpt[String].get,
       "kind" -> "immutable"
     )
   )
@@ -47,6 +47,6 @@ class ConfigTree extends Specification with AdminWeb{
   def e2 = (firstStepConfigTreeServerClient \ "jsonId").asOpt[Int].get === 4
   def e3 = (firstStepConfigTreeServerClient \ "method").asOpt[String].get === "addFirstStep"
   def e4 = (firstStepConfigTreeServerClient \ "result" \ "adminId").asOpt[String].get ===
-    (autentificationServerClient \ "result" \ "adminId").asOpt[String].get
+    (loginServerClient \ "result" \ "adminId").asOpt[String].get
   def e5 = (firstStepConfigTreeServerClient \ "result" \ "kind").asOpt[String].get === "immutable"
 }
