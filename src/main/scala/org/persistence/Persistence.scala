@@ -28,7 +28,6 @@ import org.admin.configTree.AdminNextStep
 import org.admin.configTree.AdminConfigTreeStep
 import org.admin.configTree.AdminConfigTree
 import org.admin.configTree.AdminConfigTreeComponent
-import org.dto._
 import org.status.Status
 import org.dto.Registration.RegistrationSC
 import org.dto.Registration.RegistrationCS
@@ -36,6 +35,7 @@ import org.dto.Login.LoginSC
 import org.dto.Login.LoginCS
 import org.dto.ConfigTree.ConfigTreeCS
 import org.persistence.db.orientdb.ConfigTree
+import org.dto.ConfigTree.ConfigTreeSC
 
 object Persistence {
   
@@ -52,7 +52,7 @@ object Persistence {
     AdminUserVertex.login(loginCS)
   }
   
-  def getConfigTree(configTreeCS: ConfigTreeCS): AdminConfigTree = {
+  def getConfigTree(configTreeCS: ConfigTreeCS): ConfigTreeSC = {
     ConfigTree.getConfigTree(configTreeCS)
   }
     /**

@@ -103,7 +103,7 @@ trait AdminWeb {
       case Some("Registration") => register(receivedMessage)
       case Some("Login") => login(receivedMessage)
       case Some("addFirstStep") => addFirstStep(receivedMessage)
-      case Some("configTree") => configTree(receivedMessage)
+      case Some("ConfigTree") => configTree(receivedMessage)
       case Some("addComponent") => addComponent(receivedMessage)
       case Some("addNextStep") => addNextStep(receivedMessage)
       case _ => Json.obj("error" -> "keinen Treffer")
@@ -160,11 +160,15 @@ trait AdminWeb {
 //    val authentication = (receivedMessage \ "params" \ "authentication").asOpt[Boolean].get
     
     
+    
     val steps = Admin.configTree(configTreeCS)
-    Json.obj(
-      "jsonId"-> 3,
-      "method" -> "configTree"
-      ,"result" -> Json.toJson(steps)
-    )
+    
+    Json.toJson(steps)
+    
+//    Json.obj(
+//      "jsonId"-> 3,
+//      "method" -> "configTree"
+//      ,"result" -> Json.toJson(steps)
+//    )
   }
 }

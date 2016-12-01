@@ -23,6 +23,7 @@ import org.dto.Registration.RegistrationCS
 import org.dto.Login.LoginCS
 import org.dto.Login.LoginSC
 import org.dto.ConfigTree.ConfigTreeCS
+import org.dto.ConfigTree.ConfigTreeSC
 
 
 
@@ -140,7 +141,7 @@ object Admin {
 //      Persistence.setStep(user, isConnected, step, kind)
 //  }
   
-  def configTree(configTreeCS: ConfigTreeCS) = {
+  def configTree(configTreeCS: ConfigTreeCS): ConfigTreeSC = {
     Persistence.getConfigTree(configTreeCS)
   }
   

@@ -12,7 +12,7 @@ class ConfigTreeEmpty extends Specification with AdminWeb{
   def is = s2"""
     Diese Specification prueft die leere Konfiguration
     (erste Aufruf nach der Regestrierung und Anmeldung)
-      autentification                                   $e1
+      loginStatus=true                                   $e1
       jsonId                                            $e2
       method                                            $e3
       result                                            $e4
@@ -27,22 +27,24 @@ class ConfigTreeEmpty extends Specification with AdminWeb{
       "password" -> "testEmptyConfigTree"
     )
   )
-
+  
   val loginServerClient = handelMessage(loginClientServer)
-  def e1 = (loginServerClient \ "result" \ "authentication").asOpt[Boolean].get === true
-
+  
+  def e1 = (loginServerClient \ "result" \ "status").asOpt[Boolean].get === true
+  
+  println(loginServerClient)
   val configTreeClientServer = Json.obj(
     "jsonId" -> 6,
-    "method" -> "configTree"
+    "dto" -> "ConfigTree"
     ,"params" -> Json.obj(
       "adminId" -> (loginServerClient \ "result" \ "adminId").asOpt[String].get,
-      "authentication" -> (loginServerClient \ "result" \ "authentication").asOpt[Boolean].get
+      "loginStatus" -> (loginServerClient \ "result" \ "status").asOpt[Boolean].get
     )
   )
 
   val configTreeServerClient = handelMessage(configTreeClientServer)
   println(configTreeServerClient)
-  def e2 = (configTreeServerClient \ "jsonId").asOpt[Int].get === 3
-  def e3 = (configTreeServerClient \ "method").asOpt[String].get === "configTree"
+  def e2 = (configTreeServerClient \ "jsonId").asOpt[Int].get === 6
+  def e3 = (configTreeServerClient \ "dto").asOpt[String].get === "ConfigTree"
   def e4 = (configTreeServerClient \ "result" \ "steps").asOpt[List[JsValue]].get === List.empty
 }
