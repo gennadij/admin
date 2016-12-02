@@ -3,7 +3,8 @@ package org.dto.ConfigTree
 import play.api.libs.json.Json
 
 case class ConfigTreeResultSC (
-    steps: Seq[ConfigTreeStepSC]
+    steps: Seq[ConfigTreeStepSC],
+    message: String
 )
 
 object ConfigTreeResultSC {

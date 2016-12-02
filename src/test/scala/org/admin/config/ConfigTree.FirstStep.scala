@@ -11,11 +11,18 @@ class ConfigTreeFirstStep extends Specification with AdminWeb{
 
   def is = s2"""
     Diese Specification prueft die Erzeugung eines neuen Steps
-      loginStatus=true                                   $e1
-      jsonId = 6                                            $e2
-      dto = ConfigTree                                            $e3
-      adminId                                           $e4
-      kind                                              $e5
+      Login=========
+      loginStatus=true                                                       $e1
+      FirstStep
+      jsonId = 4                                                             $e2
+      dto = ConfigTree                                                       $e3
+      adminId                                                                $e4
+      kind = Immutable                                                       $e5
+      ConfigTree
+      jsonId = 6                                                             $e6
+      dto = ConfigTree                                                       $e7
+      configTree = FirstStep                                                 $e8
+      
     """
 
   
@@ -31,12 +38,15 @@ class ConfigTreeFirstStep extends Specification with AdminWeb{
   val loginServerClient = handelMessage(loginClientServer)
   def e1 = (loginServerClient \ "result" \ "authentication").asOpt[Boolean].get === true
 
+//  ============================================================================
+  
   val firstStepConfigTreeClientServer = Json.obj(
     "jsonId" -> 4,
     "method" -> "addFirstStep"
     ,"params" -> Json.obj(
       "adminId" -> (loginServerClient \ "result" \ "adminId").asOpt[String].get,
-      "kind" -> "immutable"
+      "kind" -> "immutable",
+      "loginStatus" -> (loginServerClient \ "result" \ "loginStatus").asOpt[Boolean].get
     )
   )
 
@@ -49,4 +59,22 @@ class ConfigTreeFirstStep extends Specification with AdminWeb{
   def e4 = (firstStepConfigTreeServerClient \ "result" \ "adminId").asOpt[String].get ===
     (loginServerClient \ "result" \ "adminId").asOpt[String].get
   def e5 = (firstStepConfigTreeServerClient \ "result" \ "kind").asOpt[String].get === "immutable"
+
+//  ============================================================================
+  
+  val configTreeClientServer = Json.obj(
+    "jsonId" -> 6,
+    "dto" -> "ConfigTree"
+    ,"params" -> Json.obj(
+      "adminId" -> (loginServerClient \ "result" \ "adminId").asOpt[String].get,
+      "loginStatus" -> (loginServerClient \ "result" \ "status").asOpt[Boolean].get
+    )
+  )
+  
+  
+  val configTreeServerClient = handelMessage(configTreeClientServer)
+
+  def e6 = (configTreeServerClient \ "jsonId").asOpt[Int].get === 6
+  def e7 = (configTreeServerClient \ "dto").asOpt[String].get === "ConfigTree"
+  def e8 = (configTreeServerClient \ "result" \ "steps").asOpt[List[JsValue]] === None
 }

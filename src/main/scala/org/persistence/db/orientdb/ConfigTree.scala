@@ -31,7 +31,7 @@ object ConfigTree {
       
     val vSteps: List[OrientVertex] = res.toList.map(_.asInstanceOf[OrientVertex])
     
-    new ConfigTreeSC(params = new ConfigTreeResultSC(vSteps.map(getAdminStep(_, graph, adminId))))
+    new ConfigTreeSC(params = new ConfigTreeResultSC(vSteps.map(getAdminStep(_, graph, adminId)), ""))
 //    new AdminConfigTree(vSteps.map(getAdminStep(_, graph, adminId)))
   }
   

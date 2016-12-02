@@ -17,6 +17,7 @@ import org.dto.Registration.RegistrationSC
 import org.dto.Login.LoginCS
 import org.dto.Login.LoginSC
 import org.dto.ConfigTree.ConfigTreeCS
+import org.dto.firstStep.FirstStepCS
 
 trait AdminWeb {
   
@@ -102,7 +103,7 @@ trait AdminWeb {
     (receivedMessage \ "dto").asOpt[String] match {
       case Some("Registration") => register(receivedMessage)
       case Some("Login") => login(receivedMessage)
-      case Some("addFirstStep") => addFirstStep(receivedMessage)
+      case Some("FirstStep") => firstStep(receivedMessage)
       case Some("ConfigTree") => configTree(receivedMessage)
       case Some("addComponent") => addComponent(receivedMessage)
       case Some("addNextStep") => addNextStep(receivedMessage)
@@ -123,17 +124,20 @@ trait AdminWeb {
   }
   
   
-  private def addFirstStep(receivedMessage: JsValue): JsValue = {
+  private def firstStep(receivedMessage: JsValue): JsValue = {
+    val firstStepCS: FirstStepCS = Json.fromJson[FirstStepCS](receivedMessage).get
     //TODO impl Reads with validation show 
     // https://www.playframework.com/documentation/2.4.x/ScalaJsonCombinators
-    val adminId = (receivedMessage \ "params" \ "adminId").asOpt[String].get
-    val kind = (receivedMessage \ "params" \ "kind").asOpt[String].get
-    val step = Admin.addStep(new AdminStep("", "", adminId, kind))
-    Json.obj(
-        "jsonId"-> 4,
-        "method" -> "addFirstStep"
-        ,"result" -> Json.toJson(step)
-        )
+//    val adminId = (receivedMessage \ "params" \ "adminId").asOpt[String].get
+//    val kind = (receivedMessage \ "params" \ "kind").asOpt[String].get
+    
+    
+//    val step = Admin.addStep(new AdminStep("", "", adminId, kind))
+    Json.obj(""->"")
+//        "jsonId"-> 4,
+//        "method" -> "addFirstStep"
+//        ,"result" -> Json.toJson(step)
+//        )
   }
   
   private def addComponent(receivedMessage: JsValue): JsValue = {
