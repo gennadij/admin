@@ -4,8 +4,8 @@ import play.api.libs.json.Json
 
 case class FirstStepParamsCS (
   adminId: String,
-  loginStatus: Boolean,
-  kind: String
+  kind: String,
+  loginStatus: Boolean
 )
 
 

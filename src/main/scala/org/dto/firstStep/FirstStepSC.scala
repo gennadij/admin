@@ -8,9 +8,9 @@ case class FirstStepSC (
     jsonId: Int = DTOIds.firstStep,
     dto: String = DTONames.firstStep,
     message: String,
-    params: FirstStepResultSC
+    result: FirstStepResultSC
 )
 
 object FirstStepSC {
-  implicit val fortmat = Json.reads[FirstStepSC]
+  implicit val fortmat = Json.writes[FirstStepSC]
 }

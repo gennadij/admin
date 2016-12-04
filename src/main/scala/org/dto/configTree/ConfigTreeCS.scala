@@ -2,7 +2,7 @@
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  */
 
-package org.dto.ConfigTree
+package org.dto.configTree
 
 import play.api.libs.json.Json
 import org.dto.DTONames

@@ -1,4 +1,4 @@
-package org.dto.ConfigTree
+package org.dto.configTree
 
 import play.api.libs.json.Json
 import org.dto.DTONames
@@ -7,7 +7,7 @@ import org.dto.DTOIds
 case class ConfigTreeSC (
     jsonId: Int = DTOIds.configTreeId,
     dto: String = DTONames.configTree,
-    params: ConfigTreeResultSC
+    result: ConfigTreeResultSC
 )
 
 object ConfigTreeSC {

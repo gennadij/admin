@@ -13,6 +13,9 @@ import org.admin.configTree.AdminStep
 import org.admin.configTree.AdminConfigTreeStep
 import org.status.Status
 import org.admin.configTree.AdminNextStep
+import org.dto.firstStep.FirstStepCS
+import org.dto.firstStep.FirstStepSC
+import org.dto.firstStep.FirstStepResultSC
 
 
 object StepVertex {
@@ -55,6 +58,28 @@ object StepVertex {
    * 
    * @return Status
    */
+  
+  def addFirstStep(firstStepCS: FirstStepCS): FirstStepSC = {
+    val graph: OrientGraph = OrientDB.getGraph
+    val vStep: OrientVertex = graph.addVertex("class:Step", 
+            "adminId", firstStepCS.params.adminId,
+            "kind", firstStepCS.params.kind)
+        graph.commit
+        vStep.setProperty("stepId", "S" + vStep.getIdentity.toString())
+        graph.commit
+        
+        new FirstStepSC(
+            message = "Einen neuen Schritt hinzugefuegt",
+            result = new FirstStepResultSC(
+                vStep.getIdentity.toString(),
+                "S" + vStep.getIdentity.toString(),
+                vStep.getProperty("adminId"),
+                vStep.getProperty("kind")
+            )
+        )
+  }
+  
+  
   
   def addStep(adminStep: AdminStep): AdminStep = {
     val graph: OrientGraph = OrientDB.getGraph

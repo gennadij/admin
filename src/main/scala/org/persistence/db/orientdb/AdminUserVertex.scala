@@ -10,12 +10,12 @@ import org.status.Status
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
-import org.dto.Registration.RegistrationSC
-import org.dto.Registration.RegistrationResultSC
-import org.dto.Registration.RegistrationCS
 import org.dto.Login.LoginSC
 import org.dto.Login.LoginCS
 import org.dto.Login.LoginResultSC
+import org.dto.registration.RegistrationCS
+import org.dto.registration.RegistrationSC
+import org.dto.registration.RegistrationResultSC
 
 object AdminUserVertex {
   
@@ -76,7 +76,6 @@ object AdminUserVertex {
     val adminUsers = res.toList
     if(adminUsers.size == 1){
       val loginSC: List[LoginSC] = adminUsers.map(login => {
-        println(login)
         new LoginSC(result = new LoginResultSC(
           "AU" + login.asInstanceOf[OrientVertex].getIdentity,
           login.asInstanceOf[OrientVertex].getProperty("username"),

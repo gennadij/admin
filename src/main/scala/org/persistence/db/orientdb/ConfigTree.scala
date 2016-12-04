@@ -1,6 +1,5 @@
 package org.persistence.db.orientdb
 
-import org.dto.ConfigTree.ConfigTreeCS
 import org.admin.configTree.AdminConfigTree
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
@@ -12,10 +11,11 @@ import com.tinkerpop.blueprints.Vertex
 import org.admin.configTree.AdminConfigTreeStep
 import com.tinkerpop.blueprints.Direction
 import org.admin.configTree.AdminConfigTreeComponent
-import org.dto.ConfigTree.ConfigTreeSC
-import org.dto.ConfigTree.ConfigTreeResultSC
-import org.dto.ConfigTree.ConfigTreeStepSC
-import org.dto.ConfigTree.ConfigTreeComponentSC
+import org.dto.configTree.ConfigTreeCS
+import org.dto.configTree.ConfigTreeSC
+import org.dto.configTree.ConfigTreeResultSC
+import org.dto.configTree.ConfigTreeStepSC
+import org.dto.configTree.ConfigTreeComponentSC
 
 object ConfigTree {
   def getConfigTree(configTreeCS: ConfigTreeCS): ConfigTreeSC = {
@@ -31,7 +31,7 @@ object ConfigTree {
       
     val vSteps: List[OrientVertex] = res.toList.map(_.asInstanceOf[OrientVertex])
     
-    new ConfigTreeSC(params = new ConfigTreeResultSC(vSteps.map(getAdminStep(_, graph, adminId)), ""))
+    new ConfigTreeSC(result = new ConfigTreeResultSC(vSteps.map(getAdminStep(_, graph, adminId)), ""))
 //    new AdminConfigTree(vSteps.map(getAdminStep(_, graph, adminId)))
   }
   

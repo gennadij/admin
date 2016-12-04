@@ -12,12 +12,12 @@ import org.persistence.db.orientdb.AdminUserVertex
 import org.admin.configTree.AdminConfigTree
 import org.admin.configTree.AdminConfigTreeStep
 import scala.collection.immutable.Seq
-import org.dto.Registration.RegistrationCS
-import org.dto.Registration.RegistrationSC
 import org.dto.Login.LoginCS
 import org.dto.Login.LoginSC
-import org.dto.ConfigTree.ConfigTreeCS
 import org.dto.firstStep.FirstStepCS
+import org.dto.registration.RegistrationCS
+import org.dto.registration.RegistrationSC
+import org.dto.configTree.ConfigTreeCS
 
 trait AdminWeb {
   
@@ -128,16 +128,8 @@ trait AdminWeb {
     val firstStepCS: FirstStepCS = Json.fromJson[FirstStepCS](receivedMessage).get
     //TODO impl Reads with validation show 
     // https://www.playframework.com/documentation/2.4.x/ScalaJsonCombinators
-//    val adminId = (receivedMessage \ "params" \ "adminId").asOpt[String].get
-//    val kind = (receivedMessage \ "params" \ "kind").asOpt[String].get
-    
-    
-//    val step = Admin.addStep(new AdminStep("", "", adminId, kind))
-    Json.obj(""->"")
-//        "jsonId"-> 4,
-//        "method" -> "addFirstStep"
-//        ,"result" -> Json.toJson(step)
-//        )
+    val step = Admin.addFirstStep(firstStepCS)
+    Json.toJson(step)
   }
   
   private def addComponent(receivedMessage: JsValue): JsValue = {

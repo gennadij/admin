@@ -29,13 +29,15 @@ import org.admin.configTree.AdminConfigTreeStep
 import org.admin.configTree.AdminConfigTree
 import org.admin.configTree.AdminConfigTreeComponent
 import org.status.Status
-import org.dto.Registration.RegistrationSC
-import org.dto.Registration.RegistrationCS
 import org.dto.Login.LoginSC
 import org.dto.Login.LoginCS
-import org.dto.ConfigTree.ConfigTreeCS
 import org.persistence.db.orientdb.ConfigTree
-import org.dto.ConfigTree.ConfigTreeSC
+import org.dto.firstStep.FirstStepCS
+import org.dto.firstStep.FirstStepSC
+import org.dto.registration.RegistrationCS
+import org.dto.registration.RegistrationSC
+import org.dto.configTree.ConfigTreeSC
+import org.dto.configTree.ConfigTreeCS
 
 object Persistence {
   
@@ -54,6 +56,10 @@ object Persistence {
   
   def getConfigTree(configTreeCS: ConfigTreeCS): ConfigTreeSC = {
     ConfigTree.getConfigTree(configTreeCS)
+  }
+  
+  def addFirstStep(firstStepCS: FirstStepCS): FirstStepSC = {
+    StepVertex.addFirstStep(firstStepCS)
   }
     /**
    * 

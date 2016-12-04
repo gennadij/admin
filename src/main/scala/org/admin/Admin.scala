@@ -17,18 +17,16 @@ import org.admin.configTree.AdminComponent
 import org.admin.configTree.AdminNextStep
 import play.api.libs.json.Writes
 import play.api.libs.json.Json
-import org.dto.Registration.RegistrationSC
-import org.dto.Registration.RegistrationResultSC
-import org.dto.Registration.RegistrationCS
 import org.dto.Login.LoginCS
 import org.dto.Login.LoginSC
-import org.dto.ConfigTree.ConfigTreeCS
-import org.dto.ConfigTree.ConfigTreeSC
+import org.dto.firstStep.FirstStepSC
+import org.dto.firstStep.FirstStepCS
+import org.dto.configTree.ConfigTreeCS
+import org.dto.configTree.ConfigTreeSC
+import org.dto.registration.RegistrationSC
+import org.dto.registration.RegistrationCS
 
-
-
-object Admin {
-  /**
+/**
    * Administrator definiert und zusammenstellt sein einegen Konfiguration.
    * Auf der Webseite von Administrator werden alle notwendigen Einstellungen 
    * zu dem ConfigServer, ConfigClient getätigt. Danach kann der User alle 
@@ -43,18 +41,9 @@ object Admin {
    * ---- die gesamte Information zu der Step mit Components aus der fremden DB zu lesen
    * 
    */
-  
-  /**
-   * Rigestrierung
-   * 
-   * Client -> Regestrierung mit adminId und password
-   * Server -> true/false Bestätigung
-   * 
-   * changeUsername(): AdminUser
-   * changePassword(): AdminUser
-   * deleteAccount(): AdminUser
-   * 
-   */
+
+
+object Admin {
   
   def register(registrationCS: RegistrationCS): RegistrationSC = {
     Persistence.register(registrationCS)
@@ -64,10 +53,25 @@ object Admin {
     Persistence.login(loginCS: LoginCS)
   }
   
-  /**
-   * END
-   */
+  def configTree(configTreeCS: ConfigTreeCS): ConfigTreeSC = {
+    Persistence.getConfigTree(configTreeCS)
+  }
   
+  def addFirstStep(firstStepCS: FirstStepCS): FirstStepSC = {
+    Persistence.addFirstStep(firstStepCS)
+  }
+  
+  
+  
+  
+  
+  def addStep(adminStep: AdminNextStep): AdminNextStep = {
+    Persistence.addStep(adminStep)
+  }
+  
+  def addStep(adminStep: AdminStep): AdminStep = {
+    Persistence.addStep(adminStep)
+  }
   
   /**
    * create ConfigTree
@@ -88,9 +92,7 @@ object Admin {
    * @return Status
    */
   
-  def addStep(adminStep: AdminStep): AdminStep = {
-    Persistence.addStep(adminStep)
-  }
+
   
   /**
    * 
@@ -104,10 +106,6 @@ object Admin {
    * 
    * @return Status
    */
-  
-  def addStep(adminStep: AdminNextStep): AdminNextStep = {
-    Persistence.addStep(adminStep)
-  }
   
   /**
    * fuegt Vertex Component zu ConfigTree hinzu
@@ -140,10 +138,7 @@ object Admin {
 //    
 //      Persistence.setStep(user, isConnected, step, kind)
 //  }
-  
-  def configTree(configTreeCS: ConfigTreeCS): ConfigTreeSC = {
-    Persistence.getConfigTree(configTreeCS)
-  }
+
   
   def component(id: String): AdminComponent = {
     Persistence.component(id)

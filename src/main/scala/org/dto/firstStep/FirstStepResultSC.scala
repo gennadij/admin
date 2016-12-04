@@ -11,5 +11,5 @@ case class FirstStepResultSC (
 )
 
 object FirstStepResultSC {
-  implicit val fortmat = Json.reads[FirstStepResultSC]
+  implicit val fortmat = Json.writes[FirstStepResultSC]
 }
