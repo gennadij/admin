@@ -16,6 +16,8 @@ import org.admin.configTree.AdminNextStep
 import org.dto.firstStep.FirstStepCS
 import org.dto.firstStep.FirstStepSC
 import org.dto.firstStep.FirstStepResultSC
+import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
+import com.orientechnologies.orient.core.sql.OCommandSQL
 
 
 object StepVertex {
@@ -78,6 +80,18 @@ object StepVertex {
             )
         )
   }
+  
+  
+  def removerSteps(adminId: String) = {
+    val graph: OrientGraph = OrientDB.getGraph
+    val res: Int = graph
+      .command(new OCommandSQL(s"DELETE VERTEX Step where adminId='$adminId'")).execute()
+      
+    graph.commit
+    res
+  }
+  
+  
   
   
   

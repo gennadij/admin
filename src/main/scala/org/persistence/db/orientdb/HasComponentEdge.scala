@@ -13,6 +13,7 @@ import org.status.SuccessfulStatus
 import org.status.WarningStatus
 import com.tinkerpop.blueprints.impls.orient.OrientEdge
 import org.status.Status
+import org.dto.component._
 
 object HasComponentEdge {
   
@@ -21,6 +22,25 @@ object HasComponentEdge {
   val propKeyAdminId = "adminId"
   val propKeyComponentId = "componentId"
   val propKeyStepId = "stepId"
+  
+  def add(componentSC: ComponentSC): Status = {
+   val graph: OrientGraph = OrientDB.getGraph
+   val outStep: String = componentSC.result.stepId
+   val inComponent: String = componentSC.result.id
+   val adminId: String = componentSC.result.adminId
+   val eHasComponent: OrientEdge = graph.addEdge("class:hasComponent", 
+     graph.getVertex(outStep), 
+      graph.getVertex(inComponent), 
+     "hasComponent")
+   eHasComponent.setProperty("adminId", adminId)
+   eHasComponent.setProperty("hasComponentId", "S" + outStep + "C" + inComponent )
+	 graph.commit
+   
+   new SuccessfulStatus("added hasComponents", "S" + outStep + "C" + inComponent)
+  }
+  
+  
+  
   
   def createSchema(){
     val graph: OrientGraph = OrientDB.getGraph

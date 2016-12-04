@@ -38,6 +38,7 @@ import org.dto.registration.RegistrationCS
 import org.dto.registration.RegistrationSC
 import org.dto.configTree.ConfigTreeSC
 import org.dto.configTree.ConfigTreeCS
+import org.dto.component._
 
 object Persistence {
   
@@ -60,6 +61,15 @@ object Persistence {
   
   def addFirstStep(firstStepCS: FirstStepCS): FirstStepSC = {
     StepVertex.addFirstStep(firstStepCS)
+  }
+  
+    def addComponent(componentCS: ComponentCS): ComponentSC = {
+    ComponentVertex.addComponent(componentCS)
+  }
+  
+    
+  def addHasComponent(componentSC: ComponentSC): Status = {
+    HasComponentEdge.add(componentSC)
   }
     /**
    * 
@@ -99,9 +109,9 @@ object Persistence {
   def addStep(adminStep: AdminNextStep): AdminNextStep = {
     StepVertex.addStep(adminStep)
   }
-  def addComponent(adminComponent: AdminComponent): AdminComponent = {
-    ComponentVertex.addComponent(adminComponent)
-  }
+//  def addComponent(adminComponent: AdminComponent): AdminComponent = {
+//    ComponentVertex.addComponent(adminComponent)
+//  }
   
   /**
    * TODO korrektur fue falsche IDs 

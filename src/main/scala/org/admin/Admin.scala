@@ -25,7 +25,7 @@ import org.dto.configTree.ConfigTreeCS
 import org.dto.configTree.ConfigTreeSC
 import org.dto.registration.RegistrationSC
 import org.dto.registration.RegistrationCS
-
+import org.dto.component._
 /**
    * Administrator definiert und zusammenstellt sein einegen Konfiguration.
    * Auf der Webseite von Administrator werden alle notwendigen Einstellungen 
@@ -59,6 +59,14 @@ object Admin {
   
   def addFirstStep(firstStepCS: FirstStepCS): FirstStepSC = {
     Persistence.addFirstStep(firstStepCS)
+  }
+  
+  def addComponent(componentCS: ComponentCS): ComponentSC = {
+    Persistence.addComponent(componentCS)
+  }
+  
+  def addHasComponent(componentSC: ComponentSC) = {
+    Persistence.addHasComponent(componentSC)
   }
   
   
@@ -110,19 +118,19 @@ object Admin {
   /**
    * fuegt Vertex Component zu ConfigTree hinzu
    */
-  def addComponent(adminComponent: AdminComponent): AdminComponent = {
-    Persistence.addComponent(adminComponent)
-  }
+//  def addComponent(adminComponent: AdminComponent): AdminComponent = {
+//    Persistence.addComponent(adminComponent)
+//  }
   /**
    * fuegt Edge hasComponent zu ConfigTree hinzu, dadurch wird Vertex Step mit 
    * Vertex Component verbunden
    */
-  def addHasComponent(adminId: String, outStep: String, inComponents: List[String]) = {
-    Persistence.addHasComponent(adminId, outStep, inComponents)
-  }
-  def addHasComponent(adminId: String, outStep: String, inComponent: String): Status = {
-    Persistence.addHasComponent(adminId, outStep, inComponent)
-  }
+//  def addHasComponent(adminId: String, outStep: String, inComponents: List[String]) = {
+//    Persistence.addHasComponent(adminId, outStep, inComponents)
+//  }
+//  def addHasComponent(adminId: String, outStep: String, inComponent: String): Status = {
+//    Persistence.addHasComponent(adminId, outStep, inComponent)
+//  }
   
   /**
    * fuegt Edge NextStep zu ConfigTree hinzu, dadurch wird Vertex Component mit 

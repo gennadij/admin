@@ -5,15 +5,11 @@ import org.specs2.Specification
 import play.api.libs.json.{JsValue, Json}
 import org.persistence.db.orientdb.StepVertex
 
-/**
-  * Created by gennadi on 16.11.16.
-  */
-class ConfigTreeFirstStep extends Specification with AdminWeb{
+class ConfigTreeFirstStepWithComponent extends Specification with AdminWeb{
 
   def is = s2"""
     Diese Specification prueft die Erzeugung eines neuen Steps
       Login -> loginStatus=true                                              $e1
-      DeleteStep -> 1                                                       $e12
       FirstStep -> jsonId = 4                                                $e2
       FirstStep -> dto = ConfigTree                                          $e3
       FirstStep -> adminId                                                   $e4
@@ -39,13 +35,14 @@ class ConfigTreeFirstStep extends Specification with AdminWeb{
 
   val loginServerClient = handelMessage(loginClientServer)
   def e1 = (loginServerClient \ "result" \ "status").asOpt[Boolean].get === true
+  
 //  ============================================================================
   
   //delete Step von vorheriger Ausfuerung
   def e12 = StepVertex.removerSteps((loginServerClient \ "result" \ "adminId").asOpt[String].get) === 1
-  
-//  ============================================================================
 
+//  ============================================================================
+  
   val firstStepConfigTreeClientServer = Json.obj(
     "jsonId" -> 4,
     "dto" -> "FirstStep" 
@@ -85,4 +82,22 @@ class ConfigTreeFirstStep extends Specification with AdminWeb{
     (loginServerClient \ "result" \ "adminId").asOpt[String].get
   def e10 = (((configTreeServerClient \ "result" \ "steps")(0)) \ "kind").asOpt[String].get === "first"
   def e11 = (((configTreeServerClient \ "result" \ "steps")(0)) \ "components").asOpt[List[JsValue]].get.size === 0
+  
+//  {"jsonId": 5, "method": "addComponent", "params": {"adminId": "AU#40:0", "kind": "immutable", "stepId": "#12:1"}
+  
+  val componentClientServer = Json.obj(
+      "jsonId" -> 5,
+      "dto" -> "Component"
+      ,"params" -> Json.obj(
+          "adminId" -> (loginServerClient \ "result" \ "adminId").asOpt[String].get,
+          "kind" -> "immutable"
+          ,"stepId" -> (firstStepConfigTreeServerClient \ "result" \ "id").asOpt[String].get
+      )
+  )
+  
+  
+//  {"jsonId": 5, "method": "addComponent", 
+//        "result": {"id": "#13:1", "componentId": "C#13:1", "adminId": "AU#40:0", "kind": "immutable"}}
+  
+  
 }

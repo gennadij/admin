@@ -18,6 +18,8 @@ import org.dto.firstStep.FirstStepCS
 import org.dto.registration.RegistrationCS
 import org.dto.registration.RegistrationSC
 import org.dto.configTree.ConfigTreeCS
+import org.dto.component.ComponentCS
+import org.dto.component.ComponentSC
 
 trait AdminWeb {
   
@@ -105,7 +107,7 @@ trait AdminWeb {
       case Some("Login") => login(receivedMessage)
       case Some("FirstStep") => firstStep(receivedMessage)
       case Some("ConfigTree") => configTree(receivedMessage)
-      case Some("addComponent") => addComponent(receivedMessage)
+      case Some("Component") => component(receivedMessage)
       case Some("addNextStep") => addNextStep(receivedMessage)
       case _ => Json.obj("error" -> "keinen Treffer")
     }
@@ -132,13 +134,19 @@ trait AdminWeb {
     Json.toJson(step)
   }
   
-  private def addComponent(receivedMessage: JsValue): JsValue = {
-    val adminId = (receivedMessage \ "adminId").toString()
-    val kind = (receivedMessage \ "kind").toString()
-    val stepId = (receivedMessage \ "stepId").toString()
-    val component = Admin.addComponent(new AdminComponent("", "", adminId, kind))
-    val hasComponent = Admin.addHasComponent(adminId, stepId, component.id)
-    Json.toJson(component)
+  private def component(receivedMessage: JsValue): JsValue = {
+    val componentCS: ComponentCS = Json.fromJson[ComponentCS](receivedMessage).get
+    
+//    val adminId = (receivedMessage \ "adminId").toString()
+//    val kind = (receivedMessage \ "kind").toString()
+//    val stepId = (receivedMessage \ "stepId").toString()
+    
+    val componentSC: ComponentSC = Admin.addComponent(componentCS)
+//    val component = Admin.addComponent(new AdminComponent("", "", adminId, kind))
+//    val hasComponent = Admin.addHasComponent(adminId, stepId, component.id)
+    val hasComponent = Admin.addHasComponent(componentSC)
+//    Json.toJson(component)
+    Json.toJson(componentSC)
   }
   
   private def addNextStep(receivedMessage: JsValue): JsValue = {

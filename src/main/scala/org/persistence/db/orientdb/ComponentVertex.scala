@@ -12,6 +12,7 @@ import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.admin.configTree.AdminComponent
 import org.status.Status
+import org.dto.component._
 
 object ComponentVertex {
   
@@ -35,6 +36,31 @@ object ComponentVertex {
 //  }
   
   
+  def addComponent(componentCS: ComponentCS): ComponentSC = {
+    val graph: OrientGraph = OrientDB.getGraph
+    
+    val vComponent: OrientVertex = graph.addVertex(
+        "class:Component", 
+        "kind", componentCS.params.kind,
+        "adminId", componentCS.params.adminId
+    )
+    
+    graph.commit
+    vComponent.setProperty("componentId", "C" + vComponent.getIdentity.toString())
+    graph.commit
+    
+    new ComponentSC(
+        result = new ComponentResultSC(
+            vComponent.getIdentity.toString,
+            "C" + vComponent.getIdentity,
+            componentCS.params.adminId,
+            componentCS.params.kind,
+            componentCS.params.stepId
+        ),
+        message = ""
+    )
+  }
+  
   def get(id: String): AdminComponent = {
     val graph: OrientGraph = OrientDB.getGraph
     val vComponent = graph.getVertex(id)
@@ -47,24 +73,27 @@ object ComponentVertex {
   }
   
   
-  def addComponent(adminComponent: AdminComponent): AdminComponent = {
-    val graph: OrientGraph = OrientDB.getGraph
-    
-    val vComponent: OrientVertex = graph.addVertex(
-        "class:Component", 
-        "kind", adminComponent.kind,
-        "adminId", adminComponent.adminId
-    )
-    graph.commit
-    vComponent.setProperty("componentId", "C" + vComponent.getIdentity.toString())
-    graph.commit
-    new AdminComponent(
-        vComponent.getIdentity.toString,
-        "C" + vComponent.getIdentity,
-        adminComponent.adminId,
-        adminComponent.kind
-    )
-  }
+  
+  
+  
+//  def addComponent(adminComponent: AdminComponent): AdminComponent = {
+//    val graph: OrientGraph = OrientDB.getGraph
+//    
+//    val vComponent: OrientVertex = graph.addVertex(
+//        "class:Component", 
+//        "kind", adminComponent.kind,
+//        "adminId", adminComponent.adminId
+//    )
+//    graph.commit
+//    vComponent.setProperty("componentId", "C" + vComponent.getIdentity.toString())
+//    graph.commit
+//    new AdminComponent(
+//        vComponent.getIdentity.toString,
+//        "C" + vComponent.getIdentity,
+//        adminComponent.adminId,
+//        adminComponent.kind
+//    )
+//  }
   
   
   def createSchema(graph: OrientGraph) = {
