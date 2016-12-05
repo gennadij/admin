@@ -88,7 +88,7 @@ trait AdminWeb {
    *   {"jsonId": 5, "method": "addComponent", "params": {"adminId": "AU#40:0", "kind": "immutable", "stepId": "#12:1"}
    *    Server -> Client
    *    {"jsonId": 5, "method": "addComponent", 
-   *      "result": {"id": "#13:1", "componentId": "C#13:1", "adminId": "AU#40:0", "kind": "immutable"}}
+   *      "result": {"id": "#13:1", "componentId": "C#13:1", "adminId": "AU#40:0", "kind": "immutable", "stepId": "#12:1"}}
    * 6. => addNextStep add connect Component with NextStep
    *   Server <- Client
    *   {"jsonId": 6, "method": "addNextStep", "params": {"adminId": "AU#40:0", "kind": "default", "componentId": "#13:1"}
@@ -140,7 +140,6 @@ trait AdminWeb {
 //    val adminId = (receivedMessage \ "adminId").toString()
 //    val kind = (receivedMessage \ "kind").toString()
 //    val stepId = (receivedMessage \ "stepId").toString()
-    
     val componentSC: ComponentSC = Admin.addComponent(componentCS)
 //    val component = Admin.addComponent(new AdminComponent("", "", adminId, kind))
 //    val hasComponent = Admin.addHasComponent(adminId, stepId, component.id)
@@ -153,9 +152,9 @@ trait AdminWeb {
     val adminId = (receivedMessage \ "adminId").toString()
     val kind = (receivedMessage \ "kind").toString()
     val componentId = (receivedMessage \ "componentId").toString()
-    val step = Admin.addStep(new AdminStep("", "", adminId, kind))
-    val nextStep = Admin.addNextStep(adminId, componentId, step.id)
-    Json.toJson(step)
+//    val step = Admin.addStep(new AdminStep("", "", adminId, kind))
+//    val nextStep = Admin.addNextStep(adminId, componentId, step.id)
+    Json.toJson("")
   }
   
   private def configTree(receivedMessage: JsValue): JsValue = {

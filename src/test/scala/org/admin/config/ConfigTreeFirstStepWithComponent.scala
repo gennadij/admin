@@ -83,6 +83,8 @@ class ConfigTreeFirstStepWithComponent extends Specification with AdminWeb{
   def e10 = (((configTreeServerClient \ "result" \ "steps")(0)) \ "kind").asOpt[String].get === "first"
   def e11 = (((configTreeServerClient \ "result" \ "steps")(0)) \ "components").asOpt[List[JsValue]].get.size === 0
   
+  //============================================================================
+  
 //  {"jsonId": 5, "method": "addComponent", "params": {"adminId": "AU#40:0", "kind": "immutable", "stepId": "#12:1"}
   
   val componentClientServer = Json.obj(
@@ -96,8 +98,18 @@ class ConfigTreeFirstStepWithComponent extends Specification with AdminWeb{
   )
   
   
-//  {"jsonId": 5, "method": "addComponent", 
-//        "result": {"id": "#13:1", "componentId": "C#13:1", "adminId": "AU#40:0", "kind": "immutable"}}
+//{"jsonId": 5, "method": "addComponent", 
+//   *      "result": {"id": "#13:1", "componentId": "C#13:1", "adminId": "AU#40:0", "kind": "immutable", "stepId": "#12:1"}}
+  
+  val componentServerClient = handelMessage(componentClientServer)
+  
+  def e13 = (componentServerClient \ "jsonId").asOpt[Int].get === 5
+  def e14 = (configTreeServerClient \ "dto").asOpt[String].get === "Component"
+  def e15 = (configTreeServerClient \ "result" \ "adminId").asOpt[String].get === 
+    (loginServerClient \ "result" \ "adminId").asOpt[String].get
+  def e16 = (configTreeServerClient \ "result" \ "kind").asOpt[String].get === "immutable" 
+  def e17 = (configTreeServerClient \ "result" \ "stepId").asOpt[String].get === 
+    (firstStepConfigTreeServerClient \ "result" \ "id").asOpt[String].get
   
   
 }
