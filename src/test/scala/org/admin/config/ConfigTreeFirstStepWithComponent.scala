@@ -10,6 +10,7 @@ class ConfigTreeFirstStepWithComponent extends Specification with AdminWeb{
   def is = s2"""
     Diese Specification prueft die Erzeugung eines neuen Steps
       Login -> loginStatus=true                                              $e1
+      FirstStep -> Delete                                                   $e12
       FirstStep -> jsonId = 4                                                $e2
       FirstStep -> dto = ConfigTree                                          $e3
       FirstStep -> adminId                                                   $e4
@@ -20,7 +21,11 @@ class ConfigTreeFirstStepWithComponent extends Specification with AdminWeb{
       ConfigTree -> step -> adminId                                          $e9
       ConfigTree -> step -> kind=first                                      $e10
       ConfigTree -> step -> components.size=0                               $e11
-      
+      Component -> component.jsonId=5                                       $e13
+      Component -> component.dto=Component                                  $e14
+      Component -> component.result.adminId                                 $e15
+      Component -> component.result.kind                                    $e16
+      Component -> component.result.stepId                                  $e17
     """
 // TODO Löschen der vorherigen Step bevor der Schritt hinzugefügt wird
   
@@ -111,5 +116,25 @@ class ConfigTreeFirstStepWithComponent extends Specification with AdminWeb{
   def e17 = (configTreeServerClient \ "result" \ "stepId").asOpt[String].get === 
     (firstStepConfigTreeServerClient \ "result" \ "id").asOpt[String].get
   
+//  ============================================================================
+    
+  val configTreeClientServer1 = Json.obj(
+    "jsonId" -> 6,
+    "dto" -> "ConfigTree"
+    ,"params" -> Json.obj(
+      "adminId" -> (loginServerClient \ "result" \ "adminId").asOpt[String].get,
+      "loginStatus" -> (loginServerClient \ "result" \ "status").asOpt[Boolean].get
+    )
+  )
+  
+  val configTreeServerClient1 = handelMessage(configTreeClientServer1)
+  
+  def e18 = (configTreeServerClient1 \ "jsonId").asOpt[Int].get === 6
+  def e19 = (configTreeServerClient1 \ "dto").asOpt[String].get === "ConfigTree"
+  def e20 = (configTreeServerClient1 \ "result" \ "steps").asOpt[List[JsValue]].get.size === 1
+  def e21 = (((configTreeServerClient1 \ "result" \ "steps")(0)) \ "adminId").asOpt[String].get === 
+    (loginServerClient \ "result" \ "adminId").asOpt[String].get
+  def e22 = (((configTreeServerClient1 \ "result" \ "steps")(0)) \ "kind").asOpt[String].get === "first"
+  def e23 = (((configTreeServerClient1 \ "result" \ "steps")(0)) \ "components").asOpt[List[JsValue]].get.size === 0
   
 }
