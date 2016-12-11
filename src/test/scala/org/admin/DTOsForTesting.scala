@@ -7,8 +7,8 @@ object DTOsForTesting {
       "jsonId" -> 1,
       "dto" -> "Registration"
       ,"params" -> Json.obj(
-          "username" -> "test8",
-          "password"-> "test8"))
+          "username" -> "userexist",
+          "password"-> "userexist"))
           
     val registerSC_1 = Json.obj(
         "jsonId" -> 1,
@@ -16,13 +16,31 @@ object DTOsForTesting {
 	      "result" -> 
 	        Json.obj(
 	            "adminId" -> "",
-	            "username" -> "test8",
+	            "username" -> "userexist",
 	            "status" -> false,
 	            "message" -> "Registrierung war nicht erfolgreich. Username existiert bereits"
 	       )
     )
+    
+  val registerCS_2 = Json.obj(
+    "jsonId" -> 1,
+    "dto" -> "Registration"
+    ,"params" -> Json.obj(
+      "username" -> "userNotExist",
+      "password"-> "userNotExist"))
+      
+  val registerSC_2 = Json.obj(
+    "jsonId" -> 1,
+    "dto" -> "Registration",
+    "result" -> 
+      Json.obj(
+          "adminId" -> "",
+          "username" -> "userNotExist",
+          "status" -> true,
+          "message" -> "Registrierung war erfolgreich"
+     )
+    )
+    
+    val userNotExist = "userNotExist"
           
-//{"jsonId":1,"dto":"Registration","result":{"adminId":"","username":"test8","stat
-//us":false,"message":"Registrierung war nicht erfolgreich. Username existiert ber
-//eits"}}
 }

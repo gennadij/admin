@@ -12,8 +12,8 @@ import org.persistence.db.orientdb.AdminUserVertex
 import org.admin.configTree.AdminConfigTree
 import org.admin.configTree.AdminConfigTreeStep
 import scala.collection.immutable.Seq
-import org.dto.Login.LoginCS
-import org.dto.Login.LoginSC
+import org.dto.login.LoginCS
+import org.dto.login.LoginSC
 import org.dto.firstStep.FirstStepCS
 import org.dto.registration.RegistrationCS
 import org.dto.registration.RegistrationSC

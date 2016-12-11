@@ -29,8 +29,8 @@ import org.admin.configTree.AdminConfigTreeStep
 import org.admin.configTree.AdminConfigTree
 import org.admin.configTree.AdminConfigTreeComponent
 import org.status.Status
-import org.dto.Login.LoginSC
-import org.dto.Login.LoginCS
+import org.dto.login.LoginSC
+import org.dto.login.LoginCS
 import org.persistence.db.orientdb.ConfigTree
 import org.dto.firstStep.FirstStepCS
 import org.dto.firstStep.FirstStepSC

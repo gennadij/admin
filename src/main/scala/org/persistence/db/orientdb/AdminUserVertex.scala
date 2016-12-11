@@ -10,9 +10,9 @@ import org.status.Status
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
-import org.dto.Login.LoginSC
-import org.dto.Login.LoginCS
-import org.dto.Login.LoginResultSC
+import org.dto.login.LoginSC
+import org.dto.login.LoginCS
+import org.dto.login.LoginResultSC
 import org.dto.registration.RegistrationCS
 import org.dto.registration.RegistrationSC
 import org.dto.registration.RegistrationResultSC
@@ -99,5 +99,11 @@ object AdminUserVertex {
       .command(new OCommandSQL(s"SELECT FROM AdminUser WHERE username='$username' and password='$adminPassword'")).execute()
     val adminId = res.toList.map(_.asInstanceOf[OrientVertex].getIdentity)
     if(adminId.size == 1) adminId.head.toString else ""
+  }
+  
+  def removeAdmin(username: String) = {
+    val graph: OrientGraph = OrientDB.getGraph
+    val res: Int = graph
+      .command(new OCommandSQL(s"DELETE VERTEX AdminUser where username='$username'")).execute()
   }
 }
