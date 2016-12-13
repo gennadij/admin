@@ -26,28 +26,6 @@ object StepVertex {
   val propKeyAdminId = "adminId"
   val propKeyKind = "kind"
   
-//  def create(graph: OrientGraph, propKeys: List[String]){
-//    val vStep = new VertexStep()
-//    vStep.create(graph, propKeys)
-//  }
-  
-  // TODO if Einweisung mit stepId ausbessern
-//  def addStep(step: AdminStep): String = {
-//    val graph: OrientGraph = OrientDB.getGraph()
-//    if(graph.getVertices(propKeyId, step.id).size == 0){
-//        val vertex: OrientVertex = graph.addVertex("class:Step", 
-////            propKeyId, props(propKeyId), 
-//            propKeyAdminId, step.adminId,
-//            propKeyKind, step.kind)
-//        graph.commit
-//        vertex.setProperty(propKeyId, "S" + vertex.getIdentity.toString())
-//        graph.commit
-//        vertex.getIdentity.toString
-//    }else{
-//      ""
-//    }
-//  }
-  
     /**
    * 
    * fuegt Vertex Step zu ConfigTree hinzu
@@ -86,10 +64,10 @@ object StepVertex {
     val graph: OrientGraph = OrientDB.getGraph
     val res: Int = graph
       .command(new OCommandSQL(s"DELETE VERTEX Step where adminId='$adminId'")).execute()
-      
     graph.commit
     res
   }
+ 
   
   
   
@@ -161,6 +139,28 @@ object StepVertex {
   
   def get() = ???
 }
+
+//  def create(graph: OrientGraph, propKeys: List[String]){
+//    val vStep = new VertexStep()
+//    vStep.create(graph, propKeys)
+//  }
+  
+  // TODO if Einweisung mit stepId ausbessern
+//  def addStep(step: AdminStep): String = {
+//    val graph: OrientGraph = OrientDB.getGraph()
+//    if(graph.getVertices(propKeyId, step.id).size == 0){
+//        val vertex: OrientVertex = graph.addVertex("class:Step", 
+////            propKeyId, props(propKeyId), 
+//            propKeyAdminId, step.adminId,
+//            propKeyKind, step.kind)
+//        graph.commit
+//        vertex.setProperty(propKeyId, "S" + vertex.getIdentity.toString())
+//        graph.commit
+//        vertex.getIdentity.toString
+//    }else{
+//      ""
+//    }
+
 //class VertexStep {
 //  
 //  val propStep = "Step"

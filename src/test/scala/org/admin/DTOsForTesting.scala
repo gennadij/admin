@@ -3,6 +3,7 @@ package org.admin
 import play.api.libs.json.Json
 
 object DTOsForTesting {
+  
     val registerCS_1 = Json.obj(
       "jsonId" -> 1,
       "dto" -> "Registration"
@@ -42,5 +43,4 @@ object DTOsForTesting {
     )
     
     val userNotExist = "userNotExist"
-          
 }
