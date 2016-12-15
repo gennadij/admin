@@ -61,6 +61,16 @@ object ComponentVertex {
     )
   }
   
+  def deleteComponent(adminId: String) = {
+    val graph: OrientGraph = OrientDB.getGraph
+    val res: Int = graph
+      .command(new OCommandSQL(s"DELETE VERTEX Component where adminId='$adminId'")).execute()
+    graph.commit
+    
+  }
+  
+  
+  
   def get(id: String): AdminComponent = {
     val graph: OrientGraph = OrientDB.getGraph
     val vComponent = graph.getVertex(id)

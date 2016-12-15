@@ -1,22 +1,20 @@
 package org.admin.config
 
-import org.admin.AdminWeb
 import org.specs2.mutable.Specification
-import play.api.libs.json.{JsValue, Json}
-import org.persistence.db.orientdb.StepVertex
-import org.specs2.mutable.Before
+import org.admin.AdminWeb
 import org.specs2.specification.BeforeAfterAll
-import org.persistence.db.orientdb.ComponentVertex
+import play.api.libs.json.Json
+import play.api.libs.json.JsValue
 
-class ConfigTreeFirstStepWithComponent 
+class ConfigTreeStepComponentNextStep 
     extends Specification
     with AdminWeb 
     with BeforeAfterAll{
 
   def beforeAll = {
     println("delete Step and Component")
-    StepVertex.removerSteps((loginSC \ "result" \ "adminId").asOpt[String].get)
-    ComponentVertex.deleteComponent((loginSC \ "result" \ "adminId").asOpt[String].get)
+//    StepVertex.removerSteps((loginSC \ "result" \ "adminId").asOpt[String].get)
+//    ComponentVertex.deleteComponent((loginSC \ "result" \ "adminId").asOpt[String].get)
   }
   
   def afterAll = {
@@ -28,8 +26,8 @@ class ConfigTreeFirstStepWithComponent
     "jsonId" -> 2,
     "dto" -> "Login"
     ,"params" -> Json.obj(
-      "username" -> "firstStepConfigTree",
-      "password" -> "firstStepConfigTree"
+      "username" -> "firstStepComponentNextStep",
+      "password" -> "firstStepComponentNextStep"
     )
   )
 
@@ -78,6 +76,10 @@ class ConfigTreeFirstStepWithComponent
     )
   )
   
+  val nextStepCS = Json.obj("" -> "")
+  
+  val nextStepSC = handelMessage(nextStepCS)
+  
   val configTreeSC_1 = handelMessage(configTreeCS_1)
   
   println(s"Login        Client -> Server: $loginCS")
@@ -90,6 +92,8 @@ class ConfigTreeFirstStepWithComponent
   println(s"Component    Server -> Client: $componentSC")
   println(s"ConfigTree   Client -> Server: $configTreeCS_1")
   println(s"ConfigTree   Server -> Client: $configTreeSC_1")
+  println(s"NextStep     Client -> Server: ")
+  println(s"NextStep     Server -> Client: ")
   
   
   
@@ -192,4 +196,6 @@ class ConfigTreeFirstStepWithComponent
     }
     
   }
+  
+  
 }

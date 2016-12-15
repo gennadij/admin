@@ -108,7 +108,7 @@ trait AdminWeb {
       case Some("FirstStep") => firstStep(receivedMessage)
       case Some("ConfigTree") => configTree(receivedMessage)
       case Some("Component") => component(receivedMessage)
-      case Some("addNextStep") => addNextStep(receivedMessage)
+      case Some("NextStep") => addNextStep(receivedMessage)
       case _ => Json.obj("error" -> "keinen Treffer")
     }
   }

@@ -105,5 +105,6 @@ object AdminUserVertex {
     val graph: OrientGraph = OrientDB.getGraph
     val res: Int = graph
       .command(new OCommandSQL(s"DELETE VERTEX AdminUser where username='$username'")).execute()
+    graph.commit
   }
 }
