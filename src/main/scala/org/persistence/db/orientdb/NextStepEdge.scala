@@ -9,6 +9,8 @@ import org.status.SuccessfulStatus
 import org.status.WarningStatus
 import com.tinkerpop.blueprints.impls.orient.OrientEdge
 import org.status.Status
+import org.dto.nextStep.NextStepSC
+import org.dto.nextStep.NextStepResultSC
 
 
 object NextStepEdge {
@@ -19,18 +21,18 @@ object NextStepEdge {
   val propKeyComponentId = "componentId"
   val propKeyStepId = "stepId"
   
-  def createSchema(){
-    val graph: OrientGraph = OrientDB.getGraph
-    if(graph.getEdgeType("NextStep") == null){
-  	  val eNextStep: OrientEdgeType = graph.createEdgeType(classname)
-  	  eNextStep.createProperty(propKeyNextStepId, OType.STRING)
-  	  eNextStep.createProperty(propKeyAdminId, OType.STRING)
-  	  graph.commit
-  	  new SuccessfulStatus(s"Class $classname was created", "")
-    }else{
-      WarningStatus(s"Class $classname was already created", "")
-    }
-  }
+//  def createSchema(){
+//    val graph: OrientGraph = OrientDB.getGraph
+//    if(graph.getEdgeType("NextStep") == null){
+//  	  val eNextStep: OrientEdgeType = graph.createEdgeType(classname)
+//  	  eNextStep.createProperty(propKeyNextStepId, OType.STRING)
+//  	  eNextStep.createProperty(propKeyAdminId, OType.STRING)
+//  	  graph.commit
+//  	  new SuccessfulStatus(s"Class $classname was created", "")
+//    }else{
+//      WarningStatus(s"Class $classname was already created", "")
+//    }
+//  }
   
 //  def connect(nextSteps: Seq[NextStep]): List[Status] = {
 //    val graph: OrientGraph = OrientDB.getGraph
@@ -51,6 +53,28 @@ object NextStepEdge {
 //    })
 //    status
 //  }
+
+  def addNextStep(adminId: String, outComponent: String, inStep: String): NextStepSC = {
+    val graph: OrientGraph = OrientDB.getGraph
+    
+     val eNextStep: OrientEdge = graph.addEdge("class:nextStep", 
+       graph.getVertex(outComponent), 
+        graph.getVertex(inStep), 
+       "nextStep")
+     eNextStep.setProperty("adminId", adminId)
+     eNextStep.setProperty("nextStepId", "C" + outComponent + "S" + inStep )
+  	 graph.commit
+     
+//  	 new NextStepSC(result: new NextStepResultSC(
+//  	     inStep,
+//  	     
+//  	 ))
+    
+    null
+//     new SuccessfulStatus("added nextStep", "C" + outComponent + "S" + inStep)
+  }
+  
+  
   
   def add(adminId: String, outComponent: String, inStep: String): Status = {
     val graph: OrientGraph = OrientDB.getGraph

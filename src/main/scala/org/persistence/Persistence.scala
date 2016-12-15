@@ -16,18 +16,12 @@ import org.persistence.db.orientdb.ComponentVertex
 import org.persistence.db.orientdb.HasComponentEdge
 import org.persistence.db.orientdb.NextStepEdge
 import org.persistence.db.orientdb.AdminUserVertex
-import org.admin.configTree.AdminStep
-import org.admin.configTree.AdminComponent
 import org.persistence.db.orientdb.OrientDB
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import com.tinkerpop.blueprints.Direction
 import com.tinkerpop.blueprints.impls.orient.OrientEdge
 import com.tinkerpop.blueprints.Edge
 import com.tinkerpop.blueprints.Vertex
-import org.admin.configTree.AdminNextStep
-import org.admin.configTree.AdminConfigTreeStep
-import org.admin.configTree.AdminConfigTree
-import org.admin.configTree.AdminConfigTreeComponent
 import org.status.Status
 import org.dto.login.LoginSC
 import org.dto.login.LoginCS
@@ -39,13 +33,12 @@ import org.dto.registration.RegistrationSC
 import org.dto.configTree.ConfigTreeSC
 import org.dto.configTree.ConfigTreeCS
 import org.dto.component._
+import org.dto.nextStep.NextStepCS
+import org.dto.nextStep.NextStepSC
 
 object Persistence {
   
   def rules() = ???
-  
-  def firstStep = {
-  }
   
   def register(registrationCS: RegistrationCS): RegistrationSC = {
     AdminUserVertex.register(registrationCS)
@@ -63,14 +56,22 @@ object Persistence {
     StepVertex.addFirstStep(firstStepCS)
   }
   
-    def addComponent(componentCS: ComponentCS): ComponentSC = {
+  def addComponent(componentCS: ComponentCS): ComponentSC = {
     ComponentVertex.addComponent(componentCS)
   }
   
-    
   def addHasComponent(componentSC: ComponentSC): Status = {
     HasComponentEdge.add(componentSC)
   }
+  
+  def addStep(nextStepCS: NextStepCS): String = {
+    StepVertex.addStep(nextStepCS)
+  }
+  
+  def addNextStep(nextStepCS: NextStepCS): NextStepSC = {
+    null
+  }
+  
     /**
    * 
    * fuegt Vertex Step zu ConfigTree hinzu
@@ -84,15 +85,15 @@ object Persistence {
    * @return Status
    */
   
-  def addStep(adminStep: AdminStep): AdminStep = {
-    StepVertex.addStep(adminStep)
-  }
+//  def addStep(adminStep: AdminStep): AdminStep = {
+//    StepVertex.addStep(adminStep)
+//  }
   
   
-  def authenticate(username: String, password: String): String = {
-    val adminId: String = AdminUserVertex.adminId(username, password)
-    if(adminId.isEmpty()) "" else "AU" + adminId
-  }
+//  def authenticate(username: String, password: String): String = {
+//    val adminId: String = AdminUserVertex.adminId(username, password)
+//    if(adminId.isEmpty()) "" else "AU" + adminId
+//  }
    /**
    * 
    * fuegt Vertex Step zu ConfigTree hinzu
@@ -106,9 +107,9 @@ object Persistence {
    * @return Status
    */
   
-  def addStep(adminStep: AdminNextStep): AdminNextStep = {
-    StepVertex.addStep(adminStep)
-  }
+//  def addStep(adminStep: AdminNextStep): AdminNextStep = {
+//    StepVertex.addStep(adminStep)
+//  }
 //  def addComponent(adminComponent: AdminComponent): AdminComponent = {
 //    ComponentVertex.addComponent(adminComponent)
 //  }
@@ -144,13 +145,13 @@ object Persistence {
   
 
   
-  def addHasComponent(adminId: String, outStep: String, inComponents: List[String]): Status = {
-    HasComponentEdge.add(adminId, outStep, inComponents)
-  }
-  
-  def addHasComponent(adminId: String, outStep: String, inComponent: String): Status = {
-    HasComponentEdge.add(adminId, outStep, inComponent)
-  }
+//  def addHasComponent(adminId: String, outStep: String, inComponents: List[String]): Status = {
+//    HasComponentEdge.add(adminId, outStep, inComponents)
+//  }
+//  
+//  def addHasComponent(adminId: String, outStep: String, inComponent: String): Status = {
+//    HasComponentEdge.add(adminId, outStep, inComponent)
+//  }
   
   /**
    * 
@@ -164,15 +165,15 @@ object Persistence {
    * 
    * @return Status
    */
-  
-  def addNextStep(adminId: String, outComponent: String, inStep: String): Status = {
-    NextStepEdge.add(adminId, outComponent, inStep)
-  }
-  
-  
-  def component(id: String): AdminComponent = {
-    ComponentVertex.get(id)
-  }
+//  
+//  def addNextStep(adminId: String, outComponent: String, inStep: String): Status = {
+//    NextStepEdge.add(adminId, outComponent, inStep)
+//  }
+//  
+//  
+//  def component(id: String): AdminComponent = {
+//    ComponentVertex.get(id)
+//  }
   
 //  def setStep(adminId: String, isConnected: Boolean, step: Step, kind: String) = {
     

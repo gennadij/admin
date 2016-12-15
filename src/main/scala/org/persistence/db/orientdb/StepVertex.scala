@@ -18,6 +18,8 @@ import org.dto.firstStep.FirstStepSC
 import org.dto.firstStep.FirstStepResultSC
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.orientechnologies.orient.core.sql.OCommandSQL
+import org.dto.nextStep.NextStepCS
+import org.dto.nextStep.NextStepSC
 
 
 object StepVertex {
@@ -41,11 +43,11 @@ object StepVertex {
   
   def addFirstStep(firstStepCS: FirstStepCS): FirstStepSC = {
     val graph: OrientGraph = OrientDB.getGraph
-    val vStep: OrientVertex = graph.addVertex("class:Step", 
-            "adminId", firstStepCS.params.adminId,
-            "kind", firstStepCS.params.kind)
+    val vStep: OrientVertex = graph.addVertex("class:" + PropertyKey.STEP, 
+            PropertyKey.ADMIN_ID, firstStepCS.params.adminId,
+            PropertyKey.KIND, firstStepCS.params.kind)
         graph.commit
-        vStep.setProperty("stepId", "S" + vStep.getIdentity.toString())
+        vStep.setProperty(PropertyKey.STEP_ID, "S" + vStep.getIdentity.toString())
         graph.commit
         
         new FirstStepSC(
@@ -53,12 +55,31 @@ object StepVertex {
             result = new FirstStepResultSC(
                 vStep.getIdentity.toString(),
                 "S" + vStep.getIdentity.toString(),
-                vStep.getProperty("adminId"),
-                vStep.getProperty("kind")
+                vStep.getProperty(PropertyKey.ADMIN_ID),
+                vStep.getProperty(PropertyKey.KIND)
             )
         )
   }
   
+    def addStep(nextStepCS: NextStepCS): String = {
+    val graph: OrientGraph = OrientDB.getGraph
+    
+    val vStep: OrientVertex = graph.addVertex("class:" + PropertyKey.STEP, 
+            PropertyKey.ADMIN_ID, nextStepCS.params.adminId,
+            PropertyKey.KIND, nextStepCS.params.kind)
+        graph.commit
+        vStep.setProperty(PropertyKey.STEP_ID, "S" + vStep.getIdentity.toString())
+        graph.commit
+        
+        vStep.getIdentity.toString()
+        
+//        new AdminStep(
+//            vStep.getIdentity.toString(),
+//            "S" + vStep.getIdentity.toString(),
+//            vStep.getProperty("adminId"),
+//            vStep.getProperty("kind")
+//        )
+  }
   
   def removerSteps(adminId: String) = {
     val graph: OrientGraph = OrientDB.getGraph
@@ -67,78 +88,63 @@ object StepVertex {
     graph.commit
     res
   }
- 
-  
-  
-  
-  
-  
-  def addStep(adminStep: AdminStep): AdminStep = {
-    val graph: OrientGraph = OrientDB.getGraph
-    val vStep: OrientVertex = graph.addVertex("class:Step", 
-            "adminId", adminStep.adminId,
-            "kind", adminStep.kind)
-        graph.commit
-        vStep.setProperty("stepId", "S" + vStep.getIdentity.toString())
-        graph.commit
-        
-        new AdminStep(
-            vStep.getIdentity.toString(),
-            "S" + vStep.getIdentity.toString(),
-            vStep.getProperty("adminId"),
-            vStep.getProperty("kind")
-        )
-  }
-  
-    def addStep(adminStep: AdminNextStep): AdminNextStep = {
-    val graph: OrientGraph = OrientDB.getGraph
-    val vStep: OrientVertex = graph.addVertex("class:Step", 
-            "adminId", adminStep.adminId,
-            "kind", adminStep.kind)
-        graph.commit
-        vStep.setProperty("stepId", "S" + vStep.getIdentity.toString())
-        graph.commit
-        
-        new AdminNextStep(
-            true,
-            vStep.getIdentity.toString(),
-            "S" + vStep.getIdentity.toString(),
-            vStep.getProperty("adminId"),
-            vStep.getProperty("kind"), 
-//            null,
-            ""
-        )
-  }
-  
-  
-  def create(props: Map[String, String]) = {
-    val graph: OrientGraph = OrientDB.getGraph
-    if(graph.getVertices(propKeyId, props(propKeyId)).size == 0){
-        val vertex: OrientVertex = graph.addVertex("class:Step", 
-            propKeyId, props(propKeyId), 
-            propKeyAdminId, props(propKeyAdminId),
-            propKeyKind, props(propKeyKind))
-        graph.commit
-        new SuccessfulStatus("object Step with " + vertex.getId + vertex.getProperties + " was created", "")
-    }else{
-      new WarningStatus("object Step with " + props(propKeyId) + "already exist", "")
-    }
-  }
-  
-   def update(graph: OrientGraph, props: Map[String, String]){
-    //TODO bessere such Methode
-    if(graph.getVertices("stepId", props("id")).size == 0){
-//        graph.addVertex("class:Step", "stepId", props("id"))
-//        graph.commit
-      new WarningStatus("object Step with " + props("id") + "cannot update because not exist", "")
-    }else{
-      new SuccessfulStatus("object Step with " + props("id") + " was updated", "")
-     
-    }
-  }
-  
-  def get() = ???
 }
+  
+  
+  
+  
+  
+
+  
+//    def addStep(adminStep: AdminNextStep): AdminNextStep = {
+//    val graph: OrientGraph = OrientDB.getGraph
+//    val vStep: OrientVertex = graph.addVertex("class:Step", 
+//            "adminId", adminStep.adminId,
+//            "kind", adminStep.kind)
+//        graph.commit
+//        vStep.setProperty("stepId", "S" + vStep.getIdentity.toString())
+//        graph.commit
+//        
+//        new AdminNextStep(
+//            true,
+//            vStep.getIdentity.toString(),
+//            "S" + vStep.getIdentity.toString(),
+//            vStep.getProperty("adminId"),
+//            vStep.getProperty("kind"), 
+////            null,
+//            ""
+//        )
+//  }
+  
+  
+//  def create(props: Map[String, String]) = {
+//    val graph: OrientGraph = OrientDB.getGraph
+//    if(graph.getVertices(propKeyId, props(propKeyId)).size == 0){
+//        val vertex: OrientVertex = graph.addVertex("class:Step", 
+//            propKeyId, props(propKeyId), 
+//            propKeyAdminId, props(propKeyAdminId),
+//            propKeyKind, props(propKeyKind))
+//        graph.commit
+//        new SuccessfulStatus("object Step with " + vertex.getId + vertex.getProperties + " was created", "")
+//    }else{
+//      new WarningStatus("object Step with " + props(propKeyId) + "already exist", "")
+//    }
+//  }
+//  
+//   def update(graph: OrientGraph, props: Map[String, String]){
+//    //TODO bessere such Methode
+//    if(graph.getVertices("stepId", props("id")).size == 0){
+////        graph.addVertex("class:Step", "stepId", props("id"))
+////        graph.commit
+//      new WarningStatus("object Step with " + props("id") + "cannot update because not exist", "")
+//    }else{
+//      new SuccessfulStatus("object Step with " + props("id") + " was updated", "")
+//     
+//    }
+//  }
+//  
+//  def get() = ???
+//}
 
 //  def create(graph: OrientGraph, propKeys: List[String]){
 //    val vStep = new VertexStep()

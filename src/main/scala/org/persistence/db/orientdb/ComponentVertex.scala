@@ -10,7 +10,6 @@ import com.orientechnologies.orient.core.metadata.schema.OType
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
-import org.admin.configTree.AdminComponent
 import org.status.Status
 import org.dto.component._
 
@@ -71,16 +70,16 @@ object ComponentVertex {
   
   
   
-  def get(id: String): AdminComponent = {
-    val graph: OrientGraph = OrientDB.getGraph
-    val vComponent = graph.getVertex(id)
-    new AdminComponent(
-        vComponent.getIdentity. toString,
-        vComponent.getProperty(PropertyKey.COMPONENT_ID),
-        vComponent.getProperty(PropertyKey.ADMIN_ID),
-        vComponent.getProperty(PropertyKey.KIND)
-    )
-  }
+//  def get(id: String): AdminComponent = {
+//    val graph: OrientGraph = OrientDB.getGraph
+//    val vComponent = graph.getVertex(id)
+//    new AdminComponent(
+//        vComponent.getIdentity. toString,
+//        vComponent.getProperty(PropertyKey.COMPONENT_ID),
+//        vComponent.getProperty(PropertyKey.ADMIN_ID),
+//        vComponent.getProperty(PropertyKey.KIND)
+//    )
+//  }
   
   
   

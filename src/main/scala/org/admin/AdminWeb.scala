@@ -20,6 +20,7 @@ import org.dto.registration.RegistrationSC
 import org.dto.configTree.ConfigTreeCS
 import org.dto.component.ComponentCS
 import org.dto.component.ComponentSC
+import org.dto.nextStep.NextStepCS
 
 trait AdminWeb {
   
@@ -125,33 +126,27 @@ trait AdminWeb {
     Json.toJson(loginSC)
   }
   
-  
+      //TODO impl Reads with validation show 
+    // https://www.playframework.com/documentation/2.4.x/ScalaJsonCombinators
   private def firstStep(receivedMessage: JsValue): JsValue = {
     val firstStepCS: FirstStepCS = Json.fromJson[FirstStepCS](receivedMessage).get
-    //TODO impl Reads with validation show 
-    // https://www.playframework.com/documentation/2.4.x/ScalaJsonCombinators
     val step = Admin.addFirstStep(firstStepCS)
     Json.toJson(step)
   }
   
   private def component(receivedMessage: JsValue): JsValue = {
     val componentCS: ComponentCS = Json.fromJson[ComponentCS](receivedMessage).get
-    
-//    val adminId = (receivedMessage \ "adminId").toString()
-//    val kind = (receivedMessage \ "kind").toString()
-//    val stepId = (receivedMessage \ "stepId").toString()
     val componentSC: ComponentSC = Admin.addComponent(componentCS)
-//    val component = Admin.addComponent(new AdminComponent("", "", adminId, kind))
-//    val hasComponent = Admin.addHasComponent(adminId, stepId, component.id)
     val hasComponent = Admin.addHasComponent(componentSC)
-//    Json.toJson(component)
     Json.toJson(componentSC)
   }
   
   private def addNextStep(receivedMessage: JsValue): JsValue = {
-    val adminId = (receivedMessage \ "adminId").toString()
-    val kind = (receivedMessage \ "kind").toString()
-    val componentId = (receivedMessage \ "componentId").toString()
+    val nextStepCS: NextStepCS = Json.fromJson[NextStepCS](receivedMessage).get
+    
+//    val adminId = (receivedMessage \ "adminId").toString()
+//    val kind = (receivedMessage \ "kind").toString()
+//    val componentId = (receivedMessage \ "componentId").toString()
 //    val step = Admin.addStep(new AdminStep("", "", adminId, kind))
 //    val nextStep = Admin.addNextStep(adminId, componentId, step.id)
     Json.toJson("")

@@ -26,6 +26,9 @@ import org.dto.configTree.ConfigTreeSC
 import org.dto.registration.RegistrationSC
 import org.dto.registration.RegistrationCS
 import org.dto.component._
+import org.dto.nextStep.NextStepCS
+import org.dto.nextStep.NextStepSC
+
 /**
    * Administrator definiert und zusammenstellt sein einegen Konfiguration.
    * Auf der Webseite von Administrator werden alle notwendigen Einstellungen 
@@ -53,6 +56,8 @@ object Admin {
     Persistence.login(loginCS: LoginCS)
   }
   
+  def logout(adminId: String): Boolean = ???
+  
   def configTree(configTreeCS: ConfigTreeCS): ConfigTreeSC = {
     Persistence.getConfigTree(configTreeCS)
   }
@@ -61,171 +66,44 @@ object Admin {
     Persistence.addFirstStep(firstStepCS)
   }
   
+   /**
+   * fuegt Vertex Component zu ConfigTree hinzu
+   */
+  
   def addComponent(componentCS: ComponentCS): ComponentSC = {
     Persistence.addComponent(componentCS)
   }
+  
+   /**
+   * fuegt Edge hasComponent zu ConfigTree hinzu, dadurch wird Vertex Step mit 
+   * Vertex Component verbunden
+   */
   
   def addHasComponent(componentSC: ComponentSC) = {
     Persistence.addHasComponent(componentSC)
   }
   
-  
-  
-  
-  
-  def addStep(adminStep: AdminNextStep): AdminNextStep = {
-    Persistence.addStep(adminStep)
+  def addStep(nextStepCS: NextStepCS): NextStepSC = {
+    null
   }
   
-  def addStep(adminStep: AdminStep): AdminStep = {
-    Persistence.addStep(adminStep)
+  def addNextStep(nextStepCS: NextStepCS): NextStepSC = {
+    null
   }
   
-  /**
-   * create ConfigTree
-   * 
-   * 
-   */
-  
-  /**
-   * 
-   * fuegt Vertex Step zu ConfigTree hinzu
-   * 
-   * @author Gennadi Heimann
-   * 
-   * @version 1.0
-   * 
-   * @param AdminStep
-   * 
-   * @return Status
-   */
-  
-
-  
-  /**
-   * 
-   * fuegt Vertex Step zu ConfigTree hinzu
-   * 
-   * @author Gennadi Heimann
-   * 
-   * @version 1.0
-   * 
-   * @param AdminStep
-   * 
-   * @return Status
-   */
-  
-  /**
-   * fuegt Vertex Component zu ConfigTree hinzu
-   */
-//  def addComponent(adminComponent: AdminComponent): AdminComponent = {
-//    Persistence.addComponent(adminComponent)
-//  }
-  /**
-   * fuegt Edge hasComponent zu ConfigTree hinzu, dadurch wird Vertex Step mit 
-   * Vertex Component verbunden
-   */
-//  def addHasComponent(adminId: String, outStep: String, inComponents: List[String]) = {
-//    Persistence.addHasComponent(adminId, outStep, inComponents)
-//  }
-//  def addHasComponent(adminId: String, outStep: String, inComponent: String): Status = {
-//    Persistence.addHasComponent(adminId, outStep, inComponent)
-//  }
-  
-  /**
+    /**
    * fuegt Edge NextStep zu ConfigTree hinzu, dadurch wird Vertex Component mit 
    * Vertex Step erbunden
    */
-  def addNextStep(adminId: String, outComponent: String, inStep: String) = {
-    Persistence.addNextStep(adminId, outComponent, inStep)
-  }
-  
-//  def setStep(user: String, isConnected: Boolean, step: Step, kind: String): Status = {
-//    
-//      val stepId = List.empty
-//    
-//      Persistence.setStep(user, isConnected, step, kind)
+//  def addNextStep(adminId: String, outComponent: String, inStep: String) = {
+//    Persistence.addNextStep(adminId, outComponent, inStep)
 //  }
-
   
-  def component(id: String): AdminComponent = {
-    Persistence.component(id)
-  }
-  
-  /*
-   * return aktualisierte Liste von Steps
-   * 
-   * action 
-   *  - add
-   *  - remove
-   *  - update
-   */
-  
-//  def updateConfig(adminId: String, step: Step, action: String): List[Step] = ???
-  
-  def logout(adminId: String): Boolean = ???
-  
-  
-  /**
-   * END
-   */
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  /**
-   * Anmeldung von Admin
-   * 
-   * Cleint -> Anmeldung mit regestrierten Daten (adminId, password)
-   * 
-   * Server -> true
-   *        -> false --> adminId existiert nicht, Falsches Password
-   */
-  
-  def connect(username: String, password: String): Status = {
-    
-//    val admins: Seq[AdminId] = InterfaceAdminPersistence.admin(adminId, password)
-//    
-//    findAndCheckAdmin(adminId, password, admins)
-    val adminId = AdminUserVertex.adminId(username, password)
-    
-    if (adminId == "") new WarningStatus("The User with thisusername and password not exist", "")
-      else new SuccessfulStatus(s"user with id = $adminId is logged", "")
-  }
-  
-//  def findAndCheckAdmin(adminId: String, password: String, admins: Seq[AdminId]): Status = {
-//    
-//    if(admins.exists { admin => admin.adminId == adminId && admin.password == password })
-//      SuccessfulStatus("Anmeldung ist erfolgreich", "")
-//    else
-//      ErrorStatus("Administrator Id oder Passwort falsch", "")
+//  def addStep(adminStep: AdminNextStep): AdminNextStep = {
+//    Persistence.addStep(adminStep)
 //  }
-//  
-//  def setConnectPathForConfigClient(clientId: String, configPath: String) = {
-//    
-//    val pathToConfigID = "config_ids/client_" + configPath.split("/").last + ".xml"
-//    
-//    val configFile = "config_" + configPath.split("/").last + ".xml"
-//    
-//    val client = new ConfigID(clientId, configPath, configFile)
-//    
-//    val clientXML: Node = client.toXML
-//    
-//    scala.xml.XML.save(pathToConfigID, clientXML, "UTF-8", true, null)
+  
+//  def addStep(adminStep: AdminStep): AdminStep = {
+//    Persistence.addStep(adminStep)
 //  }
 }
