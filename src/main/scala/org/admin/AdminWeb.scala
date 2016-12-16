@@ -6,11 +6,7 @@ package org.admin
 
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
-import org.admin.configTree.AdminStep
-import org.admin.configTree.AdminComponent
 import org.persistence.db.orientdb.AdminUserVertex
-import org.admin.configTree.AdminConfigTree
-import org.admin.configTree.AdminConfigTreeStep
 import scala.collection.immutable.Seq
 import org.dto.login.LoginCS
 import org.dto.login.LoginSC
@@ -52,27 +48,6 @@ trait AdminWeb {
                   				[
                   					{
                   						"id":"#21:0","componentId":"C#21:0","adminId":"AU#37:0","kind":"immutable","nextSteps":"NS#17:2"
-                  					},
-                  					{
-                  						"id":"#22:0","componentId":"C#22:0","adminId":"AU#37:0","kind":"immutable","nextSteps":"NS#17:2"
-                  					},
-                  					{
-                  						"id":"#23:0","componentId":"C#23:0","adminId":"AU#37:0","kind":"immutable","nextSteps":"NS#17:2"
-                  					}
-                  				]
-                  		},
-                  		{
-                  			"id":"#17:2","stepId":"#17:2","adminId":"AU#37:0","kind":"default",
-                  			"components":
-                  				[
-                  					{
-                  						"id":"#23:1","componentId":"C#23:1","adminId":"AU#37:0","kind":"immutable","nextSteps":"NS#18:2"
-                  					},
-                  					{
-                  						"id":"#22:1","componentId":"C#22:1","adminId":"AU#37:0","kind":"immutable","nextSteps":"NS#18:2"
-                  					},
-                  					{
-                  						"id":"#21:1","componentId":"C#21:1","adminId":"AU#37:0","kind":"immutable","nextSteps":"NS#18:2"
                   					}
                   				]
                   		}
@@ -90,12 +65,22 @@ trait AdminWeb {
    *    Server -> Client
    *    {"jsonId": 5, "method": "addComponent", 
    *      "result": {"id": "#13:1", "componentId": "C#13:1", "adminId": "AU#40:0", "kind": "immutable", "stepId": "#12:1"}}
-   * 6. => addNextStep add connect Component with NextStep
+   * 6. => HasComponent
+   *    Server <- Client
+   *    {jsonId : 4, dto : HasComponent, params : {adminId : AU#40:0, outStep : #40:0, inComponent : #40:0}}
+   *    Server -> Client
+   *    {jsonId : 4, dto : HasComponent, params :  {adminId : AU#40:0, status: true, message: Step und Component wurde verbunden}}
+   * 6. => addStep add connect Component with NextStep
    *   Server <- Client
    *   {"jsonId": 6, "method": "addNextStep", "params": {"adminId": "AU#40:0", "kind": "default", "componentId": "#13:1"}
    *   Server -> Client
    *    {"jsonId": 6, "method": "addNextStep", 
    *      "result": {"id": "#14:1", "stepId": "S#14:1", "adminId": "AU#40:0", "kind": "default"}}
+   * 7. => addNextStep
+   *    Server <- Client
+   *    {jsonId : 4, dto : NextStep, params : {adminId : AU#40:0, inStep : #40:0, outComponent : #40:0}}
+   *    Server -> Client
+   *    {jsonId : 4, dto : NextStep, params :  {adminId : AU#40:0, status: true, message: Component und Step wurde verbunden}}
    * 7. => updateStep update Step
    * 8. => deleteStep delete Step and its hasComponent  (brauche zugehörige Step, was soll mit der weiterer ConfigTree passieren)
    * 9. => updateComponent 

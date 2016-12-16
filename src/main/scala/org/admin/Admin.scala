@@ -12,9 +12,6 @@ import org.status.ErrorStatus
 import org.persistence.Persistence
 import org.persistence.db.orientdb.AdminUserVertex
 import org.status.WarningStatus
-import org.admin.configTree.AdminStep
-import org.admin.configTree.AdminComponent
-import org.admin.configTree.AdminNextStep
 import play.api.libs.json.Writes
 import play.api.libs.json.Json
 import org.dto.login.LoginCS
