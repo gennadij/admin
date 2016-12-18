@@ -9,12 +9,13 @@ import org.dto.DTONames
 import org.dto.DTOIds
 
 /**
-  * Created by gennadi on 20.11.16.
-  */
+ * {jsonId : 1, dto : Registeration, params : {username : test, password : test}}
+ */
+
 case class RegistrationCS (
                       jsonId: Int = DTOIds.registerId,
-                      val dto: String = DTONames.register,
-                      val params: RegistrationParamsCS
+                      dto: String = DTONames.register,
+                      params: RegistrationParamsCS
                     )
 
 object RegistrationCS {

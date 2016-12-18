@@ -9,7 +9,7 @@ import org.dto.DTONames
 import org.dto.DTOIds
 
 /**
-  * Created by gennadi on 20.11.16.
+  * {jsonId : 1, dto : Registeration, result : {adminId : #40:0, username : test, status : true, message : Nachricht}}
   */
 case class RegistrationSC (
     jsonId: Int = DTOIds.registerId,

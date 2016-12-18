@@ -22,65 +22,60 @@ trait AdminWeb {
   
   //TODO Objekte für Transport erzeugen
   /**
-   * 1. register => register Admin
+   * 1. => Registration
    *   Server <- Client
-   *   {"jsonId": 1, "method": "register", "params": {"username": "test", "password": "test"}}
+   *   {jsonId : 1, dto : Registeration, params : {username : test, password : test}}
    *   Server -> Client
-   *   {"jsonId": 1, "method": "register", result": {"adminId": "AU#40:0", "username": "test"}}
-   * 2. => login Admin
+   *   {jsonId : 1, dto : Registeration, result : {adminId : #40:0, username : test, status : true, message : Nachricht}}
+   * 2. => Login
    *   Server <- Client
-   *   {"jsonId": 2, "method": "autheticate", params: {"username": "test", "password": "test"}}
+   *   {jsond : 2, dto : Login, params : {username : test, password : test}}
    *   Server -> Client
-   *   {"jsonId": 2, "method": "autheticate", 
-   *       result: {"id": "AU#40:0", "username": "test", "password": "test", "authentication": true}}
+   *   {jsonId : 2, dto: Login, result: {adminId : #40:0, username : test, status : true, message : Nachricht}}
+   * 3. ConfigUri
+   *   Server <- Client
+   *   {jsond : 3, dto : ConfigUri, params : {adminId : #40:0, configUri : test.test.org}
+   *   Server -> Client
+   *   {jsond : 3, dto : ConfigUri, params : {status : true, message : Nachricht}
    * 3. => updateUser
    * 4. => updatePassword
    * 5. => removeAdmin
-   * 6. => configTree
+   * 6. => ConfigTree
    *   Server <- Client
-   *   {"jsonId": 6, "method": "configTree", params: {"adminId": "AU#40:0", "authentication": true}}
+   *   {jsonId : 6, dto : ConfigTree, params: {adminId : #40:0}}
    *   Server -> Client
-   *   {"jsonId": 7, "method": "configTree", result: {"steps":
-                  	[
-                  		{
-                  			"id":"#19:1","stepId":"#19:1","adminId":"AU#37:0","kind":"first",
-                  			"components":
-                  				[
-                  					{
-                  						"id":"#21:0","componentId":"C#21:0","adminId":"AU#37:0","kind":"immutable","nextSteps":"NS#17:2"
-                  					}
-                  				]
-                  		}
-                  	]
-                  }}
-   * 4. => addFirstStep
+   *   {jsonId : 6, dto : ConfigTree, result: {steps :
+          	[
+          		{stepId :#19:1, kind: first, components:
+          				[{componentId : #21:0, kind : immutable}]
+          		}
+          	]
+          }}
+   * 7. => FirstStep
    *   Server <- Client
-   *   {"jsonId": 4, "method": "addFirstStep", "params": {"adminId": "AU#40:0", "kind": "immutable"}}
+   *   {jsonId: 7, dto : FirstStep, params : {adminId : #40:0, kind  : first}}
    *   Server -> Client
-   *   {"jsonId": 4, "method": "addFirstStep", 
-   *     "result": {"id": "#12.1", "stepId": "S#12.1", "adminId": "AU#40:0", "kind": "first" }} 
-   * 5. => addComponent and connect Step with Component
+   *   {jsonId : 7, dto : FirstStep, result : {stepId : #12:1, status : true, message : Nachricht}} 
+   * 8. => Component
    *   Server <- Client
-   *   {"jsonId": 5, "method": "addComponent", "params": {"adminId": "AU#40:0", "kind": "immutable", "stepId": "#12:1"}
+   *   {jsonId : 8, dto : Component, params : {adminId : #40:0, kind : immutable}
    *    Server -> Client
-   *    {"jsonId": 5, "method": "addComponent", 
-   *      "result": {"id": "#13:1", "componentId": "C#13:1", "adminId": "AU#40:0", "kind": "immutable", "stepId": "#12:1"}}
-   * 6. => HasComponent
+   *    {jsonId : 8, dto : Component, result : {componentId : #13:1, status : true, message : Nachricht}}
+   * 9. => HasComponent
    *    Server <- Client
-   *    {jsonId : 4, dto : HasComponent, params : {adminId : AU#40:0, outStep : #40:0, inComponent : #40:0}}
+   *    {jsonId : 9, dto : HasComponent, params : {adminId : 40:0, outStepId : #40:0, inComponentId : #40:0}}
    *    Server -> Client
-   *    {jsonId : 4, dto : HasComponent, params :  {adminId : AU#40:0, status: true, message: Step und Component wurde verbunden}}
-   * 6. => addStep add connect Component with NextStep
+   *    {jsonId : 9, dto : HasComponent, result :  {status: true, message : Nachricht}}
+   * 10. => Step
    *   Server <- Client
-   *   {"jsonId": 6, "method": "addNextStep", "params": {"adminId": "AU#40:0", "kind": "default", "componentId": "#13:1"}
+   *   {jsonId : 10, dto : Step, params : {adminId : #40:0, kind : default}
    *   Server -> Client
-   *    {"jsonId": 6, "method": "addNextStep", 
-   *      "result": {"id": "#14:1", "stepId": "S#14:1", "adminId": "AU#40:0", "kind": "default"}}
-   * 7. => addNextStep
+   *    {jsonId : 10, dto : Step, result : {stepId : #14:1", status : true, message : Nachricht}}
+   * 7. => NextStep
    *    Server <- Client
-   *    {jsonId : 4, dto : NextStep, params : {adminId : AU#40:0, inStep : #40:0, outComponent : #40:0}}
+   *    {jsonId : 11, dto : NextStep, params : {adminId : #40:0, inStepId : #40:1, outComponentId : #40:2}}
    *    Server -> Client
-   *    {jsonId : 4, dto : NextStep, params :  {adminId : AU#40:0, status: true, message: Component und Step wurde verbunden}}
+   *    {jsonId : 11, dto : NextStep, result : {status: true, message: Nachricht}}
    * 7. => updateStep update Step
    * 8. => deleteStep delete Step and its hasComponent  (brauche zugehörige Step, was soll mit der weiterer ConfigTree passieren)
    * 9. => updateComponent 

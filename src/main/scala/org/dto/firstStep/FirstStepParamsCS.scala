@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ */
 package org.dto.firstStep
 
 import play.api.libs.json.Json

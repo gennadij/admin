@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ */
 package org.persistence.db.orientdb
 
 object PropertyKey {

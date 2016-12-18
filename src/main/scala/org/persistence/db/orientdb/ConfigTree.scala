@@ -1,6 +1,8 @@
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ */
 package org.persistence.db.orientdb
 
-import org.admin.configTree.AdminConfigTree
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
@@ -8,9 +10,7 @@ import com.orientechnologies.orient.core.sql.OCommandSQL
 import scala.collection.JavaConversions._
 import com.tinkerpop.blueprints.Edge
 import com.tinkerpop.blueprints.Vertex
-import org.admin.configTree.AdminConfigTreeStep
 import com.tinkerpop.blueprints.Direction
-import org.admin.configTree.AdminConfigTreeComponent
 import org.dto.configTree.ConfigTreeCS
 import org.dto.configTree.ConfigTreeSC
 import org.dto.configTree.ConfigTreeResultSC
