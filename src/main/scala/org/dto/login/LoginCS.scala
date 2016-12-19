@@ -13,7 +13,7 @@ import org.dto.DTOIds
   * {jsond : 2, dto : Login, params : {username : test, password : test}}
   */
 case class LoginCS (
-    jsonId: Int = DTOIds.loginId,
+    jsonId: Int = DTOIds.login,
     dto: String = DTONames.login,
     params: LoginParamsCS
 )

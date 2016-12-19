@@ -46,16 +46,13 @@ object ComponentVertex {
         "kind", componentCS.params.kind,
         "adminId", componentCS.params.adminId
     )
-    
-    graph.commit
-    vComponent.setProperty("componentId", "C" + vComponent.getIdentity.toString())
     graph.commit
     
     new ComponentSC(
         result = new ComponentResultSC(
             vComponent.getIdentity.toString,
             true, // TODO Status implementieren
-            message = ""
+            message = "Die Komponente wurde hinzugefuegt"
         )
     )
   }

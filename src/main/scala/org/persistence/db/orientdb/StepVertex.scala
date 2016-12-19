@@ -47,14 +47,12 @@ object StepVertex {
             PropertyKey.ADMIN_ID, firstStepCS.params.adminId,
             PropertyKey.KIND, firstStepCS.params.kind)
         graph.commit
-        vStep.setProperty(PropertyKey.STEP_ID, "S" + vStep.getIdentity.toString())
-        graph.commit
         
         new FirstStepSC(
             result = new FirstStepResultSC(
                 vStep.getIdentity.toString(),
                 true, //TODO Status implementieren
-                message = "Einen neuen Schritt hinzugefuegt"
+                message = "Erste Schritt wurde zu Ihre Konfiguration hinzugefügt"
             )
         )
   }

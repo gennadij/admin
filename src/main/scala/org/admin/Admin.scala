@@ -25,6 +25,8 @@ import org.dto.registration.RegistrationCS
 import org.dto.component._
 import org.dto.nextStep.NextStepCS
 import org.dto.nextStep.NextStepSC
+import org.dto.connStepToComponent.ConnStepToComponentCS
+import org.dto.connStepToComponent.ConnStepToComponentSC
 
 /**
    * Administrator definiert und zusammenstellt sein einegen Konfiguration.
@@ -76,8 +78,8 @@ object Admin {
    * Vertex Component verbunden
    */
   
-  def addHasComponent(componentSC: ComponentSC) = {
-    Persistence.addHasComponent(componentSC)
+  def addHasComponent(connStepToComponentSC: ConnStepToComponentCS): ConnStepToComponentSC = {
+    Persistence.addHasComponent(connStepToComponentSC)
   }
   
   def addStep(nextStepCS: NextStepCS): NextStepSC = {

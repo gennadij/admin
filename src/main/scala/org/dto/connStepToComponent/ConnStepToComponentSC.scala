@@ -17,7 +17,7 @@ import play.api.libs.json.Json
 case class ConnStepToComponentSC (
     jsonId: Int = DTOIds.connStepToComponen,
     dto: String = DTONames.connSteptoComponent,
-    params: ConnStepToComponentResultSC
+    result: ConnStepToComponentResultSC
 )
 
 object ConnStepToComponentSC {

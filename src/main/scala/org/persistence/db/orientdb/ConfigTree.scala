@@ -40,13 +40,13 @@ object ConfigTree {
       val eHasComponent: List[Edge] = vStep.getEdges(Direction.OUT).toList
       val vComponents: List[Vertex] = eHasComponent.map { hC => hC.getVertex(Direction.IN) }
       
-      val stepId = if(vStep.getProperty("stepId").toString().substring(1) == vStep.getId.toString()){
-          vStep.getProperty("stepId").toString().substring(1)}
-        else {
-          vStep.setProperty("stepId", vStep.getId.toString())
-          graph.commit()
-          "S" + vStep.getProperty("stepId").toString
-        }
+//      val stepId = if(vStep.getProperty("stepId").toString().substring(1) == vStep.getId.toString()){
+//          vStep.getProperty("stepId").toString().substring(1)}
+//        else {
+//          vStep.setProperty("stepId", vStep.getId.toString())
+//          graph.commit()
+//          "S" + vStep.getProperty("stepId").toString
+//        }
       
       new ConfigTreeStepSC(
           vStep.getIdentity.toString,

@@ -14,6 +14,9 @@ import org.status.WarningStatus
 import com.tinkerpop.blueprints.impls.orient.OrientEdge
 import org.status.Status
 import org.dto.component._
+import org.dto.connStepToComponent.ConnStepToComponentCS
+import org.dto.connStepToComponent.ConnStepToComponentResultSC
+import org.dto.connStepToComponent.ConnStepToComponentSC
 
 object HasComponentEdge {
   
@@ -23,20 +26,25 @@ object HasComponentEdge {
   val propKeyComponentId = "componentId"
   val propKeyStepId = "stepId"
   
-  def add(componentSC: ComponentSC): Status = {
-   val graph: OrientGraph = OrientDB.getGraph
-   val outStep: String = componentSC.result.stepId
-   val inComponent: String = componentSC.result.id
-   val adminId: String = componentSC.result.adminId
-   val eHasComponent: OrientEdge = graph.addEdge("class:hasComponent", 
-     graph.getVertex(outStep), 
+  def add(connStepToComponent: ConnStepToComponentCS): ConnStepToComponentSC = {
+    val graph: OrientGraph = OrientDB.getGraph
+    val outStep: String = connStepToComponent.params.outStep
+    val inComponent: String = connStepToComponent.params.inComponent
+    val adminId: String = connStepToComponent.params.adminId
+    val eHasComponent: OrientEdge = graph.addEdge("class:hasComponent", 
+      graph.getVertex(outStep), 
       graph.getVertex(inComponent), 
-     "hasComponent")
-   eHasComponent.setProperty("adminId", adminId)
-   eHasComponent.setProperty("hasComponentId", "S" + outStep + "C" + inComponent )
-	 graph.commit
+       "hasComponent")
    
-   new SuccessfulStatus("added hasComponents", "S" + outStep + "C" + inComponent)
+    eHasComponent.setProperty("adminId", adminId)
+    graph.commit
+    
+    new ConnStepToComponentSC(
+        result = new ConnStepToComponentResultSC(
+            true, //TODO Status implementieren
+            s"Der Step mit id=$outStep wurde mit der Komponente mit id=$inComponent verbunden"
+        )
+    )
   }
   
   

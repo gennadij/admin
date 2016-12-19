@@ -12,7 +12,7 @@ import play.api.libs.json.Json
 case class ComponentParamsCS (
     adminId: String,
     kind: String
-    ,stepId: String
+//    ,stepId: String
 )
 
 object ComponentParamsCS {

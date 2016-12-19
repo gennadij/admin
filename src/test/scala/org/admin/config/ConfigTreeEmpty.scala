@@ -44,5 +44,5 @@ class ConfigTreeEmpty extends Specification with AdminWeb{
   val configTreeServerClient = handelMessage(configTreeClientServer)
   def e2 = (configTreeServerClient \ "jsonId").asOpt[Int].get === 6
   def e3 = (configTreeServerClient \ "dto").asOpt[String].get === "ConfigTree"
-  def e4 = (configTreeServerClient \ "result" \ "steps").asOpt[List[JsValue]] === None
+  def e4 = (configTreeServerClient \ "result" \ "steps").asOpt[List[JsValue]].get === List.empty
 }

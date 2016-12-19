@@ -35,6 +35,8 @@ import org.dto.configTree.ConfigTreeCS
 import org.dto.component._
 import org.dto.nextStep.NextStepCS
 import org.dto.nextStep.NextStepSC
+import org.dto.connStepToComponent.ConnStepToComponentCS
+import org.dto.connStepToComponent.ConnStepToComponentSC
 
 object Persistence {
   
@@ -60,8 +62,8 @@ object Persistence {
     ComponentVertex.addComponent(componentCS)
   }
   
-  def addHasComponent(componentSC: ComponentSC): Status = {
-    HasComponentEdge.add(componentSC)
+  def addHasComponent(connStepToComponentSC: ConnStepToComponentCS): ConnStepToComponentSC = {
+    HasComponentEdge.add(connStepToComponentSC)
   }
   
   def addStep(nextStepCS: NextStepCS): String = {

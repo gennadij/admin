@@ -21,6 +21,8 @@ import org.dto.configTree.ConfigTreeCS
 import org.dto.component.ComponentCS
 import org.dto.component.ComponentSC
 import org.dto.nextStep.NextStepCS
+import org.dto.connStepToComponent.ConnStepToComponentCS
+import org.dto.connStepToComponent.ConnStepToComponentSC
 
 /**
  * Created by Gennadi Heimann 19.12.2016
@@ -118,8 +120,7 @@ trait AdminWeb {
   def configUri(receivedMessage: JsValue): JsValue = {
     null
   }
-      //TODO impl Reads with validation show 
-    // https://www.playframework.com/documentation/2.4.x/ScalaJsonCombinators
+  
   private def firstStep(receivedMessage: JsValue): JsValue = {
     val firstStepCS: FirstStepCS = Json.fromJson[FirstStepCS](receivedMessage).get
     val step = Admin.addFirstStep(firstStepCS)
@@ -129,12 +130,14 @@ trait AdminWeb {
   private def component(receivedMessage: JsValue): JsValue = {
     val componentCS: ComponentCS = Json.fromJson[ComponentCS](receivedMessage).get
     val componentSC: ComponentSC = Admin.addComponent(componentCS)
-    val hasComponent = Admin.addHasComponent(componentSC)
+//    val hasComponent = Admin.addHasComponent(componentSC)
     Json.toJson(componentSC)
   }
   
   private def connStepToComponent(receivedMeassage: JsValue): JsValue= {
-    null
+    val connStepToComponentCS: ConnStepToComponentCS = Json.fromJson[ConnStepToComponentCS](receivedMeassage).get
+    val connStepToComponentSC: ConnStepToComponentSC = Admin.addHasComponent(connStepToComponentCS)
+    Json.toJson(connStepToComponentSC)
   }
   
   private def addNextStep(receivedMessage: JsValue): JsValue = {
