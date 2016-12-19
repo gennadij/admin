@@ -7,6 +7,7 @@ package org.dto.registration
 import play.api.libs.json.Json
 
 /**
+ * Created by Gennadi Heimann 19.12.2016
  * {jsonId : 1, dto : Registeration, params : {username : test, password : test}}
  */
 case class RegistrationParamsCS (

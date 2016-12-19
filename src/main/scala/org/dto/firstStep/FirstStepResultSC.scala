@@ -5,11 +5,16 @@ package org.dto.firstStep
 
 import play.api.libs.json.Json
 
+/**
+ * Created by Gennadi Heimann 19.12.2016
+ * 
+ * result : {stepId : #12:1, status : true, message : Nachricht}
+ */
+
 case class FirstStepResultSC (
-  id: String,
   stepId: String,
-  adminId: String,
-  kind: String
+  kind: String,
+  message: String
   
 )
 

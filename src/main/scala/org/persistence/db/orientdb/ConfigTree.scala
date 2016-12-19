@@ -50,8 +50,6 @@ object ConfigTree {
       
       new ConfigTreeStepSC(
           vStep.getIdentity.toString,
-          stepId,
-          adminId,
           vStep.getProperty("kind").toString(),
           getAdminComponents(vComponents)
       
@@ -70,10 +68,8 @@ object ConfigTree {
   vComponents.map({ vC => 
         new ConfigTreeComponentSC(
             vC.getId.toString(),
-            vC.getProperty("componentId"),
-            vC.getProperty("adminId").toString,
-            vC.getProperty("kind").toString(),
-            getNextStep(vC)
+            vC.getProperty("kind").toString()
+            ,getNextStep(vC)
         )
       })
     

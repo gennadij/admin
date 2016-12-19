@@ -4,6 +4,10 @@
 
 package org.admin
 
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ */
+
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import org.persistence.db.orientdb.AdminUserVertex
@@ -17,6 +21,10 @@ import org.dto.configTree.ConfigTreeCS
 import org.dto.component.ComponentCS
 import org.dto.component.ComponentSC
 import org.dto.nextStep.NextStepCS
+
+/**
+ * Created by Gennadi Heimann 19.12.2016
+ */
 
 trait AdminWeb {
   
@@ -37,7 +45,6 @@ trait AdminWeb {
    *   {jsond : 3, dto : ConfigUri, params : {adminId : #40:0, configUri : test.test.org}
    *   Server -> Client
    *   {jsond : 3, dto : ConfigUri, params : {status : true, message : Nachricht}
-   * 3. => updateUser
    * 4. => updatePassword
    * 5. => removeAdmin
    * 6. => ConfigTree
@@ -86,6 +93,7 @@ trait AdminWeb {
     (receivedMessage \ "dto").asOpt[String] match {
       case Some("Registration") => register(receivedMessage)
       case Some("Login") => login(receivedMessage)
+      case Some("ConfigUri") => configUri(receivedMessage)
       case Some("FirstStep") => firstStep(receivedMessage)
       case Some("ConfigTree") => configTree(receivedMessage)
       case Some("Component") => component(receivedMessage)
@@ -106,6 +114,9 @@ trait AdminWeb {
     Json.toJson(loginSC)
   }
   
+  def configUri(receivedMessage: JsValue): JsValue = {
+    null
+  }
       //TODO impl Reads with validation show 
     // https://www.playframework.com/documentation/2.4.x/ScalaJsonCombinators
   private def firstStep(receivedMessage: JsValue): JsValue = {

@@ -9,7 +9,8 @@ import play.api.libs.json.Json
 import org.dto.DTOIds
 
 /**
-  * Created by gennadi on 20.11.16.
+  * Created by gennadi Heimann on 20.11.16.
+  * {jsond : 2, dto : Login, params : {username : test, password : test}}
   */
 case class LoginCS (
     jsonId: Int = DTOIds.loginId,

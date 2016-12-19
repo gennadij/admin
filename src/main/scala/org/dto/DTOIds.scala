@@ -4,6 +4,10 @@
 
 package org.dto
 
+/**
+ * Created by Gennadi Heimann 19.12.2016
+ */
+
 object DTOIds {
   val registerId: Int = 1
   val loginId: Int = 2

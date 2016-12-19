@@ -7,6 +7,11 @@ import play.api.libs.json.Json
 import org.dto.DTOIds
 import org.dto.DTONames
 
+/**
+ * Created by Gennadi Heimann 19.12.2016
+ * 
+ * {jsonId : 8, dto : Component, params : {adminId : #40:0, kind : immutable}
+ */
 case class ComponentCS (
     jsonId: Int = DTOIds.component,
     dto: String = DTONames.component,

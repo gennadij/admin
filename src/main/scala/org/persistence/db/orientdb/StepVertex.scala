@@ -51,12 +51,10 @@ object StepVertex {
         graph.commit
         
         new FirstStepSC(
-            message = "Einen neuen Schritt hinzugefuegt",
             result = new FirstStepResultSC(
                 vStep.getIdentity.toString(),
-                "S" + vStep.getIdentity.toString(),
-                vStep.getProperty(PropertyKey.ADMIN_ID),
-                vStep.getProperty(PropertyKey.KIND)
+                vStep.getProperty(PropertyKey.KIND),
+                message = "Einen neuen Schritt hinzugefuegt"
             )
         )
   }

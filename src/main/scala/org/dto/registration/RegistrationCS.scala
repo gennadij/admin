@@ -9,6 +9,7 @@ import org.dto.DTONames
 import org.dto.DTOIds
 
 /**
+ * Created by Gennadi Heimann 19.12.2016
  * {jsonId : 1, dto : Registeration, params : {username : test, password : test}}
  */
 

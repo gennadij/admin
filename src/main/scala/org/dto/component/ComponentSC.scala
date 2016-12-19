@@ -7,11 +7,16 @@ import org.dto.DTOIds
 import org.dto.DTONames
 import play.api.libs.json.Json
 
+/**
+ * Created by Gennadi Heimann 19.12.2016
+ * 
+ * {jsonId : 8, dto : Component, result : {componentId : #13:1, status : true, message : Nachricht}}
+ */
+
 case class ComponentSC (
     jsonId: Int = DTOIds.component,
     dto: String = DTONames.component,
-    result: ComponentResultSC,
-    message: String
+    result: ComponentResultSC
 )
 
 object ComponentSC {
