@@ -53,7 +53,7 @@ object StepVertex {
         new FirstStepSC(
             result = new FirstStepResultSC(
                 vStep.getIdentity.toString(),
-                vStep.getProperty(PropertyKey.KIND),
+                true, //TODO Status implementieren
                 message = "Einen neuen Schritt hinzugefuegt"
             )
         )

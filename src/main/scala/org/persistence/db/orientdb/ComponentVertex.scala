@@ -54,12 +54,9 @@ object ComponentVertex {
     new ComponentSC(
         result = new ComponentResultSC(
             vComponent.getIdentity.toString,
-            "C" + vComponent.getIdentity,
-            componentCS.params.adminId,
-            componentCS.params.kind,
-            componentCS.params.stepId
-        ),
-        message = ""
+            true, // TODO Status implementieren
+            message = ""
+        )
     )
   }
   

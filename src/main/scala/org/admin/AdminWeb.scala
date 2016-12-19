@@ -68,11 +68,11 @@ trait AdminWeb {
    *   {jsonId : 8, dto : Component, params : {adminId : #40:0, kind : immutable}
    *    Server -> Client
    *    {jsonId : 8, dto : Component, result : {componentId : #13:1, status : true, message : Nachricht}}
-   * 9. => HasComponent
+   * 9. => ConnStepToComponent
    *    Server <- Client
-   *    {jsonId : 9, dto : HasComponent, params : {adminId : 40:0, outStepId : #40:0, inComponentId : #40:0}}
+   *    {jsonId : 9, dto : ConnStepToComponent, params : {adminId : 40:0, outStepId : #40:0, inComponentId : #40:0}}
    *    Server -> Client
-   *    {jsonId : 9, dto : HasComponent, result :  {status: true, message : Nachricht}}
+   *    {jsonId : 9, dto : ConnStepToComponent, result :  {status: true, message : Nachricht}}
    * 10. => Step
    *   Server <- Client
    *   {jsonId : 10, dto : Step, params : {adminId : #40:0, kind : default}
@@ -97,6 +97,7 @@ trait AdminWeb {
       case Some("FirstStep") => firstStep(receivedMessage)
       case Some("ConfigTree") => configTree(receivedMessage)
       case Some("Component") => component(receivedMessage)
+      case Some("ConnStepToComponent") => connStepToComponent(receivedMessage)
       case Some("NextStep") => addNextStep(receivedMessage)
       case _ => Json.obj("error" -> "keinen Treffer")
     }
@@ -130,6 +131,10 @@ trait AdminWeb {
     val componentSC: ComponentSC = Admin.addComponent(componentCS)
     val hasComponent = Admin.addHasComponent(componentSC)
     Json.toJson(componentSC)
+  }
+  
+  private def connStepToComponent(receivedMeassage: JsValue): JsValue= {
+    null
   }
   
   private def addNextStep(receivedMessage: JsValue): JsValue = {

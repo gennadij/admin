@@ -13,7 +13,7 @@ import play.api.libs.json.Json
 
 case class FirstStepResultSC (
   stepId: String,
-  kind: String,
+  status: Boolean,
   message: String
   
 )

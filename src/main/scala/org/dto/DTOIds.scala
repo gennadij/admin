@@ -16,5 +16,6 @@ object DTOIds {
   val firstStep = 4
   val component = 5
   val configTreeId: Int = 6
+  val connStepToComponen: Int = 9
   
 }

@@ -13,7 +13,7 @@ import play.api.libs.json.Json
 
 case class ComponentResultSC (
     componentId: String
-    ,kind: String
+    ,status: Boolean
     ,message: String
 )
 

@@ -18,4 +18,5 @@ object DTONames {
   val firstStep: String = "FirstStep"
   val component: String = "Component"
   val configTree: String = "ConfigTree"
+  val connSteptoComponent: String = "ConnStepToComponent"
 }
