@@ -38,8 +38,8 @@ class ConfigTreeFirstStepWithComponent
       "jsonId" -> DTOIds.login,
       "dto" -> DTONames.login
       ,"params" -> Json.obj(
-        "username" -> "firstStepConfigTree",
-        "password" -> "firstStepConfigTree"
+        "username" -> "firstStepComponent",
+        "password" -> "firstStepComponent"
       )
     )
     val loginSC = handelMessage(loginCS)
@@ -141,6 +141,7 @@ class ConfigTreeFirstStepWithComponent
                   "inComponentId" -> (componentSC \ "result" \ "componentId").asOpt[String].get
               )
           )
+          println(connStepToComponnetCS)
           val connStepToComponentSC = handelMessage(connStepToComponnetCS)
           println(s"ConnStepToComponent   Client -> Server: $connStepToComponnetCS")
           println(s"ConnStepToComponent   Server -> Client: $connStepToComponentSC")

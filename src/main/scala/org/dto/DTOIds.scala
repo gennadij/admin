@@ -13,10 +13,10 @@ object DTOIds {
   val login: Int = 2
   val configUri: Int = 3
   val configTree: Int = 6
-  val firstStep = 7
-  val component = 8
+  val firstStep: Int = 7
+  val component: Int = 8
   val connStepToComponen: Int = 9
-  val step = 10
-  val nextStep = 11
+  val step: Int = 10
+  val connComponentToStep: Int = 11
   
 }

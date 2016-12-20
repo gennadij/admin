@@ -18,8 +18,8 @@ class ConfigTreeStepComponentNextStep
   def beforeAll = {
     println("delete Step, Component and NextStep")
     val loginCS = Json.obj(
-      "jsonId" -> 2,
-      "dto" -> "Login"
+      "jsonId" -> DTOIds.login,
+      "dto" -> DTONames.login
       ,"params" -> Json.obj(
         "username" -> "firstStep3ComponentNextStep",
         "password" -> "firstStep3ComponentNextStep"
@@ -41,8 +41,8 @@ class ConfigTreeStepComponentNextStep
       "jsonId" -> DTOIds.login,
       "dto" -> DTONames.login
       ,"params" -> Json.obj(
-        "username" -> "firstStepConfigTree",
-        "password" -> "firstStepConfigTree"
+        "username" -> "firstStep3ComponentNextStep",
+        "password" -> "firstStep3ComponentNextStep"
       )
     )
     val loginSC = handelMessage(loginCS)

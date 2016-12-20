@@ -1,17 +1,16 @@
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  */
-package org.dto.nextStep
+package org.dto.step
 
 import play.api.libs.json.Json
 
-case class NextStepResultSC (
-    id: String,
+case class StepResultSC (
     stepId: String,
     adminId: String,
     kind: String
 )
 
-object NextStepResultSC {
-  implicit val format = Json.writes[NextStepResultSC]
+object StepResultSC {
+  implicit val format = Json.writes[StepResultSC]
 }

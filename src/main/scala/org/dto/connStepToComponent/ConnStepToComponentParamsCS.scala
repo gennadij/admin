@@ -15,8 +15,8 @@ import play.api.libs.json.Json
 
 case class ConnStepToComponentParamsCS (
     adminId: String,
-    outStep: String,
-    inComponent: String
+    outStepId: String,
+    inComponentId: String
 )
 
 object ConnStepToComponentParamsCS {

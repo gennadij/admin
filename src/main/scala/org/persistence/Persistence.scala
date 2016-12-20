@@ -33,10 +33,12 @@ import org.dto.registration.RegistrationSC
 import org.dto.configTree.ConfigTreeSC
 import org.dto.configTree.ConfigTreeCS
 import org.dto.component._
-import org.dto.nextStep.NextStepCS
-import org.dto.nextStep.NextStepSC
 import org.dto.connStepToComponent.ConnStepToComponentCS
 import org.dto.connStepToComponent.ConnStepToComponentSC
+import org.dto.step.StepCS
+import org.dto.step.StepSC
+import org.dto.connComponentToStep.ConnComponentToStepSC
+import org.dto.connComponentToStep.ConnComponentToStepCS
 
 object Persistence {
   
@@ -66,13 +68,15 @@ object Persistence {
     HasComponentEdge.add(connStepToComponentSC)
   }
   
-  def addStep(nextStepCS: NextStepCS): String = {
-    StepVertex.addStep(nextStepCS)
+  def addNextStep(connComponentToStepCS: ConnComponentToStepCS): ConnComponentToStepSC = {
+    NextStepEdge.add(connComponentToStepCS)
   }
   
-  def addNextStep(nextStepCS: NextStepCS): NextStepSC = {
-    null
+  def addStep(stepCS: StepCS): StepSC = {
+    StepVertex.addStep(stepCS)
   }
+  
+
   
     /**
    * 

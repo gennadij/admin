@@ -28,8 +28,8 @@ object HasComponentEdge {
   
   def add(connStepToComponent: ConnStepToComponentCS): ConnStepToComponentSC = {
     val graph: OrientGraph = OrientDB.getGraph
-    val outStep: String = connStepToComponent.params.outStep
-    val inComponent: String = connStepToComponent.params.inComponent
+    val outStep: String = connStepToComponent.params.outStepId
+    val inComponent: String = connStepToComponent.params.inComponentId
     val adminId: String = connStepToComponent.params.adminId
     val eHasComponent: OrientEdge = graph.addEdge("class:hasComponent", 
       graph.getVertex(outStep), 

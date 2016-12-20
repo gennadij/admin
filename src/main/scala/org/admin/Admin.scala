@@ -5,7 +5,6 @@
 
 package org.admin
 
-import scala.xml._
 import org.status.Status
 import org.status.SuccessfulStatus
 import org.status.ErrorStatus
@@ -23,10 +22,12 @@ import org.dto.configTree.ConfigTreeSC
 import org.dto.registration.RegistrationSC
 import org.dto.registration.RegistrationCS
 import org.dto.component._
-import org.dto.nextStep.NextStepCS
-import org.dto.nextStep.NextStepSC
 import org.dto.connStepToComponent.ConnStepToComponentCS
 import org.dto.connStepToComponent.ConnStepToComponentSC
+import org.dto.step.StepCS
+import org.dto.step.StepSC
+import org.dto.connComponentToStep.ConnComponentToStepCS
+import org.dto.connComponentToStep.ConnComponentToStepSC
 
 /**
    * Administrator definiert und zusammenstellt sein einegen Konfiguration.
@@ -82,12 +83,12 @@ object Admin {
     Persistence.addHasComponent(connStepToComponentSC)
   }
   
-  def addStep(nextStepCS: NextStepCS): NextStepSC = {
-    null
+  def addStep(stepCS: StepCS): StepSC = {
+    Persistence.addStep(stepCS)
   }
   
-  def addNextStep(nextStepCS: NextStepCS): NextStepSC = {
-    null
+  def addNextStep(connComponentToStepCS: ConnComponentToStepCS): ConnComponentToStepSC = {
+    Persistence.addNextStep(connComponentToStepCS)
   }
   
     /**

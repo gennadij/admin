@@ -12,8 +12,10 @@ import org.status.SuccessfulStatus
 import org.status.WarningStatus
 import com.tinkerpop.blueprints.impls.orient.OrientEdge
 import org.status.Status
-import org.dto.nextStep.NextStepSC
-import org.dto.nextStep.NextStepResultSC
+import org.dto.connComponentToStep.ConnComponentToStepCS
+import org.dto.connComponentToStep.ConnComponentToStepSC
+import org.dto.step.StepSC
+import org.dto.connComponentToStep.ConnComponentToStepResultSC
 
 
 object NextStepEdge {
@@ -57,40 +59,46 @@ object NextStepEdge {
 //    status
 //  }
 
-  def addNextStep(adminId: String, outComponent: String, inStep: String): NextStepSC = {
+//  def addNextStep(adminId: String, outComponent: String, inStep: String): StepSC = {
+//    val graph: OrientGraph = OrientDB.getGraph
+//    
+//     val eNextStep: OrientEdge = graph.addEdge("class:nextStep", 
+//       graph.getVertex(outComponent), 
+//        graph.getVertex(inStep), 
+//       "nextStep")
+//     eNextStep.setProperty("adminId", adminId)
+//     eNextStep.setProperty("nextStepId", "C" + outComponent + "S" + inStep )
+//  	 graph.commit
+//     
+////  	 new NextStepSC(result: new NextStepResultSC(
+////  	     inStep,
+////  	     
+////  	 ))
+//    
+//    null
+////     new SuccessfulStatus("added nextStep", "C" + outComponent + "S" + inStep)
+//  }
+  
+  
+  
+  def add(connComponentToStepCS: ConnComponentToStepCS): ConnComponentToStepSC = {
     val graph: OrientGraph = OrientDB.getGraph
-    
+    val adminId: String = connComponentToStepCS.params.adminId
+    val outComponentId: String = connComponentToStepCS.params.outComponentId
+    val inStepId: String = connComponentToStepCS.params.inStepId
      val eNextStep: OrientEdge = graph.addEdge("class:nextStep", 
-       graph.getVertex(outComponent), 
-        graph.getVertex(inStep), 
+       graph.getVertex(outComponentId), 
+        graph.getVertex(inStepId), 
        "nextStep")
      eNextStep.setProperty("adminId", adminId)
-     eNextStep.setProperty("nextStepId", "C" + outComponent + "S" + inStep )
   	 graph.commit
-     
-//  	 new NextStepSC(result: new NextStepResultSC(
-//  	     inStep,
-//  	     
-//  	 ))
-    
-    null
-//     new SuccessfulStatus("added nextStep", "C" + outComponent + "S" + inStep)
-  }
-  
-  
-  
-  def add(adminId: String, outComponent: String, inStep: String): Status = {
-    val graph: OrientGraph = OrientDB.getGraph
-    
-     val eNextStep: OrientEdge = graph.addEdge("class:nextStep", 
-       graph.getVertex(outComponent), 
-        graph.getVertex(inStep), 
-       "nextStep")
-     eNextStep.setProperty("adminId", adminId)
-     eNextStep.setProperty("nextStepId", "C" + outComponent + "S" + inStep )
-  	 graph.commit
-     
-     new SuccessfulStatus("added nextStep", "C" + outComponent + "S" + inStep)
+  	 
+  	 new ConnComponentToStepSC(
+  	     result = new ConnComponentToStepResultSC(
+  	         true,
+  	         s"Die Componnet mit id=$outComponentId wurde mit Step mit id=$inStepId verbunden"
+  	     )
+  	 )
   }
   
 }

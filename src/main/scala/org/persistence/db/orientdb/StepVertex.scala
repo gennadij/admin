@@ -18,8 +18,9 @@ import org.dto.firstStep.FirstStepSC
 import org.dto.firstStep.FirstStepResultSC
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.orientechnologies.orient.core.sql.OCommandSQL
-import org.dto.nextStep.NextStepCS
-import org.dto.nextStep.NextStepSC
+import org.dto.step.StepCS
+import org.dto.step.StepSC
+import org.dto.step.StepResultSC
 
 
 object StepVertex {
@@ -57,24 +58,21 @@ object StepVertex {
         )
   }
   
-    def addStep(nextStepCS: NextStepCS): String = {
+    def addStep(stepCS: StepCS): StepSC = {
     val graph: OrientGraph = OrientDB.getGraph
     
     val vStep: OrientVertex = graph.addVertex("class:" + PropertyKey.STEP, 
-            PropertyKey.ADMIN_ID, nextStepCS.params.adminId,
-            PropertyKey.KIND, nextStepCS.params.kind)
-        graph.commit
-        vStep.setProperty(PropertyKey.STEP_ID, "S" + vStep.getIdentity.toString())
+            PropertyKey.ADMIN_ID, stepCS.params.adminId,
+            PropertyKey.KIND, stepCS.params.kind)
         graph.commit
         
-        vStep.getIdentity.toString()
-        
-//        new AdminStep(
-//            vStep.getIdentity.toString(),
-//            "S" + vStep.getIdentity.toString(),
-//            vStep.getProperty("adminId"),
-//            vStep.getProperty("kind")
-//        )
+        new StepSC(
+            result = new StepResultSC(
+            	vStep.getIdentity.toString(),
+            	vStep.getProperty("adminId"),
+            	vStep.getProperty("kind")
+            )
+        )
   }
   
   def removerSteps(adminId: String) = {
