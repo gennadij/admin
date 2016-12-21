@@ -14,7 +14,7 @@ object DTONames {
   val register: String = "Registration"
   val login: String = "Login"
   val configUri: String = "ConfigUri"
-  val step: String = "step"
+  val step: String = "Step"
   val firstStep: String = "FirstStep"
   val component: String = "Component"
   val configTree: String = "ConfigTree"

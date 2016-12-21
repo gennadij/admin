@@ -7,8 +7,8 @@ import play.api.libs.json.Json
 
 case class StepResultSC (
     stepId: String,
-    adminId: String,
-    kind: String
+    status: Boolean,
+    message: String
 )
 
 object StepResultSC {

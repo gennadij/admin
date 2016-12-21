@@ -31,40 +31,22 @@ object ConfigTree {
       
     val vSteps: List[OrientVertex] = res.toList.map(_.asInstanceOf[OrientVertex])
     
-    new ConfigTreeSC(result = new ConfigTreeResultSC(vSteps.map(getAdminStep(_, graph, adminId)), ""))
-//    new AdminConfigTree(vSteps.map(getAdminStep(_, graph, adminId)))
+    new ConfigTreeSC(result = new ConfigTreeResultSC(vSteps.map(getStep(_, graph, adminId)), ""))
   }
   
   
-  private def getAdminStep(vStep: OrientVertex, graph: OrientGraph, adminId: String): ConfigTreeStepSC = {
+  private def getStep(vStep: OrientVertex, graph: OrientGraph, adminId: String): ConfigTreeStepSC = {
       val eHasComponent: List[Edge] = vStep.getEdges(Direction.OUT).toList
       val vComponents: List[Vertex] = eHasComponent.map { hC => hC.getVertex(Direction.IN) }
-      
-//      val stepId = if(vStep.getProperty("stepId").toString().substring(1) == vStep.getId.toString()){
-//          vStep.getProperty("stepId").toString().substring(1)}
-//        else {
-//          vStep.setProperty("stepId", vStep.getId.toString())
-//          graph.commit()
-//          "S" + vStep.getProperty("stepId").toString
-//        }
       
       new ConfigTreeStepSC(
           vStep.getIdentity.toString,
           vStep.getProperty("kind").toString(),
-          getAdminComponents(vComponents)
-      
+          getComponents(vComponents)
       )
-      
-//      new AdminConfigTreeStep(
-//          vStep.getIdentity.toString,
-//          stepId,
-//          adminId,
-//          vStep.getProperty("kind").toString(),
-//          getAdminComponents(vComponents)
-//      )
   }
   
-  private def getAdminComponents(vComponents: List[Vertex]): List[ConfigTreeComponentSC] = {
+  private def getComponents(vComponents: List[Vertex]): List[ConfigTreeComponentSC] = {
   vComponents.map({ vC => 
         new ConfigTreeComponentSC(
             vC.getId.toString(),
@@ -72,19 +54,6 @@ object ConfigTree {
             ,getNextStep(vC)
         )
       })
-    
-    
-    
-    
-//    vComponents.map({ vC => 
-//        new AdminConfigTreeComponent(
-//            vC.getId.toString(),
-//            vC.getProperty("componentId"),
-//            vC.getProperty("adminId").toString,
-//            vC.getProperty("kind").toString(),
-//            getNextStep(vC)
-//        )
-//      })
   }
     
   private def getNextStep(component: Vertex): String = {
@@ -92,6 +61,6 @@ object ConfigTree {
     val vNextStep: List[Vertex] = eNextStep.map ( { eNS => 
       eNS.getVertex(Direction.IN)
     })
-    if(vNextStep.size == 1) "NS" + vNextStep.head.getId.toString() else "no nextStep"
+    if(vNextStep.size == 1) vNextStep.head.getId.toString() else "no nextStep"
   }
 }

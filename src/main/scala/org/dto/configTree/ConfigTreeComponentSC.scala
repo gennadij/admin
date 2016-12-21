@@ -16,7 +16,7 @@ import play.api.libs.json.Json
 case class ConfigTreeComponentSC (
     componentId: String,
     kind: String,
-    nextSteps: String
+    nextStep: String
 )
 
 object ConfigTreeComponentSC {

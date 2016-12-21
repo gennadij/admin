@@ -69,8 +69,8 @@ object StepVertex {
         new StepSC(
             result = new StepResultSC(
             	vStep.getIdentity.toString(),
-            	vStep.getProperty("adminId"),
-            	vStep.getProperty("kind")
+            	true//TODO impl status
+            	,"Der Step wurde hinzugefuegt"
             )
         )
   }
