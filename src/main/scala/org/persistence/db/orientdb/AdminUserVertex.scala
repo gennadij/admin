@@ -53,7 +53,7 @@ object AdminUserVertex {
                       propKeyAdminUserPassword, registrationCS.params.password)
       graph.commit
       new RegistrationSC(result = new RegistrationResultSC(
-          "AU" + vAdminUser.getIdentity.toString(),
+          vAdminUser.getIdentity.toString(),
           vAdminUser.getProperty(propKeyAdminUsername).toString(),
           true,
           "Registrierung war erfolgreich"
@@ -80,7 +80,7 @@ object AdminUserVertex {
     if(adminUsers.size == 1){
       val loginSC: List[LoginSC] = adminUsers.map(login => {
         new LoginSC(result = new LoginResultSC(
-          "AU" + login.asInstanceOf[OrientVertex].getIdentity,
+          login.asInstanceOf[OrientVertex].getIdentity.toString(),
           login.asInstanceOf[OrientVertex].getProperty("username"),
           true,
           "Anmeldung mit Username " + loginCS.params.username + " war erfolgreich"

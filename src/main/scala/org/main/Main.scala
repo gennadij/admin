@@ -10,7 +10,7 @@ object Main {
     println("Generic configurator started")
     println("Run Test Scenarios")
     
-    
+    new Config()
     
     println("END")
   }
