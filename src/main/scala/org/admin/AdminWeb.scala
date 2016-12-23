@@ -33,7 +33,6 @@ import org.dto.connComponentToStep.ConnComponentToStepSC
 
 trait AdminWeb {
   
-  //TODO Objekte für Transport erzeugen
   /**
    * 1. => Registration
    *   Server <- Client
