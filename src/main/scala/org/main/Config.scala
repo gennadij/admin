@@ -13,8 +13,9 @@ class Config extends AdminWeb{
       "jsonId" -> DTOIds.login,
       "dto" -> DTONames.login
       ,"params" -> Json.obj(
-          "username" -> "config_3",
-          "password" -> "config_3"
+          "username" -> "config_4",
+          "password" -> "config_4"
+          //http://contig/test_4
       )
   )
     
