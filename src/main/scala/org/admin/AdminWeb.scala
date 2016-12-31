@@ -34,6 +34,12 @@ import org.dto.connComponentToStep.ConnComponentToStepSC
 trait AdminWeb {
   
   /**
+   * EXTENSION FOR DTO
+   *   Vertex Step
+   *     - selectionCriterium => definiert maximale und minimale Anzahl der ausgewaelten Komponenten in dem Step
+   */
+  
+  /**
    * 1. => Registration
    *   Server <- Client
    *   {jsonId : 1, dto : Registeration, params : {username : test, password : test}}
