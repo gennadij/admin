@@ -88,19 +88,6 @@ object Persistence {
    * 
    * @version 1.0
    * 
-   * @param FirstStepCS
-   * 
-   * @return FirstStepSC
-   */
-  def addFirstStep(firstStepCS: FirstStepCS): FirstStepSC = {
-    StepVertex.addFirstStep(firstStepCS)
-  }
-  
-    /**
-   * @author Gennadi Heimann
-   * 
-   * @version 1.0
-   * 
    * @param ComponentCS
    * 
    * @return ComponentSC

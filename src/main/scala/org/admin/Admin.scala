@@ -66,13 +66,6 @@ object Admin {
   def configTree(configTreeCS: ConfigTreeCS): ConfigTreeSC = {
     Persistence.getConfigTree(configTreeCS)
   }
-
-  /**
-   * @author Gennadi Heimann
-   */
-  def addFirstStep(firstStepCS: FirstStepCS): FirstStepSC = {
-    Persistence.addFirstStep(firstStepCS)
-  }
   
   /**
    * @author Gennadi Heimann

@@ -24,39 +24,6 @@ import org.dto.step.StepResultSC
  */
 
 object StepVertex {
-  val propClassName = "Step"
-  val propKeyId = "stepId"
-  val propKeyAdminId = "adminId"
-  val propKeyKind = "kind"
-  
-    /**
-   * 
-   * fuegt Vertex Step zu ConfigTree hinzu
-   * 
-   * @author Gennadi Heimann
-   * 
-   * @version 1.0
-   * 
-   * @param AdminStep
-   * 
-   * @return Status
-   */
-  
-  def addFirstStep(firstStepCS: FirstStepCS): FirstStepSC = {
-    val graph: OrientGraph = OrientDB.getGraph
-    val vStep: OrientVertex = graph.addVertex("class:" + PropertyKey.STEP, 
-            PropertyKey.ADMIN_ID, firstStepCS.params.adminId,
-            PropertyKey.KIND, firstStepCS.params.kind)
-        graph.commit
-        
-        new FirstStepSC(
-            result = new FirstStepResultSC(
-                vStep.getIdentity.toString(),
-                true, //TODO Status implementieren
-                message = "Erste Schritt wurde zu Ihre Konfiguration hinzugefügt"
-            )
-        )
-  }
   
   /**
    * @author Gennadi Heimann

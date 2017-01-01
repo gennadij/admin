@@ -13,9 +13,9 @@ class ConfigTreeEmpty extends Specification with AdminWeb{
     Diese Specification prueft die leere Konfiguration
     (erste Aufruf nach der Regestrierung und Anmeldung)
       loginStatus=true                                   $e1
-      jsonId = 6                                            $e2
-      dto=ConfigTree                                            $e3
-      result = None                                            $e4
+      jsonId = 6                                         $e2
+      dto=ConfigTree                                     $e3
+      result = None                                      $e4
     """
   
   //TODO message testen

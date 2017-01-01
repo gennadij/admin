@@ -51,8 +51,8 @@ class ConfigTreeFirstStepWithComponent
     "FirstStep" >> {
       //      {jsonId: 7, dto : FirstStep, params : {adminId : #40:0, kind  : first}}
       val firstStepConfigTreeCS = Json.obj(
-        "jsonId" -> DTOIds.firstStep,
-        "dto" -> DTONames.firstStep 
+        "jsonId" -> DTOIds.step,
+        "dto" -> DTONames.step 
         ,"params" -> Json.obj(
           "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
           "kind" -> "first"
@@ -63,17 +63,17 @@ class ConfigTreeFirstStepWithComponent
       println(s"FirstStep    Server -> Client: $firstStepConfigTreeSC")
       
       "jsonId" >> {
-    	  (firstStepConfigTreeSC \ "jsonId").asOpt[Int].get === DTOIds.firstStep
+    	  (firstStepConfigTreeSC \ "jsonId").asOpt[Int].get === DTOIds.step
       }
       "dto" >> {
-    	  (firstStepConfigTreeSC\ "dto").asOpt[String].get === DTONames.firstStep
+    	  (firstStepConfigTreeSC\ "dto").asOpt[String].get === DTONames.step
       }
       "result \\ status" >> {
         (firstStepConfigTreeSC \ "result" \ "status").asOpt[Boolean].get === true
       }
       "result \\ message" >> {
         (firstStepConfigTreeSC \ "result" \ "message").asOpt[String].get === 
-          "Erste Schritt wurde zu Ihre Konfiguration hinzugefügt"
+          "Der Step wurde hinzugefuegt"
       }
       "ConfigTree" >> {
   //      {jsonId : 6, dto : ConfigTree, params: {adminId : #40:0}}

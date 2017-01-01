@@ -6,6 +6,8 @@ import play.api.libs.json.{JsValue, Json}
 import org.persistence.db.orientdb.StepVertex
 import org.specs2.specification.BeforeAfterAll
 import org.dto.firstStep.FirstStepSC
+import org.dto.DTOIds
+import org.dto.DTONames
 
 /**
   * Created by gennadi on 16.11.16.
@@ -34,7 +36,7 @@ class ConfigTreeFirstStep extends Specification
 //      {jsonId: 7, dto : FirstStep, params : {adminId : #40:0, kind  : first}}
       val firstStepConfigTreeCS = Json.obj(
         "jsonId" -> 7,
-        "dto" -> "FirstStep" 
+        "dto" -> "Step" 
         ,"params" -> Json.obj(
           "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
           "kind" -> "first"
@@ -42,17 +44,17 @@ class ConfigTreeFirstStep extends Specification
       )
       val firstStepConfigTreeSC: JsValue = handelMessage(firstStepConfigTreeCS)
       "jsonId" >> {
-        (firstStepConfigTreeSC \ "jsonId").asOpt[Int].get === 4
+        (firstStepConfigTreeSC \ "jsonId").asOpt[Int].get === DTOIds.step
       }
       "dto" >> {
-        (firstStepConfigTreeSC \ "dto").asOpt[String].get === "FirstStep"
+        (firstStepConfigTreeSC \ "dto").asOpt[String].get === DTONames.step
       }
       "result \\ status" >> {
         (firstStepConfigTreeSC \ "result" \ "status").asOpt[Boolean].get === true
       }
       "result \\ message" >> {
         (firstStepConfigTreeSC \ "result" \ "message").asOpt[String].get === 
-          "Erste Schritt wurde zu Ihre Konfiguration hinzugefügt"
+          "Der Step wurde hinzugefuegt"
       }
     }
     "ConfigTree" >> {

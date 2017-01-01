@@ -104,7 +104,6 @@ trait AdminWeb {
       case Some("Registration") => register(receivedMessage)
       case Some("Login") => login(receivedMessage)
       case Some("ConfigUri") => configUri(receivedMessage)
-      case Some("FirstStep") => firstStep(receivedMessage)
       case Some("ConfigTree") => configTree(receivedMessage)
       case Some("Component") => component(receivedMessage)
       case Some("ConnStepToComponent") => connStepToComponent(receivedMessage)
@@ -128,12 +127,6 @@ trait AdminWeb {
   
   private def configUri(receivedMessage: JsValue): JsValue = {
     null
-  }
-  
-  private def firstStep(receivedMessage: JsValue): JsValue = {
-    val firstStepCS: FirstStepCS = Json.fromJson[FirstStepCS](receivedMessage).get
-    val step = Admin.addFirstStep(firstStepCS)
-    Json.toJson(step)
   }
   
   private def component(receivedMessage: JsValue): JsValue = {
