@@ -24,8 +24,6 @@ import com.tinkerpop.blueprints.Vertex
 import org.dto.login.LoginSC
 import org.dto.login.LoginCS
 import org.persistence.db.orientdb.ConfigTree
-import org.dto.firstStep.FirstStepCS
-import org.dto.firstStep.FirstStepSC
 import org.dto.registration.RegistrationCS
 import org.dto.registration.RegistrationSC
 import org.dto.configTree.ConfigTreeSC

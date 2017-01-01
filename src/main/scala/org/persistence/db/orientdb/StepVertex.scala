@@ -10,9 +10,6 @@ import com.tinkerpop.blueprints.impls.orient.OrientVertexType
 import com.orientechnologies.orient.core.metadata.schema.OType
 import com.tinkerpop.blueprints.Vertex
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
-import org.dto.firstStep.FirstStepCS
-import org.dto.firstStep.FirstStepSC
-import org.dto.firstStep.FirstStepResultSC
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import org.dto.step.StepCS

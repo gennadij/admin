@@ -11,8 +11,6 @@ import play.api.libs.json.Writes
 import play.api.libs.json.Json
 import org.dto.login.LoginCS
 import org.dto.login.LoginSC
-import org.dto.firstStep.FirstStepSC
-import org.dto.firstStep.FirstStepCS
 import org.dto.configTree.ConfigTreeCS
 import org.dto.configTree.ConfigTreeSC
 import org.dto.registration.RegistrationSC
