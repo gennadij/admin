@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ */
 package org.main
 
 import play.api.libs.json.Json
@@ -5,6 +8,10 @@ import org.dto.DTOIds
 import org.dto.DTONames
 import org.admin.AdminWeb
 import play.api.libs.json.JsValue
+
+/**
+ * Created by Gennadi Heimann 1.1.2017
+ */
 
 class Config extends AdminWeb{
   

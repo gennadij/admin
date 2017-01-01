@@ -6,10 +6,7 @@ package org.persistence.db.orientdb
 import scala.collection.JavaConversions._
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import com.tinkerpop.blueprints.impls.orient.OrientVertexType
-import org.status.SuccessfulStatus
-import org.status.WarningStatus
 import com.orientechnologies.orient.core.metadata.schema.OType
-import org.status.Status
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
@@ -20,32 +17,27 @@ import org.dto.registration.RegistrationCS
 import org.dto.registration.RegistrationSC
 import org.dto.registration.RegistrationResultSC
 
+/**
+ * Created by Gennadi Heimann 1.1.2017
+ */
 object AdminUserVertex {
-  
+  //TODO verschieben in die zentralle Stelle für alle Orientdb Objects
   val className = "AdminUser"
   val propKeyAdminId = "adminId"
   val propKeyAdminUsername = "username"
   val propKeyAdminUserPassword = "password"
   
-//  def create(adminUsername: String, adminUserPassword: String): AdminUser = {
-//    // TODO impl status autentifications
-//    val graph: OrientGraph = OrientDB.getGraph
-//    if(graph.getVertices(propKeyAdminUsername, adminUsername).size == 0){
-//      val vAdminUser: OrientVertex = graph.addVertex(s"class:$className",
-//                      propKeyAdminUsername, adminUsername, 
-//                      propKeyAdminUserPassword, adminUserPassword)
-//      graph.commit
-//      new AdminUser("AU" + vAdminUser.getIdentity.toString(),
-//                    vAdminUser.getProperty(propKeyAdminUsername).toString(), 
-//                    vAdminUser.getProperty(propKeyAdminUserPassword).toString(),
-//                    true)
-//    }else{
-//      new AdminUser("", "", "", false)
-//    }
-//  }
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param RegistrationCS
+   * 
+   * @return RegistrationSC
+   */
   def register(registrationCS: RegistrationCS): RegistrationSC = {
-    // TODO impl status autentifications
     val graph: OrientGraph = OrientDB.getGraph
     if(graph.getVertices(propKeyAdminUsername, registrationCS.params.username).size == 0){
       val vAdminUser: OrientVertex = graph.addVertex(s"class:$className",
@@ -68,8 +60,26 @@ object AdminUserVertex {
     }
   }
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param 
+   * 
+   * @return 
+   */
   def update = ???
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param LoginCS
+   * 
+   * @return LoginSC
+   */
   def login(loginCS: LoginCS): LoginSC = {
     val graph: OrientGraph = OrientDB.getGraph
     val username: String = loginCS.params.username
@@ -96,6 +106,15 @@ object AdminUserVertex {
     }
   }
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param username, adminPassword
+   * 
+   * @return String
+   */
   def adminId(username: String, adminPassword: String): String = {
     val graph: OrientGraph = OrientDB.getGraph
     val res: OrientDynaElementIterable = graph
@@ -104,6 +123,15 @@ object AdminUserVertex {
     if(adminId.size == 1) adminId.head.toString else ""
   }
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param username
+   * 
+   * @return Unit
+   */
   def removeAdmin(username: String) = {
     val graph: OrientGraph = OrientDB.getGraph
     val res: Int = graph

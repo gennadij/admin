@@ -3,6 +3,10 @@
  */
 package org.persistence.db.orientdb
 
+/**
+ * Created by Gennadi Heimann 1.1.2017
+ */
+
 object PropertyKey {
   
   val ADMIN_ID = "adminId"

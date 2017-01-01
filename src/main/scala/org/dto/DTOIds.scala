@@ -6,6 +6,8 @@ package org.dto
 
 /**
  * Created by Gennadi Heimann 19.12.2016
+ * 
+ * Difeniert die Ids fuer DTOs
  */
 
 object DTOIds {

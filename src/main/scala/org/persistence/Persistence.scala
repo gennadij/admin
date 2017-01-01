@@ -4,7 +4,6 @@
 
 package org.persistence
 
-import org.status.SuccessfulStatus
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
@@ -22,7 +21,6 @@ import com.tinkerpop.blueprints.Direction
 import com.tinkerpop.blueprints.impls.orient.OrientEdge
 import com.tinkerpop.blueprints.Edge
 import com.tinkerpop.blueprints.Vertex
-import org.status.Status
 import org.dto.login.LoginSC
 import org.dto.login.LoginCS
 import org.persistence.db.orientdb.ConfigTree
@@ -40,56 +38,128 @@ import org.dto.step.StepSC
 import org.dto.connComponentToStep.ConnComponentToStepSC
 import org.dto.connComponentToStep.ConnComponentToStepCS
 
+/**
+ * Created by Gennadi Heimann 1.1.2017
+ */
+
 object Persistence {
   
-  def rules() = ???
-  
-  def register(registrationCS: RegistrationCS): RegistrationSC = {
-    AdminUserVertex.register(registrationCS)
-  }
-
-  def login(loginCS: LoginCS): LoginSC = {
-    AdminUserVertex.login(loginCS)
-  }
-  
-  def getConfigTree(configTreeCS: ConfigTreeCS): ConfigTreeSC = {
-    ConfigTree.getConfigTree(configTreeCS)
-  }
-  
-  def addFirstStep(firstStepCS: FirstStepCS): FirstStepSC = {
-    StepVertex.addFirstStep(firstStepCS)
-  }
-  
-  def addComponent(componentCS: ComponentCS): ComponentSC = {
-    ComponentVertex.addComponent(componentCS)
-  }
-  
-  def addHasComponent(connStepToComponentSC: ConnStepToComponentCS): ConnStepToComponentSC = {
-    HasComponentEdge.add(connStepToComponentSC)
-  }
-  
-  def addNextStep(connComponentToStepCS: ConnComponentToStepCS): ConnComponentToStepSC = {
-    NextStepEdge.add(connComponentToStepCS)
-  }
-  
-  def addStep(stepCS: StepCS): StepSC = {
-    StepVertex.addStep(stepCS)
-  }
-  
-
-  
-    /**
-   * 
-   * fuegt Vertex Step zu ConfigTree hinzu
-   * 
+  /**
    * @author Gennadi Heimann
    * 
    * @version 1.0
    * 
-   * @param AdminStep
+   * @param RegistrationCS
    * 
-   * @return Status
+   * @return RegistrationSC 
    */
+  def register(registrationCS: RegistrationCS): RegistrationSC = {
+    AdminUserVertex.register(registrationCS)
+  }
+
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param LoginCS
+   * 
+   * @return LoginSC
+   */
+  def login(loginCS: LoginCS): LoginSC = {
+    AdminUserVertex.login(loginCS)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param ConfigTreeCS
+   * 
+   * @return ConfigTreeSC
+   */
+  def getConfigTree(configTreeCS: ConfigTreeCS): ConfigTreeSC = {
+    ConfigTree.getConfigTree(configTreeCS)
+  }
+  
+    /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param FirstStepCS
+   * 
+   * @return FirstStepSC
+   */
+  def addFirstStep(firstStepCS: FirstStepCS): FirstStepSC = {
+    StepVertex.addFirstStep(firstStepCS)
+  }
+  
+    /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param ComponentCS
+   * 
+   * @return ComponentSC
+   */
+  def addComponent(componentCS: ComponentCS): ComponentSC = {
+    ComponentVertex.addComponent(componentCS)
+  }
+  
+    /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param ConnStepToComponentCS
+   * 
+   * @return ConnStepToComponentSC
+   */
+  def addHasComponent(connStepToComponentSC: ConnStepToComponentCS): ConnStepToComponentSC = {
+    HasComponentEdge.add(connStepToComponentSC)
+  }
+  
+    /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param ConnComponentToStepCS
+   * 
+   * @return ConnComponentToStepSC
+   */
+  def addNextStep(connComponentToStepCS: ConnComponentToStepCS): ConnComponentToStepSC = {
+    NextStepEdge.add(connComponentToStepCS)
+  }
+  
+    /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param StepCS
+   * 
+   * @return StepSC 
+   */
+  def addStep(stepCS: StepCS): StepSC = {
+    StepVertex.addStep(stepCS)
+  }
+  
+    /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  def rules() = ???
+  
+
   
 //  def addStep(adminStep: AdminStep): AdminStep = {
 //    StepVertex.addStep(adminStep)
@@ -120,10 +190,6 @@ object Persistence {
 //    ComponentVertex.addComponent(adminComponent)
 //  }
   
-  /**
-   * TODO korrektur fue falsche IDs 
-   */
-  
 //  def getConfigTree(adminId: String): AdminConfigTree = {
 //    val graph: OrientGraph = OrientDB.getGraph
 //    
@@ -138,18 +204,6 @@ object Persistence {
 //    
 //    new AdminConfigTree(vSteps.map(getAdminStep(_, graph, adminId)))
 //  }
-
-
-  
-  
-  /**
-   * TODO wenn keinen nextStep exestiert
-   * entweder Fehler oder Ende von ConfigTree
-   * bei NextStep einen StepObjekt hinzufügen
-   */
-
-  
-
   
 //  def addHasComponent(adminId: String, outStep: String, inComponents: List[String]): Status = {
 //    HasComponentEdge.add(adminId, outStep, inComponents)

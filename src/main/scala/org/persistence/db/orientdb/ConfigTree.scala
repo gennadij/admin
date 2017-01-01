@@ -17,7 +17,21 @@ import org.dto.configTree.ConfigTreeResultSC
 import org.dto.configTree.ConfigTreeStepSC
 import org.dto.configTree.ConfigTreeComponentSC
 
+/**
+ * Created by Gennadi Heimann 1.1.2017
+ */
+
 object ConfigTree {
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param
+   * 
+   * @return
+   */
   def getConfigTree(configTreeCS: ConfigTreeCS): ConfigTreeSC = {
     val graph: OrientGraph = OrientDB.getGraph
     val adminId: String = configTreeCS.params.adminId
@@ -34,7 +48,15 @@ object ConfigTree {
     new ConfigTreeSC(result = new ConfigTreeResultSC(vSteps.map(getStep(_, graph, adminId)), ""))
   }
   
-  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param
+   * 
+   * @return
+   */
   private def getStep(vStep: OrientVertex, graph: OrientGraph, adminId: String): ConfigTreeStepSC = {
       val eHasComponent: List[Edge] = vStep.getEdges(Direction.OUT).toList
       val vComponents: List[Vertex] = eHasComponent.map { hC => hC.getVertex(Direction.IN) }
@@ -45,7 +67,16 @@ object ConfigTree {
           getComponents(vComponents)
       )
   }
-  
+
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param
+   * 
+   * @return
+   */
   private def getComponents(vComponents: List[Vertex]): List[ConfigTreeComponentSC] = {
   vComponents.map({ vC => 
         new ConfigTreeComponentSC(
@@ -55,7 +86,16 @@ object ConfigTree {
         )
       })
   }
-    
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param
+   * 
+   * @return
+   */
   private def getNextStep(component: Vertex): String = {
     val eNextStep: List[Edge] = component.getEdges(Direction.OUT).toList
     val vNextStep: List[Vertex] = eNextStep.map ( { eNS => 
