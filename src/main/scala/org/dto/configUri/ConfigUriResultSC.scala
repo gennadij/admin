@@ -12,7 +12,7 @@ import play.api.libs.json.Json
  */
 case class ConfigUriResultSC (
   status: Boolean,
-  message: String
+  message: String 
 )
 
 object ConfigUriResultSC {

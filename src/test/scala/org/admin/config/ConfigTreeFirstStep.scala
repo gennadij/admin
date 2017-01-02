@@ -5,7 +5,6 @@ import org.specs2.mutable.Specification
 import play.api.libs.json.{JsValue, Json}
 import org.persistence.db.orientdb.StepVertex
 import org.specs2.specification.BeforeAfterAll
-import org.dto.firstStep.FirstStepSC
 import org.dto.DTOIds
 import org.dto.DTONames
 
@@ -39,7 +38,11 @@ class ConfigTreeFirstStep extends Specification
         "dto" -> "Step" 
         ,"params" -> Json.obj(
           "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
-          "kind" -> "first"
+          "kind" -> "first",
+          "selectionCriterium" -> Json.obj(
+              "min" -> 1,
+              "max" -> 1
+          )
         )
       )
       val firstStepConfigTreeSC: JsValue = handelMessage(firstStepConfigTreeCS)

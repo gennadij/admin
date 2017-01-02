@@ -58,7 +58,11 @@ class ConfigTreeStepComponentNextStep
         "dto" -> DTONames.step 
         ,"params" -> Json.obj(
           "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
-          "kind" -> "first"
+          "kind" -> "first",
+          "selectionCriterium" -> Json.obj(
+              "min" -> 1,
+              "max" -> 1
+          )
         )
       )
       val firstStepSC = handelMessage(firstStepCS)
@@ -364,7 +368,11 @@ class ConfigTreeStepComponentNextStep
             "dto" -> DTONames.step,
             "params" -> Json.obj(
                 "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
-                "kind" -> "default"
+                "kind" -> "default",
+                "selectionCriterium" -> Json.obj(
+                    "min" -> 1,
+                    "max" -> 1
+                )
             )
         )
         val stepSC_1 = handelMessage(stepCS_1)
@@ -453,7 +461,11 @@ class ConfigTreeStepComponentNextStep
             "dto" -> DTONames.step,
             "params" -> Json.obj(
                 "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
-                "kind" -> "default"
+                "kind" -> "default",
+                "selectionCriterium" -> Json.obj(
+                    "min" -> 1,
+                    "max" -> 1
+                )
             )
         )
         val stepSC_2 = handelMessage(stepCS_2)

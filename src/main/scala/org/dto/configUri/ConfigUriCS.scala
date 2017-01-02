@@ -16,9 +16,9 @@ import play.api.libs.json.Json
 case class ConfigUriCS (
 		jsonId : Int = DTOIds.configUri,
 		dto: String = DTONames.configUri,
-		params : ConfigUriParamsCS
+		params : ConfigUriParamsCS 
 )
 
-object ConfigUri {
+object ConfigUriCS {
   implicit val format = Json.reads[ConfigUriCS]
 }

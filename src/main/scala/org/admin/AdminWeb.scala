@@ -4,10 +4,6 @@
 
 package org.admin
 
-/**
- * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
- */
-
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import org.persistence.db.orientdb.AdminUserVertex
@@ -25,6 +21,8 @@ import org.dto.step.StepCS
 import org.dto.step.StepSC
 import org.dto.connComponentToStep.ConnComponentToStepCS
 import org.dto.connComponentToStep.ConnComponentToStepSC
+import org.dto.configUri.ConfigUriCS
+import org.dto.configUri.ConfigUriSC
 
 /**
  * Created by Gennadi Heimann 19.12.2016
@@ -125,7 +123,9 @@ trait AdminWeb {
   }
   
   private def configUri(receivedMessage: JsValue): JsValue = {
-    null
+    val configUriCS: ConfigUriCS = Json.fromJson[ConfigUriCS](receivedMessage).get
+    val configUriSC: ConfigUriSC = null
+    Json.toJson(configUriSC)
   }
   
   private def component(receivedMessage: JsValue): JsValue = {

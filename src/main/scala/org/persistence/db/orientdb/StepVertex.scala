@@ -36,16 +36,20 @@ object StepVertex {
     
     val vStep: OrientVertex = graph.addVertex("class:" + PropertyKey.STEP, 
             PropertyKey.ADMIN_ID, stepCS.params.adminId,
-            PropertyKey.KIND, stepCS.params.kind)
-        graph.commit
+            PropertyKey.KIND, stepCS.params.kind,
+            PropertyKey.SELECTION_CRITERIUM_MIN, stepCS.params.selectionCriterium.min.toString,
+            PropertyKey.SELECTION_CRITERIUM_MAX, stepCS.params.selectionCriterium.max.toString
+    )
+    
+    graph.commit
         
-        new StepSC(
-            result = new StepResultSC(
-            	vStep.getIdentity.toString(),
-            	true//TODO impl status
-            	,"Der Step wurde hinzugefuegt"
-            )
+    new StepSC(
+        result = new StepResultSC(
+        	vStep.getIdentity.toString(),
+        	true//TODO impl status
+        	,"Der Step wurde hinzugefuegt"
         )
+    )
   }
 
   /**

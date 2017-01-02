@@ -13,7 +13,8 @@ import play.api.libs.json.Json
 
 case class StepParamsCS (
     adminId: String,
-    kind: String
+    kind: String,
+    selectionCriterium: SelectionCriterium
 )
 
 

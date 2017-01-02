@@ -55,7 +55,11 @@ class ConfigTreeFirstStepWithComponent
         "dto" -> DTONames.step 
         ,"params" -> Json.obj(
           "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
-          "kind" -> "first"
+          "kind" -> "first",
+          "selectionCriterium" -> Json.obj(
+              "min" -> 1,
+              "max" -> 1
+          )
         )
       )
       val firstStepConfigTreeSC = handelMessage(firstStepConfigTreeCS)

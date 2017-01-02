@@ -5,6 +5,7 @@ package org.dto.configUri
 
 import org.dto.DTOIds
 import org.dto.DTONames
+import play.api.libs.json.Json
 
 /**
  * Created by Gennadi Heimann 1.1.2017
@@ -13,5 +14,10 @@ import org.dto.DTONames
  */
 case class ConfigUriSC (
     jsonId: Int = DTOIds.configUri,
-    dto: String = DTONames.configUri
+    dto: String = DTONames.configUri,
+    result: ConfigUriResultSC
 )
+
+object ConfigUriSC {
+  implicit val format = Json.writes[ConfigUriSC]
+}

@@ -20,9 +20,9 @@ class Config extends AdminWeb{
       "jsonId" -> DTOIds.login,
       "dto" -> DTONames.login
       ,"params" -> Json.obj(
-          "username" -> "config_4",
-          "password" -> "config_4"
-          //http://contig/test_4
+          "username" -> "config_5",
+          "password" -> "config_5"
+          //http://contig/test_5
       )
   )
     
@@ -37,7 +37,11 @@ class Config extends AdminWeb{
       "dto" -> DTONames.firstStep 
       ,"params" -> Json.obj(
           "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
-          "kind" -> "first"
+          "kind" -> "first",
+          "selectionCriterium" -> Json.obj(
+              "min" -> 1,
+              "max" -> 1
+          )
       )
   )
   
@@ -138,7 +142,11 @@ class Config extends AdminWeb{
       "dto" -> DTONames.step,
       "params" -> Json.obj(
           "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
-          "kind" -> "default"
+          "kind" -> "default",
+          "selectionCriterium" -> Json.obj(
+              "min" -> 1,
+              "max" -> 1
+          )
       )
   )
         
@@ -181,7 +189,11 @@ class Config extends AdminWeb{
       "dto" -> DTONames.step,
       "params" -> Json.obj(
           "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
-          "kind" -> "default"
+          "kind" -> "default",
+          "selectionCriterium" -> Json.obj(
+              "min" -> 1,
+              "max" -> 1
+          )
       )
   )
         

@@ -14,5 +14,7 @@ object PropertyKey {
   val KIND = "kind"
   val STEP = "Step"
   val STEP_ID = "stepId"
+  val SELECTION_CRITERIUM_MIN = "selectionCriteriumMin"
+  val SELECTION_CRITERIUM_MAX = "selectionCriteriumMax"
   
 }
