@@ -124,7 +124,7 @@ trait AdminWeb {
   
   private def configUri(receivedMessage: JsValue): JsValue = {
     val configUriCS: ConfigUriCS = Json.fromJson[ConfigUriCS](receivedMessage).get
-    val configUriSC: ConfigUriSC = null
+    val configUriSC: ConfigUriSC = Admin.configUri(configUriCS)
     Json.toJson(configUriSC)
   }
   

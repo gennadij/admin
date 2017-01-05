@@ -35,6 +35,8 @@ import org.dto.step.StepCS
 import org.dto.step.StepSC
 import org.dto.connComponentToStep.ConnComponentToStepSC
 import org.dto.connComponentToStep.ConnComponentToStepCS
+import org.dto.configUri.ConfigUriCS
+import org.dto.configUri.ConfigUriSC
 
 /**
  * Created by Gennadi Heimann 1.1.2017
@@ -67,6 +69,20 @@ object Persistence {
   def login(loginCS: LoginCS): LoginSC = {
     AdminUserVertex.login(loginCS)
   }
+
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param LoginCS
+   * 
+   * @return LoginSC
+   */
+  def configUri(configUriCS: ConfigUriCS): ConfigUriSC = {
+    AdminUserVertex.configUri(configUriCS)
+  }
+  
   
   /**
    * @author Gennadi Heimann
