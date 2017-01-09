@@ -16,5 +16,7 @@ object PropertyKey {
   val STEP_ID = "stepId"
   val SELECTION_CRITERIUM_MIN = "selectionCriteriumMin"
   val SELECTION_CRITERIUM_MAX = "selectionCriteriumMax"
+  val CONFIG = "Config"
+  val CONFIG_URL = "configUrl"
   
 }

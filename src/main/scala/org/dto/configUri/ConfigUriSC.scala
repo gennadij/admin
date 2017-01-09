@@ -13,8 +13,8 @@ import play.api.libs.json.Json
  * {jsond : 3, dto : ConfigUri, params : {status : true, message : Nachricht}
  */
 case class ConfigUriSC (
-    jsonId: Int = DTOIds.configUri,
-    dto: String = DTONames.configUri,
+    jsonId: Int,
+    dto: String,
     result: ConfigUriResultSC
 )
 

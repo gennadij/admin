@@ -13,7 +13,7 @@ package org.dto
 object DTOIds {
   val registerId: Int = 1
   val login: Int = 2
-  val configUri: Int = 3
+  val createConfig: Int = 3
   val configTree: Int = 6
   val firstStep: Int = 7
   val component: Int = 8

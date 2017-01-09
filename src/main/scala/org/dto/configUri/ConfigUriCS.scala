@@ -14,8 +14,8 @@ import play.api.libs.json.Json
  */
 
 case class ConfigUriCS (
-		jsonId : Int = DTOIds.configUri,
-		dto: String = DTONames.configUri,
+		jsonId : Int,
+		dto: String,
 		params : ConfigUriParamsCS 
 )
 

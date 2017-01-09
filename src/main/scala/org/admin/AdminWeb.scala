@@ -23,6 +23,8 @@ import org.dto.connComponentToStep.ConnComponentToStepCS
 import org.dto.connComponentToStep.ConnComponentToStepSC
 import org.dto.configUri.ConfigUriCS
 import org.dto.configUri.ConfigUriSC
+import org.dto.Config.CreateConfigCS
+import org.dto.Config.CreateConfigSC
 
 /**
  * Created by Gennadi Heimann 19.12.2016
@@ -31,9 +33,26 @@ import org.dto.configUri.ConfigUriSC
 trait AdminWeb {
   
   /**
-   * EXTENSION FOR DTO
+   * ChangeLog 06.01.2017
    *   Vertex Step
    *     - selectionCriterium => definiert maximale und minimale Anzahl der ausgewaelten Komponenten in dem Step
+   *     
+   *   new Vertex Config
+   *      + configUrl
+   *   
+   *   AdminUser
+   *      - configUri
+   *   
+   *   Step
+   *     - adminId
+   *   
+   *   Component
+   *      - adminId
+   *     
+   *   AdminUser -> Config -> FitstStep
+   *   
+   *   Alle TD die An der Client desendet werden mit einem HASH Wert verschluesseln oder 
+   *   verschluesselte Kommunikation
    */
   
   /**
@@ -47,11 +66,11 @@ trait AdminWeb {
    *   {jsond : 2, dto : Login, params : {username : test, password : test}}
    *   Server -> Client
    *   {jsonId : 2, dto: Login, result: {adminId : #40:0, username : test, status : true, message : Nachricht}}
-   * 3. ConfigUri
+   * 3. newConfig
    *   Server <- Client
-   *   {jsond : 3, dto : ConfigUri, params : {adminId : #40:0, configUri : test.test.org}
+   *   {jsond : 3, dto : CreateConfig, params : {adminId : #40:0, configUrl : test.test.org}
    *   Server -> Client
-   *   {jsond : 3, dto : ConfigUri, params : {status : true, message : Nachricht}
+   *   {jsond : 3, dto : CreateConfig, result : {id: #23:12, status : true, message : Nachricht}
    * 4. => updatePassword
    * 5. => removeAdmin
    * 6. => ConfigTree
@@ -67,7 +86,7 @@ trait AdminWeb {
           }}
    * 7. => FirstStep
    *   Server <- Client
-   *   {jsonId: 7, dto : FirstStep, params : {adminId : #40:0, kind  : first}}
+   *   {jsonId: 7, dto : FirstStep, params : {configId : #40:0, kind  : first}}
    *   Server -> Client
    *   {jsonId : 7, dto : FirstStep, result : {stepId : #12:1, status : true, message : Nachricht}} 
    * 8. => Component
@@ -100,7 +119,8 @@ trait AdminWeb {
     (receivedMessage \ "dto").asOpt[String] match {
       case Some("Registration") => register(receivedMessage)
       case Some("Login") => login(receivedMessage)
-      case Some("ConfigUri") => configUri(receivedMessage)
+//      case Some("ConfigUri") => configUri(receivedMessage)
+      case Some("CreateConfig") => createConfig(receivedMessage)
       case Some("ConfigTree") => configTree(receivedMessage)
       case Some("Component") => component(receivedMessage)
       case Some("ConnStepToComponent") => connStepToComponent(receivedMessage)
@@ -120,6 +140,12 @@ trait AdminWeb {
     val loginCS: LoginCS = Json.fromJson[LoginCS](receivedMessage).get
     val loginSC: LoginSC = Admin.login(loginCS)
     Json.toJson(loginSC)
+  }
+  
+  private def createConfig(receivedMessage: JsValue): JsValue = {
+    val createConfigCS: CreateConfigCS = Json.fromJson[CreateConfigCS](receivedMessage).get
+    val createConfigSC: CreateConfigSC = Admin.createConfig(createConfigCS)
+    Json.toJson(createConfigSC)
   }
   
   private def configUri(receivedMessage: JsValue): JsValue = {

@@ -35,6 +35,9 @@ import org.dto.step.StepCS
 import org.dto.step.StepSC
 import org.dto.connComponentToStep.ConnComponentToStepSC
 import org.dto.connComponentToStep.ConnComponentToStepCS
+import org.dto.Config.CreateConfigCS
+import org.dto.Config.CreateConfigSC
+import org.persistence.db.orientdb.ConfigVertex
 
 /**
  * Created by Gennadi Heimann 1.1.2017
@@ -66,6 +69,19 @@ object Persistence {
    */
   def login(loginCS: LoginCS): LoginSC = {
     AdminUserVertex.login(loginCS)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param ConfigTreeCS
+   * 
+   * @return ConfigTreeSC
+   */
+  def createConfig(createConfigCS: CreateConfigCS): CreateConfigSC = {
+    ConfigVertex.createConfig(createConfigCS)
   }
   
   /**

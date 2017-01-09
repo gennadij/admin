@@ -36,8 +36,8 @@ class AdminUserWithConfigUrl extends Specification
     }
     "ConfigUri" >> {
       val configUriCS = Json.obj(
-          "jsonId" -> DTOIds.configUri,
-          "dto" -> DTONames.configUri,
+          "jsonId" -> 3,
+          "dto" -> 3,
           "params" -> Json.obj(
               "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
               "configUri" -> "//http://contig/AdminUserConfigUri"

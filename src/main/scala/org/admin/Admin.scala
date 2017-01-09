@@ -22,6 +22,8 @@ import org.dto.step.StepCS
 import org.dto.step.StepSC
 import org.dto.connComponentToStep.ConnComponentToStepCS
 import org.dto.connComponentToStep.ConnComponentToStepSC
+import org.dto.Config.CreateConfigCS
+import org.dto.Config.CreateConfigSC
 
 /**
  * Created by Gennadi Heimann on 1.1.2017
@@ -56,6 +58,19 @@ object Admin {
    */
   def login(loginCS: LoginCS): LoginSC = {
     Persistence.login(loginCS: LoginCS)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param CreateConfigCS
+   * 
+   * @return CreateConfigSC
+   */
+  def createConfig(createConfigCS: CreateConfigCS): CreateConfigSC = {
+    Persistence.createConfig(createConfigCS)
   }
   
   /**

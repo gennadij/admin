@@ -13,7 +13,7 @@ package org.dto
 object DTONames {
   val register: String = "Registration"
   val login: String = "Login"
-  val configUri: String = "ConfigUri"
+  val createConfig: String = "CreateConfig"
   val step: String = "Step"
   val firstStep: String = "FirstStep"
   val component: String = "Component"
