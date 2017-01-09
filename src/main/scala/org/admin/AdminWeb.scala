@@ -56,6 +56,20 @@ trait AdminWeb {
    */
   
   /**
+   * ChangeLog 09.01.2017
+   * 
+   * FirstStep wird immer an der Config Vertes angehaengt
+   * 
+   * NextStep wird immer an der Component Vertex angehaengt
+   * 
+   * deswegen wird es automatisch bei der erzeugen der jeweiligen Steps die Verbindungsedge erzeugt
+   * 
+   *  - ConnComponentToStep
+   *  - ConnStepToComponent
+   * 
+   */
+  
+  /**
    * 1. => Registration
    *   Server <- Client
    *   {jsonId : 1, dto : Registeration, params : {username : test, password : test}}
@@ -121,6 +135,7 @@ trait AdminWeb {
       case Some("Login") => login(receivedMessage)
 //      case Some("ConfigUri") => configUri(receivedMessage)
       case Some("CreateConfig") => createConfig(receivedMessage)
+      case Some("FirstStep") => firstStep(receivedMessage)
       case Some("ConfigTree") => configTree(receivedMessage)
       case Some("Component") => component(receivedMessage)
       case Some("ConnStepToComponent") => connStepToComponent(receivedMessage)
@@ -146,6 +161,10 @@ trait AdminWeb {
     val createConfigCS: CreateConfigCS = Json.fromJson[CreateConfigCS](receivedMessage).get
     val createConfigSC: CreateConfigSC = Admin.createConfig(createConfigCS)
     Json.toJson(createConfigSC)
+  }
+  
+  private def firstStep(receivedMessage: JsValue): JsValue = {
+    null
   }
   
 //  private def configUri(receivedMessage: JsValue): JsValue = {

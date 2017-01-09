@@ -53,8 +53,8 @@ class CreateConfig extends Specification
       "result \\ message" >> {
     	  (createConfigSC \ "result" \ "message").asOpt[String].get === "Die Konfiguration wurde erfolgreich erzeugt"
       }
-      "verbinde AdminUser mit AdminUser" >> {
-        
+      "erzeuge FirstStep" >> {
+        "" === ""
       }
     }
   }

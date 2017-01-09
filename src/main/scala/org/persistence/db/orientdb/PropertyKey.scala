@@ -9,7 +9,9 @@ package org.persistence.db.orientdb
 
 object PropertyKey {
   
-  val ADMIN_USER = "AdminUser"
+  val VERTEX_ADMIN_USER = "AdminUser"
+  val VERTEX_CONFIG = "Config"
+  val EDGE_HAS_CONFIG = "hasConfig"
   val USERNAME = "username"
   val PASSWORD = "password"
   val ADMIN_ID = "adminId"
@@ -19,7 +21,6 @@ object PropertyKey {
   val STEP_ID = "stepId"
   val SELECTION_CRITERIUM_MIN = "selectionCriteriumMin"
   val SELECTION_CRITERIUM_MAX = "selectionCriteriumMax"
-  val CONFIG = "Config"
   val CONFIG_URL = "configUrl"
   
 }

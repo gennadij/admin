@@ -38,7 +38,7 @@ object AdminUserVertex {
     val graph: OrientGraph = OrientDB.getGraph
     if(graph.getVertices(PropertyKey.USERNAME, registrationCS.params.username).size == 0){
       val vAdminUser: OrientVertex = graph.addVertex(
-          "class:" + PropertyKey.ADMIN_USER, 
+          "class:" + PropertyKey.VERTEX_ADMIN_USER, 
           PropertyKey.USERNAME, registrationCS.params.username, 
           PropertyKey.PASSWORD, registrationCS.params.password)
       graph.commit
