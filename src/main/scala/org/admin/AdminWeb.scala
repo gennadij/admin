@@ -148,11 +148,11 @@ trait AdminWeb {
     Json.toJson(createConfigSC)
   }
   
-  private def configUri(receivedMessage: JsValue): JsValue = {
-    val configUriCS: ConfigUriCS = Json.fromJson[ConfigUriCS](receivedMessage).get
-    val configUriSC: ConfigUriSC = null
-    Json.toJson(configUriSC)
-  }
+//  private def configUri(receivedMessage: JsValue): JsValue = {
+//    val configUriCS: ConfigUriCS = Json.fromJson[ConfigUriCS](receivedMessage).get
+//    val configUriSC: ConfigUriSC = Admin.configUri(configUriCS)
+//    Json.toJson(configUriSC)
+//  }
   
   private def component(receivedMessage: JsValue): JsValue = {
     val componentCS: ComponentCS = Json.fromJson[ComponentCS](receivedMessage).get

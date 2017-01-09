@@ -11,9 +11,9 @@ import org.persistence.db.orientdb.AdminUserVertex
 class AdminUserWithConfigUrl extends Specification 
                           with AdminWeb
                           with BeforeAfterAll{
-  
+  //TODO status false testen
   def beforeAll() = {
-    AdminUserVertex.removeAdmin("AdminUserConfigUri")
+//    AdminUserVertex.removeAdmin("AdminUserConfigUri")
   }
   
   def afterAll() = {
@@ -31,6 +31,8 @@ class AdminUserWithConfigUrl extends Specification
     )
     
     val loginSC = handelMessage(loginCS)
+    
+    println(loginSC)
     "Login" >> {
       (loginSC \ "result" \ "status").asOpt[Boolean].get === true
     }
@@ -40,15 +42,18 @@ class AdminUserWithConfigUrl extends Specification
           "dto" -> 3,
           "params" -> Json.obj(
               "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
-              "configUri" -> "//http://contig/AdminUserConfigUri"
+              "configUri" -> "http://contig/AdminUserConfigUri"
           )
       )
       val configUriSC = handelMessage(configUriCS)
+      println("=> " + configUriSC)
       "result \\ status" >> {
-        (configUriCS \ "result" \ "status").asOpt[Boolean].get === true
+        (configUriSC \ "result" \ "status").asOpt[Boolean].get === true
       }
       "result \\ message" >> {
-        (configUriCS \ "result" \ "status").asOpt[String].get == ""
+        (configUriSC \ "result" \ "message").asOpt[String].get ===
+          "Die URI = " + (configUriCS \ "params" \ "configUri").asOpt[String].get + " wurde fuer der AdminUser=" + 
+          (loginSC \ "result" \ "adminId").asOpt[String].get + " hinzugefuegt"
       }
     }
   }

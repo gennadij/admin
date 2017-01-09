@@ -16,17 +16,14 @@ import org.dto.login.LoginResultSC
 import org.dto.registration.RegistrationCS
 import org.dto.registration.RegistrationSC
 import org.dto.registration.RegistrationResultSC
+import org.dto.configUri.ConfigUriCS
+import org.dto.configUri.ConfigUriSC
+import org.dto.configUri.ConfigUriResultSC
 
 /**
  * Created by Gennadi Heimann 1.1.2017
  */
 object AdminUserVertex {
-  //TODO verschieben in die zentralle Stelle für alle Orientdb Objects
-  val className = "AdminUser"
-  val propKeyAdminId = "adminId"
-  val propKeyAdminUsername = "username"
-  val propKeyAdminUserPassword = "password"
-  
   
   /**
    * @author Gennadi Heimann
@@ -39,14 +36,15 @@ object AdminUserVertex {
    */
   def register(registrationCS: RegistrationCS): RegistrationSC = {
     val graph: OrientGraph = OrientDB.getGraph
-    if(graph.getVertices(propKeyAdminUsername, registrationCS.params.username).size == 0){
-      val vAdminUser: OrientVertex = graph.addVertex(s"class:$className",
-                      propKeyAdminUsername, registrationCS.params.username, 
-                      propKeyAdminUserPassword, registrationCS.params.password)
+    if(graph.getVertices(PropertyKey.USERNAME, registrationCS.params.username).size == 0){
+      val vAdminUser: OrientVertex = graph.addVertex(
+          "class:" + PropertyKey.ADMIN_USER, 
+          PropertyKey.USERNAME, registrationCS.params.username, 
+          PropertyKey.PASSWORD, registrationCS.params.password)
       graph.commit
       new RegistrationSC(result = new RegistrationResultSC(
           vAdminUser.getIdentity.toString(),
-          vAdminUser.getProperty(propKeyAdminUsername).toString(),
+          vAdminUser.getProperty(PropertyKey.USERNAME).toString(),
           true,
           "Registrierung war erfolgreich"
       ))
@@ -71,6 +69,38 @@ object AdminUserVertex {
    */
   def update = ???
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+//  def configUri(configUriCS: ConfigUriCS): ConfigUriSC = {
+//    val graph: OrientGraph = OrientDB.getGraph
+//    
+//    val adminId = configUriCS.params.adminId
+//    val configUri = configUriCS.params.configUri
+//    //UPDATE AdminUser SET configUri='test' where @rid='#21:3'
+//    val res: Int = graph
+//      .command(new OCommandSQL(s"UPDATE AdminUser SET configUri='$configUri' where @rid='$adminId'")).execute()
+//    
+//    if(res == 1) {
+//      new ConfigUriSC(result = new ConfigUriResultSC(
+//            true,
+//            s"Die URI = $configUri wurde fuer der AdminUser=$adminId hinzugefuegt"
+//          )
+//      )
+//    }else{
+//      new ConfigUriSC(result = new ConfigUriResultSC(
+//            false,
+//            s"Die URI = $configUri wurde nicht fuer der AdminUser=$adminId hinzugefuegt"
+//          )
+//      )
+//    }
+//  }
   /**
    * @author Gennadi Heimann
    * 

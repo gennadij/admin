@@ -70,6 +70,20 @@ object Persistence {
   def login(loginCS: LoginCS): LoginSC = {
     AdminUserVertex.login(loginCS)
   }
+
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param LoginCS
+   * 
+   * @return LoginSC
+   */
+//  def configUri(configUriCS: ConfigUriCS): ConfigUriSC = {
+//    AdminUserVertex.configUri(configUriCS)
+//  }
+  
   
   /**
    * @author Gennadi Heimann

@@ -57,7 +57,7 @@ object Admin {
    * @author Gennadi Heimann
    */
   def login(loginCS: LoginCS): LoginSC = {
-    Persistence.login(loginCS: LoginCS)
+    Persistence.login(loginCS)
   }
   
   /**
@@ -72,6 +72,14 @@ object Admin {
   def createConfig(createConfigCS: CreateConfigCS): CreateConfigSC = {
     Persistence.createConfig(createConfigCS)
   }
+  
+  /**
+   * @author Gennadi Heimann
+   */
+//  def configUri(configUriCS: ConfigUriCS): ConfigUriSC = {
+//    Persistence.configUri(configUriCS)
+//  }
+  
   
   /**
    * @author Gennadi Heimann
