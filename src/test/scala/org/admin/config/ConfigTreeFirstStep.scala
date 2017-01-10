@@ -16,9 +16,9 @@ class ConfigTreeFirstStep extends Specification
                           with BeforeAfterAll{
   
   def beforeAll() = {
-    val loginSC = handelMessage(DTOConfigTree.loginCS)
-    println("remove Steps")
-    StepVertex.removerSteps((loginSC \ "result" \ "adminId").asOpt[String].get)
+//    val loginSC = handelMessage(DTOConfigTree.loginCS)
+//    println("remove Steps")
+//    StepVertex.removerSteps((loginSC \ "result" \ "adminId").asOpt[String].get)
   }
   
   def afterAll() = {
@@ -26,18 +26,25 @@ class ConfigTreeFirstStep extends Specification
   }
 
   
-  "Diese Specification prueft die Erzeugung eines neuen Steps" >> {
-    val loginSC = handelMessage(DTOConfigTree.loginCS)
-    "Login" >> {
-      (loginSC \ "result" \ "status").asOpt[Boolean].get === true
-    }
+  "Diese Specification für die Erzeugung eines neuen Steps in der Konfiguration" >> {
+//    val loginCS = Json.obj(
+//        "jsonId" -> 2,
+//        "dto" -> "Login"
+//        ,"params" -> Json.obj(
+//            "username" -> "firstStepConfigTree",
+//            "password" -> "firstStepConfigTree"
+//    )
+//  )
+//    val loginSC = handelMessage(loginCS)
+//    "Login" >> {
+//      (loginSC \ "result" \ "status").asOpt[Boolean].get === true
+//    }
     "FirstStep anlegen" >> {
-//      {jsonId: 7, dto : FirstStep, params : {adminId : #40:0, kind  : first}}
-      val firstStepConfigTreeCS = Json.obj(
-        "jsonId" -> 7,
-        "dto" -> "Step" 
+      val firstStepCS = Json.obj(
+        "dtoId" -> DTOIds.FIRST_STEP,
+        "dto" -> DTONames.FIRST_STEP
         ,"params" -> Json.obj(
-          "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
+          "configId" -> "#43:1",
           "kind" -> "first",
           "selectionCriterium" -> Json.obj(
               "min" -> 1,
@@ -45,12 +52,12 @@ class ConfigTreeFirstStep extends Specification
           )
         )
       )
-      val firstStepConfigTreeSC: JsValue = handelMessage(firstStepConfigTreeCS)
+      val firstStepConfigTreeSC: JsValue = handelMessage(firstStepCS)
       "jsonId" >> {
-        (firstStepConfigTreeSC \ "jsonId").asOpt[Int].get === DTOIds.step
+        (firstStepConfigTreeSC \ "dtoId").asOpt[Int].get === DTOIds.FIRST_STEP
       }
       "dto" >> {
-        (firstStepConfigTreeSC \ "dto").asOpt[String].get === DTONames.step
+        (firstStepConfigTreeSC \ "dto").asOpt[String].get === DTONames.FIRST_STEP
       }
       "result \\ status" >> {
         (firstStepConfigTreeSC \ "result" \ "status").asOpt[Boolean].get === true
@@ -60,31 +67,31 @@ class ConfigTreeFirstStep extends Specification
           "Der Step wurde hinzugefuegt"
       }
     }
-    "ConfigTree" >> {
-//      {jsonId : 6, dto : ConfigTree, params: {adminId : #40:0}}
-        val configTreeCS = Json.obj(
-          "jsonId" -> 6,
-          "dto" -> "ConfigTree"
-          ,"params" -> Json.obj(
-            "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get
-          )
-        )
-      val configTreeSC = handelMessage(configTreeCS)
-      "jsonId" >> {
-        (configTreeSC \ "jsonId").asOpt[Int].get === 6
-      }
-      "dto" >> {
-        (configTreeSC \ "dto").asOpt[String].get === "ConfigTree"
-      }
-      "result \\ steps(size)" >> {
-        (configTreeSC \ "result" \ "steps").asOpt[List[JsValue]].get.size === 1
-      }
-      "result \\ steps(0) \\ kind" >> {
-        (((configTreeSC \ "result" \ "steps")(0)) \ "kind").asOpt[String].get === "first"
-      }
-      "result \\ steps(0) \\ components" >> {
-        (((configTreeSC \ "result" \ "steps")(0)) \ "components").asOpt[List[JsValue]].get.size === 0
-      }
-    }
+//    "ConfigTree" >> {
+////      {jsonId : 6, dto : ConfigTree, params: {adminId : #40:0}}
+//        val configTreeCS = Json.obj(
+//          "jsonId" -> 6,
+//          "dto" -> "ConfigTree"
+//          ,"params" -> Json.obj(
+//            "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get
+//          )
+//        )
+//      val configTreeSC = handelMessage(configTreeCS)
+//      "jsonId" >> {
+//        (configTreeSC \ "jsonId").asOpt[Int].get === 6
+//      }
+//      "dto" >> {
+//        (configTreeSC \ "dto").asOpt[String].get === "ConfigTree"
+//      }
+//      "result \\ steps(size)" >> {
+//        (configTreeSC \ "result" \ "steps").asOpt[List[JsValue]].get.size === 1
+//      }
+//      "result \\ steps(0) \\ kind" >> {
+//        (((configTreeSC \ "result" \ "steps")(0)) \ "kind").asOpt[String].get === "first"
+//      }
+//      "result \\ steps(0) \\ components" >> {
+//        (((configTreeSC \ "result" \ "steps")(0)) \ "components").asOpt[List[JsValue]].get.size === 0
+//      }
+//    }
   }
 }

@@ -1,8 +1,6 @@
 package org.persistence.db.orientdb
 
-import org.dto.Config.CreateConfigCS
-import org.dto.Config.CreateConfigSC
-import org.dto.Config.CreateConfigResult
+import org.dto.config.CreateConfigCS
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 
@@ -22,7 +20,10 @@ object ConfigVertex {
    * 
    * @return RegistrationSC
    */
-  def createConfig(createConfigCS: CreateConfigCS): CreateConfigSC = {
+  def createConfig(createConfigCS: CreateConfigCS): OrientVertex = {
+    
+    //TODO Try Catch Block einbauen -> Nullpointer Exception fangen
+    
     val graph: OrientGraph = OrientDB.getGraph
 
     val vConfig: OrientVertex = graph.addVertex(
@@ -30,23 +31,7 @@ object ConfigVertex {
         PropertyKey.CONFIG_URL, createConfigCS.params.configUrl
     )
     graph.commit
-    if(HasConfigEdge.hasConfig(createConfigCS.params.adminId, vConfig.getIdentity.toString)) {
-      CreateConfigSC(
-          result = CreateConfigResult(
-              vConfig.getIdentity.toString,
-              true,
-              "Die Konfiguration wurde erfolgreich erzeugt"
-          )
-      )
-    }else {
-      graph.rollback
-      CreateConfigSC(
-          result = CreateConfigResult(
-              "",
-              false,
-              "Beim Erzeugen der Konfiguration ist einen Fehler aufgetreten"
-          )
-      )
-    }
+    
+    vConfig
   }
 }

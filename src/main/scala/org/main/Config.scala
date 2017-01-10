@@ -17,8 +17,8 @@ class Config extends AdminWeb{
   
   //###Login
   val loginCS = Json.obj(
-      "jsonId" -> DTOIds.login,
-      "dto" -> DTONames.login
+      "jsonId" -> DTOIds.LOGIN,
+      "dto" -> DTONames.LOGIN
       ,"params" -> Json.obj(
           "username" -> "config_5",
           "password" -> "config_5"
@@ -33,8 +33,8 @@ class Config extends AdminWeb{
   
   //###First Step
   val firstStepCS = Json.obj(
-      "jsonId" -> DTOIds.firstStep,
-      "dto" -> DTONames.firstStep 
+      "jsonId" -> DTOIds.FIRST_STEP,
+      "dto" -> DTONames.FIRST_STEP 
       ,"params" -> Json.obj(
           "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
           "kind" -> "first",
@@ -51,8 +51,8 @@ class Config extends AdminWeb{
   
   // ###Component 1 1
   val componentCS_1_1 = Json.obj(
-      "jsonId" -> DTOIds.component,
-      "dto" -> DTONames.component
+      "jsonId" -> DTOIds.COMPONENT,
+      "dto" -> DTONames.COMPONENT
       ,"params" -> Json.obj(
           "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
           "kind" -> "immutable"
@@ -80,8 +80,8 @@ class Config extends AdminWeb{
   
   // ###Component 1 2
   val componentCS_1_2 = Json.obj(
-      "jsonId" -> DTOIds.component,
-      "dto" -> DTONames.component
+      "jsonId" -> DTOIds.COMPONENT,
+      "dto" -> DTONames.COMPONENT
       ,"params" -> Json.obj(
           "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
           "kind" -> "immutable"
@@ -109,8 +109,8 @@ class Config extends AdminWeb{
   
   // ###Component 1 3
   val componentCS_1_3 = Json.obj(
-      "jsonId" -> DTOIds.component,
-      "dto" -> DTONames.component
+      "jsonId" -> DTOIds.COMPONENT,
+      "dto" -> DTONames.COMPONENT
       ,"params" -> Json.obj(
           "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
           "kind" -> "immutable"
@@ -138,8 +138,8 @@ class Config extends AdminWeb{
   
   //###Step 2
   val stepCS_2 = Json.obj(
-      "jsonId" -> DTOIds.step,
-      "dto" -> DTONames.step,
+      "jsonId" -> DTOIds.STEP,
+      "dto" -> DTONames.STEP,
       "params" -> Json.obj(
           "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
           "kind" -> "default",
@@ -185,8 +185,8 @@ class Config extends AdminWeb{
   
   //###Step 3
   val stepCS_3 = Json.obj(
-      "jsonId" -> DTOIds.step,
-      "dto" -> DTONames.step,
+      "jsonId" -> DTOIds.STEP,
+      "dto" -> DTONames.STEP,
       "params" -> Json.obj(
           "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
           "kind" -> "default",
@@ -217,8 +217,8 @@ class Config extends AdminWeb{
 
   // ###Component 2 1
   val componentCS_2_1 = Json.obj(
-      "jsonId" -> DTOIds.component,
-      "dto" -> DTONames.component
+      "jsonId" -> DTOIds.COMPONENT,
+      "dto" -> DTONames.COMPONENT
       ,"params" -> Json.obj(
           "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
           "kind" -> "immutable"
@@ -245,8 +245,8 @@ class Config extends AdminWeb{
 
   // ###Component 2 2
   val componentCS_2_2 = Json.obj(
-      "jsonId" -> DTOIds.component,
-      "dto" -> DTONames.component
+      "jsonId" -> DTOIds.COMPONENT,
+      "dto" -> DTONames.COMPONENT
       ,"params" -> Json.obj(
           "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
           "kind" -> "immutable"

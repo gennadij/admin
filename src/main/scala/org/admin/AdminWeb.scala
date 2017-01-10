@@ -1,7 +1,3 @@
-/**
- * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
- */
-
 package org.admin
 
 import play.api.libs.json._
@@ -23,10 +19,14 @@ import org.dto.connComponentToStep.ConnComponentToStepCS
 import org.dto.connComponentToStep.ConnComponentToStepSC
 import org.dto.configUri.ConfigUriCS
 import org.dto.configUri.ConfigUriSC
-import org.dto.Config.CreateConfigCS
-import org.dto.Config.CreateConfigSC
+import org.dto.config.CreateConfigCS
+import org.dto.config.CreateConfigSC
+import org.dto.firstStep.FirstStepCS
+import org.dto.firstStep.FirstStepSC
 
 /**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
  * Created by Gennadi Heimann 19.12.2016
  */
 
@@ -80,12 +80,16 @@ trait AdminWeb {
    *   {jsond : 2, dto : Login, params : {username : test, password : test}}
    *   Server -> Client
    *   {jsonId : 2, dto: Login, result: {adminId : #40:0, username : test, status : true, message : Nachricht}}
-   * 3. newConfig
+   * 3. CreateConfig
    *   Server <- Client
    *   {jsond : 3, dto : CreateConfig, params : {adminId : #40:0, configUrl : test.test.org}
    *   Server -> Client
-   *   {jsond : 3, dto : CreateConfig, result : {id: #23:12, status : true, message : Nachricht}
-   * 4. => updatePassword
+   *   {jsond : 3, dto : CreateConfig, result : {configId: #23:12, status : true, message : Nachricht}
+   * 4. Config
+   *   Server <- Client
+   *   {dtoId : 4, dto : Config, params : {adminId : #40:0}
+   *   Server -> Client
+   *   {dtoId: 4, dto: Config, result: {configs: [{configId: #23:13, configUrl: http...}, ...]}}
    * 5. => removeAdmin
    * 6. => ConfigTree
    *   Server <- Client
@@ -164,7 +168,9 @@ trait AdminWeb {
   }
   
   private def firstStep(receivedMessage: JsValue): JsValue = {
-    null
+    val firstStepCS: FirstStepCS = Json.fromJson[FirstStepCS](receivedMessage).get
+    val firstStepSC: FirstStepSC = Admin.firstStep(firstStepCS)
+    Json.toJson(firstStepSC)
   }
   
 //  private def configUri(receivedMessage: JsValue): JsValue = {

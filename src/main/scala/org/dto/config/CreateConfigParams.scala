@@ -1,4 +1,4 @@
-package org.dto.Config
+package org.dto.config
 
 import play.api.libs.json.Json
 

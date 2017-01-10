@@ -1,8 +1,3 @@
-/**
- * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
- */
-
-
 package org.admin
 
 import org.persistence.Persistence
@@ -22,10 +17,14 @@ import org.dto.step.StepCS
 import org.dto.step.StepSC
 import org.dto.connComponentToStep.ConnComponentToStepCS
 import org.dto.connComponentToStep.ConnComponentToStepSC
-import org.dto.Config.CreateConfigCS
-import org.dto.Config.CreateConfigSC
+import org.dto.config.CreateConfigCS
+import org.dto.config.CreateConfigSC
+import org.dto.firstStep.FirstStepCS
+import org.dto.firstStep.FirstStepSC
 
 /**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
  * Created by Gennadi Heimann on 1.1.2017
  * 
  * Administrator definiert und zusammenstellt sein einegen Konfiguration.
@@ -72,6 +71,20 @@ object Admin {
   def createConfig(createConfigCS: CreateConfigCS): CreateConfigSC = {
     Persistence.createConfig(createConfigCS)
   }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param FirstStepCS
+   * 
+   * @return FirstStepSC
+   */
+  def firstStep(firstStepCS: FirstStepCS): FirstStepSC = {
+    Persistence.firstStep(firstStepCS)
+  }
+  
   
   /**
    * @author Gennadi Heimann

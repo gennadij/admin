@@ -11,13 +11,13 @@ package org.dto
  */
 
 object DTONames {
-  val register: String = "Registration"
-  val login: String = "Login"
-  val createConfig: String = "CreateConfig"
-  val step: String = "Step"
-  val firstStep: String = "FirstStep"
-  val component: String = "Component"
-  val configTree: String = "ConfigTree"
+  val REGISTRATION: String = "Registration"
+  val LOGIN: String = "Login"
+  val CREATE_CONFIG: String = "CreateConfig"
+  val STEP: String = "Step"
+  val FIRST_STEP: String = "FirstStep"
+  val COMPONENT: String = "Component"
+  val CONFIG_TREE: String = "ConfigTree"
   val connSteptoComponent: String = "ConnStepToComponent"
   val connComponentToStep: String = "ConnComponentToStep"
 }

@@ -2,7 +2,7 @@
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  */
 
-package org.dto.Config
+package org.dto.config
 
 import org.dto.DTOIds
 import org.dto.DTONames
@@ -15,8 +15,8 @@ import play.api.libs.json.Json
  */
 
 case class CreateConfigCS (
-    jsonId: Int = DTOIds.createConfig,
-    dto: String =DTONames.createConfig,
+    jsonId: Int = DTOIds.CREATE_CONFIG,
+    dto: String =DTONames.CREATE_CONFIG,
     params: CreateConfigParams
 )
 

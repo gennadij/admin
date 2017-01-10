@@ -14,8 +14,8 @@ import org.dto.DTOIds
  */
 
 case class RegistrationCS (
-                      jsonId: Int = DTOIds.registerId,
-                      dto: String = DTONames.register,
+                      jsonId: Int = DTOIds.REGISTRATION,
+                      dto: String = DTONames.REGISTRATION,
                       params: RegistrationParamsCS
                     )
 

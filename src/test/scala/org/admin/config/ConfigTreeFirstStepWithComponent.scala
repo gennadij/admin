@@ -35,8 +35,8 @@ class ConfigTreeFirstStepWithComponent
   
   "Diese Specification prueft die Erzeugung eines neuen Steps mit Componenten" >> {
     val loginCS = Json.obj(
-      "jsonId" -> DTOIds.login,
-      "dto" -> DTONames.login
+      "jsonId" -> DTOIds.LOGIN,
+      "dto" -> DTONames.LOGIN
       ,"params" -> Json.obj(
         "username" -> "firstStepComponent",
         "password" -> "firstStepComponent"
@@ -51,8 +51,8 @@ class ConfigTreeFirstStepWithComponent
     "FirstStep" >> {
       //      {jsonId: 7, dto : FirstStep, params : {adminId : #40:0, kind  : first}}
       val firstStepConfigTreeCS = Json.obj(
-        "jsonId" -> DTOIds.step,
-        "dto" -> DTONames.step 
+        "jsonId" -> DTOIds.STEP,
+        "dto" -> DTONames.STEP 
         ,"params" -> Json.obj(
           "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
           "kind" -> "first",
@@ -67,10 +67,10 @@ class ConfigTreeFirstStepWithComponent
       println(s"FirstStep    Server -> Client: $firstStepConfigTreeSC")
       
       "jsonId" >> {
-    	  (firstStepConfigTreeSC \ "jsonId").asOpt[Int].get === DTOIds.step
+    	  (firstStepConfigTreeSC \ "jsonId").asOpt[Int].get === DTOIds.STEP
       }
       "dto" >> {
-    	  (firstStepConfigTreeSC\ "dto").asOpt[String].get === DTONames.step
+    	  (firstStepConfigTreeSC\ "dto").asOpt[String].get === DTONames.STEP
       }
       "result \\ status" >> {
         (firstStepConfigTreeSC \ "result" \ "status").asOpt[Boolean].get === true
@@ -82,8 +82,8 @@ class ConfigTreeFirstStepWithComponent
       "ConfigTree" >> {
   //      {jsonId : 6, dto : ConfigTree, params: {adminId : #40:0}}
         val configTreeCS = Json.obj(
-          "jsonId" -> DTOIds.configTree,
-          "dto" -> DTONames.configTree
+          "jsonId" -> DTOIds.CONFIG_TREE,
+          "dto" -> DTONames.CONFIG_TREE
           ,"params" -> Json.obj(
             "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get
           )
@@ -111,8 +111,8 @@ class ConfigTreeFirstStepWithComponent
       "Component" >> {
   //    {jsonId : 8, dto : Component, params : {adminId : #40:0, kind : immutable}
         val componentCS = Json.obj(
-          "jsonId" -> DTOIds.component,
-          "dto" -> DTONames.component
+          "jsonId" -> DTOIds.COMPONENT,
+          "dto" -> DTONames.COMPONENT
           ,"params" -> Json.obj(
             "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
             "kind" -> "immutable"
@@ -122,10 +122,10 @@ class ConfigTreeFirstStepWithComponent
         println(s"Component    Client -> Server: $componentCS")
         println(s"Component    Server -> Client: $componentSC")
         "jsonId" >> {
-          (componentSC \ "jsonId").asOpt[Int].get === DTOIds.component
+          (componentSC \ "jsonId").asOpt[Int].get === DTOIds.COMPONENT
         }
         "dto" >> {
-          (componentSC \ "dto").asOpt[String].get === DTONames.component
+          (componentSC \ "dto").asOpt[String].get === DTONames.COMPONENT
         }
         "result \\ status" >> {
           (componentSC \ "result" \ "status").asOpt[Boolean].get === true
@@ -169,8 +169,8 @@ class ConfigTreeFirstStepWithComponent
         "ConfigTree" >> {
           //      {jsonId : 6, dto : ConfigTree, params: {adminId : #40:0}}
            val configTreeCS_1 = Json.obj(
-             "jsonId" -> DTOIds.configTree,
-             "dto" -> DTONames.configTree
+             "jsonId" -> DTOIds.CONFIG_TREE,
+             "dto" -> DTONames.CONFIG_TREE
              ,"params" -> Json.obj(
                "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get
              )
@@ -179,10 +179,10 @@ class ConfigTreeFirstStepWithComponent
            println(s"ConfigTree   Client -> Server: $configTreeCS_1")
            println(s"ConfigTree   Server -> Client: $configTreeSC_1")
           "jsonId" >> {
-            (configTreeSC_1 \ "jsonId").asOpt[Int].get === DTOIds.configTree
+            (configTreeSC_1 \ "jsonId").asOpt[Int].get === DTOIds.CONFIG_TREE
           }
           "dto" >> {
-            (configTreeSC_1 \ "dto").asOpt[String].get === DTONames.configTree
+            (configTreeSC_1 \ "dto").asOpt[String].get === DTONames.CONFIG_TREE
           }
           "result \\ steps.size" >> {
             (configTreeSC_1 \ "result" \ "steps").asOpt[List[JsValue]].get.size === 1

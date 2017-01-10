@@ -21,8 +21,8 @@ class CreateConfig extends Specification
   
   "Diese Spezifikation erzeugt neue Konfiguration für die Admin" >> {
      val loginCS = Json.obj(
-        "jsonId" -> DTOIds.login,
-        "dto" -> DTONames.login
+        "jsonId" -> DTOIds.LOGIN,
+        "dto" -> DTONames.LOGIN
         ,"params" -> Json.obj(
             "username" -> "CreateConfig",
             "password" -> "CreateConfig"
@@ -35,8 +35,8 @@ class CreateConfig extends Specification
     }
     "erzeuge neue Konfiguration" >> {
       val createConfigCS = Json.obj(
-          "jsonId" -> DTOIds.createConfig,
-          "dto" -> DTONames.createConfig
+          "jsonId" -> DTOIds.CREATE_CONFIG,
+          "dto" -> DTONames.CREATE_CONFIG
           , "params" -> Json.obj(
               "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
               "configUrl" -> "//http://contig/AdminUserConfigUri"
@@ -44,7 +44,7 @@ class CreateConfig extends Specification
       )
       val createConfigSC = handelMessage(createConfigCS)
       "result \\ id" >> {
-        (createConfigSC \ "result" \ "id").asOpt[String].get.size === 5
+        (createConfigSC \ "result" \ "configId").asOpt[String].get.size === 5
       }
       "result \\ status" >> {
     	  (createConfigSC \ "result" \ "status").asOpt[Boolean].get === true

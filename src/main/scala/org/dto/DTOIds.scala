@@ -11,14 +11,14 @@ package org.dto
  */
 
 object DTOIds {
-  val registerId: Int = 1
-  val login: Int = 2
-  val createConfig: Int = 3
-  val configTree: Int = 6
-  val firstStep: Int = 7
-  val component: Int = 8
+  val REGISTRATION: Int = 1
+  val LOGIN: Int = 2
+  val CREATE_CONFIG: Int = 3
+  val CONFIG_TREE: Int = 6
+  val FIRST_STEP: Int = 7
+  val COMPONENT: Int = 8
   val connStepToComponen: Int = 9
-  val step: Int = 10
+  val STEP: Int = 10
   val connComponentToStep: Int = 11
   
 }

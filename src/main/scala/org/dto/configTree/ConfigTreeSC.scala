@@ -16,8 +16,8 @@ import org.dto.DTOIds
  */
 
 case class ConfigTreeSC (
-    jsonId: Int = DTOIds.configTree,
-    dto: String = DTONames.configTree,
+    jsonId: Int = DTOIds.CONFIG_TREE,
+    dto: String = DTONames.CONFIG_TREE,
     result: ConfigTreeResultSC
 )
 

@@ -13,8 +13,8 @@ import org.dto.DTOIds
   * {jsonId : 2, dto: Login, result: {adminId : #40:0, username : test, status : true, message : Nachricht}}
   */
 case class LoginSC (
-                   jsonId: Int = DTOIds.login,
-                   dto: String = DTONames.login,
+                   jsonId: Int = DTOIds.LOGIN,
+                   dto: String = DTONames.LOGIN,
                    result: LoginResultSC
                    )
 

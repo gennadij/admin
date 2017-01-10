@@ -13,8 +13,8 @@ import org.dto.DTONames
  * {jsonId : 8, dto : Component, params : {adminId : #40:0, kind : immutable}
  */
 case class ComponentCS (
-    jsonId: Int = DTOIds.component,
-    dto: String = DTONames.component,
+    jsonId: Int = DTOIds.COMPONENT,
+    dto: String = DTONames.COMPONENT,
     params: ComponentParamsCS
 )
 

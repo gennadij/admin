@@ -35,9 +35,15 @@ import org.dto.step.StepCS
 import org.dto.step.StepSC
 import org.dto.connComponentToStep.ConnComponentToStepSC
 import org.dto.connComponentToStep.ConnComponentToStepCS
-import org.dto.Config.CreateConfigCS
-import org.dto.Config.CreateConfigSC
+import org.dto.config.CreateConfigCS
+import org.dto.config.CreateConfigSC
 import org.persistence.db.orientdb.ConfigVertex
+import org.persistence.db.orientdb.HasConfigEdge
+import org.dto.config.CreateConfigResult
+import org.dto.firstStep.FirstStepCS
+import org.dto.firstStep.FirstStepSC
+import org.persistence.db.orientdb.HasFirstStepEdge
+import org.dto.firstStep.FirstStepResult
 
 /**
  * Created by Gennadi Heimann 1.1.2017
@@ -95,7 +101,66 @@ object Persistence {
    * @return ConfigTreeSC
    */
   def createConfig(createConfigCS: CreateConfigCS): CreateConfigSC = {
-    ConfigVertex.createConfig(createConfigCS)
+    val vConfig = ConfigVertex.createConfig(createConfigCS)
+    val eHasConfig = HasConfigEdge.hasConfig(createConfigCS.params.adminId, vConfig)
+    if(vConfig != null && eHasConfig != null) {
+      CreateConfigSC(
+          result = CreateConfigResult(
+              vConfig.getIdentity.toString,
+              true,
+              "Die Konfiguration wurde erfolgreich erzeugt"
+          )
+      )
+    }else {
+      CreateConfigSC(
+          result = CreateConfigResult(
+              "",
+              false,
+              "Beim Erzeugen der Konfiguration ist einen Fehler aufgetreten"
+          )
+      )
+    }
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param firstStepCS
+   * 
+   * @return firstStepSC
+   */
+  
+  def firstStep(firstStepCS: FirstStepCS): FirstStepSC = {
+    val firstStepSC: FirstStepSC = StepVertex.firstStep(firstStepCS)
+    println(firstStepSC)
+    if(firstStepSC != null ) {
+      if (firstStepSC.result.status) {
+        val eHasFirstStep: OrientEdge = HasFirstStepEdge.hasFirstStep(firstStepCS, firstStepSC)
+        if(eHasFirstStep != null) {
+          firstStepSC
+        }else{
+          FirstStepSC(
+              result = FirstStepResult(
+                  "",
+                  false,
+                  "Es ist einen Fehler aufgetreten"
+              )
+          )
+        }
+      }else{
+        firstStepSC
+      }
+    }else{
+      FirstStepSC(
+          result = FirstStepResult(
+              "",
+              false,
+              "Es ist einen Fehler aufgetreten"
+          )
+      )
+    }
   }
   
   /**

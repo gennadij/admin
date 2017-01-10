@@ -1,4 +1,4 @@
-package org.dto.Config
+package org.dto.config
 
 import org.dto.DTOIds
 import org.dto.DTONames
@@ -12,8 +12,8 @@ import play.api.libs.json.Json
  * jsond : 3, dto : CreateConfig, result : ...
  */
 case class CreateConfigSC (
-    jsonId: Int = DTOIds.createConfig,
-    dto: String = DTONames.createConfig,
+    jsonId: Int = DTOIds.CREATE_CONFIG,
+    dto: String = DTONames.CREATE_CONFIG,
     result: CreateConfigResult
 )
 

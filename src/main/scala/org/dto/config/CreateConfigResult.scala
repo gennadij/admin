@@ -1,4 +1,4 @@
-package org.dto.Config
+package org.dto.config
 
 import play.api.libs.json.Json
 
@@ -11,7 +11,7 @@ import play.api.libs.json.Json
  */
 
 case class CreateConfigResult (
-    id: String,
+    configId: String,
     status: Boolean,
     message: String
 )
