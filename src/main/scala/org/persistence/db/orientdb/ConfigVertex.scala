@@ -23,7 +23,6 @@ object ConfigVertex {
   def createConfig(createConfigCS: CreateConfigCS): OrientVertex = {
     
     //TODO Try Catch Block einbauen -> Nullpointer Exception fangen
-    
     val graph: OrientGraph = OrientDB.getGraph
 
     val vConfig: OrientVertex = graph.addVertex(

@@ -40,10 +40,10 @@ import org.dto.config.CreateConfigSC
 import org.persistence.db.orientdb.ConfigVertex
 import org.persistence.db.orientdb.HasConfigEdge
 import org.dto.config.CreateConfigResult
-import org.dto.firstStep.FirstStepCS
-import org.dto.firstStep.FirstStepSC
+import org.dto.step.FirstStepCS
 import org.persistence.db.orientdb.HasFirstStepEdge
-import org.dto.firstStep.FirstStepResult
+import org.dto.step.FirstStepSC
+import org.dto.step.FirstStepResult
 
 /**
  * Created by Gennadi Heimann 1.1.2017
@@ -134,7 +134,6 @@ object Persistence {
   
   def firstStep(firstStepCS: FirstStepCS): FirstStepSC = {
     val firstStepSC: FirstStepSC = StepVertex.firstStep(firstStepCS)
-    println(firstStepSC)
     if(firstStepSC != null ) {
       if (firstStepSC.result.status) {
         val eHasFirstStep: OrientEdge = HasFirstStepEdge.hasFirstStep(firstStepCS, firstStepSC)
@@ -176,7 +175,7 @@ object Persistence {
     ConfigTree.getConfigTree(configTreeCS)
   }
   
-    /**
+  /**
    * @author Gennadi Heimann
    * 
    * @version 1.0
@@ -187,6 +186,32 @@ object Persistence {
    */
   def addComponent(componentCS: ComponentCS): ComponentSC = {
     ComponentVertex.addComponent(componentCS)
+  }
+  
+  /**
+   * creting von new Component and connect thies new Component with Step from param
+   * 
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param ComponentCS
+   * 
+   * @return ComponentSC
+   */
+  def component(componentCS: ComponentCS): ComponentSC = {
+    val componentSC: ComponentSC = ComponentVertex.component(componentCS)
+    if(HasComponentEdge.hasComponent(componentCS, componentSC) != null) {
+      componentSC
+    }else{
+      ComponentSC(
+          result = ComponentResult(
+              "",
+              false,
+              "Es ist einen Fehler aufgetreten"
+          )
+      )
+    }
   }
   
     /**

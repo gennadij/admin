@@ -8,12 +8,12 @@ import play.api.libs.json.Json
 /**
  * Created by Gennadi Heimann 1.1.2017
  */
-case class StepResultSC (
+case class StepResult (
     stepId: String,
     status: Boolean,
     message: String
 )
 
-object StepResultSC {
-  implicit val format = Json.writes[StepResultSC]
+object StepResult {
+  implicit val format = Json.writes[StepResult]
 }

@@ -3,8 +3,8 @@ package org.persistence.db.orientdb
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import com.tinkerpop.blueprints.impls.orient.OrientEdge
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
-import org.dto.firstStep.FirstStepSC
-import org.dto.firstStep.FirstStepCS
+import org.dto.step.FirstStepSC
+import org.dto.step.FirstStepCS
 
 object HasFirstStepEdge {
   

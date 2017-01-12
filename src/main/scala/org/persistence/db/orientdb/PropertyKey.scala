@@ -13,6 +13,7 @@ object PropertyKey {
   val VERTEX_CONFIG = "Config"
   val EDGE_HAS_CONFIG = "hasConfig"
   val EDGE_HAS_FIRST_STEP = "hasFirstStep"
+  val EDGE_HAS_COMPONENT = "hasComponent"
   val USERNAME = "username"
   val PASSWORD = "password"
   val ADMIN_ID = "adminId"

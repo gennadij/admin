@@ -11,12 +11,12 @@ import play.api.libs.json.Json
  * result : {componentId : #13:1, status : true, message : Nachricht}
  */
 
-case class ComponentResultSC (
+case class ComponentResult (
     componentId: String
     ,status: Boolean
     ,message: String
 )
 
-object ComponentResultSC {
-  implicit val format = Json.writes[ComponentResultSC]
+object ComponentResult {
+  implicit val format = Json.writes[ComponentResult]
 }

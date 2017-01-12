@@ -21,8 +21,8 @@ import org.dto.configUri.ConfigUriCS
 import org.dto.configUri.ConfigUriSC
 import org.dto.config.CreateConfigCS
 import org.dto.config.CreateConfigSC
-import org.dto.firstStep.FirstStepCS
-import org.dto.firstStep.FirstStepSC
+import org.dto.step.FirstStepCS
+import org.dto.step.FirstStepSC
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -109,7 +109,7 @@ trait AdminWeb {
    *   {jsonId : 7, dto : FirstStep, result : {stepId : #12:1, status : true, message : Nachricht}} 
    * 8. => Component
    *   Server <- Client
-   *   {jsonId : 8, dto : Component, params : {adminId : #40:0, kind : immutable}
+   *   {jsonId : 8, dto : Component, params : {stepId : #40:0, kind : immutable}
    *    Server -> Client
    *    {jsonId : 8, dto : Component, result : {componentId : #13:1, status : true, message : Nachricht}}
    * 9. => ConnStepToComponent
@@ -181,7 +181,8 @@ trait AdminWeb {
   
   private def component(receivedMessage: JsValue): JsValue = {
     val componentCS: ComponentCS = Json.fromJson[ComponentCS](receivedMessage).get
-    val componentSC: ComponentSC = Admin.addComponent(componentCS)
+//    val componentSC: ComponentSC = Admin.addComponent(componentCS)
+    val componentSC: ComponentSC = Admin.component(componentCS)
     Json.toJson(componentSC)
   }
   

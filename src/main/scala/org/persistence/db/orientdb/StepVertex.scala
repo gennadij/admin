@@ -14,10 +14,11 @@ import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import org.dto.step.StepCS
 import org.dto.step.StepSC
-import org.dto.step.StepResultSC
-import org.dto.firstStep.FirstStepCS
-import org.dto.firstStep.FirstStepResult
-import org.dto.firstStep.FirstStepSC
+import com.tinkerpop.blueprints.Direction
+import org.dto.step.StepResult
+import org.dto.step.FirstStepSC
+import org.dto.step.FirstStepCS
+import org.dto.step.FirstStepResult
 
 /**
  * Created by Gennadi Heimann 1.1.2017
@@ -47,7 +48,7 @@ object StepVertex {
     graph.commit
         
     new StepSC(
-        result = new StepResultSC(
+        result = new StepResult(
         	vStep.getIdentity.toString(),
         	true//TODO impl status
         	,"Der Step wurde hinzugefuegt"
@@ -70,21 +71,10 @@ object StepVertex {
     
     val graph: OrientGraph = OrientDB.getGraph
     val configId = firstStepCS.params.configId
-    val counts: OrientDynaElementIterable = graph
-      .command(new OCommandSQL(s"select count(out('HasFirstStep')) from Config where @rid='$configId'")).execute()
-      
-      println(counts)
-    val countsList = counts.toList
-    println(countsList)
-    println(countsList(0).asInstanceOf[OrientVertex].getProperty("count").toString.toInt)
-    val count: Int = if(countsList.size == 1) countsList(0).asInstanceOf[OrientVertex].getProperty("count").toString.toInt else 2
-    val vFirstStep: OrientVertex = graph.addVertex(
-        "class:" + PropertyKey.VERTEX_STEP,
-        PropertyKey.KIND, firstStepCS.params.kind
-    )
-    graph.commit
     
-    if(count > 0) {
+    val countsOfFirstSteps: Int = graph.getVertex(configId).getEdges(Direction.OUT, PropertyKey.EDGE_HAS_FIRST_STEP).toList.size
+    println(countsOfFirstSteps)
+    if(countsOfFirstSteps > 0) {
       new FirstStepSC(
           result = FirstStepResult(
               "",
@@ -93,6 +83,14 @@ object StepVertex {
           )
       )
     }else{
+      val vFirstStep: OrientVertex = graph.addVertex(
+        "class:" + PropertyKey.VERTEX_STEP,
+        PropertyKey.KIND, firstStepCS.params.kind,
+        PropertyKey.SELECTION_CRITERIUM_MIN, firstStepCS.params.selectionCriterium.min.toString,
+        PropertyKey.SELECTION_CRITERIUM_MAX, firstStepCS.params.selectionCriterium.max.toString
+      )
+      graph.commit
+      
       new FirstStepSC(
           result = FirstStepResult(
               vFirstStep.getIdentity.toString,
@@ -116,6 +114,14 @@ object StepVertex {
     val graph: OrientGraph = OrientDB.getGraph
     val res: Int = graph
       .command(new OCommandSQL(s"DELETE VERTEX Step where adminId='$adminId'")).execute()
+    graph.commit
+    res
+  }
+  
+  def removeStep(configId: String): Int = {
+    val graph: OrientGraph = OrientDB.getGraph
+    val res: Int = graph
+      .command(new OCommandSQL(s"DELETE VERTEX Step where @rid IN (SELECT out() from Config where @rid='$configId')")).execute()
     graph.commit
     res
   }

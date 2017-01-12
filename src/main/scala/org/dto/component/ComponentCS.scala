@@ -1,6 +1,3 @@
-/**
- * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
- */
 package org.dto.component
 
 import play.api.libs.json.Json
@@ -8,16 +5,18 @@ import org.dto.DTOIds
 import org.dto.DTONames
 
 /**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
  * Created by Gennadi Heimann 19.12.2016
  * 
  * {jsonId : 8, dto : Component, params : {adminId : #40:0, kind : immutable}
  */
 case class ComponentCS (
-    jsonId: Int = DTOIds.COMPONENT,
+    dtoId: Int = DTOIds.COMPONENT,
     dto: String = DTONames.COMPONENT,
-    params: ComponentParamsCS
+    params: ComponentParams
 )
 
 object ComponentCS {
-  implicit val format = Json.reads[ComponentCS]
+    implicit val format = Json.reads[ComponentCS]
 }

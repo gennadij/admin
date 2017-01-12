@@ -13,7 +13,7 @@ import play.api.libs.json.Json
 case class StepSC (
     jsonId: Int = DTOIds.STEP,
     dto: String = DTONames.STEP,
-    result: StepResultSC
+    result: StepResult
 )
 
 object StepSC {

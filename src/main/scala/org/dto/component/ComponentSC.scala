@@ -14,9 +14,9 @@ import play.api.libs.json.Json
  */
 
 case class ComponentSC (
-    jsonId: Int = DTOIds.COMPONENT,
+    dtoId: Int = DTOIds.COMPONENT,
     dto: String = DTONames.COMPONENT,
-    result: ComponentResultSC
+    result: ComponentResult
 )
 
 object ComponentSC {

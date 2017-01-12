@@ -11,13 +11,13 @@ import play.api.libs.json.Json
  * params : {adminId : #40:0, kind : default}
  */
 
-case class StepParamsCS (
+case class StepParams (
     adminId: String,
     kind: String,
     selectionCriterium: SelectionCriterium
 )
 
 
-object StepParamsCS {
-  implicit val format = Json.reads[StepParamsCS]
+object StepParams {
+  implicit val format = Json.reads[StepParams]
 }

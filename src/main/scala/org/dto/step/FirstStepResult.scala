@@ -1,4 +1,4 @@
-package org.dto.firstStep
+package org.dto.step
 
 import play.api.libs.json.Json
 

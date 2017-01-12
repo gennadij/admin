@@ -1,4 +1,4 @@
-package org.dto.firstStep
+package org.dto.step
 
 import play.api.libs.json.Json
 
@@ -13,7 +13,8 @@ import play.api.libs.json.Json
 
 case class FirstStepParams (
     configId: String,
-    kind: String
+    kind: String,
+    selectionCriterium: SelectionCriterium
 )
 
 object FirstStepParams {

@@ -1,7 +1,3 @@
-/**
- * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
- */
-
 package org.persistence.db.orientdb
 
 import scala.collection.JavaConversions._
@@ -16,16 +12,12 @@ import org.dto.connStepToComponent.ConnStepToComponentResultSC
 import org.dto.connStepToComponent.ConnStepToComponentSC
 
 /**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
  * Created by Gennadi Heimann 1.1.2017
  */
 
 object HasComponentEdge {
-  
-  val classname = "hasComponent"
-  val propKeyHasComponentId = "hasComponentId"
-  val propKeyAdminId = "adminId"
-  val propKeyComponentId = "componentId"
-  val propKeyStepId = "stepId"
 
   /**
    * @author Gennadi Heimann
@@ -55,5 +47,22 @@ object HasComponentEdge {
             s"Der Step mit id=$outStep wurde mit der Komponente mit id=$inComponent verbunden"
         )
     )
+  }
+  
+  def hasComponent(componentCS: ComponentCS, componentSC: ComponentSC): OrientEdge = {
+    val graph: OrientGraph = OrientDB.getGraph
+    
+    val stepId = componentCS.params.stepId
+    val componentId = componentSC.result.componentId
+    
+    val eHasComponent = graph.addEdge(
+        "class:" + PropertyKey.EDGE_HAS_COMPONENT, 
+        graph.getVertex(stepId), 
+        graph.getVertex(componentId), 
+        PropertyKey.EDGE_HAS_COMPONENT
+    )
+    graph.commit
+    
+    eHasComponent
   }
 }

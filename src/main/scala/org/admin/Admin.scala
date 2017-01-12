@@ -19,8 +19,8 @@ import org.dto.connComponentToStep.ConnComponentToStepCS
 import org.dto.connComponentToStep.ConnComponentToStepSC
 import org.dto.config.CreateConfigCS
 import org.dto.config.CreateConfigSC
-import org.dto.firstStep.FirstStepCS
-import org.dto.firstStep.FirstStepSC
+import org.dto.step.FirstStepCS
+import org.dto.step.FirstStepSC
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -108,6 +108,19 @@ object Admin {
    */
   def addComponent(componentCS: ComponentCS): ComponentSC = {
     Persistence.addComponent(componentCS)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param ComponentCS
+   * 
+   * @return ComponentSC
+   */
+  def component(componentCS: ComponentCS): ComponentSC = {
+    Persistence.component(componentCS)
   }
   
   /**
