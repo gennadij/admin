@@ -1,7 +1,3 @@
-/**
- * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
- */
-
 package org.dto.login
 
 import play.api.libs.json.Json
@@ -9,14 +5,17 @@ import org.dto.DTONames
 import org.dto.DTOIds
 
 /**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
   * Created by gennadi on 22.11.16.
+  * 
   * {jsonId : 2, dto: Login, result: {adminId : #40:0, username : test, status : true, message : Nachricht}}
   */
 case class LoginSC (
-                   jsonId: Int = DTOIds.LOGIN,
-                   dto: String = DTONames.LOGIN,
-                   result: LoginResultSC
-                   )
+    dtoId: Int = DTOIds.LOGIN,
+    dto: String = DTONames.LOGIN,
+    result: LoginResult
+)
 
 object LoginSC {
   implicit val format = Json.writes[LoginSC]

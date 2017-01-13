@@ -7,7 +7,11 @@ import org.dto.DTOIds
 import org.dto.DTONames
 import play.api.libs.json.Json
 import play.api.libs.json.JsValue
+import org.persistence.db.orientdb.ConfigVertex
+import org.junit.runner.RunWith
+import org.specs2.runner.JUnitRunner
 
+@RunWith(classOf[JUnitRunner])
 class SpecsAddingFromComponent extends Specification 
                           with AdminWeb
                           with BeforeAfterAll{
@@ -15,8 +19,8 @@ class SpecsAddingFromComponent extends Specification
   def beforeAll() = {}
   
   def afterAll() = {
-//    val count = StepVertex.removeStep("#43:1")
-//    println("Anzahl der geloeschten Steps " + count)
+    val count = ConfigVertex.deleteAllStepsAndComponent("#41:0")
+    require(count == 2, "Anzahl der geloeschten Vertexes " + count)
   }
   
   "Diese Specification spezifiziert das Hinzufügen von der Component zu dem Step" >> {
@@ -34,7 +38,6 @@ class SpecsAddingFromComponent extends Specification
         )
       )
       val firstStepSC: JsValue = handelMessage(firstStepCS)
-      println(firstStepSC)
       "dtoId" >> {
         (firstStepSC \ "dtoId").asOpt[Int].get === DTOIds.FIRST_STEP
       }
@@ -58,7 +61,6 @@ class SpecsAddingFromComponent extends Specification
           )
         )
         val componentSC: JsValue = handelMessage(componentCS)
-        println(componentSC)
         "dtoId" >> {
           (componentSC \ "dtoId").asOpt[Int].get === DTOIds.COMPONENT
         }

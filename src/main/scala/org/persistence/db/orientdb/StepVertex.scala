@@ -73,7 +73,6 @@ object StepVertex {
     val configId = firstStepCS.params.configId
     
     val countsOfFirstSteps: Int = graph.getVertex(configId).getEdges(Direction.OUT, PropertyKey.EDGE_HAS_FIRST_STEP).toList.size
-    println(countsOfFirstSteps)
     if(countsOfFirstSteps > 0) {
       new FirstStepSC(
           result = FirstStepResult(

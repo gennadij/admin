@@ -100,12 +100,6 @@ object ComponentVertex {
     val res: Int = graph
       .command(new OCommandSQL(s"DELETE VERTEX Component where adminId='$adminId'")).execute()
     graph.commit
-    
-  }
-
-  def deleteComponentAfterOneStep() = {
-//    DELETE VERTEX Component WHERE @rid IN (select out('hasFirstStep').out('hasComponent') from Config where @rid='#41:0')
-//    DELETE VERTEX Step WHERE @rid IN (select out('hasFirstStep') from Config where @rid='#41:0')
   }
   
   /**

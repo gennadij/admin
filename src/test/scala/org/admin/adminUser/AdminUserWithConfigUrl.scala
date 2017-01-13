@@ -11,9 +11,7 @@ import org.persistence.db.orientdb.AdminUserVertex
 class AdminUserWithConfigUrl extends Specification 
                           with AdminWeb
                           with BeforeAfterAll{
-  //TODO status false testen
   def beforeAll() = {
-//    AdminUserVertex.removeAdmin("AdminUserConfigUri")
   }
   
   def afterAll() = {

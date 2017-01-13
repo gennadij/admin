@@ -1,6 +1,3 @@
-/**
- * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
- */
 package org.persistence.db.orientdb
 
 import scala.collection.JavaConversions._
@@ -12,15 +9,22 @@ import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.dto.login.LoginSC
 import org.dto.login.LoginCS
-import org.dto.login.LoginResultSC
+import org.dto.login.LoginResult
 import org.dto.registration.RegistrationCS
 import org.dto.registration.RegistrationSC
-import org.dto.registration.RegistrationResultSC
+import org.dto.registration.RegistrationResult
 import org.dto.configUri.ConfigUriCS
 import org.dto.configUri.ConfigUriSC
 import org.dto.configUri.ConfigUriResultSC
+import org.dto.login.Config
+import com.tinkerpop.blueprints.Direction
+import com.tinkerpop.blueprints.impls.orient.OrientEdge
+import com.tinkerpop.blueprints.Edge
+import com.tinkerpop.blueprints.Vertex
 
 /**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
  * Created by Gennadi Heimann 1.1.2017
  */
 object AdminUserVertex {
@@ -42,14 +46,14 @@ object AdminUserVertex {
           PropertyKey.USERNAME, registrationCS.params.username, 
           PropertyKey.PASSWORD, registrationCS.params.password)
       graph.commit
-      new RegistrationSC(result = new RegistrationResultSC(
+      new RegistrationSC(result = new RegistrationResult(
           vAdminUser.getIdentity.toString(),
           vAdminUser.getProperty(PropertyKey.USERNAME).toString(),
           true,
           "Registrierung war erfolgreich"
       ))
     }else{
-      new RegistrationSC(result = new RegistrationResultSC(
+      new RegistrationSC(result = new RegistrationResult(
           "", 
           registrationCS.params.username,
           false,
@@ -119,18 +123,35 @@ object AdminUserVertex {
     val adminUsers = res.toList
     if(adminUsers.size == 1){
       val loginSC: List[LoginSC] = adminUsers.map(login => {
-        new LoginSC(result = new LoginResultSC(
+        val vAdminUser: OrientVertex = login.asInstanceOf[OrientVertex]
+        
+        val eHasConfigs: List[Edge] = vAdminUser.getEdges(Direction.OUT, "hasConfig").toList
+        
+        val vConfigs: List[Vertex] = eHasConfigs.map(eHasConfig => {
+          eHasConfig.getVertex(Direction.IN)
+        })
+        
+        val configs: List[Config] = vConfigs.map(vConfig => {
+          Config(
+              vConfig.getId.toString,
+              vConfig.getProperty("configUrl")
+              
+          )
+        })
+        new LoginSC(result = new LoginResult(
           login.asInstanceOf[OrientVertex].getIdentity.toString(),
           login.asInstanceOf[OrientVertex].getProperty("username"),
+          configs,
           true,
           "Anmeldung mit Username " + loginCS.params.username + " war erfolgreich"
         ))
       })
     loginSC(0)
     }else{
-      new LoginSC(result = new LoginResultSC(
+      new LoginSC(result = new LoginResult(
           "", 
           loginCS.params.username, 
+          List.empty,
           false, 
           "Anmeldung mit Username " + loginCS.params.username + " war nicht erfolgreich"))
     }
@@ -162,10 +183,11 @@ object AdminUserVertex {
    * 
    * @return Unit
    */
-  def removeAdmin(username: String) = {
+  def deleteAdmin(username: String): Int = {
     val graph: OrientGraph = OrientDB.getGraph
     val res: Int = graph
       .command(new OCommandSQL(s"DELETE VERTEX AdminUser where username='$username'")).execute()
     graph.commit
+    res
   }
 }

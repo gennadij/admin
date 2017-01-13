@@ -79,7 +79,9 @@ trait AdminWeb {
    *   Server <- Client
    *   {jsond : 2, dto : Login, params : {username : test, password : test}}
    *   Server -> Client
-   *   {jsonId : 2, dto: Login, result: {adminId : #40:0, username : test, status : true, message : Nachricht}}
+   *   {jsonId : 2, dto: Login, result: {
+   *      adminId : #40:0, username : test, configs: 
+   *      [{configId: #12:23, configUrl: http:// .. } ..], status : true, message : Nachricht}}
    * 3. CreateConfig
    *   Server <- Client
    *   {jsond : 3, dto : CreateConfig, params : {adminId : #40:0, configUrl : test.test.org}
@@ -142,9 +144,9 @@ trait AdminWeb {
       case Some("FirstStep") => firstStep(receivedMessage)
       case Some("ConfigTree") => configTree(receivedMessage)
       case Some("Component") => component(receivedMessage)
-      case Some("ConnStepToComponent") => connStepToComponent(receivedMessage)
+//      case Some("ConnStepToComponent") => connStepToComponent(receivedMessage)
       case Some("Step") => step(receivedMessage)
-      case Some("ConnComponentToStep") => connComponentToStep(receivedMessage)
+//      case Some("ConnComponentToStep") => connComponentToStep(receivedMessage)
       case _ => Json.obj("error" -> "keinen Treffer")
     }
   }
@@ -173,24 +175,17 @@ trait AdminWeb {
     Json.toJson(firstStepSC)
   }
   
-//  private def configUri(receivedMessage: JsValue): JsValue = {
-//    val configUriCS: ConfigUriCS = Json.fromJson[ConfigUriCS](receivedMessage).get
-//    val configUriSC: ConfigUriSC = Admin.configUri(configUriCS)
-//    Json.toJson(configUriSC)
-//  }
-  
   private def component(receivedMessage: JsValue): JsValue = {
     val componentCS: ComponentCS = Json.fromJson[ComponentCS](receivedMessage).get
-//    val componentSC: ComponentSC = Admin.addComponent(componentCS)
     val componentSC: ComponentSC = Admin.component(componentCS)
     Json.toJson(componentSC)
   }
   
-  private def connStepToComponent(receivedMeassage: JsValue): JsValue= {
-    val connStepToComponentCS: ConnStepToComponentCS = Json.fromJson[ConnStepToComponentCS](receivedMeassage).get
-    val connStepToComponentSC: ConnStepToComponentSC = Admin.addHasComponent(connStepToComponentCS)
-    Json.toJson(connStepToComponentSC)
-  }
+//  private def connStepToComponent(receivedMeassage: JsValue): JsValue= {
+//    val connStepToComponentCS: ConnStepToComponentCS = Json.fromJson[ConnStepToComponentCS](receivedMeassage).get
+//    val connStepToComponentSC: ConnStepToComponentSC = Admin.addHasComponent(connStepToComponentCS)
+//    Json.toJson(connStepToComponentSC)
+//  }
   
   private def step(receivedMessage: JsValue): JsValue = {
     val stepCS: StepCS = Json.fromJson[StepCS](receivedMessage).get
@@ -198,12 +193,12 @@ trait AdminWeb {
     Json.toJson(stepSC)
   }
   
-  private def connComponentToStep(receivedMessage: JsValue): JsValue = {
-    val connComponentToStepCS: ConnComponentToStepCS = 
-      Json.fromJson[ConnComponentToStepCS](receivedMessage).get
-    val connComponentToStepSC: ConnComponentToStepSC = Admin.addNextStep(connComponentToStepCS)
-    Json.toJson(connComponentToStepSC)
-  }
+//  private def connComponentToStep(receivedMessage: JsValue): JsValue = {
+//    val connComponentToStepCS: ConnComponentToStepCS = 
+//      Json.fromJson[ConnComponentToStepCS](receivedMessage).get
+//    val connComponentToStepSC: ConnComponentToStepSC = Admin.addNextStep(connComponentToStepCS)
+//    Json.toJson(connComponentToStepSC)
+//  }
   
   private def configTree(receivedMessage: JsValue): JsValue = {
     val configTreeCS: ConfigTreeCS = Json.fromJson[ConfigTreeCS](receivedMessage).get

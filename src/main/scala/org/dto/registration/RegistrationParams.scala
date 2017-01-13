@@ -10,12 +10,12 @@ import play.api.libs.json.Json
  * Created by Gennadi Heimann 19.12.2016
  * {jsonId : 1, dto : Registeration, params : {username : test, password : test}}
  */
-case class RegistrationParamsCS (
+case class RegistrationParams (
                           username: String,
                           password: String
                           )
 
 
-object RegistrationParamsCS {
-  implicit val format = Json.reads[RegistrationParamsCS]
+object RegistrationParams {
+  implicit val format = Json.reads[RegistrationParams]
 }

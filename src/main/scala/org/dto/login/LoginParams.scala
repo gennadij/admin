@@ -12,11 +12,11 @@ import play.api.libs.json.Json
  * {jsond : 2, dto : Login, params : {username : test, password : test}}
  */
 
-case class LoginParamsCS (
+case class LoginParams (
     username: String,
     password: String
 )
 
-object LoginParamsCS {
-  implicit val fortmat = Json.reads[LoginParamsCS]
+object LoginParams {
+  implicit val fortmat = Json.reads[LoginParams]
 }

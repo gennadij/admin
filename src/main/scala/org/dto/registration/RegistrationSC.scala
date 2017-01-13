@@ -13,9 +13,9 @@ import org.dto.DTOIds
   * {jsonId : 1, dto : Registeration, result : {adminId : #40:0, username : test, status : true, message : Nachricht}}
   */
 case class RegistrationSC (
-    jsonId: Int = DTOIds.REGISTRATION,
-    val dto: String = DTONames.REGISTRATION,
-    result: RegistrationResultSC
+    dtoId: Int = DTOIds.REGISTRATION,
+    dto: String = DTONames.REGISTRATION,
+    result: RegistrationResult
 )
 
 object RegistrationSC {

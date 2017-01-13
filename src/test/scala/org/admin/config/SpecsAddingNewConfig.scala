@@ -7,8 +7,11 @@ import org.dto.DTONames
 import org.admin.AdminWeb
 import org.specs2.specification.BeforeAfterAll
 import org.persistence.db.orientdb.AdminUserVertex
+import org.specs2.runner.JUnitRunner
+import org.junit.runner.RunWith
 
-class CreateConfig extends Specification
+@RunWith(classOf[JUnitRunner])
+class SpecsAddingNewConfig extends Specification
                           with AdminWeb
                           with BeforeAfterAll{
   
@@ -21,11 +24,11 @@ class CreateConfig extends Specification
   
   "Diese Spezifikation erzeugt neue Konfiguration für die Admin" >> {
      val loginCS = Json.obj(
-        "jsonId" -> DTOIds.LOGIN,
+        "dtoId" -> DTOIds.LOGIN,
         "dto" -> DTONames.LOGIN
         ,"params" -> Json.obj(
-            "username" -> "CreateConfig",
-            "password" -> "CreateConfig"
+            "username" -> "user2",
+            "password" -> "user2"
         )
     )
     

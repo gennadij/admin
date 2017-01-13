@@ -11,13 +11,13 @@ import play.api.libs.json.Json
  * {jsonId : 1, dto : Registeration, result : {adminId : #40:0, username : test, status : true, message : Nachricht}}
  */
 
-case class RegistrationResultSC (
+case class RegistrationResult (
     adminId: String,
     username: String,
     status: Boolean,
     message: String
 )
 
-object RegistrationResultSC {
-  implicit val format = Json.writes[RegistrationResultSC]
+object RegistrationResult {
+  implicit val format = Json.writes[RegistrationResult]
 }

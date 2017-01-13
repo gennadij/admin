@@ -23,12 +23,7 @@ object DTOsForTesting {
 	       )
     )
     
-  val registerCS_2 = Json.obj(
-    "jsonId" -> 1,
-    "dto" -> "Registration"
-    ,"params" -> Json.obj(
-      "username" -> "userNotExist",
-      "password"-> "userNotExist"))
+  
       
   val registerSC_2 = Json.obj(
     "jsonId" -> 1,
