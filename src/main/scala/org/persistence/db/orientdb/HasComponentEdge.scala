@@ -54,6 +54,9 @@ object HasComponentEdge {
     
     val stepId = componentCS.params.stepId
     val componentId = componentSC.result.componentId
+    println(componentCS)
+    println(stepId)
+    println(componentId)
     
     val eHasComponent = graph.addEdge(
         "class:" + PropertyKey.EDGE_HAS_COMPONENT, 

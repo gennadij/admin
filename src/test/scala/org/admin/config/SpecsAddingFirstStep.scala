@@ -13,7 +13,7 @@ import org.junit.runner.RunWith
 
 
 @RunWith(classOf[JUnitRunner])
-class SpecsAddingFromFirstStep extends Specification 
+class SpecsAddingFirstStep extends Specification 
                           with AdminWeb
                           with BeforeAfterAll{
   
@@ -21,9 +21,8 @@ class SpecsAddingFromFirstStep extends Specification
   }
   
   def afterAll() = {
-    val count = StepVertex.removeStep("#43:1")
-    println("Anzahl der geloeschten Steps " + count)
-    count.pp
+    val count = StepVertex.removeStep("#41:4")
+    require(count == 1, "Anzahl der geloeschten Steps " + count)
   }
 
   
@@ -33,7 +32,7 @@ class SpecsAddingFromFirstStep extends Specification
         "dtoId" -> DTOIds.FIRST_STEP,
         "dto" -> DTONames.FIRST_STEP
         ,"params" -> Json.obj(
-          "configId" -> "#43:1",
+          "configId" -> "#41:4",
           "kind" -> "first",
           "selectionCriterium" -> Json.obj(
               "min" -> 1,
@@ -62,7 +61,7 @@ class SpecsAddingFromFirstStep extends Specification
         "dtoId" -> DTOIds.FIRST_STEP,
         "dto" -> DTONames.FIRST_STEP
         ,"params" -> Json.obj(
-          "configId" -> "#43:1",
+          "configId" -> "#41:4",
           "kind" -> "first",
           "selectionCriterium" -> Json.obj(
               "min" -> 1,

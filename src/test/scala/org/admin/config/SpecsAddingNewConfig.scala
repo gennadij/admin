@@ -7,8 +7,8 @@ import org.dto.DTONames
 import org.admin.AdminWeb
 import org.specs2.specification.BeforeAfterAll
 import org.persistence.db.orientdb.AdminUserVertex
-import org.specs2.runner.JUnitRunner
 import org.junit.runner.RunWith
+import org.specs2.runner.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
 class SpecsAddingNewConfig extends Specification
@@ -27,8 +27,8 @@ class SpecsAddingNewConfig extends Specification
         "dtoId" -> DTOIds.LOGIN,
         "dto" -> DTONames.LOGIN
         ,"params" -> Json.obj(
-            "username" -> "user2",
-            "password" -> "user2"
+            "username" -> "user3",
+            "password" -> "user3"
         )
     )
     
@@ -42,12 +42,12 @@ class SpecsAddingNewConfig extends Specification
           "dto" -> DTONames.CREATE_CONFIG
           , "params" -> Json.obj(
               "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
-              "configUrl" -> "//http://contig/AdminUserConfigUri"
+              "configUrl" -> "//http://contig1/user3"
           )
       )
       val createConfigSC = handelMessage(createConfigCS)
       "result \\ id" >> {
-        (createConfigSC \ "result" \ "configId").asOpt[String].get.size === 5
+        (createConfigSC \ "result" \ "configId").asOpt[String].get === ""
       }
       "result \\ status" >> {
     	  (createConfigSC \ "result" \ "status").asOpt[Boolean].get === true
@@ -55,9 +55,6 @@ class SpecsAddingNewConfig extends Specification
       }
       "result \\ message" >> {
     	  (createConfigSC \ "result" \ "message").asOpt[String].get === "Die Konfiguration wurde erfolgreich erzeugt"
-      }
-      "erzeuge FirstStep" >> {
-        "" === ""
       }
     }
   }

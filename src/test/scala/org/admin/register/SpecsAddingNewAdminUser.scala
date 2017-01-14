@@ -38,8 +38,6 @@ class SpecsAddingNewAdminUser extends org.specs2.mutable.Specification with Admi
            )
       )
       val registerSC = handelMessage(registerCS)
-      println(registerCS)
-      println(registerSC)
       "dtoId" >> {
         (registerSC \ "dtoId").asOpt[Int].get === DTOIds.REGISTRATION
       }

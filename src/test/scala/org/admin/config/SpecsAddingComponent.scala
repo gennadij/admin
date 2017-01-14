@@ -12,14 +12,14 @@ import org.junit.runner.RunWith
 import org.specs2.runner.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class SpecsAddingFromComponent extends Specification 
+class SpecsAddingComponent extends Specification 
                           with AdminWeb
                           with BeforeAfterAll{
   
   def beforeAll() = {}
   
   def afterAll() = {
-    val count = ConfigVertex.deleteAllStepsAndComponent("#41:0")
+    val count = ConfigVertex.deleteAllStepsAndComponent("#44:2")
     require(count == 2, "Anzahl der geloeschten Vertexes " + count)
   }
   
@@ -29,7 +29,7 @@ class SpecsAddingFromComponent extends Specification
         "dtoId" -> DTOIds.FIRST_STEP,
         "dto" -> DTONames.FIRST_STEP
         ,"params" -> Json.obj(
-          "configId" -> "#41:0",
+          "configId" -> "#44:2",
           "kind" -> "first",
           "selectionCriterium" -> Json.obj(
               "min" -> 1,
