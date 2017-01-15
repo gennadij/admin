@@ -2,7 +2,6 @@ package org.admin.register
 
 import play.api.libs.json._
 import org.admin.AdminWeb
-import org.admin.DTOsForTesting
 import org.specs2.specification.BeforeAfterAll
 import org.persistence.db.orientdb.AdminUserVertex
 import org.dto.DTOIds

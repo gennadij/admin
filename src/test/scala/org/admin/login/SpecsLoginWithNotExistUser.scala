@@ -5,6 +5,12 @@ import play.api.libs.json.Json
 import play.api.libs.json.JsValue
 import org.admin.AdminWeb
 
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
+ * Created by Gennadi Heimann 15.01.2017
+ */
+
 class SpecsLoginWithNotExistUser extends Specification with AdminWeb {
   def is = 
   

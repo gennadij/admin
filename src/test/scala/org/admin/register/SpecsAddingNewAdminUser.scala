@@ -2,13 +2,13 @@ package org.admin.register
 
 import play.api.libs.json._
 import org.admin.AdminWeb
-import org.admin.DTOsForTesting
 import org.specs2.specification.BeforeAfterAll
 import org.persistence.db.orientdb.AdminUserVertex
 import org.dto.DTOIds
 import org.dto.DTONames
 import org.specs2.runner.JUnitRunner
 import org.junit.runner.RunWith
+import org.specs2.mutable.Specification
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -17,7 +17,9 @@ import org.junit.runner.RunWith
  */
 
 @RunWith(classOf[JUnitRunner])
-class SpecsAddingNewAdminUser extends org.specs2.mutable.Specification with AdminWeb with BeforeAfterAll{
+class SpecsAddingNewAdminUser extends Specification 
+                                with AdminWeb 
+                                with BeforeAfterAll{
 
   def beforeAll() = {
   }

@@ -3,6 +3,12 @@ package org.admin.persistence.db
 import org.specs2.Specification
 import org.persistence.db.orientdb.OrientDB
 
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
+ * Created by Gennadi Heimann 15.01.2017
+ */
+
 class DBConnection extends Specification{
   
   def is = 

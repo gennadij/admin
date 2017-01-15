@@ -95,7 +95,7 @@ trait AdminWeb {
    * 5. => removeAdmin
    * 6. => ConfigTree
    *   Server <- Client
-   *   {jsonId : 6, dto : ConfigTree, params: {adminId : #40:0}}
+   *   {jsonId : 6, dto : ConfigTree, params: {configId : #40:0}}
    *   Server -> Client
    *   {jsonId : 6, dto : ConfigTree, result: {steps :
           	[

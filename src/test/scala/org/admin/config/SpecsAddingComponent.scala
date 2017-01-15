@@ -29,7 +29,7 @@ class SpecsAddingComponent extends Specification
         "dtoId" -> DTOIds.FIRST_STEP,
         "dto" -> DTONames.FIRST_STEP
         ,"params" -> Json.obj(
-          "configId" -> "#44:2",
+          "configId" -> "#41:6",
           "kind" -> "first",
           "selectionCriterium" -> Json.obj(
               "min" -> 1,
@@ -76,34 +76,5 @@ class SpecsAddingComponent extends Specification
         }
       }
     }
-//    "Der zweite FirstStep hinzufuegen" >> {
-//      val twiceStepCS = Json.obj(
-//        "dtoId" -> DTOIds.FIRST_STEP,
-//        "dto" -> DTONames.FIRST_STEP
-//        ,"params" -> Json.obj(
-//          "configId" -> "#43:1",
-//          "kind" -> "first",
-//          "selectionCriterium" -> Json.obj(
-//              "min" -> 1,
-//              "max" -> 1
-//          )
-//        )
-//      )
-//      val twiceStepConfigTreeSC: JsValue = handelMessage(twiceStepCS)
-//      "dtoId" >> {
-//        (twiceStepConfigTreeSC \ "dtoId").asOpt[Int].get === DTOIds.FIRST_STEP
-//      }
-//      "dto" >> {
-//        (twiceStepConfigTreeSC \ "dto").asOpt[String].get === DTONames.FIRST_STEP
-//      }
-//      "result \\ status" >> {
-//        (twiceStepConfigTreeSC \ "result" \ "status").asOpt[Boolean].get === false
-//      }
-//      "result \\ message" >> {
-//        (twiceStepConfigTreeSC \ "result" \ "message").asOpt[String].get === 
-//          "Der FirstStep exstiert bereits"
-//      }
-//    }
   }
-  
 }

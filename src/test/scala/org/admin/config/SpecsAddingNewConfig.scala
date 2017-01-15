@@ -1,34 +1,29 @@
-package org.admin.adminUser
+package org.admin.config
 
+import org.specs2.runner.JUnitRunner
 import org.specs2.mutable.Specification
-import play.api.libs.json.Json
-import org.dto.DTOIds
-import org.dto.DTONames
 import org.admin.AdminWeb
 import org.specs2.specification.BeforeAfterAll
-import org.persistence.db.orientdb.AdminUserVertex
 import org.junit.runner.RunWith
-import org.specs2.runner.JUnitRunner
+import org.dto.DTOIds
+import org.dto.DTONames
+import play.api.libs.json.Json
 
 @RunWith(classOf[JUnitRunner])
-class SpecsAddingNewConfig extends Specification
-                          with AdminWeb
-                          with BeforeAfterAll{
+class SpecsAddingNewConfig extends Specification 
+                           with AdminWeb
+                           with BeforeAfterAll{
+  def beforeAll() = {}
   
-  def beforeAll() = {
-  }
-  
-  def afterAll() = {
-    
-  }
+  def afterAll() = {}
   
   "Diese Spezifikation erzeugt neue Konfiguration für die Admin" >> {
      val loginCS = Json.obj(
         "dtoId" -> DTOIds.LOGIN,
         "dto" -> DTONames.LOGIN
         ,"params" -> Json.obj(
-            "username" -> "user3",
-            "password" -> "user3"
+            "username" -> "user4",
+            "password" -> "user4"
         )
     )
     
