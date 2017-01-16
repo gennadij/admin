@@ -1,5 +1,6 @@
 package org.persistence.db.orientdb
 
+import scala.collection.JavaConversions._
 import org.dto.config.CreateConfigCS
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
@@ -60,8 +61,17 @@ object ConfigVertex {
       res
   }
     
+  def deleteConfigVertex(username: String): Int = {
+    val sql: String = s"DELETE VERTEX Config where @rid IN (SELECT OUT('hasConfig') FROM AdminUser WHERE username='$username')"
+      val graph: OrientGraph = OrientDB.getGraph
+      val res: Int = graph
+        .command(new OCommandSQL(sql)).execute()
+      graph.commit
+      res
+  }
+    
   /**
-   * Loescht alle Steps und Components die zu der Config gehoeren
+   * 
    * 
    * @author Gennadi Heimann
    * 
@@ -73,16 +83,24 @@ object ConfigVertex {
    */
   def getConfigTree(configTreeCS: ConfigTreeCS): ConfigTreeSC = {
     val graph: OrientGraph = OrientDB.getGraph
-    val adminId: String = configTreeCS.params.adminId
+    val configId: String = configTreeCS.params.adminId
+    
+    //traverse OUT()from #41:6 STRATEGY BREADTH_FIRST
     
     val res: OrientDynaElementIterable = graph
-      .command(new OCommandSQL("select from " + 
-          "(SELECT FROM " + 
-                "(traverse out(hasComponent) from " + 
-                      "(select from Step where kind='first') STRATEGY BREADTH_FIRST)" + 
-                 s" where @class='Step') where adminId='$adminId'")).execute()
-      
-//    val vSteps: List[OrientVertex] = res.toList.map(_.asInstanceOf[OrientVertex])
+      .command(new OCommandSQL(s"traverse out() from $configId STRATEGY BREADTH_FIRST")).execute()
+    
+    val vertexes: List[OrientVertex] = res.toList.map(_.asInstanceOf[OrientVertex])
+    
+    vertexes.foreach(vertex => println(vertex.getType.toString()))
+    
+    
+    val filterd = vertexes.filter(vertex => vertex.getType.toString() == "Step" && vertex.getProperty("kind") == "first")
+    
+    println(filterd)
+    
+    
+    
     
 //    new ConfigTreeSC(result = new ConfigTreeResultSC(vSteps.map(getStep(_, graph, adminId)), ""))
   null

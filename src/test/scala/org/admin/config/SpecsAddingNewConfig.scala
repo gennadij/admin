@@ -8,6 +8,13 @@ import org.junit.runner.RunWith
 import org.dto.DTOIds
 import org.dto.DTONames
 import play.api.libs.json.Json
+import org.persistence.db.orientdb.ConfigVertex
+
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
+ * Created by Gennadi Heimann 16.01.2017
+ */
 
 @RunWith(classOf[JUnitRunner])
 class SpecsAddingNewConfig extends Specification 
@@ -15,15 +22,19 @@ class SpecsAddingNewConfig extends Specification
                            with BeforeAfterAll{
   def beforeAll() = {}
   
-  def afterAll() = {}
+  def afterAll() = {
+    val count: Int = ConfigVertex.deleteConfigVertex("user5")
+    require(count == 1, "Anzahl der geloeschten ConfigVertexes " + count)
+    
+  }
   
   "Diese Spezifikation erzeugt neue Konfiguration für die Admin" >> {
      val loginCS = Json.obj(
         "dtoId" -> DTOIds.LOGIN,
         "dto" -> DTONames.LOGIN
         ,"params" -> Json.obj(
-            "username" -> "user4",
-            "password" -> "user4"
+            "username" -> "user5",
+            "password" -> "user5"
         )
     )
     
@@ -41,9 +52,6 @@ class SpecsAddingNewConfig extends Specification
           )
       )
       val createConfigSC = handelMessage(createConfigCS)
-      "result \\ id" >> {
-        (createConfigSC \ "result" \ "configId").asOpt[String].get === ""
-      }
       "result \\ status" >> {
     	  (createConfigSC \ "result" \ "status").asOpt[Boolean].get === true
         

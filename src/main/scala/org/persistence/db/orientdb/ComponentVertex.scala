@@ -4,7 +4,6 @@
 package org.persistence.db.orientdb
 
 import scala.collection.JavaConversions._
-
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import com.tinkerpop.blueprints.impls.orient.OrientVertexType
 import com.orientechnologies.orient.core.metadata.schema.OType

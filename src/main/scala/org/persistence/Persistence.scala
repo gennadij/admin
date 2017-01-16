@@ -172,7 +172,8 @@ object Persistence {
    * @return ConfigTreeSC
    */
   def getConfigTree(configTreeCS: ConfigTreeCS): ConfigTreeSC = {
-    ConfigTree.getConfigTree(configTreeCS)
+//    ConfigTree.getConfigTree(configTreeCS)
+    ConfigVertex.getConfigTree(configTreeCS)
   }
   
   /**

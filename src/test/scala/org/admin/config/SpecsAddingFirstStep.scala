@@ -11,6 +11,11 @@ import org.persistence.db.orientdb.StepVertex
 import org.specs2.runner.JUnitRunner
 import org.junit.runner.RunWith
 
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
+ * Created by Gennadi Heimann 16.01.2017
+ */
 
 @RunWith(classOf[JUnitRunner])
 class SpecsAddingFirstStep extends Specification 

@@ -11,6 +11,12 @@ import org.persistence.db.orientdb.ConfigVertex
 import org.junit.runner.RunWith
 import org.specs2.runner.JUnitRunner
 
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
+ * Created by Gennadi Heimann 16.01.2017
+ */
+
 @RunWith(classOf[JUnitRunner])
 class SpecsAddingComponent extends Specification 
                           with AdminWeb
@@ -29,7 +35,7 @@ class SpecsAddingComponent extends Specification
         "dtoId" -> DTOIds.FIRST_STEP,
         "dto" -> DTONames.FIRST_STEP
         ,"params" -> Json.obj(
-          "configId" -> "#41:6",
+          "configId" -> "#44:2",
           "kind" -> "first",
           "selectionCriterium" -> Json.obj(
               "min" -> 1,
