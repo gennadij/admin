@@ -19,6 +19,8 @@ import org.specs2.mutable.Specification
  * user2 -> login (Config nicht geloescht, FirstStep geloescht) in SpecsAddingFirstStep
  * user3 -> new Component (Adminuser nicht geloescht, Config nicht geloescht, FirstStep geloescht, Component geloescht) in SpecsAddingComponent
  * user4 -> ConfigTree () in SpecsConfigTree
+ * user6 -> new 3 Components () in SpecsAddingNewComponent
+ * 
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 13.01.2017

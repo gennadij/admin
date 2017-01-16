@@ -18,7 +18,7 @@ import org.specs2.runner.JUnitRunner
  */
 
 @RunWith(classOf[JUnitRunner])
-class SpecsAddingComponent extends Specification 
+class SpecsAddingComponentWithFirstStep extends Specification 
                           with AdminWeb
                           with BeforeAfterAll{
   
@@ -29,7 +29,7 @@ class SpecsAddingComponent extends Specification
     require(count == 2, "Anzahl der geloeschten Vertexes " + count)
   }
   
-  "Diese Specification spezifiziert das Hinzufügen von der Component zu dem Step" >> {
+  "Diese Specification spezifiziert das Hinzufügen von der Component zu dem FirstStep" >> {
     "FirstStep hinzufuegen" >> {
       val firstStepCS = Json.obj(
         "dtoId" -> DTOIds.FIRST_STEP,

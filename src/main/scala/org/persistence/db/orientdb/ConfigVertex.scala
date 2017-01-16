@@ -8,6 +8,11 @@ import com.orientechnologies.orient.core.sql.OCommandSQL
 import org.dto.configTree.ConfigTreeSC
 import org.dto.configTree.ConfigTreeCS
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
+import com.tinkerpop.blueprints.Edge
+import com.tinkerpop.blueprints.Vertex
+import org.dto.configTree.ConfigTreeStepSC
+import org.dto.configTree.ConfigTreeComponentSC
+import org.dto.configTree.ConfigTreeResultSC
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -94,16 +99,79 @@ object ConfigVertex {
     
     vertexes.foreach(vertex => println(vertex.getType.toString()))
     
+    val vFirstSteps: List[OrientVertex] = vertexes.filter(vertex => vertex.getType.toString() == "Step" && vertex.getProperty("kind") == "first")
     
-    val filterd = vertexes.filter(vertex => vertex.getType.toString() == "Step" && vertex.getProperty("kind") == "first")
+    val vFirstStep: OrientVertex = if(vFirstSteps.size == 1) vFirstSteps(0) else null
     
-    println(filterd)
+    if(vFirstStep == null) {
+      //Fehler dto
+    }else{
+      ConfigTreeSC(result = ConfigTreeResultSC(List.empty, ""))
+    }
     
     
-    
-    
+    null
 //    new ConfigTreeSC(result = new ConfigTreeResultSC(vSteps.map(getStep(_, graph, adminId)), ""))
   null
   
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param
+   * 
+   * @return
+   */
+  private def getStep(vStep: OrientVertex, graph: OrientGraph, adminId: String): ConfigTreeStepSC = {
+//      val eHasComponent: List[Edge] = vStep.getEdges(Direction.OUT).toList
+//      val vComponents: List[Vertex] = eHasComponent.map { hC => hC.getVertex(Direction.IN) }
+      
+//      new ConfigTreeStepSC(
+//          vStep.getIdentity.toString,
+//          vStep.getProperty("kind").toString(),
+//          getComponents(vComponents)
+//      )
+    null
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param
+   * 
+   * @return
+   */
+  private def getComponents(vComponents: List[Vertex]): List[ConfigTreeComponentSC] = {
+//  vComponents.map({ vC => 
+//        new ConfigTreeComponentSC(
+//            vC.getId.toString(),
+//            vC.getProperty("kind").toString()
+//            ,getNextStep(vC)
+//        )
+//      })
+    null
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param
+   * 
+   * @return
+   */
+  private def getNextStep(component: Vertex): String = {
+//    val eNextStep: List[Edge] = component.getEdges(Direction.OUT).toList
+//    val vNextStep: List[Vertex] = eNextStep.map ( { eNS => 
+//      eNS.getVertex(Direction.IN)
+//    })
+//    if(vNextStep.size == 1) vNextStep.head.getId.toString() else "no nextStep"
+    null
   }
 }
