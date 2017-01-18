@@ -15,7 +15,7 @@ import org.specs2.mutable.Specification
  * user1 -> new User (nach dem Test geloescht) in SpecsAddingNewAdminUser
  * user2 -> login (AdminUser nicht geloescht) in SpecsLogin
  * user -> login (nicht exsistiert in DB) in SpecsLoginWithNotExistUser
- * user5 -> new Config (AdminUser nicht geloescht, Config wird geloescht) in SpecsAddingNewConfig
+ * 
  * user2 -> login (Config nicht geloescht, FirstStep geloescht) in SpecsAddingFirstStep
  * user3 -> new Component (Adminuser nicht geloescht, Config nicht geloescht, FirstStep geloescht, Component geloescht) in SpecsAddingComponent
  * user4 -> ConfigTree () in SpecsConfigTree

@@ -44,7 +44,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
       }
     }
     
-    "Component 1 fuer FirstStep hinzufuegen" >> {
+    "Component 2 fuer FirstStep hinzufuegen" >> {
       val componentCS_1 = Json.obj(
         "dtoId" -> DTOIds.COMPONENT,
         "dto" -> DTONames.COMPONENT
@@ -69,7 +69,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
       }
     }
     
-    "Component 2 fuer FirstStep hinzufuegen" >> {
+    "Component 3 fuer FirstStep hinzufuegen" >> {
       val componentCS_2 = Json.obj(
         "dtoId" -> DTOIds.COMPONENT,
         "dto" -> DTONames.COMPONENT
@@ -94,7 +94,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
       }
     }
     
-    "Component 3 fuer FirstStep hinzufuegen" >> {
+    "Component 4 fuer FirstStep hinzufuegen" >> {
       val componentCS_3 = Json.obj(
         "dtoId" -> DTOIds.COMPONENT,
         "dto" -> DTONames.COMPONENT

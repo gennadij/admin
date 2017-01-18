@@ -112,8 +112,6 @@ object ConfigVertex {
     
     null
 //    new ConfigTreeSC(result = new ConfigTreeResultSC(vSteps.map(getStep(_, graph, adminId)), ""))
-  null
-  
   }
   
   /**

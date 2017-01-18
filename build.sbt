@@ -67,9 +67,9 @@ lazy val root = (project in file(".")).
 		,orientdbClient
 		,orientdbTools
 		,jsonFromPLay
-		,specs2_core
-		,specs2
-		,junit
+		//,specs2_core
+		//,specs2
+		//,junit
 		,specs2JUnit
 		),
 		fork := true
