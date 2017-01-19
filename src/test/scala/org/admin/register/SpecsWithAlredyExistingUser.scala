@@ -23,8 +23,8 @@ class SpecsAddingAlredyExistingAdminUser extends Specification with AdminWeb wit
   }
   
   def afterAll() = {
-    val count = AdminUserVertex.deleteAdmin("user1")
-    require(count == 1, "Anzahl der geloescten AdminUserVertexes " + count)
+//    val count = AdminUserVertex.deleteAdmin("user1")
+//    require(count == 1, "Anzahl der geloescten AdminUserVertexes " + count)
   }
   
   "Specification spezifiziert die Registrierung des schon exestierenden Users" >> {

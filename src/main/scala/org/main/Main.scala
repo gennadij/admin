@@ -15,7 +15,10 @@ object Main {
     println("Generic configurator started")
     println("Run Test Scenarios")
     
-    new Config()
+//    new Config()
+    
+//    PrepareConfigForSpecs2.prepareWithAlredyExistingUser
+//    PrepareConfigForSpecs2.prepareLogin
     
     println("END")
   }
