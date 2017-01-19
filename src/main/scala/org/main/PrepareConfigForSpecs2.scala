@@ -81,7 +81,7 @@ object PrepareConfigForSpecs2 extends AdminWeb{
     
     println("adminId " + adminId)
     
-    val configId: String = createNewConfig(adminId, "http://contig/user6"#mjjjjjl)
+    val configId: String = createNewConfig(adminId, "http://contig/user6")
     
     println("ConfigId" + configId)
     
