@@ -22,11 +22,13 @@ class SpecsAddingFirstStep extends Specification
                           with AdminWeb
                           with BeforeAfterAll{
   
+  val configId = "#41:2"
+  
   def beforeAll() = {
   }
   
   def afterAll() = {
-    val count = StepVertex.removeStep("#41:4")
+    val count = StepVertex.removeStep(configId)
     require(count == 1, "Anzahl der geloeschten Steps " + count)
   }
 
@@ -37,7 +39,7 @@ class SpecsAddingFirstStep extends Specification
         "dtoId" -> DTOIds.FIRST_STEP,
         "dto" -> DTONames.FIRST_STEP
         ,"params" -> Json.obj(
-          "configId" -> "#41:4",
+          "configId" -> configId,
           "kind" -> "first",
           "selectionCriterium" -> Json.obj(
               "min" -> 1,
@@ -66,7 +68,7 @@ class SpecsAddingFirstStep extends Specification
         "dtoId" -> DTOIds.FIRST_STEP,
         "dto" -> DTONames.FIRST_STEP
         ,"params" -> Json.obj(
-          "configId" -> "#41:4",
+          "configId" -> configId,
           "kind" -> "first",
           "selectionCriterium" -> Json.obj(
               "min" -> 1,

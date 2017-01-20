@@ -20,10 +20,12 @@ import org.persistence.db.orientdb.ConfigVertex
 class SpecsAddingNewConfig extends Specification 
                            with AdminWeb
                            with BeforeAfterAll{
+  
+  val userPassword = "user3"
   def beforeAll() = {}
   
   def afterAll() = {
-    val count: Int = ConfigVertex.deleteConfigVertex("user5")
+    val count: Int = ConfigVertex.deleteConfigVertex(userPassword)
     require(count == 1, "Anzahl der geloeschten ConfigVertexes " + count)
     
   }
@@ -33,8 +35,8 @@ class SpecsAddingNewConfig extends Specification
         "dtoId" -> DTOIds.LOGIN,
         "dto" -> DTONames.LOGIN
         ,"params" -> Json.obj(
-            "username" -> "user5",
-            "password" -> "user5"
+            "username" -> userPassword,
+            "password" -> userPassword
         )
     )
     

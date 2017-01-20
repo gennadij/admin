@@ -4,6 +4,8 @@ import org.specs2.Specification
 import play.api.libs.json.Json
 import play.api.libs.json.JsValue
 import org.admin.AdminWeb
+import org.junit.runner.RunWith
+import org.specs2.runner.JUnitRunner
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -11,6 +13,7 @@ import org.admin.AdminWeb
  * Created by Gennadi Heimann 15.01.2017
  */
 
+@RunWith(classOf[JUnitRunner])
 class SpecsLoginWithNotExistUser extends Specification with AdminWeb {
   def is = 
   

@@ -22,10 +22,14 @@ class SpecsAddingComponentWithFirstStep extends Specification
                           with AdminWeb
                           with BeforeAfterAll{
   
-  def beforeAll() = {}
+  val configId = "#43:2"
+  
+  def beforeAll() = {
+    //TODO select @rid from (select  expand(out('hasConfig')) from AdminUser where username='user5')
+  }
   
   def afterAll() = {
-    val count = ConfigVertex.deleteAllStepsAndComponent("#44:2")
+    val count = ConfigVertex.deleteAllStepsAndComponent(configId)
     require(count == 2, "Anzahl der geloeschten Vertexes " + count)
   }
   
@@ -35,7 +39,7 @@ class SpecsAddingComponentWithFirstStep extends Specification
         "dtoId" -> DTOIds.FIRST_STEP,
         "dto" -> DTONames.FIRST_STEP
         ,"params" -> Json.obj(
-          "configId" -> "#44:2",
+          "configId" -> configId,
           "kind" -> "first",
           "selectionCriterium" -> Json.obj(
               "min" -> 1,
@@ -44,6 +48,8 @@ class SpecsAddingComponentWithFirstStep extends Specification
         )
       )
       val firstStepSC: JsValue = handelMessage(firstStepCS)
+//      println(firstStepCS)
+//      println(firstStepSC)
       "dtoId" >> {
         (firstStepSC \ "dtoId").asOpt[Int].get === DTOIds.FIRST_STEP
       }
@@ -57,6 +63,7 @@ class SpecsAddingComponentWithFirstStep extends Specification
         (firstStepSC \ "result" \ "message").asOpt[String].get === 
           "Der erste Step wurde zu der Konfiguration hinzugefuegt"
       }
+      
       "Component hinzufuegen" >> {
         val componentCS = Json.obj(
           "dtoId" -> DTOIds.COMPONENT,
@@ -67,6 +74,9 @@ class SpecsAddingComponentWithFirstStep extends Specification
           )
         )
         val componentSC: JsValue = handelMessage(componentCS)
+//        println(componentCS)
+//        println(componentSC)
+        
         "dtoId" >> {
           (componentSC \ "dtoId").asOpt[Int].get === DTOIds.COMPONENT
         }

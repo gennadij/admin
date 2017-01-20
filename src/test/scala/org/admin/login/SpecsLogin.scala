@@ -46,7 +46,7 @@ class SpecsLogin extends Specification with AdminWeb {
   def e4 = (jsonServerClient \ "result" \ "username").asOpt[String].get must_== user
   def e7 = (jsonServerClient \ "result" \ "configs").asOpt[List[JsValue]].get.size === 1
 //  def e8 = ((jsonServerClient \ "result" \ "configs")(0) \ "configId").asOpt[String].get === "#41:4"
-  def e9 = ((jsonServerClient \ "result" \ "configs")(0) \ "configUrl").asOpt[String].get === "http//:config1/user2"
+  def e9 = ((jsonServerClient \ "result" \ "configs")(0) \ "configUrl").asOpt[String].get === "http://contig1/user2"
   def e5 = (jsonServerClient \ "result" \ "status").asOpt[Boolean].get must_== true
   def e6 = (jsonServerClient \ "result" \ "message").asOpt[String].get must_== 
     s"Anmeldung mit Username $user war erfolgreich"

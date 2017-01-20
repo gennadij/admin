@@ -19,6 +19,9 @@ object Main {
     
 //    PrepareConfigForSpecs2.prepareWithAlredyExistingUser
 //    PrepareConfigForSpecs2.prepareLogin
+//    PrepareConfigForSpecs2.prepareAddingNewConfig
+//    PrepareConfigForSpecs2.prepareAddingFirstStep
+    PrepareConfigForSpecs2.prepareAddingComponentWithFirstStep
     
     println("END")
   }

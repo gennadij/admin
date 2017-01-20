@@ -44,13 +44,15 @@ object PrepareConfigForSpecs2 extends AdminWeb{
   }
   
   def prepareAddingNewConfig = {
-//    registerNewUser("user3")
     
-    val adminId: String = login("user5")
+    val userPassword = "user3"
+    registerNewUser(userPassword)
+    
+    val adminId: String = login(userPassword)
   }
   
   def prepareAddingFirstStep = {
-//    registerNewUser("user4")
+    registerNewUser("user4")
     
     val adminId: String = login("user4")
     
@@ -63,7 +65,7 @@ object PrepareConfigForSpecs2 extends AdminWeb{
   }
   
   def prepareAddingComponentWithFirstStep = {
-//    registerNewUser("user5")
+    registerNewUser("user5")
     
     val adminId = login("user5")
     
@@ -137,7 +139,7 @@ object PrepareConfigForSpecs2 extends AdminWeb{
     
     val loginSC = handelMessage(loginCS)
     
-    require((loginSC \ "result" \ "status").asOpt[Boolean].get == true)
+    require((loginSC \ "result" \ "status").asOpt[Boolean].get == true, "LoginStatus" + (loginSC \ "result" \ "status").asOpt[Boolean].get)
 
     (loginSC \ "result" \ "adminId").asOpt[String].get
   }
