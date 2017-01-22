@@ -34,7 +34,7 @@ object ConfigTree {
    */
   def getConfigTree(configTreeCS: ConfigTreeCS): ConfigTreeSC = {
     val graph: OrientGraph = OrientDB.getGraph
-    val adminId: String = configTreeCS.params.adminId
+    val adminId: String = configTreeCS.params.configId
     
     val res: OrientDynaElementIterable = graph
       .command(new OCommandSQL("select from " + 

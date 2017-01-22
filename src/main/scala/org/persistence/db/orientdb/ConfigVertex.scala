@@ -84,11 +84,11 @@ object ConfigVertex {
    * 
    * @param configId
    * 
-   * @return Count from deleted Vertexes
+   * @return 
    */
   def getConfigTree(configTreeCS: ConfigTreeCS): ConfigTreeSC = {
     val graph: OrientGraph = OrientDB.getGraph
-    val configId: String = configTreeCS.params.adminId
+    val configId: String = configTreeCS.params.configId
     
     //traverse OUT()from #41:6 STRATEGY BREADTH_FIRST
     

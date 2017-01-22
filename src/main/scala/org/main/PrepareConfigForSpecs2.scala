@@ -23,7 +23,7 @@ object PrepareConfigForSpecs2 extends AdminWeb{
    * user4 -> SpecsAddingFirstStep
    * user5 -> SpecsAddingComponentWithFirstStep
    * user6 -> SpecsAddingNewComponent
-   * 
+   * user7 -> SpecsConfigTree
    */
   
   def prepareWithAlredyExistingUser = {
@@ -93,6 +93,9 @@ object PrepareConfigForSpecs2 extends AdminWeb{
     
   }
   
+  def prepareConfigTree = {
+    
+  }
   
   def registerNewUser(userPassword: String) = {
     

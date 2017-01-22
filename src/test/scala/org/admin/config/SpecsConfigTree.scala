@@ -49,9 +49,9 @@ class SpecsConfigTree extends Specification with AdminWeb with BeforeAfterAll{
       "ConfigTree" >> {
         val configTreeCS = Json.obj(
             "jsonId" -> DTOIds.CONFIG_TREE,
-          "dto" -> DTONames.CONFIG_TREE
-          ,"params" -> Json.obj(
-              "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get
+            "dto" -> DTONames.CONFIG_TREE
+            ,"params" -> Json.obj(
+                "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get
             )
         )
         val configTreeSC = handelMessage(configTreeCS)

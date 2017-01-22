@@ -40,6 +40,7 @@ class SpecsLogin extends Specification with AdminWeb {
 
 
   val jsonServerClient: JsValue = handelMessage(jsonClientServer)
+  
   println(jsonServerClient)
   def e1 = (jsonServerClient \ "dtoId").asOpt[Int].get must_== 2
   def e2 = (jsonServerClient \ "dto").asOpt[String].get must_== "Login"

@@ -13,7 +13,7 @@ import play.api.libs.json.JsValue
 
 @RunWith(classOf[JUnitRunner])
 class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAfterAll{
-  
+  //TODO hinten ConfigTree ausfueren um Hinzufuegen von COmponent prüfen
   def beforeAll() = {}
   def afterAll() = {}
   

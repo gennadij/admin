@@ -21,7 +21,8 @@ object Main {
 //    PrepareConfigForSpecs2.prepareLogin
 //    PrepareConfigForSpecs2.prepareAddingNewConfig
 //    PrepareConfigForSpecs2.prepareAddingFirstStep
-    PrepareConfigForSpecs2.prepareAddingComponentWithFirstStep
+//    PrepareConfigForSpecs2.prepareAddingComponentWithFirstStep
+    PrepareConfigForSpecs2.prepareAddingNewComponent
     
     println("END")
   }

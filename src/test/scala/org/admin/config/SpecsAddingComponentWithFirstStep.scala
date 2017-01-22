@@ -22,24 +22,23 @@ class SpecsAddingComponentWithFirstStep extends Specification
                           with AdminWeb
                           with BeforeAfterAll{
   
-  val configId = "#43:2"
   
   def beforeAll() = {
     //TODO select @rid from (select  expand(out('hasConfig')) from AdminUser where username='user5')
   }
   
   def afterAll() = {
-    val count = ConfigVertex.deleteAllStepsAndComponent(configId)
+    val count = ConfigVertex.deleteAllStepsAndComponent(login)
     require(count == 2, "Anzahl der geloeschten Vertexes " + count)
   }
   
-  "Diese Specification spezifiziert das Hinzufügen von der Component zu dem FirstStep" >> {
+  "Diese Specification spezifiziert das Hinzufügen von der Component zu dem FirstStep (user5)" >> {
     "FirstStep hinzufuegen" >> {
       val firstStepCS = Json.obj(
         "dtoId" -> DTOIds.FIRST_STEP,
         "dto" -> DTONames.FIRST_STEP
         ,"params" -> Json.obj(
-          "configId" -> configId,
+          "configId" -> login,
           "kind" -> "first",
           "selectionCriterium" -> Json.obj(
               "min" -> 1,
@@ -92,5 +91,19 @@ class SpecsAddingComponentWithFirstStep extends Specification
         }
       }
     }
+  }
+  def login(): String = {
+    val user = "user5"
+      val jsonClientServer = Json.obj(
+          "dtoId" -> DTOIds.LOGIN,
+          "dto" -> DTONames.LOGIN
+          ,"params" -> Json.obj(
+              "username" -> user,
+              "password"-> user
+           )
+      )
+      val jsonServerClient: JsValue = handelMessage(jsonClientServer)
+      require((jsonServerClient \ "result" \ "status").asOpt[Boolean].get == true)
+      ((jsonServerClient \ "result" \ "configs")(0) \ "configId").asOpt[String].get
   }
 }

@@ -21,14 +21,11 @@ import org.junit.runner.RunWith
 class SpecsAddingFirstStep extends Specification 
                           with AdminWeb
                           with BeforeAfterAll{
-  
-  val configId = "#41:2"
-  
-  def beforeAll() = {
-  }
+                          
+  def beforeAll() = {}
   
   def afterAll() = {
-    val count = StepVertex.removeStep(configId)
+    val count = StepVertex.removeStep(login)
     require(count == 1, "Anzahl der geloeschten Steps " + count)
   }
 
@@ -39,7 +36,7 @@ class SpecsAddingFirstStep extends Specification
         "dtoId" -> DTOIds.FIRST_STEP,
         "dto" -> DTONames.FIRST_STEP
         ,"params" -> Json.obj(
-          "configId" -> configId,
+          "configId" -> login,
           "kind" -> "first",
           "selectionCriterium" -> Json.obj(
               "min" -> 1,
@@ -68,7 +65,7 @@ class SpecsAddingFirstStep extends Specification
         "dtoId" -> DTOIds.FIRST_STEP,
         "dto" -> DTONames.FIRST_STEP
         ,"params" -> Json.obj(
-          "configId" -> configId,
+          "configId" -> login,
           "kind" -> "first",
           "selectionCriterium" -> Json.obj(
               "min" -> 1,
@@ -117,5 +114,20 @@ class SpecsAddingFirstStep extends Specification
 //        (((configTreeSC \ "result" \ "steps")(0)) \ "components").asOpt[List[JsValue]].get.size === 0
 //      }
 //    }
+  }
+  
+  def login(): String = {
+    val user = "user4"
+      val jsonClientServer = Json.obj(
+          "dtoId" -> DTOIds.LOGIN,
+          "dto" -> DTONames.LOGIN
+          ,"params" -> Json.obj(
+              "username" -> user,
+              "password"-> user
+           )
+      )
+      val jsonServerClient: JsValue = handelMessage(jsonClientServer)
+      require((jsonServerClient \ "result" \ "status").asOpt[Boolean].get == true)
+      ((jsonServerClient \ "result" \ "configs")(0) \ "configId").asOpt[String].get
   }
 }
