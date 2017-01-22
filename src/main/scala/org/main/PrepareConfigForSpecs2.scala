@@ -6,6 +6,13 @@ import org.dto.DTONames
 import org.admin.AdminWeb
 import com.sun.org.glassfish.external.arc.Stability
 import play.api.libs.json.JsValue
+import com.orientechnologies.orient.core.sql.OCommandSQL
+import org.persistence.db.orientdb.OrientDB
+import com.tinkerpop.blueprints.impls.orient.OrientGraph
+import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
+import scala.collection.JavaConversions._
+import com.tinkerpop.blueprints.impls.orient.OrientVertex
+import com.tinkerpop.blueprints.impls.orient.OrientElementIterable
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -95,6 +102,18 @@ object PrepareConfigForSpecs2 extends AdminWeb{
   
   def prepareConfigTree = {
     
+  }
+  
+  def getFirstStep(username: String): String = {
+//    select out('hasConfig').out('hasFirstStep') from AdminUser where username='user6'
+    val graph: OrientGraph = OrientDB.getGraph
+    val sql: String = s"select expand(out('hasConfig').out('hasFirstStep')) from AdminUser where username='$username'"
+    println(sql)
+    val res: OrientDynaElementIterable = graph
+        .command(new OCommandSQL(sql)).execute()
+      graph.commit
+      
+    res.toList.get(0).asInstanceOf[OrientVertex].getIdentity.toString()
   }
   
   def registerNewUser(userPassword: String) = {

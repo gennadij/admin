@@ -111,4 +111,9 @@ object ComponentVertex {
    * @return
    */
   def update() = ???
+  
+  def deleteComponents(stepId: String): String = {
+//    select out('hasConfig').out('hasFirstStep').out('hasComponent') from AdminUser where username='user6'
+    ""
+  }
 }
