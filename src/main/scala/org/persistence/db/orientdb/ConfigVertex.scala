@@ -91,9 +91,12 @@ object ConfigVertex {
     val configId: String = configTreeCS.params.configId
     
     //traverse OUT()from #41:6 STRATEGY BREADTH_FIRST
-    
+    //select expand(out('hasFirstStep')) from Config where @rid='#41:10'
+    // select from (traverse out() from #41:10 STRATEGY BREADTH_FIRST)
+//    select from (traverse out() from #41:10 STRATEGY BREADTH_FIRST) where @class='Step'
     val res: OrientDynaElementIterable = graph
       .command(new OCommandSQL(s"traverse out() from $configId STRATEGY BREADTH_FIRST")).execute()
+      
     
     val vertexes: List[OrientVertex] = res.toList.map(_.asInstanceOf[OrientVertex])
     
