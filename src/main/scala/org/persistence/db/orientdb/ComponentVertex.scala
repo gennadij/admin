@@ -112,8 +112,15 @@ object ComponentVertex {
    */
   def update() = ???
   
-  def deleteComponents(stepId: String): String = {
-//    select out('hasConfig').out('hasFirstStep').out('hasComponent') from AdminUser where username='user6'
-    ""
+  def deleteComponents(stepId: String): Int = {
+//    delete VERTEX Component where @rid in (select out('hasConfig').out('hasFirstStep').out('hasComponent') from AdminUser where username='user6')
+//    delete VERTEX Component where @rid in (select @rid from Step where @rid='')
+    val graph: OrientGraph = OrientDB.getGraph
+    val sql: String = s"delete VERTEX Component where @rid in " + 
+      s"(select out('hasComponent') from Step where @rid='$stepId')"
+    val res: Int = graph
+      .command(new OCommandSQL(sql)).execute()
+    graph.commit
+    res
   }
 }

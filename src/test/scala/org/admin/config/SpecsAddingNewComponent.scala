@@ -10,6 +10,7 @@ import org.dto.DTOIds
 import org.dto.DTONames
 import play.api.libs.json.JsValue
 import org.main.PrepareConfigForSpecs2
+import org.persistence.db.orientdb.ComponentVertex
 
 
 @RunWith(classOf[JUnitRunner])
@@ -17,6 +18,9 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
   //TODO hinten ConfigTree ausfueren um Hinzufuegen von COmponent prüfen
   def beforeAll() = {}
   def afterAll() = {
+    val firstStepId = PrepareConfigForSpecs2.getFirstStep("user6")
+    val count = ComponentVertex.deleteComponents(firstStepId)
+    require(count == 4, "Anzahl der geloeschten Components " + count)
   }
   
   
