@@ -86,23 +86,6 @@ object PrepareConfigForSpecs2 extends AdminWeb{
   def prepareAddingNewComponent = {
     registerNewUser("user6")
     
-    val adminId = login("user6")
-    
-    println("adminId " + adminId)
-    
-    val configId: String = createNewConfig(adminId, "http://contig/user6")
-    
-    println("ConfigId" + configId)
-    
-    val firstStep: String = addFirstStep(configId)
-    
-    println("FirstStep " + firstStep)
-    
-  }
-  
-  def prepareConfigTree = {
-    registerNewUser("user7")
-    
     val adminId = login("user7")
     
     println("adminId " + adminId)
@@ -114,10 +97,62 @@ object PrepareConfigForSpecs2 extends AdminWeb{
     val firstStep: String = addFirstStep(configId)
     
     println("FirstStep " + firstStep)
+  }
+  
+  def prepareConfigTree = {
+    /*
+     * Linux
+     * adminId #21:25
+     * ConfigId#41:10
+     * FirstStep #25:51
+     * Component 1 1 #29:39
+     * Component 1 2 #30:33
+     * Component 1 3 #31:31
+     */
+    registerNewUser("user7")
     
-    // FirstStep -> 3 Components
-    // Component_1
-    //
+    val adminId = login("user7")
+    
+    println("adminId " + adminId)
+    
+    val configId: String = createNewConfig(adminId, "http://contig/user7")
+    
+    println("ConfigId" + configId)
+    
+    val firstStepId : String = addFirstStep(configId)
+    
+    println("FirstStep " + firstStepId)
+    
+    //FirstStep -> 3 Components
+    
+    val componentId_1_1 = addComponentToStep(firstStepId)
+    
+    println("Component 1 1 " + componentId_1_1)
+    
+    val componentId_1_2 = addComponentToStep(firstStepId)
+    
+    println("Component 1 2 " + componentId_1_2)
+    
+    val componentId_1_3 = addComponentToStep(firstStepId)
+    
+    println("Component 1 3 " + componentId_1_3)
+  }
+  
+  
+  private def addComponentToStep(stepId: String): String = {
+    val componentCS = Json.obj(
+        "dtoId" -> DTOIds.COMPONENT,
+        "dto" -> DTONames.COMPONENT
+        ,"params" -> Json.obj(
+            "stepId" -> stepId,
+            "kind" -> "immutable"
+        )
+    )
+    val componentSC: JsValue = handelMessage(componentCS)
+    require((componentSC \ "result" \ "status").asOpt[Boolean].get == true)
+    require((componentSC \ "result" \ "message").asOpt[String].get == "Die Komponente wurde hinzugefuegt")
+    
+    (componentSC \ "result" \ "componentId").asOpt[String].get
   }
   
   def getFirstStep(username: String): String = {
@@ -132,7 +167,7 @@ object PrepareConfigForSpecs2 extends AdminWeb{
     res.toList.get(0).asInstanceOf[OrientVertex].getIdentity.toString()
   }
   
-  def registerNewUser(userPassword: String) = {
+  private def registerNewUser(userPassword: String) = {
     
     val registerCS = Json.obj(
           "dtoId" -> DTOIds.REGISTRATION,
@@ -149,7 +184,7 @@ object PrepareConfigForSpecs2 extends AdminWeb{
     require((registerSC \ "result" \ "status").asOpt[Boolean].get == true, "Status: " + (registerSC \ "result" \ "status").asOpt[Boolean].get)
   }
   
-  def createNewConfig(adminId: String, configUrl: String) = {
+  private def createNewConfig(adminId: String, configUrl: String) = {
     val createConfigCS = Json.obj(
           "jsonId" -> DTOIds.CREATE_CONFIG,
           "dto" -> DTONames.CREATE_CONFIG
@@ -165,7 +200,7 @@ object PrepareConfigForSpecs2 extends AdminWeb{
       (createConfigSC \ "result" \ "configId").asOpt[String].get
   }
   
-  def login (userPassword: String): String = {
+  private def login (userPassword: String): String = {
     val loginCS = Json.obj(
         "dtoId" -> DTOIds.LOGIN,
         "dto" -> DTONames.LOGIN
@@ -183,7 +218,7 @@ object PrepareConfigForSpecs2 extends AdminWeb{
   }
   
   
-  def addFirstStep(configId: String): String = {
+  private def addFirstStep(configId: String): String = {
     val firstStepCS = Json.obj(
         "dtoId" -> DTOIds.FIRST_STEP,
         "dto" -> DTONames.FIRST_STEP
