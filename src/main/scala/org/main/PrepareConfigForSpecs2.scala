@@ -101,7 +101,23 @@ object PrepareConfigForSpecs2 extends AdminWeb{
   }
   
   def prepareConfigTree = {
+    registerNewUser("user7")
     
+    val adminId = login("user7")
+    
+    println("adminId " + adminId)
+    
+    val configId: String = createNewConfig(adminId, "http://contig/user7")
+    
+    println("ConfigId" + configId)
+    
+    val firstStep: String = addFirstStep(configId)
+    
+    println("FirstStep " + firstStep)
+    
+    // FirstStep -> 3 Components
+    // Component_1
+    //
   }
   
   def getFirstStep(username: String): String = {
