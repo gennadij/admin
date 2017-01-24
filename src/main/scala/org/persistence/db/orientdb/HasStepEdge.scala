@@ -13,12 +13,13 @@ import org.dto.connComponentToStep.ConnComponentToStepCS
 import org.dto.connComponentToStep.ConnComponentToStepSC
 import org.dto.step.StepSC
 import org.dto.connComponentToStep.ConnComponentToStepResultSC
+import org.dto.step.StepCS
 
 /**
  * Created by Gennadi Heimann 1.1.2017
  */
 
-object NextStepEdge {
+object HasStepEdge {
   
   val classname = "nextStep"
   val propKeyNextStepId = "nextStepId"
@@ -53,6 +54,22 @@ object NextStepEdge {
   	         s"Die Componnet mit id=$outComponentId wurde mit Step mit id=$inStepId verbunden"
   	     )
   	 )
+  }
+  
+  def hasStep(stepCS: StepCS, stepSC: StepSC): OrientEdge = {
+    
+    val graph: OrientGraph = OrientDB.getGraph()
+    val vComponent = graph.getVertex(stepCS.params.componentId)
+    val vStep = graph.getVertex(stepSC.result.stepId)
+    val eHasStep: OrientEdge = graph.addEdge(
+        "class:" + PropertyKey.EDGE_HAS_STEP, 
+        vComponent, 
+        vStep, 
+        PropertyKey.EDGE_HAS_STEP
+    )
+    graph.commit
+    
+    eHasStep
   }
   
 }

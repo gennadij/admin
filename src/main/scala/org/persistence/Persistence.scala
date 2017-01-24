@@ -13,7 +13,6 @@ import com.orientechnologies.orient.core.sql.OCommandSQL
 import org.persistence.db.orientdb.StepVertex
 import org.persistence.db.orientdb.ComponentVertex
 import org.persistence.db.orientdb.HasComponentEdge
-import org.persistence.db.orientdb.NextStepEdge
 import org.persistence.db.orientdb.AdminUserVertex
 import org.persistence.db.orientdb.OrientDB
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
@@ -163,6 +162,45 @@ object Persistence {
   }
   
   /**
+   * creting von new Component and connect thies new Component with Step from param
+   * 
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param ComponentCS
+   * 
+   * @return ComponentSC
+   */
+  def component(componentCS: ComponentCS): ComponentSC = {
+    val componentSC: ComponentSC = ComponentVertex.component(componentCS)
+    if(HasComponentEdge.hasComponent(componentCS, componentSC) != null) {
+      componentSC
+    }else{
+      ComponentSC(
+          result = ComponentResult(
+              "",
+              false,
+              "Es ist einen Fehler aufgetreten"
+          )
+      )
+    }
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param ConfigTreeCS
+   * 
+   * @return ConfigTreeSC
+   */
+  def step(stepCS: StepCS): StepSC = {
+    ???
+  }
+  
+  /**
    * @author Gennadi Heimann
    * 
    * @version 1.0
@@ -189,32 +227,6 @@ object Persistence {
     ComponentVertex.addComponent(componentCS)
   }
   
-  /**
-   * creting von new Component and connect thies new Component with Step from param
-   * 
-   * @author Gennadi Heimann
-   * 
-   * @version 1.0
-   * 
-   * @param ComponentCS
-   * 
-   * @return ComponentSC
-   */
-  def component(componentCS: ComponentCS): ComponentSC = {
-    val componentSC: ComponentSC = ComponentVertex.component(componentCS)
-    if(HasComponentEdge.hasComponent(componentCS, componentSC) != null) {
-      componentSC
-    }else{
-      ComponentSC(
-          result = ComponentResult(
-              "",
-              false,
-              "Es ist einen Fehler aufgetreten"
-          )
-      )
-    }
-  }
-  
     /**
    * @author Gennadi Heimann
    * 
@@ -238,7 +250,8 @@ object Persistence {
    * @return ConnComponentToStepSC
    */
   def addNextStep(connComponentToStepCS: ConnComponentToStepCS): ConnComponentToStepSC = {
-    NextStepEdge.add(connComponentToStepCS)
+//    NextStepEdge.add(connComponentToStepCS)
+    null
   }
   
     /**

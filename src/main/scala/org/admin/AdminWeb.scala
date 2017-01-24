@@ -111,9 +111,9 @@ trait AdminWeb {
    *   {jsonId : 7, dto : FirstStep, result : {stepId : #12:1, status : true, message : Nachricht}} 
    * 8. => Component
    *   Server <- Client
-   *   {jsonId : 8, dto : Component, params : {stepId : #40:0, kind : immutable}
+   *   {dtoIdId : 8, dto : Component, params : {stepId : #40:0, kind : immutable}
    *    Server -> Client
-   *    {jsonId : 8, dto : Component, result : {componentId : #13:1, status : true, message : Nachricht}}
+   *    {dtoId : 8, dto : Component, result : {componentId : #13:1, status : true, message : Nachricht}}
    * 9. => ConnStepToComponent
    *    Server <- Client
    *    {jsonId : 9, dto : ConnStepToComponent, params : {adminId : 40:0, outStepId : #40:0, inComponentId : #40:0}}
