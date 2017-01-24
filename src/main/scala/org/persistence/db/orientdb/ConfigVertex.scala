@@ -13,6 +13,7 @@ import com.tinkerpop.blueprints.Vertex
 import org.dto.configTree.ConfigTreeStepSC
 import org.dto.configTree.ConfigTreeComponentSC
 import org.dto.configTree.ConfigTreeResultSC
+import com.tinkerpop.blueprints.Direction
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -94,27 +95,15 @@ object ConfigVertex {
     //select expand(out('hasFirstStep')) from Config where @rid='#41:10'
     // select from (traverse out() from #41:10 STRATEGY BREADTH_FIRST)
 //    select from (traverse out() from #41:10 STRATEGY BREADTH_FIRST) where @class='Step'
-    val res: OrientDynaElementIterable = graph
-      .command(new OCommandSQL(s"traverse out() from $configId STRATEGY BREADTH_FIRST")).execute()
-      
+//    select expand(out()) from AdminUser where username='user7'
+    val sql: String = s"select from (traverse out() from $configId STRATEGY BREADTH_FIRST) where @class='Step'"
+    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+
+    val vSteps: List[OrientVertex] = res.toList.map(_.asInstanceOf[OrientVertex])
     
-    val vertexes: List[OrientVertex] = res.toList.map(_.asInstanceOf[OrientVertex])
+    println(vSteps)
     
-    vertexes.foreach(vertex => println(vertex.getType.toString()))
-    
-    val vFirstSteps: List[OrientVertex] = vertexes.filter(vertex => vertex.getType.toString() == "Step" && vertex.getProperty("kind") == "first")
-    
-    val vFirstStep: OrientVertex = if(vFirstSteps.size == 1) vFirstSteps(0) else null
-    
-    if(vFirstStep == null) {
-      //Fehler dto
-    }else{
-      ConfigTreeSC(result = ConfigTreeResultSC(List.empty, ""))
-    }
-    
-    
-    null
-//    new ConfigTreeSC(result = new ConfigTreeResultSC(vSteps.map(getStep(_, graph, adminId)), ""))
+    new ConfigTreeSC(result = new ConfigTreeResultSC(vSteps.map(getStep(_, graph)), ""))
   }
   
   /**
@@ -126,16 +115,15 @@ object ConfigVertex {
    * 
    * @return
    */
-  private def getStep(vStep: OrientVertex, graph: OrientGraph, adminId: String): ConfigTreeStepSC = {
-//      val eHasComponent: List[Edge] = vStep.getEdges(Direction.OUT).toList
-//      val vComponents: List[Vertex] = eHasComponent.map { hC => hC.getVertex(Direction.IN) }
+  private def getStep(vStep: OrientVertex, graph: OrientGraph): ConfigTreeStepSC = {
+      val eHasComponent: List[Edge] = vStep.getEdges(Direction.OUT).toList
+      val vComponents: List[Vertex] = eHasComponent.map { hC => hC.getVertex(Direction.IN) }
       
-//      new ConfigTreeStepSC(
-//          vStep.getIdentity.toString,
-//          vStep.getProperty("kind").toString(),
-//          getComponents(vComponents)
-//      )
-    null
+      new ConfigTreeStepSC(
+          vStep.getIdentity.toString,
+          vStep.getProperty("kind").toString(),
+          getComponents(vComponents)
+      )
   }
   
   /**

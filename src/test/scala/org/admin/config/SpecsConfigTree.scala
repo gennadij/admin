@@ -31,8 +31,8 @@ class SpecsConfigTree extends Specification with AdminWeb with BeforeAfterAll{
           "dtoId" -> DTOIds.LOGIN,
           "dto" -> DTONames.LOGIN
           ,"params" -> Json.obj(
-              "username" -> "user4",
-              "password"-> "user4"
+              "username" -> "user7",
+              "password"-> "user7"
           )
       )
       val loginSC: JsValue = handelMessage(loginCS)
@@ -43,15 +43,13 @@ class SpecsConfigTree extends Specification with AdminWeb with BeforeAfterAll{
       "Login -> configs.size" >> {
         (loginSC \ "result" \ "configs").asOpt[List[JsValue]].get.size === 1
       }
-      "Login -> config(0) -> configId" >> {
-        configId === "#41:6"
-      }
+      
       "ConfigTree" >> {
         val configTreeCS = Json.obj(
             "jsonId" -> DTOIds.CONFIG_TREE,
             "dto" -> DTONames.CONFIG_TREE
             ,"params" -> Json.obj(
-                "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get
+                "configId" -> configId
             )
         )
         val configTreeSC = handelMessage(configTreeCS)

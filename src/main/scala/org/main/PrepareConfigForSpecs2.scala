@@ -108,6 +108,14 @@ object PrepareConfigForSpecs2 extends AdminWeb{
      * Component 1 1 #29:39
      * Component 1 2 #30:33
      * Component 1 3 #31:31
+     * Windows
+     * adminId #23:3
+     * ConfigId#43:3
+     * FirstStep #28:0
+     * Component 1 1 #30:6
+     * Component 1 2 #31:5
+     * Component 1 3 #32:5
+     * 
      */
     registerNewUser("user7")
     
@@ -154,6 +162,7 @@ object PrepareConfigForSpecs2 extends AdminWeb{
     
     (componentSC \ "result" \ "componentId").asOpt[String].get
   }
+  
   
   def getFirstStep(username: String): String = {
 //    select out('hasConfig').out('hasFirstStep') from AdminUser where username='user6'
