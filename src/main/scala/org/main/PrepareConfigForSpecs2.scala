@@ -31,6 +31,7 @@ object PrepareConfigForSpecs2 extends AdminWeb{
    * user5 -> SpecsAddingComponentWithFirstStep
    * user6 -> SpecsAddingNewComponent
    * user7 -> SpecsConfigTree
+   * user8 -> SpecsAddStep
    */
   
   def prepareWithAlredyExistingUser = {
@@ -126,6 +127,38 @@ object PrepareConfigForSpecs2 extends AdminWeb{
     val configId: String = createNewConfig(adminId, "http://contig/user7")
     
     println("ConfigId" + configId)
+    
+    val firstStepId : String = addFirstStep(configId)
+    
+    println("FirstStep " + firstStepId)
+    
+    //FirstStep -> 3 Components
+    
+    val componentId_1_1 = addComponentToStep(firstStepId)
+    
+    println("Component 1 1 " + componentId_1_1)
+    
+    val componentId_1_2 = addComponentToStep(firstStepId)
+    
+    println("Component 1 2 " + componentId_1_2)
+    
+    val componentId_1_3 = addComponentToStep(firstStepId)
+    
+    println("Component 1 3 " + componentId_1_3)
+  }
+  
+  def prepareSpecsAddStep = {
+    
+    val usePassword = "user8" 
+    registerNewUser(usePassword)
+    
+    val adminId = login(usePassword)
+    
+    println("adminId " + adminId)
+    
+    val configId: String = createNewConfig(adminId, "http://contig/user7")
+    
+    println("configId " + configId)
     
     val firstStepId : String = addFirstStep(configId)
     

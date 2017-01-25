@@ -189,7 +189,7 @@ trait AdminWeb {
   
   private def step(receivedMessage: JsValue): JsValue = {
     val stepCS: StepCS = Json.fromJson[StepCS](receivedMessage).get
-    val stepSC: StepSC = Admin.addStep(stepCS)
+    val stepSC: StepSC = Admin.step(stepCS)
     Json.toJson(stepSC)
   }
   

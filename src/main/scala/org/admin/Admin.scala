@@ -85,6 +85,32 @@ object Admin {
     Persistence.firstStep(firstStepCS)
   }
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param ComponentCS
+   * 
+   * @return ComponentSC
+   */
+  def component(componentCS: ComponentCS): ComponentSC = {
+    Persistence.component(componentCS)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param ComponentCS
+   * 
+   * @return ComponentSC
+   */
+  
+  def step(stepCS: StepCS): StepSC = {
+    Persistence.step(stepCS)
+  }
   
   /**
    * @author Gennadi Heimann
@@ -110,18 +136,7 @@ object Admin {
     Persistence.addComponent(componentCS)
   }
   
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 1.0
-   * 
-   * @param ComponentCS
-   * 
-   * @return ComponentSC
-   */
-  def component(componentCS: ComponentCS): ComponentSC = {
-    Persistence.component(componentCS)
-  }
+  
   
   /**
    * @author Gennadi Heimann

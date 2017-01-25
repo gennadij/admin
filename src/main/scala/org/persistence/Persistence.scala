@@ -43,6 +43,8 @@ import org.dto.step.FirstStepCS
 import org.persistence.db.orientdb.HasFirstStepEdge
 import org.dto.step.FirstStepSC
 import org.dto.step.FirstStepResult
+import org.persistence.db.orientdb.HasStepEdge
+import org.dto.step.StepResult
 
 /**
  * Created by Gennadi Heimann 1.1.2017
@@ -197,7 +199,33 @@ object Persistence {
    * @return ConfigTreeSC
    */
   def step(stepCS: StepCS): StepSC = {
-    ???
+    val stepSC: StepSC = StepVertex.step(stepCS)
+    if(stepSC != null ) {
+      if (stepSC.result.status) {
+        val eHasStep: OrientEdge = HasStepEdge.hasStep(stepCS, stepSC)
+        if(eHasStep != null) {
+          stepSC
+        }else{
+          StepSC(
+              result = StepResult(
+                  "",
+                  false,
+                  "Es ist einen Fehler aufgetreten"
+              )
+          )
+        }
+      }else{
+        stepSC
+      }
+    }else{
+      StepSC(
+          result = StepResult(
+              "",
+              false,
+              "Es ist einen Fehler aufgetreten"
+          )
+      )
+    }
   }
   
   /**

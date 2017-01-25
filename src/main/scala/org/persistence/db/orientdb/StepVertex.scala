@@ -57,6 +57,7 @@ object StepVertex {
   }
   
   def step(stepCS: StepCS): StepSC = {
+    //Pruefen wenn Stepp schon exestiert nur Component zu der vorhandenen Step verbinden.
     val graph: OrientGraph = OrientDB.getGraph
     val componentId: String = stepCS.params.componentId
     
