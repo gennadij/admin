@@ -14,7 +14,7 @@ import play.api.libs.json.Json
 
 case class FirstStepSC (
     dtoId: Int = DTOIds.FIRST_STEP,
-    dto: String = DTONames.FIRST_STEP,
+    dto: String = DTONames.CREATE_FIRST_STEP,
     result: FirstStepResult
 )
 

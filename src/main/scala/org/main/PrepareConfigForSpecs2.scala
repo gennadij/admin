@@ -183,7 +183,7 @@ object PrepareConfigForSpecs2 extends AdminWeb{
   private def addComponentToStep(stepId: String): String = {
     val componentCS = Json.obj(
         "dtoId" -> DTOIds.COMPONENT,
-        "dto" -> DTONames.COMPONENT
+        "dto" -> DTONames.CREATE_COMPONENT
         ,"params" -> Json.obj(
             "stepId" -> stepId,
             "kind" -> "immutable"
@@ -263,7 +263,7 @@ object PrepareConfigForSpecs2 extends AdminWeb{
   private def addFirstStep(configId: String): String = {
     val firstStepCS = Json.obj(
         "dtoId" -> DTOIds.FIRST_STEP,
-        "dto" -> DTONames.FIRST_STEP
+        "dto" -> DTONames.CREATE_FIRST_STEP
         ,"params" -> Json.obj(
           "configId" -> configId,
           "kind" -> "first",

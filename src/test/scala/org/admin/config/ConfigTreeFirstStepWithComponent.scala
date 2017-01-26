@@ -112,7 +112,7 @@ class ConfigTreeFirstStepWithComponent
   //    {jsonId : 8, dto : Component, params : {adminId : #40:0, kind : immutable}
         val componentCS = Json.obj(
           "jsonId" -> DTOIds.COMPONENT,
-          "dto" -> DTONames.COMPONENT
+          "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
             "kind" -> "immutable"
@@ -125,7 +125,7 @@ class ConfigTreeFirstStepWithComponent
           (componentSC \ "jsonId").asOpt[Int].get === DTOIds.COMPONENT
         }
         "dto" >> {
-          (componentSC \ "dto").asOpt[String].get === DTONames.COMPONENT
+          (componentSC \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT
         }
         "result \\ status" >> {
           (componentSC \ "result" \ "status").asOpt[Boolean].get === true

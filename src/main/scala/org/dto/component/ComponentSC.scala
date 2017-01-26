@@ -15,7 +15,7 @@ import play.api.libs.json.Json
 
 case class ComponentSC (
     dtoId: Int = DTOIds.COMPONENT,
-    dto: String = DTONames.COMPONENT,
+    dto: String = DTONames.CREATE_COMPONENT,
     result: ComponentResult
 )
 

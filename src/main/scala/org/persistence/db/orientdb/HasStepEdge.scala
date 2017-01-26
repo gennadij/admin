@@ -9,10 +9,7 @@ import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import com.tinkerpop.blueprints.impls.orient.OrientEdgeType
 import com.orientechnologies.orient.core.metadata.schema.OType
 import com.tinkerpop.blueprints.impls.orient.OrientEdge
-import org.dto.connComponentToStep.ConnComponentToStepCS
-import org.dto.connComponentToStep.ConnComponentToStepSC
 import org.dto.step.StepSC
-import org.dto.connComponentToStep.ConnComponentToStepResultSC
 import org.dto.step.StepCS
 
 /**
@@ -36,25 +33,25 @@ object HasStepEdge {
    * 
    * @return
    */
-  def add(connComponentToStepCS: ConnComponentToStepCS): ConnComponentToStepSC = {
-    val graph: OrientGraph = OrientDB.getGraph
-    val adminId: String = connComponentToStepCS.params.adminId
-    val outComponentId: String = connComponentToStepCS.params.outComponentId
-    val inStepId: String = connComponentToStepCS.params.inStepId
-     val eNextStep: OrientEdge = graph.addEdge("class:nextStep", 
-       graph.getVertex(outComponentId), 
-        graph.getVertex(inStepId), 
-       "nextStep")
-     eNextStep.setProperty("adminId", adminId)
-  	 graph.commit
-  	 
-  	 new ConnComponentToStepSC(
-  	     result = new ConnComponentToStepResultSC(
-  	         true,
-  	         s"Die Componnet mit id=$outComponentId wurde mit Step mit id=$inStepId verbunden"
-  	     )
-  	 )
-  }
+//  def add(connComponentToStepCS: ConnComponentToStepCS): ConnComponentToStepSC = {
+//    val graph: OrientGraph = OrientDB.getGraph
+//    val adminId: String = connComponentToStepCS.params.adminId
+//    val outComponentId: String = connComponentToStepCS.params.outComponentId
+//    val inStepId: String = connComponentToStepCS.params.inStepId
+//     val eNextStep: OrientEdge = graph.addEdge("class:nextStep", 
+//       graph.getVertex(outComponentId), 
+//        graph.getVertex(inStepId), 
+//       "nextStep")
+//     eNextStep.setProperty("adminId", adminId)
+//  	 graph.commit
+//  	 
+//  	 new ConnComponentToStepSC(
+//  	     result = new ConnComponentToStepResultSC(
+//  	         true,
+//  	         s"Die Componnet mit id=$outComponentId wurde mit Step mit id=$inStepId verbunden"
+//  	     )
+//  	 )
+//  }
   
   def hasStep(stepCS: StepCS, stepSC: StepSC): OrientEdge = {
     

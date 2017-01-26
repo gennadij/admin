@@ -14,7 +14,7 @@ import org.dto.DTONames
 
 case class FirstStepCS (
     dtoId: Int = DTOIds.FIRST_STEP,
-    dto: String = DTONames.FIRST_STEP,
+    dto: String = DTONames.CREATE_FIRST_STEP,
     params: FirstStepParams
     
 )

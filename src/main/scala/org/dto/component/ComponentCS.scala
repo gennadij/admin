@@ -13,7 +13,7 @@ import org.dto.DTONames
  */
 case class ComponentCS (
     dtoId: Int = DTOIds.COMPONENT,
-    dto: String = DTONames.COMPONENT,
+    dto: String = DTONames.CREATE_COMPONENT,
     params: ComponentParams
 )
 

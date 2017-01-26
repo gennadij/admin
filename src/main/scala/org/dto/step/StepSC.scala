@@ -12,7 +12,7 @@ import play.api.libs.json.Json
  */
 case class StepSC (
     jsonId: Int = DTOIds.STEP,
-    dto: String = DTONames.STEP,
+    dto: String = DTONames.CREATE_STEP,
     result: StepResult
 )
 

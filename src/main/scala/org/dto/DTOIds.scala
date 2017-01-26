@@ -17,8 +17,7 @@ object DTOIds {
   val CONFIG_TREE: Int = 6
   val FIRST_STEP: Int = 7
   val COMPONENT: Int = 8
-  val connStepToComponen: Int = 9
+  val CONNECTION_COMPONENT_TO_STEP: Int = 9
   val STEP: Int = 10
-  val connComponentToStep: Int = 11
   
 }

@@ -11,18 +11,17 @@ import org.dto.registration.RegistrationSC
 import org.dto.configTree.ConfigTreeCS
 import org.dto.component.ComponentCS
 import org.dto.component.ComponentSC
-import org.dto.connStepToComponent.ConnStepToComponentCS
-import org.dto.connStepToComponent.ConnStepToComponentSC
 import org.dto.step.StepCS
 import org.dto.step.StepSC
-import org.dto.connComponentToStep.ConnComponentToStepCS
-import org.dto.connComponentToStep.ConnComponentToStepSC
 import org.dto.configUri.ConfigUriCS
 import org.dto.configUri.ConfigUriSC
 import org.dto.config.CreateConfigCS
 import org.dto.config.CreateConfigSC
 import org.dto.step.FirstStepCS
 import org.dto.step.FirstStepSC
+import org.dto.DTONames
+import org.dto.connectionComponentToStep.ConnectionComponentToStepCS
+import org.dto.connectionComponentToStep.ConnectionComponentToStepSC
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -114,17 +113,12 @@ trait AdminWeb {
    *   {dtoIdId : 8, dto : Component, params : {stepId : #40:0, kind : immutable}
    *    Server -> Client
    *    {dtoId : 8, dto : Component, result : {componentId : #13:1, status : true, message : Nachricht}}
-   * 9. => ConnStepToComponent
-   *    Server <- Client
-   *    {jsonId : 9, dto : ConnStepToComponent, params : {adminId : 40:0, outStepId : #40:0, inComponentId : #40:0}}
-   *    Server -> Client
-   *    {jsonId : 9, dto : ConnStepToComponent, result :  {status: true, message : Nachricht}}
    * 10. => Step
    *   Server <- Client
    *   {jsonId : 10, dto : Step, params : {adminId : #40:0, kind : default}
    *   Server -> Client
    *    {jsonId : 10, dto : Step, result : {stepId : #14:1", status : true, message : Nachricht}}
-   * 7. => ConnComponentToStep
+   * 7. => ConnectionComponentToStep
    *    Server <- Client
    *    {jsonId : 11, dto : ConnComponentToStep, params : {adminId : #40:0, inStepId : #40:1, outComponentId : #40:2}}
    *    Server -> Client
@@ -137,16 +131,14 @@ trait AdminWeb {
   
   def handelMessage(receivedMessage: JsValue): JsValue = {
     (receivedMessage \ "dto").asOpt[String] match {
-      case Some("Registration") => register(receivedMessage)
-      case Some("Login") => login(receivedMessage)
-//      case Some("ConfigUri") => configUri(receivedMessage)
-      case Some("CreateConfig") => createConfig(receivedMessage)
-      case Some("FirstStep") => firstStep(receivedMessage)
-      case Some("ConfigTree") => configTree(receivedMessage)
-      case Some("Component") => component(receivedMessage)
-//      case Some("ConnStepToComponent") => connStepToComponent(receivedMessage)
-      case Some("Step") => step(receivedMessage)
-//      case Some("ConnComponentToStep") => connComponentToStep(receivedMessage)
+      case Some(DTONames.REGISTRATION) => register(receivedMessage)
+      case Some(DTONames.LOGIN) => login(receivedMessage)
+      case Some(DTONames.CREATE_CONFIG) => createConfig(receivedMessage)
+      case Some(DTONames.CREATE_FIRST_STEP) => createFirstStep(receivedMessage)
+      case Some(DTONames.CONFIG_TREE) => configTree(receivedMessage)
+      case Some(DTONames.CREATE_COMPONENT) => createComponent(receivedMessage)
+      case Some(DTONames.CREATE_STEP) => createStep(receivedMessage)
+      case Some(DTONames.CONNECTION_COMPONENT_TO_STEP) => connectComponentToStep(receivedMessage)
       case _ => Json.obj("error" -> "keinen Treffer")
     }
   }
@@ -169,36 +161,31 @@ trait AdminWeb {
     Json.toJson(createConfigSC)
   }
   
-  private def firstStep(receivedMessage: JsValue): JsValue = {
+  private def createFirstStep(receivedMessage: JsValue): JsValue = {
     val firstStepCS: FirstStepCS = Json.fromJson[FirstStepCS](receivedMessage).get
-    val firstStepSC: FirstStepSC = Admin.firstStep(firstStepCS)
+    val firstStepSC: FirstStepSC = Admin.createFirstStep(firstStepCS)
     Json.toJson(firstStepSC)
   }
   
-  private def component(receivedMessage: JsValue): JsValue = {
+  private def createComponent(receivedMessage: JsValue): JsValue = {
     val componentCS: ComponentCS = Json.fromJson[ComponentCS](receivedMessage).get
-    val componentSC: ComponentSC = Admin.component(componentCS)
+    val componentSC: ComponentSC = Admin.createComponent(componentCS)
     Json.toJson(componentSC)
   }
   
-//  private def connStepToComponent(receivedMeassage: JsValue): JsValue= {
-//    val connStepToComponentCS: ConnStepToComponentCS = Json.fromJson[ConnStepToComponentCS](receivedMeassage).get
-//    val connStepToComponentSC: ConnStepToComponentSC = Admin.addHasComponent(connStepToComponentCS)
-//    Json.toJson(connStepToComponentSC)
-//  }
-  
-  private def step(receivedMessage: JsValue): JsValue = {
+  private def createStep(receivedMessage: JsValue): JsValue = {
     val stepCS: StepCS = Json.fromJson[StepCS](receivedMessage).get
-    val stepSC: StepSC = Admin.step(stepCS)
+    val stepSC: StepSC = Admin.createStep(stepCS)
     Json.toJson(stepSC)
   }
   
-//  private def connComponentToStep(receivedMessage: JsValue): JsValue = {
-//    val connComponentToStepCS: ConnComponentToStepCS = 
-//      Json.fromJson[ConnComponentToStepCS](receivedMessage).get
-//    val connComponentToStepSC: ConnComponentToStepSC = Admin.addNextStep(connComponentToStepCS)
-//    Json.toJson(connComponentToStepSC)
-//  }
+  private def connectComponentToStep(receivedMessage: JsValue): JsValue = {
+    val connectionComponentToStepCS: ConnectionComponentToStepCS = 
+      Json.fromJson[ConnectionComponentToStepCS](receivedMessage).get
+    val connectionComponentToStepSC: ConnectionComponentToStepSC = 
+      Admin.connectComponentToStep(connectionComponentToStepCS)
+    Json.toJson(connectionComponentToStepSC)
+  }
   
   private def configTree(receivedMessage: JsValue): JsValue = {
     val configTreeCS: ConfigTreeCS = Json.fromJson[ConfigTreeCS](receivedMessage).get

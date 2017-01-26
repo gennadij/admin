@@ -30,7 +30,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
       "Component 1 fuer FirstStep hinzufuegen" >> {
         val componentCS = Json.obj(
           "dtoId" -> DTOIds.COMPONENT,
-          "dto" -> DTONames.COMPONENT
+          "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> firstStepId,
             "kind" -> "immutable"
@@ -41,7 +41,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
           (componentSC \ "dtoId").asOpt[Int].get === DTOIds.COMPONENT
         }
         "dto" >> {
-          (componentSC \ "dto").asOpt[String].get === DTONames.COMPONENT
+          (componentSC \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT
         }
         "result \\ status" >> {
           (componentSC \ "result" \ "status").asOpt[Boolean].get === true
@@ -55,7 +55,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
       "Component 2 fuer FirstStep hinzufuegen" >> {
         val componentCS_1 = Json.obj(
           "dtoId" -> DTOIds.COMPONENT,
-          "dto" -> DTONames.COMPONENT
+          "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> firstStepId,
             "kind" -> "immutable"
@@ -66,7 +66,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
           (componentSC_1 \ "dtoId").asOpt[Int].get === DTOIds.COMPONENT
         }
         "dto" >> {
-          (componentSC_1 \ "dto").asOpt[String].get === DTONames.COMPONENT
+          (componentSC_1 \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT
         }
         "result \\ status" >> {
           (componentSC_1 \ "result" \ "status").asOpt[Boolean].get === true
@@ -80,7 +80,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
       "Component 3 fuer FirstStep hinzufuegen" >> {
         val componentCS_2 = Json.obj(
           "dtoId" -> DTOIds.COMPONENT,
-          "dto" -> DTONames.COMPONENT
+          "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> firstStepId,
             "kind" -> "immutable"
@@ -91,7 +91,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
           (componentSC_2 \ "dtoId").asOpt[Int].get === DTOIds.COMPONENT
         }
         "dto" >> {
-          (componentSC_2 \ "dto").asOpt[String].get === DTONames.COMPONENT
+          (componentSC_2 \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT
         }
         "result \\ status" >> {
           (componentSC_2 \ "result" \ "status").asOpt[Boolean].get === true
@@ -105,7 +105,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
       "Component 4 fuer FirstStep hinzufuegen" >> {
         val componentCS_3 = Json.obj(
           "dtoId" -> DTOIds.COMPONENT,
-          "dto" -> DTONames.COMPONENT
+          "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> firstStepId,
             "kind" -> "immutable"
@@ -116,7 +116,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
           (componentSC_3 \ "dtoId").asOpt[Int].get === DTOIds.COMPONENT
         }
         "dto" >> {
-          (componentSC_3 \ "dto").asOpt[String].get === DTONames.COMPONENT
+          (componentSC_3 \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT
         }
         "result \\ status" >> {
           (componentSC_3 \ "result" \ "status").asOpt[Boolean].get === true

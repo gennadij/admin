@@ -36,7 +36,7 @@ class SpecsAddingComponentWithFirstStep extends Specification
     "FirstStep hinzufuegen" >> {
       val firstStepCS = Json.obj(
         "dtoId" -> DTOIds.FIRST_STEP,
-        "dto" -> DTONames.FIRST_STEP
+        "dto" -> DTONames.CREATE_FIRST_STEP
         ,"params" -> Json.obj(
           "configId" -> login,
           "kind" -> "first",
@@ -53,7 +53,7 @@ class SpecsAddingComponentWithFirstStep extends Specification
         (firstStepSC \ "dtoId").asOpt[Int].get === DTOIds.FIRST_STEP
       }
       "dto" >> {
-        (firstStepSC \ "dto").asOpt[String].get === DTONames.FIRST_STEP
+        (firstStepSC \ "dto").asOpt[String].get === DTONames.CREATE_FIRST_STEP
       }
       "result \\ status" >> {
         (firstStepSC \ "result" \ "status").asOpt[Boolean].get === true
@@ -66,7 +66,7 @@ class SpecsAddingComponentWithFirstStep extends Specification
       "Component hinzufuegen" >> {
         val componentCS = Json.obj(
           "dtoId" -> DTOIds.COMPONENT,
-          "dto" -> DTONames.COMPONENT
+          "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> (firstStepSC \ "result" \ "stepId").asOpt[String].get,
             "kind" -> "immutable"
@@ -80,7 +80,7 @@ class SpecsAddingComponentWithFirstStep extends Specification
           (componentSC \ "dtoId").asOpt[Int].get === DTOIds.COMPONENT
         }
         "dto" >> {
-          (componentSC \ "dto").asOpt[String].get === DTONames.COMPONENT
+          (componentSC \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT
         }
         "result \\ status" >> {
           (componentSC \ "result" \ "status").asOpt[Boolean].get === true

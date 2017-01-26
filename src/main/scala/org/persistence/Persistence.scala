@@ -1,7 +1,3 @@
-/**
- * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
- */
-
 package org.persistence
 
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory
@@ -28,12 +24,8 @@ import org.dto.registration.RegistrationSC
 import org.dto.configTree.ConfigTreeSC
 import org.dto.configTree.ConfigTreeCS
 import org.dto.component._
-import org.dto.connStepToComponent.ConnStepToComponentCS
-import org.dto.connStepToComponent.ConnStepToComponentSC
 import org.dto.step.StepCS
 import org.dto.step.StepSC
-import org.dto.connComponentToStep.ConnComponentToStepSC
-import org.dto.connComponentToStep.ConnComponentToStepCS
 import org.dto.config.CreateConfigCS
 import org.dto.config.CreateConfigSC
 import org.persistence.db.orientdb.ConfigVertex
@@ -45,8 +37,12 @@ import org.dto.step.FirstStepSC
 import org.dto.step.FirstStepResult
 import org.persistence.db.orientdb.HasStepEdge
 import org.dto.step.StepResult
+import org.dto.connectionComponentToStep.ConnectionComponentToStepSC
+import org.dto.connectionComponentToStep.ConnectionComponentToStepCS
 
 /**
+ *  Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
  * Created by Gennadi Heimann 1.1.2017
  */
 
@@ -77,19 +73,6 @@ object Persistence {
   def login(loginCS: LoginCS): LoginSC = {
     AdminUserVertex.login(loginCS)
   }
-
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 1.0
-   * 
-   * @param LoginCS
-   * 
-   * @return LoginSC
-   */
-//  def configUri(configUriCS: ConfigUriCS): ConfigUriSC = {
-//    AdminUserVertex.configUri(configUriCS)
-//  }
   
   
   /**
@@ -133,7 +116,7 @@ object Persistence {
    * @return firstStepSC
    */
   
-  def firstStep(firstStepCS: FirstStepCS): FirstStepSC = {
+  def createFirstStep(firstStepCS: FirstStepCS): FirstStepSC = {
     val firstStepSC: FirstStepSC = StepVertex.firstStep(firstStepCS)
     if(firstStepSC != null ) {
       if (firstStepSC.result.status) {
@@ -174,7 +157,7 @@ object Persistence {
    * 
    * @return ComponentSC
    */
-  def component(componentCS: ComponentCS): ComponentSC = {
+  def createComponent(componentCS: ComponentCS): ComponentSC = {
     val componentSC: ComponentSC = ComponentVertex.component(componentCS)
     if(HasComponentEdge.hasComponent(componentCS, componentSC) != null) {
       componentSC
@@ -198,7 +181,7 @@ object Persistence {
    * 
    * @return ConfigTreeSC
    */
-  def step(stepCS: StepCS): StepSC = {
+  def createStep(stepCS: StepCS): StepSC = {
     val stepSC: StepSC = StepVertex.step(stepCS)
     if(stepSC != null ) {
       if (stepSC.result.status) {
@@ -237,6 +220,22 @@ object Persistence {
    * 
    * @return ConfigTreeSC
    */
+  
+  def connectComponentToStep(
+      connectionComponentToStep: ConnectionComponentToStepCS
+      ): ConnectionComponentToStepSC = {
+    ???
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param ConfigTreeCS
+   * 
+   * @return ConfigTreeSC
+   */
   def getConfigTree(configTreeCS: ConfigTreeCS): ConfigTreeSC = {
 //    ConfigTree.getConfigTree(configTreeCS)
     ConfigVertex.getConfigTree(configTreeCS)
@@ -264,9 +263,9 @@ object Persistence {
    * 
    * @return ConnStepToComponentSC
    */
-  def addHasComponent(connStepToComponentSC: ConnStepToComponentCS): ConnStepToComponentSC = {
-    HasComponentEdge.add(connStepToComponentSC)
-  }
+//  def addHasComponent(connStepToComponentSC: ConnStepToComponentCS): ConnStepToComponentSC = {
+//    HasComponentEdge.add(connStepToComponentSC)
+//  }
   
     /**
    * @author Gennadi Heimann
@@ -277,10 +276,10 @@ object Persistence {
    * 
    * @return ConnComponentToStepSC
    */
-  def addNextStep(connComponentToStepCS: ConnComponentToStepCS): ConnComponentToStepSC = {
-//    NextStepEdge.add(connComponentToStepCS)
-    null
-  }
+//  def addNextStep(connComponentToStepCS: ConnComponentToStepCS): ConnComponentToStepSC = {
+////    NextStepEdge.add(connComponentToStepCS)
+//    null
+//  }
   
     /**
    * @author Gennadi Heimann

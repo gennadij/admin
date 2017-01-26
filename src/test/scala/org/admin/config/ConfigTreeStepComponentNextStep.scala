@@ -86,7 +86,7 @@ class ConfigTreeStepComponentNextStep
         //{jsonId : 8, dto : Component, params : {adminId : #40:0, kind : immutable}
         val componentCS_1 = Json.obj(
           "jsonId" -> DTOIds.COMPONENT,
-          "dto" -> DTONames.COMPONENT
+          "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
             "kind" -> "immutable"
@@ -99,7 +99,7 @@ class ConfigTreeStepComponentNextStep
           (componentSC_1 \ "jsonId").asOpt[Int].get === DTOIds.COMPONENT
         }
         "component 1 -> dto" >> {
-          (componentSC_1 \ "dto").asOpt[String].get === DTONames.COMPONENT
+          (componentSC_1 \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT
         }
         "component 1 -> result \\ status" >> {
           (componentSC_1 \ "result" \ "status").asOpt[Boolean].get === true
@@ -179,7 +179,7 @@ class ConfigTreeStepComponentNextStep
         //{jsonId : 8, dto : Component, params : {adminId : #40:0, kind : immutable}
         val componentCS_2 = Json.obj(
           "jsonId" -> DTOIds.COMPONENT,
-          "dto" -> DTONames.COMPONENT
+          "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
             "kind" -> "immutable"
@@ -192,7 +192,7 @@ class ConfigTreeStepComponentNextStep
           (componentSC_2 \ "jsonId").asOpt[Int].get === DTOIds.COMPONENT
         }
         "component 2 -> dto" >> {
-          (componentSC_2 \ "dto").asOpt[String].get === DTONames.COMPONENT
+          (componentSC_2 \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT
         }
         "component 2 -> result \\ status" >> {
           (componentSC_2 \ "result" \ "status").asOpt[Boolean].get === true
@@ -272,7 +272,7 @@ class ConfigTreeStepComponentNextStep
         //{jsonId : 8, dto : Component, params : {adminId : #40:0, kind : immutable}
         val componentCS_3 = Json.obj(
           "jsonId" -> DTOIds.COMPONENT,
-          "dto" -> DTONames.COMPONENT
+          "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
             "kind" -> "immutable"
@@ -285,7 +285,7 @@ class ConfigTreeStepComponentNextStep
           (componentSC_3 \ "jsonId").asOpt[Int].get === DTOIds.COMPONENT
         }
         "component 3 -> dto" >> {
-          (componentSC_3 \ "dto").asOpt[String].get === DTONames.COMPONENT
+          (componentSC_3 \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT
         }
         "component 3 -> result \\ status" >> {
           (componentSC_3 \ "result" \ "status").asOpt[Boolean].get === true

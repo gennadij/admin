@@ -11,16 +11,14 @@ import org.dto.configTree.ConfigTreeSC
 import org.dto.registration.RegistrationSC
 import org.dto.registration.RegistrationCS
 import org.dto.component._
-import org.dto.connStepToComponent.ConnStepToComponentCS
-import org.dto.connStepToComponent.ConnStepToComponentSC
 import org.dto.step.StepCS
 import org.dto.step.StepSC
-import org.dto.connComponentToStep.ConnComponentToStepCS
-import org.dto.connComponentToStep.ConnComponentToStepSC
 import org.dto.config.CreateConfigCS
 import org.dto.config.CreateConfigSC
 import org.dto.step.FirstStepCS
 import org.dto.step.FirstStepSC
+import org.dto.connectionComponentToStep.ConnectionComponentToStepCS
+import org.dto.connectionComponentToStep.ConnectionComponentToStepSC
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -81,8 +79,8 @@ object Admin {
    * 
    * @return FirstStepSC
    */
-  def firstStep(firstStepCS: FirstStepCS): FirstStepSC = {
-    Persistence.firstStep(firstStepCS)
+  def createFirstStep(firstStepCS: FirstStepCS): FirstStepSC = {
+    Persistence.createFirstStep(firstStepCS)
   }
   
   /**
@@ -94,8 +92,8 @@ object Admin {
    * 
    * @return ComponentSC
    */
-  def component(componentCS: ComponentCS): ComponentSC = {
-    Persistence.component(componentCS)
+  def createComponent(componentCS: ComponentCS): ComponentSC = {
+    Persistence.createComponent(componentCS)
   }
   
   /**
@@ -108,17 +106,16 @@ object Admin {
    * @return ComponentSC
    */
   
-  def step(stepCS: StepCS): StepSC = {
-    Persistence.step(stepCS)
+  def createStep(stepCS: StepCS): StepSC = {
+    Persistence.createStep(stepCS)
   }
   
-  /**
-   * @author Gennadi Heimann
-   */
-//  def configUri(configUriCS: ConfigUriCS): ConfigUriSC = {
-//    Persistence.configUri(configUriCS)
-//  }
   
+  def connectComponentToStep(
+      connectionComponentToStep: ConnectionComponentToStepCS
+      ): ConnectionComponentToStepSC = {
+    Persistence.connectComponentToStep(connectionComponentToStep)
+  }
   
   /**
    * @author Gennadi Heimann
@@ -144,9 +141,9 @@ object Admin {
    * fuegt Edge hasComponent zu ConfigTree hinzu, dadurch wird Vertex Step mit 
    * Vertex Component verbunden
    */
-  def addHasComponent(connStepToComponentSC: ConnStepToComponentCS): ConnStepToComponentSC = {
-    Persistence.addHasComponent(connStepToComponentSC)
-  }
+//  def addHasComponent(connStepToComponentSC: ConnStepToComponentCS): ConnStepToComponentSC = {
+//    Persistence.addHasComponent(connStepToComponentSC)
+//  }
 
   /**
    * @author Gennadi Heimann
@@ -158,9 +155,9 @@ object Admin {
   /**
    * @author Gennadi Heimann
    */
-  def addNextStep(connComponentToStepCS: ConnComponentToStepCS): ConnComponentToStepSC = {
-    Persistence.addNextStep(connComponentToStepCS)
-  }
+//  def addNextStep(connComponentToStepCS: ConnComponentToStepCS): ConnComponentToStepSC = {
+//    Persistence.addNextStep(connComponentToStepCS)
+//  }
 
   /**
    * @author Gennadi Heimann
