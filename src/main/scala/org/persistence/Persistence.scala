@@ -222,9 +222,9 @@ object Persistence {
    */
   
   def connectComponentToStep(
-      connectionComponentToStep: ConnectionComponentToStepCS
+      connectionComponentToStepCS: ConnectionComponentToStepCS
       ): ConnectionComponentToStepSC = {
-    ???
+    HasStepEdge.hasStep(connectionComponentToStepCS)
   }
   
   /**

@@ -29,7 +29,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
       val firstStepId = PrepareConfigForSpecs2.getFirstStep("user6")
       "Component 1 fuer FirstStep hinzufuegen" >> {
         val componentCS = Json.obj(
-          "dtoId" -> DTOIds.COMPONENT,
+          "dtoId" -> DTOIds.CREATE_COMPONENT,
           "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> firstStepId,
@@ -38,7 +38,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
         )
         val componentSC: JsValue = handelMessage(componentCS)
         "dtoId" >> {
-          (componentSC \ "dtoId").asOpt[Int].get === DTOIds.COMPONENT
+          (componentSC \ "dtoId").asOpt[Int].get === DTOIds.CREATE_COMPONENT
         }
         "dto" >> {
           (componentSC \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT
@@ -54,7 +54,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
       
       "Component 2 fuer FirstStep hinzufuegen" >> {
         val componentCS_1 = Json.obj(
-          "dtoId" -> DTOIds.COMPONENT,
+          "dtoId" -> DTOIds.CREATE_COMPONENT,
           "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> firstStepId,
@@ -63,7 +63,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
         )
         val componentSC_1: JsValue = handelMessage(componentCS_1)
         "dtoId" >> {
-          (componentSC_1 \ "dtoId").asOpt[Int].get === DTOIds.COMPONENT
+          (componentSC_1 \ "dtoId").asOpt[Int].get === DTOIds.CREATE_COMPONENT
         }
         "dto" >> {
           (componentSC_1 \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT
@@ -79,7 +79,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
       
       "Component 3 fuer FirstStep hinzufuegen" >> {
         val componentCS_2 = Json.obj(
-          "dtoId" -> DTOIds.COMPONENT,
+          "dtoId" -> DTOIds.CREATE_COMPONENT,
           "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> firstStepId,
@@ -88,7 +88,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
         )
         val componentSC_2: JsValue = handelMessage(componentCS_2)
         "dtoId" >> {
-          (componentSC_2 \ "dtoId").asOpt[Int].get === DTOIds.COMPONENT
+          (componentSC_2 \ "dtoId").asOpt[Int].get === DTOIds.CREATE_COMPONENT
         }
         "dto" >> {
           (componentSC_2 \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT
@@ -104,7 +104,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
       
       "Component 4 fuer FirstStep hinzufuegen" >> {
         val componentCS_3 = Json.obj(
-          "dtoId" -> DTOIds.COMPONENT,
+          "dtoId" -> DTOIds.CREATE_COMPONENT,
           "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> firstStepId,
@@ -113,7 +113,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
         )
         val componentSC_3: JsValue = handelMessage(componentCS_3)
         "dtoId" >> {
-          (componentSC_3 \ "dtoId").asOpt[Int].get === DTOIds.COMPONENT
+          (componentSC_3 \ "dtoId").asOpt[Int].get === DTOIds.CREATE_COMPONENT
         }
         "dto" >> {
           (componentSC_3 \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT

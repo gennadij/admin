@@ -11,6 +11,9 @@ import com.orientechnologies.orient.core.metadata.schema.OType
 import com.tinkerpop.blueprints.impls.orient.OrientEdge
 import org.dto.step.StepSC
 import org.dto.step.StepCS
+import org.dto.connectionComponentToStep.ConnectionComponentToStepCS
+import org.dto.connectionComponentToStep.ConnectionComponentToStepSC
+import org.dto.connectionComponentToStep.ConnectionComponentToStepResult
 
 /**
  * Created by Gennadi Heimann 1.1.2017
@@ -18,11 +21,11 @@ import org.dto.step.StepCS
 
 object HasStepEdge {
   
-  val classname = "nextStep"
-  val propKeyNextStepId = "nextStepId"
-  val propKeyAdminId = "adminId"
-  val propKeyComponentId = "componentId"
-  val propKeyStepId = "stepId"
+//  val classname = "nextStep"
+//  val propKeyNextStepId = "nextStepId"
+//  val propKeyAdminId = "adminId"
+//  val propKeyComponentId = "componentId"
+//  val propKeyStepId = "stepId"
   
   /**
    * @author Gennadi Heimann
@@ -69,4 +72,34 @@ object HasStepEdge {
     eHasStep
   }
   
+  def hasStep(
+      connectionComponentToStepCS: ConnectionComponentToStepCS
+      ): ConnectionComponentToStepSC = {
+    val graph: OrientGraph = OrientDB.getGraph()
+    val vComponent = graph.getVertex(connectionComponentToStepCS.params.componentId)
+    val vStep = graph.getVertex(connectionComponentToStepCS.params.stepId)
+    
+    val eHasStep: OrientEdge = graph.addEdge(
+        "class:" + PropertyKey.EDGE_HAS_STEP, 
+        vComponent, 
+        vStep, 
+        PropertyKey.EDGE_HAS_STEP
+    )
+    graph.commit
+    if(eHasStep != null) {
+      ConnectionComponentToStepSC(
+          result = ConnectionComponentToStepResult(
+              true,
+              "Component mit dem Step wurde Verbunden"
+          )
+      )
+    }else{
+      ConnectionComponentToStepSC(
+          result = ConnectionComponentToStepResult(
+              false,
+              "Component mit dem Step wurde nicht Verbunden"
+          )
+      )
+    }
+  }
 }

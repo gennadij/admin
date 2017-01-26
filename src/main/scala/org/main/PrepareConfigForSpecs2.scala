@@ -13,6 +13,9 @@ import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import scala.collection.JavaConversions._
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import com.tinkerpop.blueprints.impls.orient.OrientElementIterable
+import com.tinkerpop.blueprints.Edge
+import com.tinkerpop.blueprints.Direction
+import org.persistence.db.orientdb.PropertyKey
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -149,6 +152,16 @@ object PrepareConfigForSpecs2 extends AdminWeb{
   
   def prepareSpecsAddStep = {
     
+    /*
+     * Windows
+     * adminId #21:5
+     * configId #41:4
+     * FirstStep #25:3
+     * Component 1 1 #29:10
+     * Component 1 2 #30:9
+     * Component 1 3 #31:8
+     */
+    
     val usePassword = "user8" 
     registerNewUser(usePassword)
     
@@ -179,10 +192,20 @@ object PrepareConfigForSpecs2 extends AdminWeb{
     println("Component 1 3 " + componentId_1_3)
   }
   
+  def getComponentsFromFirstStep(stepId: String): List[String] = {
+    val graph: OrientGraph = OrientDB.getGraph
+    
+    val vStep: OrientVertex = graph.getVertex(stepId)
+    
+    val eHasComponents: List[Edge] = vStep.getEdges(Direction.OUT, PropertyKey.EDGE_HAS_COMPONENT).toList
+    
+    eHasComponents map {_.getId.toString()}
+  }
+  
   
   private def addComponentToStep(stepId: String): String = {
     val componentCS = Json.obj(
-        "dtoId" -> DTOIds.COMPONENT,
+        "dtoId" -> DTOIds.CREATE_COMPONENT,
         "dto" -> DTONames.CREATE_COMPONENT
         ,"params" -> Json.obj(
             "stepId" -> stepId,
@@ -262,7 +285,7 @@ object PrepareConfigForSpecs2 extends AdminWeb{
   
   private def addFirstStep(configId: String): String = {
     val firstStepCS = Json.obj(
-        "dtoId" -> DTOIds.FIRST_STEP,
+        "dtoId" -> DTOIds.CREATE_FIRST_STEP,
         "dto" -> DTONames.CREATE_FIRST_STEP
         ,"params" -> Json.obj(
           "configId" -> configId,

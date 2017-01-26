@@ -14,7 +14,7 @@ import play.api.libs.json.Json
  */
 
 case class StepCS (
-    jsonId: Int = DTOIds.STEP,
+    jsonId: Int = DTOIds.CREATE_STEP,
     dto: String = DTONames.CREATE_STEP,
     params: StepParams
 )

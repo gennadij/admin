@@ -33,7 +33,7 @@ class SpecsAddingFirstStep extends Specification
   "Diese Specification spezifiziert das Hinzufügen von dem Step zu der Konfiguration" >> {
     "FirstStep hinzufuegen" >> {
       val firstStepCS = Json.obj(
-        "dtoId" -> DTOIds.FIRST_STEP,
+        "dtoId" -> DTOIds.CREATE_FIRST_STEP,
         "dto" -> DTONames.CREATE_FIRST_STEP
         ,"params" -> Json.obj(
           "configId" -> login,
@@ -46,7 +46,7 @@ class SpecsAddingFirstStep extends Specification
       )
       val firstStepSC: JsValue = handelMessage(firstStepCS)
       "dtoId" >> {
-        (firstStepSC \ "dtoId").asOpt[Int].get === DTOIds.FIRST_STEP
+        (firstStepSC \ "dtoId").asOpt[Int].get === DTOIds.CREATE_FIRST_STEP
       }
       "dto" >> {
         (firstStepSC \ "dto").asOpt[String].get === DTONames.CREATE_FIRST_STEP
@@ -62,7 +62,7 @@ class SpecsAddingFirstStep extends Specification
     }
     "Der zweite FirstStep hinzufuegen" >> {
       val twiceStepCS = Json.obj(
-        "dtoId" -> DTOIds.FIRST_STEP,
+        "dtoId" -> DTOIds.CREATE_FIRST_STEP,
         "dto" -> DTONames.CREATE_FIRST_STEP
         ,"params" -> Json.obj(
           "configId" -> login,
@@ -75,7 +75,7 @@ class SpecsAddingFirstStep extends Specification
       )
       val twiceStepConfigTreeSC: JsValue = handelMessage(twiceStepCS)
       "dtoId" >> {
-        (twiceStepConfigTreeSC \ "dtoId").asOpt[Int].get === DTOIds.FIRST_STEP
+        (twiceStepConfigTreeSC \ "dtoId").asOpt[Int].get === DTOIds.CREATE_FIRST_STEP
       }
       "dto" >> {
         (twiceStepConfigTreeSC \ "dto").asOpt[String].get === DTONames.CREATE_FIRST_STEP

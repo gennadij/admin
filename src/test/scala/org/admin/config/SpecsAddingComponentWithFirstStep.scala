@@ -35,7 +35,7 @@ class SpecsAddingComponentWithFirstStep extends Specification
   "Diese Specification spezifiziert das Hinzufügen von der Component zu dem FirstStep (user5)" >> {
     "FirstStep hinzufuegen" >> {
       val firstStepCS = Json.obj(
-        "dtoId" -> DTOIds.FIRST_STEP,
+        "dtoId" -> DTOIds.CREATE_FIRST_STEP,
         "dto" -> DTONames.CREATE_FIRST_STEP
         ,"params" -> Json.obj(
           "configId" -> login,
@@ -50,7 +50,7 @@ class SpecsAddingComponentWithFirstStep extends Specification
 //      println(firstStepCS)
 //      println(firstStepSC)
       "dtoId" >> {
-        (firstStepSC \ "dtoId").asOpt[Int].get === DTOIds.FIRST_STEP
+        (firstStepSC \ "dtoId").asOpt[Int].get === DTOIds.CREATE_FIRST_STEP
       }
       "dto" >> {
         (firstStepSC \ "dto").asOpt[String].get === DTONames.CREATE_FIRST_STEP
@@ -65,7 +65,7 @@ class SpecsAddingComponentWithFirstStep extends Specification
       
       "Component hinzufuegen" >> {
         val componentCS = Json.obj(
-          "dtoId" -> DTOIds.COMPONENT,
+          "dtoId" -> DTOIds.CREATE_COMPONENT,
           "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> (firstStepSC \ "result" \ "stepId").asOpt[String].get,
@@ -77,7 +77,7 @@ class SpecsAddingComponentWithFirstStep extends Specification
 //        println(componentSC)
         
         "dtoId" >> {
-          (componentSC \ "dtoId").asOpt[Int].get === DTOIds.COMPONENT
+          (componentSC \ "dtoId").asOpt[Int].get === DTOIds.CREATE_COMPONENT
         }
         "dto" >> {
           (componentSC \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT

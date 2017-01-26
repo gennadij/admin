@@ -11,7 +11,7 @@ import play.api.libs.json.Json
  * Created by Gennadi Heimann 1.1.2017
  */
 case class StepSC (
-    jsonId: Int = DTOIds.STEP,
+    jsonId: Int = DTOIds.CREATE_STEP,
     dto: String = DTONames.CREATE_STEP,
     result: StepResult
 )
