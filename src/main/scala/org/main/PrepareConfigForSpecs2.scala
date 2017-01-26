@@ -160,6 +160,13 @@ object PrepareConfigForSpecs2 extends AdminWeb{
      * Component 1 1 #29:10
      * Component 1 2 #30:9
      * Component 1 3 #31:8
+     * Linux
+     * adminId #21:26
+     * configId #41:11
+     * FirstStep #25:52
+     * Component 1 1 #29:40
+     * Component 1 2 #30:34
+     * Component 1 3 #31:32
      */
     
     val usePassword = "user8" 
