@@ -1,6 +1,3 @@
-/**
- * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
- */
 package org.dto.step
 
 import org.dto.DTOIds
@@ -8,13 +5,15 @@ import org.dto.DTONames
 import play.api.libs.json.Json
 
 /**
+ *  Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
  * Created by Gennadi Heimann 19.12.2016
  * 
  * {jsonId : 10, dto : Step, params : {adminId : #40:0, kind : default}
  */
 
 case class StepCS (
-    jsonId: Int = DTOIds.CREATE_STEP,
+    dtoId: Int = DTOIds.CREATE_STEP,
     dto: String = DTONames.CREATE_STEP,
     params: StepParams
 )

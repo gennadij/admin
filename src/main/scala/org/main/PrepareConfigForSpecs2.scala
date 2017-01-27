@@ -16,6 +16,7 @@ import com.tinkerpop.blueprints.impls.orient.OrientElementIterable
 import com.tinkerpop.blueprints.Edge
 import com.tinkerpop.blueprints.Direction
 import org.persistence.db.orientdb.PropertyKey
+import com.tinkerpop.blueprints.Vertex
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -206,9 +207,27 @@ object PrepareConfigForSpecs2 extends AdminWeb{
     
     val eHasComponents: List[Edge] = vStep.getEdges(Direction.OUT, PropertyKey.EDGE_HAS_COMPONENT).toList
     
-    eHasComponents map {_.getId.toString()}
+    val vComponents: List[Vertex] = eHasComponents map {_.getVertex(Direction.IN)}
+    
+    vComponents map {_.getId.toString()}
   }
   
+  def deleteStepFromComponent(componentId: String, stepId: String): Int = {
+    
+    val graph: OrientGraph = OrientDB.getGraph
+    
+    val vStep: OrientVertex = graph.getVertex(stepId)
+    
+    val eHasComponents: List[Edge] = vStep.getEdges(Direction.OUT, PropertyKey.EDGE_HAS_COMPONENT).toList
+    
+    val vComponents: List[Vertex] = eHasComponents map {_.getVertex(Direction.IN)}
+    
+    val vSteps = vComponents map {_.getEdges(Direction.OUT, "hasStep") map {_.getVertex(Direction.IN).remove()}}
+    
+    println(vSteps)
+//    delete vertex Step where @rid in (select out(hasStep) from Component where @rid='#29:10')
+    ???
+  }
   
   private def addComponentToStep(stepId: String): String = {
     val componentCS = Json.obj(
