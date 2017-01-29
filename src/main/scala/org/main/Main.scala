@@ -23,8 +23,10 @@ object Main {
 //    PrepareConfigForSpecs2.prepareAddingFirstStep
 //    PrepareConfigForSpecs2.prepareAddingComponentWithFirstStep
 //    PrepareConfigForSpecs2.prepareAddingNewComponent
+    PrepareConfigForSpecs2.prepareSpecsConfigTreeEmpty
 //    PrepareConfigForSpecs2.prepareConfigTree
-    PrepareConfigForSpecs2.prepareSpecsAddStep
+//    PrepareConfigForSpecs2.prepareSpecsAddStep
+    
     
     println("END")
   }

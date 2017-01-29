@@ -14,7 +14,7 @@ import play.api.libs.json.Json
  */
 
 case class ConfigTreeResultSC (
-    steps: Seq[ConfigTreeStepSC],
+    steps: Set[ConfigTreeStepSC],
     message: String
 )
 

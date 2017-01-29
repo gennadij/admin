@@ -26,7 +26,7 @@ import com.tinkerpop.blueprints.Vertex
 object PrepareConfigForSpecs2 extends AdminWeb{
   //TODO schon exestierenden User prüfen
   /*
-   * userExist -> SpecsAddingAlredyExistingAdminUser
+   * userExist -> SpecsAddingAlredyExistingUser
    * user -> SpecsLoginWithNotExistUser
    * user1 -> SpecsAddingNewAdminUser
    * user2 -> SpecsLogin
@@ -34,11 +34,19 @@ object PrepareConfigForSpecs2 extends AdminWeb{
    * user4 -> SpecsAddingFirstStep
    * user5 -> SpecsAddingComponentWithFirstStep
    * user6 -> SpecsAddingNewComponent
-   * user7 -> SpecsConfigTree
+   * user7 -> SpecsConfigTreeFirstStep3Components
    * user8 -> SpecsAddStep
+   * user9 -> SpecsConfigTreeEmpty
    */
   
-  def prepareWithAlredyExistingUser = {
+  def prepare(user: String) {
+//    userExist
+    prepareWithAlredyExistingUser
+//    user2
+    prepareLogin
+  }
+  
+  private def prepareWithAlredyExistingUser = {
     registerNewUser("userExist")
   }
   
@@ -200,6 +208,23 @@ object PrepareConfigForSpecs2 extends AdminWeb{
     println("Component 1 3 " + componentId_1_3)
   }
   
+  def prepareSpecsConfigTreeEmpty = {
+    /*
+     * adminId #21:27
+     * configId #41:12
+     */
+    val usePassword = "user9" 
+    registerNewUser(usePassword)
+    
+    val adminId = login(usePassword)
+    
+    println("adminId " + adminId)
+    
+    val configId: String = createNewConfig(adminId, "http://contig/user7")
+    
+    println("configId " + configId)
+  }
+  
   def getComponentsFromFirstStep(stepId: String): List[String] = {
     val graph: OrientGraph = OrientDB.getGraph
     
@@ -210,23 +235,6 @@ object PrepareConfigForSpecs2 extends AdminWeb{
     val vComponents: List[Vertex] = eHasComponents map {_.getVertex(Direction.IN)}
     
     vComponents map {_.getId.toString()}
-  }
-  
-  def deleteStepFromComponent(componentId: String, stepId: String): Int = {
-    
-    val graph: OrientGraph = OrientDB.getGraph
-    
-    val vStep: OrientVertex = graph.getVertex(stepId)
-    
-    val eHasComponents: List[Edge] = vStep.getEdges(Direction.OUT, PropertyKey.EDGE_HAS_COMPONENT).toList
-    
-    val vComponents: List[Vertex] = eHasComponents map {_.getVertex(Direction.IN)}
-    
-    val vSteps = vComponents map {_.getEdges(Direction.OUT, "hasStep") map {_.getVertex(Direction.IN).remove()}}
-    
-    println(vSteps)
-//    delete vertex Step where @rid in (select out(hasStep) from Component where @rid='#29:10')
-    ???
   }
   
   private def addComponentToStep(stepId: String): String = {

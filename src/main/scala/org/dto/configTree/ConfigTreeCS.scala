@@ -15,7 +15,7 @@ import org.dto.DTOIds
  */
 
 case class ConfigTreeCS (
-    jsonId: Int,
+    dtoId: Int,
     dto: String,
     params: ConfigTreeParamsCS
 )

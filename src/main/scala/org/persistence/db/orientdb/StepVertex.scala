@@ -160,4 +160,25 @@ object StepVertex {
     graph.commit
     res
   }
+  
+    def deleteStepFromComponent(componentId: String): Int = {
+    
+    val graph: OrientGraph = OrientDB.getGraph
+    
+//    val vStep: OrientVertex = graph.getVertex(stepId)
+    
+    //    delete vertex Step where @rid in (select out(hasStep) from Component where @rid='#29:10')
+    
+    val sql = s"delete vertex Step where @rid in (select out(hasStep) from Component where @rid='$componentId')"
+    
+    val res: Int = graph.command(new OCommandSQL(sql)).execute()
+    
+//    val eHasComponents: List[Edge] = vStep.getEdges(Direction.OUT, PropertyKey.EDGE_HAS_COMPONENT).toList
+//    
+//    val vComponents: List[Vertex] = eHasComponents map {_.getVertex(Direction.IN)}
+//    
+//    val vSteps = vComponents map {_.getEdges(Direction.OUT, "hasStep") map {_.getVertex(Direction.IN).remove()}}
+    
+    res
+  }
 }

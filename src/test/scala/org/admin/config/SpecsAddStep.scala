@@ -10,6 +10,7 @@ import org.dto.DTONames
 import play.api.libs.json.JsObject
 import org.junit.runner.RunWith
 import org.specs2.runner.JUnitRunner
+import org.persistence.db.orientdb.StepVertex
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -19,8 +20,16 @@ import org.specs2.runner.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class SpecsAddStep extends Specification with AdminWeb with BeforeAfterAll{
   
-  def afterAll(): Unit = ???
-  def beforeAll(): Unit = ???
+  def afterAll(): Unit = {
+    val stepId: String = PrepareConfigForSpecs2.getFirstStep("user8")
+    val componentIds: List[String] = PrepareConfigForSpecs2.getComponentsFromFirstStep(stepId)
+    
+    val count = componentIds map {StepVertex.deleteStepFromComponent(_)}
+    
+    require(count == List(1, 0, 1), "Anzahl der geloeschten Steps" + count)
+    
+  }
+  def beforeAll(): Unit = {}
   
   "Specification spezifiziert die Erzeugung von der Step" >> {
     val stepId: String = PrepareConfigForSpecs2.getFirstStep("user8")
@@ -69,16 +78,17 @@ class SpecsAddStep extends Specification with AdminWeb with BeforeAfterAll{
         val connectionComponentToStepSC = handelMessage(connectionComponentToStepCS)
         println(connectionComponentToStepSC)
         "connectionComponentToStepSC \\ dtoId" >> {
-          (connectionComponentToStepSC \ "dtoId").asOpt[Int].get === DTOIds.CREATE_STEP
+          (connectionComponentToStepSC \ "dtoId").asOpt[Int].get === DTOIds.CONNECTION_COMPONENT_TO_STEP
         }
         "connectionComponentToStepSC \\ dto" >> {
-          (connectionComponentToStepSC \ "dto").asOpt[String] === DTONames.CREATE_STEP 
+          (connectionComponentToStepSC \ "dto").asOpt[String].get === DTONames.CONNECTION_COMPONENT_TO_STEP
         }
         "connectionComponentToStepSC \\ result \\ status" >> {
           (connectionComponentToStepSC \ "result" \ "status").asOpt[Boolean].get === true
         }
         "connectionComponentToStepSC \\ result \\ message" >> {
-          (connectionComponentToStepSC \ "result" \ "message").asOpt[String].get === ""
+          (connectionComponentToStepSC \ "result" \ "message").asOpt[String].get === 
+            "Component mit dem Step wurde Verbunden"
         }
       }
     }

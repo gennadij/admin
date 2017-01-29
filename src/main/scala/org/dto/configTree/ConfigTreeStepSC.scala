@@ -16,7 +16,7 @@ import play.api.libs.json.Json
 case class ConfigTreeStepSC (
     stepId: String,
     kind: String,
-    components: List[ConfigTreeComponentSC]
+    components: Set[ConfigTreeComponentSC]
 )
 
 object ConfigTreeStepSC {

@@ -99,8 +99,9 @@ object ConfigVertex {
     val sql: String = s"select from (traverse out() from $configId STRATEGY BREADTH_FIRST) where @class='Step'"
     val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
 
-    val vSteps: List[OrientVertex] = res.toList.map(_.asInstanceOf[OrientVertex])
+    val vStepsList: List[OrientVertex] = res.toList.map(_.asInstanceOf[OrientVertex])
     
+    val vSteps: Set[OrientVertex] = vStepsList.toSet
     println(vSteps)
     
     new ConfigTreeSC(result = new ConfigTreeResultSC(vSteps.map(getStep(_, graph)), ""))
@@ -116,8 +117,8 @@ object ConfigVertex {
    * @return
    */
   private def getStep(vStep: OrientVertex, graph: OrientGraph): ConfigTreeStepSC = {
-      val eHasComponent: List[Edge] = vStep.getEdges(Direction.OUT).toList
-      val vComponents: List[Vertex] = eHasComponent.map { hC => hC.getVertex(Direction.IN) }
+      val eHasComponent: Set[Edge] = vStep.getEdges(Direction.OUT).toSet
+      val vComponents: Set[Vertex] = eHasComponent.map { hC => hC.getVertex(Direction.IN) }
       
       new ConfigTreeStepSC(
           vStep.getIdentity.toString,
@@ -135,15 +136,14 @@ object ConfigVertex {
    * 
    * @return
    */
-  private def getComponents(vComponents: List[Vertex]): List[ConfigTreeComponentSC] = {
-//  vComponents.map({ vC => 
-//        new ConfigTreeComponentSC(
-//            vC.getId.toString(),
-//            vC.getProperty("kind").toString()
-//            ,getNextStep(vC)
-//        )
-//      })
-    null
+  private def getComponents(vComponents: Set[Vertex]): Set[ConfigTreeComponentSC] = {
+  vComponents.map({ vC => 
+        new ConfigTreeComponentSC(
+            vC.getId.toString(),
+            vC.getProperty("kind").toString()
+            ,getNextStep(vC)
+        )
+      })
   }
   
   /**
@@ -156,11 +156,10 @@ object ConfigVertex {
    * @return
    */
   private def getNextStep(component: Vertex): String = {
-//    val eNextStep: List[Edge] = component.getEdges(Direction.OUT).toList
-//    val vNextStep: List[Vertex] = eNextStep.map ( { eNS => 
-//      eNS.getVertex(Direction.IN)
-//    })
-//    if(vNextStep.size == 1) vNextStep.head.getId.toString() else "no nextStep"
-    null
+    val eNextStep: List[Edge] = component.getEdges(Direction.OUT).toList
+    val vNextStep: List[Vertex] = eNextStep.map ( { eNS => 
+      eNS.getVertex(Direction.IN)
+    })
+    if(vNextStep.size == 1) vNextStep.head.getId.toString() else "no nextStep"
   }
 }
