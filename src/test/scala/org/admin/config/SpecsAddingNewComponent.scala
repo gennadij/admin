@@ -12,6 +12,11 @@ import play.api.libs.json.JsValue
 import org.main.PrepareConfigForSpecs2
 import org.persistence.db.orientdb.ComponentVertex
 
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
+ * Created by Gennadi Heimann 16.01.2017
+ */
 
 @RunWith(classOf[JUnitRunner])
 class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAfterAll{

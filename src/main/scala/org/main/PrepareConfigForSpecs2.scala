@@ -210,8 +210,12 @@ object PrepareConfigForSpecs2 extends AdminWeb{
   
   def prepareSpecsConfigTreeEmpty = {
     /*
+     * Linux
      * adminId #21:27
      * configId #41:12
+     * Windows
+     * adminId #21:6
+     * configId #41:5
      */
     val usePassword = "user9" 
     registerNewUser(usePassword)

@@ -47,7 +47,7 @@ class SpecsConfigTreeEmpty extends Specification with AdminWeb with BeforeAfterA
       )
       val configTreeServerClient = handelMessage(configTreeClientServer)
       "configTree \\ dtoId" >> {
-        (configTreeServerClient \ "jsonId").asOpt[Int].get === DTOIds.CONFIG_TREE
+        (configTreeServerClient \ "dtoId").asOpt[Int].get === DTOIds.CONFIG_TREE
       }
       "configTree \\ dto" >> {
         (configTreeServerClient \ "dto").asOpt[String].get === DTONames.CONFIG_TREE

@@ -16,45 +16,12 @@ import org.dto.connectionComponentToStep.ConnectionComponentToStepSC
 import org.dto.connectionComponentToStep.ConnectionComponentToStepResult
 
 /**
- * Created by Gennadi Heimann 1.1.2017
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
+ * Created by Gennadi Heimann 24.01.2017
  */
 
 object HasStepEdge {
-  
-//  val classname = "nextStep"
-//  val propKeyNextStepId = "nextStepId"
-//  val propKeyAdminId = "adminId"
-//  val propKeyComponentId = "componentId"
-//  val propKeyStepId = "stepId"
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 1.0
-   * 
-   * @param
-   * 
-   * @return
-   */
-//  def add(connComponentToStepCS: ConnComponentToStepCS): ConnComponentToStepSC = {
-//    val graph: OrientGraph = OrientDB.getGraph
-//    val adminId: String = connComponentToStepCS.params.adminId
-//    val outComponentId: String = connComponentToStepCS.params.outComponentId
-//    val inStepId: String = connComponentToStepCS.params.inStepId
-//     val eNextStep: OrientEdge = graph.addEdge("class:nextStep", 
-//       graph.getVertex(outComponentId), 
-//        graph.getVertex(inStepId), 
-//       "nextStep")
-//     eNextStep.setProperty("adminId", adminId)
-//  	 graph.commit
-//  	 
-//  	 new ConnComponentToStepSC(
-//  	     result = new ConnComponentToStepResultSC(
-//  	         true,
-//  	         s"Die Componnet mit id=$outComponentId wurde mit Step mit id=$inStepId verbunden"
-//  	     )
-//  	 )
-//  }
   
   def hasStep(stepCS: StepCS, stepSC: StepSC): OrientEdge = {
     

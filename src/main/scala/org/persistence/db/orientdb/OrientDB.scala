@@ -1,14 +1,14 @@
-/**
- * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
- */
 package org.persistence.db.orientdb
 
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory
+
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal
 
 /**
- * Created by Gennadi Heimann 1.1.2017
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
+ * Created by Gennadi Heimann 13.11.2016
  */
 
 object OrientDB {

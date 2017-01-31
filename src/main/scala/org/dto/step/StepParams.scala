@@ -6,9 +6,9 @@ package org.dto.step
 import play.api.libs.json.Json
 
 /**
- * Created by Gennadi Heimann 19.12.2016
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
- * params : {adminId : #40:0, kind : default}
+ * Created by Gennadi Heimann 19.12.2016
  */
 
 case class StepParams (

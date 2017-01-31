@@ -66,9 +66,9 @@ class SpecsConfigTreeFirstStep3Components extends Specification with AdminWeb wi
           (configTreeSC \ "result" \ "steps").asOpt[Set[JsValue]].get.size === 1
         }
         "configTree \\ result \\ steps(0)" >> {
-          "stepId" >> {
-            (((configTreeSC \ "result" \ "steps")(0)) \ "stepId").asOpt[String].get === "#25:51"
-          }
+//          "stepId" >> {
+//            (((configTreeSC \ "result" \ "steps")(0)) \ "stepId").asOpt[String].get === "#25:51"
+//          }
           "kind" >> {
             (((configTreeSC \ "result" \ "steps")(0)) \ "kind").asOpt[String].get === "first"
           }
@@ -76,9 +76,9 @@ class SpecsConfigTreeFirstStep3Components extends Specification with AdminWeb wi
             (((configTreeSC \ "result" \ "steps")(0)) \ "components").asOpt[Set[JsValue]].get.size === 3
           }
           "components(0)" >> {
-            "componentId" >> {
-              (((((configTreeSC \ "result" \ "steps")(0)) \ "components")(0)) \ "componentId").asOpt[String].get === "#29:39"
-            }
+//            "componentId" >> {
+//              (((((configTreeSC \ "result" \ "steps")(0)) \ "components")(0)) \ "componentId").asOpt[String].get === "#29:39"
+//            }
             "kind" >> {
               (((((configTreeSC \ "result" \ "steps")(0)) \ "components")(0)) \ "kind").asOpt[String].get === "immutable"
             }
@@ -86,9 +86,9 @@ class SpecsConfigTreeFirstStep3Components extends Specification with AdminWeb wi
               (((((configTreeSC \ "result" \ "steps")(0)) \ "components")(0)) \ "nextStep").asOpt[String].get === "no nextStep"
             }
             "components(1)" >> {
-              "componentId" >> {
-                (((((configTreeSC \ "result" \ "steps")(0)) \ "components")(1)) \ "componentId").asOpt[String].get === "#30:33"
-              }
+//              "componentId" >> {
+//                (((((configTreeSC \ "result" \ "steps")(0)) \ "components")(1)) \ "componentId").asOpt[String].get === "#30:33"
+//              }
               "kind" >> {
                 (((((configTreeSC \ "result" \ "steps")(0)) \ "components")(1)) \ "kind").asOpt[String].get === "immutable"
               }
@@ -97,9 +97,9 @@ class SpecsConfigTreeFirstStep3Components extends Specification with AdminWeb wi
               }
             }
             "components(2)" >> {
-              "componentId" >> {
-                (((((configTreeSC \ "result" \ "steps")(0)) \ "components")(2)) \ "componentId").asOpt[String].get === "#31:31"
-              }
+//              "componentId" >> {
+//                (((((configTreeSC \ "result" \ "steps")(0)) \ "components")(2)) \ "componentId").asOpt[String].get === "#31:31"
+//              }
               "kind" >> {
                 (((((configTreeSC \ "result" \ "steps")(0)) \ "components")(2)) \ "kind").asOpt[String].get === "immutable"
               }

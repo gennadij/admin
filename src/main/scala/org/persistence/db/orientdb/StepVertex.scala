@@ -1,6 +1,3 @@
-/**
- * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
- */
 package org.persistence.db.orientdb
 
 import scala.collection.JavaConversions._
@@ -21,40 +18,12 @@ import org.dto.step.FirstStepCS
 import org.dto.step.FirstStepResult
 
 /**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
  * Created by Gennadi Heimann 1.1.2017
  */
 
 object StepVertex {
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 1.0
-   * 
-   * @param
-   * 
-   * @return
-   */
-  def addStep(stepCS: StepCS): StepSC = {
-    val graph: OrientGraph = OrientDB.getGraph
-    
-    val vStep: OrientVertex = graph.addVertex("class:" + PropertyKey.VERTEX_STEP, 
-//            PropertyKey.ADMIN_ID, stepCS.params.adminId,
-            PropertyKey.KIND, stepCS.params.kind,
-            PropertyKey.SELECTION_CRITERIUM_MIN, stepCS.params.selectionCriterium.min.toString,
-            PropertyKey.SELECTION_CRITERIUM_MAX, stepCS.params.selectionCriterium.max.toString
-    )
-    
-    graph.commit
-        
-    new StepSC(
-        result = new StepResult(
-        	vStep.getIdentity.toString(),
-        	true//TODO impl status
-        	,"Der Step wurde hinzugefuegt"
-        )
-    )
-  }
   
   def step(stepCS: StepCS): StepSC = {
     //Pruefen wenn Stepp schon exestiert nur Component zu der vorhandenen Step verbinden.
@@ -165,19 +134,9 @@ object StepVertex {
     
     val graph: OrientGraph = OrientDB.getGraph
     
-//    val vStep: OrientVertex = graph.getVertex(stepId)
-    
-    //    delete vertex Step where @rid in (select out(hasStep) from Component where @rid='#29:10')
-    
     val sql = s"delete vertex Step where @rid in (select out(hasStep) from Component where @rid='$componentId')"
     
     val res: Int = graph.command(new OCommandSQL(sql)).execute()
-    
-//    val eHasComponents: List[Edge] = vStep.getEdges(Direction.OUT, PropertyKey.EDGE_HAS_COMPONENT).toList
-//    
-//    val vComponents: List[Vertex] = eHasComponents map {_.getVertex(Direction.IN)}
-//    
-//    val vSteps = vComponents map {_.getEdges(Direction.OUT, "hasStep") map {_.getVertex(Direction.IN).remove()}}
     
     res
   }

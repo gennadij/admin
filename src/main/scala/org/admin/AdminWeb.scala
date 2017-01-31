@@ -13,8 +13,6 @@ import org.dto.component.ComponentCS
 import org.dto.component.ComponentSC
 import org.dto.step.StepCS
 import org.dto.step.StepSC
-import org.dto.configUri.ConfigUriCS
-import org.dto.configUri.ConfigUriSC
 import org.dto.config.CreateConfigCS
 import org.dto.config.CreateConfigSC
 import org.dto.step.FirstStepCS
@@ -26,7 +24,7 @@ import org.dto.connectionComponentToStep.ConnectionComponentToStepSC
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
- * Created by Gennadi Heimann 19.12.2016
+ * Created by Gennadi Heimann 28.11.2016
  */
 
 trait AdminWeb {

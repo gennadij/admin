@@ -6,6 +6,12 @@ import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import org.dto.step.FirstStepSC
 import org.dto.step.FirstStepCS
 
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
+ * Created by Gennadi Heimann 11.01.2017
+ */
+
 object HasFirstStepEdge {
   
   def hasFirstStep(firstStepCS: FirstStepCS, firstStepSC: FirstStepSC): OrientEdge = {

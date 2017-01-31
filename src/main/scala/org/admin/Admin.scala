@@ -23,7 +23,7 @@ import org.dto.connectionComponentToStep.ConnectionComponentToStepSC
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
- * Created by Gennadi Heimann on 1.1.2017
+ * Created by Gennadi Heimann on 13.11.2016
  * 
  * Administrator definiert und zusammenstellt sein einegen Konfiguration.
  * Auf der Webseite von Administrator werden alle notwendigen Einstellungen 
@@ -34,10 +34,6 @@ import org.dto.connectionComponentToStep.ConnectionComponentToStepSC
  * 2. Nach der Regestrierung kann der Admin mit Username und Passwort sich in 
  * ---- der Administrationsbereich anmelden und eine eigen Konfiguration 
  * ---- erstellen.
- * 3. Die Konfiguration besteht aus der ConfigStep und Components.
- * ---- In jedem Step oder Component kann man die DB-Query difenieren um 
- * ---- die gesamte Information zu der Step mit Components aus der fremden DB zu lesen
- * 
  */
 
 
@@ -45,6 +41,12 @@ object Admin {
   
   /**
    * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param RegistrationCS
+   * 
+   * @return RegistrationSC
    */
   def register(registrationCS: RegistrationCS): RegistrationSC = {
     Persistence.register(registrationCS)
@@ -52,6 +54,12 @@ object Admin {
   
   /**
    * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param LoginSC
+   * 
+   * @return LoginCS
    */
   def login(loginCS: LoginCS): LoginSC = {
     Persistence.login(loginCS)
@@ -101,16 +109,27 @@ object Admin {
    * 
    * @version 1.0
    * 
-   * @param ComponentCS
+   * @param StepCS
    * 
-   * @return ComponentSC
+   * @return StepSC
    */
   
   def createStep(stepCS: StepCS): StepSC = {
     Persistence.createStep(stepCS)
   }
   
-  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * Verbindet bestehnde Component mit bestehenden Step
+   * Sowohl Component alsauch Step muessen bereits exestieren
+   * 
+   * @param ConnectionComponentToStepCS
+   * 
+   * @return ConnectionComponentToStepSC
+   */
   def connectComponentToStep(
       connectionComponentToStep: ConnectionComponentToStepCS
       ): ConnectionComponentToStepSC = {
@@ -119,48 +138,25 @@ object Admin {
   
   /**
    * @author Gennadi Heimann
+   * 
+   * @version 1.0
+   * 
+   * @param ConfigTreeCS
+   * 
+   * @return ConfigTreeSC
    */
   def configTree(configTreeCS: ConfigTreeCS): ConfigTreeSC = {
     Persistence.getConfigTree(configTreeCS)
   }
-  
+
   /**
    * @author Gennadi Heimann
    * 
-   * fuegt Vertex Component zu ConfigTree hinzu
-   */
-  def addComponent(componentCS: ComponentCS): ComponentSC = {
-    Persistence.addComponent(componentCS)
-  }
-  
-  
-  
-  /**
-   * @author Gennadi Heimann
+   * @version 1.0
    * 
-   * fuegt Edge hasComponent zu ConfigTree hinzu, dadurch wird Vertex Step mit 
-   * Vertex Component verbunden
+   * @param 
+   * 
+   * @return 
    */
-//  def addHasComponent(connStepToComponentSC: ConnStepToComponentCS): ConnStepToComponentSC = {
-//    Persistence.addHasComponent(connStepToComponentSC)
-//  }
-
-  /**
-   * @author Gennadi Heimann
-   */
-  def addStep(stepCS: StepCS): StepSC = {
-    Persistence.addStep(stepCS)
-  }
-
-  /**
-   * @author Gennadi Heimann
-   */
-//  def addNextStep(connComponentToStepCS: ConnComponentToStepCS): ConnComponentToStepSC = {
-//    Persistence.addNextStep(connComponentToStepCS)
-//  }
-
-  /**
-   * @author Gennadi Heimann
-   */
-  def logout(adminId: String): Boolean = ???
+  def logout(): Boolean = ???
 }

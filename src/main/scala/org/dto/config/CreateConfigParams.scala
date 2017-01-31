@@ -3,9 +3,9 @@ package org.dto.config
 import play.api.libs.json.Json
 
 /**
- * Created by Gennadi heimann 09.01.2017
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
- * params : {adminId : #40:0, configUrl : test.test.org}
+ * Created by Gennadi heimann 09.01.2017
  */
 
 case class CreateConfigParams (

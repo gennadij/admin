@@ -1,6 +1,3 @@
-/**
- * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
- */
 package org.persistence.db.orientdb
 
 import scala.collection.JavaConversions._
@@ -13,41 +10,11 @@ import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.dto.component._
 
 /**
- * Created by Gennadi Heimann 1.1.2017
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
+ * Created by Gennadi Heimann 13.11.2016
  */
 object ComponentVertex {
-  
-  val propClassName = "Component"
-  val propKeyId = "componentId"
-  val propKeyAdminId = "adminId"
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 1.0
-   * 
-   * @param
-   * 
-   * @return
-   */
-  def addComponent(componentCS: ComponentCS): ComponentSC = {
-    val graph: OrientGraph = OrientDB.getGraph
-    
-    val vComponent: OrientVertex = graph.addVertex(
-        "class:Component", 
-        "kind", componentCS.params.kind
-//        "adminId", componentCS.params.adminId
-    )
-    graph.commit
-    
-    new ComponentSC(
-        result = new ComponentResult(
-            vComponent.getIdentity.toString,
-            true, // TODO Status implementieren
-            message = "Die Komponente wurde hinzugefuegt"
-        )
-    )
-  }
   
   /**
    * @author Gennadi Heimann

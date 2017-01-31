@@ -91,11 +91,6 @@ object ConfigVertex {
     val graph: OrientGraph = OrientDB.getGraph
     val configId: String = configTreeCS.params.configId
     
-    //traverse OUT()from #41:6 STRATEGY BREADTH_FIRST
-    //select expand(out('hasFirstStep')) from Config where @rid='#41:10'
-    // select from (traverse out() from #41:10 STRATEGY BREADTH_FIRST)
-//    select from (traverse out() from #41:10 STRATEGY BREADTH_FIRST) where @class='Step'
-//    select expand(out()) from AdminUser where username='user7'
     val sql: String = s"select from (traverse out() from $configId STRATEGY BREADTH_FIRST) where @class='Step'"
     val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
 

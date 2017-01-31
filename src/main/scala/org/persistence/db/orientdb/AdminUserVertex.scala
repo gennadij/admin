@@ -13,9 +13,6 @@ import org.dto.login.LoginResult
 import org.dto.registration.RegistrationCS
 import org.dto.registration.RegistrationSC
 import org.dto.registration.RegistrationResult
-import org.dto.configUri.ConfigUriCS
-import org.dto.configUri.ConfigUriSC
-import org.dto.configUri.ConfigUriResultSC
 import org.dto.login.Config
 import com.tinkerpop.blueprints.Direction
 import com.tinkerpop.blueprints.impls.orient.OrientEdge
@@ -25,7 +22,7 @@ import com.tinkerpop.blueprints.Vertex
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
- * Created by Gennadi Heimann 1.1.2017
+ * Created by Gennadi Heimann 13.11.2016
  */
 object AdminUserVertex {
   
@@ -72,39 +69,7 @@ object AdminUserVertex {
    * @return 
    */
   def update = ???
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 1.0
-   * 
-   * @param 
-   * 
-   * @return 
-   */
-//  def configUri(configUriCS: ConfigUriCS): ConfigUriSC = {
-//    val graph: OrientGraph = OrientDB.getGraph
-//    
-//    val adminId = configUriCS.params.adminId
-//    val configUri = configUriCS.params.configUri
-//    //UPDATE AdminUser SET configUri='test' where @rid='#21:3'
-//    val res: Int = graph
-//      .command(new OCommandSQL(s"UPDATE AdminUser SET configUri='$configUri' where @rid='$adminId'")).execute()
-//    
-//    if(res == 1) {
-//      new ConfigUriSC(result = new ConfigUriResultSC(
-//            true,
-//            s"Die URI = $configUri wurde fuer der AdminUser=$adminId hinzugefuegt"
-//          )
-//      )
-//    }else{
-//      new ConfigUriSC(result = new ConfigUriResultSC(
-//            false,
-//            s"Die URI = $configUri wurde nicht fuer der AdminUser=$adminId hinzugefuegt"
-//          )
-//      )
-//    }
-//  }
+
   /**
    * @author Gennadi Heimann
    * 
@@ -155,23 +120,6 @@ object AdminUserVertex {
           false, 
           "Anmeldung mit Username " + loginCS.params.username + " war nicht erfolgreich"))
     }
-  }
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 1.0
-   * 
-   * @param username, adminPassword
-   * 
-   * @return String
-   */
-  def adminId(username: String, adminPassword: String): String = {
-    val graph: OrientGraph = OrientDB.getGraph
-    val res: OrientDynaElementIterable = graph
-      .command(new OCommandSQL(s"SELECT FROM AdminUser WHERE username='$username' and password='$adminPassword'")).execute()
-    val adminId = res.toList.map(_.asInstanceOf[OrientVertex].getIdentity)
-    if(adminId.size == 1) adminId.head.toString else ""
   }
   
   /**
