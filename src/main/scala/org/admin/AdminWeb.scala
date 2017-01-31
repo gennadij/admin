@@ -50,6 +50,9 @@ trait AdminWeb {
    *   
    *   Alle TD die An der Client desendet werden mit einem HASH Wert verschluesseln oder 
    *   verschluesselte Kommunikation
+   *   
+   *   Version 0.0.1 created 31.01.2017
+   *   
    */
   
   /**
