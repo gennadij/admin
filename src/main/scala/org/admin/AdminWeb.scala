@@ -166,7 +166,7 @@ trait AdminWeb {
     val createConfigSC: CreateConfigSC = Admin.createConfig(createConfigCS)
     Json.toJson(createConfigSC)
   }
-  
+  //TODO Parameter kind ist hier umbrauchbar
   private def createFirstStep(receivedMessage: JsValue): JsValue = {
     val firstStepCS: FirstStepCS = Json.fromJson[FirstStepCS](receivedMessage).get
     val firstStepSC: FirstStepSC = Admin.createFirstStep(firstStepCS)
