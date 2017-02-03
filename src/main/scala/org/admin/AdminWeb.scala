@@ -67,6 +67,11 @@ trait AdminWeb {
    *  - ConnComponentToStep
    *  - ConnStepToComponent
    * 
+   * 
+   * Log to v0.1.0
+   * 
+   * Integration in einen Play Project
+   * 
    */
   
   /**
