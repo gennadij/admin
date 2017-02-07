@@ -51,7 +51,8 @@ val specs2 = "org.specs2" % "specs2_2.11" % "3.3"
 lazy val commonSettings = Seq(
 	organization := "org.generic_configurator", 	
 	version := "0.1.0",
-	scalaVersion := "2.11.8"
+	scalaVersion := "2.11.8",
+	publishMavenStyle := true
 )
 
 lazy val root = (project in file(".")).

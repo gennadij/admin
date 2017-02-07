@@ -12,18 +12,16 @@ object Main {
     println("Generic configurator started")
     println("Run Test Scenarios")
     
-//    new Config()
-    
 //    PrepareConfigForSpecs2.prepareWithAlredyExistingUser
 //    PrepareConfigForSpecs2.prepareLogin
 //    PrepareConfigForSpecs2.prepareAddingNewConfig
 //    PrepareConfigForSpecs2.prepareAddingFirstStep
 //    PrepareConfigForSpecs2.prepareAddingComponentWithFirstStep
 //    PrepareConfigForSpecs2.prepareAddingNewComponent
-    PrepareConfigForSpecs2.prepareSpecsConfigTreeEmpty
+//    PrepareConfigForSpecs2.prepareSpecsConfigTreeEmpty
 //    PrepareConfigForSpecs2.prepareConfigTree
 //    PrepareConfigForSpecs2.prepareSpecsAddStep
-    
+    new TestConfigs().configUser10
     
     println("END")
   }
