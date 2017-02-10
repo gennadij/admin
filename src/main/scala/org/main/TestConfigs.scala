@@ -60,6 +60,56 @@ class TestConfigs extends AdminWeb{
 //componentId_8_2 = #28:37 -> #32:34
 //componentId_8_3 = #28:37 -> #29:47
 //END
+  
+  /*
+   * Windows
+   */
+  
+//adminId #21:7
+//configId #41:6
+//firstStepId = #41:6 -> #25:9
+//componentId_1_1 = #25:9 -> #29:15
+//componentId_1_2 = #25:9 -> #30:14
+//componentId_1_3 = #25:9 -> #31:13
+//stepId_2 #29:15 -> #26:6
+//Connect #30:14 -> #26:6
+//componentId_2_1 = #26:6 -> #32:11
+//componentId_2_2 = #26:6 -> #29:16
+//stepId_3 #31:13 -> #27:5
+//Connect #32:11 -> #27:5
+//Connect #29:16 -> #27:5
+//componentId_3_1 = #27:5 -> #30:15
+//componentId_3_2 = #27:5 -> #31:14
+//componentId_3_3 = #27:5 -> #32:12
+//componentId_3_4 = #27:5 -> #29:17
+//stepId_4 #30:15 -> #28:5
+//Connect #31:14 -> #28:5
+//Connect #32:12 -> #28:5
+//Connect #29:17 -> #28:5
+//componentId_4_1 = #28:5 -> #30:16
+//componentId_4_2 = #28:5 -> #31:15
+//componentId_4_3 = #28:5 -> #32:13
+//stepId_5 #30:16 -> #25:10
+//Connect #31:15 -> #25:10
+//componentId_5_1 = #25:10 -> #29:18
+//componentId_5_2 = #25:10 -> #30:17
+//componentId_5_3 = #25:10 -> #31:16
+//componentId_5_4 = #25:10 -> #32:14
+//componentId_5_5 = #25:10 -> #29:19
+//stepId_6 #32:13 -> #26:7
+//componentId_6_1 = #26:7 -> #30:18
+//componentId_6_2 = #26:7 -> #31:17
+//componentId_6_3 = #26:7 -> #32:15
+//stepId_7 #32:14 -> #27:6
+//Connect #29:19 -> #27:6
+//componentId_7_1 = #27:6 -> #29:20
+//componentId_7_2 = #27:6 -> #30:19
+//stepId_8 #29:18 -> #28:6
+//Connect #30:17 -> #28:6
+//Connect #31:16 -> #28:6
+//componentId_8_1 = #28:6 -> #31:18
+//componentId_8_2 = #28:6 -> #32:16
+//componentId_8_3 = #28:6 -> #29:21
 
   
   
