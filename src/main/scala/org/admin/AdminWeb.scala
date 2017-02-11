@@ -75,6 +75,18 @@ trait AdminWeb {
    */
   
   /**
+   * Docu zu der Login
+   * 
+   * https://www.lightbend.com/activator/template/bootzooka
+   * http://www.lightbend.com/activator/template/play-oauth2-scala
+   * https://scalaplayschool.wordpress.com/2014/08/27/lesson-12-a-login-action-with-scala-play-angular-bootstrap/
+   * https://www.playframework.com/documentation/2.0.4/ScalaSecurity
+   * https://github.com/nezasa/play-login-sample
+   * https://www.playframework.com/documentation/2.1.1/JavaGuide4
+   * http://ics-software-engineering.github.io/play-example-login/
+   */
+  
+  /**
    * 1. => Registration
    *   Server <- Client
    *   {jsonId : 1, dto : Registeration, params : {username : test, password : test}}
