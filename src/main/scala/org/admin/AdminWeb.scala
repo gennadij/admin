@@ -28,64 +28,6 @@ import org.dto.connectionComponentToStep.ConnectionComponentToStepSC
  */
 
 trait AdminWeb {
-  
-  /**
-   * ChangeLog 06.01.2017
-   *   Vertex Step
-   *     - selectionCriterium => definiert maximale und minimale Anzahl der ausgewaelten Komponenten in dem Step
-   *     
-   *   new Vertex Config
-   *      + configUrl
-   *   
-   *   AdminUser
-   *      - configUri
-   *   
-   *   Step
-   *     - adminId
-   *   
-   *   Component
-   *      - adminId
-   *     
-   *   AdminUser -> Config -> FitstStep
-   *   
-   *   Alle TD die An der Client desendet werden mit einem HASH Wert verschluesseln oder 
-   *   verschluesselte Kommunikation
-   *   
-   *   Version 0.0.1 created 31.01.2017
-   *   
-   */
-  
-  /**
-   * ChangeLog 09.01.2017
-   * 
-   * FirstStep wird immer an der Config Vertes angehaengt
-   * 
-   * NextStep wird immer an der Component Vertex angehaengt
-   * 
-   * deswegen wird es automatisch bei der erzeugen der jeweiligen Steps die Verbindungsedge erzeugt
-   * 
-   *  - ConnComponentToStep
-   *  - ConnStepToComponent
-   * 
-   * 
-   * Log to v0.1.0
-   * 
-   * Integration in einen Play Project
-   * 
-   */
-  
-  /**
-   * Docu zu der Login
-   * 
-   * https://www.lightbend.com/activator/template/bootzooka
-   * http://www.lightbend.com/activator/template/play-oauth2-scala
-   * https://scalaplayschool.wordpress.com/2014/08/27/lesson-12-a-login-action-with-scala-play-angular-bootstrap/
-   * https://www.playframework.com/documentation/2.0.4/ScalaSecurity
-   * https://github.com/nezasa/play-login-sample
-   * https://www.playframework.com/documentation/2.1.1/JavaGuide4
-   * http://ics-software-engineering.github.io/play-example-login/
-   */
-  
   /**
    * 1. => Registration
    *   Server <- Client

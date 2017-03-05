@@ -29,7 +29,7 @@ object AdminUserVertex {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param RegistrationCS
    * 
@@ -62,7 +62,7 @@ object AdminUserVertex {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param 
    * 
@@ -73,7 +73,7 @@ object AdminUserVertex {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param LoginCS
    * 
@@ -125,7 +125,7 @@ object AdminUserVertex {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param username
    * 

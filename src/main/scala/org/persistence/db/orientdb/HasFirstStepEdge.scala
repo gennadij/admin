@@ -14,6 +14,16 @@ import org.dto.step.FirstStepCS
 
 object HasFirstStepEdge {
   
+  
+    /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.0
+   * 
+   * @param firstStepCS: FirstStepCS, firstStepSC: FirstStepSC
+   * 
+   * @return OrientEdge
+   */
   def hasFirstStep(firstStepCS: FirstStepCS, firstStepSC: FirstStepSC): OrientEdge = {
     //TODO Try Catch Block
    

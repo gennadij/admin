@@ -19,7 +19,7 @@ object ComponentVertex {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param
    * 
@@ -55,7 +55,7 @@ object ComponentVertex {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param
    * 
@@ -71,7 +71,7 @@ object ComponentVertex {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param
    * 

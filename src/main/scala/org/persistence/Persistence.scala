@@ -50,7 +50,7 @@ object Persistence {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param RegistrationCS
    * 
@@ -63,7 +63,7 @@ object Persistence {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param LoginCS
    * 
@@ -77,7 +77,7 @@ object Persistence {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param CreateConfigSC
    * 
@@ -108,7 +108,7 @@ object Persistence {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param FirstStepCS
    * 
@@ -150,7 +150,7 @@ object Persistence {
    * 
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param ComponentCS
    * 
@@ -174,7 +174,7 @@ object Persistence {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param StepSC
    * 
@@ -213,7 +213,7 @@ object Persistence {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param ConnectionComponentToStepCS
    * 
@@ -229,7 +229,7 @@ object Persistence {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param ConfigTreeCS
    * 

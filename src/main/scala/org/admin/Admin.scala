@@ -42,7 +42,7 @@ object Admin {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param RegistrationCS
    * 
@@ -55,7 +55,7 @@ object Admin {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param LoginSC
    * 
@@ -68,7 +68,7 @@ object Admin {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param CreateConfigCS
    * 
@@ -81,7 +81,7 @@ object Admin {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param FirstStepCS
    * 
@@ -94,7 +94,7 @@ object Admin {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param ComponentCS
    * 
@@ -107,7 +107,7 @@ object Admin {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param StepCS
    * 
@@ -121,7 +121,7 @@ object Admin {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * Verbindet bestehnde Component mit bestehenden Step
    * Sowohl Component alsauch Step muessen bereits exestieren
@@ -139,7 +139,7 @@ object Admin {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param ConfigTreeCS
    * 
@@ -152,7 +152,7 @@ object Admin {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param 
    * 

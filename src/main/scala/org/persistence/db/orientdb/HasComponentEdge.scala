@@ -16,6 +16,16 @@ import org.dto.component._
 
 object HasComponentEdge {
   
+    /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.0
+   * 
+   * @param componentCS: ComponentCS, componentSC: ComponentSC
+   * 
+   * @return OrientEdge
+   */
+  
   def hasComponent(componentCS: ComponentCS, componentSC: ComponentSC): OrientEdge = {
     val graph: OrientGraph = OrientDB.getGraph
     

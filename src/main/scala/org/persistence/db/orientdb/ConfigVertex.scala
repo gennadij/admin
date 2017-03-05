@@ -25,7 +25,7 @@ object ConfigVertex {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param CreateConfig
    * 
@@ -50,7 +50,7 @@ object ConfigVertex {
    * 
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param configId
    * 
@@ -81,11 +81,11 @@ object ConfigVertex {
    * 
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
-   * @param configId
+   * @param ConfigTreeCS
    * 
-   * @return 
+   * @return ConfigTreeSC
    */
   def getConfigTree(configTreeCS: ConfigTreeCS): ConfigTreeSC = {
     val graph: OrientGraph = OrientDB.getGraph
@@ -105,11 +105,11 @@ object ConfigVertex {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
-   * @param
+   * @param vStep: OrientVertex, graph: OrientGraph
    * 
-   * @return
+   * @return ConfigTreeStepSC
    */
   private def getStep(vStep: OrientVertex, graph: OrientGraph): ConfigTreeStepSC = {
       val eHasComponent: Set[Edge] = vStep.getEdges(Direction.OUT).toSet
@@ -125,11 +125,11 @@ object ConfigVertex {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
-   * @param
+   * @param vComponents: Set[Vertex]
    * 
-   * @return
+   * @return Set[ConfigTreeComponentSC]
    */
   private def getComponents(vComponents: Set[Vertex]): Set[ConfigTreeComponentSC] = {
   vComponents.map({ vC => 
@@ -144,7 +144,7 @@ object ConfigVertex {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param
    * 

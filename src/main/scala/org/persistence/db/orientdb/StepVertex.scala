@@ -25,6 +25,15 @@ import org.dto.step.FirstStepResult
 
 object StepVertex {
   
+    /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.0
+   * 
+   * @param
+   * 
+   * @return
+   */
   def step(stepCS: StepCS): StepSC = {
     //Pruefen wenn Stepp schon exestiert nur Component zu der vorhandenen Step verbinden.
     val graph: OrientGraph = OrientDB.getGraph
@@ -63,7 +72,7 @@ object StepVertex {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param
    * 
@@ -108,7 +117,7 @@ object StepVertex {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 1.0
+   * @version 0.1.0
    * 
    * @param
    * 
@@ -132,12 +141,10 @@ object StepVertex {
   
     def deleteStepFromComponent(componentId: String): Int = {
     
-    val graph: OrientGraph = OrientDB.getGraph
+      val graph: OrientGraph = OrientDB.getGraph
     
-    val sql = s"delete vertex Step where @rid in (select out(hasStep) from Component where @rid='$componentId')"
+      val sql = s"delete vertex Step where @rid in (select out(hasStep) from Component where @rid='$componentId')"
     
-    val res: Int = graph.command(new OCommandSQL(sql)).execute()
-    
-    res
+      graph.command(new OCommandSQL(sql)).execute()
   }
 }

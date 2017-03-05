@@ -12,6 +12,15 @@ import com.tinkerpop.blueprints.impls.orient.OrientVertex
 
 object HasConfigEdge {
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.0
+   * 
+   * @param adminId: String, vConfig: OrientVertex
+   * 
+   * @return OrientEdge
+   */
   def hasConfig(adminId: String, vConfig: OrientVertex): OrientEdge = {
     //TODO Try Catch Block
     

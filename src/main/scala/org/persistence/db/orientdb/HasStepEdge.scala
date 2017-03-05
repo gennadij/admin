@@ -23,6 +23,15 @@ import org.dto.connectionComponentToStep.ConnectionComponentToStepResult
 
 object HasStepEdge {
   
+    /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.0
+   * 
+   * @param
+   * 
+   * @return
+   */
   def hasStep(stepCS: StepCS, stepSC: StepSC): OrientEdge = {
     
     val graph: OrientGraph = OrientDB.getGraph()
@@ -39,6 +48,15 @@ object HasStepEdge {
     eHasStep
   }
   
+    /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.0
+   * 
+   * @param
+   * 
+   * @return
+   */
   def hasStep(
       connectionComponentToStepCS: ConnectionComponentToStepCS
       ): ConnectionComponentToStepSC = {
