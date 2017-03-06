@@ -11,6 +11,7 @@ object PropertyKey {
   val VERTEX_ADMIN_USER = "AdminUser"
   val VERTEX_CONFIG = "Config"
   val VERTEX_STEP = "Step"
+  val VERTEX_COMPONENT = "Component"
   val EDGE_HAS_CONFIG = "hasConfig"
   val EDGE_HAS_FIRST_STEP = "hasFirstStep"
   val EDGE_HAS_COMPONENT = "hasComponent"
@@ -24,6 +25,7 @@ object PropertyKey {
   val SELECTION_CRITERIUM_MIN = "selectionCriteriumMin"
   val SELECTION_CRITERIUM_MAX = "selectionCriteriumMax"
   val CONFIG_URL = "configUrl"
+  val NAME_TO_SHOW: String = "nameToShow"
   
   
 }

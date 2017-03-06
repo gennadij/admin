@@ -11,6 +11,7 @@ import play.api.libs.json.Json
 
 case class FirstStepParams (
     configId: String,
+    nameToShow: String,
     kind: String,
     selectionCriterium: SelectionCriterium
 )

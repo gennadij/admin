@@ -9,6 +9,7 @@ import play.api.libs.json.Json
  */
 case class ComponentParams (
     stepId: String,
+    nameToShow: String,
     kind: String
 )
 

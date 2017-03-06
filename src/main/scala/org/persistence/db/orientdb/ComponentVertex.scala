@@ -29,8 +29,9 @@ object ComponentVertex {
     val graph: OrientGraph = OrientDB.getGraph
     
     val vComponent: OrientVertex = graph.addVertex(
-        "class:Component", 
-        "kind", componentCS.params.kind
+        "class:" + PropertyKey.VERTEX_COMPONENT, 
+        PropertyKey.NAME_TO_SHOW, componentCS.params.nameToShow,
+        PropertyKey.KIND, componentCS.params.kind
     )
     graph.commit
     
@@ -52,6 +53,7 @@ object ComponentVertex {
       )
     }
   }
+  
   /**
    * @author Gennadi Heimann
    * 

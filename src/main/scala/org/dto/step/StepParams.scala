@@ -13,6 +13,7 @@ import play.api.libs.json.Json
 
 case class StepParams (
     componentId: String,
+    nameToShow: String,
     kind: String,
     selectionCriterium: SelectionCriterium
 )

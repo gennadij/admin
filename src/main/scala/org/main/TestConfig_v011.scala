@@ -1,124 +1,78 @@
 package org.main
 
 import org.admin.AdminWeb
-import play.api.libs.json.Json
 import org.dto.DTOIds
 import org.dto.DTONames
+import play.api.libs.json.Json
 import play.api.libs.json.JsValue
 
-class TestConfigs extends AdminWeb{
+class TestConfig_v011 extends AdminWeb{
   
   /*
    * Linux
    */
-//  I am generic configurator
+//I am generic configurator
 //Generic configurator started
 //Run Test Scenarios
-//adminId #21:28
-//configId #41:13
-//firstStepId = #41:13 -> #25:55
-//componentId_1_1 = #25:55 -> #29:41
-//componentId_1_2 = #25:55 -> #30:35
-//componentId_1_3 = #25:55 -> #31:33
-//stepId_2 #29:41 -> #26:47
-//Connect #30:35 -> #26:47
-//componentId_2_1 = #26:47 -> #32:29
-//componentId_2_2 = #26:47 -> #29:42
-//stepId_3 #31:33 -> #27:39
-//Connect #32:29 -> #27:39
-//Connect #29:42 -> #27:39
-//componentId_3_1 = #27:39 -> #30:36
-//componentId_3_2 = #27:39 -> #31:34
-//componentId_3_3 = #27:39 -> #32:30
-//componentId_3_4 = #27:39 -> #29:43
-//stepId_4 #30:36 -> #28:36
-//Connect #31:34 -> #28:36
-//Connect #32:30 -> #28:36
-//Connect #29:43 -> #28:36
-//componentId_4_1 = #28:36 -> #30:37
-//componentId_4_2 = #28:36 -> #31:35
-//componentId_4_3 = #28:36 -> #32:31
-//stepId_5 #30:37 -> #25:56
-//Connect #31:35 -> #25:56
-//componentId_5_1 = #25:56 -> #29:44
-//componentId_5_2 = #25:56 -> #30:38
-//componentId_5_3 = #25:56 -> #31:36
-//componentId_5_4 = #25:56 -> #32:32
-//componentId_5_5 = #25:56 -> #29:45
-//stepId_6 #32:31 -> #26:48
-//componentId_6_1 = #26:48 -> #30:39
-//componentId_6_2 = #26:48 -> #31:37
-//componentId_6_3 = #26:48 -> #32:33
-//stepId_7 #32:32 -> #27:40
-//Connect #29:45 -> #27:40
-//componentId_7_1 = #27:40 -> #29:46
-//componentId_7_2 = #27:40 -> #30:40
-//stepId_8 #29:44 -> #28:37
-//Connect #30:38 -> #28:37
-//Connect #31:36 -> #28:37
-//componentId_8_1 = #28:37 -> #31:38
-//componentId_8_2 = #28:37 -> #32:34
-//componentId_8_3 = #28:37 -> #29:47
+//adminId #22:14
+//configId #42:5
+//firstStepId = #42:5 -> #25:61
+//componentId_1_1 = #25:61 -> #29:54
+//componentId_1_2 = #25:61 -> #30:47
+//componentId_1_3 = #25:61 -> #31:45
+//stepId_2 #29:54 -> #26:53
+//Connect #30:47 -> #26:53
+//componentId_2_1 = #26:53 -> #32:41
+//componentId_2_2 = #26:53 -> #29:55
+//stepId_3 #31:45 -> #27:45
+//Connect #32:41 -> #27:45
+//Connect #29:55 -> #27:45
+//componentId_3_1 = #27:45 -> #30:48
+//componentId_3_2 = #27:45 -> #31:46
+//componentId_3_3 = #27:45 -> #32:42
+//componentId_3_4 = #27:45 -> #29:56
+//stepId_4 #30:48 -> #28:42
+//Connect #31:46 -> #28:42
+//Connect #32:42 -> #28:42
+//Connect #29:56 -> #28:42
+//componentId_4_1 = #28:42 -> #30:49
+//componentId_4_2 = #28:42 -> #31:47
+//componentId_4_3 = #28:42 -> #32:43
+//stepId_5 #30:49 -> #25:62
+//Connect #31:47 -> #25:62
+//componentId_5_1 = #25:62 -> #29:57
+//componentId_5_2 = #25:62 -> #30:50
+//componentId_5_3 = #25:62 -> #31:48
+//componentId_5_4 = #25:62 -> #32:44
+//componentId_5_5 = #25:62 -> #29:58
+//stepId_6 #32:43 -> #26:54
+//componentId_6_1 = #26:54 -> #30:51
+//componentId_6_2 = #26:54 -> #31:49
+//componentId_6_3 = #26:54 -> #32:45
+//stepId_7 #32:44 -> #27:46
+//Connect #29:58 -> #27:46
+//componentId_7_1 = #27:46 -> #29:59
+//componentId_7_2 = #27:46 -> #30:52
+//stepId_8 #29:57 -> #28:43
+//Connect #30:50 -> #28:43
+//Connect #31:48 -> #28:43
+//componentId_8_1 = #28:43 -> #31:50
+//componentId_8_2 = #28:43 -> #32:46
+//componentId_8_3 = #28:43 -> #29:60
 //END
   
   /*
    * Windows
    */
-  
-//adminId #21:7
-//configId #41:6
-//firstStepId = #41:6 -> #25:9
-//componentId_1_1 = #25:9 -> #29:15
-//componentId_1_2 = #25:9 -> #30:14
-//componentId_1_3 = #25:9 -> #31:13
-//stepId_2 #29:15 -> #26:6
-//Connect #30:14 -> #26:6
-//componentId_2_1 = #26:6 -> #32:11
-//componentId_2_2 = #26:6 -> #29:16
-//stepId_3 #31:13 -> #27:5
-//Connect #32:11 -> #27:5
-//Connect #29:16 -> #27:5
-//componentId_3_1 = #27:5 -> #30:15
-//componentId_3_2 = #27:5 -> #31:14
-//componentId_3_3 = #27:5 -> #32:12
-//componentId_3_4 = #27:5 -> #29:17
-//stepId_4 #30:15 -> #28:5
-//Connect #31:14 -> #28:5
-//Connect #32:12 -> #28:5
-//Connect #29:17 -> #28:5
-//componentId_4_1 = #28:5 -> #30:16
-//componentId_4_2 = #28:5 -> #31:15
-//componentId_4_3 = #28:5 -> #32:13
-//stepId_5 #30:16 -> #25:10
-//Connect #31:15 -> #25:10
-//componentId_5_1 = #25:10 -> #29:18
-//componentId_5_2 = #25:10 -> #30:17
-//componentId_5_3 = #25:10 -> #31:16
-//componentId_5_4 = #25:10 -> #32:14
-//componentId_5_5 = #25:10 -> #29:19
-//stepId_6 #32:13 -> #26:7
-//componentId_6_1 = #26:7 -> #30:18
-//componentId_6_2 = #26:7 -> #31:17
-//componentId_6_3 = #26:7 -> #32:15
-//stepId_7 #32:14 -> #27:6
-//Connect #29:19 -> #27:6
-//componentId_7_1 = #27:6 -> #29:20
-//componentId_7_2 = #27:6 -> #30:19
-//stepId_8 #29:18 -> #28:6
-//Connect #30:17 -> #28:6
-//Connect #31:16 -> #28:6
-//componentId_8_1 = #28:6 -> #31:18
-//componentId_8_2 = #28:6 -> #32:16
-//componentId_8_3 = #28:6 -> #29:21
 
   
   
   
   
   
-  def configUser10 = {
+  def config_v011 = {
     
-    val userPassword: String = "user10"
+    val userPassword: String = "user12"
     
     registerNewUser(userPassword)
     
@@ -126,31 +80,31 @@ class TestConfigs extends AdminWeb{
     
     println("adminId " + adminId)
     
-    val configId: String = createNewConfig(adminId,  "http://contig/user10")
+    val configId: String = createNewConfig(adminId,  "http://contig/user12")
     
     println("configId " + configId)
     
     //STEP 1
     
-    val firstStepId: String = addFirstStep(configId, 1, 1)
+    val firstStepId: String = addFirstStep(configId, 1, 1, "S_1")
     
     println(s"firstStepId = $configId -> $firstStepId")
     
-    val componentId_1_1: String = addComponent(firstStepId, "immutable")
+    val componentId_1_1: String = addComponent(firstStepId, "immutable", "C_1_1")
     
     println(s"componentId_1_1 = $firstStepId -> $componentId_1_1")
     
-    val componentId_1_2: String = addComponent(firstStepId, "immutable")
+    val componentId_1_2: String = addComponent(firstStepId, "immutable", "C_1_2")
     
     println(s"componentId_1_2 = $firstStepId -> $componentId_1_2")
     
-    val componentId_1_3: String = addComponent(firstStepId, "immutable")
+    val componentId_1_3: String = addComponent(firstStepId, "immutable", "C_1_3")
     
     println(s"componentId_1_3 = $firstStepId -> $componentId_1_3")
     
     //STEP 2
     
-    val stepId_2: String = addStep(componentId_1_1, "default", 1, 1)
+    val stepId_2: String = addStep(componentId_1_1, "default", 1, 1, "S_2")
     
     println("stepId_2 " + componentId_1_1 + " -> " + stepId_2 )
     
@@ -158,17 +112,17 @@ class TestConfigs extends AdminWeb{
     
     println("Connect " + componentId_1_2 + " -> " + stepId_2)
     
-    val componentId_2_1: String = addComponent(stepId_2, "immutable")
+    val componentId_2_1: String = addComponent(stepId_2, "immutable", "C_2_1")
     
     println(s"componentId_2_1 = $stepId_2 -> $componentId_2_1")
     
-    val componentId_2_2: String = addComponent(stepId_2, "immutable")
+    val componentId_2_2: String = addComponent(stepId_2, "immutable", "C_2_1")
     
     println(s"componentId_2_2 = $stepId_2 -> $componentId_2_2")
     
     // STEP 3
     
-    val stepId_3: String = addStep(componentId_1_3, "default", 2, 4)
+    val stepId_3: String = addStep(componentId_1_3, "default", 2, 4, "S_3")
     
     println("stepId_3 " + componentId_1_3 + " -> " + stepId_3)
     
@@ -180,25 +134,25 @@ class TestConfigs extends AdminWeb{
     
     println("Connect " + componentId_2_2 + " -> " + stepId_3)
     
-    val componentId_3_1 = addComponent(stepId_3, "immutable")
+    val componentId_3_1 = addComponent(stepId_3, "immutable", "C_3_1")
     
     println(s"componentId_3_1 = $stepId_3 -> $componentId_3_1")
     
-    val componentId_3_2 = addComponent(stepId_3, "immutable")
+    val componentId_3_2 = addComponent(stepId_3, "immutable", "C_3_2")
     
     println(s"componentId_3_2 = $stepId_3 -> $componentId_3_2")
     
-    val componentId_3_3 = addComponent(stepId_3, "mutable")
+    val componentId_3_3 = addComponent(stepId_3, "mutable", "C_3_3")
     
     println(s"componentId_3_3 = $stepId_3 -> $componentId_3_3")
     
-    val componentId_3_4 = addComponent(stepId_3, "mutable")
+    val componentId_3_4 = addComponent(stepId_3, "mutable", "C_3_4")
     
     println(s"componentId_3_4 = $stepId_3 -> $componentId_3_4")
     
     //STEP 4
     
-    val stepId_4 = addStep(componentId_3_1, "default", 1, 2)
+    val stepId_4 = addStep(componentId_3_1, "default", 1, 2, "S_4")
     
     println(s"stepId_4 $componentId_3_1 -> $stepId_4")
     
@@ -214,22 +168,21 @@ class TestConfigs extends AdminWeb{
     
     println(s"Connect $componentId_3_4 -> $stepId_4")
     
-    val componentId_4_1 = addComponent(stepId_4, "immutable")
+    val componentId_4_1 = addComponent(stepId_4, "immutable", "C_4_1")
     
     println(s"componentId_4_1 = $stepId_4 -> $componentId_4_1")
     
-    val componentId_4_2 = addComponent(stepId_4, "immutable")
+    val componentId_4_2 = addComponent(stepId_4, "immutable", "C_4_2")
     
     println(s"componentId_4_2 = $stepId_4 -> $componentId_4_2")
     
-    val componentId_4_3 = addComponent(stepId_4, "immutable")
+    val componentId_4_3 = addComponent(stepId_4, "immutable", "C_4_3")
     
     println(s"componentId_4_3 = $stepId_4 -> $componentId_4_3")
     
-    
     // STEP 5
     
-    val stepId_5 = addStep(componentId_4_1, "default", 2, 4)
+    val stepId_5 = addStep(componentId_4_1, "default", 2, 4, "S_5")
     
     println(s"stepId_5 $componentId_4_1 -> $stepId_5")
     
@@ -237,47 +190,47 @@ class TestConfigs extends AdminWeb{
     
     println(s"Connect $componentId_4_2 -> $stepId_5")
     
-    val componentId_5_1 = addComponent(stepId_5, "immutable")
+    val componentId_5_1 = addComponent(stepId_5, "immutable", "C_5_1")
     
     println(s"componentId_5_1 = $stepId_5 -> $componentId_5_1")
     
-    val componentId_5_2 = addComponent(stepId_5, "immutable")
+    val componentId_5_2 = addComponent(stepId_5, "immutable", "C_5_2")
     
     println(s"componentId_5_2 = $stepId_5 -> $componentId_5_2")
     
-    val componentId_5_3 = addComponent(stepId_5, "immutable")
+    val componentId_5_3 = addComponent(stepId_5, "immutable", "C_5_3")
     
     println(s"componentId_5_3 = $stepId_5 -> $componentId_5_3")
     
-    val componentId_5_4 = addComponent(stepId_5, "immutable")
+    val componentId_5_4 = addComponent(stepId_5, "immutable", "C_5_4")
     
     println(s"componentId_5_4 = $stepId_5 -> $componentId_5_4")
     
-    val componentId_5_5 = addComponent(stepId_5, "immutable")
+    val componentId_5_5 = addComponent(stepId_5, "immutable", "C_5_5")
     
     println(s"componentId_5_5 = $stepId_5 -> $componentId_5_5")
     
     //STEP 6
     
-    val stepId_6 = addStep(componentId_4_3, "final", 1, 1)
+    val stepId_6 = addStep(componentId_4_3, "final", 1, 1, "S_6")
     
     println(s"stepId_6 $componentId_4_3 -> $stepId_6")
     
-    val componentId_6_1 = addComponent(stepId_6, "immutable")
+    val componentId_6_1 = addComponent(stepId_6, "immutable", "C_6_1")
     
     println(s"componentId_6_1 = $stepId_6 -> $componentId_6_1")
     
-    val componentId_6_2 = addComponent(stepId_6, "immutable")
+    val componentId_6_2 = addComponent(stepId_6, "immutable", "C_6_2")
     
     println(s"componentId_6_2 = $stepId_6 -> $componentId_6_2")
     
-    val componentId_6_3 = addComponent(stepId_6, "immutable")
+    val componentId_6_3 = addComponent(stepId_6, "immutable", "C_6_3")
     
     println(s"componentId_6_3 = $stepId_6 -> $componentId_6_3")
     
     //STEP 7
     
-    val stepId_7 = addStep(componentId_5_4, "final", 1, 1)
+    val stepId_7 = addStep(componentId_5_4, "final", 1, 1, "S_7")
     
     println(s"stepId_7 $componentId_5_4 -> $stepId_7")
     
@@ -285,17 +238,17 @@ class TestConfigs extends AdminWeb{
     
     println(s"Connect $componentId_5_5 -> $stepId_7")
     
-    val componentId_7_1 = addComponent(stepId_7, "immutable")
+    val componentId_7_1 = addComponent(stepId_7, "immutable", "C_7_1")
     
     println(s"componentId_7_1 = $stepId_7 -> $componentId_7_1")
     
-    val componentId_7_2 = addComponent(stepId_7, "immutable")
+    val componentId_7_2 = addComponent(stepId_7, "immutable", "C_7_2")
     
     println(s"componentId_7_2 = $stepId_7 -> $componentId_7_2")
     
     //STEP 8
     
-    val stepId_8 = addStep(componentId_5_1, "final", 1, 1)
+    val stepId_8 = addStep(componentId_5_1, "final", 1, 1, "S_8")
     
     println(s"stepId_8 $componentId_5_1 -> $stepId_8")
     
@@ -307,20 +260,18 @@ class TestConfigs extends AdminWeb{
     
     println(s"Connect $componentId_5_3 -> $stepId_8")
     
-    val componentId_8_1 = addComponent(stepId_8, "immutable")
+    val componentId_8_1 = addComponent(stepId_8, "immutable", "C_8_1")
     
     println(s"componentId_8_1 = $stepId_8 -> $componentId_8_1")
     
-    val componentId_8_2 = addComponent(stepId_8, "immutable")
+    val componentId_8_2 = addComponent(stepId_8, "immutable", "C_8_2")
     
     println(s"componentId_8_2 = $stepId_8 -> $componentId_8_2")
     
-    val componentId_8_3 = addComponent(stepId_8, "immutable")
+    val componentId_8_3 = addComponent(stepId_8, "immutable", "C_8_3")
     
     println(s"componentId_8_3 = $stepId_8 -> $componentId_8_3")
   }
-  
-  
   
   private def registerNewUser(userPassword: String) = {
     
@@ -372,12 +323,13 @@ class TestConfigs extends AdminWeb{
       (createConfigSC \ "result" \ "configId").asOpt[String].get
   }
   
-  private def addFirstStep(configId: String, min: Int, max: Int): String = {
+  private def addFirstStep(configId: String, min: Int, max: Int, nameToShow: String): String = {
     val firstStepCS = Json.obj(
         "dtoId" -> DTOIds.CREATE_FIRST_STEP,
         "dto" -> DTONames.CREATE_FIRST_STEP
         ,"params" -> Json.obj(
           "configId" -> configId,
+          "nameToShow" -> nameToShow,
           "kind" -> "first",
           "selectionCriterium" -> Json.obj(
               "min" -> min,
@@ -395,12 +347,13 @@ class TestConfigs extends AdminWeb{
       (firstStepSC \ "result" \ "stepId").asOpt[String].get
   }
   
-  private def addComponent(stepId: String, kind: String): String = {
+  private def addComponent(stepId: String, kind: String, nameToShow: String): String = {
     val componentCS = Json.obj(
         "dtoId" -> DTOIds.CREATE_COMPONENT,
         "dto" -> DTONames.CREATE_COMPONENT
         ,"params" -> Json.obj(
             "stepId" -> stepId,
+            "nameToShow" -> nameToShow,
             "kind" -> kind
         )
     )
@@ -411,12 +364,13 @@ class TestConfigs extends AdminWeb{
     (componentSC \ "result" \ "componentId").asOpt[String].get
   }
   
-  private def addStep(componentId: String, kind: String, min: Int, max: Int): String = {
+  private def addStep(componentId: String, kind: String, min: Int, max: Int, nameToShow: String): String = {
     val stepCS = Json.obj(
         "dtoId" -> DTOIds.CREATE_STEP,
         "dto" -> DTONames.CREATE_STEP,
         "params" -> Json.obj(
             "componentId" -> componentId,
+            "nameToShow" -> nameToShow,
             "kind" -> kind,
             "selectionCriterium" -> Json.obj(
                 "min" -> min,

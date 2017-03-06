@@ -88,32 +88,6 @@ class SpecsAddingFirstStep extends Specification
           "Der FirstStep exstiert bereits"
       }
     }
-//    "ConfigTree" >> {
-////      {jsonI : 6, dto : ConfigTree, params: {adminId : #40:0}}
-//        val configTreeCS = Json.obj(
-//          "jsonId" -> 6,
-//          "dto" -> "ConfigTree"
-//          ,"params" -> Json.obj(
-//            "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get
-//          )
-//        )
-//      val configTreeSC = handelMessage(configTreeCS)
-//      "jsonId" >> {
-//        (configTreeSC \ "jsonId").asOpt[Int].get === 6
-//      }
-//      "dto" >> {
-//        (configTreeSC \ "dto").asOpt[String].get === "ConfigTree"
-//      }
-//      "result \\ steps(size)" >> {
-//        (configTreeSC \ "result" \ "steps").asOpt[List[JsValue]].get.size === 1
-//      }
-//      "result \\ steps(0) \\ kind" >> {
-//        (((configTreeSC \ "result" \ "steps")(0)) \ "kind").asOpt[String].get === "first"
-//      }
-//      "result \\ steps(0) \\ components" >> {
-//        (((configTreeSC \ "result" \ "steps")(0)) \ "components").asOpt[List[JsValue]].get.size === 0
-//      }
-//    }
   }
   
   def login(): String = {

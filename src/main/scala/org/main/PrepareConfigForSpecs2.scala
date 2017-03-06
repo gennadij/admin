@@ -37,6 +37,9 @@ object PrepareConfigForSpecs2 extends AdminWeb{
    * user7 -> SpecsConfigTreeFirstStep3Components
    * user8 -> SpecsAddStep
    * user9 -> SpecsConfigTreeEmpty
+   * user10 -> TestConfig version 0.1.0
+   * user11 -> SpecsStepComponentPropertyNameToSchow
+   * user12 -> TestConfig_v011
    */
   
   def prepare(user: String) {
@@ -225,6 +228,26 @@ object PrepareConfigForSpecs2 extends AdminWeb{
     println("adminId " + adminId)
     
     val configId: String = createNewConfig(adminId, "http://contig/user7")
+    
+    println("configId " + configId)
+  }
+  
+  def prepareSpecsStepComponentPropertyNameToSchow = {
+    
+    /*
+     * Linux
+     * adminId #21:29
+     * configId #41:14
+     */
+    val userPassword = "user11"
+    
+    registerNewUser(userPassword)
+    
+    val adminId = login(userPassword)
+    
+    println("adminId " + adminId)
+    
+    val configId: String = createNewConfig(adminId, "http://contig/user11")
     
     println("configId " + configId)
   }

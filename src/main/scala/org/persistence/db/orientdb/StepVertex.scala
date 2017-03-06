@@ -29,6 +29,7 @@ object StepVertex {
    * @author Gennadi Heimann
    * 
    * @version 0.1.0
+   * @version 0.1.1
    * 
    * @param
    * 
@@ -42,6 +43,7 @@ object StepVertex {
     val countsOfSteps: Int = graph.getVertex(componentId).getEdges(Direction.OUT, PropertyKey.EDGE_HAS_STEP).toList.size
     
     if(countsOfSteps > 0) {
+      //TODO step if error
       new StepSC(
           result = StepResult(
               "",
@@ -53,6 +55,7 @@ object StepVertex {
       val vStep: OrientVertex = graph.addVertex(
         "class:" + PropertyKey.VERTEX_STEP,
         PropertyKey.KIND, stepCS.params.kind,
+        PropertyKey.NAME_TO_SHOW, stepCS.params.nameToShow,
         PropertyKey.SELECTION_CRITERIUM_MIN, stepCS.params.selectionCriterium.min.toString,
         PropertyKey.SELECTION_CRITERIUM_MAX, stepCS.params.selectionCriterium.max.toString
       )
@@ -98,6 +101,7 @@ object StepVertex {
     }else{
       val vFirstStep: OrientVertex = graph.addVertex(
         "class:" + PropertyKey.VERTEX_STEP,
+        PropertyKey.NAME_TO_SHOW, firstStepCS.params.nameToShow,
         PropertyKey.KIND, firstStepCS.params.kind,
         PropertyKey.SELECTION_CRITERIUM_MIN, firstStepCS.params.selectionCriterium.min.toString,
         PropertyKey.SELECTION_CRITERIUM_MAX, firstStepCS.params.selectionCriterium.max.toString
@@ -123,13 +127,6 @@ object StepVertex {
    * 
    * @return
    */
-  def removerSteps(adminId: String) = {
-    val graph: OrientGraph = OrientDB.getGraph
-    val res: Int = graph
-      .command(new OCommandSQL(s"DELETE VERTEX Step where adminId='$adminId'")).execute()
-    graph.commit
-    res
-  }
   
   def removeStep(configId: String): Int = {
     val graph: OrientGraph = OrientDB.getGraph
@@ -145,6 +142,8 @@ object StepVertex {
     
       val sql = s"delete vertex Step where @rid in (select out(hasStep) from Component where @rid='$componentId')"
     
-      graph.command(new OCommandSQL(sql)).execute()
+      val res: Int = graph.command(new OCommandSQL(sql)).execute()
+      graph.commit()
+      res
   }
 }

@@ -40,6 +40,7 @@ ChangeLog 09.01.2017
 ChangeLog version 0.1.1
 
 Hinzufuegen neue Property <nameToShow> in Vertex Component und Step
+    siehe docu db_schema.txt
 
 ChangeLog version 1.0.0
 
