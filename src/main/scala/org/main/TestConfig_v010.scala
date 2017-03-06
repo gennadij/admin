@@ -6,7 +6,7 @@ import org.dto.DTOIds
 import org.dto.DTONames
 import play.api.libs.json.JsValue
 
-class TestConfigs_v010 extends AdminWeb{
+class TestConfig_v010 extends AdminWeb{
   
   /*
    * Linux

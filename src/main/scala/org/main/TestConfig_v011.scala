@@ -65,7 +65,55 @@ class TestConfig_v011 extends AdminWeb{
    * Windows
    */
 
-  
+//  I am generic configurator
+//Generic configurator started
+//Run Test Scenarios
+//adminId #21:8
+//configId #41:7
+//firstStepId = #41:7 -> #25:11
+//componentId_1_1 = #25:11 -> #29:22
+//componentId_1_2 = #25:11 -> #30:20
+//componentId_1_3 = #25:11 -> #31:19
+//stepId_2 #29:22 -> #26:8
+//Connect #30:20 -> #26:8
+//componentId_2_1 = #26:8 -> #32:17
+//componentId_2_2 = #26:8 -> #29:23
+//stepId_3 #31:19 -> #27:7
+//Connect #32:17 -> #27:7
+//Connect #29:23 -> #27:7
+//componentId_3_1 = #27:7 -> #30:21
+//componentId_3_2 = #27:7 -> #31:20
+//componentId_3_3 = #27:7 -> #32:18
+//componentId_3_4 = #27:7 -> #29:24
+//stepId_4 #30:21 -> #28:7
+//Connect #31:20 -> #28:7
+//Connect #32:18 -> #28:7
+//Connect #29:24 -> #28:7
+//componentId_4_1 = #28:7 -> #30:22
+//componentId_4_2 = #28:7 -> #31:21
+//componentId_4_3 = #28:7 -> #32:19
+//stepId_5 #30:22 -> #25:12
+//Connect #31:21 -> #25:12
+//componentId_5_1 = #25:12 -> #29:25
+//componentId_5_2 = #25:12 -> #30:23
+//componentId_5_3 = #25:12 -> #31:22
+//componentId_5_4 = #25:12 -> #32:20
+//componentId_5_5 = #25:12 -> #29:26
+//stepId_6 #32:19 -> #26:9
+//componentId_6_1 = #26:9 -> #30:24
+//componentId_6_2 = #26:9 -> #31:23
+//componentId_6_3 = #26:9 -> #32:21
+//stepId_7 #32:20 -> #27:8
+//Connect #29:26 -> #27:8
+//componentId_7_1 = #27:8 -> #29:27
+//componentId_7_2 = #27:8 -> #30:25
+//stepId_8 #29:25 -> #28:8
+//Connect #30:23 -> #28:8
+//Connect #31:22 -> #28:8
+//componentId_8_1 = #28:8 -> #31:24
+//componentId_8_2 = #28:8 -> #32:22
+//componentId_8_3 = #28:8 -> #29:28
+//END
   
   
   
