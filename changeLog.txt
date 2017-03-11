@@ -51,13 +51,27 @@ ChangeLog version 1.0.0
 
 
 ChangeLog version 0.1.2
-    - Es darf nicht zwei gleiche Urls in der DB vorgefungen werden
-    - Der Vertax Config darf nur einen FirstStep haben
-
+    # Es darf nicht zwei gleiche Urls in der DB vorgefungen werden
+        Die Ueberpruefung im Configurator nicht notwendigt
+    # Der Vertax Config darf nur einen FirstStep haben
+        Die Ueberpruefung in dem Configurator nicht notwendigt
+    # Die selectedComponents können nur bei von einem Step ausgewaelt werden.
+        Im Configurator bei der Suche ueber selectedComponent den selectedStep 
+        kann nur einen Step gefunden werden, deswegen ist diese ueberpruefung 
+        nicht notwaendigt.
+    # Das Problem stellt sich wie folgt aus
+             -> Component1 -> nextStep1
+        Step -> Component2 -> nextStep1
+             -> Component3 -> nextStep2
+        Bei der Auswahl von Component2 und Component3 kann zu einer Kollesion 
+        im Configurator führen, da es keinen definierten nextStep gibt.
+        Das wird im Admin ausgeschlossen.
+        Der Configurator braucht nicht das ueberpruefen.
+        
 ChangeLog version 0.1.1
 
-Hinzufuegen neue Property <nameToShow> in Vertex Component und Step
-    siehe docu db_schema.txt
+    - Hinzufuegen neue Property <nameToShow> in Vertex Component und Step 
+        (siehe docu db_schema.txt)
 
 
         
