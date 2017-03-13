@@ -38,8 +38,8 @@ ChangeLog 09.01.2017
         - ConnStepToComponent
 
 ChangeLog version 1.0.0
-    - Integration in einen Play Project
-    - Implementierung des Login
+    # Integration in einen Play Project
+    # Implementierung des Login
         Docu zu der Login
         https://www.lightbend.com/activator/template/bootzooka
         http://www.lightbend.com/activator/template/play-oauth2-scala
@@ -50,7 +50,7 @@ ChangeLog version 1.0.0
         http://ics-software-engineering.github.io/play-example-login/
 
 
-ChangeLog version 0.1.2
+ChangeLog version 0.1.2 
     # Es darf nicht zwei gleiche Urls in der DB vorgefungen werden
         Die Ueberpruefung im Configurator nicht notwendigt
     # Der Vertax Config darf nur einen FirstStep haben
@@ -68,7 +68,7 @@ ChangeLog version 0.1.2
         Das wird im Admin ausgeschlossen.
         Der Configurator braucht nicht das ueberpruefen.
         
-ChangeLog version 0.1.1
+ChangeLog version 0.1.1 -> done on 01.03.2017
 
     - Hinzufuegen neue Property <nameToShow> in Vertex Component und Step 
         (siehe docu db_schema.txt)
