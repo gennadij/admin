@@ -37,6 +37,7 @@ class SpecsAddingFirstStep extends Specification
         "dto" -> DTONames.CREATE_FIRST_STEP
         ,"params" -> Json.obj(
           "configId" -> login,
+          "nameToShow" -> "FirstStep",
           "kind" -> "first",
           "selectionCriterium" -> Json.obj(
               "min" -> 1,
@@ -66,6 +67,7 @@ class SpecsAddingFirstStep extends Specification
         "dto" -> DTONames.CREATE_FIRST_STEP
         ,"params" -> Json.obj(
           "configId" -> login,
+          "nameToShow" -> "FirstStep",
           "kind" -> "first",
           "selectionCriterium" -> Json.obj(
               "min" -> 1,

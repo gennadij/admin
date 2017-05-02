@@ -32,9 +32,11 @@ ChangeLog version 1.0.0
 
 ChangeLog version 0.1.2
     - 1. Es darf nicht zwei gleiche Urls in der DB vorgefungen werden
-         Die Ueberpruefung im Configurator nicht notwendigt
+         Die Ueberpruefung im Configurator nicht notwendigt 
+         OrientDB UNIQUE-Index
     # 2. Der Vertax Config darf nur einen FirstStep haben
          Die Ueberpruefung in dem Configurator nicht notwendigt
+         TestClass -> SpecsAddingFirstStep
     # 3. Die selectedComponents können nur bei von einem Step ausgewaelt werden.
          Im Configurator bei der Suche ueber selectedComponent den selectedStep 
          kann nur einen Step gefunden werden, deswegen ist diese ueberpruefung 
