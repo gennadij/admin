@@ -42,8 +42,8 @@ ChangeLog 09.01.2017
         - ConnStepToComponent
 
 ChangeLog version 1.0.0
-    - Integration in einen Play Project
-    - Implementierung des Login
+    # Integration in einen Play Project
+    # Implementierung des Login
         Docu zu der Login
         https://www.lightbend.com/activator/template/bootzooka
         http://www.lightbend.com/activator/template/play-oauth2-scala
@@ -55,24 +55,24 @@ ChangeLog version 1.0.0
 
 
 ChangeLog version 0.1.2
-    # Es darf nicht zwei gleiche Urls in der DB vorgefungen werden
-        Die Ueberpruefung im Configurator nicht notwendigt
-    # Der Vertax Config darf nur einen FirstStep haben
-        Die Ueberpruefung in dem Configurator nicht notwendigt
-    # Die selectedComponents können nur bei von einem Step ausgewaelt werden.
-        Im Configurator bei der Suche ueber selectedComponent den selectedStep 
-        kann nur einen Step gefunden werden, deswegen ist diese ueberpruefung 
-        nicht notwaendigt.
-    # Das Problem stellt sich wie folgt aus
-             -> Component1 -> nextStep1
-        Step -> Component2 -> nextStep1
-             -> Component3 -> nextStep2
-        Bei der Auswahl von Component2 und Component3 kann zu einer Kollesion 
-        im Configurator führen, da es keinen definierten nextStep gibt.
-        Das wird im Admin ausgeschlossen.
-        Der Configurator braucht nicht das ueberpruefen. 
-        Es muss ausgeschlossen werden, dass die Component2 oder Component1 
-        zusammen mit der Component3 ausgewaelt werden kann.
+    - 1. Es darf nicht zwei gleiche Urls in der DB vorgefungen werden
+         Die Ueberpruefung im Configurator nicht notwendigt
+    # 2. Der Vertax Config darf nur einen FirstStep haben
+         Die Ueberpruefung in dem Configurator nicht notwendigt
+    # 3. Die selectedComponents können nur bei von einem Step ausgewaelt werden.
+         Im Configurator bei der Suche ueber selectedComponent den selectedStep 
+         kann nur einen Step gefunden werden, deswegen ist diese ueberpruefung 
+         nicht notwaendigt.
+    # 4. Das Problem stellt sich wie folgt aus
+              -> Component1 -> nextStep1
+         Step -> Component2 -> nextStep1
+              -> Component3 -> nextStep2
+         Bei der Auswahl von Component2 und Component3 kann zu einer Kollesion 
+         im Configurator führen, da es keinen definierten nextStep gibt.
+         Das wird im Admin ausgeschlossen.
+         Der Configurator braucht nicht das ueberpruefen. 
+         Es muss ausgeschlossen werden, dass die Component2 oder Component1 
+         zusammen mit der Component3 ausgewaelt werden kann.
         
 ChangeLog version 0.1.1
 
