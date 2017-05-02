@@ -9,6 +9,10 @@
 |                           CHANGELOGS                                         |
 |******************************************************************************|
 
+Legende
+- fertige ToDo
+# nicht fertige ToDo
+
 ChangeLog 06.01.2017
     Vertex Step
         - selectionCriterium => definiert maximale und minimale Anzahl der ausgewaelten Komponenten in dem Step
@@ -66,7 +70,9 @@ ChangeLog version 0.1.2
         Bei der Auswahl von Component2 und Component3 kann zu einer Kollesion 
         im Configurator führen, da es keinen definierten nextStep gibt.
         Das wird im Admin ausgeschlossen.
-        Der Configurator braucht nicht das ueberpruefen.
+        Der Configurator braucht nicht das ueberpruefen. 
+        Es muss ausgeschlossen werden, dass die Component2 oder Component1 
+        zusammen mit der Component3 ausgewaelt werden kann.
         
 ChangeLog version 0.1.1
 

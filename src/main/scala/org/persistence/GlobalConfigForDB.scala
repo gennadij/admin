@@ -5,7 +5,7 @@ object GlobalConfigForDB {
   //Test
   def db: DB = {
     activeDB match {
-      case "test" => new TestDB
+      case "test" => new TestDBv011
     }
   }
 }
@@ -18,6 +18,12 @@ abstract class DB {
 
 class TestDB extends DB {
   override val dbName = "testDB"
+  override val username = "root"
+  override val password = "root"
+}
+
+class TestDBv011 extends DB {
+  override val dbName = "testDBv011"
   override val username = "root"
   override val password = "root"
 }

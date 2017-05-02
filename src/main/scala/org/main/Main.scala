@@ -25,6 +25,7 @@ object Main {
 //    PrepareConfigForSpecs2.prepareSpecsStepComponentPropertyNameToSchow
     new TestConfig_v011().config_v011
     
+    
     println("END")
   }
 }
