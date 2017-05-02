@@ -23,7 +23,7 @@ object Main {
 //    PrepareConfigForSpecs2.prepareSpecsAddStep
 //    new TestConfigs().configUser10
 //    PrepareConfigForSpecs2.prepareSpecsStepComponentPropertyNameToSchow
-    new TestConfig_v011().config_v011
+    new TestConfig_v012().config_v012
     
     
     println("END")
