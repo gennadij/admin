@@ -104,52 +104,84 @@ trait AdminWeb {
   }
 
   private def register(receivedMessage: JsValue): JsValue = {
-    val registrationCS: RegistrationCS = Json.fromJson[RegistrationCS](receivedMessage).get
-    val registrationSC: RegistrationSC = Admin.register(registrationCS)
+    val registrationCS: JsResult[RegistrationCS] = Json.fromJson[RegistrationCS](receivedMessage)
+    registrationCS match {
+      case s : JsSuccess[RegistrationCS] => s.get
+      case e : JsError => println("Errors -> REGISTRATION: " + JsError.toJson(e).toString())
+    }
+    val registrationSC: RegistrationSC = Admin.register(registrationCS.get)
     Json.toJson(registrationSC)
   }
 
   private def login(receivedMessage: JsValue): JsValue = {
-    val loginCS: LoginCS = Json.fromJson[LoginCS](receivedMessage).get
-    val loginSC: LoginSC = Admin.login(loginCS)
+    val loginCS: JsResult[LoginCS] = Json.fromJson[LoginCS](receivedMessage)
+    loginCS match {
+      case s : JsSuccess[LoginCS] => s.get
+      case e : JsError => println("Errors -> LOGIN: " + JsError.toJson(e).toString())
+    }
+    val loginSC: LoginSC = Admin.login(loginCS.get)
     Json.toJson(loginSC)
   }
   
   private def createConfig(receivedMessage: JsValue): JsValue = {
-    val createConfigCS: CreateConfigCS = Json.fromJson[CreateConfigCS](receivedMessage).get
-    val createConfigSC: CreateConfigSC = Admin.createConfig(createConfigCS)
+    val createConfigCS: JsResult[CreateConfigCS] = Json.fromJson[CreateConfigCS](receivedMessage)
+    createConfigCS match {
+      case s : JsSuccess[CreateConfigCS] => s.get
+      case e : JsError => println("Errors -> CREATE_CONFIG: " + JsError.toJson(e).toString())
+    }
+    val createConfigSC: CreateConfigSC = Admin.createConfig(createConfigCS.get)
     Json.toJson(createConfigSC)
   }
-  //TODO Parameter kind ist hier umbrauchbar
+  
   private def createFirstStep(receivedMessage: JsValue): JsValue = {
-    val firstStepCS: FirstStepCS = Json.fromJson[FirstStepCS](receivedMessage).get
-    val firstStepSC: FirstStepSC = Admin.createFirstStep(firstStepCS)
+    val firstStepCS: JsResult[FirstStepCS] = Json.fromJson[FirstStepCS](receivedMessage)
+    firstStepCS match {
+      case s : JsSuccess[FirstStepCS] => s.get
+      case e : JsError => println("Errors -> CREATE_FIRST_STEP: " + JsError.toJson(e).toString())
+    }
+    val firstStepSC: FirstStepSC = Admin.createFirstStep(firstStepCS.get)
     Json.toJson(firstStepSC)
   }
   
   private def createComponent(receivedMessage: JsValue): JsValue = {
-    val componentCS: ComponentCS = Json.fromJson[ComponentCS](receivedMessage).get
-    val componentSC: ComponentSC = Admin.createComponent(componentCS)
+    val componentCS: JsResult[ComponentCS] = Json.fromJson[ComponentCS](receivedMessage)
+    componentCS match {
+      case s : JsSuccess[ComponentCS] => s.get
+      case e : JsError => println("Errors -> CREATE_COMPONENT: " + JsError.toJson(e).toString())
+    }
+    val componentSC: ComponentSC = Admin.createComponent(componentCS.get)
     Json.toJson(componentSC)
   }
   
   private def createStep(receivedMessage: JsValue): JsValue = {
-    val stepCS: StepCS = Json.fromJson[StepCS](receivedMessage).get
-    val stepSC: StepSC = Admin.createStep(stepCS)
+    val stepCS: JsResult[StepCS] = Json.fromJson[StepCS](receivedMessage)
+    stepCS match {
+      case s : JsSuccess[StepCS] => s.get
+      case e : JsError => println("Errors -> CREATE_STEPT: " + JsError.toJson(e).toString())
+    }
+    val stepSC: StepSC = Admin.createStep(stepCS.get)
     Json.toJson(stepSC)
   }
   
   private def connectComponentToStep(receivedMessage: JsValue): JsValue = {
-    val connectionComponentToStepCS: ConnectionComponentToStepCS = 
-      Json.fromJson[ConnectionComponentToStepCS](receivedMessage).get
+    val connectionComponentToStepCS: JsResult[ConnectionComponentToStepCS] = 
+      Json.fromJson[ConnectionComponentToStepCS](receivedMessage)
+    connectionComponentToStepCS match {
+      case s : JsSuccess[ConnectionComponentToStepCS] => s.get
+      case e : JsError => println("Errors -> CONNECTION_COMPONENT_TO_STEP: " + JsError.toJson(e).toString())
+    }
     val connectionComponentToStepSC: ConnectionComponentToStepSC = 
-      Admin.connectComponentToStep(connectionComponentToStepCS)
+      Admin.connectComponentToStep(connectionComponentToStepCS.get)
     Json.toJson(connectionComponentToStepSC)
   }
   
   private def configTree(receivedMessage: JsValue): JsValue = {
-    val configTreeCS: ConfigTreeCS = Json.fromJson[ConfigTreeCS](receivedMessage).get
-    val steps = Admin.configTree(configTreeCS)
-    Json.toJson(steps)
+    val configTreeCS: JsResult[ConfigTreeCS] = Json.fromJson[ConfigTreeCS](receivedMessage)
+    configTreeCS match {
+      case s : JsSuccess[ConfigTreeCS] => s.get
+      case e : JsError => println("Errors -> CONFIG_TREE: " + JsError.toJson(e).toString())
+    }
+    val configTreeSC = Admin.configTree(configTreeCS.get)
+    Json.toJson(configTreeSC)
   }
 }

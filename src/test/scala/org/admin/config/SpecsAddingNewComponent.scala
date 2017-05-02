@@ -38,6 +38,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
           "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> firstStepId,
+            "nameToShow" -> "Component",
             "kind" -> "immutable"
           )
         )
@@ -63,6 +64,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
           "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> firstStepId,
+            "nameToShow" -> "Component",
             "kind" -> "immutable"
           )
         )
@@ -88,6 +90,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
           "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> firstStepId,
+            "nameToShow" -> "Component",
             "kind" -> "immutable"
           )
         )
@@ -113,6 +116,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
           "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> firstStepId,
+            "nameToShow" -> "Component",
             "kind" -> "immutable"
           )
         )

@@ -39,6 +39,7 @@ class SpecsAddingComponentWithFirstStep extends Specification
         "dto" -> DTONames.CREATE_FIRST_STEP
         ,"params" -> Json.obj(
           "configId" -> login,
+          "nameToShow" -> "FirstStep",
           "kind" -> "first",
           "selectionCriterium" -> Json.obj(
               "min" -> 1,
@@ -69,6 +70,7 @@ class SpecsAddingComponentWithFirstStep extends Specification
           "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> (firstStepSC \ "result" \ "stepId").asOpt[String].get,
+            "nameToShow" -> "Component",
             "kind" -> "immutable"
           )
         )

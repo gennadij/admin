@@ -41,6 +41,7 @@ class SpecsAddStep extends Specification with AdminWeb with BeforeAfterAll{
           "dto" -> DTONames.CREATE_STEP,
           "params" -> Json.obj(
               "componentId" -> componentIds(0),
+              "nameToShow" -> "Component",
               "kind" -> "default",
               "selectionCriterium" -> Json.obj(
                   "min" -> 1,
@@ -98,6 +99,7 @@ class SpecsAddStep extends Specification with AdminWeb with BeforeAfterAll{
           "dto" -> DTONames.CREATE_STEP,
           "params" -> Json.obj(
               "componentId" -> componentIds(2),
+              "nameToShow" -> "Component",
               "kind" -> "default",
               "selectionCriterium" -> Json.obj(
                   "min" -> 1,

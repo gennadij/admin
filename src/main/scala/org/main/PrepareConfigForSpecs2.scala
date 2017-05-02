@@ -49,7 +49,7 @@ object PrepareConfigForSpecs2 extends AdminWeb{
     prepareLogin
   }
   
-  private def prepareWithAlredyExistingUser = {
+  def prepareWithAlredyExistingUser = {
     registerNewUser("userExist")
   }
   
@@ -102,11 +102,11 @@ object PrepareConfigForSpecs2 extends AdminWeb{
   def prepareAddingNewComponent = {
     registerNewUser("user6")
     
-    val adminId = login("user7")
+    val adminId = login("user6")
     
     println("adminId " + adminId)
     
-    val configId: String = createNewConfig(adminId, "http://contig/user7")
+    val configId: String = createNewConfig(adminId, "http://contig/user6")
     
     println("ConfigId" + configId)
     
@@ -270,6 +270,7 @@ object PrepareConfigForSpecs2 extends AdminWeb{
         "dto" -> DTONames.CREATE_COMPONENT
         ,"params" -> Json.obj(
             "stepId" -> stepId,
+            "nameToShow" -> "Component",
             "kind" -> "immutable"
         )
     )
@@ -350,6 +351,7 @@ object PrepareConfigForSpecs2 extends AdminWeb{
         "dto" -> DTONames.CREATE_FIRST_STEP
         ,"params" -> Json.obj(
           "configId" -> configId,
+          "nameToShow" -> "FirstStep",
           "kind" -> "first",
           "selectionCriterium" -> Json.obj(
               "min" -> 1,
