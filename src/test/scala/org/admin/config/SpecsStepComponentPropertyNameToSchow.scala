@@ -12,22 +12,29 @@ import play.api.libs.json.Json
 import org.main.PrepareConfigForSpecs2
 import org.persistence.db.orientdb.ComponentVertex
 import org.persistence.db.orientdb.StepVertex
+import preparingConfigs.PreparingConfigsForTests
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 05.03.2017
+ * 
+ * Username = user11
+ * 
+ * Linux
+ * adminId #21:29
+ * configId #41:14
  */
 
 @RunWith(classOf[JUnitRunner])
 class SpecsStepComponentPropertyNameToSchow extends Specification 
                           with AdminWeb
-                          with BeforeAfterAll{
+                          with BeforeAfterAll {
   var componentId = ""
   
   def afterAll(): Unit = {
-    val firstStepId = PrepareConfigForSpecs2.getFirstStep("user11")
-    println("Component " + componentId)
+    val firstStepId = preparingConfigs.PreparingConfigsForTests.getFirstStep("user11")
+//    println("Component " + componentId)
     val countStep = StepVertex.deleteStepFromComponent(componentId)
     require(countStep == 1, "Anzahl der geloeschten Steps " + countStep)
     val countComponent = ComponentVertex.deleteComponents(firstStepId)
@@ -38,7 +45,7 @@ class SpecsStepComponentPropertyNameToSchow extends Specification
   }
   
   def beforeAll(): Unit = {
-    
+//    PreparingConfigsForTests.prepareSpecsStepComponentPropertyNameToSchow
   }
   
   "Specifikation spezifiziert neu Property <NameToShow>" >> {
@@ -56,9 +63,9 @@ class SpecsStepComponentPropertyNameToSchow extends Specification
           )
         )
       )
-      println(firstStepCS)
+//      println(firstStepCS)
       val firstStepSC: JsValue = handelMessage(firstStepCS)
-      println(firstStepSC)
+//      println(firstStepSC)
       "dtoId" >> {
         (firstStepSC \ "dtoId").asOpt[Int].get === DTOIds.CREATE_FIRST_STEP
       }
@@ -75,7 +82,7 @@ class SpecsStepComponentPropertyNameToSchow extends Specification
       
       val firstStepId = (firstStepSC \ "result" \ "stepId").asOpt[String].get
       
-      println(firstStepId)
+//      println(firstStepId)
       "Component 1 fuer FirstStep hinzufuegen" >> {
         val componentCS = Json.obj(
           "dtoId" -> DTOIds.CREATE_COMPONENT,
@@ -116,9 +123,9 @@ class SpecsStepComponentPropertyNameToSchow extends Specification
                 )
             )
         )
-        println(stepCS)
+//        println(stepCS)
         val stepSC = handelMessage(stepCS)
-        println(stepSC)
+//        println(stepSC)
         "stepCS \\ dtoId" >> {
           (stepSC \ "dtoId").asOpt[Int].get === DTOIds.CREATE_STEP
         }
@@ -141,9 +148,9 @@ class SpecsStepComponentPropertyNameToSchow extends Specification
                   "stepId" -> (stepSC \ "result" \ "stepId").asOpt[String].get
               )
           )
-          println(connectionComponentToStepCS)
+//          println(connectionComponentToStepCS)
           val connectionComponentToStepSC = handelMessage(connectionComponentToStepCS)
-          println(connectionComponentToStepSC)
+//          println(connectionComponentToStepSC)
           "connectionComponentToStepSC \\ dtoId" >> {
             (connectionComponentToStepSC \ "dtoId").asOpt[Int].get === DTOIds.CONNECTION_COMPONENT_TO_STEP
           }

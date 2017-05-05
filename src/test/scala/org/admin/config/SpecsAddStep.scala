@@ -15,25 +15,30 @@ import org.persistence.db.orientdb.StepVertex
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
- * Created by Gennadi Heimann 27.01.2016
+ * Created by Gennadi Heimann 25.01.2016
+ * 
+ * Username = user8
  */
+
 @RunWith(classOf[JUnitRunner])
 class SpecsAddStep extends Specification with AdminWeb with BeforeAfterAll{
   
   def afterAll(): Unit = {
-    val stepId: String = PrepareConfigForSpecs2.getFirstStep("user8")
-    val componentIds: List[String] = PrepareConfigForSpecs2.getComponentsFromFirstStep(stepId)
+    val stepId: String = preparingConfigs.PreparingConfigsForTests.getFirstStep("user8")
+    val componentIds: List[String] = preparingConfigs.PreparingConfigsForTests.getComponentsFromFirstStep(stepId)
     
     val count = componentIds map {StepVertex.deleteStepFromComponent(_)}
     
     require(count == List(1, 0, 1), "Anzahl der geloeschten Steps" + count)
     
   }
-  def beforeAll(): Unit = {}
+  def beforeAll(): Unit = {
+//    preparingConfigs.PreparingConfigsForTests.prepareSpecsAddStep
+  }
   
   "Specification spezifiziert die Erzeugung von der Step" >> {
-    val stepId: String = PrepareConfigForSpecs2.getFirstStep("user8")
-    val componentIds: List[String] = PrepareConfigForSpecs2.getComponentsFromFirstStep(stepId)
+    val stepId: String = preparingConfigs.PreparingConfigsForTests.getFirstStep("user8")
+    val componentIds: List[String] = preparingConfigs.PreparingConfigsForTests.getComponentsFromFirstStep(stepId)
   
     "component(0) -> step_1" >> {
       val stepCS = Json.obj(

@@ -21,7 +21,6 @@ object Main {
 //    PrepareConfigForSpecs2.prepareSpecsConfigTreeEmpty
 //    PrepareConfigForSpecs2.prepareConfigTree
 //    PrepareConfigForSpecs2.prepareSpecsAddStep
-//    new TestConfigs().configUser10
 //    PrepareConfigForSpecs2.prepareSpecsStepComponentPropertyNameToSchow
     /*v012*/
 //    new TestConfig_v012().config_v012

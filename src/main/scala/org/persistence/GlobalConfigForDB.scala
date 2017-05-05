@@ -5,7 +5,7 @@ object GlobalConfigForDB {
   //Test
   def db: DB = {
     activeDB match {
-      case "test" => new TestDBv012
+      case "test" => new TestDB
     }
   }
 }

@@ -15,6 +15,8 @@ import org.junit.runner.RunWith
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 16.01.2017
+ * 
+ * Username = user4
  */
 
 @RunWith(classOf[JUnitRunner])
@@ -22,7 +24,10 @@ class SpecsAddingFirstStep extends Specification
                           with AdminWeb
                           with BeforeAfterAll{
                           
-  def beforeAll() = {}
+  def beforeAll() = {
+//    preparingConfigs.PreparingConfigsForTests.prepareAddingFirstStep
+    
+  }
   
   def afterAll() = {
     val count = StepVertex.removeStep(login)

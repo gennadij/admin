@@ -10,7 +10,7 @@ import org.specs2.runner.JUnitRunner
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
- * Created by Gennadi Heimann 15.01.2017
+ * Created by Gennadi Heimann 13.01.2017
  */
 
 @RunWith(classOf[JUnitRunner])
@@ -18,7 +18,7 @@ class SpecsLoginWithNotExistUser extends Specification with AdminWeb {
   def is = 
   
   s2"""
-       Specification fuer die Pruefung der Registrierung eines neuen Admins
+       Specification fuer die Pruefung der Registrierung eines neuen nicht exestierenden Users
           dtoId                                                         $e1
           dto                                                            $e2
           username                                                       $e4

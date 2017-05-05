@@ -15,6 +15,8 @@ import org.specs2.runner.JUnitRunner
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 16.01.2017
+ * 
+ * Username = user5
  */
 
 @RunWith(classOf[JUnitRunner])
@@ -25,6 +27,7 @@ class SpecsAddingComponentWithFirstStep extends Specification
   
   def beforeAll() = {
     //TODO select @rid from (select  expand(out('hasConfig')) from AdminUser where username='user5')
+//    preparingConfigs.PreparingConfigsForTests.prepareAddingComponentWithFirstStep
   }
   
   def afterAll() = {

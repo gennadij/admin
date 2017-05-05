@@ -8,17 +8,27 @@ import org.junit.runner.RunWith
 import org.specs2.runner.JUnitRunner
 import org.dto.DTONames
 import org.dto.DTOIds
+import org.specs2.specification.BeforeAfterAll
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
- * Created by Gennadi Heimann 15.01.2017
+ * Created by Gennadi Heimann 13.01.2017
+ * 
+ * Username = user2
  */
 
 @RunWith(classOf[JUnitRunner])
-class SpecsLogin extends Specification with AdminWeb {
+class SpecsLogin extends Specification with AdminWeb with BeforeAfterAll{
+  
+  def afterAll(): Unit = {}
+  def beforeAll(): Unit = {
+//    preparingConfigs.PreparingConfigsForTests.prepareLogin
+  }
+  
   def is = 
   
+
   s2"""
        Specification fuer die Pruefung der Registrierung eines neuen Admins
           dtoId                                                         $e1

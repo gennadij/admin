@@ -14,20 +14,21 @@ import org.specs2.mutable.Specification
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 13.01.2017
+ * 
+ * Username = userExist
  */
 
 @RunWith(classOf[JUnitRunner])
 class SpecsAddingAlredyExistingAdminUser extends Specification with AdminWeb with BeforeAfterAll{
 
   def beforeAll() = {
+//    preparingConfigs.PreparingConfigsForTests.prepareWithAlredyExistingUser
   }
   
   def afterAll() = {
-//    val count = AdminUserVertex.deleteAdmin("user1")
-//    require(count == 1, "Anzahl der geloescten AdminUserVertexes " + count)
   }
   
-  "Specification spezifiziert die Registrierung des schon exestierenden Users" >> {
+  "Specification spezifiziert die Registrierung des exestierenden Users" >> {
     "schon exstierenden User hinzufuegen" >> {
       val registerCS = Json.obj(
           "dtoId" -> DTOIds.REGISTRATION,

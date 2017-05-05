@@ -14,13 +14,17 @@ import play.api.libs.json.JsValue
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 16.01.2017
+ * 
+ * Username = user7
  */
 
 @RunWith(classOf[JUnitRunner])
 class SpecsConfigTreeFirstStep3Components extends Specification with AdminWeb with BeforeAfterAll{
   
   
-  def beforeAll() = {}
+  def beforeAll() = {
+//    preparingConfigs.PreparingConfigsForTests.prepareConfigTree
+  }
   
   def afterAll() = {}
   
