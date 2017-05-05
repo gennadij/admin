@@ -11,14 +11,38 @@ import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.persistence.db.orientdb.OrientDB
+
 import scala.collection.JavaConversions._
 import com.tinkerpop.blueprints.Edge
 import com.tinkerpop.blueprints.Vertex
 import com.tinkerpop.blueprints.Direction
 import org.persistence.db.orientdb.PropertyKey
 
+import scala.collection.JavaConversions._
+import scala.concurrent.stm.CommitBarrier.UserCancel
+
 object PreparingConfigsForTests extends AdminWeb {
-  
+
+  def prepareSpecsTwoSameConfigUrls = {
+    val graph: OrientGraph = OrientDB.getGraph
+    val sql: String = s"select count(username) from AdminUser where username like 'user13'"
+    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+		val count = res.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString().toInt).get(0)
+    if(count == 1 ) {
+      println("Der User user13 ist schon erstellt worden")
+    }else {
+			registerNewUser("user13")
+
+			val adminId_1 = login("user13")
+
+			println("adminId " + adminId_1)
+
+			val configId_1 = createNewConfig(adminId_1, "http://contig/user13")
+
+			println("ConfigId" + configId_1)
+		}
+	}
+
   def getComponentsFromFirstStep(stepId: String): List[String] = {
     val graph: OrientGraph = OrientDB.getGraph
     
@@ -84,7 +108,7 @@ object PreparingConfigsForTests extends AdminWeb {
 //    select out('hasConfig').out('hasFirstStep') from AdminUser where username='user6'
     val graph: OrientGraph = OrientDB.getGraph
     val sql: String = s"select expand(out('hasConfig').out('hasFirstStep')) from AdminUser where username='$username'"
-    println(sql)
+//    println(sql)
     val res: OrientDynaElementIterable = graph
         .command(new OCommandSQL(sql)).execute()
       graph.commit
@@ -246,7 +270,7 @@ object PreparingConfigsForTests extends AdminWeb {
     println("configId " + configId)
   }
   
-  private def registerNewUser(userPassword: String) = {
+  def registerNewUser(userPassword: String) = {
     
     val registerCS = Json.obj(
           "dtoId" -> DTOIds.REGISTRATION,
@@ -260,10 +284,10 @@ object PreparingConfigsForTests extends AdminWeb {
     val registerSC = handelMessage(registerCS)
     
     require((registerSC \ "result" \ "username").asOpt[String].get == userPassword, s"Username: $userPassword")
-    require((registerSC \ "result" \ "status").asOpt[Boolean].get == true, "Status: " + (registerSC \ "result" \ "status").asOpt[Boolean].get)
+    require((registerSC \ "result" \ "status").asOpt[Boolean].get == true, "Status: " + (registerSC \ "result" \ "status").asOpt[Boolean].get + " bei der User " + userPassword )
   }
     
-  private def login (userPassword: String): String = {
+  def login (userPassword: String): String = {
     val loginCS = Json.obj(
         "dtoId" -> DTOIds.LOGIN,
         "dto" -> DTONames.LOGIN
@@ -280,7 +304,7 @@ object PreparingConfigsForTests extends AdminWeb {
     (loginSC \ "result" \ "adminId").asOpt[String].get
   }
   
-  private def createNewConfig(adminId: String, configUrl: String) = {
+  def createNewConfig(adminId: String, configUrl: String) = {
     val createConfigCS = Json.obj(
           "jsonId" -> DTOIds.CREATE_CONFIG,
           "dto" -> DTONames.CREATE_CONFIG

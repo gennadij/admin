@@ -3,10 +3,16 @@ package org.persistence
 object GlobalConfigForDB {
   val activeDB: String = "test"
   //Test
+  var datenbank: DB = new TestDB
   def db: DB = {
     activeDB match {
-      case "test" => new TestDB
+      case "test" => datenbank
     }
+  }
+
+  def setDb(db: DB) = {
+    println("Set DB: " + db.dbName)
+    datenbank = db
   }
 }
 

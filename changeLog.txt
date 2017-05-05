@@ -34,6 +34,7 @@ ChangeLog version 0.1.2
     - 1. Es darf nicht zwei gleiche Urls in der DB vorgefungen werden
          Die Ueberpruefung im Configurator nicht notwendigt 
          OrientDB UNIQUE-Index
+         TestUser = user13, user14
     # 2. Der Vertax Config darf nur einen FirstStep haben
          Die Ueberpruefung in dem Configurator nicht notwendigt
          TestClass -> SpecsAddingFirstStep

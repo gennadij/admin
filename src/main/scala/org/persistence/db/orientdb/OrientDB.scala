@@ -25,10 +25,11 @@ object OrientDB {
    */
   def getGraph(): OrientGraph = {
     
-    val uri = if(System.getProperty("os.name") == "Linux") 
-    "remote:localhost/" + GlobalConfigForDB.db.dbName
-      else 
-    "remote:localhost/" + GlobalConfigForDB.db.dbName
+//    val uri = if(System.getProperty("os.name") == "Linux")
+//    "remote:localhost/" + GlobalConfigForDB.db.dbName
+//      else
+//    "remote:localhost/" + GlobalConfigForDB.db.dbName
+    val uri = "remote:localhost/" + GlobalConfigForDB.db.dbName
     val factory:  OrientGraphFactory = new OrientGraphFactory(uri, GlobalConfigForDB.db.username, GlobalConfigForDB.db.password)
     factory.getTx()
   }
