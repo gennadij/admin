@@ -32,12 +32,6 @@ class SpecsTwoSameConfigUrls extends Specification
 		GlobalConfigForDB.setDb(new TestDBv012)
 		PreparingConfigsForTests.prepareSpecsTwoSameConfigUrls
 		val count = AdminUserVertex.deleteAdmin("user14")
-//		val username =
-//		val sql_1: String = s"DELETE VERTEX AdminUser where username='$username'"
-//		val graph: OrientGraph = OrientDB.getGraph
-//		val res: Int = graph
-//			.command(new OCommandSQL(sql_1)).execute()
-//		graph.commit
 		require(count == 1, count.toString)
 	}
 	def afterAll = {
