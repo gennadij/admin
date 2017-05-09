@@ -14,6 +14,8 @@ import org.persistence.db.orientdb.ConfigVertex
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 16.01.2017
+ * 
+ * Username = user3
  */
 
 @RunWith(classOf[JUnitRunner])
@@ -22,7 +24,9 @@ class SpecsAddingNewConfig extends Specification
                            with BeforeAfterAll{
   
   val userPassword = "user3"
-  def beforeAll() = {}
+  def beforeAll() = {
+//    preparingConfigs.PreparingConfigsForTests.prepareAddingNewConfig
+  }
   
   def afterAll() = {
     val count: Int = ConfigVertex.deleteConfigVertex(userPassword)

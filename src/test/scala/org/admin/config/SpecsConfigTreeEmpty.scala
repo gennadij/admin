@@ -14,12 +14,16 @@ import play.api.libs.json.JsValue
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 29.01.2017
+ * 
+ * Username = user9
  */
 
 @RunWith(classOf[JUnitRunner])
 class SpecsConfigTreeEmpty extends Specification with AdminWeb with BeforeAfterAll {
 
-  def afterAll(): Unit = {}
+  def afterAll(): Unit = {
+//    preparingConfigs.PreparingConfigsForTests.prepareSpecsConfigTreeEmpty
+  }
   
   def beforeAll(): Unit = {}
       

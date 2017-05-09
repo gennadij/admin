@@ -1,0 +1,28 @@
+git remote -v -> view all connections
+git remote add <name> <url>
+
+https://github.com/gennadij/configurator.git
+git@github.com:gennadij/configurator.git
+
+git remote rm <name>
+git remote rename <old-name> <new-name>
+
+
+
+remote add configOnUbuntu ubuntu@generic-config.dnshome.de:/home/ubuntu/projects/config.git
+
+Tag
+
+schow tags
+
+git tag
+
+https://git-scm.com/book/en/v2/Git-Basics-Tagging
+
+greate new annotated tag
+
+git tag -a v1.4 -m "my version 1.4"
+
+git show v1.4
+
+git push origin [tagname]

@@ -8,7 +8,7 @@ import org.specs2.runner.JUnitRunner
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
- * Created by Gennadi Heimann 15.01.2017
+ * Created by Gennadi Heimann 18.11.2016
  */
 @RunWith(classOf[JUnitRunner])
 class DBConnection extends Specification{

@@ -1,0 +1,27 @@
+connect remote:localhost/testDB root root ;
+SET echo TRUE;
+
+CREATE CLASS AdminUser EXTENDS V;
+CREATE PROPERTY AdminUser.username STRING;
+CREATE PROPERTY AdminUser.password STRING;
+
+CREATE CLASS hasConfig EXTENDS E;
+
+CREATE CLASS Config EXTENDS V;
+CREATE PROPERTY Config.configUri STRING;
+
+CREATE CLASS hasStep EXTENDS E;
+
+CREATE CLASS Step EXTENDS V;
+CREATE PROPERTY Step.kind STRING;
+CREATE PROPERTY Step.selectionCriteriumMin STRING;
+CREATE PROPERTY Step.selectionCriteriumMax STRING;
+CREATE PROPERTY Step.nameToShow STRING;
+
+CREATE CLASS Component EXTENDS V;
+CREATE PROPERTY Component.kind STRING;
+CREATE PROPERTY Component.nameToShow STRING;
+
+CREATE CLASS hasComponent EXTENDS E;
+
+CREATE CLASS nextStep EXTENDS E;

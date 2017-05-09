@@ -16,14 +16,18 @@ import org.persistence.db.orientdb.ComponentVertex
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 16.01.2017
+ * 
+ * Username = user6
  */
 
 @RunWith(classOf[JUnitRunner])
 class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAfterAll{
   //TODO hinten ConfigTree ausfueren um Hinzufuegen von COmponent prüfen
-  def beforeAll() = {}
+  def beforeAll() = {
+//    preparingConfigs.PreparingConfigsForTests.prepareAddingNewComponent
+  }
   def afterAll() = {
-    val firstStepId = PrepareConfigForSpecs2.getFirstStep("user6")
+    val firstStepId = preparingConfigs.PreparingConfigsForTests.getFirstStep("user6")
     val count = ComponentVertex.deleteComponents(firstStepId)
     require(count == 4, "Anzahl der geloeschten Components " + count)
   }
@@ -31,13 +35,14 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
   
   "Diese Specification spezifiziert das Hinzufügen von der Component zu dem Step (user6)" >> {
     "getFirstStep" >> {
-      val firstStepId = PrepareConfigForSpecs2.getFirstStep("user6")
+      val firstStepId = preparingConfigs.PreparingConfigsForTests.getFirstStep("user6")
       "Component 1 fuer FirstStep hinzufuegen" >> {
         val componentCS = Json.obj(
           "dtoId" -> DTOIds.CREATE_COMPONENT,
           "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> firstStepId,
+            "nameToShow" -> "Component",
             "kind" -> "immutable"
           )
         )
@@ -63,6 +68,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
           "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> firstStepId,
+            "nameToShow" -> "Component",
             "kind" -> "immutable"
           )
         )
@@ -88,6 +94,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
           "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> firstStepId,
+            "nameToShow" -> "Component",
             "kind" -> "immutable"
           )
         )
@@ -113,6 +120,7 @@ class SpecsAddingNewComponent extends Specification with AdminWeb with BeforeAft
           "dto" -> DTONames.CREATE_COMPONENT
           ,"params" -> Json.obj(
             "stepId" -> firstStepId,
+            "nameToShow" -> "Component",
             "kind" -> "immutable"
           )
         )

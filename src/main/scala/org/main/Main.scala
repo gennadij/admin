@@ -11,7 +11,7 @@ object Main {
     println("I am generic configurator")
     println("Generic configurator started")
     println("Run Test Scenarios")
-    
+/* v001 und v011*/
 //    PrepareConfigForSpecs2.prepareWithAlredyExistingUser
 //    PrepareConfigForSpecs2.prepareLogin
 //    PrepareConfigForSpecs2.prepareAddingNewConfig
@@ -21,9 +21,10 @@ object Main {
 //    PrepareConfigForSpecs2.prepareSpecsConfigTreeEmpty
 //    PrepareConfigForSpecs2.prepareConfigTree
 //    PrepareConfigForSpecs2.prepareSpecsAddStep
-//    new TestConfigs().configUser10
 //    PrepareConfigForSpecs2.prepareSpecsStepComponentPropertyNameToSchow
-    new TestConfig_v011().config_v011
+    /*v012*/
+//    new TestConfig_v012().config_v012
+    
     
     println("END")
   }
