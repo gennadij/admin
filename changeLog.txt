@@ -31,10 +31,10 @@ ChangeLog version 0.1.2
          Die Ueberpruefung im Configurator nicht notwendigt 
          OrientDB UNIQUE-Index
          TestUser = user13, user14
-    # 2. Der Vertax Config darf nur einen FirstStep haben
+    - 2. Der Vertax Config darf nur einen FirstStep haben
          Die Ueberpruefung in dem Configurator nicht notwendigt
          TestClass -> SpecsAddingFirstStep
-    # 3. Die selectedComponents können nur bei von einem Step ausgewaelt werden.
+    # 3. Die selectedComponents können nur bei einem Step ausgewaelt werden.
          Im Configurator bei der Suche ueber selectedComponent den selectedStep 
          kann nur einen Step gefunden werden, deswegen ist diese ueberpruefung 
          nicht notwaendigt.
@@ -48,6 +48,7 @@ ChangeLog version 0.1.2
          Der Configurator braucht nicht das ueberpruefen. 
          Es muss ausgeschlossen werden, dass die Component2 oder Component1 
          zusammen mit der Component3 ausgewaelt werden kann.
+    # 5. Defekte ConfigId
         
 ChangeLog version 0.1.1 -> done on 01.03.2017
 

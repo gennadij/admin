@@ -22,6 +22,30 @@ import scala.collection.JavaConversions._
 import scala.concurrent.stm.CommitBarrier.UserCancel
 
 object PreparingConfigsForTests extends AdminWeb {
+  
+  def prepareSpecsTwoFirstStepsForOneConfig = {
+    val graph: OrientGraph = OrientDB.getGraph
+    val sql: String = s"select count(username) from AdminUser where username like 'user15'"
+    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+		val count = res.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString().toInt).get(0)
+    if(count == 1 ) {
+      println("Der User user15 ist schon erstellt worden")
+    }else {
+			registerNewUser("user15")
+
+			val adminId = login("user15")
+
+			println("adminId " + adminId)
+
+			val configId = createNewConfig(adminId, "http://contig/user15")
+
+			println("ConfigId" + configId)
+			
+			val firstStepId: String = addComponentToStep(configId)
+			
+			println("firstStepId " + firstStepId)
+		}
+  }
 
   def prepareSpecsTwoSameConfigUrls = {
     val graph: OrientGraph = OrientDB.getGraph

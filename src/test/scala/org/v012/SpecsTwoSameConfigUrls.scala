@@ -34,12 +34,7 @@ class SpecsTwoSameConfigUrls extends Specification
 		val count = AdminUserVertex.deleteAdmin("user14")
 		require(count == 1, count.toString)
 	}
-	def afterAll = {
-//		val username = "user14"
-//		val sql_1: String = s"DELETE VERTEX AdminUser where username='$username'"
-//		val graph: OrientGraph = OrientDB.getGraph
-//		graph.commit
-	}
+	def afterAll = {}
 
 	"Hier wird die Erzeugung von zwei verschiedenen AdminUser mit gleicher ConfigUrl spezifiziert" >> {
 		"ORecordDuplicatedException" >> {
