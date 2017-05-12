@@ -47,7 +47,7 @@ ChangeLog version 0.1.2
          Das wird im Admin ausgeschlossen.
          Der Configurator braucht nicht das ueberpruefen. 
          Es muss ausgeschlossen werden, dass die Component2 oder Component1 
-         zusammen mit der Component3 ausgewaelt werden kann.
+         zusammen mit der Component3 ausgewaelt werden kann. (siehe requirement)
     # 5. Defekte ConfigId
         
 ChangeLog version 0.1.1 -> done on 01.03.2017
