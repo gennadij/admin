@@ -1,0 +1,188 @@
+@created on 19.07.2017
+@finished on 20.10.2017
+
+ChangeLog version 0.1.5
+        
+# 1.@created on     19.07.2017
+    @finished on    31.07.2017
+    Erstellung einer einfachen dynamischen Webseite um einen groben Verlauf 
+    der Konfiguration nachvollgezogen werden kann.
+    
+    1. Darstellung des ConfigTrees
+    
+    Die Div-Boxen werden mit Hilfe der JS-Lib JsPlumb erstellt und verbunden.
+    
+    
+# 2.@created on     02.08.2017
+    @finished on    20.10.2017
+    
+    1. Implemtierung der Verlauf bei einer Kollesion mit 2 Steps in einer Ebene
+    
+    Ausgangssituation
+    
+     C1            C2          C3
+     \             /            
+       \         /              
+         \     /                
+            S1                 
+            
+            
+    WebClient macht folgende Aenderung
+    
+     C1            C2          C3
+     \             /            |
+       \         /              |
+         \     /                |
+            S1                 S2
+    
+    Client versucht zweiten Step in der Ebene zu erstellen
+
+    {
+      "dtoId":10,
+      "dto":"CreateStep",
+      "params":{
+        "componentId":"#30:60",
+        "nameToShow":"Step 3",
+        "kind":"default",
+        "selectionCriterium":{
+          "min":1,
+          "max":2
+        }
+      }
+    }
+    
+    Server schauet ob die selectionCriterium 
+    if {min : 1, max: 1} 
+        Server erstellt zweiten Step
+    else
+        Server erstellt die Abhaengigkeiten
+    
+    Server speichert temporaer den Schritt
+    
+    Server erkennt die Kollision und sclaegt den Vorschlag zu der Visualisierung des Konfliktes
+    {
+      "dtoId":10,
+      "dto":"CreateStep",
+      "result":{
+        "stepId":"",
+        "status":"WARNING_ADDITIONAL_STEP_IN_LEVEL_CS",
+        "message":"Um den Konflikt zu vermeiden waelen Sie die Visualisierung oder legen Sie den Schritt nicht an"
+        "visualProposalForAdditionalStepInOneLevel":[
+          "graying",
+          "remove",
+          "unselectable"
+        ],
+        "dependenciesForAdditionalStepsInOneLevel": []
+      }
+    }
+    
+    User macht den Auswahl zu der Visualisierung des Konfliktes
+    
+    {
+      "dtoId": 11
+      "dto": "VisualProposalForAdditionalStepInOneLevel"
+      "params": {
+        "visualProposal" : {
+          "selectedVisualProposal" : "remove"
+        }
+      }
+    }
+    
+    Server berechnet den Konflikt. Erstellt die notwendigen Abhängigkeiten 
+    zwischen Komponenten und zweiten Step in der Ebene. 
+    
+    {
+      "dtoId":10,
+      "dto":"CreateStep",
+      "result":{
+        "stepId":"",
+        "status":"ADDITIONAL_STEP_IN_LEVEL_SC",
+        "message":"Der Konflikt wurde durch die Abhaengigkeiten zwischen Components gelöst"
+        "visualProposalForAdditionalStepsInOneLevel":[]
+        "dependenciesForAdditionalStepsInOneLevel": [
+          {
+            "componentOutId" : "#10:00",
+            "componentInId" : "#11:11",
+            "dependencyId" : "#12:11",
+            "dependencyType" : "remove"
+          }, ...
+        ]
+      }
+    }
+    
+    Algorithm
+    
+    Zuerst Prüfen den Schritt des Target-Component, ob sein Vater Schritt die SelectionCreterium(1,1) hat.
+    Wenn ja die erzeugung von Dependencies nicht notwendig, da nur eine Komponente ausgewählt werden kann.
+    
+    Suche alle Siblingscomponente und erzeuge von allen Siblingscomponenten zu der Targetcomponente 
+    die Dependencies
+    
+    
+    Erstelle aus der aktuellen Komponente die Abhängigkeiten zu allen 
+    Sibling-Komponenten
+    
+    Erstelle neuen Schritt aus der aktuellen Komponente
+    
+    
+    ===========================================================================
+    
+    Ausgangssituation
+
+
+     C1            C2          C3
+     \             /            |
+       \         /              |
+         \     /                |
+            S1                  S2
+            
+            
+    Admin macht folgende Aenderung
+     C1            C2          C3
+     \               \          |
+       \                 \      |
+         \                   \  |
+            S1                  S2
+            
+    Die Abhaengigkeiten zwischen den Komponenten muessen neue angapast werden
+    
+    Web 
+    {
+      "dtoId" : 9, 
+      "dto" : "ConnectionComponentToStep", 
+      "params" : {
+        "componentId" : #40:1,
+        "stepId" : "#40:2"
+      }
+    }
+    
+    Algorithm
+    
+    Aus dem Ziel-Schritt wird zu allen Kompnenten des Schrittes gegangen.
+    
+    Aus diesen Komponenten werden alle Abhaengigkeiten zu der aktuellen 
+    Komponente geloescht.
+    
+    Aus der aktuellen Komponente werden alle Abhaengigkeiten zu der gefundenen
+    Komponenten und geloescht. 
+    
+    Erstelle aus der aktuellen Komponente die Abhaengigkeiten zu allen 
+    Komponenten der LevelCS ausser der Komponenten aus des Ziel-Schrites.
+    
+    2. Implementierung einer Factory für jeden Client der mit Server verbinden 
+       wird. Das bedeutet, dass bei jeder verbindung des Client wird eine 
+       Instanz des Admins für diesen WebClient erzeugt und in Laufe der 
+       Verbindung gehalten (Stataful Connection).
+    
+    3. Try Catch fuer jede DB Zugriff
+    
+    4. Wrapper fuer die Trennung der DTO und interne Objekte
+    
+    5. SC un CS zu Out In abgeaendert
+       
+# 3.@created on     02.08.2017
+    @finished on    20.10.2017
+    
+    Die Objects in models.persistence.db.orientdb muessen ueber Factory erreicht
+    werden. Die Konvertierung von Objects fuer DB zu der DTO wird in Admin Object
+    erfolgen.

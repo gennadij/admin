@@ -1,0 +1,12 @@
+Legende
+- fertige Specification
+# defined Specification
+
+@created on 20.05.2017
+@finished on 19.07.2017
+
+ChangeLog version 0.1.4
+        
+# 1.@created on     21.05.2017
+    @finished on    19.07.2017
+    Integration in einen Play Project, alle Test muessen laufen ohne Fehler

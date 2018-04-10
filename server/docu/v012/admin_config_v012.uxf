@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>13</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>234</y>
+      <w>260</w>
+      <h>156</h>
+    </coordinates>
+    <panel_attributes>class
+--
+Step extend Vertex
+--
++ kind
++ selectionCriteriumMin
++ selectionCriteriumMin
++ nameToShow
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>793</x>
+      <y>767</y>
+      <w>247</w>
+      <h>156</h>
+    </coordinates>
+    <panel_attributes>Vertex
+--
+Step
+--
+kind=first
+nameToShow=S1
+sCMin=1
+sCMax=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>325</x>
+      <y>117</y>
+      <w>234</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>class
+--
+hasComponent extend Edge
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1248</x>
+      <y>1053</y>
+      <w>195</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>Vertex
+--
+Component
+--
+nameToShow=S1C3
+kind=immutable</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>403</y>
+      <w>234</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>class
+--
+Component extend Vertex
+--
++ kind
++ nameToShow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1027</x>
+      <y>793</y>
+      <w>351</w>
+      <h>286</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+hasComponents</panel_attributes>
+    <additional_attributes>250.0;200.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>273</x>
+      <y>1053</y>
+      <w>182</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>Vertex
+--
+Component
+--
+nameToShow=S1C1
+kind=immutable</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>897</x>
+      <y>910</y>
+      <w>169</w>
+      <h>169</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+hasComponents</panel_attributes>
+    <additional_attributes>10.0;110.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>364</x>
+      <y>793</y>
+      <w>455</w>
+      <h>286</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+hasComponents</panel_attributes>
+    <additional_attributes>10.0;200.0;330.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>806</x>
+      <y>1053</y>
+      <w>182</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>Vertex
+--
+Component
+--
+nameToShow=S1C2
+kind=immutable</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>546</x>
+      <y>1313</y>
+      <w>156</w>
+      <h>156</h>
+    </coordinates>
+    <panel_attributes>Vertex
+--
+Step
+--
+kind=default
+nameToShow=S2
+sCMin=1
+sCNax=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>364</x>
+      <y>1157</y>
+      <w>247</w>
+      <h>182</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+hasStep</panel_attributes>
+    <additional_attributes>170.0;120.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>650</x>
+      <y>1157</y>
+      <w>260</w>
+      <h>182</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+hasStep</panel_attributes>
+    <additional_attributes>10.0;120.0;180.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>975</x>
+      <y>1872</y>
+      <w>208</w>
+      <h>156</h>
+    </coordinates>
+    <panel_attributes>Vertex
+--
+Step
+--
+nameToShow=S3
+kind=default
+sCMin=2
+sCNax=4</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>234</x>
+      <y>1573</y>
+      <w>182</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>Vertex
+--
+Component
+--
+nameToShow=S2C1
+kind=immutable</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>767</x>
+      <y>1573</y>
+      <w>182</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>Vertex
+--
+Component
+--
+nameToShow=S2C2
+kind=immutable</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>689</x>
+      <y>1339</y>
+      <w>247</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+hasComponent</panel_attributes>
+    <additional_attributes>150.0;180.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>286</x>
+      <y>1339</y>
+      <w>286</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+hasComponents</panel_attributes>
+    <additional_attributes>10.0;180.0;200.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1066</x>
+      <y>1157</y>
+      <w>299</w>
+      <h>741</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+hasStep</panel_attributes>
+    <additional_attributes>10.0;550.0;210.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1508</x>
+      <y>2197</y>
+      <w>182</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>Vertex
+--
+Component
+--
+nameToShow=S3C3
+kind=mutable</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1131</x>
+      <y>2184</y>
+      <w>182</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>Vertex
+--
+Component
+--
+nameToShow=S3C4
+kind=mutable
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>2197</y>
+      <w>182</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>Vertex
+--
+Component
+--
+nameToShow=S2C1
+kind=immutable</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>403</x>
+      <y>2197</y>
+      <w>195</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>Vertex
+--
+Component
+--
+nameToShow=S3C1
+kind=immutable</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1118</x>
+      <y>2015</y>
+      <w>494</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+hasComponent</panel_attributes>
+    <additional_attributes>360.0;140.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>871</x>
+      <y>2015</y>
+      <w>247</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+hasComponent</panel_attributes>
+    <additional_attributes>10.0;140.0;140.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>468</x>
+      <y>2015</y>
+      <w>572</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+hasComponent</panel_attributes>
+    <additional_attributes>10.0;140.0;420.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>312</x>
+      <y>1677</y>
+      <w>689</w>
+      <h>364</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+hasStep</panel_attributes>
+    <additional_attributes>510.0;260.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>845</x>
+      <y>1677</y>
+      <w>156</w>
+      <h>325</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+hasStep</panel_attributes>
+    <additional_attributes>100.0;230.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>325</x>
+      <y>0</y>
+      <w>234</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>class
+--
+hasConfig extend Edge
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>0</y>
+      <w>234</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>class
+--
+AdminUser extend Vertex
+--
++ username
++ password</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>117</y>
+      <w>234</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>class
+--
+Config extend Vertex
+--
++ configUrl</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>325</x>
+      <y>234</y>
+      <w>234</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>class
+--
+hasStep extend Edge
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>533</y>
+      <w>260</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>Vertex
+--
+Config
+--
+configUrl=http://contig/user17</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>819</x>
+      <y>286</y>
+      <w>182</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>Vertex
+--
+AdminUser
+--
+username=user17
+password=user17</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>884</x>
+      <y>390</y>
+      <w>117</w>
+      <h>169</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+hasConfig</panel_attributes>
+    <additional_attributes>10.0;110.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>897</x>
+      <y>611</y>
+      <w>104</w>
+      <h>182</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+has Step</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1066</x>
+      <y>2015</y>
+      <w>221</w>
+      <h>195</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+hasComponent</panel_attributes>
+    <additional_attributes>110.0;130.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>325</x>
+      <y>351</y>
+      <w>234</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>class
+--
+hasStep
+--
++ dependencyType</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>338</x>
+      <y>1157</y>
+      <w>1027</w>
+      <h>143</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+exclude</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0;700.0;90.0;770.0;10.0</additional_attributes>
+  </element>
+</diagram>

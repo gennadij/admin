@@ -1,0 +1,43 @@
+connect remote:localhost/TestDBv013 root root;
+SET echo TRUE;
+
+CREATE CLASS AdminUser EXTENDS V;
+ALTER CLASS AdminUser STRICTMODE TRUE;
+CREATE PROPERTY AdminUser.username STRING;
+CREATE INDEX AdminUser.username UNIQUE;
+#alter class AdminUser strictmode true;
+
+CREATE CLASS hasConfig EXTENDS E;
+#alter class hasConfig strictmode true;
+
+CREATE CLASS Config EXTENDS V;
+CREATE PROPERTY Config.configUrl STRING;
+CREATE INDEX Config.configUrl UNIQUE;
+#alter class Config strictmode true;
+
+CREATE CLASS hasStep EXTENDS E;
+#alter class hasStep strictmode true;
+
+CREATE CLASS Step EXTENDS V;
+CREATE PROPERTY Step.kind STRING;
+CREATE PROPERTY Step.selectionCriteriumMin STRING;
+CREATE PROPERTY Step.selectionCriteriumMax STRING;
+CREATE PROPERTY Step.nameToShow STRING;
+#alter class Step strictmode true;
+
+CREATE CLASS hasComponent EXTENDS E;
+ALTER CLASS hasComponent STRICTMODE TRUE;
+#alter class hasComponent strictmode true;
+
+CREATE CLASS Component EXTENDS V;
+CREATE PROPERTY Component.kind STRING;
+CREATE PROPERTY Component.nameToShow STRING;
+#alter class Component strictmode true;
+
+CREATE CLASS hasDependency EXTENDS E;
+CREATE PROPERTY hasDependency.dependencyType STRING;
+CREATE PROPERTY hasDependency.visualization STRING;
+CREATE PROPERTY hasDependency.nameToShow STRING;
+#alter class hasDependency strictmode true;
+
+

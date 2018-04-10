@@ -1,0 +1,169 @@
+@created on 29.07.2017
+@finished on 
+
+ChangeLog version 0.1.6
+        
+# 1.@created on     
+    @finished on    
+    Erstellung einer einfachen dynamischen Webseite um einen groben Verlauf 
+    der Konfiguration nachvollgezogen werden kann.
+    
+    1. Erstellung eines Admin-Benutzers -> Verschiebung in die Version
+    2. Erstellung eines Schrittes -> Verschiebúng in die Version
+    3. Erstellung einer Komponente -> Verschiebung in die Version
+    4. Erstellung eines Schrittes aus der Komponente -> verschiebung in die Version
+    
+    Die Div-Boxen werden mit Hilfe der JS-Lib JsPlumb erstellt und verbunden.
+    
+# 2.@created on  30.07.2017
+    @finished on 
+    
+    Integration in die Scala.js fuer Frontend - WebClient
+    
+    Verschiedene Scenarios
+    
+    Scenario 1
+    
+    Ausgangssituation
+    
+                  S1
+                /  | \
+             /     |    \
+          /        |       \
+       /           |          \
+     C1            C2          C3
+     \             /            
+       \         /              
+         \     /                
+            S1                 
+    
+    WebClient erstellt S3
+    
+    Ergebnis
+    
+                  S1
+                /  | \
+             /     |    \
+          /        |       \
+       /           |          \
+    C1            C2          C3
+     \             /            |
+       \         /              |
+         \     /                |
+            S1                 S2
+            
+    Scenario 2
+    
+    Ausgangssituation
+    
+                  S1
+                /  | \    \
+             /     |    \      \
+          /        |       \        \
+       /           |          \          \
+     C1            C2          C3          C4
+     \             /            |
+       \         /              |
+         \     /                |
+            S1                 S2
+    
+    WebClient erstellt S3
+    
+    Ergebnis
+    
+                  S1
+                /  | \    \
+             /     |    \      \
+          /        |       \        \
+       /           |          \          \
+     C1            C2          C3          C4
+     \             /            |        /
+       \         /              |     /
+         \     /                |  /
+            S1                 S2
+            
+            
+            
+            
+            
+    2. Implementierung der Ebenen (Levels). Ein Level beinhaltet einen oder 
+       mehrere Steps mit seinen Components. Die Verbindung Component zu Step 
+       ist ausserhab der Ebene.
+       
+       
+       | LevelSC 1         |   | LevelSC 2          |
+              -> Component 1 -> Step 3 -> Component 4
+              
+       Step 1 -> Component 2 -> Step 2 -> Component 5
+              -> Component 3 -> Step 2 -> Component 6
+              
+                 | LevelCS 1          |
+              -> Component 1 -> Step 3 -> Component 4
+              
+       Step 1 -> Component 2 -> Step 2 -> Component 5
+              -> Component 3 -> Step 2 -> Component 6
+              
+              
+    4. Implementierung einer Hash-Tabelle mit [VertexId, HashWert].
+       Wenn der Server Sendet ein DTO mit der ID aus dem Datenbank, dann 
+       wird einen Hashwert zu dieser ID berechnet und zur WebClient wird 
+       dieser Hashwert gesendet. Bei der DTOs zu dem Server wird der Wert
+       des Hashwertes in der Tabele gesucht und dazugehoerige ID weiter im DB
+       verwendet.
+       
+       
+       
+# 2.@created on  3.11.2017
+    @finished on 
+    
+    1. Difenierte TODOs aus dem Configurator
+        # - es soll nur einen FirstStep bei der Config geben
+		
+# 3.@created on     08.11.2017
+    @finished on    
+	
+	Integration der scala.js in die Play-Project
+	https://github.com/vmunier/play-scalajs.g8
+	https://github.com/hussachai/play-scalajs-showcase
+	https://elements.heroku.com/buttons/jkutner/play-with-scalajs-example
+
+# 4.@created on     08.11.2017
+    @finished on    
+    
+    Implementierung von dem Schritt bei dem mehrere Komponente ausgewaehlt werden koennen
+    
+# 5.@created on     09.11.2017
+    @finished on    
+    
+    Bei der Erstellung von einem Schrit muss sichergestellt werden, dass nur einen Schritt zu 
+    der Komponente verbunden wird
+    
+# 5.@created on     24.11.2017
+    @finished on    
+    
+    Edge von Config zu FirstStep muss hasStep heissen
+    
+# 6.@created on     01.12.2017
+    @finished on    
+    
+    In SelectionCriterium darf nicht min > max sein
+    
+# 7.@created on     30.01.2018
+    @finished on    
+    
+    Globale Einstellungen fuer die Konfiguration.
+    Der Vertex Config bekommt einen zusaetzlichen Vertex <GlobalSettings> angehaengt.
+    In <GlobalSettings> werden die Einstellungen fuer gesamte Konfiguration definiert.
+    Folgende Einstellungen werden gemacht:
+    - configurationCourse: [sequence or sabstitute] 
+        - sequence -> Die Schritte werden hintereinander ausgeführt. Die abgearbeitete Schritte 
+            werden nicht aus der GUI entfernt. Der Benutzer kann jederzeit aus der schon bearbeteten
+            Schritt die Komponente entfernen oder bearbeiten.
+        - sabstitute -> Die Schritte werden hintereinader ausgeführt. Die abgearbeitete Schritt 
+        wird aus der GUI entfernt und danach neue geladen. Das Zurückkehern wird über der Aktion
+        des Benutzers ausgeführt. Der Benutzer sieht nur einen aktuellen Schritt in der GUI.
+        
+# 7.@created on     10.04.2018
+    @finished on  
+    
+    Beim nicht erreichtem Server Error an Client senden. Connection Error fangen.
