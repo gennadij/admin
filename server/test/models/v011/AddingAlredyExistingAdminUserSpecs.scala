@@ -16,6 +16,9 @@ import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import org.genericConfig.admin.models.json.StatusErrorRegistUserAlreadyExist
 import models.preparingConfigs.PrepareConfigsForSpecsv011
 import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.shared.status.registration.AlredyExistUser
+import org.genericConfig.admin.shared.status.Success
+import play.api.Logger
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -40,8 +43,7 @@ class AddingAlredyExistingAdminUserSpecs extends Specification with AdminWeb wit
   "Specification spezifiziert die Registrierung des exestierenden Users" >> {
     "schon exstierenden User hinzufuegen" >> {
       val registerCS = Json.obj(
-          "dtoId" -> DTOIds.REGISTRATION,
-          "dto" -> DTONames.REGISTRATION
+          "json" -> DTONames.REGISTRATION
           ,"params" -> Json.obj(
                "username" -> "userExist",
                "password"-> "userExist"
@@ -49,20 +51,17 @@ class AddingAlredyExistingAdminUserSpecs extends Specification with AdminWeb wit
       )
       
       val registerSC = wC.handleMessage(registerCS)
-      "dtoId" >> {
-        (registerSC \ "dtoId").asOpt[Int].get === DTOIds.REGISTRATION
-      }
-      "dto" >> {
-        (registerSC \ "dto").asOpt[String].get === DTONames.REGISTRATION
-      }
-      "username" >> {
-        (registerSC \ "result" \ "username").asOpt[String].get must_== "userExist"
+      
+      Logger.info("<- " + registerCS)
+      Logger.info("-> " + registerSC)
+      "json" >> {
+        (registerSC \ "json").asOpt[String].get === DTONames.REGISTRATION
       }
       "status" >> {
-        (registerSC \ "result" \ "status").asOpt[String].get must_== StatusErrorRegistUserAlreadyExist.status
+        (registerSC \ "result" \ "status" \ "addUser" \ "status").asOpt[String].get must_== AlredyExistUser().status
       }
       "message" >> {
-        (registerSC \ "result" \ "message").asOpt[String].get must_== StatusErrorRegistUserAlreadyExist.message
+        (registerSC \ "result" \ "status" \ "common" \ "status").asOpt[String].get must_== Success().status
       }
     }
   }

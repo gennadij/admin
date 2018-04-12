@@ -120,42 +120,16 @@ trait Wrapper {
         })
     ))
   }
-/**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.5
-   * 
-   * @param JsonRegistrationCS
-   * 
-   * @return RegistrationCS
-   */
-  def toRegistrationIn(jsonRegistrationIn: JsonRegistrationIn): RegistrationIn = {
-    RegistrationIn(
-        jsonRegistrationIn.params.username,
-        jsonRegistrationIn.params.password
-    )
-  }
   
   /**
    * @author Gennadi Heimann
    * 
-   * @version 0.1.5
+   * @version 0.1.6
    * 
    * @param RegistrationSC
    * 
    * @return JsonRegistrationSC
    */
-//  def toJsonRegistrationOut(registrationOut: RegistrationOut): JsonRegistrationOut = {
-//    JsonRegistrationOut(
-//        result = RegistrationResult(
-//            registrationOut.adminId,
-//            registrationOut.username,
-//            registrationOut.status,
-//            registrationOut.message
-//        )
-//    )
-//  }
-  
   def toJsonRegistrationOut(registrationBO: RegistrationBO): JsonRegistrationOut = {
     JsonRegistrationOut(
         result = RegistrationResult(

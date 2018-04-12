@@ -81,29 +81,15 @@ object Persistence {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 0.0.6
+   * @version 0.1.6
    * 
-   * @param RegistrationCS
+   * @param 
    * 
-   * @return RegistrationSC 
+   * @return 
    */
   
   def addUser(username: String, password: String): RegistrationBO = {
     Graph.addUser(username, password)
-  }
-  
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.0
-   * 
-   * @param RegistrationCS
-   * 
-   * @return RegistrationSC 
-   */
-  def register(registrationIn: RegistrationIn): RegistrationOut = {
-    AdminUserVertex.register(registrationIn)
   }
 
   /**

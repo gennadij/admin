@@ -18,6 +18,15 @@ import org.genericConfig.admin.models.json.registration.RegistrationResult
 
 object Registration{
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
   def registUser(username: String, password: String): RegistrationBO = {
     new Registration().registUser(username, password)
   }
@@ -26,22 +35,16 @@ object Registration{
 
 class Registration {
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
   def registUser(username: String, password: String): RegistrationBO = {
-//    val user: RegistrationBO = 
-      Persistence.addUser(username, password)
-    
-//    (user.status: @unchecked) match {
-//      case StatusRegistration(None, Some(Error())) => {
-//        JsonRegistrationOut(
-//            result = RegistrationResult(
-//                user.adminId,
-//                user.username,
-//                user.status
-//            )
-//        )
-//      }
-//      case StatusRegistration(Some(AlredyExistUser()), Some(Success())) => ???
-//      case StatusRegistration(Some(AddedUser()), Some(Success())) => ???
-//    }
+    Persistence.addUser(username, password)
   }
 }

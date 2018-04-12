@@ -13,8 +13,6 @@ import com.tinkerpop.blueprints.Edge
 import com.tinkerpop.blueprints.Vertex
 import play.api.Logger
 import org.genericConfig.admin.models.persistence.OrientDB
-import org.genericConfig.admin.models.wrapper.registration.RegistrationIn
-import org.genericConfig.admin.models.wrapper.registration.RegistrationOut
 import org.genericConfig.admin.models.json.StatusSuccessfulRegist
 import org.genericConfig.admin.models.json.StatusErrorRegistUserAlreadyExist
 import org.genericConfig.admin.models.json.StatusErrorRegistGeneral
@@ -40,48 +38,48 @@ object AdminUserVertex {
    * 
    * @return RegistrationSC
    */
-  def register(registrationIn: RegistrationIn): RegistrationOut = {
-    val graph: OrientGraph = OrientDB.getFactory().getTx
-    
-    if(graph.getVertices(PropertyKey.USERNAME, registrationIn.username).asScala.size == 0){
-      
-        val vAdminUser: Any = try {
-          val vAdminUser: OrientVertex = graph.addVertex("class:" + PropertyKey.VERTEX_ADMIN_USER, 
-          PropertyKey.USERNAME, registrationIn.username, 
-          PropertyKey.PASSWORD, registrationIn.password)
-          graph.commit
-          vAdminUser
-        }catch {
-          case e : Exception => graph.rollback()
-        }
-        
-        vAdminUser match {
-          case adminUser : OrientVertex => {
-            RegistrationOut(
-                adminUser.getIdentity.toString(),
-                adminUser.getProperty(PropertyKey.USERNAME).toString(),
-                StatusSuccessfulRegist.status,
-                StatusSuccessfulRegist.message
-            )
-          }
-          case e : Exception => {
-            new RegistrationOut(
-                "",
-                registrationIn.username,
-                StatusErrorRegistGeneral.status,
-                StatusErrorRegistGeneral.message
-            )
-          }
-        }
-    }else{
-      new RegistrationOut(
-          "", 
-          registrationIn.username,
-          StatusErrorRegistUserAlreadyExist.status,
-          StatusErrorRegistUserAlreadyExist.message
-      )
-    }
-  }
+//  def register(registrationIn: RegistrationIn): RegistrationOut = {
+//    val graph: OrientGraph = OrientDB.getFactory().getTx
+//    
+//    if(graph.getVertices(PropertyKey.USERNAME, registrationIn.username).asScala.size == 0){
+//      
+//        val vAdminUser: Any = try {
+//          val vAdminUser: OrientVertex = graph.addVertex("class:" + PropertyKey.VERTEX_ADMIN_USER, 
+//          PropertyKey.USERNAME, registrationIn.username, 
+//          PropertyKey.PASSWORD, registrationIn.password)
+//          graph.commit
+//          vAdminUser
+//        }catch {
+//          case e : Exception => graph.rollback()
+//        }
+//        
+//        vAdminUser match {
+//          case adminUser : OrientVertex => {
+//            RegistrationOut(
+//                adminUser.getIdentity.toString(),
+//                adminUser.getProperty(PropertyKey.USERNAME).toString(),
+//                StatusSuccessfulRegist.status,
+//                StatusSuccessfulRegist.message
+//            )
+//          }
+//          case e : Exception => {
+//            new RegistrationOut(
+//                "",
+//                registrationIn.username,
+//                StatusErrorRegistGeneral.status,
+//                StatusErrorRegistGeneral.message
+//            )
+//          }
+//        }
+//    }else{
+//      new RegistrationOut(
+//          "", 
+//          registrationIn.username,
+//          StatusErrorRegistUserAlreadyExist.status,
+//          StatusErrorRegistUserAlreadyExist.message
+//      )
+//    }
+//  }
   
   /**
    * @author Gennadi Heimann

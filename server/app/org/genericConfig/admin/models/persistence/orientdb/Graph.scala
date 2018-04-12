@@ -23,6 +23,16 @@ import org.genericConfig.admin.shared.status.registration.AlredyExistUser
  * Created by Gennadi Heimann 10.04.2018
  */
 object Graph{
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
   def addUser(username: String, password: String): RegistrationBO = {
     val graph: OrientGraph = Database.getFactory().getTx()
     new Graph(graph).writeUser(username, password)
@@ -31,6 +41,15 @@ object Graph{
 
 class Graph(graph: OrientGraph) {
 
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
   private def writeUser(username: String, password: String): RegistrationBO = {
     val vUser: (Option[OrientVertex], Status)  = try {
       if(graph.getVertices(PropertyKeys.USERNAME, username).asScala.size == 0){
