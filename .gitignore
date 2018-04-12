@@ -18,7 +18,6 @@ dist
 # hidden cross project folders
 shared/.js
 shared/.jvm
-shared/*.class
 
 # temp files
 .~*

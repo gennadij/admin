@@ -33,7 +33,7 @@ import org.genericConfig.admin.models.json.dependency.JsonDependencyOut
 trait AdminWeb {
   
   def handleMessage(receivedMessage: JsValue, admin: Admin): JsValue = {
-    (receivedMessage \ "dto").asOpt[String] match {
+    (receivedMessage \ "json").asOpt[String] match {
       case Some(DTONames.REGISTRATION) => register(receivedMessage, admin)
       case Some(DTONames.LOGIN) => login(receivedMessage, admin)
       case Some(DTONames.CREATE_CONFIG) => createConfig(receivedMessage, admin)

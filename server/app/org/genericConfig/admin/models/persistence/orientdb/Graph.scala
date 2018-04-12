@@ -57,7 +57,7 @@ class Graph(graph: OrientGraph) {
     vUser match {
       case (Some(vUser), AddedUser()) => {
         RegistrationBO(
-            "", "", 
+            username, "",
             vUser.getIdentity.toString(), 
             StatusRegistration(Some(AddedUser()), Some(Success()))
         )

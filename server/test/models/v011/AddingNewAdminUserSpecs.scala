@@ -15,6 +15,10 @@ import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import org.genericConfig.admin.models.persistence.db.orientdb.AdminUserVertex
 import org.genericConfig.admin.models.json.StatusSuccessfulRegist
 import org.genericConfig.admin.controllers.websocket.WebClient
+import play.api.Logger
+import org.genericConfig.admin.shared.status.registration.AlredyExistUser
+import org.genericConfig.admin.shared.status.registration.AddedUser
+import org.genericConfig.admin.shared.status.Success
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -51,17 +55,20 @@ class AddingNewAdminUserSpecs extends Specification
       )
       val wC = WebClient.init
       val registerSC = wC.handleMessage(registerCS)
+      Logger.info("<- " + registerCS)
+      Logger.info("-> " + registerSC)
+      
       "dto" >> {
-        (registerSC \ "dto").asOpt[String].get === DTONames.REGISTRATION
+        (registerSC \ "json").asOpt[String].get === DTONames.REGISTRATION
       }
       "username" >> {
         (registerSC \ "result" \ "username").asOpt[String].get must_== "user1"
       }
       "status" >> {
-        (registerSC \ "result" \ "status").asOpt[String].get must_== StatusSuccessfulRegist.status
+        (registerSC \ "result" \ "status" \ "addUser" \ "status").asOpt[String].get must_== AddedUser().status
       }
       "message" >> {
-        (registerSC \ "result" \ "message").asOpt[String].get must_== StatusSuccessfulRegist.message
+        (registerSC \ "result" \ "status" \ "common" \ "status").asOpt[String].get must_== Success().status
       }
     }
   }

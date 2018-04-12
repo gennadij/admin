@@ -12,6 +12,6 @@ case class RegistrationBO (
     username: String = "",
     password: String = "",
     
-    adminId: String = "",
+    adminId: String = "", 
     status: StatusRegistration
 )
