@@ -18,7 +18,6 @@ import org.genericConfig.admin.models.persistence.db.orientdb.AdminUserVertex
 import play.api.Logger
 import org.genericConfig.admin.models.visualization.VisualizationProposal
 import org.genericConfig.admin.models.tempConfig.TempConfigurations
-import org.genericConfig.admin.models.persistence.db.orientdb.PropertyKey
 import org.genericConfig.admin.models.wrapper.step.StepIn
 import org.genericConfig.admin.models.wrapper.step.StepOut
 import org.genericConfig.admin.models.json.StatusSuccessfulGeneral
@@ -64,6 +63,8 @@ import org.genericConfig.admin.models.json.StatusErrorDependencyCreated
 import org.genericConfig.admin.models.json.StatusErrorDuplicateConfigUrl
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.shared.bo.RegistrationBO
+import org.genericConfig.admin.models.persistence.db.orientdb.PropertyKey
+import org.genericConfig.admin.models.persistence.orientdb.Graph
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -77,9 +78,18 @@ import org.genericConfig.admin.shared.bo.RegistrationBO
       //http://orientdb.com/docs/last/Graph-VE.html
 object Persistence {
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.0.6
+   * 
+   * @param RegistrationCS
+   * 
+   * @return RegistrationSC 
+   */
   
   def addUser(username: String, password: String): RegistrationBO = {
-    
+    Graph.addUser(username, password)
   }
   
   

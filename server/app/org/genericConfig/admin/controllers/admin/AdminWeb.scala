@@ -55,7 +55,8 @@ trait AdminWeb {
       case s : JsSuccess[JsonRegistrationIn] => s.get
       case e : JsError => Logger.error("Errors -> REGISTRATION: " + JsError.toJson(e).toString())
     }
-    val registrationOut: JsonRegistrationOut = admin.register(registrationIn.get)
+    val registrationOut: JsonRegistrationOut = 
+      admin.register_(registrationIn.get.params.username, registrationIn.get.params.password)
     Json.toJson(registrationOut)
   }
 

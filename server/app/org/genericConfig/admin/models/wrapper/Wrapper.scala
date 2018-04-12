@@ -52,6 +52,9 @@ import org.genericConfig.admin.models.json.dependency.JsonDependencyIn
 import org.genericConfig.admin.models.wrapper.dependency.DependencyIn
 import org.genericConfig.admin.models.json.step.JsonVisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
+import org.genericConfig.admin.shared.bo.RegistrationBO
+import org.genericConfig.admin.models.json.registration.JsonRegistrationStatus
+import org.genericConfig.admin.models.json.common.JsonStatus
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -142,16 +145,36 @@ trait Wrapper {
    * 
    * @return JsonRegistrationSC
    */
-  def toJsonRegistrationOut(registrationOut: RegistrationOut): JsonRegistrationOut = {
+//  def toJsonRegistrationOut(registrationOut: RegistrationOut): JsonRegistrationOut = {
+//    JsonRegistrationOut(
+//        result = RegistrationResult(
+//            registrationOut.adminId,
+//            registrationOut.username,
+//            registrationOut.status,
+//            registrationOut.message
+//        )
+//    )
+//  }
+  
+  def toJsonRegistrationOut(registrationBO: RegistrationBO): JsonRegistrationOut = {
     JsonRegistrationOut(
         result = RegistrationResult(
-            registrationOut.adminId,
-            registrationOut.username,
-            registrationOut.status,
-            registrationOut.message
+          registrationBO.adminId,
+          registrationBO.username,
+          JsonRegistrationStatus(
+              registrationBO.status.addUser match {
+                case Some(adduser) => Some(JsonStatus(adduser.status, adduser.message))
+                case None => None
+              },
+              registrationBO.status.common match {
+                case Some(common) => Some(JsonStatus(common.status, common.message))
+                case None => None
+              }
+          )
         )
     )
   }
+  
   
   /**
    * @author Gennadi Heimann

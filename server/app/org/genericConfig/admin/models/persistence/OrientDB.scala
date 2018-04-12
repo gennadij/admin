@@ -88,8 +88,8 @@ class OrientDB {
 
 
 
-case class TestDB() {
-    def dbName: String = "testDB"
-    def username: String = "root"
-    def password: String = "root"
-}
+//case class TestDB() {
+//    def dbName: String = "testDB"
+//    def username: String = "root"
+//    def password: String = "root"
+//}

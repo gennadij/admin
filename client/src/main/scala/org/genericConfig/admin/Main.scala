@@ -14,7 +14,7 @@ import scala.scalajs._
 
 object Main {
   val url = "ws://localhost:9000/admin"
-		  val socket = new dom.WebSocket(url)
+	val socket = new dom.WebSocket(url)
   val numPattern = "[0-9]+".r
   
   def main(args: Array[String]): Unit = {
@@ -36,10 +36,13 @@ object Main {
     
     socket.onopen = { (e: dom.Event) => {
         println("Websocket open")
-        val login = """{"dtoId":2, "dto":"Login", "params":{"username":"test", "password":"test"}}"""
+//        val login = """{"dtoId":2, "dto":"Login", "params":{"username":"test", "password":"test"}}"""
+//        
+//        println("sende " + login)
+//        socket.send(login)
         
-        println("sende " + login)
-        socket.send(login)
+//        new Login().getUsername
+//        new Registration().getRegistrationPage
       }
     }
     

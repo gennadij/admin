@@ -25,7 +25,6 @@ import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
 import org.genericConfig.admin.models.json.StatusErrorWriteToDB
 import org.genericConfig.admin.models.json.StatusErrorDuplicateConfigUrl
 import com.orientechnologies.common.exception.OException
-
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 

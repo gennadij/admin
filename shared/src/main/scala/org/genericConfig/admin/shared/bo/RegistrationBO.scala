@@ -1,5 +1,8 @@
 package org.genericConfig.admin.shared.bo
 
+import org.genericConfig.admin.shared.status.Status
+import org.genericConfig.admin.shared.status.registration.StatusRegistration
+
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
@@ -10,6 +13,5 @@ case class RegistrationBO (
     password: String = "",
     
     adminId: String = "",
-    status: String = "",
-    message: String = ""
+    status: StatusRegistration
 )

@@ -11,8 +11,7 @@ import play.api.libs.json.Json
 case class RegistrationResult (
     adminId: String,
     username: String,
-    status: String,
-    message: String
+    status: JsonRegistrationStatus
 )
 
 object RegistrationResult {

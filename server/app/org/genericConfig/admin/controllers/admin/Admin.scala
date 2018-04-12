@@ -63,14 +63,14 @@ class Admin extends Wrapper{
    * 
    * @return RegistrationSC
    */
-  def register(jsonRegistrationIn: JsonRegistrationIn): JsonRegistrationOut = {
-    
-    toJsonRegistrationOut(Persistence.register(toRegistrationIn(jsonRegistrationIn)))
-  }
+//  def register(jsonRegistrationIn: JsonRegistrationIn): JsonRegistrationOut = {
+//    
+//    toJsonRegistrationOut(Persistence.register(toRegistrationIn(jsonRegistrationIn)))
+//  }
   
   def register_(username: String, password: String): JsonRegistrationOut = {
     
-    Registration.registUser(username, password)
+    toJsonRegistrationOut(Registration.registUser(username, password))
     
 //    toJsonRegistrationOut(Persistence.register(toRegistrationIn(jsonRegistrationIn)))
   }
