@@ -1,0 +1,24 @@
+package org.genericConfig.admin.models.json.login
+
+import play.api.libs.functional.syntax._
+import org.genericConfig.admin.models.json.common.JsonStatus
+import play.api.libs.json.Writes
+import play.api.libs.json.JsPath
+
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
+ * Created by Gennadi Heimann 18.04.2018
+ */
+case class JsonLoginStatus (
+    userLogin: Option[JsonStatus],
+    common: Option[JsonStatus]
+)
+
+object JsonLoginStatus {
+  import org.genericConfig.admin.models.json.common.JsonStatus.writerJsonStatus
+  implicit val writerJsonRegistrationStatus: Writes[JsonLoginStatus] = (
+    (JsPath \ "userLogin").write(Writes.optionWithNull[JsonStatus]) and
+    (JsPath \ "common").write(Writes.optionWithNull[JsonStatus])
+  )(unlift(JsonLoginStatus.unapply))
+}

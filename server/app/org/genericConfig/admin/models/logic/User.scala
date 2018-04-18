@@ -9,6 +9,7 @@ import org.genericConfig.admin.shared.status.registration.AlredyExistUser
 import org.genericConfig.admin.shared.status.registration.AddedUser
 import org.genericConfig.admin.shared.status.Success
 import org.genericConfig.admin.models.json.registration.RegistrationResult
+import org.genericConfig.admin.shared.bo.LoginBO
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -16,7 +17,7 @@ import org.genericConfig.admin.models.json.registration.RegistrationResult
  * Created by Gennadi Heimann 10.04.2018
  */
 
-object Registration{
+object User {
   
   /**
    * @author Gennadi Heimann
@@ -28,12 +29,26 @@ object Registration{
    * @return 
    */
   def registUser(username: String, password: String): RegistrationBO = {
-    new Registration().registUser(username, password)
+    new User().registUser(username, password)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  
+  def login(username: String, password: String): LoginBO = {
+    new User().login(username, password)
   }
   
 }
 
-class Registration {
+class User {
   
   /**
    * @author Gennadi Heimann
@@ -44,7 +59,21 @@ class Registration {
    * 
    * @return 
    */
-  def registUser(username: String, password: String): RegistrationBO = {
+  private def registUser(username: String, password: String): RegistrationBO = {
     Persistence.addUser(username, password)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  
+  private def login(username: String, password: String): LoginBO = {
+    Persistence.login(username, password)
   }
 }

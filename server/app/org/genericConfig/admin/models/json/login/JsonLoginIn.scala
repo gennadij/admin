@@ -21,8 +21,7 @@ import play.api.libs.json.Json
 }
 */
 case class JsonLoginIn (
-    dtoId: Int = DTOIds.LOGIN,
-    dto: String = DTONames.LOGIN,
+    json: String = DTONames.LOGIN,
     params: JsonLoginParams
 )
 

@@ -33,7 +33,7 @@ import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalSt
 import org.genericConfig.admin.models.json.config.JsonCreateConfigOut
 import org.genericConfig.admin.models.json.step.JsonFirstStepOut
 import org.genericConfig.admin.models.json.config.JsonCreateConfigIn
-import org.genericConfig.admin.models.logic.Registration
+import org.genericConfig.admin.models.logic.User
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -64,7 +64,7 @@ class Admin extends Wrapper{
    * @return RegistrationSC
    */
   def register(username: String, password: String): JsonRegistrationOut = {
-    toJsonRegistrationOut(Registration.registUser(username, password))
+    toJsonRegistrationOut(User.registUser(username, password))
   }
   /**
    * @author Gennadi Heimann
@@ -76,7 +76,7 @@ class Admin extends Wrapper{
    * @return LoginCS
    */
   def login(jsonLoginIn: JsonLoginIn): JsonLoginOut = {
-    toJsonLoginOut(Persistence.login(toLoginIn(jsonLoginIn)))
+    toJsonLoginOut(Persistence.login(jsonLoginIn.params.username, jsonLoginIn.params.password))
   }
   
   /**

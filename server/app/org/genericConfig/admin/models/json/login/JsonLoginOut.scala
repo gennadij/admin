@@ -11,28 +11,8 @@ import play.api.libs.json.Writes
  * Created by gennadi on 22.11.16.
  */
 
-/*
-{
-  dtoId : 2, 
-  dto: Login, 
-  result: {
-    adminId : #40:0, 
-    username : test, 
-    configs:[
-      {
-        configId: #12:23, 
-        configUrl: http://config.de
-      }...
-    ], 
-    status : SUCCESSFUL_CONFIG, 
-    message : Nachricht
-  }
-}
-
-*/
 case class JsonLoginOut (
-    dtoId: Int = DTOIds.LOGIN,
-    dto: String = DTONames.LOGIN,
+    json: String = DTONames.LOGIN,
     result: JsonLoginResult
 )
 

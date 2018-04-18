@@ -7,9 +7,7 @@ import org.genericConfig.admin.models.wrapper.step.StepOut
 import org.genericConfig.admin.models.wrapper.dependency.DependencyOut
 import org.genericConfig.admin.models.json.step.JsonStepResult
 import org.genericConfig.admin.models.json.step.JsonDependencyForAdditionalStepsInOneLevel
-import org.genericConfig.admin.models.wrapper.registration.RegistrationIn
 import org.genericConfig.admin.models.json.registration.JsonRegistrationIn
-import org.genericConfig.admin.models.wrapper.registration.RegistrationOut
 import org.genericConfig.admin.models.json.registration.JsonRegistrationOut
 import org.genericConfig.admin.models.json.registration.RegistrationResult
 import org.genericConfig.admin.models.wrapper.login.LoginOut
@@ -55,6 +53,8 @@ import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalSt
 import org.genericConfig.admin.shared.bo.RegistrationBO
 import org.genericConfig.admin.models.json.registration.JsonRegistrationStatus
 import org.genericConfig.admin.models.json.common.JsonStatus
+import org.genericConfig.admin.shared.bo.LoginBO
+import org.genericConfig.admin.models.json.login.JsonLoginStatus
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -175,19 +175,30 @@ trait Wrapper {
    * 
    * @return JsonLoginSC
    */
-  def toJsonLoginOut(loginOut: LoginOut): JsonLoginOut = {
+  def toJsonLoginOut(loginBO: LoginBO): JsonLoginOut = {
     JsonLoginOut(
         result = JsonLoginResult(
-            loginOut.adminId,
-            loginOut.username,
-            loginOut.configs.map(config => {
-              JsonConfig(
-                  config.configId,
-                  config.configUrl
-              )
-            }),
-            loginOut.status,
-            loginOut.message
+            loginBO.adminId,
+            loginBO.username,
+            loginBO.configs match {
+              case Some(configs) => Some(configs.map(config => {
+                JsonConfig(
+                    config.configId,
+                    config.configUrl
+                 )
+              }))
+              case None => None
+            },
+            JsonLoginStatus(
+                Some(JsonStatus(
+                    loginBO.status.userLogin.status,
+                    loginBO.status.userLogin.message
+                )),
+                Some(JsonStatus(
+                    loginBO.status.common.status,
+                    loginBO.status.common.message
+                )),
+            )
         )
     )
   }

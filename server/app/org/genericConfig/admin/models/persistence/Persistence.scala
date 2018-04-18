@@ -30,8 +30,6 @@ import org.genericConfig.admin.models.json.StatusErrorGeneral
 import org.genericConfig.admin.models.persistence.db.orientdb.HasStepEdge
 import org.genericConfig.admin.models.json.step.JsonVisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.models.json.step.JsonDependencyForAdditionalStepsInOneLevel
-import org.genericConfig.admin.models.wrapper.registration.RegistrationIn
-import org.genericConfig.admin.models.wrapper.registration.RegistrationOut
 import org.genericConfig.admin.models.wrapper.login.LoginIn
 import org.genericConfig.admin.models.wrapper.login.LoginOut
 import org.genericConfig.admin.models.wrapper.config.CreateConfigIn
@@ -65,6 +63,17 @@ import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalSt
 import org.genericConfig.admin.shared.bo.RegistrationBO
 import org.genericConfig.admin.models.persistence.db.orientdb.PropertyKey
 import org.genericConfig.admin.models.persistence.orientdb.Graph
+import org.genericConfig.admin.shared.status.Status
+import org.genericConfig.admin.shared.status.Success
+import org.genericConfig.admin.shared.status.Error
+import org.genericConfig.admin.shared.status.ODBClassCastError
+import org.genericConfig.admin.shared.status.ODBReadError
+import org.genericConfig.admin.shared.bo.LoginBO
+import org.genericConfig.admin.shared.bo.ConfigBO
+import org.genericConfig.admin.shared.status.login.StatusLogin
+import org.genericConfig.admin.shared.status.login.UserExist
+import org.genericConfig.admin.shared.status.login.UserConfigsError
+import org.genericConfig.admin.shared.status.login.UserNotExist
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -101,10 +110,101 @@ object Persistence {
    * 
    * @return LoginSC
    */
-  def login(loginIn: LoginIn): LoginOut = {
-    AdminUserVertex.login(loginIn)
+  def login(username: String, password: String): LoginBO = {
+    
+    val vUser: (Option[OrientVertex], Status) = Graph.readUser(username, password)
+    
+    vUser._2 match {
+      case Success() => {
+        getLoginBO(vUser._1.get)
+      }
+      case Error() => {
+        LoginBO(
+            username, 
+            "",
+            None,
+            StatusLogin(
+                UserNotExist(),
+                Error()
+            )
+        )
+      }
+      case ODBClassCastError() => {
+        LoginBO(
+            "", "",
+            None,
+            StatusLogin(
+                UserNotExist(),
+                ODBClassCastError()
+            )
+        )
+      }
+      case ODBReadError() => {
+        LoginBO(
+            "", "",
+            None,
+            StatusLogin(
+                UserNotExist(),
+                ODBReadError()
+            )
+        )
+      }
+    }
   }
   
+  private def getLoginBO(vUser: OrientVertex): LoginBO = {
+    val vConfigs: (Option[List[OrientVertex]], Status) = Graph.readConfigs(vUser.getIdentity.toString)
+    vConfigs._2 match {
+      case Success() => {
+        LoginBO(
+            vUser.getProperty(PropertyKey.USERNAME),
+            vUser.getIdentity.toString,
+            Some(
+                vConfigs._1.get map (vConfig => {
+                  ConfigBO(
+                      vConfig.getId.toString,
+                      vConfig.getProperty(PropertyKey.CONFIG_URL)
+                  )
+                })
+            ),
+            StatusLogin(
+                UserExist(),
+                Success()
+            )
+        )
+      }
+      case Error() => {
+        LoginBO(
+            "", "",
+            None,
+            StatusLogin(
+                UserConfigsError(),
+                Error()
+            )
+        )
+      }
+      case ODBClassCastError() => {
+        LoginBO(
+            "", "",
+            None,
+            StatusLogin(
+                UserConfigsError(),
+                Error()
+            )
+        )
+      }
+      case ODBReadError() => {
+        LoginBO(
+            "", "",
+            None,
+            StatusLogin(
+                UserConfigsError(),
+                Error()
+            )
+        )
+      }
+    }
+  }
   
   /**
    * @author Gennadi Heimann
