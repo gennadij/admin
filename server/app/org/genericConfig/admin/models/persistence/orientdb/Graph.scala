@@ -21,6 +21,9 @@ import com.tinkerpop.blueprints.Direction
 import com.tinkerpop.blueprints.Edge
 import com.tinkerpop.blueprints.impls.orient.OrientEdge
 import org.genericConfig.admin.shared.bo.ConfigBO
+import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
+import org.genericConfig.admin.shared.status.ODBWriteError
+import org.genericConfig.admin.shared.status.ODBRecordDuplicated
 
 
 /**
@@ -66,10 +69,35 @@ object Graph{
    * 
    * @return LoginBO
    */
-  def readConfigs(adminId: String): (Option[List[OrientVertex]], Status) = {
-    new Graph(Database.getFactory().getTx()).readConfigs(adminId)
+  def readConfigs(userId: String): (Option[List[OrientVertex]], Status) = {
+    new Graph(Database.getFactory().getTx()).readConfigs(userId)
   }
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param String
+   * 
+   * @return
+   */
+  def createConfig(configUrl: String): (Option[OrientVertex], Status) = {
+    new Graph(Database.getFactory().getTx()).createConfig(configUrl)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param String
+   * 
+   * @return
+   */
+  def appendConfigTo(userId: String, vConfig: OrientVertex): (Option[OrientEdge], Status) = {
+    new Graph(Database.getFactory().getTx()).appendConfigTo(userId, vConfig)
+  }
   
 }
 
@@ -186,6 +214,81 @@ class Graph(graph: OrientGraph) {
       }
       case _ => {
         RegistrationBO("", "", "", StatusRegistration(None, Some(Error())))
+      }
+    }
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param String
+   * 
+   * @return 
+   */
+  def createConfig(configUrl: String): (Option[OrientVertex], Status) = {
+    
+    try {
+      val vConfig: OrientVertex = graph.addVertex(
+          "class:" + PropertyKeys.VERTEX_CONFIG,
+          PropertyKeys.CONFIG_URL, configUrl)
+        graph.commit
+        (Some(vConfig), Success())
+    }catch{
+      case e1: ORecordDuplicatedException => {
+        Logger.error(e1.printStackTrace().toString)
+        graph.rollback()
+        (None, ODBRecordDuplicated())
+      }
+      case e2 : ClassCastException => {
+        graph.rollback()
+        Logger.error(e2.printStackTrace().toString)
+        (None, ODBClassCastError())
+      }
+      case e3: Exception => {
+        graph.rollback()
+        Logger.error(e3.printStackTrace().toString)
+        (None, ODBWriteError())
+      }
+    }
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param String
+   * 
+   * @return
+   */
+  def appendConfigTo(userId: String, vConfig: OrientVertex): (Option[OrientEdge], Status) = {
+    try{
+      val vUser = graph.getVertex(userId)
+      val eHasConfig: OrientEdge = graph.addEdge(
+        "class:" + PropertyKeys.EDGE_HAS_CONFIG, 
+         vUser, 
+         vConfig, 
+         PropertyKeys.EDGE_HAS_CONFIG
+      )
+      graph.commit
+      (Some(eHasConfig), Success())
+    }catch{
+      case e1: ORecordDuplicatedException => {
+        Logger.error(e1.printStackTrace().toString)
+        graph.rollback()
+        (None, ODBRecordDuplicated())
+      }
+      case e2 : ClassCastException => {
+        graph.rollback()
+        Logger.error(e2.printStackTrace().toString)
+        (None, ODBClassCastError())
+      }
+      case e3: Exception => {
+        graph.rollback()
+        Logger.error(e3.printStackTrace().toString)
+        (None, ODBWriteError())
       }
     }
   }

@@ -16,9 +16,6 @@ import org.genericConfig.admin.models.persistence.OrientDB
 import org.genericConfig.admin.models.json.StatusSuccessfulRegist
 import org.genericConfig.admin.models.json.StatusErrorRegistUserAlreadyExist
 import org.genericConfig.admin.models.json.StatusErrorRegistGeneral
-import org.genericConfig.admin.models.wrapper.login.LoginIn
-import org.genericConfig.admin.models.wrapper.login.LoginOut
-import org.genericConfig.admin.models.wrapper.login.Config
 import org.genericConfig.admin.models.json.StatusSuccessfulLogin
 import org.genericConfig.admin.models.json.StatusErrorLogin
 
@@ -101,65 +98,48 @@ object AdminUserVertex {
    * 
    * @return LoginSC
    */
-  def login(loginIn: LoginIn): LoginOut = {
-    val graph: OrientGraph = OrientDB.getFactory().getTx
-    val username: String = loginIn.username
-    val password : String = loginIn.password
-    val res: OrientDynaElementIterable = graph
-      .command(new OCommandSQL(s"SELECT FROM AdminUser WHERE username='$username' and password='$password'")).execute()
-    graph.commit
-    val adminUsers = res.asScala.toList
-    if(adminUsers.size == 1){
-      val loginSC: List[LoginOut] = adminUsers.map(login => {
-        val vAdminUser: OrientVertex = login.asInstanceOf[OrientVertex]
-        
-        val eHasConfigs: List[Edge] = vAdminUser.getEdges(Direction.OUT, PropertyKey.EDGE_HAS_CONFIG).asScala.toList
-        
-        val vConfigs: List[Vertex] = eHasConfigs.map(eHasConfig => {
-          eHasConfig.getVertex(Direction.IN)
-        })
-        
-        val configs: List[Config] = vConfigs.map(vConfig => {
-          Config(
-              vConfig.getId.toString,
-              vConfig.getProperty("configUrl")
-              
-          )
-        })
-        LoginOut(
-            login.asInstanceOf[OrientVertex].getIdentity.toString,
-            login.asInstanceOf[OrientVertex].getProperty("username").toString,
-            configs,
-            StatusSuccessfulLogin.status,
-            StatusSuccessfulLogin.message
-        )
-      })
-    loginSC(0)
-    }else{
-      LoginOut(
-              "", 
-              loginIn.username, 
-              List.empty,
-              StatusErrorLogin.status,
-              StatusErrorLogin.message
-      )
-    }
-  }
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.0
-   * 
-   * @param username
-   * 
-   * @return Unit
-   */
-  def deleteAdmin(username: String): Int = {
-    val graph: OrientGraph = OrientDB.getFactory().getTx
-    val res: Int = graph
-      .command(new OCommandSQL(s"DELETE VERTEX AdminUser where username='$username'")).execute()
-    graph.commit
-    res
-  }
+//  def login(loginIn: LoginIn): LoginOut = {
+//    val graph: OrientGraph = OrientDB.getFactory().getTx
+//    val username: String = loginIn.username
+//    val password : String = loginIn.password
+//    val res: OrientDynaElementIterable = graph
+//      .command(new OCommandSQL(s"SELECT FROM AdminUser WHERE username='$username' and password='$password'")).execute()
+//    graph.commit
+//    val adminUsers = res.asScala.toList
+//    if(adminUsers.size == 1){
+//      val loginSC: List[LoginOut] = adminUsers.map(login => {
+//        val vAdminUser: OrientVertex = login.asInstanceOf[OrientVertex]
+//        
+//        val eHasConfigs: List[Edge] = vAdminUser.getEdges(Direction.OUT, PropertyKey.EDGE_HAS_CONFIG).asScala.toList
+//        
+//        val vConfigs: List[Vertex] = eHasConfigs.map(eHasConfig => {
+//          eHasConfig.getVertex(Direction.IN)
+//        })
+//        
+//        val configs: List[Config] = vConfigs.map(vConfig => {
+//          Config(
+//              vConfig.getId.toString,
+//              vConfig.getProperty("configUrl")
+//              
+//          )
+//        })
+//        LoginOut(
+//            login.asInstanceOf[OrientVertex].getIdentity.toString,
+//            login.asInstanceOf[OrientVertex].getProperty("username").toString,
+//            configs,
+//            StatusSuccessfulLogin.status,
+//            StatusSuccessfulLogin.message
+//        )
+//      })
+//    loginSC(0)
+//    }else{
+//      LoginOut(
+//              "", 
+//              loginIn.username, 
+//              List.empty,
+//              StatusErrorLogin.status,
+//              StatusErrorLogin.message
+//      )
+//    }
+//  }
 }

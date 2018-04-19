@@ -10,8 +10,7 @@ import org.genericConfig.admin.models.json.DTONames
  * Created by Gennadi Heimann 09.01.2017
  */
 case class JsonCreateConfigOut (
-    jsonId: Int = DTOIds.CREATE_CONFIG,
-    dto: String = DTONames.CREATE_CONFIG,
+    json: String = DTONames.CREATE_CONFIG,
     result: CreateConfigResult
 )
 

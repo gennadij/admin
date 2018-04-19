@@ -29,3 +29,14 @@ case class ODBReadError() extends Status{
   def status: String = "ODB_READE_ERROR"
   def message: String = "Beim Laden hat einen Fehler in Datenbank aufgetreten"
 }
+
+case class ODBWriteError() extends Status{
+  def status: String = "ODB_WRITE_ERROR"
+  def message: String = "Beim Laden hat einen Fehler in Datenbank aufgetreten"
+}
+
+case class ODBRecordDuplicated() extends Status{
+  def status: String = "ODB_RECORD_DUPLICATED"
+  def message: String = "Beim Laden hat einen Fehler in Datenbank aufgetreten"
+}
+

@@ -167,3 +167,8 @@ ChangeLog version 0.1.6
     @finished on  
     
     Beim nicht erreichtem Server Error an Client senden. Connection Error fangen.
+    
+# 8.@created on     18.04.2018
+    @finished on  
+    
+    Status un BO von Registration und Login zu dem UserBO und StatusUser zusammenfuehren

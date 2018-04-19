@@ -10,15 +10,11 @@ import org.genericConfig.admin.models.json.step.JsonDependencyForAdditionalSteps
 import org.genericConfig.admin.models.json.registration.JsonRegistrationIn
 import org.genericConfig.admin.models.json.registration.JsonRegistrationOut
 import org.genericConfig.admin.models.json.registration.RegistrationResult
-import org.genericConfig.admin.models.wrapper.login.LoginOut
-import org.genericConfig.admin.models.wrapper.login.LoginIn
 import org.genericConfig.admin.models.json.login.JsonLoginIn
 import org.genericConfig.admin.models.json.login.JsonLoginOut
 import org.genericConfig.admin.models.json.login.JsonLoginResult
 import org.genericConfig.admin.models.json.login.JsonConfig
-import org.genericConfig.admin.models.wrapper.config.CreateConfigIn
 import org.genericConfig.admin.models.json.config.JsonCreateConfigIn
-import org.genericConfig.admin.models.wrapper.config.CreateConfigOut
 import org.genericConfig.admin.models.json.config.JsonCreateConfigOut
 import org.genericConfig.admin.models.json.config.CreateConfigResult
 import org.genericConfig.admin.models.json.step.JsonFirstStepIn
@@ -55,6 +51,8 @@ import org.genericConfig.admin.models.json.registration.JsonRegistrationStatus
 import org.genericConfig.admin.models.json.common.JsonStatus
 import org.genericConfig.admin.shared.bo.LoginBO
 import org.genericConfig.admin.models.json.login.JsonLoginStatus
+import org.genericConfig.admin.shared.bo.ConfigBO
+import org.genericConfig.admin.models.json.config.JsonConfigStatus
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -159,12 +157,12 @@ trait Wrapper {
    * 
    * @return LoginCS
    */
-  def toLoginIn(jsonLoginIn: JsonLoginIn): LoginIn = {
-    LoginIn(
-        jsonLoginIn.params.username,
-        jsonLoginIn.params.password
-    )
-  }
+//  def toLoginIn(jsonLoginIn: JsonLoginIn): LoginIn = {
+//    LoginIn(
+//        jsonLoginIn.params.username,
+//        jsonLoginIn.params.password
+//    )
+//  }
   
   /**
    * @author Gennadi Heimann
@@ -212,12 +210,12 @@ trait Wrapper {
    * 
    * @return CreateConfigCS
    */
-  def toCreateConfigIn(jsonCreateConfigIn: JsonCreateConfigIn): CreateConfigIn = {
-    CreateConfigIn(
-        jsonCreateConfigIn.params.adminId,
-        jsonCreateConfigIn.params.configUrl
-    )
-  }
+//  def toCreateConfigIn(jsonCreateConfigIn: JsonCreateConfigIn): CreateConfigIn = {
+//    CreateConfigIn(
+//        jsonCreateConfigIn.params.adminId,
+//        jsonCreateConfigIn.params.configUrl
+//    )
+//  }
   
   /**
    * @author Gennadi Heimann
@@ -228,12 +226,28 @@ trait Wrapper {
    * 
    * @return JsonCreateConfigSC
    */
-  def toJsonCreateConfigOut(createConfigOut: CreateConfigOut): JsonCreateConfigOut = {
+  def toJsonCreateConfigOut(configBO: ConfigBO): JsonCreateConfigOut = {
     JsonCreateConfigOut(
         result = CreateConfigResult(
-            createConfigOut.configId,
-            createConfigOut.status,
-            createConfigOut.message
+            configBO.configId,
+            JsonConfigStatus(
+                configBO.status.addConfig match {
+                  case Some(addConfig) => 
+                    Some(JsonStatus(
+                      addConfig.status,
+                      addConfig.message
+                    ))
+                  case None => None
+                },
+                configBO.status.common match {
+                  case Some(common) => 
+                    Some(JsonStatus(
+                      common.status,
+                      common.message
+                    ))
+                  case None => None
+                }
+            )
         )
     )
   }

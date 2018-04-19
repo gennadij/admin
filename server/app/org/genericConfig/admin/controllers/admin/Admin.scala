@@ -89,7 +89,8 @@ class Admin extends Wrapper{
    * @return CreateConfigSC
    */
   def createConfig(jsonCreateConfigIn: JsonCreateConfigIn): JsonCreateConfigOut = {
-    toJsonCreateConfigOut(Persistence.createConfig(toCreateConfigIn(jsonCreateConfigIn)))
+    toJsonCreateConfigOut(
+        Persistence.createConfig(jsonCreateConfigIn.params.adminId, jsonCreateConfigIn.params.configUrl))
   }
   
   /**

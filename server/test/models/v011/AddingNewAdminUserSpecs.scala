@@ -19,6 +19,7 @@ import play.api.Logger
 import org.genericConfig.admin.shared.status.registration.AlredyExistUser
 import org.genericConfig.admin.shared.status.registration.AddedUser
 import org.genericConfig.admin.shared.status.Success
+import models.preparingConfigs.PrepareConfigsForSpecsv011
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -36,7 +37,7 @@ class AddingNewAdminUserSpecs extends Specification
   sequential
   
   def beforeAll() = {
-    val count = AdminUserVertex.deleteAdmin("user1")
+    val count = PrepareConfigsForSpecsv011.deleteAdmin("user1")
     require(count == 1, "Anzahl der geloescten AdminUserVertexes " + count)
   }
   

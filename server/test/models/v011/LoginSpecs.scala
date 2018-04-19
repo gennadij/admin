@@ -9,7 +9,6 @@ import org.specs2.specification.BeforeAfterAll
 import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
-import org.genericConfig.admin.controllers.admin.AdminWeb
 import org.genericConfig.admin.controllers.websocket.WebClient
 import models.preparingConfigs.PrepareConfigsForSpecsv011
 import org.genericConfig.admin.models.json.DTONames
@@ -28,7 +27,7 @@ import play.api.Logger
  */
 
 @RunWith(classOf[JUnitRunner])
-class SpecsLogin extends Specification with AdminWeb with BeforeAfterAll{
+class SpecsLogin extends Specification with BeforeAfterAll{
   
   val wC = WebClient.init
   

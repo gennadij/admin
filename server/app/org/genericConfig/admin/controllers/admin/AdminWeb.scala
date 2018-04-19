@@ -160,38 +160,3 @@ trait AdminWeb {
     Json.toJson(stepOut)
   }
 }
-
-/*
-
-
-   * 3. CreateConfig
-   *   Server <- Client
-   *   {jsond : 3, dto : CreateConfig, params : {adminId : #40:0, configUrl : test.test.org}
-   *   Server -> Client
-   *   {jsond : 3, dto : CreateConfig, result : {configId: #23:12, status : true, message : Nachricht}
-   * 4. Config
-   *   Server <- Client
-   *   {dtoId : 4, dto : Config, params : {adminId : #40:0}
-   *   Server -> Client
-   *   {dtoId: 4, dto: Config, result: {configs: [{configId: #23:13, configUrl: http...}, ...]}}
-   * 5. => removeAdmin
-   * 7. => FirstStep
-   *   Server <- Client
-   *   {jsonId: 7, dto : FirstStep, params : {configId : #40:0, kind  : first}}
-   *   Server -> Client
-   *   {jsonId : 7, dto : FirstStep, result : {stepId : #12:1, status : true, message : Nachricht}} 
-   * 8. => Component
-   *   Server <- Client
-   *   {dtoIdId : 8, dto : Component, params : {stepId : #40:0, kind : immutable}
-   *    Server -> Client
-   *    {dtoId : 8, dto : Component, result : {componentId : #13:1, status : true, message : Nachricht}}
-   * 10. => Step
-   *   Server <- Client
-   *   {jsonId : 10, dto : Step, params : {adminId : #40:0, kind : default}
-   *   Server -> Client
-   *    {jsonId : 10, dto : Step, result : {stepId : #14:1", status : true, message : Nachricht}}
-   * 7. => updateStep update Step
-   * 8. => deleteStep delete Step and its hasComponent  (brauche zugehörige Step, was soll mit der weiterer ConfigTree passieren)
-   * 9. => updateComponent 
-   * 10. => deleteComponen
-   */

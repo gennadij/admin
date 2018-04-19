@@ -62,22 +62,22 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
   
   def registerNewUser(userPassword: String, webClient: WebClient) = {
     val registerCS = Json.obj(
-          "dtoId" -> DTOIds.REGISTRATION,
-          "dto" -> DTONames.REGISTRATION
-          ,"params" -> Json.obj(
-               "username" -> userPassword,
-               "password"-> userPassword
-           )
+        "json" -> DTONames.REGISTRATION
+        ,"params" -> Json.obj(
+            "username" -> userPassword,
+            "password"-> userPassword
+        )
       )
     val registerSC = webClient.handleMessage(registerCS)
+    
+    Logger.info("registerCS " + registerCS)
+    Logger.info("registerSC " + registerSC)
     require((registerSC \ "result" \ "username").asOpt[String].get == userPassword, s"Username: $userPassword")
-    require((registerSC \ "result" \ "status").asOpt[String].get == StatusSuccessfulRegist.status)
   }
   
   def login (userPassword: String, webClient: WebClient): String = {
     val loginCS = Json.obj(
-        "dtoId" -> DTOIds.LOGIN,
-        "dto" -> DTONames.LOGIN
+        "json" -> DTONames.LOGIN
         ,"params" -> Json.obj(
             "username" -> userPassword,
             "password" -> userPassword
@@ -86,8 +86,6 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
     
     val loginSC = webClient.handleMessage(loginCS)
     
-    require((loginSC \ "result" \ "status").asOpt[String].get == StatusSuccessfulLogin.status)
-
     (loginSC \ "result" \ "adminId").asOpt[String].get
   }
   

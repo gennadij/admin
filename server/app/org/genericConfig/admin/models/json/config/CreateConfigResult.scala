@@ -10,8 +10,7 @@ import play.api.libs.json.Json
 
 case class CreateConfigResult (
     configId: String,
-    status: String,
-    message: String
+    status: JsonConfigStatus
 )
 
 object CreateConfigResult{

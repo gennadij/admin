@@ -30,10 +30,6 @@ import org.genericConfig.admin.models.json.StatusErrorGeneral
 import org.genericConfig.admin.models.persistence.db.orientdb.HasStepEdge
 import org.genericConfig.admin.models.json.step.JsonVisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.models.json.step.JsonDependencyForAdditionalStepsInOneLevel
-import org.genericConfig.admin.models.wrapper.login.LoginIn
-import org.genericConfig.admin.models.wrapper.login.LoginOut
-import org.genericConfig.admin.models.wrapper.config.CreateConfigIn
-import org.genericConfig.admin.models.wrapper.config.CreateConfigOut
 import org.genericConfig.admin.models.json.StatusSuccessfulConfig
 import org.genericConfig.admin.models.persistence.db.orientdb.ConfigVertex
 import org.genericConfig.admin.models.persistence.db.orientdb.HasConfigEdge
@@ -74,6 +70,11 @@ import org.genericConfig.admin.shared.status.login.StatusLogin
 import org.genericConfig.admin.shared.status.login.UserExist
 import org.genericConfig.admin.shared.status.login.UserConfigsError
 import org.genericConfig.admin.shared.status.login.UserNotExist
+import org.genericConfig.admin.shared.status.config.StatusConfig
+import org.genericConfig.admin.shared.status.ODBRecordDuplicated
+import org.genericConfig.admin.shared.status.ODBWriteError
+import org.genericConfig.admin.shared.status.config.ConfigAdded
+import org.genericConfig.admin.shared.status.config.ConfigAlredyExist
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -162,8 +163,13 @@ object Persistence {
             Some(
                 vConfigs._1.get map (vConfig => {
                   ConfigBO(
+                      vUser.getIdentity.toString,
                       vConfig.getId.toString,
-                      vConfig.getProperty(PropertyKey.CONFIG_URL)
+                      vConfig.getProperty(PropertyKey.CONFIG_URL),
+                      StatusConfig(
+                          None,
+                          Some(Success())
+                      )
                   )
                 })
             ),
@@ -215,42 +221,82 @@ object Persistence {
    * 
    * @return CreateConfigCS
    */
-  def createConfig(createConfigIn: CreateConfigIn): CreateConfigOut = {
-    val vConfig: (Option[OrientVertex], String) = ConfigVertex.createConfig(createConfigIn)
+  def createConfig(userId: String, configUrl: String): ConfigBO = {
+    val vConfig: (Option[OrientVertex], Status) = Graph.createConfig(configUrl)
     vConfig._2 match {
-      case StatusSuccessfulConfig.status => {
-        val eHasConfig: (Option[OrientEdge], String) = HasConfigEdge.hasConfig(createConfigIn.adminId, vConfig._1.get)
+      case Success() => {
+        val eHasConfig: (Option[OrientEdge], Status) = Graph.appendConfigTo(userId, vConfig._1.get)
         eHasConfig._2 match {
-          case StatusSuccessfulConfig.status => {
-            CreateConfigOut(
+          case Success() => {
+            ConfigBO(
+                userId,
                 vConfig._1.get.getIdentity.toString,
-                StatusSuccessfulConfig.status,
-                StatusSuccessfulConfig.message
+                configUrl,
+                StatusConfig(
+                    Some(ConfigAdded()),
+                    Some(Success())
+                )
             )
           }
-          case StatusErrorWriteToDB.status => {
-            CreateConfigOut(
+          case ODBRecordDuplicated() => {
+            ConfigBO(
+                userId,
                 "",
-                StatusErrorConfig.status,
-                StatusErrorConfig.message
+                configUrl,
+                StatusConfig(
+                    Some(ConfigAlredyExist()),
+                    Some(ODBRecordDuplicated())
+                )
+            )
+          }
+          case ODBClassCastError() => {
+            ConfigBO(
+                "", "", "",
+                StatusConfig(
+                    None,
+                    Some(ODBClassCastError())
+                )
+            )
+          }
+          case ODBWriteError() => {
+            ConfigBO(
+                "", "", "",
+                StatusConfig(
+                    None,
+                    Some(ODBWriteError())
+                )
             )
           }
         }
-        
       }
-      case StatusErrorDuplicateConfigUrl.status => {
-        CreateConfigOut(
-            "",
-            StatusErrorDuplicateConfigUrl.status,
-            StatusErrorDuplicateConfigUrl.message
-        )
+      case ODBRecordDuplicated() => {
+        ConfigBO(
+                userId,
+                "",
+                configUrl,
+                StatusConfig(
+                    Some(ConfigAlredyExist()),
+                    Some(ODBRecordDuplicated())
+                )
+            )
       }
-      case StatusErrorWriteToDB.status => {
-        CreateConfigOut(
-            "",
-            StatusErrorWriteToDB.status,
-            StatusErrorWriteToDB.message
-        )
+      case ODBClassCastError() => {
+        ConfigBO(
+                "", "", "",
+                StatusConfig(
+                    None,
+                    Some(ODBClassCastError())
+                )
+            )
+      }
+      case ODBWriteError() => {
+        ConfigBO(
+                "", "", "",
+                StatusConfig(
+                    None,
+                    Some(ODBWriteError())
+                )
+            )
       }
     }
   }

@@ -11,8 +11,7 @@ import org.genericConfig.admin.models.json.DTONames
  */
 
 case class JsonCreateConfigIn (
-    jsonId: Int = DTOIds.CREATE_CONFIG,
-    dto: String =DTONames.CREATE_CONFIG,
+    json: String =DTONames.CREATE_CONFIG,
     params: CreateConfigParams
 )
 

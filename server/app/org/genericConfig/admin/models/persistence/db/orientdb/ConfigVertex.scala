@@ -9,7 +9,6 @@ import com.tinkerpop.blueprints.Edge
 import com.tinkerpop.blueprints.Vertex
 import com.tinkerpop.blueprints.Direction
 import org.genericConfig.admin.models.persistence.OrientDB
-import org.genericConfig.admin.models.wrapper.config.CreateConfigIn
 import org.genericConfig.admin.models.wrapper.configTree.ConfigTreeIn
 import org.genericConfig.admin.models.wrapper.configTree.ConfigTreeOut
 import org.genericConfig.admin.models.wrapper.configTree.Step
@@ -41,40 +40,40 @@ object ConfigVertex {
    * 
    * @return RegistrationSC
    */
-  def createConfig(createConfigCS: CreateConfigIn): (Option[OrientVertex], String) = {
-    
-    val graph: OrientGraph = OrientDB.getFactory().getTx
-    
-    
-    val vConfig: Any = try {
-      val vConfig: OrientVertex = graph.addVertex(
-          "class:" + PropertyKey.VERTEX_CONFIG,
-          PropertyKey.CONFIG_URL, createConfigCS.configUrl)
-        graph.commit
-        vConfig
-    }catch{
-      case e2: ORecordDuplicatedException => {
-        graph.rollback()
-        e2
-      }
-      case e1: Exception => {
-        graph.rollback()
-        e1
-      }
-    }
-    
-    vConfig match {
-      case vConfig: OrientVertex => {
-        (Some(vConfig), StatusSuccessfulConfig.status)
-      }
-      case e2 : ORecordDuplicatedException => {
-        (None, StatusErrorDuplicateConfigUrl.status)
-      }
-      case e1 : Exception => {
-        (None, StatusErrorWriteToDB.status)
-      }
-    }
-  }
+//  def createConfig(createConfigCS: CreateConfigIn): (Option[OrientVertex], String) = {
+//    
+//    val graph: OrientGraph = OrientDB.getFactory().getTx
+//    
+//    
+//    val vConfig: Any = try {
+//      val vConfig: OrientVertex = graph.addVertex(
+//          "class:" + PropertyKey.VERTEX_CONFIG,
+//          PropertyKey.CONFIG_URL, createConfigCS.configUrl)
+//        graph.commit
+//        vConfig
+//    }catch{
+//      case e2: ORecordDuplicatedException => {
+//        graph.rollback()
+//        e2
+//      }
+//      case e1: Exception => {
+//        graph.rollback()
+//        e1
+//      }
+//    }
+//    
+//    vConfig match {
+//      case vConfig: OrientVertex => {
+//        (Some(vConfig), StatusSuccessfulConfig.status)
+//      }
+//      case e2 : ORecordDuplicatedException => {
+//        (None, StatusErrorDuplicateConfigUrl.status)
+//      }
+//      case e1 : Exception => {
+//        (None, StatusErrorWriteToDB.status)
+//      }
+//    }
+//  }
   
   /**
    * Loescht alle Steps und Components die zu der Config gehoeren
@@ -97,16 +96,6 @@ object ConfigVertex {
       graph.commit
       res
   }
-    
-  def deleteConfigVertex(username: String): Int = {
-    val sql: String = s"DELETE VERTEX Config where @rid IN (SELECT OUT('hasConfig') FROM AdminUser WHERE username='$username')"
-      val graph: OrientGraph = OrientDB.getFactory().getTx
-      val res: Int = graph
-        .command(new OCommandSQL(sql)).execute()
-      graph.commit
-      res
-  }
-    
   /**
    * 
    * 
