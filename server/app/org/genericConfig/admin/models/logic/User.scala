@@ -1,6 +1,5 @@
 package org.genericConfig.admin.models.logic
 
-import org.genericConfig.admin.models.json.registration.JsonRegistrationOut
 import org.genericConfig.admin.shared.bo.RegistrationBO
 import org.genericConfig.admin.models.persistence.Persistence
 import org.genericConfig.admin.shared.status.Error
@@ -8,7 +7,6 @@ import org.genericConfig.admin.shared.status.registration.StatusRegistration
 import org.genericConfig.admin.shared.status.registration.AlredyExistUser
 import org.genericConfig.admin.shared.status.registration.AddedUser
 import org.genericConfig.admin.shared.status.Success
-import org.genericConfig.admin.models.json.registration.RegistrationResult
 import org.genericConfig.admin.shared.bo.LoginBO
 
 /**

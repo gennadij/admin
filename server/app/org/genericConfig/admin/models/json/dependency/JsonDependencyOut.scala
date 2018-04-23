@@ -1,8 +1,7 @@
 package org.genericConfig.admin.models.json.dependency
 
-import org.genericConfig.admin.models.json.DTOIds
-import org.genericConfig.admin.models.json.DTONames
 import play.api.libs.json.Json
+import org.genericConfig.admin.shared.json.JsonNames
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -11,8 +10,7 @@ import play.api.libs.json.Json
  */
 
 case class JsonDependencyOut (
-    dtoId: Int = DTOIds.CREATE_DEPENDENCY,
-    dto: String = DTONames.CREATE_DEPENDENCY,
+    json: String = JsonNames.CREATE_DEPENDENCY,
     result: JsonDependencyResult
 )
 

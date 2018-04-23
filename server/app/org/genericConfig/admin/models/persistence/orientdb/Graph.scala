@@ -24,6 +24,7 @@ import org.genericConfig.admin.shared.bo.ConfigBO
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
 import org.genericConfig.admin.shared.status.ODBWriteError
 import org.genericConfig.admin.shared.status.ODBRecordDuplicated
+import com.tinkerpop.blueprints.Vertex
 
 
 /**
@@ -95,8 +96,33 @@ object Graph{
    * 
    * @return
    */
-  def appendConfigTo(userId: String, vConfig: OrientVertex): (Option[OrientEdge], Status) = {
-    new Graph(Database.getFactory().getTx()).appendConfigTo(userId, vConfig)
+  def appendConfigTo(userId: String, configId: String): Status = {
+    new Graph(Database.getFactory().getTx()).appendConfigTo(userId, configId)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param String
+   * 
+   * @return
+   */
+  def deleteAllConfigs(username: String): Int = {
+    new Graph(Database.getFactory.getTx).deleteAllConfigs(username)
+  }
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param String
+   * 
+   * @return
+   */
+  def getConfigs(userId: String): (Option[List[OrientVertex]], Status) = {
+    new Graph(Database.getFactory.getTx).getConfigs(userId)
   }
   
 }
@@ -180,14 +206,17 @@ class Graph(graph: OrientGraph) {
    */
   private def writeUser(username: String, password: String): RegistrationBO = {
     val vUser: (Option[OrientVertex], Status)  = try {
-      if(graph.getVertices(PropertyKeys.USERNAME, username).asScala.size == 0){
+      val vAdminUseres : List[Vertex] = graph.getVertices(PropertyKeys.USERNAME, username).asScala.toList
+      if(vAdminUseres.size == 0){
         val vAdminUser: OrientVertex = graph.addVertex("class:" + PropertyKeys.VERTEX_ADMIN_USER, 
           PropertyKeys.USERNAME, username, 
           PropertyKeys.PASSWORD, password)
         graph.commit
         (Some(vAdminUser), AddedUser())
+      }else if(vAdminUseres.size == 1){
+        (Some(vAdminUseres.head.asInstanceOf[OrientVertex]), AlredyExistUser())
       }else{
-        (None, AlredyExistUser())
+        (None, Error())
       }
     }catch{
       case e2 : ClassCastException => {
@@ -209,8 +238,11 @@ class Graph(graph: OrientGraph) {
             StatusRegistration(Some(AddedUser()), Some(Success()))
         )
       }
-      case (None, AlredyExistUser()) => {
-        RegistrationBO(status = StatusRegistration(Some(AlredyExistUser()), Some(Success())))
+      case (Some(vUser), AlredyExistUser()) => {
+        RegistrationBO(
+            username, "", 
+            vUser.getIdentity.toString, 
+            status = StatusRegistration(Some(AlredyExistUser()), Some(Success())))
       }
       case _ => {
         RegistrationBO("", "", "", StatusRegistration(None, Some(Error())))
@@ -263,9 +295,10 @@ class Graph(graph: OrientGraph) {
    * 
    * @return
    */
-  def appendConfigTo(userId: String, vConfig: OrientVertex): (Option[OrientEdge], Status) = {
+  def appendConfigTo(userId: String, configId: String): Status = {
     try{
-      val vUser = graph.getVertex(userId)
+      val vUser: OrientVertex = graph.getVertex(userId)
+      val vConfig: OrientVertex = graph.getVertex(configId)
       val eHasConfig: OrientEdge = graph.addEdge(
         "class:" + PropertyKeys.EDGE_HAS_CONFIG, 
          vUser, 
@@ -273,8 +306,62 @@ class Graph(graph: OrientGraph) {
          PropertyKeys.EDGE_HAS_CONFIG
       )
       graph.commit
-      (Some(eHasConfig), Success())
+//      (Some(eHasConfig), Success())
+      Success()
     }catch{
+      case e1: ORecordDuplicatedException => {
+        Logger.error(e1.printStackTrace().toString)
+        graph.rollback()
+//        (None, ODBRecordDuplicated())
+        ODBRecordDuplicated()
+      }
+      case e2 : ClassCastException => {
+        graph.rollback()
+        Logger.error(e2.printStackTrace().toString)
+//        (None, ODBClassCastError())
+        ODBClassCastError()
+      }
+      case e3: Exception => {
+        graph.rollback()
+        Logger.error(e3.printStackTrace().toString)
+//        (None, ODBWriteError())
+        ODBWriteError()
+      }
+    }
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param String
+   * 
+   * @return
+   */
+  private def deleteAllConfigs(username: String): Int = {
+    val sql: String  = s"delete vertex Config where @rid in (traverse out('hasConfig') from (select out() from AdminUser where username='$username'))"
+    val res: Int = graph.command(new OCommandSQL(sql)).execute()
+    graph.commit
+    res
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param String
+   * 
+   * @return
+   */
+  private def getConfigs(userId: String): (Option[List[OrientVertex]], Status) = {
+    try {
+      val vConfigs: List[OrientVertex] = 
+        graph.getVertex(userId).getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_CONFIG).asScala.toList map (
+            _.asInstanceOf[OrientEdge].getVertex(Direction.IN))
+      (Some(vConfigs), Success())
+    }catch {
       case e1: ORecordDuplicatedException => {
         Logger.error(e1.printStackTrace().toString)
         graph.rollback()
@@ -288,7 +375,7 @@ class Graph(graph: OrientGraph) {
       case e3: Exception => {
         graph.rollback()
         Logger.error(e3.printStackTrace().toString)
-        (None, ODBWriteError())
+        (None, ODBReadError())
       }
     }
   }

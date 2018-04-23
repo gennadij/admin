@@ -14,7 +14,6 @@ import com.tinkerpop.blueprints.impls.orient.OrientEdge
 import com.tinkerpop.blueprints.Edge
 import com.tinkerpop.blueprints.Vertex
 import org.genericConfig.admin.models.persistence.db.orientdb.HasDependencyEdge
-import org.genericConfig.admin.models.persistence.db.orientdb.AdminUserVertex
 import play.api.Logger
 import org.genericConfig.admin.models.visualization.VisualizationProposal
 import org.genericConfig.admin.models.tempConfig.TempConfigurations
@@ -223,81 +222,61 @@ object Persistence {
    */
   def createConfig(userId: String, configUrl: String): ConfigBO = {
     val vConfig: (Option[OrientVertex], Status) = Graph.createConfig(configUrl)
-    vConfig._2 match {
-      case Success() => {
-        val eHasConfig: (Option[OrientEdge], Status) = Graph.appendConfigTo(userId, vConfig._1.get)
-        eHasConfig._2 match {
-          case Success() => {
-            ConfigBO(
-                userId,
-                vConfig._1.get.getIdentity.toString,
-                configUrl,
-                StatusConfig(
-                    Some(ConfigAdded()),
-                    Some(Success())
-                )
-            )
-          }
-          case ODBRecordDuplicated() => {
-            ConfigBO(
-                userId,
-                "",
-                configUrl,
-                StatusConfig(
-                    Some(ConfigAlredyExist()),
-                    Some(ODBRecordDuplicated())
-                )
-            )
-          }
-          case ODBClassCastError() => {
-            ConfigBO(
-                "", "", "",
-                StatusConfig(
-                    None,
-                    Some(ODBClassCastError())
-                )
-            )
-          }
-          case ODBWriteError() => {
-            ConfigBO(
-                "", "", "",
-                StatusConfig(
-                    None,
-                    Some(ODBWriteError())
-                )
-            )
-          }
-        }
-      }
-      case ODBRecordDuplicated() => {
+    
+    vConfig._1 match {
+      case Some(vC) => {
         ConfigBO(
-                userId,
-                "",
-                configUrl,
-                StatusConfig(
-                    Some(ConfigAlredyExist()),
-                    Some(ODBRecordDuplicated())
-                )
+            userId,
+            vC.getIdentity.toString,
+            configUrl,
+            StatusConfig(
+                None,
+                Some(vConfig._2)
             )
+        )
       }
-      case ODBClassCastError() => {
+      case None => {
         ConfigBO(
-                "", "", "",
-                StatusConfig(
-                    None,
-                    Some(ODBClassCastError())
-                )
+            "", "", "",
+            StatusConfig(
+                None,
+                Some(vConfig._2)
             )
+        )
       }
-      case ODBWriteError() => {
-        ConfigBO(
-                "", "", "",
-                StatusConfig(
-                    None,
-                    Some(ODBWriteError())
-                )
-            )
+    }
+  }
+  
+  def appendConfigTo(userId: String, configId: String): Status = {
+    Graph.appendConfigTo(userId, configId)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.0
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  def getConfigs(userId: String): List[ConfigBO] = {
+    val (vConfigs, status): (Option[List[OrientVertex]], Status) = Graph.getConfigs(userId)
+    vConfigs match {
+      case Some(vConfigs) => {
+        vConfigs map (vConfig => {
+          ConfigBO(
+              userId: String,
+              vConfig.getIdentity.toString,
+              vConfig.getProperty(PropertyKey.CONFIG_URL),
+              StatusConfig(
+                  None,
+                  Some(status)
+              )
+          )
+        })
       }
+      case None => List(ConfigBO(status = StatusConfig(None, Some(status))))
     }
   }
   

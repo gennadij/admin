@@ -11,10 +11,10 @@ import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import org.genericConfig.admin.controllers.admin.AdminWeb
 import org.genericConfig.admin.controllers.websocket.WebClient
-import org.genericConfig.admin.models.json.DTONames
 import play.api.Logger
 import org.genericConfig.admin.shared.status.login.UserNotExist
 import org.genericConfig.admin.shared.status.Error
+import org.genericConfig.admin.shared.json.JsonNames
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -41,7 +41,7 @@ class LoginWithNotExistUserSpecs extends Specification with AdminWeb  with Befor
   val user = "user"
   val webClient = WebClient.init
   val jsonClientServer = Json.obj(
-      "json" -> DTONames.LOGIN,
+      "json" -> JsonNames.LOGIN,
       "params" -> Json.obj(
           "username" -> user,
           "password"-> user))

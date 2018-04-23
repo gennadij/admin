@@ -1,8 +1,7 @@
 package org.genericConfig.admin.models.json.step
 
-import org.genericConfig.admin.models.json.DTOIds
-import org.genericConfig.admin.models.json.DTONames
 import play.api.libs.json.Json
+import org.genericConfig.admin.shared.json.JsonNames
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -11,8 +10,7 @@ import play.api.libs.json.Json
  */
 
 case class JsonFirstStepOut (
-    dtoId: Int = DTOIds.CREATE_FIRST_STEP,
-    dto: String = DTONames.CREATE_FIRST_STEP,
+    dto: String = JsonNames.CREATE_FIRST_STEP,
     result: JsonFirstStepResult
 )
 

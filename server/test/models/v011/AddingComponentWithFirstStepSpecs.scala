@@ -3,8 +3,6 @@ package models.v011
 import org.specs2.specification.BeforeAfterAll
 import org.genericConfig.admin.controllers.admin.AdminWeb
 import org.specs2.mutable.Specification
-import org.genericConfig.admin.models.json.DTOIds
-import org.genericConfig.admin.models.json.DTONames
 import play.api.libs.json.Json
 import play.api.libs.json.JsValue
 import org.genericConfig.admin.models.persistence.db.orientdb.ConfigVertex
@@ -21,6 +19,7 @@ import play.api.Logger
 import org.genericConfig.admin.models.json.StatusSuccessfulLogin
 import models.preparingConfigs.PrepareConfigsForSpecsv011
 import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.shared.json.JsonNames
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -49,8 +48,7 @@ class AddingComponentWithFirstStepSpecs extends Specification
   "Diese Specification spezifiziert das Hinzufügen von der Component zu dem FirstStep user5" >> {
     "FirstStep -> Components hinzufuegen" >> {
       val firstStepCS = Json.obj(
-        "dtoId" -> DTOIds.CREATE_FIRST_STEP,
-        "dto" -> DTONames.CREATE_FIRST_STEP
+        "json" -> JsonNames.CREATE_FIRST_STEP
         ,"params" -> Json.obj(
           "configId" -> userId,
           "nameToShow" -> "FirstStep",
@@ -63,14 +61,12 @@ class AddingComponentWithFirstStepSpecs extends Specification
       )
       val firstStepSC: JsValue = wC.handleMessage(firstStepCS)
       
-      (firstStepSC \ "dtoId").asOpt[Int].get === DTOIds.CREATE_FIRST_STEP
-      (firstStepSC \ "dto").asOpt[String].get === DTONames.CREATE_FIRST_STEP
+      (firstStepSC \ "dto").asOpt[String].get === JsonNames.CREATE_FIRST_STEP
       (firstStepSC \ "result" \ "status").asOpt[String].get === StatusSuccessfulFirstStepCreated.status
       (firstStepSC \ "result" \ "message").asOpt[String].get === StatusSuccessfulFirstStepCreated.message
       
       val componentCS = Json.obj(
-        "dtoId" -> DTOIds.CREATE_COMPONENT,
-        "dto" -> DTONames.CREATE_COMPONENT
+        "json" -> JsonNames.CREATE_COMPONENT
         ,"params" -> Json.obj(
           "stepId" -> (firstStepSC \ "result" \ "stepId").asOpt[String].get,
           "nameToShow" -> "Component",
@@ -79,8 +75,7 @@ class AddingComponentWithFirstStepSpecs extends Specification
       )
       val componentSC: JsValue = wC.handleMessage(componentCS)
       
-      (componentSC \ "dtoId").asOpt[Int].get === DTOIds.CREATE_COMPONENT
-      (componentSC \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT
+      (componentSC \ "dto").asOpt[String].get === JsonNames.CREATE_COMPONENT
       (componentSC \ "result" \ "status").asOpt[String].get === StatusSuccessfulComponentCreated.status
       (componentSC \ "result" \ "message").asOpt[String].get === StatusSuccessfulComponentCreated.message
     }
@@ -88,8 +83,7 @@ class AddingComponentWithFirstStepSpecs extends Specification
   def login(): String = {
     val user = "user5"
       val jsonClientServer = Json.obj(
-          "dtoId" -> DTOIds.LOGIN,
-          "dto" -> DTONames.LOGIN
+          "json" -> JsonNames.LOGIN
           ,"params" -> Json.obj(
               "username" -> user,
               "password"-> user

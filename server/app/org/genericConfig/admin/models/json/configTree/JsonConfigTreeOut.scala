@@ -1,8 +1,7 @@
 package org.genericConfig.admin.models.json.configTree
 
 import play.api.libs.json.Json
-import org.genericConfig.admin.models.json.DTOIds
-import org.genericConfig.admin.models.json.DTONames
+import org.genericConfig.admin.shared.json.JsonNames
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -32,8 +31,7 @@ import org.genericConfig.admin.models.json.DTONames
 
 
 case class JsonConfigTreeOut (
-    dtoId: Int = DTOIds.CONFIG_TREE,
-    dto: String = DTONames.CONFIG_TREE,
+    json: String = JsonNames.CONFIG_TREE,
     result: JsonConfigTreeResult
 )
 

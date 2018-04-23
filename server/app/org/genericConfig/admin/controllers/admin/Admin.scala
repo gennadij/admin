@@ -8,8 +8,6 @@ import com.tinkerpop.blueprints.impls.orient.OrientEdge
 import org.genericConfig.admin.models.persistence.db.orientdb.StepVertex
 import play.api.LoggerLike
 import play.api.Logger
-import org.genericConfig.admin.models.json.registration.JsonRegistrationIn
-import org.genericConfig.admin.models.json.registration.JsonRegistrationOut
 import org.genericConfig.admin.models.json.login.JsonLoginOut
 import org.genericConfig.admin.models.json.login.JsonLoginIn
 import org.genericConfig.admin.models.json.step.JsonFirstStepIn
@@ -34,6 +32,10 @@ import org.genericConfig.admin.models.json.config.JsonCreateConfigOut
 import org.genericConfig.admin.models.json.step.JsonFirstStepOut
 import org.genericConfig.admin.models.json.config.JsonCreateConfigIn
 import org.genericConfig.admin.models.logic.User
+import org.genericConfig.admin.models.json.config.JsonGetConfigsIn
+import org.genericConfig.admin.models.json.config.JsonGetConfigsOut
+import org.genericConfig.admin.models.logic.Config
+import org.genericConfig.admin.shared.json.registration.JsonRegistrationOut
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -69,7 +71,7 @@ class Admin extends Wrapper{
   /**
    * @author Gennadi Heimann
    * 
-   * @version 0.1.0
+   * @version 0.1.6
    * 
    * @param LoginSC
    * 
@@ -82,7 +84,7 @@ class Admin extends Wrapper{
   /**
    * @author Gennadi Heimann
    * 
-   * @version 0.1.0
+   * @version 0.1.6
    * 
    * @param CreateConfigCS
    * 
@@ -90,8 +92,33 @@ class Admin extends Wrapper{
    */
   def createConfig(jsonCreateConfigIn: JsonCreateConfigIn): JsonCreateConfigOut = {
     toJsonCreateConfigOut(
-        Persistence.createConfig(jsonCreateConfigIn.params.adminId, jsonCreateConfigIn.params.configUrl))
+        Config.createConfig(jsonCreateConfigIn.params.adminId, jsonCreateConfigIn.params.configUrl))
   }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param
+   * 
+   * @return
+   */
+  def getConfigs(jsonGetConfigsIn: JsonGetConfigsIn): JsonGetConfigsOut = {
+    Config.getConfigs(jsonGetConfigsIn.params.userId)
+    ???
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param
+   * 
+   * @return
+   */
+  def deleteConfig() = ???
   
   /**
    * @author Gennadi Heimann

@@ -11,12 +11,12 @@ import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import org.genericConfig.admin.controllers.websocket.WebClient
 import models.preparingConfigs.PrepareConfigsForSpecsv011
-import org.genericConfig.admin.models.json.DTONames
 import org.genericConfig.admin.shared.status.login.StatusLogin
 import org.genericConfig.admin.shared.status.login.StatusUserLogin
 import org.genericConfig.admin.shared.status.login.UserExist
 import org.genericConfig.admin.shared.status.Success
 import play.api.Logger
+import org.genericConfig.admin.shared.json.JsonNames
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -51,7 +51,7 @@ class SpecsLogin extends Specification with BeforeAfterAll{
   val user = "user2"
   
   val jsonClientServer = Json.obj(
-      "json" -> DTONames.LOGIN
+      "json" -> JsonNames.LOGIN
       ,"params" -> Json.obj(
           "username" -> user,
           "password"-> user))

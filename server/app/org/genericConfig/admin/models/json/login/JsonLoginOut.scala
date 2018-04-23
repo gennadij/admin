@@ -1,9 +1,8 @@
 package org.genericConfig.admin.models.json.login
 
 import play.api.libs.json.Json
-import org.genericConfig.admin.models.json.DTOIds
-import org.genericConfig.admin.models.json.DTONames
 import play.api.libs.json.Writes
+import org.genericConfig.admin.shared.json.JsonNames
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -12,7 +11,7 @@ import play.api.libs.json.Writes
  */
 
 case class JsonLoginOut (
-    json: String = DTONames.LOGIN,
+    json: String = JsonNames.LOGIN,
     result: JsonLoginResult
 )
 

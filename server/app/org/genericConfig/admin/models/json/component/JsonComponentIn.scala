@@ -1,8 +1,7 @@
 package org.genericConfig.admin.models.json.component
 
 import play.api.libs.json.Json
-import org.genericConfig.admin.models.json.DTOIds
-import org.genericConfig.admin.models.json.DTONames
+import org.genericConfig.admin.shared.json.JsonNames
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -12,8 +11,7 @@ import org.genericConfig.admin.models.json.DTONames
  * {jsonId : 8, dto : Component, params : {adminId : #40:0, kind : immutable}
  */
 case class JsonComponentIn (
-    dtoId: Int = DTOIds.CREATE_COMPONENT,
-    dto: String = DTONames.CREATE_COMPONENT,
+    json: String = JsonNames.CREATE_COMPONENT,
     params: ComponentParams
 )
 

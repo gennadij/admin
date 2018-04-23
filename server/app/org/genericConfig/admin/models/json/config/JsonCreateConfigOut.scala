@@ -1,8 +1,7 @@
 package org.genericConfig.admin.models.json.config
 
 import play.api.libs.json.Json
-import org.genericConfig.admin.models.json.DTOIds
-import org.genericConfig.admin.models.json.DTONames
+import org.genericConfig.admin.shared.json.JsonNames
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -10,7 +9,7 @@ import org.genericConfig.admin.models.json.DTONames
  * Created by Gennadi Heimann 09.01.2017
  */
 case class JsonCreateConfigOut (
-    json: String = DTONames.CREATE_CONFIG,
+    json: String = JsonNames.CREATE_CONFIG,
     result: CreateConfigResult
 )
 

@@ -10,11 +10,11 @@ import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import models.preparingConfigs.PrepareConfigsForSpecsv011
 import org.genericConfig.admin.controllers.websocket.WebClient
-import org.genericConfig.admin.models.json.DTONames
 import org.genericConfig.admin.shared.status.Success
 import org.genericConfig.admin.shared.status.login.UserExist
 import play.api.Logger
 import org.genericConfig.admin.shared.status.config.ConfigAdded
+import org.genericConfig.admin.shared.json.JsonNames
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -43,7 +43,7 @@ class AddingNewConfigSpecs extends Specification
     "Login mit AdminUser und fuege Konfig zu dem AdminUser hinzu" >> {
       
       val loginCS = Json.obj(
-        "json" -> DTONames.LOGIN
+        "json" -> JsonNames.LOGIN
         ,"params" -> Json.obj(
             "username" -> userPassword,
             "password" -> userPassword
@@ -54,8 +54,9 @@ class AddingNewConfigSpecs extends Specification
     (loginSC \ "result" \ "status" \ "userLogin" \ "status").asOpt[String].get must_== UserExist().status
     (loginSC \ "result" \ "status" \ "common" \ "status").asOpt[String].get must_== Success().status
     
+    Logger.info((loginSC \ "result" \ "adminId").asOpt[String].get)
     val createConfigCS = Json.obj(
-        "json" -> DTONames.CREATE_CONFIG
+        "json" -> JsonNames.CREATE_CONFIG
         , "params" -> Json.obj(
             "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
             "configUrl" -> "//http://contig1/user3"
@@ -63,6 +64,8 @@ class AddingNewConfigSpecs extends Specification
     )
     val createConfigSC = wC.handleMessage(createConfigCS)
 	  
+    //TODO com.orientechnologies.orient.core.exception.OValidationException: analysieren
+    
     Logger.info("createConfigCS " + createConfigCS)
     Logger.info("createConfigSC " + createConfigSC)
     

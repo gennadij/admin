@@ -1,8 +1,7 @@
 package org.genericConfig.admin.models.json.step
 
-import org.genericConfig.admin.models.json.DTOIds
-import org.genericConfig.admin.models.json.DTONames
 import play.api.libs.json.Json
+import org.genericConfig.admin.shared.json.JsonNames
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -10,8 +9,7 @@ import play.api.libs.json.Json
  * Created by Gennadi Heimann 1.1.2017
  */
 case class JsonStepOut (
-    dtoId: Int = DTOIds.CREATE_STEP,
-    dto: String = DTONames.CREATE_STEP,
+    json: String = JsonNames.CREATE_STEP,
     result: JsonStepResult
 )
 

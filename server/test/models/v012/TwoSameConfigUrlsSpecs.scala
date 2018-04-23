@@ -16,11 +16,11 @@ import play.api.libs.json.JsValue
 import play.api.libs.json.Json
 import org.genericConfig.admin.controllers.websocket.WebClient
 import models.preparingConfigs.PrepareConfigsForSpecsv011
-import org.genericConfig.admin.models.json.DTONames
 import org.genericConfig.admin.shared.status.config.ConfigAdded
 import org.genericConfig.admin.shared.status.Success
 import org.genericConfig.admin.shared.status.config.ConfigAlredyExist
 import org.genericConfig.admin.shared.status.ODBRecordDuplicated
+import org.genericConfig.admin.shared.json.JsonNames
 
 /**
 	* Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -54,7 +54,7 @@ class TwoSameConfigUrlsSpecs extends Specification
 			val user14 = login("user14", webClient)
 			
 			val createConfigIn = Json.obj(
-          "json" -> DTONames.CREATE_CONFIG
+          "json" -> JsonNames.CREATE_CONFIG
           , "params" -> Json.obj(
               "adminId" -> user14,
               "configUrl" -> "http://config/user13"

@@ -3,10 +3,7 @@ package org.genericConfig.admin.controllers.admin
 import play.api.libs.json._
 import scala.collection.immutable.Seq
 import play.api.Logger
-import org.genericConfig.admin.models.json.DTONames
-import org.genericConfig.admin.models.json.registration.JsonRegistrationIn
 import org.genericConfig.admin.models.json.login.JsonLoginIn
-import org.genericConfig.admin.models.json.registration.JsonRegistrationOut
 import org.genericConfig.admin.models.json.login.JsonLoginOut
 import org.genericConfig.admin.models.json.config.JsonCreateConfigIn
 import org.genericConfig.admin.models.json.config.JsonCreateConfigOut
@@ -23,6 +20,12 @@ import org.genericConfig.admin.models.json.step.JsonStepOut
 import org.genericConfig.admin.models.json.configTree.JsonConfigTreeIn
 import org.genericConfig.admin.models.json.configTree.JsonConfigTreeOut
 import org.genericConfig.admin.models.json.dependency.JsonDependencyOut
+import org.genericConfig.admin.shared.json.JsonNames
+import org.genericConfig.admin.models.json.config.JsonGetConfigsIn
+import org.genericConfig.admin.models.json.config.JsonGetConfigsOut
+import org.genericConfig.admin.models.json.config.JsonDeleteConfigIn
+import org.genericConfig.admin.shared.json.registration.JsonRegistrationIn
+import org.genericConfig.admin.shared.json.registration.JsonRegistrationOut
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -34,16 +37,18 @@ trait AdminWeb {
   
   def handleMessage(receivedMessage: JsValue, admin: Admin): JsValue = {
     (receivedMessage \ "json").asOpt[String] match {
-      case Some(DTONames.REGISTRATION) => register(receivedMessage, admin)
-      case Some(DTONames.LOGIN) => login(receivedMessage, admin)
-      case Some(DTONames.CREATE_CONFIG) => createConfig(receivedMessage, admin)
-      case Some(DTONames.CREATE_FIRST_STEP) => createFirstStep(receivedMessage, admin)
-      case Some(DTONames.CONFIG_TREE) => configTree(receivedMessage, admin)
-      case Some(DTONames.CREATE_COMPONENT) => createComponent(receivedMessage, admin)
-      case Some(DTONames.CREATE_STEP) => createStep(receivedMessage, admin)
-      case Some(DTONames.CONNECTION_COMPONENT_TO_STEP) => connectComponentToStep(receivedMessage, admin)
-      case Some(DTONames.CREATE_DEPENDENCY) => createDependency(receivedMessage, admin)
-      case Some(DTONames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL) => 
+      case Some(JsonNames.REGISTRATION) => register(receivedMessage, admin)
+      case Some(JsonNames.LOGIN) => login(receivedMessage, admin)
+      case Some(JsonNames.CREATE_CONFIG) => createConfig(receivedMessage, admin)
+      case Some(JsonNames.GET_CONFIGS) => ???
+      case Some(JsonNames.DELET_CONFIG) => ???
+      case Some(JsonNames.CREATE_FIRST_STEP) => createFirstStep(receivedMessage, admin)
+      case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage, admin)
+      case Some(JsonNames.CREATE_COMPONENT) => createComponent(receivedMessage, admin)
+      case Some(JsonNames.CREATE_STEP) => createStep(receivedMessage, admin)
+      case Some(JsonNames.CONNECTION_COMPONENT_TO_STEP) => connectComponentToStep(receivedMessage, admin)
+      case Some(JsonNames.CREATE_DEPENDENCY) => createDependency(receivedMessage, admin)
+      case Some(JsonNames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL) => 
         visualProposalForAdditionalStepsInOneLevel(receivedMessage, admin)
       case _ => Json.obj("error" -> "keinen Treffer")
     }
@@ -159,4 +164,26 @@ trait AdminWeb {
         visualProposalForAdditionalStepsInOneLevelIn.get)
     Json.toJson(stepOut)
   }
+  
+  private def getConfigs(receivedMessage: JsValue, admin: Admin): JsValue = {
+    val getConfigsIn: JsResult[JsonGetConfigsIn] = Json.fromJson[JsonGetConfigsIn](receivedMessage)
+    getConfigsIn match {
+      case s: JsSuccess[JsonGetConfigsIn] => s.get
+      case e: JsError => Logger.error("Errors -> CREATE_DEPENDENCY: " + JsError.toJson(e).toString())
+    }
+    
+    val getConfigsOut: JsonGetConfigsOut  = ???//admin.???(getConfigsIn.get)
+    Json.toJson(getConfigsOut)
+   }
+  
+  private def deleteConfig(receivedMessage: JsValue, admin: Admin): JsValue = {
+    val deleteConfigIn: JsResult[JsonDeleteConfigIn] = Json.fromJson[JsonDeleteConfigIn](receivedMessage)
+    deleteConfigIn match {
+      case s: JsSuccess[JsonDeleteConfigIn] => s.get
+      case e: JsError => Logger.error("Errors -> CREATE_DEPENDENCY: " + JsError.toJson(e).toString())
+    }
+    
+    val deleteConfigOut: JsonDependencyOut  = ???//admin.???(getConfigsIn.get)
+    Json.toJson(deleteConfigOut)
+   }
 }

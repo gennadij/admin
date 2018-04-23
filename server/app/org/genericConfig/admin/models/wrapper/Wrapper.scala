@@ -7,9 +7,6 @@ import org.genericConfig.admin.models.wrapper.step.StepOut
 import org.genericConfig.admin.models.wrapper.dependency.DependencyOut
 import org.genericConfig.admin.models.json.step.JsonStepResult
 import org.genericConfig.admin.models.json.step.JsonDependencyForAdditionalStepsInOneLevel
-import org.genericConfig.admin.models.json.registration.JsonRegistrationIn
-import org.genericConfig.admin.models.json.registration.JsonRegistrationOut
-import org.genericConfig.admin.models.json.registration.RegistrationResult
 import org.genericConfig.admin.models.json.login.JsonLoginIn
 import org.genericConfig.admin.models.json.login.JsonLoginOut
 import org.genericConfig.admin.models.json.login.JsonLoginResult
@@ -47,12 +44,16 @@ import org.genericConfig.admin.models.wrapper.dependency.DependencyIn
 import org.genericConfig.admin.models.json.step.JsonVisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.shared.bo.RegistrationBO
-import org.genericConfig.admin.models.json.registration.JsonRegistrationStatus
-import org.genericConfig.admin.models.json.common.JsonStatus
 import org.genericConfig.admin.shared.bo.LoginBO
 import org.genericConfig.admin.models.json.login.JsonLoginStatus
 import org.genericConfig.admin.shared.bo.ConfigBO
 import org.genericConfig.admin.models.json.config.JsonConfigStatus
+import org.genericConfig.admin.models.json.config.JsonGetConfigsOut
+import org.genericConfig.admin.shared.json.registration.JsonRegistrationOut
+import org.genericConfig.admin.shared.json.registration.RegistrationResult
+import org.genericConfig.admin.shared.json.registration.JsonRegistrationStatus
+import org.genericConfig.admin.shared.json.status.JsonStatus
+import org.genericConfig.admin.shared.json.status.JsonStatus
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -531,5 +532,19 @@ trait Wrapper {
      VisualProposalForAdditionalStepsInOneLevelIn(
          jsonVisualProposalForAdditionalStepsInOneLevelIn.params.selectedVisualProposal
      )
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.5
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  
+  def toJsonGetConfigsOut(configBOs: List[ConfigBO]): JsonGetConfigsOut = {
+    ???
   }
 }

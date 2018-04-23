@@ -1,7 +1,5 @@
 package models.preparingConfigs
 
-import org.genericConfig.admin.models.json.DTOIds
-import org.genericConfig.admin.models.json.DTONames
 import play.api.libs.json.Json
 import org.genericConfig.admin.controllers.admin.AdminWeb
 import org.specs2.Specification
@@ -360,6 +358,7 @@ object PrepareConfigsForSpecsv011 extends AdminWeb with GeneralFunctionToPrepare
       val res: Int = graph
         .command(new OCommandSQL(sql)).execute()
       graph.commit
+      Logger.info("Deleting count: " + res)
       res
   }
   

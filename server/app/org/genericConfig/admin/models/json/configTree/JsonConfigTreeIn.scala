@@ -1,6 +1,7 @@
 package org.genericConfig.admin.models.json.configTree
 
 import play.api.libs.json.Json
+import org.genericConfig.admin.shared.json.JsonNames
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -18,8 +19,7 @@ import play.api.libs.json.Json
 }
  */
 case class JsonConfigTreeIn (
-    dtoId: Int,
-    dto: String,
+    Json: String = JsonNames.CONFIG_TREE,
     params: JsonConfigTreeParams
 )
 

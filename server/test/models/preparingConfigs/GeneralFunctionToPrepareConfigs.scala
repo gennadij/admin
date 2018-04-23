@@ -1,7 +1,5 @@
 package models.preparingConfigs
 
-import org.genericConfig.admin.models.json.DTOIds
-import org.genericConfig.admin.models.json.DTONames
 import play.api.libs.json.Json
 import play.api.libs.json.JsValue
 import org.genericConfig.admin.controllers.admin.AdminWeb
@@ -26,6 +24,7 @@ import org.genericConfig.admin.models.json.StatusSuccessfulConnectionComponentTo
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.wrapper.step.StepIn
 import org.genericConfig.admin.models.json.StatusSuccessfulAdditionalStepInLevelCSCreated
+import org.genericConfig.admin.shared.json.JsonNames
 
 /**
 	* Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -62,7 +61,7 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
   
   def registerNewUser(userPassword: String, webClient: WebClient) = {
     val registerCS = Json.obj(
-        "json" -> DTONames.REGISTRATION
+        "json" -> JsonNames.REGISTRATION
         ,"params" -> Json.obj(
             "username" -> userPassword,
             "password"-> userPassword
@@ -77,7 +76,7 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
   
   def login (userPassword: String, webClient: WebClient): String = {
     val loginCS = Json.obj(
-        "json" -> DTONames.LOGIN
+        "json" -> JsonNames.LOGIN
         ,"params" -> Json.obj(
             "username" -> userPassword,
             "password" -> userPassword
@@ -91,8 +90,7 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
   
 	def loginForConfigId(user: String, webClient: WebClient): String = {
 		val jsonClientServer = Json.obj(
-			"dtoId" -> DTOIds.LOGIN,
-			"dto" -> DTONames.LOGIN
+			"json" -> JsonNames.LOGIN
 			,"params" -> Json.obj(
 				"username" -> user,
 				"password"-> user
@@ -106,8 +104,7 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
   
   def createNewConfig(adminId: String, configUrl: String, webClient: WebClient): String = {
     val createConfigCS = Json.obj(
-          "jsonId" -> DTOIds.CREATE_CONFIG,
-          "dto" -> DTONames.CREATE_CONFIG
+          "json" -> JsonNames.CREATE_CONFIG
           , "params" -> Json.obj(
               "adminId" -> adminId,
               "configUrl" -> configUrl
@@ -122,8 +119,7 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
   
   def addFirstStep(configId: String, min: Int = 1, max: Int = 1, nameToShow: String = "FirstStep", webClient: WebClient): String = {
     val firstStepCS = Json.obj(
-        "dtoId" -> DTOIds.CREATE_FIRST_STEP,
-        "dto" -> DTONames.CREATE_FIRST_STEP
+        "json" -> JsonNames.CREATE_FIRST_STEP
         ,"params" -> Json.obj(
           "configId" -> configId,
           "nameToShow" -> nameToShow,
@@ -145,8 +141,7 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
   
   def addComponentToStep(stepId: String, nameToShow: String = "Component", wC: WebClient): String = {
     val componentCS = Json.obj(
-        "dtoId" -> DTOIds.CREATE_COMPONENT,
-        "dto" -> DTONames.CREATE_COMPONENT
+        "json" -> JsonNames.CREATE_COMPONENT
         ,"params" -> Json.obj(
             "stepId" -> stepId,
             "nameToShow" -> nameToShow,
@@ -164,8 +159,7 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
 		//TODO erweitern auf die Dependencies
 	  
 	  val stepCS = Json.obj(
-			"dtoId" -> DTOIds.CREATE_STEP,
-			"dto" -> DTONames.CREATE_STEP,
+			"json" -> JsonNames.CREATE_STEP,
 			"params" -> Json.obj(
 				"componentId" -> componentId,
 				"nameToShow" -> nameToShow,
@@ -183,8 +177,7 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
 	
 	def visualProposal(visualProposal: String, wC: WebClient): String = {
 	  val visualProposal = Json.obj(
-			    "dtoId" -> DTOIds.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL,
-				  "dto" -> DTONames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL,
+				  "json" -> JsonNames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL,
 				  "params" -> Json.obj(
 				          "selectedVisualProposal" -> "remove"
 				  )
@@ -197,8 +190,7 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
 
 	def connectComponentToStep(stepId: String, componentId: String, wC: WebClient): Unit = {
 		val connectionComponentToStepCS = Json.obj(
-			"dtoId" -> DTOIds.CONNECTION_COMPONENT_TO_STEP,
-			"dto" -> DTONames.CONNECTION_COMPONENT_TO_STEP,
+			"json" -> JsonNames.CONNECTION_COMPONENT_TO_STEP,
 			"params" -> Json.obj(
 				"componentId" -> componentId,
 				"stepId" -> stepId
