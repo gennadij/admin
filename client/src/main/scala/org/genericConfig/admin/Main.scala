@@ -10,6 +10,12 @@ import scala.scalajs.js.Dynamic
 import scala.scalajs._
 import org.genericConfig.admin.shared.json.registration.JsonRegistrationIn
 import org.genericConfig.admin.shared.json.registration.RegistrationParams
+import play.api.libs.json.JsValue
+import play.api.libs.json.Json
+import play.api.libs.json.JsResult
+import play.api.libs.json.JsSuccess
+import play.api.libs.json.JsError
+import org.genericConfig.admin.shared.json.registration.JsonRegistrationOut
 
 //import scala.collection.JavaConverters._
 
@@ -27,7 +33,17 @@ object Main {
     
     socket.onmessage = {
       (e: dom.MessageEvent) => {
-        println(e.data.toString())
+//        println(e.data.toString())
+        val jsValue: JsValue = Json.parse(e.data.toString())
+        println("jsValue " + jsValue)
+        val registrationOut: JsResult[JsonRegistrationOut] = Json.fromJson[JsonRegistrationOut](jsValue)
+        registrationOut match {
+          case s : JsSuccess[JsonRegistrationOut] => s.get
+          case e : JsError => println("Errors -> REGISTRATION: " + JsError.toJson(e).toString())
+        }
+//        
+        println("registrationOut " + registrationOut)
+        
         val message: Dynamic = JSON.parse(e.data.toString())
         message.json.toString() match {
           case "CreateConfig" => println("CreateConfig")

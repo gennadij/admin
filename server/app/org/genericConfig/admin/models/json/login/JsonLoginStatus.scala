@@ -16,7 +16,6 @@ case class JsonLoginStatus (
 )
 
 object JsonLoginStatus {
-  import org.genericConfig.admin.shared.json.status.JsonStatus.writerJsonStatus
   implicit val writerJsonRegistrationStatus: Writes[JsonLoginStatus] = (
     (JsPath \ "userLogin").write(Writes.optionWithNull[JsonStatus]) and
     (JsPath \ "common").write(Writes.optionWithNull[JsonStatus])

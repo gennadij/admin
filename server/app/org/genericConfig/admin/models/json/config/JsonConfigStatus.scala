@@ -16,7 +16,6 @@ case class JsonConfigStatus (
 )
 
 object JsonConfigStatus {
-  import org.genericConfig.admin.shared.json.status.JsonStatus.writerJsonStatus
   implicit val writerJsonRegistrationStatus: Writes[JsonConfigStatus] = (
     (JsPath \ "addConfig").write(Writes.optionWithNull[JsonStatus]) and
     (JsPath \ "common").write(Writes.optionWithNull[JsonStatus])
