@@ -1,4 +1,4 @@
-package org.genericConfig.admin.models.json.config
+package org.genericConfig.admin.shared.json.config
 
 import org.genericConfig.admin.shared.json.JsonNames
 import play.api.libs.json.Json
@@ -9,10 +9,11 @@ import play.api.libs.json.Json
  * Created by Gennadi Heimann 20.04.2018
  */
 case class JsonGetConfigsOut (
-    json: String = JsonNames.GET_CONFIGS
+    json: String = JsonNames.GET_CONFIGS,
+    result: JsonGetConfigsResult
 
 )
 
 object JsonGetConfigsOut {
-  implicit val writes = Json.writes[JsonGetConfigsOut]
+  implicit val writes = Json.format[JsonGetConfigsOut]
 }

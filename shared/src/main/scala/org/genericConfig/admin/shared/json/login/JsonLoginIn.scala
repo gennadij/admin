@@ -2,6 +2,7 @@ package org.genericConfig.admin.models.json.login
 
 import play.api.libs.json.Json
 import org.genericConfig.admin.shared.json.JsonNames
+import org.genericConfig.admin.shared.json.login.JsonLoginParams
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -25,5 +26,5 @@ case class JsonLoginIn (
 )
 
 object JsonLoginIn {
-  implicit val fortmat = Json.reads[JsonLoginIn]
+  implicit val fortmat = Json.format[JsonLoginIn]
 }

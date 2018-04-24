@@ -63,7 +63,7 @@ class Scenario_v016_1 extends Specification
 	  (newConfigOut_1 \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
     
 	  val newConfigIn_2 = Json.obj(
-        "json" -> JsonNames.CREATE_CONFIG
+        "json" -> JsonNames.CREATE_CONFIG 
         , "params" -> Json.obj(
             "adminId" -> this.userId,
             "configUrl" -> "//http://contig1/user_1_v016_2"

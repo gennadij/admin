@@ -1,8 +1,9 @@
-package org.genericConfig.admin.models.json.login
+package org.genericConfig.admin.shared.json.login
 
 import play.api.libs.json.Json
 import play.api.libs.json.Writes
 import org.genericConfig.admin.shared.json.JsonNames
+import play.api.libs.json.Format
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -16,5 +17,5 @@ case class JsonLoginOut (
 )
 
 object JsonLoginOut {
-  implicit val format: Writes[JsonLoginOut] = Json.writes[JsonLoginOut]
+  implicit val format: Format[JsonLoginOut] = Json.format[JsonLoginOut]
 }

@@ -1,6 +1,4 @@
-package org.genericConfig.admin.models.json.config
-
-import org.genericConfig.admin.shared.json.JsonNames
+package org.genericConfig.admin.shared.json.config
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

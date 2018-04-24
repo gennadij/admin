@@ -39,7 +39,7 @@ class AddingNewConfigSpecs extends Specification
   
   def afterAll() = {}
   
-  "Diese Spezifikation erzeugt neue Konfiguration für die Admin" >> {
+  "Diese Spezifikation erzeugt neue Konfiguration fuer die Admin" >> {
     "Login mit AdminUser und fuege Konfig zu dem AdminUser hinzu" >> {
       
       val loginCS = Json.obj(

@@ -4,9 +4,9 @@ import play.api.libs.json._
 import scala.collection.immutable.Seq
 import play.api.Logger
 import org.genericConfig.admin.models.json.login.JsonLoginIn
-import org.genericConfig.admin.models.json.login.JsonLoginOut
-import org.genericConfig.admin.models.json.config.JsonCreateConfigIn
-import org.genericConfig.admin.models.json.config.JsonCreateConfigOut
+import org.genericConfig.admin.shared.json.login.JsonLoginOut
+import org.genericConfig.admin.shared.json.config.JsonCreateConfigIn
+import org.genericConfig.admin.shared.json.config.JsonCreateConfigOut
 import org.genericConfig.admin.models.json.step.JsonFirstStepIn
 import org.genericConfig.admin.models.json.step.JsonFirstStepOut
 import org.genericConfig.admin.models.json.component.JsonComponentIn
@@ -21,9 +21,9 @@ import org.genericConfig.admin.models.json.configTree.JsonConfigTreeIn
 import org.genericConfig.admin.models.json.configTree.JsonConfigTreeOut
 import org.genericConfig.admin.models.json.dependency.JsonDependencyOut
 import org.genericConfig.admin.shared.json.JsonNames
-import org.genericConfig.admin.models.json.config.JsonGetConfigsIn
-import org.genericConfig.admin.models.json.config.JsonGetConfigsOut
-import org.genericConfig.admin.models.json.config.JsonDeleteConfigIn
+import org.genericConfig.admin.shared.json.config.JsonGetConfigsIn
+import org.genericConfig.admin.shared.json.config.JsonGetConfigsOut
+import org.genericConfig.admin.shared.json.config.JsonDeleteConfigIn
 import org.genericConfig.admin.shared.json.registration.JsonRegistrationIn
 import org.genericConfig.admin.shared.json.registration.JsonRegistrationOut
 

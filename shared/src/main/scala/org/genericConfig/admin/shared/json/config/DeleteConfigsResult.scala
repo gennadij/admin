@@ -1,4 +1,4 @@
-package org.genericConfig.admin.models.json.config
+package org.genericConfig.admin.shared.json.config
 
 import org.genericConfig.admin.shared.json.JsonNames
 

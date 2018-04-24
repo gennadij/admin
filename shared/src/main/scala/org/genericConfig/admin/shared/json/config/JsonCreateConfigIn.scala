@@ -1,4 +1,4 @@
-package org.genericConfig.admin.models.json.config
+package org.genericConfig.admin.shared.json.config
 
 import play.api.libs.json.Json
 import org.genericConfig.admin.shared.json.JsonNames
@@ -15,5 +15,5 @@ case class JsonCreateConfigIn (
 )
 
 object JsonCreateConfigIn {
-  implicit val format = Json.reads[JsonCreateConfigIn]
+  implicit val format = Json.format[JsonCreateConfigIn]
 }

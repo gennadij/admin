@@ -1,4 +1,4 @@
-package org.genericConfig.admin.models.json.login
+package org.genericConfig.admin.shared.json.login
 
 import play.api.libs.json.Json
 
@@ -14,5 +14,5 @@ case class JsonLoginParams (
 )
 
 object JsonLoginParams {
-  implicit val fortmat = Json.reads[JsonLoginParams]
+  implicit val fortmat = Json.format[JsonLoginParams]
 }

@@ -1,4 +1,4 @@
-package org.genericConfig.admin.models.json.login
+package org.genericConfig.admin.shared.json.login
 
 import play.api.libs.json.Json
 
@@ -13,5 +13,5 @@ case class JsonConfig (
 )
 
 object JsonConfig{
-  implicit val format = Json.writes[JsonConfig]
+  implicit val format = Json.format[JsonConfig]
 }

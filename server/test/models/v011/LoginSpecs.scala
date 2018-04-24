@@ -27,7 +27,7 @@ import org.genericConfig.admin.shared.json.JsonNames
  */
 
 @RunWith(classOf[JUnitRunner])
-class SpecsLogin extends Specification with BeforeAfterAll{
+class LoginSpecs extends Specification with BeforeAfterAll{
   
   val wC = WebClient.init
   

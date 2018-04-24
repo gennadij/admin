@@ -8,7 +8,7 @@ import com.tinkerpop.blueprints.impls.orient.OrientEdge
 import org.genericConfig.admin.models.persistence.db.orientdb.StepVertex
 import play.api.LoggerLike
 import play.api.Logger
-import org.genericConfig.admin.models.json.login.JsonLoginOut
+import org.genericConfig.admin.shared.json.login.JsonLoginOut
 import org.genericConfig.admin.models.json.login.JsonLoginIn
 import org.genericConfig.admin.models.json.step.JsonFirstStepIn
 import org.genericConfig.admin.models.json.component.JsonComponentOut
@@ -28,12 +28,12 @@ import org.genericConfig.admin.models.json.StatusSuccessfulAdditionalStepInLevel
 import org.genericConfig.admin.models.json.configTree.JsonConfigTreeIn
 import org.genericConfig.admin.models.json.configTree.JsonConfigTreeOut
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
-import org.genericConfig.admin.models.json.config.JsonCreateConfigOut
+import org.genericConfig.admin.shared.json.config.JsonCreateConfigOut
 import org.genericConfig.admin.models.json.step.JsonFirstStepOut
-import org.genericConfig.admin.models.json.config.JsonCreateConfigIn
+import org.genericConfig.admin.shared.json.config.JsonCreateConfigIn
 import org.genericConfig.admin.models.logic.User
-import org.genericConfig.admin.models.json.config.JsonGetConfigsIn
-import org.genericConfig.admin.models.json.config.JsonGetConfigsOut
+import org.genericConfig.admin.shared.json.config.JsonGetConfigsIn
+import org.genericConfig.admin.shared.json.config.JsonGetConfigsOut
 import org.genericConfig.admin.models.logic.Config
 import org.genericConfig.admin.shared.json.registration.JsonRegistrationOut
 

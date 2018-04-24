@@ -1,9 +1,10 @@
-package org.genericConfig.admin.models.json.config
+package org.genericConfig.admin.shared.json.config
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Writes
 import play.api.libs.json.JsPath
 import org.genericConfig.admin.shared.json.status.JsonStatus
+import play.api.libs.json.Format
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -16,8 +17,8 @@ case class JsonConfigStatus (
 )
 
 object JsonConfigStatus {
-  implicit val writerJsonRegistrationStatus: Writes[JsonConfigStatus] = (
-    (JsPath \ "addConfig").write(Writes.optionWithNull[JsonStatus]) and
-    (JsPath \ "common").write(Writes.optionWithNull[JsonStatus])
-  )(unlift(JsonConfigStatus.unapply))
+  implicit val writerJsonRegistrationStatus: Format[JsonConfigStatus] = (
+    (JsPath \ "addConfig").format(Format.optionWithNull[JsonStatus]) and
+    (JsPath \ "common").format(Format.optionWithNull[JsonStatus])
+  )(JsonConfigStatus.apply, unlift(JsonConfigStatus.unapply))
 }
