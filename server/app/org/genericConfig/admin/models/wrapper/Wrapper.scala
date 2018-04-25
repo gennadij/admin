@@ -10,10 +10,8 @@ import org.genericConfig.admin.models.json.step.JsonDependencyForAdditionalSteps
 import org.genericConfig.admin.models.json.login.JsonLoginIn
 import org.genericConfig.admin.shared.json.login.JsonLoginOut
 import org.genericConfig.admin.shared.json.login.JsonLoginResult
-import org.genericConfig.admin.shared.json.login.JsonConfig
 import org.genericConfig.admin.shared.json.config.JsonCreateConfigIn
 import org.genericConfig.admin.shared.json.config.JsonCreateConfigOut
-import org.genericConfig.admin.shared.json.config.CreateConfigResult
 import org.genericConfig.admin.models.json.step.JsonFirstStepIn
 import org.genericConfig.admin.models.wrapper.step.FirstStepIn
 import org.genericConfig.admin.models.json.step.JsonFirstStepOut
@@ -46,14 +44,16 @@ import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalSt
 import org.genericConfig.admin.shared.bo.RegistrationBO
 import org.genericConfig.admin.shared.bo.LoginBO
 import org.genericConfig.admin.shared.json.login.JsonLoginStatus
-import org.genericConfig.admin.shared.bo.ConfigBO
 import org.genericConfig.admin.shared.json.config.JsonConfigStatus
 import org.genericConfig.admin.shared.json.config.JsonGetConfigsOut
 import org.genericConfig.admin.shared.json.registration.JsonRegistrationOut
 import org.genericConfig.admin.shared.json.registration.RegistrationResult
 import org.genericConfig.admin.shared.json.registration.JsonRegistrationStatus
-import org.genericConfig.admin.shared.json.status.JsonStatus
-import org.genericConfig.admin.shared.json.status.JsonStatus
+import org.genericConfig.admin.shared.json.config.JsonGetConfigsResult
+import org.genericConfig.admin.shared.json.common.JsonStatus
+import org.genericConfig.admin.shared.json.common.JsonConfig
+import org.genericConfig.admin.shared.json.config.JsonCreateConfigResult
+import org.genericConfig.admin.shared.bo.config.ConfigBO
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -179,15 +179,10 @@ trait Wrapper {
         result = JsonLoginResult(
             loginBO.adminId,
             loginBO.username,
-            loginBO.configs match {
-              case Some(configs) => Some(configs.map(config => {
-                JsonConfig(
-                    config.configId,
-                    config.configUrl
-                 )
-              }))
-              case None => None
-            },
+            loginBO.config.configs map (config => { JsonConfig(
+                config.configId,
+                config.configUrl
+            )}),
             JsonLoginStatus(
                 Some(JsonStatus(
                     loginBO.status.userLogin.status,
@@ -229,14 +224,43 @@ trait Wrapper {
    */
   def toJsonCreateConfigOut(configBO: ConfigBO): JsonCreateConfigOut = {
     JsonCreateConfigOut(
-        result = CreateConfigResult(
-            configBO.configId,
+        result = JsonCreateConfigResult(
+            configBO.configs match {
+              case List() => ""
+              case _ => {
+                configBO.configs.head.configId
+              }
+            },
             JsonConfigStatus(
                 configBO.status.addConfig match {
                   case Some(addConfig) => 
                     Some(JsonStatus(
                       addConfig.status,
                       addConfig.message
+                    ))
+                  case None => None
+                },
+                configBO.status.getConfigs match {
+                  case Some(getConfigs) => 
+                    Some(JsonStatus(
+                      getConfigs.status,
+                      getConfigs.message
+                    ))
+                  case None => None
+                },
+                configBO.status.deleteConfig match {
+                  case Some(deleteConfig) => 
+                    Some(JsonStatus(
+                      deleteConfig.status,
+                      deleteConfig.message
+                    ))
+                  case None => None
+                },
+                configBO.status.updateConfig match {
+                  case Some(updateConfig) => 
+                    Some(JsonStatus(
+                      updateConfig.status,
+                      updateConfig.message
                     ))
                   case None => None
                 },
@@ -544,7 +568,59 @@ trait Wrapper {
    * @return 
    */
   
-  def toJsonGetConfigsOut(configBOs: List[ConfigBO]): JsonGetConfigsOut = {
-    ???
+  def toJsonGetConfigsOut(configBO:ConfigBO): JsonGetConfigsOut = {
+    val cBOs: List[JsonConfig] = configBO.configs map { configBO => {
+      JsonConfig(
+          configBO.configId,
+          configBO.configUrl
+      )
+    }}
+    JsonGetConfigsOut(
+        result = JsonGetConfigsResult(
+            cBOs,
+            JsonConfigStatus(
+                configBO.status.addConfig match {
+                  case Some(status) => 
+                    Some(JsonStatus(
+                        status.status,
+                        status.message
+                    ))
+                  case None => None
+                },
+                configBO.status.getConfigs match {
+                  case Some(getConfigs) => 
+                    Some(JsonStatus(
+                      getConfigs.status,
+                      getConfigs.message
+                    ))
+                  case None => None
+                },
+                configBO.status.deleteConfig match {
+                  case Some(deleteConfig) => 
+                    Some(JsonStatus(
+                      deleteConfig.status,
+                      deleteConfig.message
+                    ))
+                  case None => None
+                },
+                configBO.status.updateConfig match {
+                  case Some(updateConfig) => 
+                    Some(JsonStatus(
+                      updateConfig.status,
+                      updateConfig.message
+                    ))
+                  case None => None
+                },
+                configBO.status.common match {
+                  case Some(status) => 
+                    Some(JsonStatus(
+                        status.status,
+                        status.message
+                    ))
+                  case None => None
+                }
+            )
+        )
+    )
   }
 }

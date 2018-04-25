@@ -11,7 +11,7 @@ import org.genericConfig.admin.shared.json.JsonNames
 
 case class JsonCreateConfigIn (
     json: String =JsonNames.CREATE_CONFIG,
-    params: CreateConfigParams
+    params: JsonCreateConfigParams
 )
 
 object JsonCreateConfigIn {

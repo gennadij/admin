@@ -55,8 +55,8 @@ class AddingNewAdminUserSpecs extends Specification
       )
       val wC = WebClient.init
       val registerSC = wC.handleMessage(registerCS)
-      Logger.info("<- " + registerCS)
-      Logger.info("-> " + registerSC)
+//      Logger.info("<- " + registerCS)
+//      Logger.info("-> " + registerSC)
       
       "dto" >> {
         (registerSC \ "json").asOpt[String].get === JsonNames.REGISTRATION

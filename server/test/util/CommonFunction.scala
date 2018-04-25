@@ -48,4 +48,19 @@ trait CommonFunction {
   def deleteAllConfigs(username: String): Int = {
     Graph.deleteAllConfigs(username)
   }
+  
+  def createConfig(userId: String, configUrl: String, wC: WebClient) = {
+    val newConfigIn = Json.obj(
+        "json" -> JsonNames.CREATE_CONFIG
+        , "params" -> Json.obj(
+            "adminId" -> userId,
+            "configUrl" -> configUrl
+        )
+    )
+    
+    val newConfigOut = wC.handleMessage(newConfigIn)
+	  
+//    Logger.info("newConfigIn " + newConfigIn)
+//    Logger.info("newConfigOut " + newConfigOut)
+  }
 }

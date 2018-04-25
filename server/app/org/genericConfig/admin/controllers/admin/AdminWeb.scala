@@ -40,8 +40,8 @@ trait AdminWeb {
       case Some(JsonNames.REGISTRATION) => register(receivedMessage, admin)
       case Some(JsonNames.LOGIN) => login(receivedMessage, admin)
       case Some(JsonNames.CREATE_CONFIG) => createConfig(receivedMessage, admin)
-      case Some(JsonNames.GET_CONFIGS) => ???
-      case Some(JsonNames.DELET_CONFIG) => ???
+      case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage, admin)
+      case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage, admin)
       case Some(JsonNames.CREATE_FIRST_STEP) => createFirstStep(receivedMessage, admin)
       case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage, admin)
       case Some(JsonNames.CREATE_COMPONENT) => createComponent(receivedMessage, admin)
@@ -172,7 +172,7 @@ trait AdminWeb {
       case e: JsError => Logger.error("Errors -> CREATE_DEPENDENCY: " + JsError.toJson(e).toString())
     }
     
-    val getConfigsOut: JsonGetConfigsOut  = ???//admin.???(getConfigsIn.get)
+    val getConfigsOut: JsonGetConfigsOut  = admin.getConfigs(getConfigsIn.get)
     Json.toJson(getConfigsOut)
    }
   

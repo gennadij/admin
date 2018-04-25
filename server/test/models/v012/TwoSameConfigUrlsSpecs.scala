@@ -16,11 +16,10 @@ import play.api.libs.json.JsValue
 import play.api.libs.json.Json
 import org.genericConfig.admin.controllers.websocket.WebClient
 import models.preparingConfigs.PrepareConfigsForSpecsv011
-import org.genericConfig.admin.shared.status.config.ConfigAdded
 import org.genericConfig.admin.shared.status.Success
-import org.genericConfig.admin.shared.status.config.ConfigAlredyExist
 import org.genericConfig.admin.shared.status.ODBRecordDuplicated
 import org.genericConfig.admin.shared.json.JsonNames
+import org.genericConfig.admin.shared.status.config.AddConfigAlreadyExist
 
 /**
 	* Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -62,10 +61,10 @@ class TwoSameConfigUrlsSpecs extends Specification
       )
 			
 			val jsonConfigOut: JsValue = webClient.handleMessage(createConfigIn)
-			Logger.info("createConfigIn " + createConfigIn)
-      Logger.info("jsonConfigOut " + jsonConfigOut)
+//			Logger.info("createConfigIn " + createConfigIn)
+//      Logger.info("jsonConfigOut " + jsonConfigOut)
     
-      (jsonConfigOut \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === ConfigAlredyExist().status
+      (jsonConfigOut \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigAlreadyExist().status
 	    (jsonConfigOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === ODBRecordDuplicated().status
 			
 		}

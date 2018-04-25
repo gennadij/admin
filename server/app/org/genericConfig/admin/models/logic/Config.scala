@@ -1,16 +1,17 @@
 package org.genericConfig.admin.models.logic
 
-import org.genericConfig.admin.shared.bo.ConfigBO
 import org.genericConfig.admin.models.persistence.Persistence
 import org.genericConfig.admin.shared.status.Success
 import org.genericConfig.admin.shared.status.Status
 import org.genericConfig.admin.shared.status.config.StatusConfig
-import org.genericConfig.admin.shared.status.config.ConfigAdded
-import org.genericConfig.admin.shared.status.config.ConfigAlredyExist
 import org.genericConfig.admin.shared.status.ODBRecordDuplicated
 import org.genericConfig.admin.shared.status.ODBClassCastError
 import org.genericConfig.admin.shared.status.ODBWriteError
 import org.genericConfig.admin.shared.status.Error
+import org.genericConfig.admin.shared.bo.config.ConfigBO
+import org.genericConfig.admin.shared.status.config.AddConfigAdded
+import org.genericConfig.admin.shared.status.config.AddConfigError
+import org.genericConfig.admin.shared.status.config.AddConfigAlreadyExist
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -41,7 +42,7 @@ object Config{
    * 
    * @return
    */
-  def getConfigs(userId: String): List[ConfigBO] = {
+  def getConfigs(userId: String): ConfigBO = {
     new Config(userId).getConfigs
   }
   /**
@@ -73,91 +74,31 @@ class Config(userId: String) {
   private def createConfig(configUrl: String): ConfigBO = {
     
     val configBO: ConfigBO = Persistence.createConfig(userId, configUrl)
-    configBO.status.common match {
-      case Some(Success()) => {
-        val statusConfigAppend : Status = Persistence.appendConfigTo(userId, configBO.configId)
+    configBO.status.addConfig match {
+      case Some(AddConfigAdded()) => {
+        val statusConfigAppend : Status = Persistence.appendConfigTo(userId, configBO.configs.head.configId)
         statusConfigAppend match {
           case Success() => {
-            configBO.copy(status = StatusConfig(Some(ConfigAdded()), Some(Success())))
-            
-            ConfigBO(
-                userId,
-                configBO.configId,
-                configBO.configUrl,
-                StatusConfig(
-                    Some(ConfigAdded()),
-                    Some(Success())
-                )
-            )
+            configBO
           }
-          case ODBRecordDuplicated() => {
+          case _ => {
             ConfigBO(
-                userId,
-                "",
-                configUrl,
-                StatusConfig(
-                    Some(ConfigAlredyExist()),
-                    Some(ODBRecordDuplicated())
-                )
-            )
-          }
-          case ODBClassCastError() => {
-            ConfigBO(
-                "", "", "",
-                StatusConfig(
+                status = StatusConfig(Some(AddConfigError()),
                     None,
-                    Some(ODBClassCastError())
-                )
-            )
-          }
-          case ODBWriteError() => {
-            ConfigBO(
-                "", "", "",
-                StatusConfig(
                     None,
-                    Some(ODBWriteError())
+                    None,
+                    Some(statusConfigAppend)
                 )
             )
+            //TODO erzeugte Config soll geloescht werden
           }
         }
       }
-      case Some(ODBRecordDuplicated()) => {
-        ConfigBO(
-            userId,
-            "",
-            configUrl,
-            StatusConfig(
-                Some(ConfigAlredyExist()),
-                Some(ODBRecordDuplicated())
-            )
-        )
+      case Some(AddConfigAlreadyExist()) => {
+        configBO
       }
-      case Some(ODBClassCastError()) => {
-        ConfigBO(
-            "", "", "",
-            StatusConfig(
-                None,
-                Some(ODBClassCastError())
-            )
-        )
-      }
-      case Some(ODBWriteError()) => {
-        ConfigBO(
-            "", "", "",
-            StatusConfig(
-                None,
-                Some(ODBWriteError())
-            )
-        )
-      }
-      case None => {
-        ConfigBO(
-            "", "", "",
-            StatusConfig(
-                None,
-                Some(Error())
-            )
-        )
+      case Some(AddConfigError()) => {
+        configBO
       }
     }
   }
@@ -171,7 +112,7 @@ class Config(userId: String) {
    * 
    * @return
    */
-  private def getConfigs: List[ConfigBO] = {
+  private def getConfigs: ConfigBO = {
     Persistence.getConfigs(userId)
   }
   

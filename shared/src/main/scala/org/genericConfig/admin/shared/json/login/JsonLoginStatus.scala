@@ -3,8 +3,8 @@ package org.genericConfig.admin.shared.json.login
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Writes
 import play.api.libs.json.JsPath
-import org.genericConfig.admin.shared.json.status.JsonStatus
 import play.api.libs.json.Format
+import org.genericConfig.admin.shared.json.common.JsonStatus
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

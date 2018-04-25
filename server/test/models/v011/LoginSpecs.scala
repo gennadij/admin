@@ -59,8 +59,8 @@ class LoginSpecs extends Specification with BeforeAfterAll{
 
   val jsonServerClient: JsValue = wC.handleMessage(jsonClientServer)
   
-  Logger.info("jsonClientServer: " + jsonClientServer)
-  Logger.info("jsonServerClient: " + jsonServerClient)
+//  Logger.info("jsonClientServer: " + jsonClientServer)
+//  Logger.info("jsonServerClient: " + jsonServerClient)
   
   def e2 = (jsonServerClient \ "json").asOpt[String].get must_== "Login"
   def e4 = (jsonServerClient \ "result" \ "username").asOpt[String].get must_== user

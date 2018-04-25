@@ -49,12 +49,12 @@ class LoginWithNotExistUserSpecs extends Specification with AdminWeb  with Befor
 
   val jsonServerClient: JsValue = webClient.handleMessage(jsonClientServer)
   
-  Logger.info("jsonClientServer: " + jsonClientServer)
-  Logger.info("jsonServerClient: " + jsonServerClient)
+//  Logger.info("jsonClientServer: " + jsonClientServer)
+//  Logger.info("jsonServerClient: " + jsonServerClient)
   
   def e2 = (jsonServerClient \ "json").asOpt[String].get must_== "Login"
   def e4 = (jsonServerClient \ "result" \ "username").asOpt[String].get must_== user
-  def e7 = (jsonServerClient \ "result" \ "configs").asOpt[List[JsValue]] === None
+  def e7 = (jsonServerClient \ "result" \ "configs").asOpt[List[JsValue]] === Some(List())
   def e5 = (jsonServerClient \ "result" \ "status" \ "userLogin" \ "status").asOpt[String].get must_== UserNotExist().status
   def e6 = (jsonServerClient \ "result" \ "status"\ "common" \ "status").asOpt[String].get must_== Error().status
 }

@@ -1,6 +1,7 @@
 package org.genericConfig.admin.shared.json.config
 
 import play.api.libs.json.Json
+import org.genericConfig.admin.shared.json.common.JsonConfig
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

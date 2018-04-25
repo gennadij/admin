@@ -13,8 +13,8 @@ import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.shared.status.Success
 import org.genericConfig.admin.shared.status.login.UserExist
 import play.api.Logger
-import org.genericConfig.admin.shared.status.config.ConfigAdded
 import org.genericConfig.admin.shared.json.JsonNames
+import org.genericConfig.admin.shared.status.config.AddConfigAdded
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -66,10 +66,10 @@ class AddingNewConfigSpecs extends Specification
 	  
     //TODO com.orientechnologies.orient.core.exception.OValidationException: analysieren
     
-    Logger.info("createConfigCS " + createConfigCS)
-    Logger.info("createConfigSC " + createConfigSC)
+//    Logger.info("createConfigCS " + createConfigCS)
+//    Logger.info("createConfigSC " + createConfigSC)
     
-    (createConfigSC \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === ConfigAdded().status
+    (createConfigSC \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigAdded().status
 	  (createConfigSC \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
     }
   }

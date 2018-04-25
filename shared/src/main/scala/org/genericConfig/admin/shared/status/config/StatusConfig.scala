@@ -9,5 +9,8 @@ import org.genericConfig.admin.shared.status.Status
  */
 case class StatusConfig (
     addConfig: Option[StatusAddConfig],
+    getConfigs: Option[StatusGetConfigs],
+    deleteConfig: Option[StatusDeleteConfig],
+    updateConfig: Option[StatusUpdateConfig],
     common: Option[Status]
 )

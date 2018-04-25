@@ -9,17 +9,17 @@ import org.genericConfig.admin.shared.status.Status
  */
 sealed abstract class StatusAddConfig extends Status
 
-case class ConfigAdded() extends StatusAddConfig {
-  def status: String = "CONFIG_ADDED"
+case class AddConfigAdded() extends StatusAddConfig {
+  def status: String = "ADD_CONFIG_ADDED"
   def message: String = ""
 }
 
-case class ConfigAlredyExist() extends StatusAddConfig {
-  def status: String = "CONFIG_ALREDY_EXIST"
+case class AddConfigAlreadyExist() extends StatusAddConfig {
+  def status: String = "ADD_CONFIG_ALREADY_EXIST"
   def message: String = ""
 }
 
-//case class ConfigExist() extends StatusAddConfig {
-//  def status: String = "CONFIG_Exist"
-//  def message: String = ""
-//}
+case class AddConfigError() extends StatusAddConfig {
+  def status: String = "ADD_CONFIG_ERROR"
+  def message: String = ""
+}

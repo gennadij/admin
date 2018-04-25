@@ -10,7 +10,7 @@ import org.genericConfig.admin.shared.json.JsonNames
  */
 case class JsonCreateConfigOut (
     json: String = JsonNames.CREATE_CONFIG,
-    result: CreateConfigResult
+    result: JsonCreateConfigResult
 )
 
 object JsonCreateConfigOut {

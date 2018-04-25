@@ -105,8 +105,7 @@ class Admin extends Wrapper{
    * @return
    */
   def getConfigs(jsonGetConfigsIn: JsonGetConfigsIn): JsonGetConfigsOut = {
-    Config.getConfigs(jsonGetConfigsIn.params.userId)
-    ???
+    toJsonGetConfigsOut(Config.getConfigs(jsonGetConfigsIn.params.userId))
   }
   
   /**

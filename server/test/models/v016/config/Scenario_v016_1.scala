@@ -1,4 +1,4 @@
-package models.v016
+package models.v016.config
 
 import org.specs2.mutable.Specification
 import org.specs2.specification.BeforeAfterAll
@@ -9,8 +9,11 @@ import util.CommonFunction
 import play.api.Logger
 import org.genericConfig.admin.shared.json.JsonNames
 import play.api.libs.json.Json
-import org.genericConfig.admin.shared.status.config.ConfigAdded
 import org.genericConfig.admin.shared.status.Success
+import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
+import play.api.libs.json.JsValue.jsValueToJsLookup
+import play.api.libs.json.Json.toJsFieldJsValueWrapper
+import org.genericConfig.admin.shared.status.config.AddConfigAdded
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -56,10 +59,10 @@ class Scenario_v016_1 extends Specification
     //TODO com.orientechnologies.orient.core.exception.OValidationException: analysieren
     //Special type of exception which indicates that invalid index id was passed into storage and index data should be reloaded
     
-    Logger.info("newConfigIn_1 " + newConfigIn_1)
-    Logger.info("newConfigOut_1 " + newConfigOut_1)
+//    Logger.info("newConfigIn_1 " + newConfigIn_1)
+//    Logger.info("newConfigOut_1 " + newConfigOut_1)
     
-    (newConfigOut_1 \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === ConfigAdded().status
+    (newConfigOut_1 \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigAdded().status
 	  (newConfigOut_1 \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
     
 	  val newConfigIn_2 = Json.obj(
@@ -71,10 +74,10 @@ class Scenario_v016_1 extends Specification
     )
     val newConfigOut_2 = wC.handleMessage(newConfigIn_2)
 	  
-    Logger.info("newConfigIn_2 " + newConfigIn_2)
-    Logger.info("newConfigOut_2 " + newConfigOut_2)
+//    Logger.info("newConfigIn_2 " + newConfigIn_2)
+//    Logger.info("newConfigOut_2 " + newConfigOut_2)
     
-    (newConfigOut_2 \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === ConfigAdded().status
+    (newConfigOut_2 \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigAdded().status
 	  (newConfigOut_2 \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
 	  
 	  val newConfigIn_3 = Json.obj(
@@ -86,10 +89,10 @@ class Scenario_v016_1 extends Specification
     )
     val newConfigOut_3 = wC.handleMessage(newConfigIn_3)
 	  
-    Logger.info("newConfigIn_3 " + newConfigIn_3)
-    Logger.info("newConfigOut_3 " + newConfigOut_3)
+//    Logger.info("newConfigIn_3 " + newConfigIn_3)
+//    Logger.info("newConfigOut_3 " + newConfigOut_3)
     
-    (newConfigOut_3 \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === ConfigAdded().status
+    (newConfigOut_3 \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigAdded().status
 	  (newConfigOut_3 \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
     }
   }

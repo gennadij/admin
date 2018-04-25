@@ -1,4 +1,4 @@
-package org.genericConfig.admin.shared.bo
+package org.genericConfig.admin.shared.bo.config
 
 import org.genericConfig.admin.shared.status.config.StatusConfig
 
@@ -9,7 +9,6 @@ import org.genericConfig.admin.shared.status.config.StatusConfig
  */
 case class ConfigBO (
     admiId: String = "",
-    configId: String = "",
-    configUrl: String = "",
+    configs: List[Configuration] = List(),
     status: StatusConfig
 )

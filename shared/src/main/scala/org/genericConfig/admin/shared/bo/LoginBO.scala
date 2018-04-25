@@ -1,6 +1,8 @@
 package org.genericConfig.admin.shared.bo
 
 import org.genericConfig.admin.shared.status.login.StatusLogin
+import org.genericConfig.admin.shared.bo.config.Configuration
+import org.genericConfig.admin.shared.bo.config.ConfigBO
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -10,6 +12,6 @@ import org.genericConfig.admin.shared.status.login.StatusLogin
 case class LoginBO (
     username: String = "",
     adminId: String = "",
-    configs: Option[List[ConfigBO]],
+    config: ConfigBO,
     status: StatusLogin
 )

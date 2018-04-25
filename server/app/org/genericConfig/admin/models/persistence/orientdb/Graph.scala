@@ -20,11 +20,19 @@ import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.Direction
 import com.tinkerpop.blueprints.Edge
 import com.tinkerpop.blueprints.impls.orient.OrientEdge
-import org.genericConfig.admin.shared.bo.ConfigBO
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
 import org.genericConfig.admin.shared.status.ODBWriteError
 import org.genericConfig.admin.shared.status.ODBRecordDuplicated
 import com.tinkerpop.blueprints.Vertex
+import org.genericConfig.admin.shared.status.config.StatusConfig
+import org.genericConfig.admin.shared.status.config.StatusGetConfigs
+import org.genericConfig.admin.shared.status.config.GetConfigsEmpty
+import org.genericConfig.admin.shared.status.config.GetConfigsGot
+import org.genericConfig.admin.shared.status.config.GetConfigsError
+import org.genericConfig.admin.shared.status.config.StatusAddConfig
+import org.genericConfig.admin.shared.status.config.AddConfigAdded
+import org.genericConfig.admin.shared.status.config.AddConfigAlreadyExist
+import org.genericConfig.admin.shared.status.config.AddConfigError
 
 
 /**
@@ -66,24 +74,11 @@ object Graph{
    * 
    * @version 0.1.6
    * 
-   * @param String, String
-   * 
-   * @return LoginBO
-   */
-  def readConfigs(userId: String): (Option[List[OrientVertex]], Status) = {
-    new Graph(Database.getFactory().getTx()).readConfigs(userId)
-  }
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.6
-   * 
    * @param String
    * 
    * @return
    */
-  def createConfig(configUrl: String): (Option[OrientVertex], Status) = {
+  def createConfig(configUrl: String): (Option[OrientVertex], StatusAddConfig, Status) = {
     new Graph(Database.getFactory().getTx()).createConfig(configUrl)
   }
   
@@ -121,7 +116,7 @@ object Graph{
    * 
    * @return
    */
-  def getConfigs(userId: String): (Option[List[OrientVertex]], Status) = {
+  def getConfigs(userId: String): (Option[List[OrientVertex]], StatusGetConfigs, Status) = {
     new Graph(Database.getFactory.getTx).getConfigs(userId)
   }
   
@@ -165,36 +160,46 @@ class Graph(graph: OrientGraph) {
       }
     }
   }
-  /**
+  
+    /**
    * @author Gennadi Heimann
    * 
    * @version 0.1.6
    * 
-   * @param String, String
+   * @param String
    * 
-   * @return LoginBO
+   * @return
    */
-  private def readConfigs(adminId: String): (Option[List[OrientVertex]], Status) = {
-    
-    try{
-      val vUser: OrientVertex = graph.getVertex(adminId)
-      val vConfigs: List[OrientVertex] = vUser.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_CONFIG).asScala.toList map (
-          _.getVertex(Direction.IN).asInstanceOf[OrientVertex]
-      )
-      (Some(vConfigs), Success())
-    }catch{
+  private def getConfigs(userId: String): (Option[List[OrientVertex]], StatusGetConfigs, Status) = {
+    try {
+      val vConfigs: List[OrientVertex] = 
+        graph.getVertex(userId).getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_CONFIG).asScala.toList map (
+            _.asInstanceOf[OrientEdge].getVertex(Direction.IN))
+      vConfigs match {
+        case List() => (Some(vConfigs), GetConfigsEmpty(), Success())
+        case _      => (Some(vConfigs), GetConfigsGot(), Success())
+      }
+      
+      
+    }catch {
+      case e1: ORecordDuplicatedException => {
+        Logger.error(e1.printStackTrace().toString)
+        graph.rollback()
+        (None, GetConfigsError(), ODBRecordDuplicated())
+      }
       case e2 : ClassCastException => {
         graph.rollback()
         Logger.error(e2.printStackTrace().toString)
-        (None, ODBClassCastError())
+        (None, GetConfigsError(), ODBClassCastError())
       }
-      case e1: Exception => {
+      case e3: Exception => {
         graph.rollback()
-        Logger.error(e1.printStackTrace().toString)
-        (None, ODBReadError())
+        Logger.error(e3.printStackTrace().toString)
+        (None, GetConfigsError(), ODBReadError())
       }
     }
   }
+  
   /**
    * @author Gennadi Heimann
    * 
@@ -259,29 +264,29 @@ class Graph(graph: OrientGraph) {
    * 
    * @return 
    */
-  def createConfig(configUrl: String): (Option[OrientVertex], Status) = {
+  def createConfig(configUrl: String): (Option[OrientVertex], StatusAddConfig, Status) = {
     
     try {
       val vConfig: OrientVertex = graph.addVertex(
           "class:" + PropertyKeys.VERTEX_CONFIG,
           PropertyKeys.CONFIG_URL, configUrl)
         graph.commit
-        (Some(vConfig), Success())
+        (Some(vConfig), AddConfigAdded(), Success())
     }catch{
       case e1: ORecordDuplicatedException => {
         Logger.error(e1.printStackTrace().toString)
         graph.rollback()
-        (None, ODBRecordDuplicated())
+        (None, AddConfigAlreadyExist(), ODBRecordDuplicated())
       }
       case e2 : ClassCastException => {
         graph.rollback()
         Logger.error(e2.printStackTrace().toString)
-        (None, ODBClassCastError())
+        (None, AddConfigError(), ODBClassCastError())
       }
       case e3: Exception => {
         graph.rollback()
         Logger.error(e3.printStackTrace().toString)
-        (None, ODBWriteError())
+        (None,AddConfigError(), ODBWriteError())
       }
     }
   }
@@ -346,37 +351,5 @@ class Graph(graph: OrientGraph) {
     res
   }
   
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.6
-   * 
-   * @param String
-   * 
-   * @return
-   */
-  private def getConfigs(userId: String): (Option[List[OrientVertex]], Status) = {
-    try {
-      val vConfigs: List[OrientVertex] = 
-        graph.getVertex(userId).getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_CONFIG).asScala.toList map (
-            _.asInstanceOf[OrientEdge].getVertex(Direction.IN))
-      (Some(vConfigs), Success())
-    }catch {
-      case e1: ORecordDuplicatedException => {
-        Logger.error(e1.printStackTrace().toString)
-        graph.rollback()
-        (None, ODBRecordDuplicated())
-      }
-      case e2 : ClassCastException => {
-        graph.rollback()
-        Logger.error(e2.printStackTrace().toString)
-        (None, ODBClassCastError())
-      }
-      case e3: Exception => {
-        graph.rollback()
-        Logger.error(e3.printStackTrace().toString)
-        (None, ODBReadError())
-      }
-    }
-  }
+
 }

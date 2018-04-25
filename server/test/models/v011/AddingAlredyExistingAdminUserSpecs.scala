@@ -51,8 +51,8 @@ class AddingAlredyExistingAdminUserSpecs extends Specification with AdminWeb wit
       
       val registerSC = wC.handleMessage(registerCS)
       
-      Logger.info("<- " + registerCS)
-      Logger.info("-> " + registerSC)
+//      Logger.info("<- " + registerCS)
+//      Logger.info("-> " + registerSC)
       "json" >> {
         (registerSC \ "json").asOpt[String].get === JsonNames.REGISTRATION
       }
