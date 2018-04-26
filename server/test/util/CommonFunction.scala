@@ -26,8 +26,8 @@ trait CommonFunction {
       )
       val wC = WebClient.init
       val registerSC = wC.handleMessage(registerCS)
-      Logger.info("<- " + registerCS)
-      Logger.info("-> " + registerSC)
+//      Logger.info("<- " + registerCS)
+//      Logger.info("-> " + registerSC)
       
       (registerSC \ "result" \ "status" \ "addUser" \ "status").asOpt[String].get.toString() match {
       case "ADDED_USER" => {

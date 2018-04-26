@@ -1,6 +1,7 @@
-package org.genericConfig.admin
+package org.genericConfig.admin.client.login
 
 import org.scalajs.jquery.jQuery
+import scala.scalajs.js.Any.fromFunction0
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 

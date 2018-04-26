@@ -1,69 +1,39 @@
 @charset "ISO-8859-1";
 
-.config {
+#main {
 	position:absolute;
-    top:0;
-    bottom:0;
-    left:0;
-    right:0;
+    top : 1%;
+    bottom : 1%;
+    left : 1%;
+    right : 1%;
     overflow:hidden;
     z-index:-10;
     border-color : #282828 ;
     border-style : solid;
     border-width : medium;
-    border-radius : 5px;
+    border-radius : 10px;
 }
 
-.step {
-    text-align:left;
+#text_for_config {
+	text-align:left;
     padding : 10px;
     margin : 10px;
-    border-color : grey;
+	border-color : grey;
     border-style : solid;
     border-width : medium;
-    /*background-color: yellow;*/
     border-radius : 10px;
-    width : 70%;
+    width: 50%;
 }
 
-.step:before,
-.step:after {
-content: " ";
+.config {
+	padding : 10px;
+}
+
+.config:before, .config:after {
+content: "";
 display: table;
 }
-.step:after {
+
+.area:config {
 clear: both;
-}
-.step {
-*zoom: 1;
-}
-
-.component {
-   /*box-sizing : border-box;*/
-   text-align:center;
-   padding : 2px;
-   margin : 2px;
-   border-color : #282828 ;
-   border-style : solid;
-   border-width : medium;
-   border-radius : 5px;
-   float : left;
-   /*background-color: grey;*/
-   min-width : 60px;
-}
-
-#currentConfig{
-   text-align:left;
-   padding : 10px;
-   margin : 0px;
-   border-color : grey;
-   border-style : solid;
-   border-width : medium;
-   /*background-color: yellow;*/
-   border-radius : 10px;
-   position: absolute;
-   /*top: 150px;*/
-   left: 73%;
-   height: 80%;
-   width : 20%;
 }

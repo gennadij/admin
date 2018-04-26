@@ -1,4 +1,4 @@
-package org.genericConfig.admin
+package org.genericConfig.admin.client.config
 
 import org.scalajs.dom.raw.WebSocket
 

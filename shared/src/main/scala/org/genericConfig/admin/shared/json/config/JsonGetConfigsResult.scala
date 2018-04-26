@@ -9,6 +9,7 @@ import org.genericConfig.admin.shared.json.common.JsonConfig
  * Created by Gennadi Heimann 20.04.2018
  */
 case class JsonGetConfigsResult (
+    userId: String,
     configs: List[JsonConfig],
     status: JsonConfigStatus
 )

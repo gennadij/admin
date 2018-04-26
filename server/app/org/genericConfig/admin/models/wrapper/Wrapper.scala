@@ -577,6 +577,7 @@ trait Wrapper {
     }}
     JsonGetConfigsOut(
         result = JsonGetConfigsResult(
+            configBO.admiId,
             cBOs,
             JsonConfigStatus(
                 configBO.status.addConfig match {

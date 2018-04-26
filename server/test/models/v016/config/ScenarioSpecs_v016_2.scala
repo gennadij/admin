@@ -13,6 +13,9 @@ import org.genericConfig.admin.shared.status.Success
 import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
+import org.genericConfig.admin.shared.status.config.GetConfigsEmpty
+import play.api.libs.json.JsValue
+import org.genericConfig.admin.shared.status.config.GetConfigsGot
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -28,6 +31,7 @@ class ScenarioSpecs_v016_2 extends Specification
   val wC = WebClient.init
   var userId: String = ""
   val username = "user_v016_2"
+//  user_v016_1_client
   
   def beforeAll() = {
     val (username, userId): (String, String) = newAdminUser(this.username)
@@ -66,7 +70,16 @@ class ScenarioSpecs_v016_2 extends Specification
 //      Logger.info("getConfigsIn " + getConfigsIn)
 //      Logger.info("getConfigsOut " + getConfigsOut)
     
-      "" === ""
+      (getConfigsOut \ "json").asOpt[String].get === JsonNames.GET_CONFIGS
+      (getConfigsOut \ "result" \ "configs").asOpt[Set[JsValue]].get.size === 3
+      ((getConfigsOut \ "result" \ "configs")(0) \ "configUrl").asOpt[String].get === "//http://contig1/user_1_v016_1"
+      ((getConfigsOut \ "result" \ "configs")(1) \ "configUrl").asOpt[String].get === "//http://contig1/user_1_v016_2"
+      ((getConfigsOut \ "result" \ "configs")(2) \ "configUrl").asOpt[String].get === "//http://contig1/user_1_v016_3"
+      (getConfigsOut \ "result" \ "status" \ "addConfig").asOpt[String] === None
+      (getConfigsOut \ "result" \ "status" \ "getConfigs" \ "status").asOpt[String].get === GetConfigsGot().status
+      (getConfigsOut \ "result" \ "status" \ "deleteConfig").asOpt[String] === None
+      (getConfigsOut \ "result" \ "status" \ "updateConfig").asOpt[String] === None
+      (getConfigsOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
     }
   }
 }

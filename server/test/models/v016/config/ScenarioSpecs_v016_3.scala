@@ -13,6 +13,8 @@ import org.genericConfig.admin.shared.status.Success
 import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
+import play.api.libs.json.JsValue
+import org.genericConfig.admin.shared.status.config.GetConfigsEmpty
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -65,8 +67,13 @@ class ScenarioSpecs_v016_3 extends Specification
       
 //      Logger.info("getConfigsIn " + getConfigsIn)
 //      Logger.info("getConfigsOut " + getConfigsOut)
-    
-      "" === ""
+      (getConfigsOut \ "json").asOpt[String].get === JsonNames.GET_CONFIGS
+      (getConfigsOut \ "result" \ "configs").asOpt[Set[JsValue]].get.size === 0
+      (getConfigsOut \ "result" \ "status" \ "addConfig").asOpt[String] === None
+      (getConfigsOut \ "result" \ "status" \ "getConfigs" \ "status").asOpt[String].get === GetConfigsEmpty().status
+      (getConfigsOut \ "result" \ "status" \ "deleteConfig").asOpt[String] === None
+      (getConfigsOut \ "result" \ "status" \ "updateConfig").asOpt[String] === None
+      (getConfigsOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
     }
   }
 }
