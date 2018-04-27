@@ -34,13 +34,15 @@ class GetConfig(websocket: WebSocket) {
        "</dev> "
      
      jQuery(htmlConfig).appendTo(jQuery("#main"))
-     jQuery(s"#$configId").on("click", () => selectConfig(configId))
+     jQuery(s"#$configId").on("click", () => selectConfig(configId, config.configId))
     }
   }
   
-  def selectConfig(configId: String) = {
-    println("selected ConfigId" + configId)
+  def selectConfig(configId: String, configIdRaw: String) = {
+    println("selected ConfigId" + configIdRaw)
+    val jsonGetConfigtree = "{\"json\":\"ConfigTree\",\"params\":{\"configId\":\"" + configIdRaw + "\"}}"
+    println("websocket  send " + jsonGetConfigtree)
+    websocket.send(jsonGetConfigtree)
     jQuery("#main").remove()
-    new ConfigTree(websocket).drawConfigTree()
   }
 }

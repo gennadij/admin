@@ -10,10 +10,10 @@ import org.genericConfig.admin.shared.common.json.JsonNames
  * 
  */
 case class JsonConfigTreeIn (
-    Json: String = JsonNames.CONFIG_TREE,
+    json: String = JsonNames.CONFIG_TREE,
     params: JsonConfigTreeParams
 )
 
 object JsonConfigTreeIn {
-  implicit val format = Json.reads[JsonConfigTreeIn]
+  implicit val format = Json.format[JsonConfigTreeIn]
 }

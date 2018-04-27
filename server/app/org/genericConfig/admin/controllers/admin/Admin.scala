@@ -31,6 +31,7 @@ import org.genericConfig.admin.models.logic._
 import org.genericConfig.admin.shared.login.json._
 import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.models.json.step.JsonFirstStepOut
+import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -117,6 +118,20 @@ class Admin extends Wrapper{
   /**
    * @author Gennadi Heimann
    * 
+   * @version 0.1.6
+   * 
+   * @param
+   * 
+   * @return
+   */
+  def getConfigTree(configId: String): JsonConfigTreeOut = {
+    toJsonConfigTreeOut(Config.getConfigTree(configId))
+  }
+  
+  
+  /**
+   * @author Gennadi Heimann
+   * 
    * @version 0.1.0
    * 
    * @param FirstStepCS
@@ -175,20 +190,6 @@ class Admin extends Wrapper{
             toConnectionComponentToStepIn(jsonConnectionComponentToStepIn)
         )
     )
-  }
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.0
-   * 
-   * @param ConfigTreeCS
-   * 
-   * @return ConfigTreeSC
-   */
-  def configTree(jsonConfigTreeIn: JsonConfigTreeIn): JsonConfigTreeOut = {
-//    toJsonConfigTreeOut(Persistence.getConfigTree(toConfigTreeIn(jsonConfigTreeIn)))
-    ???
   }
 
   /**

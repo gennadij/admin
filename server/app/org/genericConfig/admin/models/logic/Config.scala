@@ -5,6 +5,7 @@ import org.genericConfig.admin.shared.common.status._
 import org.genericConfig.admin.shared.config.status._
 import org.genericConfig.admin.shared.config.status._
 import org.genericConfig.admin.shared.config.bo._
+import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -145,8 +146,7 @@ class Config(userId: String) {
    * 
    * @return
    */
-  def getConfigTree(configId: String) = {
+  def getConfigTree(configId: String): ConfigTreeBO = {
     Persistence.getConfigTree(configId)
-    ???
   }
 }

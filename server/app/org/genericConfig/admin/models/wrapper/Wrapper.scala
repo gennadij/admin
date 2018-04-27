@@ -382,37 +382,49 @@ trait Wrapper {
    * 
    * @return JsonConfigTreeOut
    */
-  def toJsonConfigTreeOut(configTreeOut: ConfigTreeBO): JsonConfigTreeOut = {
+  def toJsonConfigTreeOut(configTreeBO: ConfigTreeBO): JsonConfigTreeOut = {
     
-//    configTreeOut.step match {
-//      case Some(step) => {
-//        JsonConfigTreeOut(
-//            result = JsonConfigTreeResult(
-//                Some(JsonConfigTreeStep(
-//                    step.stepId,
-//                    step.kind,
-//                    getJsonConfigTreeComponents(step.components)
-//                )),
-//                configTreeOut.status,
-//                configTreeOut.message
-//                
-//            )
-//        )
-//        
-//      }
-//      case None => {
-//        JsonConfigTreeOut(
-//            result = JsonConfigTreeResult(
-//                None, 
-//                configTreeOut.status,
-//                configTreeOut.message
-//                
-//            )
-//        )
-//      }
-//    }
-    
-    ???
+    configTreeBO.configTree match {
+      case Some(configTree) => {
+        JsonConfigTreeOut(
+            result = JsonConfigTreeResult(
+                Some(JsonConfigTreeStep(
+                    configTree.stepId,
+                    configTree.kind,
+                    getJsonConfigTreeComponents(configTree.components)
+                )),
+                JsonConfigTreeStatus(
+                    Some(JsonStatus(
+                        configTreeBO.status.getConfigTree.status,
+                        configTreeBO.status.getConfigTree.message
+                    )),
+                    Some(JsonStatus(
+                        configTreeBO.status.common.status,
+                        configTreeBO.status.common.message
+                    ))
+                )
+            )
+        )
+        
+      }
+      case None => {
+        JsonConfigTreeOut(
+            result = JsonConfigTreeResult(
+                None, 
+                JsonConfigTreeStatus(
+                    Some(JsonStatus(
+                        configTreeBO.status.getConfigTree.status,
+                        configTreeBO.status.getConfigTree.message
+                    )),
+                    Some(JsonStatus(
+                        configTreeBO.status.common.status,
+                        configTreeBO.status.common.message
+                    ))
+                )
+            )
+        )
+      }
+    }
   }
   
   /**

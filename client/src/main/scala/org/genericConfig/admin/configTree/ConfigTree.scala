@@ -2,6 +2,7 @@ package org.genericConfig.admin.configTree
 
 import org.scalajs.jquery.jQuery
 import org.scalajs.dom.raw.WebSocket
+import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -10,8 +11,8 @@ import org.scalajs.dom.raw.WebSocket
  */
 class ConfigTree(websocket: WebSocket) {
   
-  def drawConfigTree() = {
-    println("ConfigTree")
+  def drawConfigTree(configTree: JsonConfigTreeOut) = {
+    println("ConfigTree " + configTree)
     val htmlMain =  
     """<dev id='main' class='main'> 
       <p>Konfigurationsbaum</p>

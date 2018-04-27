@@ -13,5 +13,5 @@ case class JsonConfigTreeParams (
 )
 
 object JsonConfigTreeParams {
-  implicit val format = Json.reads[JsonConfigTreeParams]
+  implicit val format = Json.format[JsonConfigTreeParams]
 }

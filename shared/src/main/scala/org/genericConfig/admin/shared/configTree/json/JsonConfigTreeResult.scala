@@ -11,15 +11,13 @@ import play.api.libs.functional.syntax._
 
 case class JsonConfigTreeResult (
     step: Option[JsonConfigTreeStep],
-    status: String,
-    message: String
+    status: JsonConfigTreeStatus
 )
 
 object JsonConfigTreeResult {
   
-  implicit val writes: Writes[JsonConfigTreeResult] = (
-    (JsPath \ "step").write(Writes.optionWithNull[JsonConfigTreeStep]) and
-    (JsPath \ "status").write[String] and
-    (JsPath \ "message").write[String]
-  )(unlift(JsonConfigTreeResult.unapply))
+  implicit val writes: Format[JsonConfigTreeResult] = (
+    (JsPath \ "step").format(Format.optionWithNull[JsonConfigTreeStep]) and
+    (JsPath \ "status").format[JsonConfigTreeStatus] 
+  )(JsonConfigTreeResult.apply, unlift(JsonConfigTreeResult.unapply))
 }

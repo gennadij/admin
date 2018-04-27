@@ -16,10 +16,18 @@ case class JsonConfigTreeStep (
 )
 
 object JsonConfigTreeStep {
-  import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeComponent.jsonConfigTreeComponentwrites
+  import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeComponent.jsonConfigTreeComponentReads
+  import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeComponent.jsonConfigTreeComponentWrites
+  
   implicit lazy val jsonConfigTreeStepWrites: Writes[JsonConfigTreeStep] = (
     (JsPath \ "stepId").write[String] and
     (JsPath \ "kind").write[String] and
-    (JsPath \ "components").lazyWrite(Writes.set[JsonConfigTreeComponent](jsonConfigTreeComponentwrites))
+    (JsPath \ "components").lazyWrite(Writes.set[JsonConfigTreeComponent](jsonConfigTreeComponentWrites))
   )(unlift(JsonConfigTreeStep.unapply))
+  
+  implicit lazy val jsonConfigTreeStepReads: Reads[JsonConfigTreeStep] = (
+    (JsPath \ "stepId").read[String] and
+    (JsPath \ "kind").read[String] and
+    (JsPath \ "components").lazyRead(Reads.set[JsonConfigTreeComponent](jsonConfigTreeComponentReads))
+  )(JsonConfigTreeStep.apply _)
 }

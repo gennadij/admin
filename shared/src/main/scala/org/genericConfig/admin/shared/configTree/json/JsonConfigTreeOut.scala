@@ -16,6 +16,6 @@ case class JsonConfigTreeOut (
 )
 
 object JsonConfigTreeOut {
-  implicit val format = Json.writes[JsonConfigTreeOut]
+  implicit val format = Json.format[JsonConfigTreeOut]
 }
 

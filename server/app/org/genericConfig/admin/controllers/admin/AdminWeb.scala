@@ -126,7 +126,7 @@ trait AdminWeb {
       case s : JsSuccess[JsonConfigTreeIn] => s.get
       case e : JsError => Logger.error("Errors -> CONFIG_TREE: " + JsError.toJson(e).toString())
     }
-    val configTreeOut: JsonConfigTreeOut = admin.configTree(configTreeIn.get)
+    val configTreeOut: JsonConfigTreeOut = admin.getConfigTree(configTreeIn.get.params.configId)
     Json.toJson(configTreeOut)
   }
   

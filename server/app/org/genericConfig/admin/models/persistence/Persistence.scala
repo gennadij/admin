@@ -64,7 +64,7 @@ import org.genericConfig.admin.shared.login.status._
 import org.genericConfig.admin.shared.config.bo.Configuration
 import org.genericConfig.admin.shared.configTree.bo.StepForConfigTreeBO
 import org.genericConfig.admin.shared.configTree.status._
-import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
+import org.genericConfig.admin.shared.configTree.bo._
 
 
 /**
@@ -346,9 +346,27 @@ object Persistence {
     val (configTree, statusGetConfigTree, commonStatus): (Option[StepForConfigTreeBO], StatusGetConfigTree, Status) = 
       Graph.getConfigTree(configId)
       statusGetConfigTree match {
-      case GetConfigTreeGot() => ???
-      case GetConfigTreeEmpty() => ???
-      case GetConfigTreeError() => ???
+      case GetConfigTreeGot() => ConfigTreeBO(
+          configTree,
+          StatusConfigTree(
+              GetConfigTreeGot(),
+              Success()
+          )
+      )
+      case GetConfigTreeEmpty() => ConfigTreeBO(
+          None,
+          StatusConfigTree(
+              GetConfigTreeEmpty(),
+              Success()
+          )
+      )
+      case GetConfigTreeError() => ConfigTreeBO(
+          None,
+          StatusConfigTree(
+              GetConfigTreeError(),
+              Success()
+          )
+      )
     }
   }
   
