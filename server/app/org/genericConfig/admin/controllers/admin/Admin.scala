@@ -8,8 +8,6 @@ import com.tinkerpop.blueprints.impls.orient.OrientEdge
 import org.genericConfig.admin.models.persistence.db.orientdb.StepVertex
 import play.api.LoggerLike
 import play.api.Logger
-import org.genericConfig.admin.shared.json.login.JsonLoginOut
-import org.genericConfig.admin.models.json.login.JsonLoginIn
 import org.genericConfig.admin.models.json.step.JsonFirstStepIn
 import org.genericConfig.admin.models.json.component.JsonComponentOut
 import org.genericConfig.admin.models.json.component.JsonComponentIn
@@ -25,17 +23,14 @@ import org.genericConfig.admin.models.json.step.JsonStepResult
 import org.genericConfig.admin.models.wrapper.Wrapper
 import org.genericConfig.admin.models.wrapper.step.StepIn
 import org.genericConfig.admin.models.json.StatusSuccessfulAdditionalStepInLevelCSCreated
-import org.genericConfig.admin.models.json.configTree.JsonConfigTreeIn
-import org.genericConfig.admin.models.json.configTree.JsonConfigTreeOut
+import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeIn
+import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
-import org.genericConfig.admin.shared.json.config.JsonCreateConfigOut
+import org.genericConfig.admin.shared.registration.json._
+import org.genericConfig.admin.models.logic._
+import org.genericConfig.admin.shared.login.json._
+import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.models.json.step.JsonFirstStepOut
-import org.genericConfig.admin.shared.json.config.JsonCreateConfigIn
-import org.genericConfig.admin.models.logic.User
-import org.genericConfig.admin.shared.json.config.JsonGetConfigsIn
-import org.genericConfig.admin.shared.json.config.JsonGetConfigsOut
-import org.genericConfig.admin.models.logic.Config
-import org.genericConfig.admin.shared.json.registration.JsonRegistrationOut
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -192,7 +187,8 @@ class Admin extends Wrapper{
    * @return ConfigTreeSC
    */
   def configTree(jsonConfigTreeIn: JsonConfigTreeIn): JsonConfigTreeOut = {
-    toJsonConfigTreeOut(Persistence.getConfigTree(toConfigTreeIn(jsonConfigTreeIn)))
+//    toJsonConfigTreeOut(Persistence.getConfigTree(toConfigTreeIn(jsonConfigTreeIn)))
+    ???
   }
 
   /**

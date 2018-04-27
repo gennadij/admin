@@ -1,15 +1,14 @@
 package org.genericConfig.admin.client
 
 import play.api.libs.json.JsValue
-import org.genericConfig.admin.shared.json.JsonNames
 import play.api.libs.json.Json
 import play.api.libs.json.JsResult
-import org.genericConfig.admin.shared.json.config.JsonGetConfigsIn
 import play.api.libs.json.JsSuccess
 import play.api.libs.json.JsError
-import org.genericConfig.admin.shared.json.config.JsonGetConfigsOut
 import org.scalajs.dom.raw.WebSocket
 import org.genericConfig.admin.client.config.GetConfig
+import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.config.json.JsonGetConfigsOut
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

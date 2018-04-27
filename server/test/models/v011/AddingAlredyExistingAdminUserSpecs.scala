@@ -14,10 +14,10 @@ import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import org.genericConfig.admin.models.json.StatusErrorRegistUserAlreadyExist
 import models.preparingConfigs.PrepareConfigsForSpecsv011
 import org.genericConfig.admin.controllers.websocket.WebClient
-import org.genericConfig.admin.shared.status.registration.AlredyExistUser
-import org.genericConfig.admin.shared.status.Success
 import play.api.Logger
-import org.genericConfig.admin.shared.json.JsonNames
+import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.common.status.Success
+import org.genericConfig.admin.shared.registration.status.AlredyExistUser
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

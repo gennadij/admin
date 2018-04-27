@@ -7,14 +7,14 @@ import org.specs2.runner.JUnitRunner
 import org.genericConfig.admin.controllers.websocket.WebClient
 import util.CommonFunction
 import play.api.Logger
-import org.genericConfig.admin.shared.json.JsonNames
 import play.api.libs.json.Json
-import org.genericConfig.admin.shared.status.Success
 import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import play.api.libs.json.JsValue
-import org.genericConfig.admin.shared.status.config.GetConfigsEmpty
+import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.config.status.GetConfigsEmpty
+import org.genericConfig.admin.shared.common.status.Success
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

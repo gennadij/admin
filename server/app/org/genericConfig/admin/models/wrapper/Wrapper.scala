@@ -7,11 +7,6 @@ import org.genericConfig.admin.models.wrapper.step.StepOut
 import org.genericConfig.admin.models.wrapper.dependency.DependencyOut
 import org.genericConfig.admin.models.json.step.JsonStepResult
 import org.genericConfig.admin.models.json.step.JsonDependencyForAdditionalStepsInOneLevel
-import org.genericConfig.admin.models.json.login.JsonLoginIn
-import org.genericConfig.admin.shared.json.login.JsonLoginOut
-import org.genericConfig.admin.shared.json.login.JsonLoginResult
-import org.genericConfig.admin.shared.json.config.JsonCreateConfigIn
-import org.genericConfig.admin.shared.json.config.JsonCreateConfigOut
 import org.genericConfig.admin.models.json.step.JsonFirstStepIn
 import org.genericConfig.admin.models.wrapper.step.FirstStepIn
 import org.genericConfig.admin.models.json.step.JsonFirstStepOut
@@ -27,33 +22,23 @@ import org.genericConfig.admin.models.wrapper.connectionComponentToStep.Connecti
 import org.genericConfig.admin.models.wrapper.connectionComponentToStep.ConnectionComponentToStepOut
 import org.genericConfig.admin.models.json.connectionComponentToStep.JsonConnectionComponentToStepOut
 import org.genericConfig.admin.models.json.connectionComponentToStep.ConnectionComponentToStepResult
-import org.genericConfig.admin.models.wrapper.configTree.ConfigTreeOut
-import org.genericConfig.admin.models.wrapper.configTree.ConfigTreeIn
-import org.genericConfig.admin.models.json.configTree.JsonConfigTreeOut
-import org.genericConfig.admin.models.json.configTree.JsonConfigTreeIn
-import org.genericConfig.admin.models.json.configTree.JsonConfigTreeResult
-import org.genericConfig.admin.models.json.configTree.JsonConfigTreeStep
-import org.genericConfig.admin.models.wrapper.configTree.Component
-import org.genericConfig.admin.models.json.configTree.JsonConfigTreeComponent
+
+import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeComponent
 import org.genericConfig.admin.models.json.dependency.JsonDependencyOut
 import org.genericConfig.admin.models.json.dependency.JsonDependencyResult
 import org.genericConfig.admin.models.json.dependency.JsonDependencyIn
 import org.genericConfig.admin.models.wrapper.dependency.DependencyIn
 import org.genericConfig.admin.models.json.step.JsonVisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
-import org.genericConfig.admin.shared.bo.RegistrationBO
-import org.genericConfig.admin.shared.bo.LoginBO
-import org.genericConfig.admin.shared.json.login.JsonLoginStatus
-import org.genericConfig.admin.shared.json.config.JsonConfigStatus
-import org.genericConfig.admin.shared.json.config.JsonGetConfigsOut
-import org.genericConfig.admin.shared.json.registration.JsonRegistrationOut
-import org.genericConfig.admin.shared.json.registration.RegistrationResult
-import org.genericConfig.admin.shared.json.registration.JsonRegistrationStatus
-import org.genericConfig.admin.shared.json.config.JsonGetConfigsResult
-import org.genericConfig.admin.shared.json.common.JsonStatus
-import org.genericConfig.admin.shared.json.common.JsonConfig
-import org.genericConfig.admin.shared.json.config.JsonCreateConfigResult
-import org.genericConfig.admin.shared.bo.config.ConfigBO
+import org.genericConfig.admin.shared.configTree.json._
+import org.genericConfig.admin.shared.registration.bo._
+import org.genericConfig.admin.shared.registration.json._
+import org.genericConfig.admin.shared.common.json._
+import org.genericConfig.admin.shared.login.json._
+import org.genericConfig.admin.shared.config.json._
+import org.genericConfig.admin.shared.config.bo._
+import org.genericConfig.admin.shared.login.bo._
+import org.genericConfig.admin.shared.configTree.bo._
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -397,35 +382,37 @@ trait Wrapper {
    * 
    * @return JsonConfigTreeOut
    */
-  def toJsonConfigTreeOut(configTreeOut: ConfigTreeOut): JsonConfigTreeOut = {
+  def toJsonConfigTreeOut(configTreeOut: ConfigTreeBO): JsonConfigTreeOut = {
     
-    configTreeOut.step match {
-      case Some(step) => {
-        JsonConfigTreeOut(
-            result = JsonConfigTreeResult(
-                Some(JsonConfigTreeStep(
-                    step.stepId,
-                    step.kind,
-                    getJsonConfigTreeComponents(step.components)
-                )),
-                configTreeOut.status,
-                configTreeOut.message
-                
-            )
-        )
-        
-      }
-      case None => {
-        JsonConfigTreeOut(
-            result = JsonConfigTreeResult(
-                None, 
-                configTreeOut.status,
-                configTreeOut.message
-                
-            )
-        )
-      }
-    }
+//    configTreeOut.step match {
+//      case Some(step) => {
+//        JsonConfigTreeOut(
+//            result = JsonConfigTreeResult(
+//                Some(JsonConfigTreeStep(
+//                    step.stepId,
+//                    step.kind,
+//                    getJsonConfigTreeComponents(step.components)
+//                )),
+//                configTreeOut.status,
+//                configTreeOut.message
+//                
+//            )
+//        )
+//        
+//      }
+//      case None => {
+//        JsonConfigTreeOut(
+//            result = JsonConfigTreeResult(
+//                None, 
+//                configTreeOut.status,
+//                configTreeOut.message
+//                
+//            )
+//        )
+//      }
+//    }
+    
+    ???
   }
   
   /**
@@ -437,7 +424,7 @@ trait Wrapper {
    * 
    * @return Set[JsonConfigTreeComponent]
    */
-  def getJsonConfigTreeComponents(components: Set[Option[Component]]): Set[JsonConfigTreeComponent] = {
+  def getJsonConfigTreeComponents(components: Set[Option[ComponentForConfigTreeBO]]): Set[JsonConfigTreeComponent] = {
     
     components.map{
       component => {
@@ -490,10 +477,10 @@ trait Wrapper {
    * 
    * @return ConfigTreeIn
    */
-  def toConfigTreeIn(jsonConfigTreeCS: JsonConfigTreeIn): ConfigTreeIn = {
-    ConfigTreeIn(
-        jsonConfigTreeCS.params.configId
-    )
+  def toConfigTreeIn(jsonConfigTreeCS: JsonConfigTreeIn) = {
+//    ConfigTreeIn(
+//        jsonConfigTreeCS.params.configId
+//    )
   }
   
   /**

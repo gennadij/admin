@@ -12,9 +12,9 @@ import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import org.genericConfig.admin.controllers.admin.AdminWeb
 import org.genericConfig.admin.controllers.websocket.WebClient
 import play.api.Logger
-import org.genericConfig.admin.shared.status.login.UserNotExist
-import org.genericConfig.admin.shared.status.Error
-import org.genericConfig.admin.shared.json.JsonNames
+import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.login.status.UserNotExist
+import org.genericConfig.admin.shared.common.status.Error
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

@@ -1,9 +1,9 @@
 package org.genericConfig.admin.client.config
 
-import org.genericConfig.admin.shared.json.config.JsonGetConfigsOut
 import org.scalajs.dom.raw.WebSocket
 import org.scalajs.jquery.jQuery
 import org.genericConfig.admin.configTree.ConfigTree
+import org.genericConfig.admin.shared.config.json.JsonGetConfigsOut
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

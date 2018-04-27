@@ -10,11 +10,11 @@ import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import models.preparingConfigs.PrepareConfigsForSpecsv011
 import org.genericConfig.admin.controllers.websocket.WebClient
-import org.genericConfig.admin.shared.status.Success
-import org.genericConfig.admin.shared.status.login.UserExist
 import play.api.Logger
-import org.genericConfig.admin.shared.json.JsonNames
-import org.genericConfig.admin.shared.status.config.AddConfigAdded
+import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.login.status.UserExist
+import org.genericConfig.admin.shared.common.status.Success
+import org.genericConfig.admin.shared.config.status.AddConfigAdded
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

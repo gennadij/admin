@@ -1,38 +1,25 @@
 package org.genericConfig.admin.models.persistence.orientdb
 
 import scala.collection.JavaConverters._
-import org.genericConfig.admin.shared.bo.RegistrationBO
-import org.genericConfig.admin.shared.status.Status
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import org.genericConfig.admin.models.persistence.Database
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import play.api.Logger
-import org.genericConfig.admin.shared.status.registration.AddedUser
-import org.genericConfig.admin.shared.status.ODBClassCastError
-import org.genericConfig.admin.shared.status.ODBReadError
-import org.genericConfig.admin.shared.status.Error
-import org.genericConfig.admin.shared.status.registration.StatusRegistration
-import org.genericConfig.admin.shared.status.Success
-import org.genericConfig.admin.shared.status.registration.AlredyExistUser
-import org.genericConfig.admin.shared.bo.LoginBO
+import org.genericConfig.admin.shared.registration.status._
+import org.genericConfig.admin.shared.common.status._
+import org.genericConfig.admin.shared.login.bo.LoginBO
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.Direction
 import com.tinkerpop.blueprints.Edge
 import com.tinkerpop.blueprints.impls.orient.OrientEdge
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
-import org.genericConfig.admin.shared.status.ODBWriteError
-import org.genericConfig.admin.shared.status.ODBRecordDuplicated
 import com.tinkerpop.blueprints.Vertex
-import org.genericConfig.admin.shared.status.config.StatusConfig
-import org.genericConfig.admin.shared.status.config.StatusGetConfigs
-import org.genericConfig.admin.shared.status.config.GetConfigsEmpty
-import org.genericConfig.admin.shared.status.config.GetConfigsGot
-import org.genericConfig.admin.shared.status.config.GetConfigsError
-import org.genericConfig.admin.shared.status.config.StatusAddConfig
-import org.genericConfig.admin.shared.status.config.AddConfigAdded
-import org.genericConfig.admin.shared.status.config.AddConfigAlreadyExist
-import org.genericConfig.admin.shared.status.config.AddConfigError
+import org.genericConfig.admin.shared.config.status._
+import org.genericConfig.admin.shared.configTree.bo._
+import org.genericConfig.admin.shared.registration.bo.RegistrationBO
+import org.genericConfig.admin.shared.configTree.status.StatusGetConfigTree
+import org.genericConfig.admin.shared.configTree.status._
 
 
 /**
@@ -107,6 +94,7 @@ object Graph{
   def deleteAllConfigs(username: String): Int = {
     new Graph(Database.getFactory.getTx).deleteAllConfigs(username)
   }
+  
   /**
    * @author Gennadi Heimann
    * 
@@ -119,6 +107,21 @@ object Graph{
   def getConfigs(userId: String): (Option[List[OrientVertex]], StatusGetConfigs, Status) = {
     new Graph(Database.getFactory.getTx).getConfigs(userId)
   }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param String
+   * 
+   * @return
+   */
+  
+  def getConfigTree(configId: String) = {
+    new Graph(Database.getFactory.getTx).getConfigTree(configId)
+  }
+  
   
 }
 
@@ -311,29 +314,175 @@ class Graph(graph: OrientGraph) {
          PropertyKeys.EDGE_HAS_CONFIG
       )
       graph.commit
-//      (Some(eHasConfig), Success())
       Success()
     }catch{
       case e1: ORecordDuplicatedException => {
         Logger.error(e1.printStackTrace().toString)
         graph.rollback()
-//        (None, ODBRecordDuplicated())
         ODBRecordDuplicated()
       }
       case e2 : ClassCastException => {
         graph.rollback()
         Logger.error(e2.printStackTrace().toString)
-//        (None, ODBClassCastError())
         ODBClassCastError()
       }
       case e3: Exception => {
         graph.rollback()
         Logger.error(e3.printStackTrace().toString)
-//        (None, ODBWriteError())
         ODBWriteError()
       }
     }
   }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param String
+   * 
+   * @return
+   */
+  private def getConfigTree(configId: String): (Option[StepForConfigTreeBO], StatusGetConfigTree, Status) = {
+    
+    try{
+      val firstSteps: List[OrientVertex] = 
+          graph.getVertex(configId)
+          .getEdges(Direction.OUT, "hasFirstStep")
+          .asScala.toList.map(eHasFirstStep => {
+            eHasFirstStep.getVertex(Direction.IN).asInstanceOf[OrientVertex]
+          })
+      firstSteps.size match {
+        case count if count == 1 => {
+          val components: Set[Option[ComponentForConfigTreeBO]] = getComponents(Some(firstSteps.head))
+          val configTree = Some(StepForConfigTreeBO(
+              firstSteps.head.getIdentity.toString,
+              firstSteps.head.getProperty(PropertyKeys.KIND),
+              components
+          ))
+          (configTree, GetConfigTreeGot(), Success())
+        }
+        case _ => (None, GetConfigTreeEmpty(), Success())
+      }
+    }catch{
+      case e1: ORecordDuplicatedException => {
+        Logger.error(e1.printStackTrace().toString)
+        graph.rollback()
+        (None, GetConfigTreeError(), ODBRecordDuplicated())
+      }
+      case e2 : ClassCastException => {
+        graph.rollback()
+        Logger.error(e2.printStackTrace().toString)
+        (None, GetConfigTreeError(), ODBClassCastError())
+      }
+      case e3: Exception => {
+        graph.rollback()
+        Logger.error(e3.printStackTrace().toString)
+        (None, GetConfigTreeError(), ODBWriteError())
+      }
+    }
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param
+   * 
+   * @return
+   */
+  def getComponents(step: Option[OrientVertex]): Set[Option[ComponentForConfigTreeBO]] = {
+    
+    val components: Set[Option[ComponentForConfigTreeBO]] = step match {
+      case Some(step) => {
+        val eHasComponents: List[Edge] = step.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT).asScala.toList
+        val components: List[Option[ComponentForConfigTreeBO]] = eHasComponents.map{ eHasComponent => {
+          val vComponent: OrientVertex = eHasComponent.getVertex(Direction.IN).asInstanceOf[OrientVertex]
+          val eHasSteps : List[Edge] = vComponent.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList
+          val component: Option[ComponentForConfigTreeBO] = eHasSteps match {
+            case List() => {
+              val lastComponent: Option[ComponentForConfigTreeBO] = Some(
+                  ComponentForConfigTreeBO(
+                      vComponent.getIdentity.toString(),
+                      vComponent.getProperty(PropertyKeys.KIND),
+                      None,
+                      None
+                  )
+              )
+              lastComponent
+            }
+            case eHasSteps => {
+              val nextSteps: List[StepForConfigTreeBO] = eHasSteps.map{
+                eHasStep => {
+                  val vStep: OrientVertex = eHasStep.getVertex(Direction.IN).asInstanceOf[OrientVertex]
+                  val components: Set[Option[ComponentForConfigTreeBO]] = getComponents(Some(vStep))
+                  StepForConfigTreeBO(
+                      vStep.getIdentity.toString,
+                      vStep.getProperty(PropertyKeys.KIND),
+                      components
+                  )
+                }
+              }
+              val defaultComponent: Option[ComponentForConfigTreeBO] = nextSteps.size match {
+                case count if count == 1 => {
+                  Some(ComponentForConfigTreeBO(
+                      vComponent.getIdentity.toString(),
+                      vComponent.getProperty(PropertyKeys.KIND),
+                      Some(nextSteps.head.stepId),
+                      Some(nextSteps.head)
+                  ))
+                }
+                case _ => None // Fehler eine Komponente kann nicht 2 Steps haben
+              }
+              defaultComponent
+            }
+          }
+          component
+        }} //end eHasComponents.map
+        val componentsWithoutDuplicate = findDuplicate(components)
+        componentsWithoutDuplicate.toSet
+      }
+      case None => Set.empty
+    }
+    components
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param
+   * 
+   * @return
+   */
+  def findDuplicate(
+      components: List[Option[ComponentForConfigTreeBO]]) : List[Option[ComponentForConfigTreeBO]] = components match {
+    
+    case List() => List()
+    case x :: xs => insert(x, findDuplicate(xs))
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param
+   * 
+   * @return
+   */
+  def insert(
+      x: Option[ComponentForConfigTreeBO], 
+      xs: List[Option[ComponentForConfigTreeBO]]): List[Option[ComponentForConfigTreeBO]] = xs match {
+    
+    case List() => List(x)
+    case y :: ys =>   if(x.get.nextStepId == y.get.nextStepId) 
+      Some(x.get.copy(nextStep = None)) :: xs
+    else y :: insert(x, ys)
+  }
+  
   
   /**
    * @author Gennadi Heimann
@@ -351,5 +500,25 @@ class Graph(graph: OrientGraph) {
     res
   }
   
+  /**
+   * Loescht alle Steps und Components die zu der Config gehoeren
+   * 
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.0
+   * 
+   * @param configId
+   * 
+   * @return Count from deleted Vertexes
+   */
+  
+    def deleteAllStepsAndComponent(configId: String) = {
+      val sql: String = s"DELETE VERTEX V where @rid IN (traverse out() from (select out('hasFirstStep') " + 
+        s"from Config where @rid='$configId'))"
+      val res: Int = graph
+        .command(new OCommandSQL(sql)).execute()
+      graph.commit
+      res
+  }
 
 }

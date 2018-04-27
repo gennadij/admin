@@ -16,10 +16,9 @@ import play.api.libs.json.JsValue
 import play.api.libs.json.Json
 import org.genericConfig.admin.controllers.websocket.WebClient
 import models.preparingConfigs.PrepareConfigsForSpecsv011
-import org.genericConfig.admin.shared.status.Success
-import org.genericConfig.admin.shared.status.ODBRecordDuplicated
-import org.genericConfig.admin.shared.json.JsonNames
-import org.genericConfig.admin.shared.status.config.AddConfigAlreadyExist
+import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.config.status.AddConfigAlreadyExist
+import org.genericConfig.admin.shared.common.status.ODBRecordDuplicated
 
 /**
 	* Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

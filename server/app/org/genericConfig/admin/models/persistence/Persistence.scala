@@ -30,7 +30,6 @@ import org.genericConfig.admin.models.persistence.db.orientdb.HasStepEdge
 import org.genericConfig.admin.models.json.step.JsonVisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.models.json.step.JsonDependencyForAdditionalStepsInOneLevel
 import org.genericConfig.admin.models.json.StatusSuccessfulConfig
-import org.genericConfig.admin.models.persistence.db.orientdb.ConfigVertex
 import org.genericConfig.admin.models.persistence.db.orientdb.HasConfigEdge
 import org.genericConfig.admin.models.json.StatusErrorConfig
 import org.genericConfig.admin.models.wrapper.step.FirstStepIn
@@ -47,41 +46,26 @@ import org.genericConfig.admin.models.json.StatusErrorComponentGeneral
 import org.genericConfig.admin.models.wrapper.connectionComponentToStep.ConnectionComponentToStepIn
 import org.genericConfig.admin.models.wrapper.connectionComponentToStep.ConnectionComponentToStepOut
 import org.genericConfig.admin.models.json.StatusErrorWriteToDB
-import org.genericConfig.admin.models.wrapper.configTree.ConfigTreeIn
-import org.genericConfig.admin.models.wrapper.configTree.ConfigTreeOut
 import org.genericConfig.admin.models.wrapper.dependency.DependencyIn
 import org.genericConfig.admin.models.wrapper.dependency.DependencyOut
 import org.genericConfig.admin.models.json.StatusSuccessfulDependencyCreated
 import org.genericConfig.admin.models.json.StatusErrorDependencyCreated
 import org.genericConfig.admin.models.json.StatusErrorDuplicateConfigUrl
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
-import org.genericConfig.admin.shared.bo.RegistrationBO
 import org.genericConfig.admin.models.persistence.db.orientdb.PropertyKey
 import org.genericConfig.admin.models.persistence.orientdb.Graph
-import org.genericConfig.admin.shared.status.Status
-import org.genericConfig.admin.shared.status.Success
-import org.genericConfig.admin.shared.status.Error
-import org.genericConfig.admin.shared.status.ODBClassCastError
-import org.genericConfig.admin.shared.status.ODBReadError
-import org.genericConfig.admin.shared.bo.LoginBO
-import org.genericConfig.admin.shared.status.login.StatusLogin
-import org.genericConfig.admin.shared.status.login.UserExist
-import org.genericConfig.admin.shared.status.login.UserConfigsError
-import org.genericConfig.admin.shared.status.login.UserNotExist
-import org.genericConfig.admin.shared.status.config.StatusConfig
-import org.genericConfig.admin.shared.status.ODBRecordDuplicated
-import org.genericConfig.admin.shared.status.ODBWriteError
-import org.genericConfig.admin.shared.status.config.GetConfigsGot
-import org.genericConfig.admin.shared.status.config.StatusGetConfigs
-import org.genericConfig.admin.shared.status.config.GetConfigsEmpty
-import org.genericConfig.admin.shared.status.config.GetConfigsError
-import org.genericConfig.admin.shared.bo.config.ConfigBO
-import org.genericConfig.admin.shared.bo.config.Configuration
-import org.genericConfig.admin.shared.status.config.StatusAddConfig
-import org.genericConfig.admin.shared.status.config.AddConfigAdded
 import org.genericConfig.admin.models.persistence.orientdb.PropertyKeys
-import org.genericConfig.admin.shared.status.config.AddConfigAlreadyExist
-import org.genericConfig.admin.shared.status.config.AddConfigError
+import org.genericConfig.admin.shared.registration.bo.RegistrationBO
+import org.genericConfig.admin.shared.login.bo.LoginBO
+import org.genericConfig.admin.shared.common.status._
+import org.genericConfig.admin.shared.config.bo.ConfigBO
+import org.genericConfig.admin.shared.config.status._
+import org.genericConfig.admin.shared.login.status._
+import org.genericConfig.admin.shared.config.bo.Configuration
+import org.genericConfig.admin.shared.configTree.bo.StepForConfigTreeBO
+import org.genericConfig.admin.shared.configTree.status._
+import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
+
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -346,6 +330,25 @@ object Persistence {
           StatusConfig(None, Some(GetConfigsEmpty()), None, None, Some(Success())))
       case GetConfigsError() => 
         ConfigBO("", List(), StatusConfig(None, Some(GetConfigsError()), None, None, Some(Success())))
+    }
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.0
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  def getConfigTree(configId: String): ConfigTreeBO = {
+    val (configTree, statusGetConfigTree, commonStatus): (Option[StepForConfigTreeBO], StatusGetConfigTree, Status) = 
+      Graph.getConfigTree(configId)
+      statusGetConfigTree match {
+      case GetConfigTreeGot() => ???
+      case GetConfigTreeEmpty() => ???
+      case GetConfigTreeError() => ???
     }
   }
   
@@ -647,20 +650,6 @@ object Persistence {
       }
       case _ => stepSC
     }
-  }
-  
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.0
-   * 
-   * @param ConfigTreeCS
-   * 
-   * @return ConfigTreeSC
-   */
-  def getConfigTree(configTreeIn: ConfigTreeIn): ConfigTreeOut = {
-    ConfigVertex.getConfigTree(configTreeIn)
   }
   
     /**

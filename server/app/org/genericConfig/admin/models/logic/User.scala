@@ -1,13 +1,8 @@
 package org.genericConfig.admin.models.logic
 
-import org.genericConfig.admin.shared.bo.RegistrationBO
 import org.genericConfig.admin.models.persistence.Persistence
-import org.genericConfig.admin.shared.status.Error
-import org.genericConfig.admin.shared.status.registration.StatusRegistration
-import org.genericConfig.admin.shared.status.registration.AlredyExistUser
-import org.genericConfig.admin.shared.status.registration.AddedUser
-import org.genericConfig.admin.shared.status.Success
-import org.genericConfig.admin.shared.bo.LoginBO
+import org.genericConfig.admin.shared.registration.bo._
+import org.genericConfig.admin.shared.login.bo._
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

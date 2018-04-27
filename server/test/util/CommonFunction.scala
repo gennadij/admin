@@ -1,13 +1,11 @@
 package util
 
 import play.api.libs.json.Json
-import org.genericConfig.admin.shared.json.JsonNames
 import org.genericConfig.admin.controllers.websocket.WebClient
 import play.api.Logger
-import org.genericConfig.admin.shared.status.registration.AddedUser
-import org.genericConfig.admin.shared.status.registration.AlredyExistUser
 import scala.collection.JavaConverters._
 import org.genericConfig.admin.models.persistence.orientdb.Graph
+import org.genericConfig.admin.shared.common.json.JsonNames
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

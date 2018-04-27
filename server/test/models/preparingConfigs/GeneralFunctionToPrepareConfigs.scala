@@ -24,7 +24,7 @@ import org.genericConfig.admin.models.json.StatusSuccessfulConnectionComponentTo
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.wrapper.step.StepIn
 import org.genericConfig.admin.models.json.StatusSuccessfulAdditionalStepInLevelCSCreated
-import org.genericConfig.admin.shared.json.JsonNames
+import org.genericConfig.admin.shared.common.json.JsonNames
 
 /**
 	* Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

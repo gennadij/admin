@@ -1,17 +1,10 @@
 package org.genericConfig.admin.models.logic
 
 import org.genericConfig.admin.models.persistence.Persistence
-import org.genericConfig.admin.shared.status.Success
-import org.genericConfig.admin.shared.status.Status
-import org.genericConfig.admin.shared.status.config.StatusConfig
-import org.genericConfig.admin.shared.status.ODBRecordDuplicated
-import org.genericConfig.admin.shared.status.ODBClassCastError
-import org.genericConfig.admin.shared.status.ODBWriteError
-import org.genericConfig.admin.shared.status.Error
-import org.genericConfig.admin.shared.bo.config.ConfigBO
-import org.genericConfig.admin.shared.status.config.AddConfigAdded
-import org.genericConfig.admin.shared.status.config.AddConfigError
-import org.genericConfig.admin.shared.status.config.AddConfigAlreadyExist
+import org.genericConfig.admin.shared.common.status._
+import org.genericConfig.admin.shared.config.status._
+import org.genericConfig.admin.shared.config.status._
+import org.genericConfig.admin.shared.config.bo._
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -45,6 +38,7 @@ object Config{
   def getConfigs(userId: String): ConfigBO = {
     new Config(userId).getConfigs
   }
+  
   /**
    * @author Gennadi Heimann
    * 
@@ -56,6 +50,19 @@ object Config{
    */
   def deleteConfig(userId: String, configId: String) = {
     new Config(userId).deleteConfig(configId)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param
+   * 
+   * @return
+   */
+  def getConfigTree(configId: String) = {
+    new Config("").getConfigTree(configId)
   }
   
 }
@@ -129,4 +136,17 @@ class Config(userId: String) {
     ???
   }
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param
+   * 
+   * @return
+   */
+  def getConfigTree(configId: String) = {
+    Persistence.getConfigTree(configId)
+    ???
+  }
 }
