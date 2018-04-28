@@ -1,6 +1,7 @@
 @charset "ISO-8859-1";
 
 #main {
+	background-color: #F7F8E0; 
 	position:absolute;
     top : 1%;
     bottom : 1%;
@@ -36,4 +37,40 @@ display: table;
 
 .area:config {
 clear: both;
+}
+
+.step{
+	background-color: #9FF781; 
+	text-align:left;
+    padding : 10px;
+    margin : 10px;
+    border-color : grey;
+    border-style : solid;
+    border-width : medium;
+    border-radius : 10px;
+    width: 90%;
+}
+
+.component{
+	background-color: #58D3F7;
+    text-align:left;
+    padding : 10px;
+    margin : 10px;
+    border-color : grey;
+    border-style : solid;
+    border-width : medium;
+    border-radius : 10px;
+    width: 90%;
+}
+
+.nextStep{
+	background-color: #F2F5A9;
+    text-align:left;
+    padding : 10px;
+    margin : 10px;
+    border-color : grey;
+    border-style : solid;
+    border-width : medium;
+    border-radius : 10px;
+    width: 20%;
 }
