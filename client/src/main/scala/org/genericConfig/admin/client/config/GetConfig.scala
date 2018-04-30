@@ -30,15 +30,25 @@ class GetConfig(websocket: WebSocket) {
      
      val htmlConfig =  
        "<dev id='" + configId + "' class='config'> " +
-         "<div id='text_for_config'>" + config.configId + " " + config.configUrl + "</div>" +
+         "<div id='text_for_config'>" + config.configId + " " + config.configUrl + 
+           "<dev id='editConfig" + configId + "' class='button'>" + 
+             "Edit" + 
+            "</dev>" + 
+            "<dev id='createConfig" + configId + "' class='button'>" + 
+              "Create" + 
+            "</dev>" +
+            "<dev id='removeConfig" + configId + "' class='button'>" + 
+              "Remove" + 
+            "</dev>" +
+           "</div>" +
        "</dev> "
      
      jQuery(htmlConfig).appendTo(jQuery("#main"))
-     jQuery(s"#$configId").on("click", () => selectConfig(configId, config.configId))
+     jQuery(s"#editConfig$configId").on("click", () => editConfig(configId, config.configId))
     }
   }
   
-  def selectConfig(configId: String, configIdRaw: String) = {
+  def editConfig(configId: String, configIdRaw: String) = {
     println("selected ConfigId" + configIdRaw)
     val jsonGetConfigtree = "{\"json\":\"ConfigTree\",\"params\":{\"configId\":\"" + configIdRaw + "\"}}"
     println("websocket  send " + jsonGetConfigtree)

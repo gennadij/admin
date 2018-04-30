@@ -2,26 +2,25 @@ package org.genericConfig.admin.configTree
 
 import org.scalajs.jquery.jQuery
 import org.scalajs.dom.raw.WebSocket
-import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeComponent
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeStep
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
- * Created by Gennadi Heimann 26.04.2018
+ * Created by Gennadi Heimann 30.04.2018
  */
-class ConfigTree(websocket: WebSocket) {
+class ConfigTreeNextStep {
   
   val numPattern = "[0-9]+".r
   
-  def drawConfigTree(configTree: JsonConfigTreeOut) = {
+  def drowNextStep(nextStep: JsonConfigTreeStep) = {
     
-    val stepIdRow = configTree.result.step.get.stepId
+    val stepIdRow = nextStep.stepId
     
     val stepId = numPattern.findAllIn(stepIdRow).toArray.mkString
     
-    val stepKind = configTree.result.step.get.kind
+    val stepKind = nextStep.kind
     
     val htmlMain =  
     """<dev id='main' class='main'> 
@@ -30,7 +29,7 @@ class ConfigTree(websocket: WebSocket) {
     
     jQuery(htmlMain).appendTo(jQuery("section"))
     
-    val components: Set[JsonConfigTreeComponent] = configTree.result.step.get.components
+    val components: Set[JsonConfigTreeComponent] = nextStep.components
     
     var htmlComponents = ""
     
@@ -58,7 +57,6 @@ class ConfigTree(websocket: WebSocket) {
         "</div>"
     }
     
-    
     val htmlStep =  
       "<dev> " +
         "<div id='" + stepId + "' class='step'>" +
@@ -74,29 +72,12 @@ class ConfigTree(websocket: WebSocket) {
           htmlComponents + 
         "</div>" +
       "</dev> "
-         
-    jQuery(htmlStep).appendTo(jQuery("#main"))
-    
-    jQuery(s"#editStep$stepId").on("click", () => editStep())
-    
-    val componentIds = components map {c => numPattern.findAllIn(c.componentId).toArray.mkString}
-    
-    componentIds foreach { componentId => 
-      jQuery(s"#editComponent$componentId").on("click", () => editComponent())
-    }
-    
-    val nextSteps: Set[(String, JsonConfigTreeStep)] = components map {c => 
-      c.nextStep match {
-        case Some(nextStep) => (numPattern.findAllIn(c.nextStepId.get).toArray.mkString, c.nextStep.get)
-        case None => (numPattern.findAllIn(c.nextStepId.get).toArray.mkString, null)
-      }
-    }
-    
-    nextSteps foreach { nextStepId =>
-      val nSId = nextStepId._1
-      jQuery(s"#selectNextStep$nSId").on("click", () => selectNextStep(nextStepId._2))
-    }
+      
+      jQuery(htmlStep).appendTo(jQuery("#main"))
+      
+      jQuery(s"#editStep$stepId").on("click", () => editStep())
   }
+  
   
   private def editComponent() = {
     println("editComponent")

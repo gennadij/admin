@@ -16,7 +16,8 @@
 }
 
 #text_for_config {
-	text-align:left;
+    background-color: #F8E0F7;
+    text-align:left;
     padding : 10px;
     margin : 10px;
 	border-color : grey;
@@ -73,4 +74,16 @@ clear: both;
     border-width : medium;
     border-radius : 10px;
     width: 20%;
+}
+
+.button{
+    background-color: #E0ECF8;
+    text-align:left;
+    padding : 3px;
+    margin : 3px;
+    border-color : grey;
+    border-style : solid;
+    border-width : medium;
+    border-radius : 10px;
+    /*width: 20%;*/
 }
