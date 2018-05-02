@@ -9,9 +9,10 @@ import org.genericConfig.admin.shared.common.json.JsonNames
  * Created by Gennadi Heimann 20.04.2018
  */
 case class JsonDeleteConfigOut (
-    json: String = JsonNames.DELET_CONFIG
+    json: String = JsonNames.DELET_CONFIG,
+    result: JsonDeleteConfigsResult
 )
 
 object JsonDeleteConfigOut {
-  implicit val format = Json.writes[JsonDeleteConfigOut]
+  implicit val format = Json.format[JsonDeleteConfigOut]
 }

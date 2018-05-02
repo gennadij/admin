@@ -301,6 +301,31 @@ object Persistence {
    * 
    * @version 0.1.0
    * 
+   * @param CreateConfigSC
+   * 
+   * @return CreateConfigCS
+   */
+  def deleteConfig(configId: String, configUrl: String): ConfigBO = {
+    val (statusDeleteConfig, statusCommon): (StatusDeleteConfig, Status) = Graph.deleteConfig(configId, configUrl: String)
+    
+    ConfigBO(
+        "", List(),
+        StatusConfig(
+            None,    //addConfig: Option[StatusAddConfig], 
+            None,    //getConfigs: Option[StatusGetConfigs], 
+            Some(statusDeleteConfig),//deleteConfig: Option[StatusDeleteConfig], 
+            None,//updateConfig: Option[StatusUpdateConfig], 
+            Some(statusCommon)//common: Option[Status
+        )
+    )
+  }
+  
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.0
+   * 
    * @param 
    * 
    * @return 

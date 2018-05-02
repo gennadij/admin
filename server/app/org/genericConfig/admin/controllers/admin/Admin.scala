@@ -113,7 +113,9 @@ class Admin extends Wrapper{
    * 
    * @return
    */
-  def deleteConfig() = ???
+  def deleteConfig(jsonDeleteConfigIn: JsonDeleteConfigIn): JsonDeleteConfigOut = {
+    toJsonDeleteConfig(Config.deleteConfig(jsonDeleteConfigIn.params.configId, jsonDeleteConfigIn.params.configUrl))
+  }
   
   /**
    * @author Gennadi Heimann

@@ -8,7 +8,8 @@ import play.api.libs.json.Json
  * Created by Gennadi Heimann 20.04.2018
  */
 case class JsonDeleteConfigParams(
-    configId: String
+    configId: String,
+    configUrl: String
 )
 
 object JsonDeleteConfigParams {

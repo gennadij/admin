@@ -9,7 +9,7 @@ import play.api.libs.json.Json
  */
 
 case class JsonCreateConfigResult (
-    configId: String, 
+    configId: String,
     status: JsonConfigStatus
 )
 

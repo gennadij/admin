@@ -49,8 +49,8 @@ object Config{
    * 
    * @return
    */
-  def deleteConfig(userId: String, configId: String) = {
-    new Config(userId).deleteConfig(configId)
+  def deleteConfig(configId: String, configUrl: String) = {
+    new Config("").deleteConfig(configId, configUrl)
   }
   
   /**
@@ -133,8 +133,8 @@ class Config(userId: String) {
    * 
    * @return
    */
-  private def deleteConfig(configId: String): ConfigBO = {
-    ???
+  private def deleteConfig(configId: String, configUrl: String): ConfigBO = {
+    Persistence.deleteConfig(configId, configUrl)
   }
   
   /**

@@ -271,6 +271,64 @@ trait Wrapper {
    * 
    * @return FirstStepCS
    */
+  def toJsonDeleteConfig(configBO: ConfigBO): JsonDeleteConfigOut = {
+    JsonDeleteConfigOut(
+        result = JsonDeleteConfigsResult(
+            JsonConfigStatus(
+                configBO.status.addConfig match {
+                  case Some(addConfig) => 
+                    Some(JsonStatus(
+                      addConfig.status,
+                      addConfig.message
+                    ))
+                  case None => None
+                },
+                configBO.status.getConfigs match {
+                  case Some(getConfigs) => 
+                    Some(JsonStatus(
+                      getConfigs.status,
+                      getConfigs.message
+                    ))
+                  case None => None
+                },
+                configBO.status.deleteConfig match {
+                  case Some(deleteConfig) => 
+                    Some(JsonStatus(
+                      deleteConfig.status,
+                      deleteConfig.message
+                    ))
+                  case None => None
+                },
+                configBO.status.updateConfig match {
+                  case Some(updateConfig) => 
+                    Some(JsonStatus(
+                      updateConfig.status,
+                      updateConfig.message
+                    ))
+                  case None => None
+                },
+                configBO.status.common match {
+                  case Some(common) => 
+                    Some(JsonStatus(
+                      common.status,
+                      common.message
+                    ))
+                  case None => None
+                }
+            )
+        )
+    )
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.5
+   * 
+   * @param JsonFirstStepCS
+   * 
+   * @return FirstStepCS
+   */
   def toFirstStepIn(jsonFirstStepIn: JsonFirstStepIn): FirstStepIn = {
     FirstStepIn(
         jsonFirstStepIn.params.configId,

@@ -176,7 +176,7 @@ trait AdminWeb {
       case e: JsError => Logger.error("Errors -> CREATE_DEPENDENCY: " + JsError.toJson(e).toString())
     }
     
-    val deleteConfigOut: JsonDependencyOut  = ???//admin.???(getConfigsIn.get)
+    val deleteConfigOut: JsonDeleteConfigOut  = admin.deleteConfig(deleteConfigIn.get)
     Json.toJson(deleteConfigOut)
    }
 }

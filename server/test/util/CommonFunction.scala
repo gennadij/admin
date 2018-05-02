@@ -6,6 +6,7 @@ import play.api.Logger
 import scala.collection.JavaConverters._
 import org.genericConfig.admin.models.persistence.orientdb.Graph
 import org.genericConfig.admin.shared.common.json.JsonNames
+import play.api.libs.json.JsValue
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -47,7 +48,7 @@ trait CommonFunction {
     Graph.deleteAllConfigs(username)
   }
   
-  def createConfig(userId: String, configUrl: String, wC: WebClient) = {
+  def createConfig(userId: String, configUrl: String, wC: WebClient): JsValue = {
     val newConfigIn = Json.obj(
         "json" -> JsonNames.CREATE_CONFIG
         , "params" -> Json.obj(
@@ -60,5 +61,7 @@ trait CommonFunction {
 	  
 //    Logger.info("newConfigIn " + newConfigIn)
 //    Logger.info("newConfigOut " + newConfigOut)
+    
+    newConfigOut
   }
 }
