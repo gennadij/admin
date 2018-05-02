@@ -16,13 +16,21 @@ class GetConfig(websocket: WebSocket) {
   
   def drowAllConfigs(getConfigsOut: JsonGetConfigsOut) = {
     
+    
+    println("getConfigsOut " + getConfigsOut.result.configs)
+    
+    jQuery("#main").remove
+    
   
     val htmlMain =  
     """<dev id='main' class='main'> 
       <p>Konfigurationen</p>
+      <dev id='createConfig' class='button'> New Config </dev>
     </dev> """
         
    jQuery(htmlMain).appendTo(jQuery("section"))
+   
+   jQuery(s"#createConfig").on("click", () => createConfig(getConfigsOut.result.userId))
    
    getConfigsOut.result.configs foreach { config =>
      
@@ -42,10 +50,12 @@ class GetConfig(websocket: WebSocket) {
             "</dev>" +
            "</div>" +
        "</dev> "
-     
+     println("config " + configId)
      jQuery(htmlConfig).appendTo(jQuery("#main"))
      jQuery(s"#editConfig$configId").on("click", () => editConfig(configId, config.configId))
     }
+    
+    
   }
   
   def editConfig(configId: String, configIdRaw: String) = {
@@ -54,5 +64,10 @@ class GetConfig(websocket: WebSocket) {
     println("websocket  send " + jsonGetConfigtree)
     websocket.send(jsonGetConfigtree)
     jQuery("#main").remove()
+  }
+  
+  def createConfig(userId: String) = {
+    println("Create Config")
+    new CreateConfig(websocket, userId).createConfig
   }
 }

@@ -33,7 +33,7 @@ object Websocket {
         //user mit 3 Configs (leer)
 //        val getConfigs = """{"json":"GetConfigs", "params":{"userId":"#24:52"}}"""
         // user mit 1 Config 1 Step 3 Components
-        val getConfigs = """{"json":"GetConfigs", "params":{"userId":"#23:3"}}"""
+        val getConfigs = """{"json":"GetConfigs", "params":{"userId":"#23:61"}}"""
         socket.send(getConfigs)
       }
     }

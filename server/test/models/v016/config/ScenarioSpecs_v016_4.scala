@@ -24,7 +24,7 @@ class ScenarioSpecs_v016_4 extends Specification
   
   val wC = WebClient.init
   var userId: String = ""
-  val username = "user_v016_4"
+  val username = "user_v016_4_client"
   
   def beforeAll() = {
     val (username, userId): (String, String) = newAdminUser(this.username)
