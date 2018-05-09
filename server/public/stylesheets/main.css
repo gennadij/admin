@@ -1,9 +1,23 @@
 @charset "ISO-8859-1";
 
+
+#status {
+    background-color: #F7F8E0;
+    position:absolute;
+    top : 1%;
+    left : 1%;
+    overflow:hidden;
+    z-index:-10;
+    border-color : #282828 ;
+    border-style : solid;
+    border-width : medium;
+    border-radius : 10px;
+    padding : 10px;
+}
 #main {
 	background-color: #F7F8E0; 
 	position:absolute;
-    top : 1%;
+    top : 10%;
     bottom : 1%;
     left : 1%;
     right : 1%;

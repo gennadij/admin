@@ -134,8 +134,18 @@ object Graph{
   def getConfigTree(configId: String) = {
     new Graph(Database.getFactory.getTx).getConfigTree(configId)
   }
-  
-  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param String
+   * 
+   * @return
+   */
+  def getUserId(configId: String): (String, Status) = {
+    new Graph(Database.getFactory.getTx).getUserId(configId)
+  }
 }
 
 class Graph(graph: OrientGraph) {
@@ -317,7 +327,6 @@ class Graph(graph: OrientGraph) {
    * @return 
    */
   def deleteConfig(configId: String, configUrl: String): (StatusDeleteConfig, Status) = {
-    
     try {
       val sql: String  = s"DELETE VERTEX Config where @rid=$configId and configUrl='$configUrl'"
       val res: Int = graph.command(new OCommandSQL(sql)).execute()
@@ -343,13 +352,48 @@ class Graph(graph: OrientGraph) {
         (DeleteConfigError(), ODBWriteError())
       }
     }
-    
-    
-//    val sql: String  = s"delete vertex Config where @rid=$configId"
-//    val res: Int = graph.command(new OCommandSQL(sql)).execute()
-//    graph.commit
-//    res
   }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param String
+   * 
+   * @return
+   */
+  
+  private def getUserId(configId: String): (String, Status) = {
+    try {
+      val userId: List[String] = 
+        graph.getVertex(configId)
+        .getEdges(Direction.IN, PropertyKeys.EDGE_HAS_CONFIG).asScala.toList map ( eHasConfig => {
+        eHasConfig.getVertex(Direction.OUT).asInstanceOf[OrientVertex].getIdentity.toString()
+      })
+      userId.size match {
+        case size if size == 1 => (userId.head, Success())
+        case _ => ("", Error())
+      }
+    }catch{
+      case e1: ORecordDuplicatedException => {
+        Logger.error(e1.printStackTrace().toString)
+        graph.rollback()
+        ("", ODBRecordDuplicated())
+      }
+      case e2 : ClassCastException => {
+        graph.rollback()
+        Logger.error(e2.printStackTrace().toString)
+        ("", ODBClassCastError())
+      }
+      case e3: Exception => {
+        graph.rollback()
+        Logger.error(e3.printStackTrace().toString)
+        ("", ODBWriteError())
+      }
+    }
+  }
+  
   /**
    * @author Gennadi Heimann
    * 

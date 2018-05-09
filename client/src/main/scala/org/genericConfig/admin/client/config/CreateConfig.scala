@@ -8,6 +8,8 @@ import org.genericConfig.admin.shared.config.json.JsonCreateConfigParams
 import play.api.libs.json.Json
 import org.genericConfig.admin.shared.config.json.JsonGetConfigsIn
 import org.genericConfig.admin.shared.config.json.JsonGetConfigsParams
+import org.genericConfig.admin.shared.config.json.JsonCreateConfigOut
+import org.genericConfig.admin.shared.common.json.JsonStatus
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -35,30 +37,42 @@ class CreateConfig(websocket: WebSocket, userId: String) {
   }
 
   def saveConfig = {
-    val configUrl_1 = jQuery("#inputConfigUrl").value()
-    println("Save config " + configUrl_1)
+    val configUrl = jQuery("#inputConfigUrl").value()
     
-    val jsonCreateConfig_1 = JsonCreateConfigIn(
+    val jsonCreateConfig: String = Json.toJson(JsonCreateConfigIn(
         params = JsonCreateConfigParams(
             userId,
-            configUrl_1.toString
+            configUrl.toString
         )
-    )
+    )).toString
     
-    println("CreateConfigIn " + Json.toJson(jsonCreateConfig_1))
-    
-    websocket.send(Json.toJson(jsonCreateConfig_1).toString())
+    websocket.send(jsonCreateConfig)
   }
   
   def showConfigs = {
-    val jsonGetConfigs = JsonGetConfigsIn(
+    val jsonGetConfigs: String  = Json.toJson(JsonGetConfigsIn(
         params = JsonGetConfigsParams(
             userId
         )
-    )
+    )).toString
     
-    websocket.send(Json.toJson(jsonGetConfigs).toString)
+    println("OUT -> " + jsonGetConfigs)
+    websocket.send(jsonGetConfigs)
   }
   
+  def updateStatus(createConfigOut: JsonCreateConfigOut) = {
+    val addConfig: Option[JsonStatus] = createConfigOut.result.status.addConfig
+//    val getConfigs: Option[JsonStatus] = createConfigOut.result.status.getConfigs
+//    val deleteConfig: Option[JsonStatus] = createConfigOut.result.status.deleteConfig
+//    val updateConfig: Option[JsonStatus] = createConfigOut.result.status.updateConfig
+    val common: Option[JsonStatus] = createConfigOut.result.status.common
+    
+    val htmlHeader = 
+      s"<dev id='status' class='status'>" + 
+        addConfig.get.status + " , " + common.get.status + 
+      "</dev>"
+    jQuery("#status").remove()
+    jQuery(htmlHeader).appendTo(jQuery("header"))
+  }
 }
 

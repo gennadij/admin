@@ -306,18 +306,37 @@ object Persistence {
    * @return CreateConfigCS
    */
   def deleteConfig(configId: String, configUrl: String): ConfigBO = {
+    
+    val (userId, status): (String, Status) = Graph.getUserId(configId)
     val (statusDeleteConfig, statusCommon): (StatusDeleteConfig, Status) = Graph.deleteConfig(configId, configUrl: String)
     
-    ConfigBO(
-        "", List(),
-        StatusConfig(
-            None,    //addConfig: Option[StatusAddConfig], 
-            None,    //getConfigs: Option[StatusGetConfigs], 
-            Some(statusDeleteConfig),//deleteConfig: Option[StatusDeleteConfig], 
-            None,//updateConfig: Option[StatusUpdateConfig], 
-            Some(statusCommon)//common: Option[Status
+    status match {
+      case Success() => {
+        ConfigBO(
+            userId, List(),
+            StatusConfig(
+                None,    //addConfig: Option[StatusAddConfig], 
+                None,    //getConfigs: Option[StatusGetConfigs], 
+                Some(statusDeleteConfig),//deleteConfig: Option[StatusDeleteConfig], 
+                None,//updateConfig: Option[StatusUpdateConfig], 
+                Some(statusCommon)//common: Option[Status
+            )
         )
-    )
+      }
+      case _ => {
+        ConfigBO(
+            "", List(),
+            StatusConfig(
+                None,    //addConfig: Option[StatusAddConfig], 
+                None,    //getConfigs: Option[StatusGetConfigs], 
+                Some(DeleteConfigError()),//deleteConfig: Option[StatusDeleteConfig], 
+                None,//updateConfig: Option[StatusUpdateConfig], 
+                Some(status)//common: Option[Status
+            )
+        )
+      }
+    }
+    
   }
   
   

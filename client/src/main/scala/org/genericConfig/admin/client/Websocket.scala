@@ -20,9 +20,11 @@ object Websocket {
   val numPattern = "[0-9]+".r
   
   def main(args: Array[String]): Unit = {
+    
+    println("main")
     socket.onmessage = {
       (e: dom.MessageEvent) => {
-        println("-> " + e.data.toString())
+        println("IN -> " + e.data.toString())
         val jsValue: JsValue = Json.parse(e.data.toString())
         new AdminClienWeb(socket).handleMessage(jsValue)
       }

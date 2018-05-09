@@ -4,6 +4,10 @@ import org.scalajs.dom.raw.WebSocket
 import org.scalajs.jquery.jQuery
 import org.genericConfig.admin.configTree.ConfigTree
 import org.genericConfig.admin.shared.config.json.JsonGetConfigsOut
+import org.genericConfig.admin.shared.common.json.JsonStatus
+import org.genericConfig.admin.shared.config.json.JsonDeleteConfigIn
+import org.genericConfig.admin.shared.config.json.JsonDeleteConfigParams
+import play.api.libs.json.Json
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -16,12 +20,22 @@ class GetConfig(websocket: WebSocket) {
   
   def drowAllConfigs(getConfigsOut: JsonGetConfigsOut) = {
     
-    
-    println("getConfigsOut " + getConfigsOut.result.configs)
-    
     jQuery("#main").remove
+    jQuery("#status").remove()
     
+    val addConfig: Option[JsonStatus] = getConfigsOut.result.status.addConfig
+    val getConfigs: Option[JsonStatus] = getConfigsOut.result.status.getConfigs
+//    val deleteConfig: Option[JsonStatus] = getConfigsOut.result.status.deleteConfig
+    val updateConfig: Option[JsonStatus] = getConfigsOut.result.status.updateConfig
+    val common: Option[JsonStatus] = getConfigsOut.result.status.common
+    
+    val htmlHeader = 
+      s"<dev id='status' class='status'>" + 
+        getConfigs.get.status + " , " + common.get.status + 
+      "</dev>"
   
+    jQuery(htmlHeader).appendTo(jQuery("header"))
+    
     val htmlMain =  
     """<dev id='main' class='main'> 
       <p>Konfigurationen</p>
@@ -29,6 +43,7 @@ class GetConfig(websocket: WebSocket) {
     </dev> """
         
    jQuery(htmlMain).appendTo(jQuery("section"))
+   
    
    jQuery(s"#createConfig").on("click", () => createConfig(getConfigsOut.result.userId))
    
@@ -39,26 +54,32 @@ class GetConfig(websocket: WebSocket) {
      val htmlConfig =  
        "<dev id='" + configId + "' class='config'> " +
          "<div id='text_for_config'>" + config.configId + " " + config.configUrl + 
-           "<dev id='editConfig" + configId + "' class='button'>" + 
-             "Edit" + 
+           "<dev id='showConfig" + configId + "' class='button'>" + 
+             "Show" + 
             "</dev>" + 
-            "<dev id='createConfig" + configId + "' class='button'>" + 
-              "Create" + 
+            "<dev id='editConfig" + configId + "' class='button'>" + 
+              "Edit" + 
             "</dev>" +
-            "<dev id='removeConfig" + configId + "' class='button'>" + 
-              "Remove" + 
+            "<dev id='deleteConfig" + configId + "' class='button'>" + 
+              "Delete" + 
             "</dev>" +
            "</div>" +
        "</dev> "
-     println("config " + configId)
-     jQuery(htmlConfig).appendTo(jQuery("#main"))
-     jQuery(s"#editConfig$configId").on("click", () => editConfig(configId, config.configId))
+           
+      jQuery(htmlConfig).appendTo(jQuery("#main"))
+      jQuery(s"#showConfig$configId").on("click", () => showConfig(configId, config.configId))
+      
+      jQuery(s"#editConfig$configId").on("click", () => editConfig())
+      
+      jQuery(s"#deleteConfig$configId").on("click", () => 
+        deleteConfig(config.configId, config.configUrl, getConfigsOut.result.userId))
+      
     }
     
     
   }
   
-  def editConfig(configId: String, configIdRaw: String) = {
+  def showConfig(configId: String, configIdRaw: String) = {
     println("selected ConfigId" + configIdRaw)
     val jsonGetConfigtree = "{\"json\":\"ConfigTree\",\"params\":{\"configId\":\"" + configIdRaw + "\"}}"
     println("websocket  send " + jsonGetConfigtree)
@@ -69,5 +90,14 @@ class GetConfig(websocket: WebSocket) {
   def createConfig(userId: String) = {
     println("Create Config")
     new CreateConfig(websocket, userId).createConfig
+  }
+  
+  def editConfig() = {
+    println("edit Config")
+  }
+  
+  def deleteConfig(configId: String, configUrl: String, userId: String) = {
+    println("delete config")
+    new DeleteConfig(websocket).deleteConfig(configId, configUrl, userId)
   }
 }

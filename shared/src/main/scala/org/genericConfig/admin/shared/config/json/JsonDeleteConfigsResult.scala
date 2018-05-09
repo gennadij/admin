@@ -8,6 +8,7 @@ import play.api.libs.json.Json
  * Created by Gennadi Heimann 20.04.2018
  */
 case class JsonDeleteConfigsResult (
+    userId: String,
     status: JsonConfigStatus
 )
 

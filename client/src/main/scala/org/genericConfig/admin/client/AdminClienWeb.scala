@@ -11,6 +11,10 @@ import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.config.json.JsonGetConfigsOut
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
 import org.genericConfig.admin.configTree.ConfigTree
+import org.genericConfig.admin.shared.config.json.JsonCreateConfigOut
+import org.genericConfig.admin.client.config.CreateConfig
+import org.genericConfig.admin.shared.config.json.JsonDeleteConfigOut
+import org.genericConfig.admin.client.config.DeleteConfig
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -24,9 +28,9 @@ class AdminClienWeb(websocket: WebSocket) {
     (receivedMessage \ "json").asOpt[String] match {
       case Some(JsonNames.REGISTRATION) => ???//register(receivedMessage, admin)
       case Some(JsonNames.LOGIN) => ???//login(receivedMessage, admin)
-      case Some(JsonNames.CREATE_CONFIG) => ???//createConfig(receivedMessage, admin)
+      case Some(JsonNames.CREATE_CONFIG) => createConfig(receivedMessage)
       case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage)
-      case Some(JsonNames.DELET_CONFIG) => ???//deleteConfig(receivedMessage, admin)
+      case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage)
       case Some(JsonNames.CREATE_FIRST_STEP) => ???//createFirstStep(receivedMessage, admin)
       case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage)
       case Some(JsonNames.CREATE_COMPONENT) => ???//createComponent(receivedMessage, admin)
@@ -47,7 +51,7 @@ class AdminClienWeb(websocket: WebSocket) {
     }
     new GetConfig(websocket).drowAllConfigs(getConfigsIn.get)
     JsValue
-   }
+  }
   
   private def configTree(receivedMessage: JsValue) = {
     val configTreeOut: JsResult[JsonConfigTreeOut] = Json.fromJson[JsonConfigTreeOut](receivedMessage)
@@ -56,7 +60,23 @@ class AdminClienWeb(websocket: WebSocket) {
       case e: JsError => println("Errors -> CREATE_DEPENDENCY: " + JsError.toJson(e).toString())
     }
     new ConfigTree(websocket).drawConfigTree(configTreeOut.get)
+  }
+  
+  private def createConfig(receivedMessage: JsValue) = {
+    val createConfigOut: JsResult[JsonCreateConfigOut] = Json.fromJson[JsonCreateConfigOut](receivedMessage)
+    createConfigOut match {
+      case s: JsSuccess[JsonCreateConfigOut] => s.get
+      case e: JsError => println("Errors -> CREATE_CONFIG: " + JsError.toJson(e).toString())
+    }
+    new CreateConfig(websocket, "").updateStatus(createConfigOut.get)
    }
   
-  
+  private def deleteConfig(receivedMessage: JsValue) = {
+    val deleteConfigOut: JsResult[JsonDeleteConfigOut] = Json.fromJson[JsonDeleteConfigOut](receivedMessage)
+    deleteConfigOut match {
+      case s: JsSuccess[JsonDeleteConfigOut] => s.get
+      case e: JsError => println("Errors -> CREATE_CONFIG: " + JsError.toJson(e).toString())
+    }
+    new DeleteConfig(websocket).updateStatus(deleteConfigOut.get)
+  }
 }

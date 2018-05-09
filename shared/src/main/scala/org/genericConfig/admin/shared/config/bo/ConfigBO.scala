@@ -8,7 +8,7 @@ import org.genericConfig.admin.shared.config.status.StatusConfig
  * Created by Gennadi Heimann 12.04.2018
  */
 case class ConfigBO (
-    admiId: String = "",
+    userId: String = "",
     configs: List[Configuration] = List(),
     status: StatusConfig
 )

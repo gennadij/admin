@@ -210,6 +210,7 @@ trait Wrapper {
   def toJsonCreateConfigOut(configBO: ConfigBO): JsonCreateConfigOut = {
     JsonCreateConfigOut(
         result = JsonCreateConfigResult(
+            configBO.userId,
             configBO.configs match {
               case List() => ""
               case _ => {
@@ -274,6 +275,7 @@ trait Wrapper {
   def toJsonDeleteConfig(configBO: ConfigBO): JsonDeleteConfigOut = {
     JsonDeleteConfigOut(
         result = JsonDeleteConfigsResult(
+            configBO.userId,
             JsonConfigStatus(
                 configBO.status.addConfig match {
                   case Some(addConfig) => 
@@ -634,7 +636,7 @@ trait Wrapper {
     }}
     JsonGetConfigsOut(
         result = JsonGetConfigsResult(
-            configBO.admiId,
+            configBO.userId,
             cBOs,
             JsonConfigStatus(
                 configBO.status.addConfig match {

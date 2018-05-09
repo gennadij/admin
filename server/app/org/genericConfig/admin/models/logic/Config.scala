@@ -49,7 +49,7 @@ object Config{
    * 
    * @return
    */
-  def deleteConfig(configId: String, configUrl: String) = {
+  def deleteConfig(configId: String, configUrl: String): ConfigBO = {
     new Config("").deleteConfig(configId, configUrl)
   }
   
