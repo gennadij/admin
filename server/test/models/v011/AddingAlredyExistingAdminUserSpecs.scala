@@ -7,7 +7,6 @@ import org.specs2.runner.JUnitRunner
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
 import org.genericConfig.admin.models.persistence.TestDB
-import org.genericConfig.admin.models.persistence.GlobalConfigForDB
 import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.Json.toJsFieldJsValueWrapper

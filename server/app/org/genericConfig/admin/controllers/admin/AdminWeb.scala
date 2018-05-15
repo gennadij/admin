@@ -28,17 +28,24 @@ trait AdminWeb {
   def handleMessage(receivedMessage: JsValue, admin: Admin): JsValue = {
     (receivedMessage \ "json").asOpt[String] match {
       case Some(JsonNames.REGISTRATION) => register(receivedMessage, admin)
+      
       case Some(JsonNames.LOGIN) => login(receivedMessage, admin)
+      
       case Some(JsonNames.CREATE_CONFIG) => createConfig(receivedMessage, admin)
       case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage, admin)
       case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage, admin)
       case Some(JsonNames.UPDATE_CONFIG) => updateConfig(receivedMessage, admin)
-      case Some(JsonNames.CREATE_FIRST_STEP) => createFirstStep(receivedMessage, admin)
+      
       case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage, admin)
-      case Some(JsonNames.CREATE_COMPONENT) => createComponent(receivedMessage, admin)
+      
+      case Some(JsonNames.CREATE_FIRST_STEP) => createFirstStep(receivedMessage, admin)
       case Some(JsonNames.CREATE_STEP) => createStep(receivedMessage, admin)
+      
+      case Some(JsonNames.CREATE_COMPONENT) => createComponent(receivedMessage, admin)
       case Some(JsonNames.CONNECTION_COMPONENT_TO_STEP) => connectComponentToStep(receivedMessage, admin)
+      
       case Some(JsonNames.CREATE_DEPENDENCY) => createDependency(receivedMessage, admin)
+      
       case Some(JsonNames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL) => 
         visualProposalForAdditionalStepsInOneLevel(receivedMessage, admin)
       case _ => Json.obj("error" -> "keinen Treffer")
@@ -80,15 +87,7 @@ trait AdminWeb {
     val firstStepIn: JsResult[JsonStepIn] = Json.fromJson[JsonStepIn](receivedMessage)
     firstStepIn match {
       case s : JsSuccess[JsonStepIn] => Json.toJson(admin.createFirstStep(firstStepIn.get))
-      case e : JsError => 
-        val error = JsonErrorOut(
-            JsonNames.ERROR,
-            JsonErrorParams(
-                "Errors -> CREATE_FIRST_STEP: " + JsError.toJson(e).toString()
-            )
-        )
-        Logger.error(error.toString)
-        Json.toJson(error)
+      case e : JsError => jsonError("CREATE_FIRST_STEP", e)
     }
   }
   
@@ -194,4 +193,15 @@ trait AdminWeb {
     val editConfigOut: JsonUpdateConfigOut  = admin.editConfig(editConfigIn.get)
     Json.toJson(editConfigOut)
    }
+  
+  private def jsonError(errorText: String, e: JsError): JsValue = {
+    val error = JsonErrorOut(
+        JsonNames.ERROR,
+        JsonErrorParams(
+            "Errors -> " + errorText + " : " + JsError.toJson(e).toString()
+        )
+    )
+    Logger.error(error.toString)
+    Json.toJson(error)
+  }
 }

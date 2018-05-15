@@ -29,4 +29,5 @@ object PropertyKeys {
   val NAME_TO_SHOW: String = "nameToShow"
   val DEPENDENCY_TYPE: String = "dependencyType"
   val VISUALIZATION: String = "visualization"
+  def CLASS: String = "class" 
 }

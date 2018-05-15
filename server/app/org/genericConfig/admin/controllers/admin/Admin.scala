@@ -82,7 +82,7 @@ class Admin extends Wrapper{
    */
   def createConfig(jsonCreateConfigIn: JsonCreateConfigIn): JsonCreateConfigOut = {
     toJsonCreateConfigOut(
-        Config.createConfig(jsonCreateConfigIn.params.adminId, jsonCreateConfigIn.params.configUrl))
+        Config.addConfig(jsonCreateConfigIn.params.adminId, jsonCreateConfigIn.params.configUrl))
   }
   
   /**
@@ -123,8 +123,8 @@ class Admin extends Wrapper{
    * @return
    */
   def editConfig(jsonEditConfigIn: JsonUpdateConfigIn): JsonUpdateConfigOut = {
-    toJsonEditConfigOut(
-        Config.editConfig(jsonEditConfigIn.params.configId, jsonEditConfigIn.params.configUrl)
+    toJsonUpdateConfigOut(
+        Config.updateConfig(jsonEditConfigIn.params.configId, jsonEditConfigIn.params.configUrl)
     )
   }
   
@@ -152,7 +152,7 @@ class Admin extends Wrapper{
    * @return FirstStepSC
    */
   def createFirstStep(jsonFirstStepIn: JsonStepIn): JsonStepOut = {
-    toJsonFirstStepOut(Step.createFirstStep(toFirstStepBO(jsonFirstStepIn)))
+    toJsonStepOut(Step.addFirstStep(toStepBO(jsonFirstStepIn)))
   }
   
   /**

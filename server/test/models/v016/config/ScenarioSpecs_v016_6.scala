@@ -51,7 +51,7 @@ class ScenarioSpecs_v016_6 extends Specification
       Logger.info(configId)
       
       val jsonEditConfigIn = Json.obj(
-          "json" -> JsonNames.EDIT_CONFIG
+          "json" -> JsonNames.UPDATE_CONFIG
           , "params" -> Json.obj(
               "configId" -> configId,
               "configUrl" -> "//http://contig1/user_v016_4_updated"
@@ -63,7 +63,7 @@ class ScenarioSpecs_v016_6 extends Specification
       Logger.info("<- " + jsonEditConfigIn)
       Logger.info("-> " + jsonEditConfigOut)
       
-      (jsonEditConfigOut \ "json").asOpt[String].get === JsonNames.EDIT_CONFIG
+      (jsonEditConfigOut \ "json").asOpt[String].get === JsonNames.UPDATE_CONFIG
       (jsonEditConfigOut \ "result" \ "status" \ "addConfig").asOpt[String] === None
       (jsonEditConfigOut \ "result" \ "status" \ "getConfigs" \ "status").asOpt[String] === None
       (jsonEditConfigOut \ "result" \ "status" \ "updateConfig" \ "status").asOpt[String].get === UpdateConfigUpdated().status

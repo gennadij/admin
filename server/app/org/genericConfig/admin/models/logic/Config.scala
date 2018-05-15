@@ -24,7 +24,7 @@ object Config{
    * 
    * @return
    */
-  def createConfig(userId: String, configUrl: String): ConfigBO = {
+  def addConfig(userId: String, configUrl: String): ConfigBO = {
     new Config(userId).createConfig(configUrl)
   }
   /**
@@ -75,8 +75,8 @@ object Config{
    * 
    * @return
    */
-  def editConfig(configId: String, configUrl: String): ConfigBO = {
-    new Config("").editConfig(configId, configUrl)
+  def updateConfig(configId: String, configUrl: String): ConfigBO = {
+    new Config("").updateConfig(configId, configUrl)
   }
   
 }
@@ -94,7 +94,7 @@ class Config(userId: String) {
    */
   private def createConfig(configUrl: String): ConfigBO = {
     
-    val configBO: ConfigBO = Persistence.createConfig(userId, configUrl)
+    val configBO: ConfigBO = Persistence.addConfig(userId, configUrl)
     configBO.status.addConfig match {
       case Some(AddConfigAdded()) => {
         val statusConfigAppend : Status = Persistence.appendConfigTo(userId, configBO.configs.head.configId)
@@ -150,8 +150,8 @@ class Config(userId: String) {
     Persistence.deleteConfig(configId, configUrl)
   }
   
-  private def editConfig(configId: String, configUrl: String): ConfigBO = {
-    Persistence.editConfig(configId, configUrl)
+  private def updateConfig(configId: String, configUrl: String): ConfigBO = {
+    Persistence.updateConfig(configId, configUrl)
   }
   
   /**

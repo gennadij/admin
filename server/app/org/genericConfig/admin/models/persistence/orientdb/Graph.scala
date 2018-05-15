@@ -21,11 +21,7 @@ import org.genericConfig.admin.shared.registration.bo.RegistrationBO
 import org.genericConfig.admin.shared.configTree.status.StatusGetConfigTree
 import org.genericConfig.admin.shared.configTree.status._
 import org.genericConfig.admin.shared.step.bo.StepBO
-import org.genericConfig.admin.shared.step.status.StatusCreateStep
-import org.genericConfig.admin.shared.step.status.CreateStepSuccess
-import org.genericConfig.admin.shared.step.status.CreateStepError
-import org.genericConfig.admin.shared.step.status.CreateStepAlreadyExist
-import org.genericConfig.admin.shared.step.status.CreateStepDefectComponentOrConfigId
+import org.genericConfig.admin.shared.step.status._
 
 
 /**
@@ -71,8 +67,8 @@ object Graph{
    * 
    * @return
    */
-  def createConfig(configUrl: String): (Option[OrientVertex], StatusAddConfig, Status) = {
-    new Graph(Database.getFactory().getTx()).createConfig(configUrl)
+  def addConfig(configUrl: String): (Option[OrientVertex], StatusAddConfig, Status) = {
+    new Graph(Database.getFactory().getTx()).addConfig(configUrl)
   }
   
   /**
@@ -149,8 +145,8 @@ object Graph{
    * 
    * @return
    */
-  def getUserId(configId: String): (String, Status) = {
-    new Graph(Database.getFactory.getTx).getUserId(configId)
+  def getAdminUserId(configId: String): (String, Status) = {
+    new Graph(Database.getFactory.getTx).getAdminUserId(configId)
   }
   
   /**
@@ -175,8 +171,35 @@ object Graph{
    * 
    * @return
    */
-  def createStep(stepBO: StepBO): (Option[OrientVertex], StatusCreateStep, Status) = {
-    new Graph(Database.getFactory.getTx).createStep(stepBO)
+  def addStep(stepBO: StepBO): (Option[OrientVertex], StatusCreateStep, Status) = {
+    new Graph(Database.getFactory.getTx).addStep(stepBO)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param
+   * 
+   * @return
+   */
+  def appendStepTo(id: String, stepId: String): (StatusAppendStep, Status) = {
+    new Graph(Database.getFactory.getTx).appendStepTo(id, stepId)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return
+   */
+  
+  def deleteStep(stepId: String): (StatusDeleteStep, Status) = {
+    new Graph(Database.getFactory.getTx).deleteStep(stepId)
   }
 }
 
@@ -324,7 +347,7 @@ class Graph(graph: OrientGraph) {
    * 
    * @return 
    */
-  def createConfig(configUrl: String): (Option[OrientVertex], StatusAddConfig, Status) = {
+  def addConfig(configUrl: String): (Option[OrientVertex], StatusAddConfig, Status) = {
     
     try {
       val vConfig: OrientVertex = graph.addVertex(
@@ -431,7 +454,7 @@ class Graph(graph: OrientGraph) {
    * @return
    */
   
-  private def getUserId(configId: String): (String, Status) = {
+  private def getAdminUserId(configId: String): (String, Status) = {
     try {
       val userId: List[String] = 
         graph.getVertex(configId)
@@ -497,6 +520,82 @@ class Graph(graph: OrientGraph) {
         graph.rollback()
         Logger.error(e3.printStackTrace().toString)
         ODBWriteError()
+      }
+    }
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param String
+   * 
+   * @return
+   */
+  def appendStepTo(id: String, stepId: String): (StatusAppendStep, Status) = {
+    
+    try{
+      val v = graph.getVertex(id)
+      val vStep = graph.getVertex(stepId)
+      graph.addEdge(
+          PropertyKeys.CLASS + PropertyKeys.EDGE_HAS_FIRST_STEP, 
+          v, 
+          vStep, 
+          PropertyKeys.EDGE_HAS_FIRST_STEP
+      )
+      graph.commit
+      
+      (AppendStepSuccess(), Success())
+    }catch{
+     case e1: ORecordDuplicatedException =>
+        Logger.error(e1.printStackTrace().toString)
+        graph.rollback()
+        (AppendStepError(), ODBRecordDuplicated())
+      case e2 : ClassCastException => 
+        graph.rollback()
+        Logger.error(e2.printStackTrace().toString)
+        (AppendStepError(), ODBClassCastError())
+      case e3: Exception => 
+        graph.rollback()
+        Logger.error(e3.printStackTrace().toString)
+        (AppendStepError(), ODBWriteError())
+    }
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return
+   */
+  private def deleteStep(stepId: String): (StatusDeleteStep, Status) = {
+    try {
+      val sql: String  = s"DELETE VERTEX Config where @rid=$stepId"
+      val res: Int = graph.command(new OCommandSQL(sql)).execute()
+      graph.commit
+      res match {
+        case 1 => (DeleteStepSuccess(), Success())
+        case _ => (DeleteStepDefectID(), Error())
+      }
+    }catch{
+      case e1: ORecordDuplicatedException => {
+        Logger.error(e1.printStackTrace().toString)
+        graph.rollback()
+        (DeleteStepError(), ODBRecordDuplicated())
+      }
+      case e2 : ClassCastException => {
+        graph.rollback()
+        Logger.error(e2.printStackTrace().toString)
+        (DeleteStepError(), ODBClassCastError())
+      }
+      case e3: Exception => {
+        graph.rollback()
+        Logger.error(e3.printStackTrace().toString)
+        (DeleteStepError(), ODBWriteError())
       }
     }
   }
@@ -697,7 +796,7 @@ class Graph(graph: OrientGraph) {
    * 
    * @return
    */
-  def createStep(stepBO: StepBO): (Option[OrientVertex], StatusCreateStep, Status) = {
+  def addStep(stepBO: StepBO): (Option[OrientVertex], StatusCreateStep, Status) = {
     
     try{
       stepBO.componentId match {

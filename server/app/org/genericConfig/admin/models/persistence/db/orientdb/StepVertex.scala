@@ -13,8 +13,6 @@ import org.genericConfig.admin.models.persistence.OrientDB
 import play.api.Logger
 import org.genericConfig.admin.models.wrapper.step.StepIn
 import org.genericConfig.admin.models.wrapper.step.StepOut
-import org.genericConfig.admin.models.wrapper.step.FirstStepIn
-import org.genericConfig.admin.models.wrapper.step.FirstStepOut
 import org.genericConfig.admin.models.json.StatusErrorFaultyConfigId
 import org.genericConfig.admin.models.json.StatusErrorFirstStepExist
 import org.genericConfig.admin.models.json.StatusSuccessfulFirstStepCreated
@@ -188,13 +186,13 @@ object StepVertex {
       graph.commit()
       res
   }
-  private def getErrorFirstStepSC(status: String, message: String): FirstStepOut = {
-    FirstStepOut(
-        "",
-        status,
-        message
-        )
-  }
+//  private def getErrorFirstStepSC(status: String, message: String): FirstStepOut = {
+//    FirstStepOut(
+//        "",
+//        status,
+//        message
+//        )
+//  }
   
   private def getErrorStepSC(status: String, message: String): StepOut = {
     StepOut(
@@ -206,13 +204,13 @@ object StepVertex {
     )
   }
   
-  private def getSuccessfulFirstStepSC(stepId: String, status: String, message: String): FirstStepOut = {
-    FirstStepOut(
-        stepId,
-        status,
-        message
-    )
-  }
+//  private def getSuccessfulFirstStepSC(stepId: String, status: String, message: String): FirstStepOut = {
+//    FirstStepOut(
+//        stepId,
+//        status,
+//        message
+//    )
+//  }
   
   private def getSuccessfulStepSC(stepId: String, status: String, message: String) = {
     StepOut(
@@ -224,28 +222,28 @@ object StepVertex {
     )
   }
   
-  private def writeFirstStepToDB(firstStepCS: FirstStepIn): Option[OrientVertex] = {
-    val graph: OrientGraph = OrientDB.getFactory().getTx
-    
-    val vFirstStep: Any = try{
-      val vFirstStep: OrientVertex = graph.addVertex(
-          "class:" + PropertyKey.VERTEX_STEP,
-          PropertyKey.NAME_TO_SHOW, firstStepCS.nameToShow,
-          PropertyKey.KIND, firstStepCS.kind,
-          PropertyKey.SELECTION_CRITERIUM_MIN, firstStepCS.selectionCriteriumMin.toString,
-          PropertyKey.SELECTION_CRITERIUM_MAX, firstStepCS.selectionCriteriumMax.toString
-      )
-      graph.commit
-      vFirstStep
-    }catch{
-      case e: Exception => graph.rollback()
-    }
-    
-    vFirstStep match {
-      case vFirstStep: OrientVertex => Some(vFirstStep)
-      case e: Exception => None
-    }
-  }
+//  private def writeFirstStepToDB(firstStepCS: FirstStepIn): Option[OrientVertex] = {
+//    val graph: OrientGraph = OrientDB.getFactory().getTx
+//    
+//    val vFirstStep: Any = try{
+//      val vFirstStep: OrientVertex = graph.addVertex(
+//          "class:" + PropertyKey.VERTEX_STEP,
+//          PropertyKey.NAME_TO_SHOW, firstStepCS.nameToShow,
+//          PropertyKey.KIND, firstStepCS.kind,
+//          PropertyKey.SELECTION_CRITERIUM_MIN, firstStepCS.selectionCriteriumMin.toString,
+//          PropertyKey.SELECTION_CRITERIUM_MAX, firstStepCS.selectionCriteriumMax.toString
+//      )
+//      graph.commit
+//      vFirstStep
+//    }catch{
+//      case e: Exception => graph.rollback()
+//    }
+//    
+//    vFirstStep match {
+//      case vFirstStep: OrientVertex => Some(vFirstStep)
+//      case e: Exception => None
+//    }
+//  }
   
   private def writeStepToDB(stepCS: StepIn): Option[OrientVertex] = {
     val graph: OrientGraph = OrientDB.getFactory().getTx

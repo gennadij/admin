@@ -30,8 +30,6 @@ import org.genericConfig.admin.models.persistence.db.orientdb.HasStepEdge
 import org.genericConfig.admin.models.json.StatusSuccessfulConfig
 import org.genericConfig.admin.models.persistence.db.orientdb.HasConfigEdge
 import org.genericConfig.admin.models.json.StatusErrorConfig
-import org.genericConfig.admin.models.wrapper.step.FirstStepIn
-import org.genericConfig.admin.models.wrapper.step.FirstStepOut
 import org.genericConfig.admin.models.json.StatusErrorFirstStepExist
 import org.genericConfig.admin.models.persistence.db.orientdb.HasFirstStepEdge
 import org.genericConfig.admin.models.json.StatusSuccessfulFirstStepCreated
@@ -64,12 +62,7 @@ import org.genericConfig.admin.shared.configTree.bo.StepForConfigTreeBO
 import org.genericConfig.admin.shared.configTree.status._
 import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.step.bo._
-import org.genericConfig.admin.shared.step.status.StatusCreateStep
-import org.genericConfig.admin.shared.step.status.CreateStepSuccess
-import org.genericConfig.admin.shared.step.status.CreateStepError
-import org.genericConfig.admin.shared.step.status.StatusStep
-import org.genericConfig.admin.shared.step.status.CreateStepAlreadyExist
-import org.genericConfig.admin.shared.step.status.CreateStepDefectComponentOrConfigId
+import org.genericConfig.admin.shared.step.status._
 import org.genericConfig.admin.shared.step.json.JsonDependencyForAdditionalStepsInOneLevel
 
 
@@ -251,9 +244,9 @@ object Persistence {
    * 
    * @return CreateConfigCS
    */
-  def createConfig(userId: String, configUrl: String): ConfigBO = {
+  def addConfig(userId: String, configUrl: String): ConfigBO = {
     val (vConfig, statusAddConfig, statusCommon) : (Option[OrientVertex], StatusAddConfig, Status) = 
-      Graph.createConfig(configUrl)
+      Graph.addConfig(configUrl)
     statusAddConfig match {
       case AddConfigAdded() => {
         ConfigBO(
@@ -313,7 +306,7 @@ object Persistence {
    */
   def deleteConfig(configId: String, configUrl: String): ConfigBO = {
     
-    val (userId, status): (String, Status) = Graph.getUserId(configId)
+    val (userId, status): (String, Status) = Graph.getAdminUserId(configId)
     val (statusDeleteConfig, statusCommon): (StatusDeleteConfig, Status) = Graph.deleteConfig(configId, configUrl: String)
     
     status match {
@@ -345,8 +338,8 @@ object Persistence {
     
   }
   
-  def editConfig(configId: String, configUrl: String): ConfigBO = {
-    val (userId, status): (String, Status) = Graph.getUserId(configId)
+  def updateConfig(configId: String, configUrl: String): ConfigBO = {
+    val (userId, status): (String, Status) = Graph.getAdminUserId(configId)
     val (statusUpdateConfig, statusCommon): (StatusUpdateConfig, Status) = Graph.updateConfig(configId: String, configUrl: String)
     status match {
       case Success() => {
@@ -375,8 +368,6 @@ object Persistence {
         )
       }
     }
-    
-    
   }
   
   /**
@@ -456,24 +447,24 @@ object Persistence {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 0.1.0
+   * @version 0.1.6
    * 
-   * @param FirstStepCS
+   * @param 
    * 
-   * @return FirstStepSC
+   * @return 
    */
   
-  def createStep(firstStepBO: StepBO): StepBO = {
+  def addStep(stepBO: StepBO): StepBO = {
     
-    val (vFirstStep: Option[OrientVertex], createStepStatus: StatusCreateStep, commonStatus: Status) = 
-      Graph.createStep(firstStepBO)
+    val (vStep: Option[OrientVertex], createStepStatus: StatusCreateStep, commonStatus: Status) = 
+      Graph.addStep(stepBO)
     
     createStepStatus match {
       case CreateStepSuccess() => 
         StepBO(
-            stepId = Some(vFirstStep.get.getIdentity.toString),
+            stepId = Some(vStep.get.getIdentity.toString),
             status = Some(StatusStep(
-                createStep = Some(CreateStepSuccess()),
+                addStep = Some(CreateStepSuccess()),
                 common = Some(Success())
             ))
         )
@@ -481,7 +472,7 @@ object Persistence {
         StepBO(
             stepId = None,
             status = Some(StatusStep(
-                createStep = Some(CreateStepError()),
+                addStep = Some(CreateStepError()),
                 common = Some(commonStatus)
             ))
         )
@@ -489,7 +480,7 @@ object Persistence {
         StepBO(
             stepId = None,
             status = Some(StatusStep(
-                createStep = Some(CreateStepAlreadyExist()),
+                addStep = Some(CreateStepAlreadyExist()),
                 common = Some(commonStatus)
             ))
         )
@@ -497,11 +488,37 @@ object Persistence {
         StepBO(
             stepId = None,
             status = Some(StatusStep(
-                createStep = Some(CreateStepDefectComponentOrConfigId()),
+                addStep = Some(CreateStepDefectComponentOrConfigId()),
                 common = Some(commonStatus)
             ))
         )
     }
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  def appendStepTo(id: String, stepId: String): (StatusAppendStep, Status) = {
+    Graph.appendStepTo(id, stepId)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  def deleteStep(stepId: String): (StatusDeleteStep, Status) = {
+    Graph.deleteStep(stepId)
   }
   
 //  /**
