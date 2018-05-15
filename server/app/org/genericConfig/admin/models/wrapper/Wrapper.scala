@@ -1,18 +1,10 @@
 package org.genericConfig.admin.models.wrapper
 
-import org.genericConfig.admin.models.json.step.JsonStepIn
-import org.genericConfig.admin.models.json.step.JsonStepOut
 import org.genericConfig.admin.models.wrapper.step.StepIn
 import org.genericConfig.admin.models.wrapper.step.StepOut
 import org.genericConfig.admin.models.wrapper.dependency.DependencyOut
-import org.genericConfig.admin.models.json.step.JsonStepResult
-import org.genericConfig.admin.models.json.step.JsonDependencyForAdditionalStepsInOneLevel
-import org.genericConfig.admin.models.json.step.JsonFirstStepIn
 import org.genericConfig.admin.models.wrapper.step.FirstStepIn
-import org.genericConfig.admin.models.json.step.JsonFirstStepOut
 import org.genericConfig.admin.models.wrapper.step.FirstStepOut
-import org.genericConfig.admin.models.json.step.JsonFirstStepResult
-import org.genericConfig.admin.models.json.component.JsonComponentIn
 import org.genericConfig.admin.models.wrapper.component.ComponentIn
 import org.genericConfig.admin.models.json.component.JsonComponentOut
 import org.genericConfig.admin.models.json.component.ComponentResult
@@ -28,7 +20,6 @@ import org.genericConfig.admin.models.json.dependency.JsonDependencyOut
 import org.genericConfig.admin.models.json.dependency.JsonDependencyResult
 import org.genericConfig.admin.models.json.dependency.JsonDependencyIn
 import org.genericConfig.admin.models.wrapper.dependency.DependencyIn
-import org.genericConfig.admin.models.json.step.JsonVisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.shared.configTree.json._
 import org.genericConfig.admin.shared.registration.bo._
@@ -39,6 +30,11 @@ import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.shared.config.bo._
 import org.genericConfig.admin.shared.login.bo._
 import org.genericConfig.admin.shared.configTree.bo._
+import org.genericConfig.admin.shared.step.json._
+import org.genericConfig.admin.shared.step.bo._
+import org.genericConfig.admin.shared.step.bo.StepBO
+import org.genericConfig.admin.shared.step.bo.StepBO
+import org.genericConfig.admin.models.json.component.JsonComponentIn
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -68,14 +64,18 @@ trait Wrapper {
    * 
    * @return StepCS
    */
-  def toStepIn(jsonStepIn: JsonStepIn): StepIn = {
-    StepIn(
-        jsonStepIn.params.componentId,
-        jsonStepIn.params.nameToShow,
-        jsonStepIn.params.kind,
-        jsonStepIn.params.selectionCriterium.min,
-        jsonStepIn.params.selectionCriterium.max
-    )
+  def toStepBO(jsonStepIn: JsonStepIn): StepBO = {
+//    StepBO(
+//        "",
+//        jsonStepIn.params.componentId,
+//        jsonStepIn.params.nameToShow,
+//        jsonStepIn.params.kind,
+//        jsonStepIn.params.selectionCriterium.min,
+//        jsonStepIn.params.selectionCriterium.max,
+//        "",
+//        None
+//    )
+    ???
   }
   /**
    * @author Gennadi Heimann
@@ -87,22 +87,21 @@ trait Wrapper {
    * @return JsonStepSC
    */
   def toJsonStepOut(stepOut: StepOut): JsonStepOut = {
-    JsonStepOut(result = JsonStepResult(
-        stepOut.stepId,
-        stepOut.status,
-        stepOut.message,
-        stepOut.visualProposalForAdditionalStepInOneLevel,
-        stepOut.dependenciesForAdditionalStepsInOneLevel.map(d => {
-          JsonDependencyForAdditionalStepsInOneLevel(
-              d.componentFromId,
-              d.componentToId,
-              d.dependencyId,
-              d.dependencyType,
-              d.visualization,
-              d.nameToShow
-          )
-        })
-    ))
+//    JsonStepOut(result = JsonStepResult(
+//        stepOut.stepId,
+//        stepOut.visualProposalForAdditionalStepInOneLevel,
+//        stepOut.dependenciesForAdditionalStepsInOneLevel.map(d => {
+//          JsonDependencyForAdditionalStepsInOneLevel(
+//              d.componentFromId,
+//              d.componentToId,
+//              d.dependencyId,
+//              d.dependencyType,
+//              d.visualization,
+//              d.nameToShow
+//          )
+//        })
+//    ))
+    ???
   }
   
   /**
@@ -272,7 +271,7 @@ trait Wrapper {
    * 
    * @return FirstStepCS
    */
-  def toJsonDeleteConfig(configBO: ConfigBO): JsonDeleteConfigOut = {
+  def toJsonDeleteConfigOut(configBO: ConfigBO): JsonDeleteConfigOut = {
     JsonDeleteConfigOut(
         result = JsonDeleteConfigsResult(
             configBO.userId,
@@ -331,13 +330,75 @@ trait Wrapper {
    * 
    * @return FirstStepCS
    */
-  def toFirstStepIn(jsonFirstStepIn: JsonFirstStepIn): FirstStepIn = {
-    FirstStepIn(
-        jsonFirstStepIn.params.configId,
-        jsonFirstStepIn.params.nameToShow,
-        jsonFirstStepIn.params.kind,
-        jsonFirstStepIn.params.selectionCriterium.min,
-        jsonFirstStepIn.params.selectionCriterium.max
+  def toJsonEditConfigOut(configBO: ConfigBO): JsonUpdateConfigOut = {
+    JsonUpdateConfigOut(
+        result = JsonUpdateConfigResult(
+            configBO.userId,
+            JsonConfigStatus(
+                configBO.status.addConfig match {
+                  case Some(addConfig) => 
+                    Some(JsonStatus(
+                      addConfig.status,
+                      addConfig.message
+                    ))
+                  case None => None
+                },
+                configBO.status.getConfigs match {
+                  case Some(getConfigs) => 
+                    Some(JsonStatus(
+                      getConfigs.status,
+                      getConfigs.message
+                    ))
+                  case None => None
+                },
+                configBO.status.deleteConfig match {
+                  case Some(deleteConfig) => 
+                    Some(JsonStatus(
+                      deleteConfig.status,
+                      deleteConfig.message
+                    ))
+                  case None => None
+                },
+                configBO.status.updateConfig match {
+                  case Some(updateConfig) => 
+                    Some(JsonStatus(
+                      updateConfig.status,
+                      updateConfig.message
+                    ))
+                  case None => None
+                },
+                configBO.status.common match {
+                  case Some(common) => 
+                    Some(JsonStatus(
+                      common.status,
+                      common.message
+                    ))
+                  case None => None
+                }
+            )
+        )
+    )
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.5
+   * 
+   * @param JsonFirstStepCS
+   * 
+   * @return FirstStepCS
+   */
+  def toFirstStepBO(jsonFirstStepIn: JsonStepIn): StepBO = {
+    StepBO(
+        Some(jsonFirstStepIn.params.configId), //configId
+        None,//componentId
+        Some(jsonFirstStepIn.params.nameToShow), // nameToShow
+        Some(jsonFirstStepIn.params.kind), // kind
+        Some(jsonFirstStepIn.params.selectionCriterium.min), // selectionCriteriumMin
+        Some(jsonFirstStepIn.params.selectionCriterium.max), // selectionCriteriumMax
+        None, // stepId
+        None // status
     )
   }
   
@@ -350,12 +411,47 @@ trait Wrapper {
    * 
    * @return JsonFirstStepSC
    */
-  def toJsonFirstStepOut(firstStepOut: FirstStepOut): JsonFirstStepOut = {
-    JsonFirstStepOut(
-        result = JsonFirstStepResult(
-            firstStepOut.stepId,
-            firstStepOut.status,
-            firstStepOut.message
+  def toJsonFirstStepOut(firstStepBO: StepBO): JsonStepOut = {
+    JsonStepOut(
+        json = JsonNames.CREATE_FIRST_STEP,
+        result = JsonStepResult(
+            firstStepBO.stepId.get,
+            Set(),
+            Set(),
+            JsonStepStatus(
+                firstStepBO.status.get.createStep match {
+                  case Some(createStep) => 
+                    Some(JsonStatus(
+                      createStep.status,
+                      createStep.message
+                    ))
+                  case None => None
+                },
+                firstStepBO.status.get.deleteStep match {
+                  case Some(deleteStep) => 
+                    Some(JsonStatus(
+                      deleteStep.status,
+                      deleteStep.message
+                    ))
+                  case None => None
+                },
+                firstStepBO.status.get.updateStep match {
+                  case Some(updateStep) => 
+                    Some(JsonStatus(
+                      updateStep.status,
+                      updateStep.message
+                    ))
+                  case None => None
+                },
+                firstStepBO.status.get.common match {
+                  case Some(common) => 
+                    Some(JsonStatus(
+                      common.status,
+                      common.message
+                    ))
+                  case None => None
+                }
+            )
         )
     )
   }

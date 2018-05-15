@@ -8,13 +8,12 @@ import play.api.libs.json.JsError
 import org.scalajs.dom.raw.WebSocket
 import org.genericConfig.admin.client.config.GetConfig
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.config.json.JsonGetConfigsOut
+import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
 import org.genericConfig.admin.configTree.ConfigTree
-import org.genericConfig.admin.shared.config.json.JsonCreateConfigOut
 import org.genericConfig.admin.client.config.CreateConfig
-import org.genericConfig.admin.shared.config.json.JsonDeleteConfigOut
 import org.genericConfig.admin.client.config.DeleteConfig
+import org.genericConfig.admin.client.config.EditConfig
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -31,6 +30,7 @@ class AdminClienWeb(websocket: WebSocket) {
       case Some(JsonNames.CREATE_CONFIG) => createConfig(receivedMessage)
       case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage)
       case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage)
+      case Some(JsonNames.UPDATE_CONFIG) => updateConfig(receivedMessage)
       case Some(JsonNames.CREATE_FIRST_STEP) => ???//createFirstStep(receivedMessage, admin)
       case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage)
       case Some(JsonNames.CREATE_COMPONENT) => ???//createComponent(receivedMessage, admin)
@@ -78,5 +78,14 @@ class AdminClienWeb(websocket: WebSocket) {
       case e: JsError => println("Errors -> CREATE_CONFIG: " + JsError.toJson(e).toString())
     }
     new DeleteConfig(websocket).updateStatus(deleteConfigOut.get)
+  }
+  
+  private def updateConfig(receivedMessage: JsValue) = {
+    val updateConfigOut: JsResult[JsonUpdateConfigOut] = Json.fromJson[JsonUpdateConfigOut](receivedMessage)
+    updateConfigOut match {
+      case s: JsSuccess[JsonUpdateConfigOut] => s.get
+      case e: JsError => println("Errors -> CREATE_CONFIG: " + JsError.toJson(e).toString())
+    }
+    new EditConfig(websocket).updateStatus(updateConfigOut.get)
   }
 }

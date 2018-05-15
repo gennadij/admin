@@ -20,6 +20,12 @@ import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.registration.bo.RegistrationBO
 import org.genericConfig.admin.shared.configTree.status.StatusGetConfigTree
 import org.genericConfig.admin.shared.configTree.status._
+import org.genericConfig.admin.shared.step.bo.StepBO
+import org.genericConfig.admin.shared.step.status.StatusCreateStep
+import org.genericConfig.admin.shared.step.status.CreateStepSuccess
+import org.genericConfig.admin.shared.step.status.CreateStepError
+import org.genericConfig.admin.shared.step.status.CreateStepAlreadyExist
+import org.genericConfig.admin.shared.step.status.CreateStepDefectComponentOrConfigId
 
 
 /**
@@ -146,7 +152,35 @@ object Graph{
   def getUserId(configId: String): (String, Status) = {
     new Graph(Database.getFactory.getTx).getUserId(configId)
   }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param String
+   * 
+   * @return
+   */
+  def updateConfig(configId: String, configUrl: String): (StatusUpdateConfig, Status) = {
+    new Graph(Database.getFactory.getTx).updateConfig(configId, configUrl)
+  }
+
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param String
+   * 
+   * @return
+   */
+  def createStep(stepBO: StepBO): (Option[OrientVertex], StatusCreateStep, Status) = {
+    new Graph(Database.getFactory.getTx).createStep(stepBO)
+  }
 }
+
+
 
 class Graph(graph: OrientGraph) {
 
@@ -350,6 +384,39 @@ class Graph(graph: OrientGraph) {
         graph.rollback()
         Logger.error(e3.printStackTrace().toString)
         (DeleteConfigError(), ODBWriteError())
+      }
+    }
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param String, String
+   * 
+   * @return
+   */
+  def updateConfig(configId: String, configUrl: String): (StatusUpdateConfig, Status) = {
+    try {
+      graph.getVertex(configId).setProperty(PropertyKeys.CONFIG_URL, configUrl)
+      graph.commit
+      (UpdateConfigUpdated(), Success())
+    }catch{
+      case e1: ORecordDuplicatedException => {
+        Logger.error(e1.printStackTrace().toString)
+        graph.rollback()
+        (UpdateConfigError(), ODBRecordDuplicated())
+      }
+      case e2 : ClassCastException => {
+        graph.rollback()
+        Logger.error(e2.printStackTrace().toString)
+        (UpdateConfigError(), ODBClassCastError())
+      }
+      case e3: Exception => {
+        graph.rollback()
+        Logger.error(e3.printStackTrace().toString)
+        (UpdateConfigError(), ODBWriteError())
       }
     }
   }
@@ -609,7 +676,7 @@ class Graph(graph: OrientGraph) {
    * 
    * @param configId
    * 
-   * @return Count from deleted Vertexes
+   * @return Count of deleted Vertexes
    */
   
     def deleteAllStepsAndComponent(configId: String) = {
@@ -620,5 +687,63 @@ class Graph(graph: OrientGraph) {
       graph.commit
       res
   }
-
+    
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param String
+   * 
+   * @return
+   */
+  def createStep(stepBO: StepBO): (Option[OrientVertex], StatusCreateStep, Status) = {
+    
+    try{
+      stepBO.componentId match {
+        case Some(componentId) => {
+          //create Step
+          (None, CreateStepSuccess(), Success())
+        }
+        case None => {
+          //create FirstStep
+          stepBO.configId match {
+            case Some(configId) => 
+              val vConfig: OrientVertex = graph.getVertex(stepBO.configId)
+              val countOfFirstSteps: Int = vConfig.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_FIRST_STEP).asScala.toList.size
+              countOfFirstSteps match {
+                case count if count > 0 => (None, CreateStepAlreadyExist(), Error()) 
+                case _=> {
+                  val vFirstStep: OrientVertex = graph.addVertex(
+                      "class:" + PropertyKeys.VERTEX_STEP,
+                      PropertyKeys.NAME_TO_SHOW, stepBO.nameToShow,
+                      PropertyKeys.KIND, stepBO.kind,
+                      PropertyKeys.SELECTION_CRITERIUM_MIN, stepBO.selectionCriteriumMin.toString,
+                      PropertyKeys.SELECTION_CRITERIUM_MAX, stepBO.selectionCriteriumMax.toString
+                  )
+                  (Some(vFirstStep), CreateStepSuccess(), Success())
+                }
+              }
+            case None => (None, CreateStepDefectComponentOrConfigId(), Error())
+          }
+        }
+      }
+    }catch{
+      case e1: ORecordDuplicatedException => {
+        Logger.error(e1.printStackTrace().toString)
+        graph.rollback()
+        (None, CreateStepError(), ODBRecordDuplicated())
+      }
+      case e2 : ClassCastException => {
+        graph.rollback()
+        Logger.error(e2.printStackTrace().toString)
+        (None, CreateStepError(), ODBClassCastError())
+      }
+      case e3: Exception => {
+        graph.rollback()
+        Logger.error(e3.printStackTrace().toString)
+        (None, CreateStepError(), ODBWriteError())
+      }
+    }
+  }
 }

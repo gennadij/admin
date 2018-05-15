@@ -7,7 +7,6 @@ import com.tinkerpop.blueprints.Vertex
 import org.genericConfig.admin.models.persistence.OrientDB
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import com.tinkerpop.blueprints.impls.orient.OrientEdge
-import org.genericConfig.admin.models.json.step.JsonVisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.models.wrapper.dependency.DependencyOut
 import org.genericConfig.admin.models.wrapper.dependency.DependencyIn
 import org.genericConfig.admin.models.json.StatusWarningAdditionalStepInLevelCS

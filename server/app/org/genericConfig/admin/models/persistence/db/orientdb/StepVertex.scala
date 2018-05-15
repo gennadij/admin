@@ -99,46 +99,46 @@ object StepVertex {
    * @return
    */
 
-  def firstStep(firstStepCS: FirstStepIn): FirstStepOut = {
-    
-    // Es soll geprueft werden, nach dem der FirstStep erzeugt wurde, 
-    // wenn keine HasStep erstellt wurde sollte eine exception geworfen werden
-    val graph: OrientGraph = OrientDB.getFactory().getTx
-    val configId = firstStepCS.configId
-    
-    val firstStep: Any = try{
-      val vConfig: OrientVertex = graph.getVertex(configId)
-      val countOfFirstSteps: Int = vConfig.getEdges(Direction.OUT, PropertyKey.EDGE_HAS_FIRST_STEP).asScala.toList.size
-        countOfFirstSteps match {
-          case count if count > 0 => {
-            getErrorFirstStepSC(StatusErrorFirstStepExist.status, StatusErrorFirstStepExist.message)
-          }
-          case _=> {
-            val vFirstStep: Option[OrientVertex] = writeFirstStepToDB(firstStepCS)
-            vFirstStep match {
-              case Some(vFirstStep) => {
-                getSuccessfulFirstStepSC(vFirstStep.getIdentity.toString, 
-                    StatusSuccessfulFirstStepCreated.status, StatusSuccessfulFirstStepCreated.message)
-              }
-              case None => getErrorFirstStepSC(
-                  StatusErrorFaultyConfigId.status, StatusErrorFaultyConfigId.message)
-            }
-          }
-        }
-    }catch{
-      case e: Exception => {
-        graph.rollback()
-        e
-      }
-    }
-    
-    firstStep match {
-      case firstStep: FirstStepOut => {
-        firstStep
-      }
-      case e : Exception => getErrorFirstStepSC(StatusErrorFaultyConfigId.status, StatusErrorFaultyConfigId.message)
-    }
-  }
+//  def firstStep(firstStepCS: FirstStepIn): FirstStepOut = {
+//    
+//    // Es soll geprueft werden, nach dem der FirstStep erzeugt wurde, 
+//    // wenn keine HasStep erstellt wurde sollte eine exception geworfen werden
+//    val graph: OrientGraph = OrientDB.getFactory().getTx
+//    val configId = firstStepCS.configId
+//    
+//    val firstStep: Any = try{
+//      val vConfig: OrientVertex = graph.getVertex(configId)
+//      val countOfFirstSteps: Int = vConfig.getEdges(Direction.OUT, PropertyKey.EDGE_HAS_FIRST_STEP).asScala.toList.size
+//        countOfFirstSteps match {
+//          case count if count > 0 => {
+//            getErrorFirstStepSC(StatusErrorFirstStepExist.status, StatusErrorFirstStepExist.message)
+//          }
+//          case _=> {
+//            val vFirstStep: Option[OrientVertex] = writeFirstStepToDB(firstStepCS)
+//            vFirstStep match {
+//              case Some(vFirstStep) => {
+//                getSuccessfulFirstStepSC(vFirstStep.getIdentity.toString, 
+//                    StatusSuccessfulFirstStepCreated.status, StatusSuccessfulFirstStepCreated.message)
+//              }
+//              case None => getErrorFirstStepSC(
+//                  StatusErrorFaultyConfigId.status, StatusErrorFaultyConfigId.message)
+//            }
+//          }
+//        }
+//    }catch{
+//      case e: Exception => {
+//        graph.rollback()
+//        e
+//      }
+//    }
+//    
+//    firstStep match {
+//      case firstStep: FirstStepOut => {
+//        firstStep
+//      }
+//      case e : Exception => getErrorFirstStepSC(StatusErrorFaultyConfigId.status, StatusErrorFaultyConfigId.message)
+//    }
+//  }
   
   /**
    * @author Gennadi Heimann

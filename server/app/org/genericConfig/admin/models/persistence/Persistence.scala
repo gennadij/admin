@@ -27,8 +27,6 @@ import org.genericConfig.admin.models.json.StatusErrorFaultyStepId
 import org.genericConfig.admin.models.json.StatusWarningAdditionalStepInLevelCS
 import org.genericConfig.admin.models.json.StatusErrorGeneral
 import org.genericConfig.admin.models.persistence.db.orientdb.HasStepEdge
-import org.genericConfig.admin.models.json.step.JsonVisualProposalForAdditionalStepsInOneLevelIn
-import org.genericConfig.admin.models.json.step.JsonDependencyForAdditionalStepsInOneLevel
 import org.genericConfig.admin.models.json.StatusSuccessfulConfig
 import org.genericConfig.admin.models.persistence.db.orientdb.HasConfigEdge
 import org.genericConfig.admin.models.json.StatusErrorConfig
@@ -65,6 +63,14 @@ import org.genericConfig.admin.shared.config.bo.Configuration
 import org.genericConfig.admin.shared.configTree.bo.StepForConfigTreeBO
 import org.genericConfig.admin.shared.configTree.status._
 import org.genericConfig.admin.shared.configTree.bo._
+import org.genericConfig.admin.shared.step.bo._
+import org.genericConfig.admin.shared.step.status.StatusCreateStep
+import org.genericConfig.admin.shared.step.status.CreateStepSuccess
+import org.genericConfig.admin.shared.step.status.CreateStepError
+import org.genericConfig.admin.shared.step.status.StatusStep
+import org.genericConfig.admin.shared.step.status.CreateStepAlreadyExist
+import org.genericConfig.admin.shared.step.status.CreateStepDefectComponentOrConfigId
+import org.genericConfig.admin.shared.step.json.JsonDependencyForAdditionalStepsInOneLevel
 
 
 /**
@@ -339,6 +345,39 @@ object Persistence {
     
   }
   
+  def editConfig(configId: String, configUrl: String): ConfigBO = {
+    val (userId, status): (String, Status) = Graph.getUserId(configId)
+    val (statusUpdateConfig, statusCommon): (StatusUpdateConfig, Status) = Graph.updateConfig(configId: String, configUrl: String)
+    status match {
+      case Success() => {
+        ConfigBO(
+            userId, 
+            List(),
+            StatusConfig(
+                None,    //addConfig: Option[StatusAddConfig], 
+                None,    //getConfigs: Option[StatusGetConfigs], 
+                None,//deleteConfig: Option[StatusDeleteConfig], 
+                Some(statusUpdateConfig),//updateConfig: Option[StatusUpdateConfig], 
+                Some(statusCommon)//common: Option[Status
+            )
+        )
+      }
+      case _ => {
+        ConfigBO(
+            "", List(),
+            StatusConfig(
+                None,    //addConfig: Option[StatusAddConfig], 
+                None,    //getConfigs: Option[StatusGetConfigs], 
+                None,//deleteConfig: Option[StatusDeleteConfig], 
+                Some(UpdateConfigError()),//updateConfig: Option[StatusUpdateConfig], 
+                Some(status)//common: Option[Status
+            )
+        )
+      }
+    }
+    
+    
+  }
   
   /**
    * @author Gennadi Heimann
@@ -424,75 +463,90 @@ object Persistence {
    * @return FirstStepSC
    */
   
-  def createFirstStep(firstStepIn: FirstStepIn): FirstStepOut = {
+  def createStep(firstStepBO: StepBO): StepBO = {
     
-    val firstStepSC: FirstStepOut = StepVertex.firstStep(firstStepIn)
-    firstStepSC.status match {
-      case StatusErrorFirstStepExist.status => {
-        firstStepSC
-      }
-      case StatusSuccessfulFirstStepCreated.status => {
-        val eHasFirstStep: Option[OrientEdge] = HasFirstStepEdge.hasFirstStep(firstStepIn, firstStepSC)
-        eHasFirstStep match {
-          case None => {
-            FirstStepOut(
-                "",
-                StatusErrorFaultyFirstStepId.status,
-                StatusErrorFaultyFirstStepId.message
-            )
-          }
-          case Some(eHasFirstStep) => {
-            firstStepSC
-          }
-        }
-      }
-      case StatusErrorFaultyConfigId.status => firstStepSC
+    val (vFirstStep: Option[OrientVertex], createStepStatus: StatusCreateStep, commonStatus: Status) = 
+      Graph.createStep(firstStepBO)
+    
+    createStepStatus match {
+      case CreateStepSuccess() => 
+        StepBO(
+            stepId = Some(vFirstStep.get.getIdentity.toString),
+            status = Some(StatusStep(
+                createStep = Some(CreateStepSuccess()),
+                common = Some(Success())
+            ))
+        )
+      case CreateStepError() => 
+        StepBO(
+            stepId = None,
+            status = Some(StatusStep(
+                createStep = Some(CreateStepError()),
+                common = Some(commonStatus)
+            ))
+        )
+      case CreateStepAlreadyExist() => 
+        StepBO(
+            stepId = None,
+            status = Some(StatusStep(
+                createStep = Some(CreateStepAlreadyExist()),
+                common = Some(commonStatus)
+            ))
+        )
+      case CreateStepDefectComponentOrConfigId() => 
+        StepBO(
+            stepId = None,
+            status = Some(StatusStep(
+                createStep = Some(CreateStepDefectComponentOrConfigId()),
+                common = Some(commonStatus)
+            ))
+        )
     }
   }
   
-  /**
-   * creting von new Component and connect thies new Component with Step from param
-   * 
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.0
-   * 
-   * @param ComponentCS
-   * 
-   * @return ComponentSC
-   */
-  def createComponent(componentIn: ComponentIn): ComponentOut = {
-    val vComponent: Option[OrientVertex] = ComponentVertex.component(componentIn)
-    
-    vComponent match {
-      case Some(vComponent) => {
-        val eHasComponent: Option[OrientEdge] = HasComponentEdge.hasComponent(componentIn, vComponent)
-        eHasComponent match {
-          case Some(eHasComponent) => {
-            ComponentOut(
-                vComponent.getIdentity.toString,
-                StatusSuccessfulComponentCreated.status,
-                StatusSuccessfulComponentCreated.message
-            )
-          }
-          case None => {
-            ComponentOut(
-                "",
-                StatusErrorComponentGeneral.status,
-                StatusErrorComponentGeneral.message
-            )
-          }
-        }
-      }
-      case None => {
-        ComponentOut(
-            "",
-            StatusErrorComponentGeneral.status,
-            StatusErrorComponentGeneral.message
-        )
-      }
-    }
-  }
+//  /**
+//   * creting von new Component and connect thies new Component with Step from param
+//   * 
+//   * @author Gennadi Heimann
+//   * 
+//   * @version 0.1.0
+//   * 
+//   * @param ComponentCS
+//   * 
+//   * @return ComponentSC
+//   */
+//  def createComponent(componentIn: ComponentIn): ComponentOut = {
+//    val vComponent: Option[OrientVertex] = ComponentVertex.component(componentIn)
+//    
+//    vComponent match {
+//      case Some(vComponent) => {
+//        val eHasComponent: Option[OrientEdge] = HasComponentEdge.hasComponent(componentIn, vComponent)
+//        eHasComponent match {
+//          case Some(eHasComponent) => {
+//            ComponentOut(
+//                vComponent.getIdentity.toString,
+//                StatusSuccessfulComponentCreated.status,
+//                StatusSuccessfulComponentCreated.message
+//            )
+//          }
+//          case None => {
+//            ComponentOut(
+//                "",
+//                StatusErrorComponentGeneral.status,
+//                StatusErrorComponentGeneral.message
+//            )
+//          }
+//        }
+//      }
+//      case None => {
+//        ComponentOut(
+//            "",
+//            StatusErrorComponentGeneral.status,
+//            StatusErrorComponentGeneral.message
+//        )
+//      }
+//    }
+//  }
   
   /**
    * @author Gennadi Heimann

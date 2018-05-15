@@ -12,12 +12,18 @@ object JsonNames {
   val CREATE_CONFIG: String = "CreateConfig"
   val GET_CONFIGS: String = "GetConfigs"
   val DELET_CONFIG: String = "DeleteConfig"
+  val UPDATE_CONFIG: String = "UpdateConfig"
   val CREATE_STEP: String = "CreateStep"
+  val DELETE_STEP: String = "DeleteStep"
+  val EDIT_STEP: String = "EditStep"
   val CREATE_FIRST_STEP: String = "CreateFirstStep"
+  val DELETE_FIRST_STEP: String = "DeleteFirstStep"
+  val EDIT_FIRST_STEP: String = "EditFirstStep"
   val CREATE_COMPONENT: String = "CreateComponent"
   val CONFIG_TREE: String = "ConfigTree"
   val CONNECTION_COMPONENT_TO_STEP: String = "ConnectionComponentToStep"
   val CREATE_DEPENDENCY: String = "CreateDependency"
   val VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL: String = 
     "VisualProposalForAdditionalStepsInOneLevel" 
+  val ERROR: String = "Error"
 }

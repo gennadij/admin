@@ -3,22 +3,19 @@ package org.genericConfig.admin.controllers.admin
 import play.api.libs.json._
 import scala.collection.immutable.Seq
 import play.api.Logger
-import org.genericConfig.admin.models.json.step.JsonFirstStepIn
-import org.genericConfig.admin.models.json.step.JsonFirstStepOut
 import org.genericConfig.admin.models.json.component.JsonComponentIn
 import org.genericConfig.admin.models.json.component.JsonComponentOut
-import org.genericConfig.admin.models.json.step.JsonStepIn
 import org.genericConfig.admin.models.json.connectionComponentToStep.JsonConnectionComponentToStepIn
 import org.genericConfig.admin.models.json.connectionComponentToStep.JsonConnectionComponentToStepOut
 import org.genericConfig.admin.models.json.dependency.JsonDependencyIn
-import org.genericConfig.admin.models.json.step.JsonVisualProposalForAdditionalStepsInOneLevelIn
-import org.genericConfig.admin.models.json.step.JsonStepOut
 import org.genericConfig.admin.shared.configTree.json._
 import org.genericConfig.admin.models.json.dependency.JsonDependencyOut
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.registration.json._
 import org.genericConfig.admin.shared.login.json._
 import org.genericConfig.admin.shared.config.json._
+import org.genericConfig.admin.shared.step.json._
+import org.genericConfig.admin.shared.error.json._
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -35,6 +32,7 @@ trait AdminWeb {
       case Some(JsonNames.CREATE_CONFIG) => createConfig(receivedMessage, admin)
       case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage, admin)
       case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage, admin)
+      case Some(JsonNames.UPDATE_CONFIG) => updateConfig(receivedMessage, admin)
       case Some(JsonNames.CREATE_FIRST_STEP) => createFirstStep(receivedMessage, admin)
       case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage, admin)
       case Some(JsonNames.CREATE_COMPONENT) => createComponent(receivedMessage, admin)
@@ -79,13 +77,19 @@ trait AdminWeb {
   }
   
   private def createFirstStep(receivedMessage: JsValue, admin: Admin): JsValue = {
-    val firstStepIn: JsResult[JsonFirstStepIn] = Json.fromJson[JsonFirstStepIn](receivedMessage)
+    val firstStepIn: JsResult[JsonStepIn] = Json.fromJson[JsonStepIn](receivedMessage)
     firstStepIn match {
-      case s : JsSuccess[JsonFirstStepIn] => s.get
-      case e : JsError => Logger.error("Errors -> CREATE_FIRST_STEP: " + JsError.toJson(e).toString())
+      case s : JsSuccess[JsonStepIn] => Json.toJson(admin.createFirstStep(firstStepIn.get))
+      case e : JsError => 
+        val error = JsonErrorOut(
+            JsonNames.ERROR,
+            JsonErrorParams(
+                "Errors -> CREATE_FIRST_STEP: " + JsError.toJson(e).toString()
+            )
+        )
+        Logger.error(error.toString)
+        Json.toJson(error)
     }
-    val firstStepOut: JsonFirstStepOut = admin.createFirstStep(firstStepIn.get)
-    Json.toJson(firstStepOut)
   }
   
   private def createComponent(receivedMessage: JsValue, admin: Admin): JsValue = {
@@ -178,5 +182,16 @@ trait AdminWeb {
     
     val deleteConfigOut: JsonDeleteConfigOut  = admin.deleteConfig(deleteConfigIn.get)
     Json.toJson(deleteConfigOut)
+   }
+  
+  private def updateConfig(receivedMessage: JsValue, admin: Admin): JsValue = {
+    val editConfigIn: JsResult[JsonUpdateConfigIn] = Json.fromJson[JsonUpdateConfigIn](receivedMessage)
+    editConfigIn match {
+      case s: JsSuccess[JsonUpdateConfigIn] => s.get
+      case e: JsError => Logger.error("Errors -> EDIT_CONFIG: " + JsError.toJson(e).toString())
+    }
+    
+    val editConfigOut: JsonUpdateConfigOut  = admin.editConfig(editConfigIn.get)
+    Json.toJson(editConfigOut)
    }
 }

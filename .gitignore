@@ -30,3 +30,6 @@ shared/.jvm
 .cache
 .target
 bin/
+server/.cache-main
+server/.cache-tests
+

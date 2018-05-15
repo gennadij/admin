@@ -66,6 +66,19 @@ object Config{
     new Config("").getConfigTree(configId)
   }
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param
+   * 
+   * @return
+   */
+  def editConfig(configId: String, configUrl: String): ConfigBO = {
+    new Config("").editConfig(configId, configUrl)
+  }
+  
 }
 
 class Config(userId: String) {
@@ -135,6 +148,10 @@ class Config(userId: String) {
    */
   private def deleteConfig(configId: String, configUrl: String): ConfigBO = {
     Persistence.deleteConfig(configId, configUrl)
+  }
+  
+  private def editConfig(configId: String, configUrl: String): ConfigBO = {
+    Persistence.editConfig(configId, configUrl)
   }
   
   /**

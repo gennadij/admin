@@ -69,7 +69,8 @@ class GetConfig(websocket: WebSocket) {
       jQuery(htmlConfig).appendTo(jQuery("#main"))
       jQuery(s"#showConfig$configId").on("click", () => showConfig(configId, config.configId))
       
-      jQuery(s"#editConfig$configId").on("click", () => editConfig())
+      jQuery(s"#editConfig$configId").on("click", () => 
+        editConfig(config.configId, config.configUrl, getConfigsOut.result.userId))
       
       jQuery(s"#deleteConfig$configId").on("click", () => 
         deleteConfig(config.configId, config.configUrl, getConfigsOut.result.userId))
@@ -92,8 +93,9 @@ class GetConfig(websocket: WebSocket) {
     new CreateConfig(websocket, userId).createConfig
   }
   
-  def editConfig() = {
+  def editConfig(configId: String, configUrl: String, userId: String) = {
     println("edit Config")
+    new EditConfig(websocket).editConfig(configId, configUrl, userId)
   }
   
   def deleteConfig(configId: String, configUrl: String, userId: String) = {

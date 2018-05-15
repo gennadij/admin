@@ -1,7 +1,6 @@
 package org.genericConfig.admin.models.json.connectionComponentToStep
 
 import play.api.libs.json.Json
-import org.genericConfig.admin.models.json.step.JsonDependencyForAdditionalStepsInOneLevel
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

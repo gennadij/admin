@@ -8,30 +8,24 @@ import com.tinkerpop.blueprints.impls.orient.OrientEdge
 import org.genericConfig.admin.models.persistence.db.orientdb.StepVertex
 import play.api.LoggerLike
 import play.api.Logger
-import org.genericConfig.admin.models.json.step.JsonFirstStepIn
 import org.genericConfig.admin.models.json.component.JsonComponentOut
 import org.genericConfig.admin.models.json.component.JsonComponentIn
-import org.genericConfig.admin.models.json.step.JsonStepIn
-import org.genericConfig.admin.models.json.step.JsonStepOut
 import org.genericConfig.admin.models.json.connectionComponentToStep.JsonConnectionComponentToStepIn
 import org.genericConfig.admin.models.json.connectionComponentToStep.JsonConnectionComponentToStepOut
 import org.genericConfig.admin.models.json.dependency.JsonDependencyIn
 import org.genericConfig.admin.models.json.dependency.JsonDependencyOut
-import org.genericConfig.admin.models.json.step.JsonVisualProposalForAdditionalStepsInOneLevelIn
-import org.genericConfig.admin.models.json.step.JsonDependencyForAdditionalStepsInOneLevel
-import org.genericConfig.admin.models.json.step.JsonStepResult
 import org.genericConfig.admin.models.wrapper.Wrapper
 import org.genericConfig.admin.models.wrapper.step.StepIn
 import org.genericConfig.admin.models.json.StatusSuccessfulAdditionalStepInLevelCSCreated
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeIn
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
+import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 import org.genericConfig.admin.shared.registration.json._
 import org.genericConfig.admin.models.logic._
 import org.genericConfig.admin.shared.login.json._
 import org.genericConfig.admin.shared.config.json._
-import org.genericConfig.admin.models.json.step.JsonFirstStepOut
-import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
+import org.genericConfig.admin.shared.step.json._
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -114,7 +108,24 @@ class Admin extends Wrapper{
    * @return
    */
   def deleteConfig(jsonDeleteConfigIn: JsonDeleteConfigIn): JsonDeleteConfigOut = {
-    toJsonDeleteConfig(Config.deleteConfig(jsonDeleteConfigIn.params.configId, jsonDeleteConfigIn.params.configUrl))
+    toJsonDeleteConfigOut(
+        Config.deleteConfig(jsonDeleteConfigIn.params.configId, jsonDeleteConfigIn.params.configUrl)
+    )
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param
+   * 
+   * @return
+   */
+  def editConfig(jsonEditConfigIn: JsonUpdateConfigIn): JsonUpdateConfigOut = {
+    toJsonEditConfigOut(
+        Config.editConfig(jsonEditConfigIn.params.configId, jsonEditConfigIn.params.configUrl)
+    )
   }
   
   /**
@@ -140,8 +151,8 @@ class Admin extends Wrapper{
    * 
    * @return FirstStepSC
    */
-  def createFirstStep(jsonFirstStepIn: JsonFirstStepIn): JsonFirstStepOut = {
-    toJsonFirstStepOut(Persistence.createFirstStep(toFirstStepIn(jsonFirstStepIn)))
+  def createFirstStep(jsonFirstStepIn: JsonStepIn): JsonStepOut = {
+    toJsonFirstStepOut(Step.createFirstStep(toFirstStepBO(jsonFirstStepIn)))
   }
   
   /**
@@ -154,7 +165,8 @@ class Admin extends Wrapper{
    * @return ComponentSC
    */
   def createComponent(jsonComponentIn: JsonComponentIn): JsonComponentOut = {
-    toJsonComponentOut(Persistence.createComponent(toComponentIn(jsonComponentIn)))
+//    toJsonComponentOut(Persistence.createComponent(toComponentIn(jsonComponentIn)))
+    ???
   }
   
   /**
@@ -169,7 +181,8 @@ class Admin extends Wrapper{
   
   def createStep(jsonStepIn: JsonStepIn): JsonStepOut = {
     
-    toJsonStepOut(Persistence.createStep(toStepIn(jsonStepIn)))
+//    toJsonStepOut(Persistence.createStep(toStepIn(jsonStepIn)))
+    ???
   }
   
   /**
@@ -233,15 +246,16 @@ class Admin extends Wrapper{
     
     val tempStep = Persistence.createAditionalStepInLevelCS(stepCS.get)
     
-    JsonStepOut(
-        result = JsonStepResult(
-            tempStep.stepId,
-            StatusSuccessfulAdditionalStepInLevelCSCreated.status,
-            StatusSuccessfulAdditionalStepInLevelCSCreated.message,
-            Set.empty,
-            dependencies
-        )
-    )
+//    JsonStepOut(
+//        result = JsonStepResult(
+//            tempStep.stepId,
+//            StatusSuccessfulAdditionalStepInLevelCSCreated.status,
+//            StatusSuccessfulAdditionalStepInLevelCSCreated.message,
+//            Set.empty,
+//            dependencies
+//        )
+//    )
+    ???
   }
   
   /**
