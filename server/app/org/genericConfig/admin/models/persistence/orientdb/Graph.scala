@@ -639,7 +639,7 @@ class Graph(graph: OrientGraph) {
               firstSteps.head.getProperty(PropertyKeys.KIND),
               components
           ))
-          (configTree, GetConfigTreeGot(), Success())
+          (configTree, GetConfigTreeSuccess(), Success())
         }
         case _ => (None, GetConfigTreeEmpty(), Success())
       }
@@ -811,7 +811,6 @@ class Graph(graph: OrientGraph) {
    */
   def addStep(stepBO: StepBO): (Option[OrientVertex], StatusAddStep, Status) = {
     
-    Logger.info("steoBO" + stepBO)
     try{
       stepBO.componentId match {
         case Some(componentId) => {

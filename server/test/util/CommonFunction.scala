@@ -50,7 +50,7 @@ trait CommonFunction {
   
   def createConfig(userId: String, configUrl: String, wC: WebClient): JsValue = {
     val newConfigIn = Json.obj(
-        "json" -> JsonNames.CREATE_CONFIG
+        "json" -> JsonNames.ADD_CONFIG
         , "params" -> Json.obj(
             "adminId" -> userId,
             "configUrl" -> configUrl

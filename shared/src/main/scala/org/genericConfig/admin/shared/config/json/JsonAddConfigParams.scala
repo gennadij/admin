@@ -8,11 +8,11 @@ import play.api.libs.json.Json
  * Created by Gennadi heimann 09.01.2017
  */
 
-case class JsonCreateConfigParams (
+case class JsonAddConfigParams (
     adminId: String, 
     configUrl: String
 )
 
-object JsonCreateConfigParams {
-  implicit val format = Json.format[JsonCreateConfigParams]
+object JsonAddConfigParams {
+  implicit val format = Json.format[JsonAddConfigParams]
 }

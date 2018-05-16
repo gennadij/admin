@@ -48,7 +48,7 @@ class Scenario_v016_1 extends Specification
     "fuer einen AdminUser" >> {
       
       val newConfigIn_1 = Json.obj(
-        "json" -> JsonNames.CREATE_CONFIG
+        "json" -> JsonNames.ADD_CONFIG
         , "params" -> Json.obj(
             "adminId" -> this.userId,
             "configUrl" -> "//http://contig1/user_1_v016_1"
@@ -66,7 +66,7 @@ class Scenario_v016_1 extends Specification
 	  (newConfigOut_1 \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
     
 	  val newConfigIn_2 = Json.obj(
-        "json" -> JsonNames.CREATE_CONFIG 
+        "json" -> JsonNames.ADD_CONFIG 
         , "params" -> Json.obj(
             "adminId" -> this.userId,
             "configUrl" -> "//http://contig1/user_1_v016_2"
@@ -81,7 +81,7 @@ class Scenario_v016_1 extends Specification
 	  (newConfigOut_2 \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
 	  
 	  val newConfigIn_3 = Json.obj(
-        "json" -> JsonNames.CREATE_CONFIG
+        "json" -> JsonNames.ADD_CONFIG
         , "params" -> Json.obj(
             "adminId" -> this.userId,
             "configUrl" -> "//http://contig1/user_1_v016_3"

@@ -238,11 +238,11 @@ object Persistence {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 0.1.0
+   * @version 0.1.6
    * 
-   * @param CreateConfigSC
+   * @param 
    * 
-   * @return CreateConfigCS
+   * @return 
    */
   def addConfig(userId: String, configUrl: String): ConfigBO = {
     val (vConfig, statusAddConfig, statusCommon) : (Option[OrientVertex], StatusAddConfig, Status) = 
@@ -291,6 +291,15 @@ object Persistence {
     }
   }
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
   def appendConfigTo(userId: String, configId: String): Status = {
     Graph.appendConfigTo(userId, configId)
   }
@@ -298,11 +307,11 @@ object Persistence {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 0.1.0
+   * @version 0.1.6
    * 
-   * @param CreateConfigSC
+   * @param 
    * 
-   * @return CreateConfigCS
+   * @return 
    */
   def deleteConfig(configId: String, configUrl: String): ConfigBO = {
     
@@ -335,9 +344,17 @@ object Persistence {
         )
       }
     }
-    
   }
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
   def updateConfig(configId: String, configUrl: String): ConfigBO = {
     val (userId, status): (String, Status) = Graph.getAdminUserId(configId)
     val (statusUpdateConfig, statusCommon): (StatusUpdateConfig, Status) = Graph.updateConfig(configId: String, configUrl: String)
@@ -373,7 +390,7 @@ object Persistence {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 0.1.0
+   * @version 0.1.6
    * 
    * @param 
    * 
@@ -410,7 +427,7 @@ object Persistence {
   /**
    * @author Gennadi Heimann
    * 
-   * @version 0.1.0
+   * @version 0.1.6
    * 
    * @param 
    * 
@@ -420,10 +437,10 @@ object Persistence {
     val (configTree, statusGetConfigTree, commonStatus): (Option[StepForConfigTreeBO], StatusGetConfigTree, Status) = 
       Graph.getConfigTree(configId)
       statusGetConfigTree match {
-      case GetConfigTreeGot() => ConfigTreeBO(
+      case GetConfigTreeSuccess() => ConfigTreeBO(
           configTree,
           StatusConfigTree(
-              GetConfigTreeGot(),
+              GetConfigTreeSuccess(),
               Success()
           )
       )
@@ -458,9 +475,6 @@ object Persistence {
     
     val (vStep: Option[OrientVertex], addStepStatus: StatusAddStep, commonStatus: Status) = 
       Graph.addStep(stepBO)
-//    Logger.info(vStep.get.toString())
-//    Logger.info(addStepStatus.toString())
-//    Logger.info(commonStatus.toString())
     addStepStatus match {
       case AddStepSuccess() => 
         StepBO(

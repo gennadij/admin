@@ -8,11 +8,11 @@ import org.genericConfig.admin.shared.common.json.JsonNames
  * 
  * Created by Gennadi Heimann 09.01.2017
  */
-case class JsonCreateConfigOut (
-    json: String = JsonNames.CREATE_CONFIG, 
-    result: JsonCreateConfigResult
-)
 
-object JsonCreateConfigOut {
-  implicit val format = Json.format[JsonCreateConfigOut]
+case class JsonAddConfigIn (
+    json: String =JsonNames.ADD_CONFIG, 
+    params: JsonAddConfigParams
+)
+object JsonAddConfigIn {
+  implicit val format = Json.format[JsonAddConfigIn]
 }

@@ -56,7 +56,7 @@ class AddingNewConfigSpecs extends Specification
     
     Logger.info((loginSC \ "result" \ "adminId").asOpt[String].get)
     val createConfigCS = Json.obj(
-        "json" -> JsonNames.CREATE_CONFIG
+        "json" -> JsonNames.ADD_CONFIG
         , "params" -> Json.obj(
             "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
             "configUrl" -> "//http://contig1/user3"

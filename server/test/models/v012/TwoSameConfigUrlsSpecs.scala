@@ -52,7 +52,7 @@ class TwoSameConfigUrlsSpecs extends Specification
 			val user14 = login("user14", webClient)
 			
 			val createConfigIn = Json.obj(
-          "json" -> JsonNames.CREATE_CONFIG
+          "json" -> JsonNames.ADD_CONFIG
           , "params" -> Json.obj(
               "adminId" -> user14,
               "configUrl" -> "http://config/user13"

@@ -14,7 +14,7 @@ import play.api.Logger
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.Success
-import org.genericConfig.admin.shared.configTree.status.GetConfigTreeGot
+import org.genericConfig.admin.shared.configTree.status.GetConfigTreeSuccess
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -72,7 +72,7 @@ class ConfigTreeFirstStep3ComponentsSpecs extends Specification with BeforeAfter
     ((((configTreeOut \ "result" \ "step") \ "components")(2)) \ "kind").asOpt[String].get === "immutable"
     ((((configTreeOut \ "result" \ "step") \ "components")(2)) \ "nextStepId").asOpt[String].get === "last"
     ((((configTreeOut \ "result" \ "step") \ "components")(2)) \ "nextStep").asOpt[String] === None
-    (configTreeOut \ "result" \ "status" \ "getConfigTree" \ "status" ).asOpt[String].get === GetConfigTreeGot().status
+    (configTreeOut \ "result" \ "status" \ "getConfigTree" \ "status" ).asOpt[String].get === GetConfigTreeSuccess().status
     (configTreeOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
   }
 }

@@ -120,9 +120,9 @@ trait Wrapper {
    * 
    * @return JsonCreateConfigSC
    */
-  def toJsonCreateConfigOut(configBO: ConfigBO): JsonCreateConfigOut = {
-    JsonCreateConfigOut(
-        result = JsonCreateConfigResult(
+  def toJsonAddConfigOut(configBO: ConfigBO): JsonAddConfigOut = {
+    JsonAddConfigOut(
+        result = JsonAddConfigResult(
             configBO.userId,
             configBO.configs match {
               case List() => ""

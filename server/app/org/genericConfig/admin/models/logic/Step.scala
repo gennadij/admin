@@ -7,6 +7,7 @@ import org.genericConfig.admin.shared.step.status._
 import org.genericConfig.admin.shared.common.status.Status
 import org.genericConfig.admin.shared.common.json.JsonNames
 import play.api.Logger
+import org.genericConfig.admin.shared.common.status.Success
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -26,6 +27,32 @@ object Step{
    */
   def addFirstStep(stepBO: StepBO): StepBO = {
     new Step().addFirstStep(stepBO)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  def deleteFirstStep(stepBO: StepBO): StepBO = {
+    new Step().deleteFirstStep(stepBO)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  def updateFirstStep(stepBO: StepBO): StepBO = {
+    new Step().updateFirstStep(stepBO)
   }
 }
 
@@ -66,6 +93,51 @@ class Step {
           }
       case _ => firstStepBO.copy(json = Some(JsonNames.ADD_FIRST_STEP))
     }
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  private def deleteFirstStep(stepBO: StepBO): StepBO = {
+    
+    val (deleteStepStatus: StatusDeleteStep, commonStatus: Status) = Persistence.deleteStep(stepBO.stepId.get)
+    
+    deleteStepStatus match {
+      case DeleteStepSuccess() => 
+        StepBO(
+            json = Some(JsonNames.DELETE_FIRST_STEP),
+            status = Some(StatusStep(deleteStep = Some(DeleteStepSuccess()), common = Some(Success())))
+        )
+      case DeleteStepError() => 
+        StepBO(
+            json = Some(JsonNames.DELETE_FIRST_STEP),
+            status = Some(StatusStep(deleteStep = Some(DeleteStepError()), common = Some(commonStatus)))
+        )
+      case DeleteStepDefectID() => 
+        StepBO(
+            json = Some(JsonNames.DELETE_FIRST_STEP),
+            status = Some(StatusStep(deleteStep = Some(DeleteStepDefectID()), common = Some(commonStatus)))
+        )
+    }
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  private def updateFirstStep(stepBO: StepBO): StepBO = {
+    ???
   }
 }
 

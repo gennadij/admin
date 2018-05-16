@@ -80,9 +80,9 @@ class Admin extends Wrapper{
    * 
    * @return CreateConfigSC
    */
-  def createConfig(jsonCreateConfigIn: JsonCreateConfigIn): JsonCreateConfigOut = {
-    toJsonCreateConfigOut(
-        Config.addConfig(jsonCreateConfigIn.params.adminId, jsonCreateConfigIn.params.configUrl))
+  def addConfig(jsonAddConfigIn: JsonAddConfigIn): JsonAddConfigOut = {
+    toJsonAddConfigOut(
+        Config.addConfig(jsonAddConfigIn.params.adminId, jsonAddConfigIn.params.configUrl))
   }
   
   /**
@@ -122,7 +122,7 @@ class Admin extends Wrapper{
    * 
    * @return
    */
-  def editConfig(jsonEditConfigIn: JsonUpdateConfigIn): JsonUpdateConfigOut = {
+  def updateConfig(jsonEditConfigIn: JsonUpdateConfigIn): JsonUpdateConfigOut = {
     toJsonUpdateConfigOut(
         Config.updateConfig(jsonEditConfigIn.params.configId, jsonEditConfigIn.params.configUrl)
     )
@@ -145,14 +145,40 @@ class Admin extends Wrapper{
   /**
    * @author Gennadi Heimann
    * 
-   * @version 0.1.0
+   * @version 0.1.6
    * 
-   * @param FirstStepCS
+   * @param 
    * 
-   * @return FirstStepSC
+   * @return 
    */
-  def createFirstStep(jsonFirstStepIn: JsonStepIn): JsonStepOut = {
+  def addFirstStep(jsonFirstStepIn: JsonStepIn): JsonStepOut = {
     toJsonStepOut(Step.addFirstStep(toStepBO(jsonFirstStepIn)))
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  def deleteFirstStep(jsonFirstStepIn: JsonStepIn): JsonStepOut = {
+    toJsonStepOut(Step.deleteFirstStep(toStepBO(jsonFirstStepIn)))
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  def updateFirstStep(jsonFirstStepIn: JsonStepIn): JsonStepOut = {
+    toJsonStepOut(Step.deleteFirstStep(toStepBO(jsonFirstStepIn)))
   }
   
   /**

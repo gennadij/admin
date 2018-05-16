@@ -25,7 +25,7 @@ object Config{
    * @return
    */
   def addConfig(userId: String, configUrl: String): ConfigBO = {
-    new Config(userId).createConfig(configUrl)
+    new Config(userId).addConfig(configUrl)
   }
   /**
    * @author Gennadi Heimann
@@ -92,7 +92,7 @@ class Config(userId: String) {
    * 
    * @return
    */
-  private def createConfig(configUrl: String): ConfigBO = {
+  private def addConfig(configUrl: String): ConfigBO = {
     
     val configBO: ConfigBO = Persistence.addConfig(userId, configUrl)
     configBO.status.addConfig match {

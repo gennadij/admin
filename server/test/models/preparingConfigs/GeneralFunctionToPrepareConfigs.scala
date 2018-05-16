@@ -104,7 +104,7 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
   
   def createNewConfig(adminId: String, configUrl: String, webClient: WebClient): String = {
     val createConfigCS = Json.obj(
-          "json" -> JsonNames.CREATE_CONFIG
+          "json" -> JsonNames.ADD_CONFIG
           , "params" -> Json.obj(
               "adminId" -> adminId,
               "configUrl" -> configUrl
@@ -159,7 +159,7 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
 		//TODO erweitern auf die Dependencies
 	  
 	  val stepCS = Json.obj(
-			"json" -> JsonNames.CREATE_STEP,
+			"json" -> JsonNames.ADD_STEP,
 			"params" -> Json.obj(
 				"componentId" -> componentId,
 				"nameToShow" -> nameToShow,

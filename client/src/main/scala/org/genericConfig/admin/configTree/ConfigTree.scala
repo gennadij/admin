@@ -5,6 +5,7 @@ import org.scalajs.dom.raw.WebSocket
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeComponent
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeStep
+import org.genericConfig.admin.shared.configTree.status._
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -16,6 +17,18 @@ class ConfigTree(websocket: WebSocket) {
   val numPattern = "[0-9]+".r
   
   def drawConfigTree(configTree: JsonConfigTreeOut) = {
+    
+    configTree.result.status.getConfigTree.get.status match {
+      case status if status == GetConfigTreeSuccess().status => 
+        updateStatus(status, configTree.result.status.common.get.status)
+      case status if status == GetConfigTreeEmpty().status => 
+        updateStatus(status, configTree.result.status.common.get.status)
+      case status if status == GetConfigTreeError().status => 
+        updateStatus(status, configTree.result.status.common.get.status)
+      
+    }
+    
+    //TODO wrapper in share move
     
     val stepIdRow = configTree.result.step.get.stepId
     
@@ -112,5 +125,15 @@ class ConfigTree(websocket: WebSocket) {
   
   private def editStep() = {
     println("editStep")
+  }
+  
+  def updateStatus(getConfigTreeStatus: String, commonStatus: String) = {
+    
+    val htmlHeader = 
+      s"<dev id='status' class='status'>" + 
+        getConfigTreeStatus + " , " + commonStatus + 
+      "</dev>"
+    jQuery("#status").remove()
+    jQuery(htmlHeader).appendTo(jQuery("header"))
   }
 }

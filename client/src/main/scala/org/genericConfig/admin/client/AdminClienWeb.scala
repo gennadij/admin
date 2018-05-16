@@ -31,7 +31,7 @@ class AdminClienWeb(websocket: WebSocket) {
       case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage)
       case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage)
       case Some(JsonNames.UPDATE_CONFIG) => updateConfig(receivedMessage)
-      case Some(JsonNames.CREATE_FIRST_STEP) => ???//createFirstStep(receivedMessage, admin)
+      case Some(JsonNames.ADD_FIRST_STEP) => ???//createFirstStep(receivedMessage, admin)
       case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage)
       case Some(JsonNames.CREATE_COMPONENT) => ???//createComponent(receivedMessage, admin)
       case Some(JsonNames.CREATE_STEP) => ???//createStep(receivedMessage, admin)
