@@ -171,7 +171,7 @@ object Graph{
    * 
    * @return
    */
-  def addStep(stepBO: StepBO): (Option[OrientVertex], StatusCreateStep, Status) = {
+  def addStep(stepBO: StepBO): (Option[OrientVertex], StatusAddStep, Status) = {
     new Graph(Database.getFactory.getTx).addStep(stepBO)
   }
   
@@ -200,6 +200,19 @@ object Graph{
   
   def deleteStep(stepId: String): (StatusDeleteStep, Status) = {
     new Graph(Database.getFactory.getTx).deleteStep(stepId)
+  }
+  
+    /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param configId
+   * 
+   * @return Count of deleted Vertexes
+   */
+  def deleteStepAppendedToConfig(configId: String): Int = {
+    new Graph(Database.getFactory.getTx).deleteStepAppendedToConfig(configId)
   }
 }
 
@@ -536,16 +549,16 @@ class Graph(graph: OrientGraph) {
   def appendStepTo(id: String, stepId: String): (StatusAppendStep, Status) = {
     
     try{
-      val v = graph.getVertex(id)
-      val vStep = graph.getVertex(stepId)
-      graph.addEdge(
+      val v: OrientVertex = graph.getVertex(id)
+      val vStep: OrientVertex = graph.getVertex(stepId)
+      val eHasSetep = graph.addEdge(
           PropertyKeys.CLASS + PropertyKeys.EDGE_HAS_FIRST_STEP, 
           v, 
           vStep, 
           PropertyKeys.EDGE_HAS_FIRST_STEP
       )
       graph.commit
-      
+      Logger.info("eHasSetep: " + eHasSetep)
       (AppendStepSuccess(), Success())
     }catch{
      case e1: ORecordDuplicatedException =>
@@ -574,7 +587,7 @@ class Graph(graph: OrientGraph) {
    */
   private def deleteStep(stepId: String): (StatusDeleteStep, Status) = {
     try {
-      val sql: String  = s"DELETE VERTEX Config where @rid=$stepId"
+      val sql: String  = s"DELETE VERTEX Step where @rid=$stepId"
       val res: Int = graph.command(new OCommandSQL(sql)).execute()
       graph.commit
       res match {
@@ -778,13 +791,13 @@ class Graph(graph: OrientGraph) {
    * @return Count of deleted Vertexes
    */
   
-    def deleteAllStepsAndComponent(configId: String) = {
-      val sql: String = s"DELETE VERTEX V where @rid IN (traverse out() from (select out('hasFirstStep') " + 
-        s"from Config where @rid='$configId'))"
-      val res: Int = graph
-        .command(new OCommandSQL(sql)).execute()
-      graph.commit
-      res
+  def deleteAllStepsAndComponent(configId: String) = {
+    val sql: String = s"DELETE VERTEX V where @rid IN (traverse out() from (select out('hasFirstStep') " + 
+      s"from Config where @rid='$configId'))"
+    val res: Int = graph
+      .command(new OCommandSQL(sql)).execute()
+    graph.commit
+    res
   }
     
   /**
@@ -792,38 +805,46 @@ class Graph(graph: OrientGraph) {
    * 
    * @version 0.1.6
    * 
-   * @param String
+   * @param
    * 
    * @return
    */
-  def addStep(stepBO: StepBO): (Option[OrientVertex], StatusCreateStep, Status) = {
+  def addStep(stepBO: StepBO): (Option[OrientVertex], StatusAddStep, Status) = {
     
+    Logger.info("steoBO" + stepBO)
     try{
       stepBO.componentId match {
         case Some(componentId) => {
           //create Step
-          (None, CreateStepSuccess(), Success())
+          (None, AddStepSuccess(), Success())
         }
         case None => {
           //create FirstStep
           stepBO.configId match {
             case Some(configId) => 
-              val vConfig: OrientVertex = graph.getVertex(stepBO.configId)
-              val countOfFirstSteps: Int = vConfig.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_FIRST_STEP).asScala.toList.size
-              countOfFirstSteps match {
-                case count if count > 0 => (None, CreateStepAlreadyExist(), Error()) 
-                case _=> {
-                  val vFirstStep: OrientVertex = graph.addVertex(
-                      "class:" + PropertyKeys.VERTEX_STEP,
-                      PropertyKeys.NAME_TO_SHOW, stepBO.nameToShow,
-                      PropertyKeys.KIND, stepBO.kind,
-                      PropertyKeys.SELECTION_CRITERIUM_MIN, stepBO.selectionCriteriumMin.toString,
-                      PropertyKeys.SELECTION_CRITERIUM_MAX, stepBO.selectionCriteriumMax.toString
-                  )
-                  (Some(vFirstStep), CreateStepSuccess(), Success())
+              val vConfig: OrientVertex = graph.getVertex(configId)
+              vConfig match {
+                case null => (None, AddStepDefectComponentOrConfigId(), ODBRecordIdDefect())
+                case _ => {
+                  val countOfFirstSteps: Int = vConfig.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_FIRST_STEP).asScala.toList.size
+                  countOfFirstSteps match {
+                    case count if count > 0 => (None, AddStepAlreadyExist(), Error()) 
+                    case _=> {
+                      val vFirstStep: OrientVertex = graph.addVertex(
+                          PropertyKeys.CLASS + PropertyKeys.VERTEX_STEP,
+                          PropertyKeys.NAME_TO_SHOW, stepBO.nameToShow.get,
+                          PropertyKeys.KIND, stepBO.kind.get,
+                          PropertyKeys.SELECTION_CRITERIUM_MIN, stepBO.selectionCriteriumMin.get.toString,
+                          PropertyKeys.SELECTION_CRITERIUM_MAX, stepBO.selectionCriteriumMax.get.toString
+                      )
+                      graph.commit
+                      (Some(vFirstStep), AddStepSuccess(), Success())
+                    }
+                  }
                 }
               }
-            case None => (None, CreateStepDefectComponentOrConfigId(), Error())
+              
+            case None => (None, AddStepDefectComponentOrConfigId(), ODBRecordIdDefect())
           }
         }
       }
@@ -831,18 +852,34 @@ class Graph(graph: OrientGraph) {
       case e1: ORecordDuplicatedException => {
         Logger.error(e1.printStackTrace().toString)
         graph.rollback()
-        (None, CreateStepError(), ODBRecordDuplicated())
+        (None, AddStepError(), ODBRecordDuplicated())
       }
       case e2 : ClassCastException => {
         graph.rollback()
         Logger.error(e2.printStackTrace().toString)
-        (None, CreateStepError(), ODBClassCastError())
+        (None, AddStepError(), ODBClassCastError())
       }
       case e3: Exception => {
         graph.rollback()
         Logger.error(e3.printStackTrace().toString)
-        (None, CreateStepError(), ODBWriteError())
+        (None, AddStepError(), ODBWriteError())
       }
     }
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param configId
+   * 
+   * @return Count of deleted Vertexes
+   */
+  def deleteStepAppendedToConfig(configId: String): Int = {
+    val res: Int = graph
+      .command(new OCommandSQL(s"DELETE VERTEX Step where @rid IN (SELECT out() from Config where @rid='$configId')")).execute()
+    graph.commit
+    res
   }
 }

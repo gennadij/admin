@@ -38,7 +38,7 @@ trait AdminWeb {
       
       case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage, admin)
       
-      case Some(JsonNames.CREATE_FIRST_STEP) => createFirstStep(receivedMessage, admin)
+      case Some(JsonNames.ADD_FIRST_STEP) => addFirstStep(receivedMessage, admin)
       case Some(JsonNames.CREATE_STEP) => createStep(receivedMessage, admin)
       
       case Some(JsonNames.CREATE_COMPONENT) => createComponent(receivedMessage, admin)
@@ -83,11 +83,11 @@ trait AdminWeb {
     Json.toJson(createConfigOut)
   }
   
-  private def createFirstStep(receivedMessage: JsValue, admin: Admin): JsValue = {
+  private def addFirstStep(receivedMessage: JsValue, admin: Admin): JsValue = {
     val firstStepIn: JsResult[JsonStepIn] = Json.fromJson[JsonStepIn](receivedMessage)
     firstStepIn match {
       case s : JsSuccess[JsonStepIn] => Json.toJson(admin.createFirstStep(firstStepIn.get))
-      case e : JsError => jsonError("CREATE_FIRST_STEP", e)
+      case e : JsError => jsonError("ADD_FIRST_STEP", e)
     }
   }
   

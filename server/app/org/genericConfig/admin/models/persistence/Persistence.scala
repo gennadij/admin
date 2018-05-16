@@ -456,39 +456,43 @@ object Persistence {
   
   def addStep(stepBO: StepBO): StepBO = {
     
-    val (vStep: Option[OrientVertex], createStepStatus: StatusCreateStep, commonStatus: Status) = 
+    val (vStep: Option[OrientVertex], addStepStatus: StatusAddStep, commonStatus: Status) = 
       Graph.addStep(stepBO)
-    
-    createStepStatus match {
-      case CreateStepSuccess() => 
+//    Logger.info(vStep.get.toString())
+//    Logger.info(addStepStatus.toString())
+//    Logger.info(commonStatus.toString())
+    addStepStatus match {
+      case AddStepSuccess() => 
         StepBO(
+            configId = stepBO.configId,
+            componentId = stepBO.componentId,
             stepId = Some(vStep.get.getIdentity.toString),
             status = Some(StatusStep(
-                addStep = Some(CreateStepSuccess()),
+                addStep = Some(AddStepSuccess()),
                 common = Some(Success())
             ))
         )
-      case CreateStepError() => 
+      case AddStepError() => 
         StepBO(
             stepId = None,
             status = Some(StatusStep(
-                addStep = Some(CreateStepError()),
+                addStep = Some(AddStepError()),
                 common = Some(commonStatus)
             ))
         )
-      case CreateStepAlreadyExist() => 
+      case AddStepAlreadyExist() => 
         StepBO(
             stepId = None,
             status = Some(StatusStep(
-                addStep = Some(CreateStepAlreadyExist()),
+                addStep = Some(AddStepAlreadyExist()),
                 common = Some(commonStatus)
             ))
         )
-      case CreateStepDefectComponentOrConfigId() => 
+      case AddStepDefectComponentOrConfigId() => 
         StepBO(
             stepId = None,
             status = Some(StatusStep(
-                addStep = Some(CreateStepDefectComponentOrConfigId()),
+                addStep = Some(AddStepDefectComponentOrConfigId()),
                 common = Some(commonStatus)
             ))
         )

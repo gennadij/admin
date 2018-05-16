@@ -119,7 +119,7 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
   
   def addFirstStep(configId: String, min: Int = 1, max: Int = 1, nameToShow: String = "FirstStep", webClient: WebClient): String = {
     val firstStepCS = Json.obj(
-        "json" -> JsonNames.CREATE_FIRST_STEP
+        "json" -> JsonNames.ADD_FIRST_STEP
         ,"params" -> Json.obj(
           "configId" -> configId,
           "nameToShow" -> nameToShow,

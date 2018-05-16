@@ -64,4 +64,25 @@ trait CommonFunction {
     
     newConfigOut
   }
+  
+  def deleteStepAppendedToConfig(configId: String) = {
+    Graph.deleteStepAppendedToConfig(configId)
+  }
+  
+  def getConfigs(userId: String, wC: WebClient) = {
+    val getConfigsIn = Json.obj(
+          "json" -> JsonNames.GET_CONFIGS
+          , "params" -> Json.obj(
+              "userId" -> userId
+          )
+      )
+      val getConfigsOut = wC.handleMessage(getConfigsIn)
+      
+      Logger.info("getConfigsIn " + getConfigsIn)
+      Logger.info("getConfigsOut " + getConfigsOut)
+      
+      val jsConfigsIds: Set[JsValue] = (getConfigsOut \ "result" \ "configs").asOpt[Set[JsValue]].get
+      
+      jsConfigsIds map( jsCId => (jsCId \ "configId").asOpt[String].get )
+  }
 }

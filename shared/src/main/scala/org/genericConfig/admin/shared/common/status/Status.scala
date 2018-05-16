@@ -40,3 +40,7 @@ case class ODBRecordDuplicated() extends Status{
   def message: String = "Beim Laden hat einen Fehler in Datenbank aufgetreten"
 }
 
+case class ODBRecordIdDefect() extends Status{
+  def status: String = "ODB_RECORD_ID_DEFECT"
+  def message: String = "Beim Laden hat einen Fehler in Datenbank aufgetreten"
+}

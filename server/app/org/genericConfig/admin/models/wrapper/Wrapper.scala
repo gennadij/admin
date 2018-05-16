@@ -371,6 +371,7 @@ trait Wrapper {
    */
   def toStepBO(jsonStepIn: JsonStepIn): StepBO = {
     StepBO(
+        Some(jsonStepIn.json),
         Some(jsonStepIn.params.configId), //configId
         None,//componentId
         Some(jsonStepIn.params.nameToShow), // nameToShow
@@ -392,9 +393,12 @@ trait Wrapper {
    */
   def toJsonStepOut(stepOut: StepBO): JsonStepOut = {
     JsonStepOut(
-        json = JsonNames.CREATE_FIRST_STEP,
+        json = JsonNames.ADD_FIRST_STEP,
         result = JsonStepResult(
-            stepOut.stepId.get,
+            stepOut.stepId match {
+              case Some(stepId) => Some(stepId)
+              case None => None
+            },
             Set(),
             Set(),
             JsonStepStatus(

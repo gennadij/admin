@@ -16,7 +16,7 @@ object JsonNames {
   val CREATE_STEP: String = "CreateStep"
   val DELETE_STEP: String = "DeleteStep"
   val EDIT_STEP: String = "EditStep"
-  val CREATE_FIRST_STEP: String = "CreateFirstStep"
+  val ADD_FIRST_STEP: String = "AddFirstStep"
   val DELETE_FIRST_STEP: String = "DeleteFirstStep"
   val EDIT_FIRST_STEP: String = "EditFirstStep"
   val CREATE_COMPONENT: String = "CreateComponent"
