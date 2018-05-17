@@ -40,7 +40,7 @@ trait AdminWeb {
       
       case Some(JsonNames.ADD_FIRST_STEP) => addFirstStep(receivedMessage, admin)
       case Some(JsonNames.DELETE_FIRST_STEP) => deleteFirstStep(receivedMessage, admin)
-      case Some(JsonNames.UPDATE_FIRST_STEP) => updateFirstStep(receivedMessage, admin)
+      case Some(JsonNames.UPDATE_STEP) => updateStep(receivedMessage, admin)
       case Some(JsonNames.ADD_STEP) => addStep(receivedMessage, admin)
       
       case Some(JsonNames.CREATE_COMPONENT) => createComponent(receivedMessage, admin)
@@ -101,11 +101,11 @@ trait AdminWeb {
     }
   }
   
-  private def updateFirstStep(receivedMessage: JsValue, admin: Admin): JsValue = {
-    val updateFirstStepIn: JsResult[JsonStepIn] = Json.fromJson[JsonStepIn](receivedMessage)
-    updateFirstStepIn match {
-      case s : JsSuccess[JsonStepIn] => Json.toJson(admin.updateFirstStep(updateFirstStepIn.get))
-      case e : JsError => jsonError(JsonNames.DELETE_FIRST_STEP, e)
+  private def updateStep(receivedMessage: JsValue, admin: Admin): JsValue = {
+    val updateStepIn: JsResult[JsonStepIn] = Json.fromJson[JsonStepIn](receivedMessage)
+    updateStepIn match {
+      case s : JsSuccess[JsonStepIn] => Json.toJson(admin.updateStep(updateStepIn.get))
+      case e : JsError => jsonError(JsonNames.UPDATE_STEP, e)
     }
   }
   

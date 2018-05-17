@@ -64,6 +64,7 @@ import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.step.bo._
 import org.genericConfig.admin.shared.step.status._
 import org.genericConfig.admin.shared.step.json.JsonDependencyForAdditionalStepsInOneLevel
+import org.genericConfig.admin.shared.common.json.JsonNames
 
 
 /**
@@ -387,6 +388,38 @@ object Persistence {
     }
   }
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  def updateStep(stepBO: StepBO): StepBO = {
+    val (updateStepStatus: StatusUpdateStep, commonStatus: Status) = Graph.updateStep(stepBO)
+    
+    updateStepStatus match {
+      case UpdateStepSuccess() => 
+        StepBO(
+            json = Some(JsonNames.UPDATE_STEP),
+            status = Some(StatusStep(
+                updateStep = Some(UpdateStepSuccess()),
+                common = Some(Success())
+            )
+        ))
+      case UpdateStepError() => 
+        
+        StepBO(
+            json = Some(JsonNames.UPDATE_STEP),
+            status = Some(StatusStep(
+                updateStep = Some(UpdateStepError()),
+                common = Some(commonStatus)
+            )
+        ))
+    }
+  }
   /**
    * @author Gennadi Heimann
    * 

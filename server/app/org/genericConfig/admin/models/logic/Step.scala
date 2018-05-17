@@ -51,8 +51,8 @@ object Step{
    * 
    * @return 
    */
-  def updateFirstStep(stepBO: StepBO): StepBO = {
-    new Step().updateFirstStep(stepBO)
+  def updateStep(stepBO: StepBO): StepBO = {
+    new Step().updateStep(stepBO)
   }
 }
 
@@ -136,8 +136,8 @@ class Step {
    * 
    * @return 
    */
-  private def updateFirstStep(stepBO: StepBO): StepBO = {
-    ???
+  private def updateStep(stepBO: StepBO): StepBO = {
+    Persistence.updateStep(stepBO)
   }
 }
 

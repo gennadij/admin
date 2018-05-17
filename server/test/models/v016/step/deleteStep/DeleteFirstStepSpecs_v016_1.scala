@@ -49,11 +49,11 @@ class DeleteFirstStepSpecs_v016_1 extends Specification
     Logger.info("Deleting Configs : " + deleteAllConfigs(this.username))
   }
   
-  "Diese Spezifikation spezifiziert die Editierung einer Konfigurationen" >> {
-    "AdminUser=user_v016_6" >> {
+  "Diese Spezifikation spezifiziert die Entfernung eines Schrittes" >> {
+    "AdminUser = user_deleteStep_v016_1" >> {
       
-      val jsonDeleteStepIn = Json.obj(
-          "json" -> JsonNames.DELETE_FIRST_STEP,
+      val jsonUpdateStepIn = Json.obj(
+          "json" -> JsonNames.UPDATE_STEP,
           "params" -> Json.obj(
               "configId" -> "",
               "componentId" -> "",
@@ -67,9 +67,9 @@ class DeleteFirstStepSpecs_v016_1 extends Specification
           )
       )
       
-      Logger.info("->" + jsonDeleteStepIn)
+      Logger.info("->" + jsonUpdateStepIn)
       
-      val jsonDeleteStepOut = wC.handleMessage(jsonDeleteStepIn)
+      val jsonDeleteStepOut = wC.handleMessage(jsonUpdateStepIn)
       
       Logger.info("<-" + jsonDeleteStepOut)
       

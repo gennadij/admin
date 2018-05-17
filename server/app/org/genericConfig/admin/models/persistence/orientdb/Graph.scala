@@ -202,7 +202,7 @@ object Graph{
     new Graph(Database.getFactory.getTx).deleteStep(stepId)
   }
   
-    /**
+  /**
    * @author Gennadi Heimann
    * 
    * @version 0.1.6
@@ -213,6 +213,19 @@ object Graph{
    */
   def deleteStepAppendedToConfig(configId: String): Int = {
     new Graph(Database.getFactory.getTx).deleteStepAppendedToConfig(configId)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  def updateStep(stepBO: StepBO): (StatusUpdateStep, Status) = {
+    new Graph(Database.getFactory.getTx).updateStep(stepBO)
   }
 }
 
@@ -608,6 +621,43 @@ class Graph(graph: OrientGraph) {
         graph.rollback()
         Logger.error(e3.printStackTrace().toString)
         (DeleteStepError(), ODBWriteError())
+      }
+    }
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param
+   * 
+   * @return
+   */
+  private def updateStep(stepBO: StepBO): (StatusUpdateStep, Status) = {
+    try {
+      val vStep: OrientVertex = graph.getVertex(stepBO.stepId.get)
+      vStep.setProperty(PropertyKeys.NAME_TO_SHOW, stepBO.nameToShow.get)
+      vStep.setProperty(PropertyKeys.KIND, stepBO.kind.get)
+      vStep.setProperty(PropertyKeys.SELECTION_CRITERIUM_MIN, stepBO.selectionCriteriumMin.get.toString)
+      vStep.setProperty(PropertyKeys.SELECTION_CRITERIUM_MAX, stepBO.selectionCriteriumMax.get.toString)
+      graph.commit
+      (UpdateStepSuccess(), Success())
+    }catch{
+      case e1: ORecordDuplicatedException => {
+        Logger.error(e1.printStackTrace().toString)
+        graph.rollback()
+        (UpdateStepError(), ODBRecordDuplicated())
+      }
+      case e2 : ClassCastException => {
+        graph.rollback()
+        Logger.error(e2.printStackTrace().toString)
+        (UpdateStepError(), ODBClassCastError())
+      }
+      case e3: Exception => {
+        graph.rollback()
+        Logger.error(e3.printStackTrace().toString)
+        (UpdateStepError(), ODBWriteError())
       }
     }
   }
