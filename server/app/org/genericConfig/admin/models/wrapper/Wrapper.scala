@@ -370,17 +370,56 @@ trait Wrapper {
    * @return StepCS
    */
   def toStepBO(jsonStepIn: JsonStepIn): StepBO = {
-    StepBO(
-        Some(jsonStepIn.json),
-        Some(jsonStepIn.params.configId), //configId
-        None,//componentId
-        Some(jsonStepIn.params.nameToShow), // nameToShow
-        Some(jsonStepIn.params.kind), // kind
-        Some(jsonStepIn.params.selectionCriterium.min), // selectionCriteriumMin
-        Some(jsonStepIn.params.selectionCriterium.max), // selectionCriteriumMax
-        None, // stepId
-        None // status
-    )
+    jsonStepIn.json match {
+      case json if json == JsonNames.ADD_FIRST_STEP => 
+        StepBO(
+            Some(jsonStepIn.json),
+            Some(jsonStepIn.params.configId), //configId
+            None,//componentId
+            Some(jsonStepIn.params.nameToShow), // nameToShow
+            Some(jsonStepIn.params.kind), // kind
+            Some(jsonStepIn.params.selectionCriterium.min), // selectionCriteriumMin
+            Some(jsonStepIn.params.selectionCriterium.max), // selectionCriteriumMax
+            None, // stepId
+            None // status
+        )
+      case json if json == JsonNames.DELETE_FIRST_STEP || json == JsonNames.DELETE_STEP => 
+        StepBO(
+            Some(jsonStepIn.json), 
+            None, //configId 
+            None,//componentId
+            None, // nameToShow
+            None, // kind
+            None, // selectionCriteriumMin
+            None, // selectionCriteriumMax
+            Some(jsonStepIn.params.stepId), // stepId
+            None // status
+        )
+      case json if json == JsonNames.UPDATE_FIRST_STEP || json == JsonNames.UPDATE_STEP  => 
+        StepBO(
+            Some(jsonStepIn.json),
+            None, //configId
+            None,//componentId
+            Some(jsonStepIn.params.nameToShow), // nameToShow
+            Some(jsonStepIn.params.kind), // kind
+            Some(jsonStepIn.params.selectionCriterium.min), // selectionCriteriumMin
+            Some(jsonStepIn.params.selectionCriterium.max), // selectionCriteriumMax
+            Some(jsonStepIn.params.stepId), // stepId
+            None // status
+        )
+      case json if json == JsonNames.ADD_STEP =>
+        StepBO(
+            Some(jsonStepIn.json),
+            None, //configId
+            Some(jsonStepIn.params.componentId),//componentId
+            Some(jsonStepIn.params.nameToShow), // nameToShow
+            Some(jsonStepIn.params.kind), // kind
+            Some(jsonStepIn.params.selectionCriterium.min), // selectionCriteriumMin
+            Some(jsonStepIn.params.selectionCriterium.max), // selectionCriteriumMax
+            None, // stepId
+            None // status
+        )
+    }
   }
   /**
    * @author Gennadi Heimann
@@ -391,18 +430,35 @@ trait Wrapper {
    * 
    * @return JsonStepSC
    */
-  def toJsonStepOut(stepOut: StepBO): JsonStepOut = {
+  def toJsonStepOut(stepBO: StepBO): JsonStepOut = {
+    stepBO.json.get match {
+      case json if json == JsonNames.ADD_FIRST_STEP => 
+        createJsonStepOut(stepBO, json)
+      case json if json == JsonNames.DELETE_FIRST_STEP => 
+        createJsonStepOut(stepBO, json)
+      case json if json == JsonNames.UPDATE_FIRST_STEP => 
+       createJsonStepOut(stepBO, json)
+      case json if json == JsonNames.ADD_STEP =>
+       createJsonStepOut(stepBO, json)
+      case json if json == JsonNames.DELETE_STEP => 
+        createJsonStepOut(stepBO, json)
+      case json if json == JsonNames.UPDATE_STEP => 
+        createJsonStepOut(stepBO, json)
+    }
+  }
+  
+  private def createJsonStepOut(stepBO: StepBO, json: String): JsonStepOut = {
     JsonStepOut(
-        json = JsonNames.ADD_FIRST_STEP,
+        json = json,
         result = JsonStepResult(
-            stepOut.stepId match {
+            stepBO.stepId match {
               case Some(stepId) => Some(stepId)
               case None => None
             },
             Set(),
             Set(),
             JsonStepStatus(
-                stepOut.status.get.addStep match {
+                stepBO.status.get.addStep match {
                   case Some(addStep) => 
                     Some(JsonStatus(
                       addStep.status,
@@ -410,7 +466,7 @@ trait Wrapper {
                     ))
                   case None => None
                 },
-                stepOut.status.get.deleteStep match {
+                stepBO.status.get.deleteStep match {
                   case Some(deleteStep) => 
                     Some(JsonStatus(
                       deleteStep.status,
@@ -418,7 +474,7 @@ trait Wrapper {
                     ))
                   case None => None
                 },
-                stepOut.status.get.updateStep match {
+                stepBO.status.get.updateStep match {
                   case Some(updateStep) => 
                     Some(JsonStatus(
                       updateStep.status,
@@ -426,7 +482,7 @@ trait Wrapper {
                     ))
                   case None => None
                 },
-                stepOut.status.get.appendStep match {
+                stepBO.status.get.appendStep match {
                   case Some(appendStep) => 
                     Some(JsonStatus(
                       appendStep.status,
@@ -434,7 +490,7 @@ trait Wrapper {
                     ))
                   case None => None
                 },
-                stepOut.status.get.common match {
+                stepBO.status.get.common match {
                   case Some(common) => 
                     Some(JsonStatus(
                       common.status,

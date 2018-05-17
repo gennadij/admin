@@ -15,7 +15,7 @@ import play.api.libs.json.JsValue
  */
 trait CommonFunction {
   
-  def newAdminUser(username: String) : (String, String) = {
+  def addAdminUser(username: String) : (String, String) = {
     val registerCS = Json.obj(
           "json" -> JsonNames.REGISTRATION
           ,"params" -> Json.obj(
@@ -84,5 +84,59 @@ trait CommonFunction {
       val jsConfigsIds: Set[JsValue] = (getConfigsOut \ "result" \ "configs").asOpt[Set[JsValue]].get
       
       jsConfigsIds map( jsCId => (jsCId \ "configId").asOpt[String].get )
+  }
+  
+  def addStep(wC: WebClient, configId: Option[String] = None, componentId: Option[String] = None): Option[String] = {
+    
+    configId match {
+      case Some(configId) => 
+        val stepIn = Json.obj(
+            "json" -> JsonNames.ADD_FIRST_STEP,
+            "params" -> Json.obj(
+                "configId" -> configId,
+                "componentId" -> "",
+                "stepId" -> "",
+                "nameToShow" -> "FirstStep",
+                "kind" -> "first",
+                "selectionCriterium" -> Json.obj(
+                    "min" -> 1,
+                    "max" -> 1
+                )
+            )
+        )
+        
+        Logger.info("<-" + stepIn)
+        
+        val stepOut: JsValue = wC.handleMessage(stepIn)
+        
+        Logger.info("->" + stepOut )
+        (stepOut \ "result" \ "stepId").asOpt[String]
+      case None => 
+        componentId match {
+          case Some(componentId) => 
+            val stepIn = Json.obj(
+            "json" -> JsonNames.ADD_FIRST_STEP,
+            "params" -> Json.obj(
+                "configId" -> "",
+                "componentId" -> componentId,
+                "nameToShow" -> "FirstStep",
+                "kind" -> "first",
+                "selectionCriterium" -> Json.obj(
+                    "min" -> 1,
+                    "max" -> 1
+                )
+            )
+        )
+        
+        Logger.info("<-" + stepIn)
+        
+        val stepOut: JsValue = wC.handleMessage(stepIn)
+        
+        Logger.info("->" + stepOut )
+        (stepOut \ "result" \ "stepId").asOpt[String]
+            
+          case None => None
+        }
+    }
   }
 }

@@ -215,7 +215,7 @@ trait AdminWeb {
    }
   
   private def jsonError(errorText: String, e: JsError): JsValue = {
-    val error = JsonErrorOut(
+    val error = JsonErrorIn(
         JsonNames.ERROR,
         JsonErrorParams(
             "Errors -> " + errorText + " : " + JsError.toJson(e).toString()

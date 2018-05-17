@@ -28,7 +28,7 @@ class ScenarioSpecs_v016_5 extends Specification
   val username = "user_v016_5"
   
   def beforeAll() = {
-    val (username, userId): (String, String) = newAdminUser(this.username)
+    val (username, userId): (String, String) = addAdminUser(this.username)
     this.userId = userId
     Logger.info("username : " + username)
     Logger.info("userId : " + userId)

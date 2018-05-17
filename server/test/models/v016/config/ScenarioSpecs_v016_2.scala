@@ -33,7 +33,7 @@ class ScenarioSpecs_v016_2 extends Specification
 //  user_v016_1_client
   
   def beforeAll() = {
-    val (username, userId): (String, String) = newAdminUser(this.username)
+    val (username, userId): (String, String) = addAdminUser(this.username)
     this.userId = userId
     Logger.info("username : " + username)
     Logger.info("userId : " + userId)

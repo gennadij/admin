@@ -558,7 +558,6 @@ class Graph(graph: OrientGraph) {
           PropertyKeys.EDGE_HAS_FIRST_STEP
       )
       graph.commit
-      Logger.info("eHasSetep: " + eHasSetep)
       (AppendStepSuccess(), Success())
     }catch{
      case e1: ORecordDuplicatedException =>
