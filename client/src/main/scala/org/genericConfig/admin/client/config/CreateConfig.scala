@@ -3,13 +3,9 @@ package org.genericConfig.admin.client.config
 import org.scalajs.dom.raw.WebSocket
 import org.scalajs.jquery.jQuery
 import com.fasterxml.jackson.annotation.JsonCreator
-import org.genericConfig.admin.shared.config.json.JsonCreateConfigIn
-import org.genericConfig.admin.shared.config.json.JsonCreateConfigParams
 import play.api.libs.json.Json
-import org.genericConfig.admin.shared.config.json.JsonGetConfigsIn
-import org.genericConfig.admin.shared.config.json.JsonGetConfigsParams
-import org.genericConfig.admin.shared.config.json.JsonCreateConfigOut
 import org.genericConfig.admin.shared.common.json.JsonStatus
+import org.genericConfig.admin.shared.config.json._
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -39,8 +35,8 @@ class CreateConfig(websocket: WebSocket, userId: String) {
   def saveConfig = {
     val configUrl = jQuery("#inputConfigUrl").value()
     
-    val jsonCreateConfig: String = Json.toJson(JsonCreateConfigIn(
-        params = JsonCreateConfigParams(
+    val jsonCreateConfig: String = Json.toJson(JsonAddConfigIn(
+        params = JsonAddConfigParams(
             userId,
             configUrl.toString
         )
@@ -60,7 +56,7 @@ class CreateConfig(websocket: WebSocket, userId: String) {
     websocket.send(jsonGetConfigs)
   }
   
-  def updateStatus(createConfigOut: JsonCreateConfigOut) = {
+  def updateStatus(createConfigOut: JsonAddConfigOut) = {
     val addConfig: Option[JsonStatus] = createConfigOut.result.status.addConfig
 //    val getConfigs: Option[JsonStatus] = createConfigOut.result.status.getConfigs
 //    val deleteConfig: Option[JsonStatus] = createConfigOut.result.status.deleteConfig

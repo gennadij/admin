@@ -592,6 +592,8 @@ trait Wrapper {
       case Some(configTree) => {
         JsonConfigTreeOut(
             result = JsonConfigTreeResult(
+                Some(configTreeBO.userId.get),
+                Some(configTreeBO.configId.get),
                 Some(JsonConfigTreeStep(
                     configTree.stepId,
                     configTree.kind,
@@ -614,6 +616,8 @@ trait Wrapper {
       case None => {
         JsonConfigTreeOut(
             result = JsonConfigTreeResult(
+                None,
+                None,
                 None, 
                 JsonConfigTreeStatus(
                     Some(JsonStatus(

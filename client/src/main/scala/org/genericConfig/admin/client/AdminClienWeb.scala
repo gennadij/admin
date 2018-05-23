@@ -14,6 +14,7 @@ import org.genericConfig.admin.configTree.ConfigTree
 import org.genericConfig.admin.client.config.CreateConfig
 import org.genericConfig.admin.client.config.DeleteConfig
 import org.genericConfig.admin.client.config.EditConfig
+import org.genericConfig.admin.shared.step.json.JsonStepOut
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -27,14 +28,14 @@ class AdminClienWeb(websocket: WebSocket) {
     (receivedMessage \ "json").asOpt[String] match {
       case Some(JsonNames.REGISTRATION) => ???//register(receivedMessage, admin)
       case Some(JsonNames.LOGIN) => ???//login(receivedMessage, admin)
-      case Some(JsonNames.CREATE_CONFIG) => createConfig(receivedMessage)
+      case Some(JsonNames.ADD_CONFIG) => addConfig(receivedMessage)
       case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage)
       case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage)
       case Some(JsonNames.UPDATE_CONFIG) => updateConfig(receivedMessage)
-      case Some(JsonNames.ADD_FIRST_STEP) => ???//createFirstStep(receivedMessage, admin)
+      case Some(JsonNames.ADD_FIRST_STEP) => addFirstStep(receivedMessage)
       case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage)
       case Some(JsonNames.CREATE_COMPONENT) => ???//createComponent(receivedMessage, admin)
-      case Some(JsonNames.CREATE_STEP) => ???//createStep(receivedMessage, admin)
+      case Some(JsonNames.ADD_STEP) => ???//createStep(receivedMessage, admin)
       case Some(JsonNames.CONNECTION_COMPONENT_TO_STEP) => ???//connectComponentToStep(receivedMessage, admin)
       case Some(JsonNames.CREATE_DEPENDENCY) => ???//createDependency(receivedMessage, admin)
       case Some(JsonNames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL) => ???
@@ -62,11 +63,11 @@ class AdminClienWeb(websocket: WebSocket) {
     new ConfigTree(websocket).drawConfigTree(configTreeOut.get)
   }
   
-  private def createConfig(receivedMessage: JsValue) = {
-    val createConfigOut: JsResult[JsonCreateConfigOut] = Json.fromJson[JsonCreateConfigOut](receivedMessage)
+  private def addConfig(receivedMessage: JsValue) = {
+    val createConfigOut: JsResult[JsonAddConfigOut] = Json.fromJson[JsonAddConfigOut](receivedMessage)
     createConfigOut match {
-      case s: JsSuccess[JsonCreateConfigOut] => s.get
-      case e: JsError => println("Errors -> CREATE_CONFIG: " + JsError.toJson(e).toString())
+      case s: JsSuccess[JsonAddConfigOut] => s.get
+      case e: JsError => println("Errors -> ADD_CONFIG: " + JsError.toJson(e).toString())
     }
     new CreateConfig(websocket, "").updateStatus(createConfigOut.get)
    }
@@ -87,5 +88,14 @@ class AdminClienWeb(websocket: WebSocket) {
       case e: JsError => println("Errors -> CREATE_CONFIG: " + JsError.toJson(e).toString())
     }
     new EditConfig(websocket).updateStatus(updateConfigOut.get)
+  }
+  
+  private def addFirstStep(receivedMessage: JsValue) = {
+    val addFirstStepOut: JsResult[JsonStepOut] = Json.fromJson[JsonStepOut](receivedMessage)
+    addFirstStepOut match {
+      case s: JsSuccess[JsonStepOut] => s.get
+      case e: JsError => println("Errors -> ADD_FIRST_STEP: " + JsError.toJson(e).toString())
+    }
+//    new EditConfig(websocket).updateStatus(updateConfigOut.get)
   }
 }
