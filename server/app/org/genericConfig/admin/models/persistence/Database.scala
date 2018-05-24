@@ -1,6 +1,11 @@
 package org.genericConfig.admin.models.persistence
 
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory
+import com.orientechnologies.orient.core.exception.OStorageException
+import play.api.Logger
+import org.genericConfig.admin.shared.common.status.Status
+import org.genericConfig.admin.shared.common.status.Success
+import org.genericConfig.admin.shared.common.status.ODBConnectionFail
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -8,22 +13,33 @@ import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory
  * Created by Gennadi Heimann 10.04.2018
  */
 object Database {
-  def getFactory(): OrientGraphFactory = {
-    
-    new Database("OrientDB").getFactory()
-  }
+  def getFactory(): (Option[OrientGraphFactory], Status) = {
+    try {
+      val db = new Database("OrientDB").getFactory()
+      db.exists()
+      (Some(db), Success())
+    }catch{
+          case e: Exception => {
+            Logger.error(e.printStackTrace().toString)
+            (None, ODBConnectionFail())
+          }
+    }
 }
 
 class Database(name: String) {
   
-  private def getFactory(): OrientGraphFactory = {
+  def getFactory(): OrientGraphFactory = {
     
     val db = TestDB()
     
     db match {
       case testDB: TestDB => 
         val uri = "remote:localhost/" + testDB.dbName
-        new OrientGraphFactory(uri, testDB.username, testDB.password)
+        
+          new OrientGraphFactory(uri, testDB.username, testDB.password)
+        
+        }
+        
     }
   }
 }

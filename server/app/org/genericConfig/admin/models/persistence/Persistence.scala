@@ -467,7 +467,7 @@ object Persistence {
           List(),
           StatusConfig(None, Some(GetConfigsEmpty()), None, None, Some(Success())))
       case GetConfigsError() => 
-        ConfigBO("", List(), StatusConfig(None, Some(GetConfigsError()), None, None, Some(Success())))
+        ConfigBO("", List(), StatusConfig(None, Some(GetConfigsError()), None, None, Some(statusCommon)))
     }
   }
   

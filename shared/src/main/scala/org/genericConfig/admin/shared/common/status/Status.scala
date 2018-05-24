@@ -44,3 +44,8 @@ case class ODBRecordIdDefect() extends Status{
   def status: String = "ODB_RECORD_ID_DEFECT"
   def message: String = "Beim Laden hat einen Fehler in Datenbank aufgetreten"
 }
+
+case class ODBConnectionFail() extends Status {
+  def status: String = "ODB_CONNECTION_FAIL"
+  def message: String = "Beim Laden hat einen Fehler in Datenbank aufgetreten"
+}

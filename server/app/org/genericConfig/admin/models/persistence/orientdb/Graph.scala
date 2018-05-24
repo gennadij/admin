@@ -22,6 +22,7 @@ import org.genericConfig.admin.shared.configTree.status.StatusGetConfigTree
 import org.genericConfig.admin.shared.configTree.status._
 import org.genericConfig.admin.shared.step.bo.StepBO
 import org.genericConfig.admin.shared.step.status._
+import com.orientechnologies.orient.core.exception.OStorageException
 
 
 /**
@@ -41,8 +42,13 @@ object Graph{
    * @return RegistrationBO
    */
   def addUser(username: String, password: String): RegistrationBO = {
-    val graph: OrientGraph = Database.getFactory().getTx()
-    new Graph(graph).writeUser(username, password)
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), Success()) => 
+        val graph: OrientGraph = dbFactory.getTx()
+        new Graph(graph).writeUser(username, password)
+      case (None, ODBConnectionFail()) => 
+        RegistrationBO(status = StatusRegistration(None, Some(ODBConnectionFail())))
+    }
   }
   
   /**
@@ -55,7 +61,14 @@ object Graph{
    * @return LoginBO
    */
   def readUser(username: String, password: String): (Option[OrientVertex], Status) = {
-    new Graph(Database.getFactory().getTx()).readUser(username, password)
+    
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), Success()) => 
+        val graph: OrientGraph = dbFactory.getTx()
+        new Graph(graph).readUser(username, password)
+      case (None, ODBConnectionFail()) => 
+        (None, ODBConnectionFail())
+    }
   }
   
   /**
@@ -68,7 +81,13 @@ object Graph{
    * @return
    */
   def addConfig(configUrl: String): (Option[OrientVertex], StatusAddConfig, Status) = {
-    new Graph(Database.getFactory().getTx()).addConfig(configUrl)
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), Success()) => 
+        val graph: OrientGraph = dbFactory.getTx()
+        new Graph(graph).addConfig(configUrl)
+      case (None, ODBConnectionFail()) => 
+        (None, AddConfigError(), ODBConnectionFail())
+    }
   }
   
   /**
@@ -81,7 +100,14 @@ object Graph{
    * @return
    */
   def deleteConfig(configId: String, configUrl: String): (StatusDeleteConfig, Status) = {
-    new Graph(Database.getFactory().getTx()).deleteConfig(configId, configUrl)
+    
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), Success()) => 
+        val graph: OrientGraph = dbFactory.getTx()
+        new Graph(graph).deleteConfig(configId, configUrl)
+      case (None, ODBConnectionFail()) => 
+        (DeleteConfigError(), ODBConnectionFail())
+    }
   }
   
   /**
@@ -94,7 +120,13 @@ object Graph{
    * @return
    */
   def appendConfigTo(userId: String, configId: String): Status = {
-    new Graph(Database.getFactory().getTx()).appendConfigTo(userId, configId)
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), Success()) => 
+        val graph: OrientGraph = dbFactory.getTx()
+        new Graph(graph).appendConfigTo(userId, configId)
+      case (None, ODBConnectionFail()) => 
+        ODBConnectionFail()
+    }
   }
   
   /**
@@ -107,7 +139,13 @@ object Graph{
    * @return
    */
   def deleteAllConfigs(username: String): Int = {
-    new Graph(Database.getFactory.getTx).deleteAllConfigs(username)
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), Success()) => 
+        val graph: OrientGraph = dbFactory.getTx()
+        new Graph(graph).deleteAllConfigs(username)
+      case (None, ODBConnectionFail()) => 
+        0
+    }
   }
   
   /**
@@ -120,7 +158,13 @@ object Graph{
    * @return
    */
   def getConfigs(userId: String): (Option[List[OrientVertex]], StatusGetConfigs, Status) = {
-    new Graph(Database.getFactory.getTx).getConfigs(userId)
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), Success()) => 
+        val graph: OrientGraph = dbFactory.getTx()
+        new Graph(graph).getConfigs(userId)
+      case (None, ODBConnectionFail()) => 
+        (None, GetConfigsError(), ODBConnectionFail())
+    }
   }
   
   /**
@@ -133,8 +177,14 @@ object Graph{
    * @return
    */
   
-  def getConfigTree(configId: String) = {
-    new Graph(Database.getFactory.getTx).getConfigTree(configId)
+  def getConfigTree(configId: String): (Option[StepForConfigTreeBO], StatusGetConfigTree, Status) = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), Success()) => 
+        val graph: OrientGraph = dbFactory.getTx()
+        new Graph(graph).getConfigTree(configId)
+      case (None, ODBConnectionFail()) => 
+        (None, GetConfigTreeError(), ODBConnectionFail())
+    }
   }
   /**
    * @author Gennadi Heimann
@@ -146,7 +196,14 @@ object Graph{
    * @return
    */
   def getAdminUserId(configId: String): (String, Status) = {
-    new Graph(Database.getFactory.getTx).getAdminUserId(configId)
+    
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), Success()) => 
+        val graph: OrientGraph = dbFactory.getTx()
+        new Graph(graph).getAdminUserId(configId)
+      case (None, ODBConnectionFail()) => 
+        ("", ODBConnectionFail())
+    }
   }
   
   /**
@@ -159,7 +216,13 @@ object Graph{
    * @return
    */
   def updateConfig(configId: String, configUrl: String): (StatusUpdateConfig, Status) = {
-    new Graph(Database.getFactory.getTx).updateConfig(configId, configUrl)
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), Success()) => 
+        val graph: OrientGraph = dbFactory.getTx()
+        new Graph(graph).updateConfig(configId, configUrl)
+      case (None, ODBConnectionFail()) => 
+        (UpdateConfigError(), ODBConnectionFail())
+    }
   }
 
   /**
@@ -172,7 +235,13 @@ object Graph{
    * @return
    */
   def addStep(stepBO: StepBO): (Option[OrientVertex], StatusAddStep, Status) = {
-    new Graph(Database.getFactory.getTx).addStep(stepBO)
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), Success()) => 
+        val graph: OrientGraph = dbFactory.getTx()
+        new Graph(graph).addStep(stepBO)
+      case (None, ODBConnectionFail()) => 
+        (None, AddStepError(), ODBConnectionFail())
+    }
   }
   
   /**
@@ -185,7 +254,14 @@ object Graph{
    * @return
    */
   def appendStepTo(id: String, stepId: String): (StatusAppendStep, Status) = {
-    new Graph(Database.getFactory.getTx).appendStepTo(id, stepId)
+    
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), Success()) => 
+        val graph: OrientGraph = dbFactory.getTx()
+        new Graph(graph).appendStepTo(id, stepId)
+      case (None, ODBConnectionFail()) => 
+        (AppendStepError(), ODBConnectionFail())
+    }
   }
   
   /**
@@ -199,7 +275,13 @@ object Graph{
    */
   
   def deleteStep(stepId: String): (StatusDeleteStep, Status) = {
-    new Graph(Database.getFactory.getTx).deleteStep(stepId)
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), Success()) => 
+        val graph: OrientGraph = dbFactory.getTx()
+        new Graph(graph).deleteStep(stepId)
+      case (None, ODBConnectionFail()) => 
+        (DeleteStepError(), ODBConnectionFail())
+    }
   }
   
   /**
@@ -212,7 +294,13 @@ object Graph{
    * @return Count of deleted Vertexes
    */
   def deleteStepAppendedToConfig(configId: String): Int = {
-    new Graph(Database.getFactory.getTx).deleteStepAppendedToConfig(configId)
+    ((Database.getFactory(): @unchecked): @unchecked) match {
+      case (Some(dbFactory), Success()) => 
+        val graph: OrientGraph = dbFactory.getTx()
+        new Graph(graph).deleteStepAppendedToConfig(configId)
+      case (None, ODBConnectionFail()) => 
+        0
+    }
   }
   
   /**
@@ -225,7 +313,13 @@ object Graph{
    * @return 
    */
   def updateStep(stepBO: StepBO): (StatusUpdateStep, Status) = {
-    new Graph(Database.getFactory.getTx).updateStep(stepBO)
+    ((Database.getFactory(): @unchecked): @unchecked) match {
+      case (Some(dbFactory), Success()) => 
+        val graph: OrientGraph = dbFactory.getTx()
+        new Graph(graph).updateStep(stepBO)
+      case (None, ODBConnectionFail()) => 
+        (UpdateStepError(), ODBConnectionFail())
+    }
   }
 }
 
