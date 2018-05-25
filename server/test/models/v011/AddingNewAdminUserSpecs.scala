@@ -18,6 +18,8 @@ import org.genericConfig.admin.shared.registration.status.AddedUser
 import org.genericConfig.admin.shared.common.status.Success
 import util.CommonFunction
 import play.api.libs.json.Json
+import org.genericConfig.admin.shared.wrapper.Wrapper
+import org.genericConfig.admin.models.logic.RidToHash
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -31,13 +33,36 @@ import play.api.libs.json.Json
 class AddingNewAdminUserSpecs extends Specification 
                                 with AdminWeb 
                                 with BeforeAfterAll
-                                with CommonFunction {
+                                with CommonFunction
+                                with Wrapper{
 
   sequential
   
   def beforeAll() = {
     val count = deleteAdmin("user1")
     require(count == 1, "Anzahl der geloescten AdminUserVertexes " + count)
+    
+//    val id1 = "#123:45"
+//    val id2 = "#123:46"
+//    val id3 = "#123:47"
+    val hash1 = RidToHash.calculateHash("#23:61")
+//    val hash2 = calculateHash(id2)
+//    val hash3 = calculateHash(id3)
+//    
+    println("" + "  " + hash1)
+//    println(id2 + "  " + hash2)
+//    println(id3 + "  " + hash3)
+//    
+//    RidToHash.setIdAndHash(id1, hash1)
+//    RidToHash.setIdAndHash(id2, hash2)
+//    RidToHash.setIdAndHash(id3, hash3)
+//    
+//    
+//    println(RidToHash.getId(hash1))
+//    
+//    println(RidToHash.getHash(id3))
+    
+//    RidToHash.cleanMap
   }
   
   def afterAll() = {

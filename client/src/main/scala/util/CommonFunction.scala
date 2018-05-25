@@ -26,11 +26,15 @@ trait CommonFunction {
   }
   
   def drawNewMain(html: String) = {
-    
+    jQuery(html).appendTo(jQuery(HtmlElementIds.section))
   }
-  
   
   def prepareIdForHtml(id: String): String = {
    "[0-9]+".r.findAllIn(id).toArray.mkString
   }
+  
+  def drawButton(id: String, text: String) = {
+    "<dev id='" + id + "' class='button'> " + text + " </dev>"
+  }
+  
 }

@@ -6,6 +6,8 @@ import org.genericConfig.admin.shared.config.status._
 import org.genericConfig.admin.shared.config.status._
 import org.genericConfig.admin.shared.config.bo._
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
+import org.genericConfig.admin.models.persistence.orientdb.Graph
+import play.api.Logger
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -134,7 +136,14 @@ class Config(userId: String) {
    * @return
    */
   private def getConfigs: ConfigBO = {
+    
+    RidToHash.initUser
+    
+//    val userIdRaw = RidToHash.getId(userId)
+    
     Persistence.getConfigs(userId)
+    
+//    configBO.copy(userId = RidToHash.getHash(configBO.userId))
   }
   
   /**

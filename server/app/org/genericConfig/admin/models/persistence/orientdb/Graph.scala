@@ -23,6 +23,7 @@ import org.genericConfig.admin.shared.configTree.status._
 import org.genericConfig.admin.shared.step.bo.StepBO
 import org.genericConfig.admin.shared.step.status._
 import com.orientechnologies.orient.core.exception.OStorageException
+import org.genericConfig.admin.models.logic.RidToHash
 
 
 /**
@@ -777,8 +778,10 @@ class Graph(graph: OrientGraph) {
       firstSteps.size match {
         case count if count == 1 => {
           val components: Set[Option[ComponentForConfigTreeBO]] = getComponents(Some(firstSteps.head))
+          RidToHash.setIdAndHash(firstSteps.head.getIdentity.toString)
+          val stepIdHash = RidToHash.getHash(firstSteps.head.getIdentity.toString)
           val configTree = Some(StepForConfigTreeBO(
-              firstSteps.head.getIdentity.toString,
+              stepIdHash,
               firstSteps.head.getProperty(PropertyKeys.KIND),
               components
           ))

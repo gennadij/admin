@@ -65,6 +65,7 @@ import org.genericConfig.admin.shared.step.bo._
 import org.genericConfig.admin.shared.step.status._
 import org.genericConfig.admin.shared.step.json.JsonDependencyForAdditionalStepsInOneLevel
 import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.models.logic.RidToHash
 
 
 /**
@@ -444,13 +445,16 @@ object Persistence {
    * @return 
    */
   def getConfigs(userId: String): ConfigBO = {
-    val (vConfigs, statusGetConfig, statusCommon): (Option[List[OrientVertex]], StatusGetConfigs, Status) = Graph.getConfigs(userId)
+    val userRid = RidToHash.getId(userId)
+    val (vConfigs, statusGetConfig, statusCommon): (Option[List[OrientVertex]], StatusGetConfigs, Status) = Graph.getConfigs(userRid)
     statusGetConfig match {
       case GetConfigsGot() => {
           ConfigBO(
               userId: String,
               vConfigs.get map (vConfig => {
-                  Configuration(vConfig.getIdentity.toString, vConfig.getProperty(PropertyKey.CONFIG_URL))
+                RidToHash.setIdAndHash(vConfig.getIdentity.toString)
+                val configIdHash = RidToHash.getHash(vConfig.getIdentity.toString)
+                Configuration(configIdHash, vConfig.getProperty(PropertyKey.CONFIG_URL))
               }),
               StatusConfig(
                   None, //addConfig
@@ -481,38 +485,44 @@ object Persistence {
    * @return 
    */
   def getConfigTree(configId: String): ConfigTreeBO = {
+    val configRid = RidToHash.getId(configId)
+    
     val (configTree, statusGetConfigTree, commonStatus): (Option[StepForConfigTreeBO], StatusGetConfigTree, Status) = 
-      Graph.getConfigTree(configId)
-    val (userId: String, status: Status) = Persistence.getAdminUserId(configId)
-      statusGetConfigTree match {
-        case GetConfigTreeSuccess() => 
-          status match {
-            case Success() => 
-              ConfigTreeBO(
-                  Some(userId),
-                  Some(configId),
-                  configTree,
-                  StatusConfigTree(
-                      GetConfigTreeSuccess(),
-                      Success()
-                  )
-              )
-            case _ =>
-              ConfigTreeBO(
-                  None,
-                  None,
-                  None,
-                  StatusConfigTree(
-                      GetConfigTreeError(),
-                      status
-                  )
-              )
-          }
+      Graph.getConfigTree(configRid)
+    
+      val (userId: String, status: Status) = Persistence.getAdminUserId(configRid)
+    
+    val userIdHash = RidToHash.getHash(userId)
+    
+    statusGetConfigTree match {
+      case GetConfigTreeSuccess() => 
+        status match {
+          case Success() => 
+            ConfigTreeBO(
+                Some(userIdHash),
+                Some(configId),
+                configTree,
+                StatusConfigTree(
+                    GetConfigTreeSuccess(),
+                    Success()
+                )
+            )
+          case _ =>
+            ConfigTreeBO(
+                None,
+                None,
+                None,
+                StatusConfigTree(
+                    GetConfigTreeError(),
+                    status
+                )
+            )
+        }
       case GetConfigTreeEmpty() => 
         status match {
             case Success() => 
               ConfigTreeBO(
-                  Some(userId),
+                  Some(userIdHash),
                   Some(configId),
                   None,
                   StatusConfigTree(

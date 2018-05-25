@@ -23,14 +23,6 @@ import org.genericConfig.admin.shared.configTree.status._
 
 trait Wrapper {
   
-  def calculateHash() = {
-    ???
-  }
-  
-  def getRid(hash: String) = {
-    ???
-  }
-  
   /**
    * @author Gennadi Heimann
    * 
