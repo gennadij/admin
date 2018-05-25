@@ -10,26 +10,28 @@ import org.genericConfig.admin.shared.config.json.JsonGetConfigsIn
 import org.genericConfig.admin.shared.config.json.JsonGetConfigsParams
 import play.api.libs.json.Json
 import org.genericConfig.admin.client.step.AddStep
+import util.CommonFunction
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 26.04.2018
  */
-class ConfigTree(websocket: WebSocket) {
-  
-  val numPattern = "[0-9]+".r
+class ConfigTree(websocket: WebSocket) extends CommonFunction{
+
+  cleanPage
   
   def drawConfigTree(configTree: JsonConfigTreeOut) = {
     
     configTree.result.status.getConfigTree.get.status match {
       case status if status == GetConfigTreeSuccess().status => {
         updateStatus(status, configTree.result.status.common.get.status)
+        drawConfigTreeNotEmpty(configTree)
       }
       case status if status == GetConfigTreeEmpty().status => 
         updateStatus(status, configTree.result.status.common.get.status)
         //TODO GetConfigTree need configId
-        drawConfigTreeEmpty(configTree.result.userId.get)
+        drawConfigTreeEmpty(configTree)
       case status if status == GetConfigTreeError().status => 
         updateStatus(status, configTree.result.status.common.get.status)
       
@@ -37,88 +39,99 @@ class ConfigTree(websocket: WebSocket) {
     
     //TODO wrapper in share move
     
-//    val stepIdRow = configTree.result.step.get.stepId
-//    
-//    val stepId = numPattern.findAllIn(stepIdRow).toArray.mkString
-//    
-//    val stepKind = configTree.result.step.get.kind
-//    
-//    val htmlMain =  
-//    """<dev id='main' class='main'> 
-//      <p>Konfigurationsbaum</p>
-//    </dev> """
-//    
-//    jQuery(htmlMain).appendTo(jQuery("section"))
-//    
-//    val components: Set[JsonConfigTreeComponent] = configTree.result.step.get.components
-//    
-//    var htmlComponents = ""
-//    
-//    components foreach { component => 
-//      val componentId = numPattern.findAllIn(component.componentId).toArray.mkString
-//      val nextStepId = numPattern.findAllIn(component.nextStepId.get).toArray.mkString
-//      
-//      htmlComponents = htmlComponents + 
-//        "<div id='" + componentId + "' class='component'>" + 
-//          "ID " + component.componentId + 
-//          "</br>" + 
-//          "Kind " + component.kind +
-//          "<dev id='editComponent" + componentId + "' class='button'>" + 
-//            "Edit" + 
-//          "</dev>" + 
-//          "<dev id='removeComponent" + componentId + "' class='button'>" + 
-//            "Remove" + 
-//          "</dev>" + 
-//          "<div id='" + nextStepId + "' class='nextStep'>" + 
-//            "nextStep " + component.nextStepId.get  + 
-//            "<dev id='selectNextStep" + nextStepId + "' class='button'>" + 
-//              "nextStep" + 
-//            "</dev>" + 
-//          "</div>" + 
-//        "</div>"
-//    }
-//    
-//    
-//    val htmlStep =  
-//      "<dev> " +
-//        "<div id='" + stepId + "' class='step'>" +
-//          "ID " + stepIdRow  + 
-//          "<dev id='editStep" + stepId + "'  class='button'>" + 
-//            "Edit" + 
-//          "</dev>" + 
-//          "<dev id='removeStep" + stepId + "' class='button'>" + 
-//            "Remove" + 
-//          "</dev>" + 
-//          " </br>" + 
-//          "Kind " + stepKind  + 
-//          htmlComponents + 
-//        "</div>" +
-//      "</dev> "
-//         
-//    jQuery(htmlStep).appendTo(jQuery("#main"))
-//    
-//    jQuery(s"#editStep$stepId").on("click", () => editStep())
-//    
-//    val componentIds = components map {c => numPattern.findAllIn(c.componentId).toArray.mkString}
-//    
-//    componentIds foreach { componentId => 
-//      jQuery(s"#editComponent$componentId").on("click", () => editComponent())
-//    }
-//    
-//    val nextSteps: Set[(String, JsonConfigTreeStep)] = components map {c => 
-//      c.nextStep match {
-//        case Some(nextStep) => (numPattern.findAllIn(c.nextStepId.get).toArray.mkString, c.nextStep.get)
-//        case None => (numPattern.findAllIn(c.nextStepId.get).toArray.mkString, null)
-//      }
-//    }
-//    
-//    nextSteps foreach { nextStepId =>
-//      val nSId = nextStepId._1
-//      jQuery(s"#selectNextStep$nSId").on("click", () => selectNextStep(nextStepId._2))
-//    }
+
   }
   
-  def drawConfigTreeEmpty(userId: String) = {
+  private def drawConfigTreeNotEmpty(configTree: JsonConfigTreeOut) = {
+    println("drawConfigTree")
+    val stepIdRow = configTree.result.step.get.stepId
+
+    val stepId = prepareIdForHtml(stepIdRow)
+    
+    val stepKind = configTree.result.step.get.kind
+    
+    val htmlMain =  
+    "<dev id='main' class='main'> " +
+        "<p>Konfigurationsbaum</p>" +
+        "<dev id='showConfigs' class='button'>" + 
+            "Konfigurationen" + 
+        "</dev>" +
+    "</dev>"
+    
+    jQuery(htmlMain).appendTo(jQuery("section"))
+    
+    val components: Set[JsonConfigTreeComponent] = configTree.result.step.get.components
+    
+    var htmlComponents = ""
+    
+    components foreach { component => 
+      val componentId = prepareIdForHtml(component.componentId)
+      val nextStepId = prepareIdForHtml(component.nextStepId.get)
+      
+      htmlComponents = htmlComponents + 
+        "<div id='" + componentId + "' class='component'>" + 
+          "ID " + component.componentId + 
+          "</br>" + 
+          "Kind " + component.kind +
+          "<dev id='editComponent" + componentId + "' class='button'>" + 
+            "Edit" + 
+          "</dev>" + 
+          "<dev id='removeComponent" + componentId + "' class='button'>" + 
+            "Remove" + 
+          "</dev>" + 
+          "<div id='" + nextStepId + "' class='nextStep'>" + 
+            "nextStep " + component.nextStepId.get  + 
+            "<dev id='selectNextStep" + nextStepId + "' class='button'>" + 
+              "nextStep" + 
+            "</dev>" + 
+          "</div>" + 
+        "</div>"
+    }
+    
+    
+    val htmlStep =  
+      "<dev> " +
+        "<div id='" + stepId + "' class='step'>" +
+          "ID " + stepIdRow  + 
+          "<dev id='editStep" + stepId + "'  class='button'>" + 
+            "Edit" + 
+          "</dev>" + 
+          "<dev id='removeStep" + stepId + "' class='button'>" + 
+            "Remove" + 
+          "</dev>" + 
+          " </br>" + 
+          "Kind " + stepKind  + 
+          htmlComponents + 
+        "</div>" +
+      "</dev> "
+         
+    jQuery(htmlStep).appendTo(jQuery("#main"))
+    
+    jQuery(s"#editStep$stepId").on("click", () => editStep())
+    
+    jQuery(s"#showConfigs").on("click", () => showConfigs(configTree.result.userId.get))
+    
+    val componentIds = components map {c => prepareIdForHtml(c.componentId)}
+    
+    componentIds foreach { componentId => 
+      jQuery(s"#editComponent$componentId").on("click", () => editComponent())
+    }
+    
+    val nextSteps: Set[(String, JsonConfigTreeStep)] = components map {c => 
+      c.nextStep match {
+        case Some(nextStep) => (prepareIdForHtml(c.nextStepId.get), c.nextStep.get)
+        case None => (prepareIdForHtml(c.nextStepId.get), null)
+      }
+    }
+    
+    nextSteps foreach { nextStepId =>
+      val nSId = nextStepId._1
+      jQuery(s"#selectNextStep$nSId").on("click", () => selectNextStep(nextStepId._2))
+    }
+  }
+  
+  
+  def drawConfigTreeEmpty(configTree: JsonConfigTreeOut) = {
     val htmlMain =  
       """<dev id='main' class='main'> 
       <p>Konfiguration</p>
@@ -128,13 +141,13 @@ class ConfigTree(websocket: WebSocket) {
          
     jQuery(htmlMain).appendTo(jQuery("section"))
     
-    jQuery(s"#addStep").on("click", () => addStep)
-    jQuery(s"#showConfigs").on("click", () => showConfigs(userId))
+    jQuery(s"#addStep").on("click", () => addStep(configTree))
+    jQuery(s"#showConfigs").on("click", () => showConfigs(configTree.result.userId.get))
     //TODO GetConfigs defecte userId abfangen
   }
  
-  private def addStep = {
-    new AddStep(websocket).addStep
+  private def addStep(configTree: JsonConfigTreeOut) = {
+    new AddStep(websocket).addStep(configTree)
   }
   
   def showConfigs(userId: String) = {

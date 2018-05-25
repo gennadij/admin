@@ -6,6 +6,9 @@ import org.genericConfig.admin.shared.step.json.JsonStepIn
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.step.json.JsonStepParams
 import org.genericConfig.admin.shared.step.json.JsonSelectionCriterium
+import play.api.libs.json.Json
+import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
+import org.genericConfig.admin.shared.step.json.JsonStepOut
 
 
 /**
@@ -13,9 +16,9 @@ import org.genericConfig.admin.shared.step.json.JsonSelectionCriterium
  * 
  * Created by Gennadi Heimann 18.05.2018
  */
-class AddStep(webSocket: WebSocket) {
+class AddStep(websocket: WebSocket) {
   
-  def addStep = {
+  def addStep(configTree: JsonConfigTreeOut) = {
     
     jQuery("#main").remove()
     
@@ -31,30 +34,53 @@ class AddStep(webSocket: WebSocket) {
     
     jQuery(htmlMain).appendTo(jQuery("section"))
    
-    jQuery(s"#saveStep").on("click", () => saveStep)
-    jQuery(s"#showConfig").on("click", () => showConfig)
+    jQuery(s"#saveStep").on("click", () => saveStep(configTree.result.configId.get))
+    jQuery(s"#showConfig").on("click", () => showConfigTree(configTree.result.configId.get))
   }
   
-  private def saveStep = {
-    println("saveStep")
+  private def saveStep(configId: String) = {
+    val nameToShow = jQuery("#inputStepNameToShow").value()
+    val scMin = jQuery("#inputSelectionCriteriumMin").value()
+    val scMax = jQuery("#inputSelectionCriteriumMax").value()
     
-    val jsonStepIn = JsonStepIn(
+    println("saveStep " + nameToShow)
+    println("saveStep " + scMin)
+    println("saveStep " + scMax)
+    
+    val jsonStepIn = Json.toJson(JsonStepIn(
         JsonNames.ADD_FIRST_STEP,
         JsonStepParams(
-            "", //configId: String,
+            configId, //configId: String,
             "", //componentId: String,
             "", //stepId: String,
-            "", //nameToShow: String,
-            "", //kind: String,
+            nameToShow.toString, //nameToShow: String,
+            "first", //kind: String,
             JsonSelectionCriterium(
-                1,
-                1
+                scMin.toString.toInt,
+                scMax.toString.toInt
             ), //selectionCriterium: JsonSelectionCriterium
         )
-    )
+    )).toString
+    
+    println("OUT -> " + jsonStepIn)
+    websocket.send(jsonStepIn)
   }
   
-  private def showConfig = {
+  private def showConfigTree(configId: String) = {
     println("showConfig")
+  }
+  
+  def updateStatus(addStep: JsonStepOut) = {
+    println(addStep)
+    val htmlHeader = 
+      s"<dev id='status' class='status'>" + 
+        addStep.result.status.addStep.get.status + 
+        " , " + 
+        addStep.result.status.appendStep.get.status + 
+        " ," + 
+        addStep.result.status.common.get.status +
+      "</dev>"
+    jQuery("#status").remove()
+    jQuery(htmlHeader).appendTo(jQuery("header"))
   }
 }

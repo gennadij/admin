@@ -8,48 +8,47 @@ import org.genericConfig.admin.shared.common.json.JsonStatus
 import org.genericConfig.admin.shared.config.json.JsonDeleteConfigIn
 import org.genericConfig.admin.shared.config.json.JsonDeleteConfigParams
 import play.api.libs.json.Json
+import util.CommonFunction
+import scala.util.matching.Regex
+import util.HtmlElementIds
+import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeIn
+import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeParams
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 25.04.2018
  */
-class GetConfig(websocket: WebSocket) {
+class GetConfig(websocket: WebSocket) extends CommonFunction{
+
+  cleanPage
   
-  val numPattern = "[0-9]+".r
-  
-  def drowAllConfigs(getConfigsOut: JsonGetConfigsOut) = {
+  def drawAllConfigs(getConfigsOut: JsonGetConfigsOut): Unit = {
     
-    jQuery("#main").remove
-    jQuery("#status").remove()
+    val status: String = getConfigsOut.result.status.getConfigs.get.status + " , " + 
+        getConfigsOut.result.status.common.get.status
     
-    val addConfig: Option[JsonStatus] = getConfigsOut.result.status.addConfig
-    val getConfigs: Option[JsonStatus] = getConfigsOut.result.status.getConfigs
-//    val deleteConfig: Option[JsonStatus] = getConfigsOut.result.status.deleteConfig
-    val updateConfig: Option[JsonStatus] = getConfigsOut.result.status.updateConfig
-    val common: Option[JsonStatus] = getConfigsOut.result.status.common
-    
-    val htmlHeader = 
-      s"<dev id='status' class='status'>" + 
-        getConfigs.get.status + " , " + common.get.status + 
-      "</dev>"
-  
-    jQuery(htmlHeader).appendTo(jQuery("header"))
+    drawNewStatus(status)
     
     val htmlMain =  
     """<dev id='main' class='main'> 
       <p>Konfigurationen</p>
       <dev id='createConfig' class='button'> New Config </dev>
     </dev> """
-        
-   jQuery(htmlMain).appendTo(jQuery("section"))
+    
+    drawNewMain(htmlMain)
+    
+    jQuery(htmlMain).appendTo(jQuery("section"))
    
-   
-   jQuery(s"#createConfig").on("click", () => createConfig(getConfigsOut.result.userId))
-   
-   getConfigsOut.result.configs foreach { config =>
+    jQuery(s"#createConfig").on("click", () => createConfig(getConfigsOut.result.userId))
+  
+    drawConfigs(getConfigsOut)
+  }
+  
+  private def drawConfigs(getConfigsOut: JsonGetConfigsOut) = {
+    getConfigsOut.result.configs foreach { config =>
      
-     val configId: String = numPattern.findAllIn(config.configId).toArray.mkString
+     val configId: String = prepareIdForHtml(config.configId)
      
      val htmlConfig =  
        "<dev id='" + configId + "' class='config'> " +
@@ -66,7 +65,8 @@ class GetConfig(websocket: WebSocket) {
            "</div>" +
        "</dev> "
            
-      jQuery(htmlConfig).appendTo(jQuery("#main"))
+      jQuery(htmlConfig).appendTo(jQuery(HtmlElementIds.main))
+      
       jQuery(s"#showConfig$configId").on("click", () => showConfig(configId, config.configId))
       
       jQuery(s"#editConfig$configId").on("click", () => 
@@ -74,26 +74,30 @@ class GetConfig(websocket: WebSocket) {
       
       jQuery(s"#deleteConfig$configId").on("click", () => 
         deleteConfig(config.configId, config.configUrl, getConfigsOut.result.userId))
-      
     }
-    
-    
   }
   
-  def showConfig(configId: String, configIdRaw: String) = {
-    println("selected ConfigId" + configIdRaw)
-    val jsonGetConfigtree = "{\"json\":\"ConfigTree\",\"params\":{\"configId\":\"" + configIdRaw + "\"}}"
-    println("websocket  send " + jsonGetConfigtree)
-    websocket.send(jsonGetConfigtree)
+  private def showConfig(configId: String, configIdRaw: String) = {
+    
+    val jsonConfigTree: String = Json.toJson(
+        JsonConfigTreeIn(
+            params = JsonConfigTreeParams(
+                configIdRaw
+            )
+        )
+    ).toString
+    
+    println("-> " + jsonConfigTree)
+    websocket.send(jsonConfigTree)
     jQuery("#main").remove()
   }
   
-  def createConfig(userId: String) = {
+  private def createConfig(userId: String) = {
     println("Create Config")
     new CreateConfig(websocket, userId).createConfig
   }
   
-  def editConfig(configId: String, configUrl: String, userId: String) = {
+  private def editConfig(configId: String, configUrl: String, userId: String) = {
     println("edit Config")
     new EditConfig(websocket).editConfig(configId, configUrl, userId)
   }

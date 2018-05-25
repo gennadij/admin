@@ -1,6 +1,5 @@
 package models.v011
 
-import play.api.libs.json._
 import org.genericConfig.admin.controllers.admin.AdminWeb
 import org.specs2.specification.BeforeAfterAll
 import org.specs2.runner.JUnitRunner
@@ -17,6 +16,8 @@ import models.preparingConfigs.PrepareConfigsForSpecsv011
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.registration.status.AddedUser
 import org.genericConfig.admin.shared.common.status.Success
+import util.CommonFunction
+import play.api.libs.json.Json
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -29,12 +30,13 @@ import org.genericConfig.admin.shared.common.status.Success
 @RunWith(classOf[JUnitRunner])
 class AddingNewAdminUserSpecs extends Specification 
                                 with AdminWeb 
-                                with BeforeAfterAll{
+                                with BeforeAfterAll
+                                with CommonFunction {
 
   sequential
   
   def beforeAll() = {
-    val count = PrepareConfigsForSpecsv011.deleteAdmin("user1")
+    val count = deleteAdmin("user1")
     require(count == 1, "Anzahl der geloescten AdminUserVertexes " + count)
   }
   

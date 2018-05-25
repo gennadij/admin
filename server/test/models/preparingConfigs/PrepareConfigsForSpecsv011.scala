@@ -351,22 +351,4 @@ object PrepareConfigsForSpecsv011 extends AdminWeb with GeneralFunctionToPrepare
       println("configId " + configId)
     }
   }
-  
-  def deleteConfigVertex(username: String): Int = {
-    val sql: String = s"DELETE VERTEX Config where @rid IN (SELECT OUT('hasConfig') FROM AdminUser WHERE username='$username')"
-      val graph: OrientGraph = Database.getFactory().getTx()
-      val res: Int = graph
-        .command(new OCommandSQL(sql)).execute()
-      graph.commit
-      Logger.info("Deleting count: " + res)
-      res
-  }
-  
-  def deleteAdmin(username: String): Int = {
-    val graph: OrientGraph = Database.getFactory().getTx()
-    val res: Int = graph
-      .command(new OCommandSQL(s"DELETE VERTEX AdminUser where username='$username'")).execute()
-    graph.commit
-    res
-  }
 }

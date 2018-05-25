@@ -62,7 +62,7 @@ object Config{
    * 
    * @return
    */
-  def getConfigTree(configId: String) = {
+  def getConfigTree(configId: String): ConfigTreeBO = {
     new Config("").getConfigTree(configId)
   }
   

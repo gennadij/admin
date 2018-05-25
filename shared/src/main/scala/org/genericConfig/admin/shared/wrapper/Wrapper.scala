@@ -1,24 +1,5 @@
-package org.genericConfig.admin.models.wrapper
+package org.genericConfig.admin.shared.wrapper
 
-import org.genericConfig.admin.models.wrapper.step.StepIn
-import org.genericConfig.admin.models.wrapper.step.StepOut
-import org.genericConfig.admin.models.wrapper.dependency.DependencyOut
-import org.genericConfig.admin.models.wrapper.component.ComponentIn
-import org.genericConfig.admin.models.json.component.JsonComponentOut
-import org.genericConfig.admin.models.json.component.ComponentResult
-import org.genericConfig.admin.models.wrapper.component.ComponentOut
-import org.genericConfig.admin.models.json.connectionComponentToStep.JsonConnectionComponentToStepIn
-import org.genericConfig.admin.models.wrapper.connectionComponentToStep.ConnectionComponentToStepIn
-import org.genericConfig.admin.models.wrapper.connectionComponentToStep.ConnectionComponentToStepOut
-import org.genericConfig.admin.models.json.connectionComponentToStep.JsonConnectionComponentToStepOut
-import org.genericConfig.admin.models.json.connectionComponentToStep.ConnectionComponentToStepResult
-
-import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeComponent
-import org.genericConfig.admin.models.json.dependency.JsonDependencyOut
-import org.genericConfig.admin.models.json.dependency.JsonDependencyResult
-import org.genericConfig.admin.models.json.dependency.JsonDependencyIn
-import org.genericConfig.admin.models.wrapper.dependency.DependencyIn
-import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.shared.configTree.json._
 import org.genericConfig.admin.shared.registration.bo._
 import org.genericConfig.admin.shared.registration.json._
@@ -30,7 +11,7 @@ import org.genericConfig.admin.shared.login.bo._
 import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.step.json._
 import org.genericConfig.admin.shared.step.bo._
-import org.genericConfig.admin.models.json.component.JsonComponentIn
+import org.genericConfig.admin.shared.configTree.status._
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -121,59 +102,7 @@ trait Wrapper {
    * @return JsonCreateConfigSC
    */
   def toJsonAddConfigOut(configBO: ConfigBO): JsonAddConfigOut = {
-    JsonAddConfigOut(
-        result = JsonAddConfigResult(
-            configBO.userId,
-            configBO.configs match {
-              case List() => ""
-              case _ => {
-                configBO.configs.head.configId
-              }
-            },
-            JsonConfigStatus(
-                configBO.status.addConfig match {
-                  case Some(addConfig) => 
-                    Some(JsonStatus(
-                      addConfig.status,
-                      addConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.getConfigs match {
-                  case Some(getConfigs) => 
-                    Some(JsonStatus(
-                      getConfigs.status,
-                      getConfigs.message
-                    ))
-                  case None => None
-                },
-                configBO.status.deleteConfig match {
-                  case Some(deleteConfig) => 
-                    Some(JsonStatus(
-                      deleteConfig.status,
-                      deleteConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.updateConfig match {
-                  case Some(updateConfig) => 
-                    Some(JsonStatus(
-                      updateConfig.status,
-                      updateConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.common match {
-                  case Some(common) => 
-                    Some(JsonStatus(
-                      common.status,
-                      common.message
-                    ))
-                  case None => None
-                }
-            )
-        )
-    )
+    new WrapperConfig(configBO).toJsonAddConfigOut
   }
   
   /**
@@ -187,60 +116,7 @@ trait Wrapper {
    */
   
   def toJsonGetConfigsOut(configBO:ConfigBO): JsonGetConfigsOut = {
-    val cBOs: List[JsonConfig] = configBO.configs map { configBO => {
-      JsonConfig(
-          configBO.configId,
-          configBO.configUrl
-      )
-    }}
-    JsonGetConfigsOut(
-        result = JsonGetConfigsResult(
-            configBO.userId,
-            cBOs,
-            JsonConfigStatus(
-                configBO.status.addConfig match {
-                  case Some(status) => 
-                    Some(JsonStatus(
-                        status.status,
-                        status.message
-                    ))
-                  case None => None
-                },
-                configBO.status.getConfigs match {
-                  case Some(getConfigs) => 
-                    Some(JsonStatus(
-                      getConfigs.status,
-                      getConfigs.message
-                    ))
-                  case None => None
-                },
-                configBO.status.deleteConfig match {
-                  case Some(deleteConfig) => 
-                    Some(JsonStatus(
-                      deleteConfig.status,
-                      deleteConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.updateConfig match {
-                  case Some(updateConfig) => 
-                    Some(JsonStatus(
-                      updateConfig.status,
-                      updateConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.common match {
-                  case Some(status) => 
-                    Some(JsonStatus(
-                        status.status,
-                        status.message
-                    ))
-                  case None => None
-                }
-            )
-        )
-    )
+    new WrapperConfig(configBO).toJsonGetConfigsOut
   }
   
   /**
@@ -253,53 +129,7 @@ trait Wrapper {
    * @return FirstStepCS
    */
   def toJsonDeleteConfigOut(configBO: ConfigBO): JsonDeleteConfigOut = {
-    JsonDeleteConfigOut(
-        result = JsonDeleteConfigsResult(
-            configBO.userId,
-            JsonConfigStatus(
-                configBO.status.addConfig match {
-                  case Some(addConfig) => 
-                    Some(JsonStatus(
-                      addConfig.status,
-                      addConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.getConfigs match {
-                  case Some(getConfigs) => 
-                    Some(JsonStatus(
-                      getConfigs.status,
-                      getConfigs.message
-                    ))
-                  case None => None
-                },
-                configBO.status.deleteConfig match {
-                  case Some(deleteConfig) => 
-                    Some(JsonStatus(
-                      deleteConfig.status,
-                      deleteConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.updateConfig match {
-                  case Some(updateConfig) => 
-                    Some(JsonStatus(
-                      updateConfig.status,
-                      updateConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.common match {
-                  case Some(common) => 
-                    Some(JsonStatus(
-                      common.status,
-                      common.message
-                    ))
-                  case None => None
-                }
-            )
-        )
-    )
+    new WrapperConfig(configBO).toJsonDeleteConfigOut
   }
   
   /**
@@ -312,53 +142,7 @@ trait Wrapper {
    * @return FirstStepCS
    */
   def toJsonUpdateConfigOut(configBO: ConfigBO): JsonUpdateConfigOut = {
-    JsonUpdateConfigOut(
-        result = JsonUpdateConfigResult(
-            configBO.userId,
-            JsonConfigStatus(
-                configBO.status.addConfig match {
-                  case Some(addConfig) => 
-                    Some(JsonStatus(
-                      addConfig.status,
-                      addConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.getConfigs match {
-                  case Some(getConfigs) => 
-                    Some(JsonStatus(
-                      getConfigs.status,
-                      getConfigs.message
-                    ))
-                  case None => None
-                },
-                configBO.status.deleteConfig match {
-                  case Some(deleteConfig) => 
-                    Some(JsonStatus(
-                      deleteConfig.status,
-                      deleteConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.updateConfig match {
-                  case Some(updateConfig) => 
-                    Some(JsonStatus(
-                      updateConfig.status,
-                      updateConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.common match {
-                  case Some(common) => 
-                    Some(JsonStatus(
-                      common.status,
-                      common.message
-                    ))
-                  case None => None
-                }
-            )
-        )
-    )
+    new WrapperConfig(configBO).toJsonUpdateConfigOut
   }
   /**
    * @author Gennadi Heimann
@@ -513,13 +297,13 @@ trait Wrapper {
    * 
    * @return JsonFirstStepSC
    */
-  def toComponentIn(jsonComponentIn : JsonComponentIn): ComponentIn = {
-    ComponentIn(
-        jsonComponentIn.params.stepId
-        , jsonComponentIn.params.nameToShow
-        , jsonComponentIn.params.kind
-    )
-  }
+//  def toComponentIn(jsonComponentIn : JsonComponentIn): ComponentIn = {
+//    ComponentIn(
+//        jsonComponentIn.params.stepId
+//        , jsonComponentIn.params.nameToShow
+//        , jsonComponentIn.params.kind
+//    )
+//  }
   
   /**
    * @author Gennadi Heimann
@@ -530,15 +314,15 @@ trait Wrapper {
    * 
    * @return JsonComponentSC
    */
-  def toJsonComponentOut(componentOut: ComponentOut): JsonComponentOut = {
-    JsonComponentOut(
-        result = ComponentResult(
-            componentOut.componentId
-            , componentOut.status
-            , componentOut.message
-        )
-    )
-  }
+//  def toJsonComponentOut(componentOut: ComponentOut): JsonComponentOut = {
+//    JsonComponentOut(
+//        result = ComponentResult(
+//            componentOut.componentId
+//            , componentOut.status
+//            , componentOut.message
+//        )
+//    )
+//  }
   
   /**
    * @author Gennadi Heimann
@@ -549,13 +333,13 @@ trait Wrapper {
    * 
    * @return ConnectionComponentToStepCS
    */
-  def toConnectionComponentToStepIn(
-      jsonConnectionComponentToStepIn: JsonConnectionComponentToStepIn): ConnectionComponentToStepIn = {
-    ConnectionComponentToStepIn(
-        jsonConnectionComponentToStepIn.params.componentId
-        , jsonConnectionComponentToStepIn.params.stepId
-    )
-  }
+//  def toConnectionComponentToStepIn(
+//      jsonConnectionComponentToStepIn: JsonConnectionComponentToStepIn): ConnectionComponentToStepIn = {
+//    ConnectionComponentToStepIn(
+//        jsonConnectionComponentToStepIn.params.componentId
+//        , jsonConnectionComponentToStepIn.params.stepId
+//    )
+//  }
   
   /**
    * @author Gennadi Heimann
@@ -566,16 +350,16 @@ trait Wrapper {
    * 
    * @return JsonConnectionComponentToStepSC
    */
-  def toJsonConnectionComponentToStepOut(
-          connectionComponentToStepOut: ConnectionComponentToStepOut
-      ): JsonConnectionComponentToStepOut = {
-    JsonConnectionComponentToStepOut(
-        result = ConnectionComponentToStepResult(
-            connectionComponentToStepOut.status,
-            connectionComponentToStepOut.message
-        )
-    )
-  }
+//  def toJsonConnectionComponentToStepOut(
+//          connectionComponentToStepOut: ConnectionComponentToStepOut
+//      ): JsonConnectionComponentToStepOut = {
+//    JsonConnectionComponentToStepOut(
+//        result = ConnectionComponentToStepResult(
+//            connectionComponentToStepOut.status,
+//            connectionComponentToStepOut.message
+//        )
+//    )
+//  }
   
   /**
    * @author Gennadi Heimann
@@ -588,16 +372,16 @@ trait Wrapper {
    */
   def toJsonConfigTreeOut(configTreeBO: ConfigTreeBO): JsonConfigTreeOut = {
     
-    configTreeBO.configTree match {
-      case Some(configTree) => {
+    configTreeBO.status.getConfigTree match {
+      case GetConfigTreeSuccess() => {
         JsonConfigTreeOut(
             result = JsonConfigTreeResult(
                 Some(configTreeBO.userId.get),
                 Some(configTreeBO.configId.get),
                 Some(JsonConfigTreeStep(
-                    configTree.stepId,
-                    configTree.kind,
-                    getJsonConfigTreeComponents(configTree.components)
+                    configTreeBO.configTree.get.stepId,
+                    configTreeBO.configTree.get.kind,
+                    getJsonConfigTreeComponents(configTreeBO.configTree.get.components)
                 )),
                 JsonConfigTreeStatus(
                     Some(JsonStatus(
@@ -611,9 +395,27 @@ trait Wrapper {
                 )
             )
         )
-        
       }
-      case None => {
+      case GetConfigTreeEmpty() => {
+        JsonConfigTreeOut(
+            result = JsonConfigTreeResult(
+                Some(configTreeBO.userId.get),
+                Some(configTreeBO.configId.get),
+                None, 
+                JsonConfigTreeStatus(
+                    Some(JsonStatus(
+                        configTreeBO.status.getConfigTree.status,
+                        configTreeBO.status.getConfigTree.message
+                    )),
+                    Some(JsonStatus(
+                        configTreeBO.status.common.status,
+                        configTreeBO.status.common.message
+                    ))
+                )
+            )
+        )
+      }
+      case GetConfigTreeError() => {
         JsonConfigTreeOut(
             result = JsonConfigTreeResult(
                 None,
@@ -697,20 +499,20 @@ trait Wrapper {
    * 
    * @return JsonDependencyOut
    */
-  def toJsonDependencyOut(dependencyOut: DependencyOut): JsonDependencyOut = {
-    JsonDependencyOut(
-        result = JsonDependencyResult(
-            dependencyOut.componentFromId,
-            dependencyOut.componentToId,
-            dependencyOut.dependencyId,
-            dependencyOut.dependencyType,
-            dependencyOut.visualization,
-            dependencyOut.nameToShow,
-            dependencyOut.status,
-            dependencyOut.message
-        )
-    )
-  }
+//  def toJsonDependencyOut(dependencyOut: DependencyOut): JsonDependencyOut = {
+//    JsonDependencyOut(
+//        result = JsonDependencyResult(
+//            dependencyOut.componentFromId,
+//            dependencyOut.componentToId,
+//            dependencyOut.dependencyId,
+//            dependencyOut.dependencyType,
+//            dependencyOut.visualization,
+//            dependencyOut.nameToShow,
+//            dependencyOut.status,
+//            dependencyOut.message
+//        )
+//    )
+//  }
   
   
   /**
@@ -722,15 +524,15 @@ trait Wrapper {
    * 
    * @return DependencyIn
    */
-  def toDependencyIn(jsonDependencyIn: JsonDependencyIn): DependencyIn = {
-    DependencyIn(
-        jsonDependencyIn.params.componentFromId,
-        jsonDependencyIn.params.componentToId,
-        jsonDependencyIn.params.dependencyType,
-        jsonDependencyIn.params.visualization,
-        jsonDependencyIn.params.nameToShow
-    )
-  }
+//  def toDependencyIn(jsonDependencyIn: JsonDependencyIn): DependencyIn = {
+//    DependencyIn(
+//        jsonDependencyIn.params.componentFromId,
+//        jsonDependencyIn.params.componentToId,
+//        jsonDependencyIn.params.dependencyType,
+//        jsonDependencyIn.params.visualization,
+//        jsonDependencyIn.params.nameToShow
+//    )
+//  }
   
   /**
    * @author Gennadi Heimann
@@ -741,12 +543,12 @@ trait Wrapper {
    * 
    * @return DependencyIn
    */
-  def toVisualProposalForAdditionalStepsInOneLevelIn(
-      jsonVisualProposalForAdditionalStepsInOneLevelIn: JsonVisualProposalForAdditionalStepsInOneLevelIn): 
-      VisualProposalForAdditionalStepsInOneLevelIn = {
-    
-     VisualProposalForAdditionalStepsInOneLevelIn(
-         jsonVisualProposalForAdditionalStepsInOneLevelIn.params.selectedVisualProposal
-     )
-  }
+//  def toVisualProposalForAdditionalStepsInOneLevelIn(
+//      jsonVisualProposalForAdditionalStepsInOneLevelIn: JsonVisualProposalForAdditionalStepsInOneLevelIn): 
+//      VisualProposalForAdditionalStepsInOneLevelIn = {
+//    
+//     VisualProposalForAdditionalStepsInOneLevelIn(
+//         jsonVisualProposalForAdditionalStepsInOneLevelIn.params.selectedVisualProposal
+//     )
+//  }
 }

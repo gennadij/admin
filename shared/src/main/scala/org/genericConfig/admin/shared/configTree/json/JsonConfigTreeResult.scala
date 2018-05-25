@@ -20,7 +20,7 @@ object JsonConfigTreeResult {
   
   implicit val writes: Format[JsonConfigTreeResult] = (
     (JsPath \ "userId").format(Format.optionWithNull[String]) and
-    (JsPath \ "confugId").format(Format.optionWithNull[String]) and
+    (JsPath \ "configId").format(Format.optionWithNull[String]) and
     (JsPath \ "step").format(Format.optionWithNull[JsonConfigTreeStep]) and
     (JsPath \ "status").format[JsonConfigTreeStatus] 
   )(JsonConfigTreeResult.apply, unlift(JsonConfigTreeResult.unapply))

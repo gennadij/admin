@@ -15,6 +15,7 @@ import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.login.status.UserExist
 import org.genericConfig.admin.shared.common.status.Success
 import org.genericConfig.admin.shared.config.status.AddConfigAdded
+import util.CommonFunction
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -26,14 +27,16 @@ import org.genericConfig.admin.shared.config.status.AddConfigAdded
 
 @RunWith(classOf[JUnitRunner])
 class AddingNewConfigSpecs extends Specification 
-                           with BeforeAfterAll{
-  
+                           with BeforeAfterAll
+                           with CommonFunction
+                           {
+                           
   val userPassword = "user3"
   
   val wC = WebClient.init
   def beforeAll() = {
     PrepareConfigsForSpecsv011.prepareAddingNewConfig(wC)
-    val count: Int = PrepareConfigsForSpecsv011.deleteConfigVertex(userPassword)
+    val count: Int = deleteConfigVertex(userPassword)
     require(count == 1, "Anzahl der geloeschten ConfigVertexes " + count)
   }
   

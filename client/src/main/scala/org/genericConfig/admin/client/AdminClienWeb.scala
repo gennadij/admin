@@ -15,6 +15,7 @@ import org.genericConfig.admin.client.config.CreateConfig
 import org.genericConfig.admin.client.config.DeleteConfig
 import org.genericConfig.admin.client.config.EditConfig
 import org.genericConfig.admin.shared.step.json.JsonStepOut
+import org.genericConfig.admin.client.step.AddStep
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -50,7 +51,7 @@ class AdminClienWeb(websocket: WebSocket) {
       case s: JsSuccess[JsonGetConfigsOut] => s.get
       case e: JsError => println("Errors -> CREATE_DEPENDENCY: " + JsError.toJson(e).toString())
     }
-    new GetConfig(websocket).drowAllConfigs(getConfigsIn.get)
+    new GetConfig(websocket).drawAllConfigs(getConfigsIn.get)
     JsValue
   }
   
@@ -96,6 +97,6 @@ class AdminClienWeb(websocket: WebSocket) {
       case s: JsSuccess[JsonStepOut] => s.get
       case e: JsError => println("Errors -> ADD_FIRST_STEP: " + JsError.toJson(e).toString())
     }
-//    new EditConfig(websocket).updateStatus(updateConfigOut.get)
+    new AddStep(websocket).updateStatus(addFirstStepOut.get)
   }
 }

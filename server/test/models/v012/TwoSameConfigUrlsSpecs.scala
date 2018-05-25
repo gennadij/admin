@@ -19,6 +19,7 @@ import models.preparingConfigs.PrepareConfigsForSpecsv011
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.config.status.AddConfigAlreadyExist
 import org.genericConfig.admin.shared.common.status.ODBRecordDuplicated
+import util.CommonFunction
 
 /**
 	* Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -30,16 +31,17 @@ import org.genericConfig.admin.shared.common.status.ODBRecordDuplicated
 	*/
 
 @RunWith(classOf[JUnitRunner])
-class TwoSameConfigUrlsSpecs extends Specification
-	with BeforeAfterAll
-	with GeneralFunctionToPrepareConfigs{
+class TwoSameConfigUrlsSpecs  extends Specification
+                              with BeforeAfterAll
+                              with GeneralFunctionToPrepareConfigs
+                              with CommonFunction{
   
 
   val webClient = WebClient.init
   
 	def beforeAll = {
 		PrepareConfigsForSpecsv012.prepareTwoSameConfigUrls(webClient)
-		val count = PrepareConfigsForSpecsv011.deleteAdmin("user14")
+		val count = deleteAdmin("user14")
 		require(count == 1, count.toString)
 	}
 	def afterAll = {}
