@@ -136,14 +136,7 @@ class Config(userId: String) {
    * @return
    */
   private def getConfigs: ConfigBO = {
-    
-    RidToHash.initUser
-    
-//    val userIdRaw = RidToHash.getId(userId)
-    
     Persistence.getConfigs(userId)
-    
-//    configBO.copy(userId = RidToHash.getHash(configBO.userId))
   }
   
   /**

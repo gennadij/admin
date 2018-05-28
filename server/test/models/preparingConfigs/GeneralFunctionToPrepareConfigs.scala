@@ -61,7 +61,7 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
   
   def registerNewUser(userPassword: String, webClient: WebClient) = {
     val registerCS = Json.obj(
-        "json" -> JsonNames.REGISTRATION
+        "json" -> JsonNames.ADD_USER
         ,"params" -> Json.obj(
             "username" -> userPassword,
             "password"-> userPassword

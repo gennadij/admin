@@ -5,7 +5,6 @@ import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import org.genericConfig.admin.models.persistence.Database
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import play.api.Logger
-import org.genericConfig.admin.shared.registration.status._
 import org.genericConfig.admin.shared.common.status._
 import org.genericConfig.admin.shared.login.bo.LoginBO
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
@@ -17,13 +16,12 @@ import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
 import com.tinkerpop.blueprints.Vertex
 import org.genericConfig.admin.shared.config.status._
 import org.genericConfig.admin.shared.configTree.bo._
-import org.genericConfig.admin.shared.registration.bo.RegistrationBO
-import org.genericConfig.admin.shared.configTree.status.StatusGetConfigTree
 import org.genericConfig.admin.shared.configTree.status._
 import org.genericConfig.admin.shared.step.bo.StepBO
 import org.genericConfig.admin.shared.step.status._
 import com.orientechnologies.orient.core.exception.OStorageException
 import org.genericConfig.admin.models.logic.RidToHash
+import org.genericConfig.admin.shared.user.status._
 
 
 /**
@@ -42,13 +40,13 @@ object Graph{
    * 
    * @return RegistrationBO
    */
-  def addUser(username: String, password: String): RegistrationBO = {
+  def addUser(username: String, password: String): (Option[OrientVertex], StatusAddUser, Status) = {
     (Database.getFactory(): @unchecked) match {
       case (Some(dbFactory), Success()) => 
         val graph: OrientGraph = dbFactory.getTx()
-        new Graph(graph).writeUser(username, password)
+        new Graph(graph).addUser(username, password)
       case (None, ODBConnectionFail()) => 
-        RegistrationBO(status = StatusRegistration(None, Some(ODBConnectionFail())))
+        (None, AddUserError(), ODBConnectionFail())
     }
   }
   
@@ -411,50 +409,33 @@ class Graph(graph: OrientGraph) {
    * 
    * @param String, String
    * 
-   * @return RegistrationBO
+   * @return 
    */
-  private def writeUser(username: String, password: String): RegistrationBO = {
-    val vUser: (Option[OrientVertex], Status)  = try {
+  private def addUser(username: String, password: String): (Option[OrientVertex], StatusAddUser, Status) = {
+    
+   try {
       val vAdminUseres : List[Vertex] = graph.getVertices(PropertyKeys.USERNAME, username).asScala.toList
       if(vAdminUseres.size == 0){
         val vAdminUser: OrientVertex = graph.addVertex("class:" + PropertyKeys.VERTEX_ADMIN_USER, 
           PropertyKeys.USERNAME, username, 
           PropertyKeys.PASSWORD, password)
         graph.commit
-        (Some(vAdminUser), AddedUser())
+        (Some(vAdminUser), AddUserSuccess(), Success())
       }else if(vAdminUseres.size == 1){
-        (Some(vAdminUseres.head.asInstanceOf[OrientVertex]), AlredyExistUser())
+        (Some(vAdminUseres.head.asInstanceOf[OrientVertex]), AddUserAlreadyExist(), Error())
       }else{
-        (None, Error())
+        (None, AddUserError(), Error())
       }
     }catch{
       case e2 : ClassCastException => {
         graph.rollback()
         Logger.error(e2.printStackTrace().toString)
-        (None, ODBClassCastError())
+        (None, AddUserError(), ODBClassCastError())
       }
       case e1: Exception => {
         graph.rollback()
         Logger.error(e1.printStackTrace().toString)
-        (None, ODBReadError())
-      }
-    }
-    vUser match {
-      case (Some(vUser), AddedUser()) => {
-        RegistrationBO(
-            username, "",
-            vUser.getIdentity.toString(), 
-            StatusRegistration(Some(AddedUser()), Some(Success()))
-        )
-      }
-      case (Some(vUser), AlredyExistUser()) => {
-        RegistrationBO(
-            username, "", 
-            vUser.getIdentity.toString, 
-            status = StatusRegistration(Some(AlredyExistUser()), Some(Success())))
-      }
-      case _ => {
-        RegistrationBO("", "", "", StatusRegistration(None, Some(Error())))
+        (None, AddUserError(), ODBReadError())
       }
     }
   }
@@ -778,10 +759,10 @@ class Graph(graph: OrientGraph) {
       firstSteps.size match {
         case count if count == 1 => {
           val components: Set[Option[ComponentForConfigTreeBO]] = getComponents(Some(firstSteps.head))
-          RidToHash.setIdAndHash(firstSteps.head.getIdentity.toString)
-          val stepIdHash = RidToHash.getHash(firstSteps.head.getIdentity.toString)
+//          RidToHash.setIdAndHash(firstSteps.head.getIdentity.toString)
+//          val stepIdHash = RidToHash.getHash(firstSteps.head.getIdentity.toString)
           val configTree = Some(StepForConfigTreeBO(
-              stepIdHash,
+              firstSteps.head.getIdentity.toString,
               firstSteps.head.getProperty(PropertyKeys.KIND),
               components
           ))

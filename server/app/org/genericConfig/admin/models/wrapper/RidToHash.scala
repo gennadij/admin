@@ -2,29 +2,31 @@ package org.genericConfig.admin.models.logic
 
 import play.api.Logger
 import org.genericConfig.admin.models.persistence.orientdb.Graph
+import org.genericConfig.admin.models.wrapper.WrapperUser
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 25.05.2018
  */
-object RidToHash {
+trait RidToHash {
   
   
   var map = scala.collection.mutable.Map[String, String]()
   
   
-  def setIdAndHash(id: String): Unit = {
-    
-    val hash = calculateHash(id)
+  def setIdAndHash(id: String): String = {
     
     (map.exists(_._1 == id): @unchecked) match {
-      case false => 
+      case false =>
+        val hash = calculateHash(id)
         map += (id -> hash)
+        map.foreach(item => Logger.info("Item" + item.toString))
+        hash
       case true => 
+        map.foreach(item => Logger.info("Item" + item.toString))
+        calculateHash(id)
     }
-    
-    map.foreach(item => Logger.info("Item" + item.toString))
   }
   
   def getId(hash: String): String = {
@@ -48,13 +50,5 @@ object RidToHash {
     val digest = md.digest(id.getBytes)
     val bigInt = new BigInteger(1, digest)
     bigInt.toString(16)
-  }
-  
-  def initUser = {
-    val (vUser, status) = Graph.readUser("user_v016_4_client" , "user_v016_4_client")
-    
-    Logger.info(vUser.get.getIdentity.toString)
-    
-    RidToHash.setIdAndHash(vUser.get.getIdentity.toString)
   }
 }

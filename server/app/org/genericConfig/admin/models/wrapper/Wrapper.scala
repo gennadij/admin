@@ -1,8 +1,6 @@
-package org.genericConfig.admin.shared.wrapper
+package org.genericConfig.admin.models.wrapper
 
 import org.genericConfig.admin.shared.configTree.json._
-import org.genericConfig.admin.shared.registration.bo._
-import org.genericConfig.admin.shared.registration.json._
 import org.genericConfig.admin.shared.common.json._
 import org.genericConfig.admin.shared.login.json._
 import org.genericConfig.admin.shared.config.json._
@@ -12,6 +10,9 @@ import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.step.json._
 import org.genericConfig.admin.shared.step.bo._
 import org.genericConfig.admin.shared.configTree.status._
+import org.genericConfig.admin.models.logic.RidToHash
+import org.genericConfig.admin.shared.user.json._
+import org.genericConfig.admin.shared.user.bo.UserBO
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -21,34 +22,32 @@ import org.genericConfig.admin.shared.configTree.status._
 
 
 
-trait Wrapper {
+trait Wrapper{
   
   /**
    * @author Gennadi Heimann
    * 
    * @version 0.1.6
    * 
-   * @param RegistrationSC
+   * @param 
    * 
-   * @return JsonRegistrationSC
+   * @return 
    */
-  def toJsonRegistrationOut(registrationBO: RegistrationBO): JsonRegistrationOut = {
-    JsonRegistrationOut(
-        result = RegistrationResult(
-          registrationBO.adminId,
-          registrationBO.username,
-          JsonRegistrationStatus(
-              registrationBO.status.addUser match {
-                case Some(adduser) => Some(JsonStatus(adduser.status, adduser.message))
-                case None => None
-              },
-              registrationBO.status.common match {
-                case Some(common) => Some(JsonStatus(common.status, common.message))
-                case None => None
-              }
-          )
-        )
-    )
+  def toRegistrationBO(jsonUserIn: JsonUserIn): UserBO = {
+    new WrapperUser().toUserBO(jsonUserIn)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return
+   */
+  def toJsonUserOut(registrationBO: UserBO): JsonUserOut = {
+    new WrapperUser().toJsonUserOut(registrationBO)
   }
   
   

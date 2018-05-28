@@ -11,11 +11,11 @@ import org.genericConfig.admin.models.json.dependency.JsonDependencyIn
 import org.genericConfig.admin.shared.configTree.json._
 import org.genericConfig.admin.models.json.dependency.JsonDependencyOut
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.registration.json._
 import org.genericConfig.admin.shared.login.json._
 import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.shared.step.json._
 import org.genericConfig.admin.shared.error.json._
+import org.genericConfig.admin.shared.user.json.JsonUserIn
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -27,7 +27,7 @@ trait AdminWeb {
   
   def handleMessage(receivedMessage: JsValue, admin: Admin): JsValue = {
     (receivedMessage \ "json").asOpt[String] match {
-      case Some(JsonNames.REGISTRATION) => register(receivedMessage, admin)
+      case Some(JsonNames.ADD_USER) => addUser(receivedMessage, admin)
       
       case Some(JsonNames.LOGIN) => login(receivedMessage, admin)
       
@@ -54,15 +54,12 @@ trait AdminWeb {
     }
   }
 
-  private def register(receivedMessage: JsValue, admin: Admin): JsValue = {
-    val registrationIn: JsResult[JsonRegistrationIn] = Json.fromJson[JsonRegistrationIn](receivedMessage)
+  private def addUser(receivedMessage: JsValue, admin: Admin): JsValue = {
+    val registrationIn: JsResult[JsonUserIn] = Json.fromJson[JsonUserIn](receivedMessage)
     registrationIn match {
-      case s : JsSuccess[JsonRegistrationIn] => s.get
-      case e : JsError => Logger.error("Errors -> REGISTRATION: " + JsError.toJson(e).toString())
+      case s : JsSuccess[JsonUserIn] => Json.toJson(admin.addUser(s.value))
+      case e : JsError => jsonError(JsonNames.ADD_USER, e)
     }
-    val registrationOut: JsonRegistrationOut = 
-      admin.register(registrationIn.get.params.username, registrationIn.get.params.password)
-    Json.toJson(registrationOut)
   }
 
   private def login(receivedMessage: JsValue, admin: Admin): JsValue = {

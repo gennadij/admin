@@ -51,7 +51,6 @@ import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalSt
 import org.genericConfig.admin.models.persistence.db.orientdb.PropertyKey
 import org.genericConfig.admin.models.persistence.orientdb.Graph
 import org.genericConfig.admin.models.persistence.orientdb.PropertyKeys
-import org.genericConfig.admin.shared.registration.bo.RegistrationBO
 import org.genericConfig.admin.shared.login.bo.LoginBO
 import org.genericConfig.admin.shared.common.status._
 import org.genericConfig.admin.shared.config.bo.ConfigBO
@@ -66,6 +65,8 @@ import org.genericConfig.admin.shared.step.status._
 import org.genericConfig.admin.shared.step.json.JsonDependencyForAdditionalStepsInOneLevel
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.models.logic.RidToHash
+import org.genericConfig.admin.shared.user.bo.UserBO
+import org.genericConfig.admin.shared.user.status._
 
 
 /**
@@ -90,8 +91,39 @@ object Persistence {
    * @return 
    */
   
-  def addUser(username: String, password: String): RegistrationBO = {
-    Graph.addUser(username, password)
+  def addUser(username: String, password: String): UserBO = {
+    val (vUser: Option[OrientVertex], statusAddUser: StatusAddUser, statusCommon: Status) = 
+      Graph.addUser(username, password)
+      
+      statusAddUser match {
+      case AddUserSuccess() => 
+        UserBO(
+            Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),
+            None,
+            Some(vUser.get.getIdentity.toString),
+            Some(StatusUser(
+                addUser = Some(AddUserSuccess()),
+                common = Some(Success())
+            ))
+        )
+      case AddUserAlreadyExist() => 
+        UserBO(
+            Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),
+            None,
+            Some(vUser.get.getIdentity.toString),
+            Some(StatusUser(
+                addUser = Some(AddUserAlreadyExist()),
+                common = Some(Error())
+            ))
+        )
+      case AddUserError() =>
+        UserBO(
+            status = Some(StatusUser(
+                addUser = Some(AddUserError()),
+                common = Some(Error())
+            ))
+        )
+    }
   }
 
   /**
@@ -445,16 +477,16 @@ object Persistence {
    * @return 
    */
   def getConfigs(userId: String): ConfigBO = {
-    val userRid = RidToHash.getId(userId)
-    val (vConfigs, statusGetConfig, statusCommon): (Option[List[OrientVertex]], StatusGetConfigs, Status) = Graph.getConfigs(userRid)
+//    val userRid = RidToHash.getId(userId)
+    val (vConfigs, statusGetConfig, statusCommon): (Option[List[OrientVertex]], StatusGetConfigs, Status) = Graph.getConfigs(userId)
     statusGetConfig match {
       case GetConfigsGot() => {
           ConfigBO(
               userId: String,
               vConfigs.get map (vConfig => {
-                RidToHash.setIdAndHash(vConfig.getIdentity.toString)
-                val configIdHash = RidToHash.getHash(vConfig.getIdentity.toString)
-                Configuration(configIdHash, vConfig.getProperty(PropertyKey.CONFIG_URL))
+//                RidToHash.setIdAndHash(vConfig.getIdentity.toString)
+//                val configIdHash = RidToHash.getHash(vConfig.getIdentity.toString)
+                Configuration(vConfig.getIdentity.toString, vConfig.getProperty(PropertyKey.CONFIG_URL))
               }),
               StatusConfig(
                   None, //addConfig
@@ -485,21 +517,21 @@ object Persistence {
    * @return 
    */
   def getConfigTree(configId: String): ConfigTreeBO = {
-    val configRid = RidToHash.getId(configId)
+//    val configRid = RidToHash.getId(configId)
     
     val (configTree, statusGetConfigTree, commonStatus): (Option[StepForConfigTreeBO], StatusGetConfigTree, Status) = 
-      Graph.getConfigTree(configRid)
+      Graph.getConfigTree(configId)
     
-      val (userId: String, status: Status) = Persistence.getAdminUserId(configRid)
+      val (userId: String, status: Status) = Persistence.getAdminUserId(configId)
     
-    val userIdHash = RidToHash.getHash(userId)
+//    val userIdHash = RidToHash.getHash(userId)
     
     statusGetConfigTree match {
       case GetConfigTreeSuccess() => 
         status match {
           case Success() => 
             ConfigTreeBO(
-                Some(userIdHash),
+                Some(userId),
                 Some(configId),
                 configTree,
                 StatusConfigTree(
@@ -522,7 +554,7 @@ object Persistence {
         status match {
             case Success() => 
               ConfigTreeBO(
-                  Some(userIdHash),
+                  Some(userId),
                   Some(configId),
                   None,
                   StatusConfigTree(

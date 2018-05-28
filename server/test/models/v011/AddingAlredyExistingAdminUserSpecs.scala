@@ -16,7 +16,7 @@ import org.genericConfig.admin.controllers.websocket.WebClient
 import play.api.Logger
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.Success
-import org.genericConfig.admin.shared.registration.status.AlredyExistUser
+import org.genericConfig.admin.shared.user.status.AddUserAlreadyExist
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -41,7 +41,7 @@ class AddingAlredyExistingAdminUserSpecs extends Specification with AdminWeb wit
   "Specification spezifiziert die Registrierung des exestierenden Users" >> {
     "schon exstierenden User hinzufuegen" >> {
       val registerCS = Json.obj(
-          "json" -> JsonNames.REGISTRATION
+          "json" -> JsonNames.ADD_USER
           ,"params" -> Json.obj(
                "username" -> "userExist",
                "password"-> "userExist"
@@ -53,10 +53,10 @@ class AddingAlredyExistingAdminUserSpecs extends Specification with AdminWeb wit
 //      Logger.info("<- " + registerCS)
 //      Logger.info("-> " + registerSC)
       "json" >> {
-        (registerSC \ "json").asOpt[String].get === JsonNames.REGISTRATION
+        (registerSC \ "json").asOpt[String].get === JsonNames.ADD_USER
       }
       "status" >> {
-        (registerSC \ "result" \ "status" \ "addUser" \ "status").asOpt[String].get must_== AlredyExistUser().status
+        (registerSC \ "result" \ "status" \ "addUser" \ "status").asOpt[String].get must_== AddUserAlreadyExist().status
       }
       "message" >> {
         (registerSC \ "result" \ "status" \ "common" \ "status").asOpt[String].get must_== Success().status

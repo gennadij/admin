@@ -1,8 +1,8 @@
 package org.genericConfig.admin.models.logic
 
 import org.genericConfig.admin.models.persistence.Persistence
-import org.genericConfig.admin.shared.registration.bo._
 import org.genericConfig.admin.shared.login.bo._
+import org.genericConfig.admin.shared.user.bo.UserBO
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -21,8 +21,8 @@ object User {
    * 
    * @return 
    */
-  def registUser(username: String, password: String): RegistrationBO = {
-    new User().registUser(username, password)
+  def addUser(userBO: UserBO): UserBO = {
+    new User().addUser(userBO)
   }
   
   /**
@@ -52,8 +52,8 @@ class User {
    * 
    * @return 
    */
-  private def registUser(username: String, password: String): RegistrationBO = {
-    Persistence.addUser(username, password)
+  private def addUser(userBO: UserBO): UserBO = {
+    Persistence.addUser(userBO.username.get, userBO.password.get)
   }
   
   /**

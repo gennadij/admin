@@ -21,7 +21,7 @@ trait CommonFunction {
   
   def addAdminUser(username: String) : (String, String) = {
     val registerCS = Json.obj(
-          "json" -> JsonNames.REGISTRATION
+          "json" -> JsonNames.ADD_USER
           ,"params" -> Json.obj(
                "username" -> username,
                "password"-> username

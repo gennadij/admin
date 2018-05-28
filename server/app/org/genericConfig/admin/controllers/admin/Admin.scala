@@ -14,18 +14,18 @@ import org.genericConfig.admin.models.json.connectionComponentToStep.JsonConnect
 import org.genericConfig.admin.models.json.connectionComponentToStep.JsonConnectionComponentToStepOut
 import org.genericConfig.admin.models.json.dependency.JsonDependencyIn
 import org.genericConfig.admin.models.json.dependency.JsonDependencyOut
-import org.genericConfig.admin.shared.wrapper.Wrapper
+import org.genericConfig.admin.models.wrapper.Wrapper
 import org.genericConfig.admin.models.wrapper.step.StepIn
 import org.genericConfig.admin.models.json.StatusSuccessfulAdditionalStepInLevelCSCreated
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeIn
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
-import org.genericConfig.admin.shared.registration.json._
 import org.genericConfig.admin.models.logic._
 import org.genericConfig.admin.shared.login.json._
 import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.shared.step.json._
+import org.genericConfig.admin.shared.user.json._
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -51,12 +51,12 @@ class Admin extends Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param RegistrationCS
+   * @param 
    * 
-   * @return RegistrationSC
+   * @return 
    */
-  def register(username: String, password: String): JsonRegistrationOut = {
-    toJsonRegistrationOut(User.registUser(username, password))
+  def addUser(jsonUserIn: JsonUserIn): JsonUserOut = {
+    toJsonUserOut(User.addUser(toRegistrationBO(jsonUserIn)))
   }
   /**
    * @author Gennadi Heimann

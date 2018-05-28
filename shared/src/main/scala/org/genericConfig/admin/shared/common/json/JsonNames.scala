@@ -7,7 +7,7 @@ package org.genericConfig.admin.shared.common.json
  */
 
 object JsonNames {
-  val REGISTRATION: String = "Registration"
+  val ADD_USER: String = "AddUser"
   
   val LOGIN: String = "Login"
   
