@@ -22,7 +22,6 @@ import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 import org.genericConfig.admin.models.logic._
-import org.genericConfig.admin.shared.login.json._
 import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.shared.step.json._
 import org.genericConfig.admin.shared.user.json._
@@ -56,7 +55,7 @@ class Admin extends Wrapper{
    * @return 
    */
   def addUser(jsonUserIn: JsonUserIn): JsonUserOut = {
-    toJsonUserOut(User.addUser(toRegistrationBO(jsonUserIn)))
+    toJsonAddUserOut(User.addUser(toAddUserBO(jsonUserIn)))
   }
   /**
    * @author Gennadi Heimann
@@ -67,8 +66,8 @@ class Admin extends Wrapper{
    * 
    * @return LoginCS
    */
-  def login(jsonLoginIn: JsonLoginIn): JsonLoginOut = {
-    toJsonLoginOut(Persistence.login(jsonLoginIn.params.username, jsonLoginIn.params.password))
+  def login(jsonUserIn: JsonUserIn): JsonUserOut = {
+    toJsonGetUserOut(User.getUser(toGetUserBO(jsonUserIn)))
   }
   
   /**

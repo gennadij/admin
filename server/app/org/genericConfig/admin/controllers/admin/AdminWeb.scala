@@ -11,7 +11,6 @@ import org.genericConfig.admin.models.json.dependency.JsonDependencyIn
 import org.genericConfig.admin.shared.configTree.json._
 import org.genericConfig.admin.models.json.dependency.JsonDependencyOut
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.login.json._
 import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.shared.step.json._
 import org.genericConfig.admin.shared.error.json._
@@ -28,8 +27,7 @@ trait AdminWeb {
   def handleMessage(receivedMessage: JsValue, admin: Admin): JsValue = {
     (receivedMessage \ "json").asOpt[String] match {
       case Some(JsonNames.ADD_USER) => addUser(receivedMessage, admin)
-      
-      case Some(JsonNames.LOGIN) => login(receivedMessage, admin)
+      case Some(JsonNames.GET_USER) => getUser(receivedMessage, admin)
       
       case Some(JsonNames.ADD_CONFIG) => addConfig(receivedMessage, admin)
       case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage, admin)
@@ -62,14 +60,12 @@ trait AdminWeb {
     }
   }
 
-  private def login(receivedMessage: JsValue, admin: Admin): JsValue = {
-    val loginIn: JsResult[JsonLoginIn] = Json.fromJson[JsonLoginIn](receivedMessage)
+  private def getUser(receivedMessage: JsValue, admin: Admin): JsValue = {
+    val loginIn: JsResult[JsonUserIn] = Json.fromJson[JsonUserIn](receivedMessage)
     loginIn match {
-      case s : JsSuccess[JsonLoginIn] => s.get
-      case e : JsError => Logger.error("Errors -> LOGIN: " + JsError.toJson(e).toString())
+      case s : JsSuccess[JsonUserIn] => Json.toJson(admin.login(loginIn.get))
+      case e : JsError => jsonError(JsonNames.GET_USER, e)
     }
-    val loginOut: JsonLoginOut = admin.login(loginIn.get)
-    Json.toJson(loginOut)
   }
   
   private def addConfig(receivedMessage: JsValue, admin: Admin): JsValue = {

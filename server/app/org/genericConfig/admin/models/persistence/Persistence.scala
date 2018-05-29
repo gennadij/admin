@@ -51,11 +51,9 @@ import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalSt
 import org.genericConfig.admin.models.persistence.db.orientdb.PropertyKey
 import org.genericConfig.admin.models.persistence.orientdb.Graph
 import org.genericConfig.admin.models.persistence.orientdb.PropertyKeys
-import org.genericConfig.admin.shared.login.bo.LoginBO
 import org.genericConfig.admin.shared.common.status._
 import org.genericConfig.admin.shared.config.bo.ConfigBO
 import org.genericConfig.admin.shared.config.status._
-import org.genericConfig.admin.shared.login.status._
 import org.genericConfig.admin.shared.config.bo.Configuration
 import org.genericConfig.admin.shared.configTree.bo.StepForConfigTreeBO
 import org.genericConfig.admin.shared.configTree.status._
@@ -135,137 +133,45 @@ object Persistence {
    * 
    * @return LoginSC
    */
-  def login(username: String, password: String): LoginBO = {
+  def getUser(username: String, password: String): UserBO = {
     
-    val vUser: (Option[OrientVertex], Status) = Graph.readUser(username, password)
+    val (vUser: Option[OrientVertex], getUserStatus: StatusGetUser, commonStatus: Status) = 
+      Graph.getUser(username, password)
     
-    vUser._2 match {
-      case Success() => {
-        getLoginBO(vUser._1.get)
-      }
-      case Error() => {
-        LoginBO(
-            username, 
-            "",
-            ConfigBO(status = StatusConfig(
-                None, //addConfig
-                Some(GetConfigsError()), //getConfigs
-                None, //deleteConfig
-                None, //updateConfig
-                Some(Error())
-            )),
-            StatusLogin(
-                UserNotExist(),
-                Error()
-            )
+    getUserStatus match {
+      case GetUserSuccess() => 
+        UserBO(
+            username = Some(vUser.get.getProperty(PropertyKeys.USERNAME)),
+            userId = Some(vUser.get.getIdentity.toString),
+            status = Some(StatusUser(
+                getUser = Some(GetUserSuccess()),
+                common = Some(Success())
+            ))
+        )
+      case GetUserError() => 
+        UserBO(
+            status = Some(StatusUser(
+                getUser = Some(GetUserError()),
+                common = Some(commonStatus)
+            ))
+        )
+      case GetUserAlreadyExist() => {
+        UserBO(
+            username = Some(username),
+            status = Some(StatusUser(
+                getUser = Some(GetUserAlreadyExist()),
+                common = Some(commonStatus)
+            ))
         )
       }
-      case ODBClassCastError() => {
-        LoginBO(
-            "", "",
-            ConfigBO(status = StatusConfig(
-                None, //addConfig
-                Some(GetConfigsError()), //getConfigs
-                None, //deleteConfig
-                None, //updateConfig
-                Some(Error())
-            )),
-            StatusLogin(
-                UserNotExist(),
-                ODBClassCastError()
-            )
+      case GetUserNotExist() => 
+        UserBO(
+            username = Some(username),
+            status = Some(StatusUser(
+                getUser = Some(GetUserNotExist()),
+                common = Some(commonStatus)
+            ))
         )
-      }
-      case ODBReadError() => {
-        LoginBO(
-            "", "",
-            ConfigBO(status = StatusConfig(
-                None, //addConfig
-                Some(GetConfigsError()), //getConfigs
-                None, //deleteConfig
-                None, //updateConfig
-                Some(Error())
-            )),
-            StatusLogin(
-                UserNotExist(),
-                ODBReadError()
-            )
-        )
-      }
-    }
-  }
-  
-  private def getLoginBO(vUser: OrientVertex): LoginBO = {
-    val (vConfigs, statusGetConfigs, statusCommon): (Option[List[OrientVertex]], StatusGetConfigs, Status) = 
-      Graph.getConfigs(vUser.getIdentity.toString)
-    statusGetConfigs match {
-      case GetConfigsGot() => {
-        LoginBO(
-            vUser.getProperty(PropertyKey.USERNAME),
-            vUser.getIdentity.toString,
-            ConfigBO(
-                vUser.getIdentity.toString,
-                vConfigs.get map (vConfig => {
-                  Configuration(
-                      vConfig.getId.toString,
-                      vConfig.getProperty(PropertyKey.CONFIG_URL)
-                  )
-                }),
-                StatusConfig(
-                    None, //addConfig
-                    Some(GetConfigsGot()), //getConfigs
-                    None, //deleteConfig
-                    None, //updateConfig
-                    Some(Success())
-                )
-            ),
-            StatusLogin(
-                UserExist(),
-                Success()
-            )
-        )
-      }
-      case GetConfigsEmpty() => {
-        LoginBO(
-            vUser.getProperty(PropertyKey.USERNAME),
-            vUser.getIdentity.toString,
-            ConfigBO(
-                vUser.getIdentity.toString,
-                List(),
-                StatusConfig(
-                    None, //addConfig
-                    Some(GetConfigsEmpty()), //getConfigs
-                    None, //deleteConfig
-                    None, //updateConfig
-                    Some(Success())
-                )
-            ),
-            StatusLogin(
-                UserExist(),
-                Success()
-            )
-        )
-      }
-      case GetConfigsError() => {
-        LoginBO(
-            "", "",
-            ConfigBO(
-                "",
-                List(),
-                StatusConfig(
-                    None, //addConfig
-                    Some(GetConfigsError()), //getConfigs
-                    None, //deleteConfig
-                    None, //updateConfig
-                    Some(statusCommon)
-                )
-            ),
-            StatusLogin(
-                UserConfigsError(),
-                statusCommon
-            )
-        )
-      }
     }
   }
   

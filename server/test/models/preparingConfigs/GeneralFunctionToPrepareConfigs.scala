@@ -76,7 +76,7 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
   
   def login (userPassword: String, webClient: WebClient): String = {
     val loginCS = Json.obj(
-        "json" -> JsonNames.LOGIN
+        "json" -> JsonNames.GET_USER
         ,"params" -> Json.obj(
             "username" -> userPassword,
             "password" -> userPassword
@@ -90,7 +90,7 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
   
 	def loginForConfigId(user: String, webClient: WebClient): String = {
 		val jsonClientServer = Json.obj(
-			"json" -> JsonNames.LOGIN
+			"json" -> JsonNames.GET_USER
 			,"params" -> Json.obj(
 				"username" -> user,
 				"password"-> user

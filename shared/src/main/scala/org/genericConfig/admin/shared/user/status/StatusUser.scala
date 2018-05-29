@@ -1,6 +1,5 @@
 package org.genericConfig.admin.shared.user.status
 
-import org.genericConfig.admin.shared.login.status.StatusLogin
 import org.genericConfig.admin.shared.common.status.Status
 
 

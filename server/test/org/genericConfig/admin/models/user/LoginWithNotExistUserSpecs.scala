@@ -1,4 +1,4 @@
-package models.v011
+package org.genericConfig.admin.models.user
 
 import org.specs2.Specification
 import play.api.libs.json.Json
@@ -11,10 +11,10 @@ import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import org.genericConfig.admin.controllers.admin.AdminWeb
 import org.genericConfig.admin.controllers.websocket.WebClient
-import play.api.Logger
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.login.status.UserNotExist
 import org.genericConfig.admin.shared.common.status.Error
+import play.api.Logger
+import org.genericConfig.admin.shared.user.status.GetUserNotExist
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -32,16 +32,16 @@ class LoginWithNotExistUserSpecs extends Specification with AdminWeb  with Befor
   
   s2"""
        Specification fuer die Pruefung der Registrierung eines neuen nicht exestierenden Users
-          dto                                                            $e2
+          json                                                            $e2
           username                                                       $e4
-          config.size                                                    $e7
-          status=true                                                    $e5
-          message="Anmeldung war nicht erfolgreich"                      $e6
+          userId                                                    $e5
+          status                      $e6
+          status                                             $e7
     """
   val user = "user"
   val webClient = WebClient.init
   val jsonClientServer = Json.obj(
-      "json" -> JsonNames.LOGIN,
+      "json" -> JsonNames.GET_USER,
       "params" -> Json.obj(
           "username" -> user,
           "password"-> user))
@@ -49,12 +49,12 @@ class LoginWithNotExistUserSpecs extends Specification with AdminWeb  with Befor
 
   val jsonServerClient: JsValue = webClient.handleMessage(jsonClientServer)
   
-//  Logger.info("jsonClientServer: " + jsonClientServer)
-//  Logger.info("jsonServerClient: " + jsonServerClient)
+  Logger.info("jsonClientServer: " + jsonClientServer)
+  Logger.info("jsonServerClient: " + jsonServerClient)
   
-  def e2 = (jsonServerClient \ "json").asOpt[String].get must_== "Login"
+  def e2 = (jsonServerClient \ "json").asOpt[String].get must_== JsonNames.GET_USER
   def e4 = (jsonServerClient \ "result" \ "username").asOpt[String].get must_== user
-  def e7 = (jsonServerClient \ "result" \ "configs").asOpt[List[JsValue]] === Some(List())
-  def e5 = (jsonServerClient \ "result" \ "status" \ "userLogin" \ "status").asOpt[String].get must_== UserNotExist().status
-  def e6 = (jsonServerClient \ "result" \ "status"\ "common" \ "status").asOpt[String].get must_== Error().status
+  def e5 = (jsonServerClient \ "result" \ "result" \ "userId").asOpt[String] must_== None
+  def e6 = (jsonServerClient \ "result" \ "status" \ "getUser" \ "status").asOpt[String].get must_== GetUserNotExist().status
+  def e7 = (jsonServerClient \ "result" \ "status"\ "common" \ "status").asOpt[String].get must_== Error().status
 }

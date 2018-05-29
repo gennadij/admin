@@ -28,7 +28,7 @@ class AdminClienWeb(websocket: WebSocket) {
   def handleMessage(receivedMessage: JsValue) = {
     (receivedMessage \ "json").asOpt[String] match {
       case Some(JsonNames.ADD_USER) => ???//register(receivedMessage, admin)
-      case Some(JsonNames.LOGIN) => ???//login(receivedMessage, admin)
+      case Some(JsonNames.GET_USER) => ???//login(receivedMessage, admin)
       case Some(JsonNames.ADD_CONFIG) => addConfig(receivedMessage)
       case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage)
       case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage)

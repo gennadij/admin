@@ -12,7 +12,6 @@ import models.preparingConfigs.PrepareConfigsForSpecsv011
 import org.genericConfig.admin.controllers.websocket.WebClient
 import play.api.Logger
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.login.status.UserExist
 import org.genericConfig.admin.shared.common.status.Success
 import org.genericConfig.admin.shared.config.status.AddConfigAdded
 import util.CommonFunction
@@ -46,7 +45,7 @@ class AddingNewConfigSpecs extends Specification
     "Login mit AdminUser und fuege Konfig zu dem AdminUser hinzu" >> {
       
       val loginCS = Json.obj(
-        "json" -> JsonNames.LOGIN
+        "json" -> JsonNames.GET_USER
         ,"params" -> Json.obj(
             "username" -> userPassword,
             "password" -> userPassword
@@ -54,7 +53,7 @@ class AddingNewConfigSpecs extends Specification
     )
    
     val loginSC = wC.handleMessage(loginCS)
-    (loginSC \ "result" \ "status" \ "userLogin" \ "status").asOpt[String].get must_== UserExist().status
+//    (loginSC \ "result" \ "status" \ "userLogin" \ "status").asOpt[String].get must_== UserExist().status
     (loginSC \ "result" \ "status" \ "common" \ "status").asOpt[String].get must_== Success().status
     
     Logger.info((loginSC \ "result" \ "adminId").asOpt[String].get)

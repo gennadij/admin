@@ -1,6 +1,5 @@
 package org.genericConfig.admin.models.wrapper
 
-import org.genericConfig.admin.shared.login.bo.LoginBO
 import org.genericConfig.admin.shared.common.json.JsonStatus
 import org.genericConfig.admin.shared.user.json._
 import org.genericConfig.admin.shared.user.bo.UserBO
@@ -24,13 +23,12 @@ class WrapperUser() extends RidToHash{
    * @return 
    */
   
-  def toUserBO(jsonUserIn: JsonUserIn): UserBO = {
+  def toAddUserBO(jsonUserIn: JsonUserIn): UserBO = {
     UserBO(
         username = Some(jsonUserIn.params.username),
         password = Some(jsonUserIn.params.password),
     )
   }
-  
   
   /**
    * @author Gennadi Heimann
@@ -41,17 +39,36 @@ class WrapperUser() extends RidToHash{
    * 
    * @return 
    */
-  def toJsonUserOut(userBO: UserBO): JsonUserOut = {
+  
+  def toGetUserBO(jsonUserIn: JsonUserIn): UserBO = {
+    UserBO(
+        username = Some(jsonUserIn.params.username),
+        password = Some(jsonUserIn.params.password),
+    )
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  def toJsonAddUserOut(userBO: UserBO): JsonUserOut = {
     
-    val userRid = userBO.userId.get
-    
-    val userIdHash = setIdAndHash(userRid)
+    val userIdHash = userBO.userId match {
+      case Some(userId) => 
+        Some(setIdAndHash(userId))
+      case None => None
+    }
     
     JsonUserOut(
         json = JsonNames.ADD_USER,
         result = JsonUserResult(
           userIdHash,
-          userBO.username.get,
+          userBO.username,
           JsonUserStatus(
               addUser = userBO.status.get.addUser match {
                 case Some(adduser) => Some(JsonStatus(adduser.status, adduser.message))
@@ -67,4 +84,38 @@ class WrapperUser() extends RidToHash{
   }
   
   
+    /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.5
+   * 
+   * @param LoginSC
+   * 
+   * @return JsonLoginSC
+   */
+  def toJsonGetUserOut(userBO: UserBO): JsonUserOut = {
+    val userIdHash = userBO.userId match {
+      case Some(userId) => 
+        Some(setIdAndHash(userId))
+      case None => None
+    } 
+    
+    JsonUserOut(
+        json = JsonNames.GET_USER,
+        result = JsonUserResult(
+            userIdHash,
+            userBO.username,
+            JsonUserStatus(
+                getUser = userBO.status.get.getUser match {
+                  case Some(getUser) => Some(JsonStatus(getUser.status, getUser.message))
+                  case None => None
+                },
+                common = userBO.status.get.common match {
+                  case Some(common) => Some(JsonStatus(common.status, common.message))
+                  case None => None
+                }
+            )
+        )
+    )
+  }
 }

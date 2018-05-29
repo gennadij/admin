@@ -2,10 +2,8 @@ package org.genericConfig.admin.models.wrapper
 
 import org.genericConfig.admin.shared.configTree.json._
 import org.genericConfig.admin.shared.common.json._
-import org.genericConfig.admin.shared.login.json._
 import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.shared.config.bo._
-import org.genericConfig.admin.shared.login.bo._
 import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.step.json._
 import org.genericConfig.admin.shared.step.bo._
@@ -33,8 +31,8 @@ trait Wrapper{
    * 
    * @return 
    */
-  def toRegistrationBO(jsonUserIn: JsonUserIn): UserBO = {
-    new WrapperUser().toUserBO(jsonUserIn)
+  def toAddUserBO(jsonUserIn: JsonUserIn): UserBO = {
+    new WrapperUser().toAddUserBO(jsonUserIn)
   }
   
   /**
@@ -46,10 +44,22 @@ trait Wrapper{
    * 
    * @return
    */
-  def toJsonUserOut(registrationBO: UserBO): JsonUserOut = {
-    new WrapperUser().toJsonUserOut(registrationBO)
+  def toJsonAddUserOut(userBO: UserBO): JsonUserOut = {
+    new WrapperUser().toJsonAddUserOut(userBO)
   }
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return
+   */
+  def toGetUserBO(jsonUserIn: JsonUserIn): UserBO = {
+    new WrapperUser().toGetUserBO(jsonUserIn)
+  }
   
    /**
    * @author Gennadi Heimann
@@ -60,27 +70,8 @@ trait Wrapper{
    * 
    * @return JsonLoginSC
    */
-  def toJsonLoginOut(loginBO: LoginBO): JsonLoginOut = {
-    JsonLoginOut(
-        result = JsonLoginResult(
-            loginBO.adminId,
-            loginBO.username,
-            loginBO.config.configs map (config => { JsonConfig(
-                config.configId,
-                config.configUrl
-            )}),
-            JsonLoginStatus(
-                Some(JsonStatus(
-                    loginBO.status.userLogin.status,
-                    loginBO.status.userLogin.message
-                )),
-                Some(JsonStatus(
-                    loginBO.status.common.status,
-                    loginBO.status.common.message
-                )),
-            )
-        )
-    )
+  def toJsonGetUserOut(userBO: UserBO): JsonUserOut = {
+    new WrapperUser().toJsonGetUserOut(userBO)
   }
   
   /**

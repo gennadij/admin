@@ -8,8 +8,7 @@ package org.genericConfig.admin.shared.common.json
 
 object JsonNames {
   val ADD_USER: String = "AddUser"
-  
-  val LOGIN: String = "Login"
+  val GET_USER: String = "GetUser"
   
   val ADD_CONFIG: String = "AddConfig"
   val GET_CONFIGS: String = "GetConfigs"

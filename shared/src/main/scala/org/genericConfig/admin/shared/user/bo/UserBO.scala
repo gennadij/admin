@@ -1,6 +1,7 @@
 package org.genericConfig.admin.shared.user.bo
 
 import org.genericConfig.admin.shared.user.status.StatusUser
+import org.genericConfig.admin.shared.config.bo.ConfigBO
 
 
 /**
@@ -12,6 +13,6 @@ case class UserBO (
     username: Option[String] = None, 
     password: Option[String] = None, 
     
-    userId: Option[String] = None,  
+    userId: Option[String] = None,
     status: Option[StatusUser] = None
 )

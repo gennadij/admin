@@ -35,7 +35,7 @@ class ConfigTreeEmptySpecs extends Specification with AdminWeb with BeforeAfterA
       
   "Diese Specification prueft die leere Konfiguration" >> {
     val loginClientServer = Json.obj(
-        "json" -> JsonNames.LOGIN
+        "json" -> JsonNames.GET_USER
         ,"params" -> Json.obj(
             "username" -> "user9",
             "password" -> "user9"

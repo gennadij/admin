@@ -147,7 +147,7 @@ class AddingFirstStepSpecs extends Specification
   def login(): String = {
     val user = "user4"
       val jsonClientServer = Json.obj(
-          "json" -> JsonNames.LOGIN,
+          "json" -> JsonNames.GET_USER,
           "params" -> Json.obj(
               "username" -> user,
               "password"-> user

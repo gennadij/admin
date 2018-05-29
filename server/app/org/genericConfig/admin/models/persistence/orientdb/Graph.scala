@@ -6,7 +6,6 @@ import org.genericConfig.admin.models.persistence.Database
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import play.api.Logger
 import org.genericConfig.admin.shared.common.status._
-import org.genericConfig.admin.shared.login.bo.LoginBO
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.Direction
@@ -59,14 +58,14 @@ object Graph{
    * 
    * @return LoginBO
    */
-  def readUser(username: String, password: String): (Option[OrientVertex], Status) = {
+  def getUser(username: String, password: String): (Option[OrientVertex], StatusGetUser, Status) = {
     
     (Database.getFactory(): @unchecked) match {
       case (Some(dbFactory), Success()) => 
         val graph: OrientGraph = dbFactory.getTx()
-        new Graph(graph).readUser(username, password)
+        new Graph(graph).getUser(username, password)
       case (None, ODBConnectionFail()) => 
-        (None, ODBConnectionFail())
+        (None, GetUserError(), ODBConnectionFail())
     }
   }
   
@@ -337,7 +336,7 @@ class Graph(graph: OrientGraph) {
    * @return LoginBO
    */
   
-  private def readUser(username: String, password: String): (Option[OrientVertex], Status) = {
+  private def getUser(username: String, password: String): (Option[OrientVertex], StatusGetUser, Status) = {
     
     try {
       val dynElemUsers: OrientDynaElementIterable = 
@@ -346,19 +345,24 @@ class Graph(graph: OrientGraph) {
       val vUsers: List[OrientVertex] = dynElemUsers.asScala.toList map (_.asInstanceOf[OrientVertex])
       
       vUsers match {
-        case userCount if userCount.size == 1 => (Some(vUsers.head), Success())
-        case _ => (None, Error())
+        case userCount if userCount.size == 1 => (Some(vUsers.head), GetUserSuccess(), Success())
+        case _ => (None, GetUserNotExist(), Error())
       }
     }catch{
+      case e1: ORecordDuplicatedException => {
+        Logger.error(e1.printStackTrace().toString)
+        graph.rollback()
+        (None, GetUserAlreadyExist(), ODBRecordDuplicated())
+      }
       case e2 : ClassCastException => {
         graph.rollback()
         Logger.error(e2.printStackTrace().toString)
-        (None, ODBClassCastError())
+        (None, GetUserError(), ODBClassCastError())
       }
       case e1: Exception => {
         graph.rollback()
         Logger.error(e1.printStackTrace().toString)
-        (None, ODBReadError())
+        (None, GetUserError(), ODBReadError())
       }
     }
   }

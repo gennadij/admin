@@ -36,7 +36,7 @@ class ConfigTreeFirstStep3ComponentsSpecs extends Specification with BeforeAfter
   def afterAll() = {}
   "Specification spezifiziert die Erzeugung von der ConfigTree" >> {
     val loginCS = Json.obj(
-        "json" -> JsonNames.LOGIN
+        "json" -> JsonNames.GET_USER
         ,"params" -> Json.obj(
             "username" -> "user7",
             "password"-> "user7"
