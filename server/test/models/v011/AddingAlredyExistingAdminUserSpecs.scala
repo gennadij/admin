@@ -50,10 +50,13 @@ class AddingAlredyExistingAdminUserSpecs extends Specification with AdminWeb wit
       
       val registerSC = wC.handleMessage(registerCS)
       
-//      Logger.info("<- " + registerCS)
-//      Logger.info("-> " + registerSC)
+      Logger.info("<- " + registerCS)
+      Logger.info("-> " + registerSC)
       "json" >> {
         (registerSC \ "json").asOpt[String].get === JsonNames.ADD_USER
+      }
+      "userId" >> {
+        (registerSC \ "result" \ "userId").asOpt[String].get.size must_== 32
       }
       "status" >> {
         (registerSC \ "result" \ "status" \ "addUser" \ "status").asOpt[String].get must_== AddUserAlreadyExist().status
