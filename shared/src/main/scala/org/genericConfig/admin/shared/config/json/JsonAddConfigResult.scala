@@ -1,6 +1,9 @@
 package org.genericConfig.admin.shared.config.json
 
 import play.api.libs.json.Json
+import play.api.libs.json.Format
+import play.api.libs.functional.syntax._
+import play.api.libs.json.JsPath
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -9,11 +12,15 @@ import play.api.libs.json.Json
  */
 
 case class JsonAddConfigResult (
-    userId: String,
-    configId: String,
+    userId: Option[String] = None,
+    configId: Option[String] = None,
     status: JsonConfigStatus
 )
 
 object JsonAddConfigResult{
-  implicit val format = Json.format[JsonAddConfigResult]
+  implicit val format: Format[JsonAddConfigResult] = (
+      (JsPath \ "userId").format(Format.optionWithNull[String]) and
+      (JsPath \ "configId").format(Format.optionWithNull[String]) and
+      (JsPath \ "status").format(Format.of[JsonConfigStatus])
+  )(JsonAddConfigResult.apply, unlift(JsonAddConfigResult.unapply))
 }

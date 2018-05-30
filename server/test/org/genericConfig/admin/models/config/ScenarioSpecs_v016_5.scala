@@ -1,4 +1,4 @@
-package models.v016.config
+package org.genericConfig.admin.models.config
 
 import org.specs2.mutable.Specification
 import org.specs2.specification.BeforeAfterAll
@@ -9,9 +9,11 @@ import org.genericConfig.admin.controllers.websocket.WebClient
 import play.api.Logger
 import org.genericConfig.admin.shared.common.json.JsonNames
 import play.api.libs.json.Json
-import org.genericConfig.admin.shared.config.status.DeleteConfigDeleted
 import org.genericConfig.admin.shared.config.status.DeleteConfigDefectID
 import org.genericConfig.admin.shared.common.status.Error
+import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
+import play.api.libs.json.JsValue.jsValueToJsLookup
+import play.api.libs.json.Json.toJsFieldJsValueWrapper
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

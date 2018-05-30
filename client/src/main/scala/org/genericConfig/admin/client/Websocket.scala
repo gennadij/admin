@@ -10,6 +10,8 @@ import play.api.libs.json.Json
 import play.api.libs.json.JsResult
 import play.api.libs.json.JsSuccess
 import play.api.libs.json.JsError
+import org.genericConfig.admin.shared.user.json.JsonUserIn
+import org.genericConfig.admin.shared.user.json.JsonUserParams
 
 //import scala.collection.JavaConverters._
 
@@ -35,8 +37,18 @@ object Websocket {
         //user mit 3 Configs (leer)
 //        val getConfigs = """{"json":"GetConfigs", "params":{"userId":"#24:52"}}"""
         // user mit 1 Config 1 Step 3 Components
-        val getConfigs = """{"json":"GetConfigs", "params":{"userId":"c33d8837e5d37dadab8dc1b4ede646ee"}}"""
-        socket.send(getConfigs)
+//        val getConfigs = """{"json":"GetConfigs", "params":{"userId":"c33d8837e5d37dadab8dc1b4ede646ee"}}"""
+//        socket.send(getConfigs)
+        val getUser = Json.toJson(
+            JsonUserIn(
+                "getUser", 
+                JsonUserParams(
+                    "user_v016_4_client", 
+                    "user_v016_4_client"
+                )
+            )
+        ).toString
+        socket.send(getUser)
       }
     }
     

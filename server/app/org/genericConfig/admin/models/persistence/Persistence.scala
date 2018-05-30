@@ -204,44 +204,37 @@ object Persistence {
     statusAddConfig match {
       case AddConfigAdded() => {
         ConfigBO(
-            userId,
-            List(Configuration(vConfig.get.getIdentity.toString, vConfig.get.getProperty(PropertyKeys.CONFIG_URL))),
-            StatusConfig(
+            Some(userId),
+            Some(List(Configuration(
+                Some(vConfig.get.getIdentity.toString), 
+                Some(vConfig.get.getProperty(PropertyKeys.CONFIG_URL))
+            ))),
+            Some(StatusConfig(
                 Some(AddConfigAdded()),
-                None,
-                None,
-                None,
-                Some(Success())
+                None, None, None, Some(Success())
             )
-        )
+        ))
       }
       case AddConfigAlreadyExist() => {
         ConfigBO(
-            userId,
-            List(),
-            StatusConfig(
+            Some(userId),
+            None,
+            Some(StatusConfig(
                 Some(AddConfigAlreadyExist()),
-                None,
-                None,
-                None,
-                Some(statusCommon)
+                None, None, None, Some(statusCommon)
             )
-        )
+        ))
       }
       case AddConfigError() => {
         ConfigBO(
-            userId,
-            List(),
-            StatusConfig(
+            Some(userId),
+            None,
+            Some(StatusConfig(
                 Some(AddConfigError()),
-                None,
-                None,
-                None,
-                Some(statusCommon)
+                None, None, None,Some(statusCommon)
             )
-        )
+        ))
       }
-        
     }
   }
   
@@ -275,27 +268,27 @@ object Persistence {
     status match {
       case Success() => {
         ConfigBO(
-            userId, List(),
-            StatusConfig(
+            Some(userId), None,
+            Some(StatusConfig(
                 None,    //addConfig: Option[StatusAddConfig], 
                 None,    //getConfigs: Option[StatusGetConfigs], 
                 Some(statusDeleteConfig),//deleteConfig: Option[StatusDeleteConfig], 
                 None,//updateConfig: Option[StatusUpdateConfig], 
                 Some(statusCommon)//common: Option[Status
             )
-        )
+        ))
       }
       case _ => {
         ConfigBO(
-            "", List(),
-            StatusConfig(
+            None, None,
+            Some(StatusConfig(
                 None,    //addConfig: Option[StatusAddConfig], 
                 None,    //getConfigs: Option[StatusGetConfigs], 
                 Some(DeleteConfigError()),//deleteConfig: Option[StatusDeleteConfig], 
                 None,//updateConfig: Option[StatusUpdateConfig], 
                 Some(status)//common: Option[Status
             )
-        )
+        ))
       }
     }
   }
@@ -315,28 +308,26 @@ object Persistence {
     status match {
       case Success() => {
         ConfigBO(
-            userId, 
-            List(),
-            StatusConfig(
+            Some(userId), None,
+            Some(StatusConfig(
                 None,    //addConfig: Option[StatusAddConfig], 
                 None,    //getConfigs: Option[StatusGetConfigs], 
                 None,//deleteConfig: Option[StatusDeleteConfig], 
                 Some(statusUpdateConfig),//updateConfig: Option[StatusUpdateConfig], 
                 Some(statusCommon)//common: Option[Status
             )
-        )
+        ))
       }
       case _ => {
         ConfigBO(
-            "", List(),
-            StatusConfig(
+            None, None, Some(StatusConfig(
                 None,    //addConfig: Option[StatusAddConfig], 
                 None,    //getConfigs: Option[StatusGetConfigs], 
                 None,//deleteConfig: Option[StatusDeleteConfig], 
                 Some(UpdateConfigError()),//updateConfig: Option[StatusUpdateConfig], 
                 Some(status)//common: Option[Status
             )
-        )
+        ))
       }
     }
   }
@@ -383,33 +374,32 @@ object Persistence {
    * @return 
    */
   def getConfigs(userId: String): ConfigBO = {
-//    val userRid = RidToHash.getId(userId)
-    val (vConfigs, statusGetConfig, statusCommon): (Option[List[OrientVertex]], StatusGetConfigs, Status) = Graph.getConfigs(userId)
+    val (vConfigs, statusGetConfig, statusCommon): (Option[List[OrientVertex]], StatusGetConfigs, Status) = 
+      Graph.getConfigs(userId)
     statusGetConfig match {
       case GetConfigsGot() => {
           ConfigBO(
-              userId: String,
-              vConfigs.get map (vConfig => {
-//                RidToHash.setIdAndHash(vConfig.getIdentity.toString)
-//                val configIdHash = RidToHash.getHash(vConfig.getIdentity.toString)
-                Configuration(vConfig.getIdentity.toString, vConfig.getProperty(PropertyKey.CONFIG_URL))
-              }),
-              StatusConfig(
+              Some(userId),
+              Some(vConfigs.get map (vConfig => {
+                Configuration(
+                    Some(vConfig.getIdentity.toString), 
+                    Some(vConfig.getProperty(PropertyKey.CONFIG_URL)))
+              })),
+              Some(StatusConfig(
                   None, //addConfig
                   Some(GetConfigsGot()), //getConfigs
                   None, //deleteConfig
                   None, //updateConfig
                   Some(Success())
               )
-          )
+          ))
         
       }
       case GetConfigsEmpty() => ConfigBO(
-          userId,
-          List(),
-          StatusConfig(None, Some(GetConfigsEmpty()), None, None, Some(Success())))
+          Some(userId), None,
+          Some(StatusConfig(None, Some(GetConfigsEmpty()), None, None, Some(Success()))))
       case GetConfigsError() => 
-        ConfigBO("", List(), StatusConfig(None, Some(GetConfigsError()), None, None, Some(statusCommon)))
+        ConfigBO(None, None, Some(StatusConfig(None, Some(GetConfigsError()), None, None, Some(statusCommon))))
     }
   }
   

@@ -1,4 +1,4 @@
-package models.v011
+package org.genericConfig.admin.models.config
 
 import org.specs2.runner.JUnitRunner
 import org.specs2.mutable.Specification
@@ -56,20 +56,22 @@ class AddingNewConfigSpecs extends Specification
 //    (loginSC \ "result" \ "status" \ "userLogin" \ "status").asOpt[String].get must_== UserExist().status
     (loginSC \ "result" \ "status" \ "common" \ "status").asOpt[String].get must_== Success().status
     
-    Logger.info((loginSC \ "result" \ "adminId").asOpt[String].get)
+    Logger.info(loginSC.toString())
     val createConfigCS = Json.obj(
         "json" -> JsonNames.ADD_CONFIG
         , "params" -> Json.obj(
-            "adminId" -> (loginSC \ "result" \ "adminId").asOpt[String].get,
+            "userId" -> (loginSC \ "result" \ "userId").asOpt[String].get,
             "configUrl" -> "//http://contig1/user3"
         )
     )
+    Logger.info("createConfigCS " + createConfigCS)
+    
     val createConfigSC = wC.handleMessage(createConfigCS)
 	  
     //TODO com.orientechnologies.orient.core.exception.OValidationException: analysieren
     
-//    Logger.info("createConfigCS " + createConfigCS)
-//    Logger.info("createConfigSC " + createConfigSC)
+    
+    Logger.info("createConfigSC " + createConfigSC)
     
     (createConfigSC \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigAdded().status
 	  (createConfigSC \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status

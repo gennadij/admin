@@ -50,9 +50,9 @@ class Admin extends Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param 
+   * @param JsonUserIn
    * 
-   * @return 
+   * @return JsonUserOut
    */
   def addUser(jsonUserIn: JsonUserIn): JsonUserOut = {
     toJsonAddUserOut(User.addUser(toAddUserBO(jsonUserIn)))
@@ -62,11 +62,11 @@ class Admin extends Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param LoginSC
+   * @param JsonUserIn
    * 
-   * @return LoginCS
+   * @return JsonUserOut
    */
-  def login(jsonUserIn: JsonUserIn): JsonUserOut = {
+  def getUser(jsonUserIn: JsonUserIn): JsonUserOut = {
     toJsonGetUserOut(User.getUser(toGetUserBO(jsonUserIn)))
   }
   
@@ -75,13 +75,13 @@ class Admin extends Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param CreateConfigCS
+   * @param JsonAddConfigIn
    * 
-   * @return CreateConfigSC
+   * @return JsonAddConfigOut
    */
   def addConfig(jsonAddConfigIn: JsonAddConfigIn): JsonAddConfigOut = {
     toJsonAddConfigOut(
-        Config.addConfig(jsonAddConfigIn.params.adminId, jsonAddConfigIn.params.configUrl))
+        Config.addConfig(toAddConfigBO(jsonAddConfigIn)))
   }
   
   /**
@@ -94,7 +94,7 @@ class Admin extends Wrapper{
    * @return
    */
   def getConfigs(jsonGetConfigsIn: JsonGetConfigsIn): JsonGetConfigsOut = {
-    toJsonGetConfigsOut(Config.getConfigs(jsonGetConfigsIn.params.userId))
+    toJsonGetConfigsOut(Config.getConfigs(toGetConfigsBO(jsonGetConfigsIn)))
   }
   
   /**
@@ -108,7 +108,7 @@ class Admin extends Wrapper{
    */
   def deleteConfig(jsonDeleteConfigIn: JsonDeleteConfigIn): JsonDeleteConfigOut = {
     toJsonDeleteConfigOut(
-        Config.deleteConfig(jsonDeleteConfigIn.params.configId, jsonDeleteConfigIn.params.configUrl)
+        Config.deleteConfig(toDeleteConfigBO(jsonDeleteConfigIn))
     )
   }
   
@@ -121,9 +121,9 @@ class Admin extends Wrapper{
    * 
    * @return
    */
-  def updateConfig(jsonEditConfigIn: JsonUpdateConfigIn): JsonUpdateConfigOut = {
+  def updateConfig(jsonUpdateConfigIn: JsonUpdateConfigIn): JsonUpdateConfigOut = {
     toJsonUpdateConfigOut(
-        Config.updateConfig(jsonEditConfigIn.params.configId, jsonEditConfigIn.params.configUrl)
+        Config.updateConfig(toUpdateConfigBO(jsonUpdateConfigIn))
     )
   }
   

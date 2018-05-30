@@ -9,23 +9,22 @@ import org.genericConfig.admin.models.wrapper.WrapperUser
  * 
  * Created by Gennadi Heimann 25.05.2018
  */
-trait RidToHash {
+object RidToHash {
   
   
   var map = scala.collection.mutable.Map[String, String]()
   
   
-  def setIdAndHash(id: String): String = {
-    
+  def setIdAndHash(id: String): (String, String) = {
     (map.exists(_._1 == id): @unchecked) match {
       case false =>
         val hash = calculateHash(id)
         map += (id -> hash)
         map.foreach(item => Logger.info("Item" + item.toString))
-        hash
+        (id, hash)
       case true => 
         map.foreach(item => Logger.info("Item" + item.toString))
-        calculateHash(id)
+        (id, calculateHash(id))
     }
   }
   

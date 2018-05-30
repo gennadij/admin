@@ -11,7 +11,7 @@ import org.genericConfig.admin.shared.common.json.JsonNames
  * 
  * Created by Gennadi Heimann 28.05.2018
  */
-class WrapperUser() extends RidToHash{
+class WrapperUser{
   
   /**
    * @author Gennadi Heimann
@@ -60,7 +60,7 @@ class WrapperUser() extends RidToHash{
     
     val userIdHash = userBO.userId match {
       case Some(userId) => 
-        Some(setIdAndHash(userId))
+        Some(RidToHash.setIdAndHash(userId)._2)
       case None => None
     }
     
@@ -96,7 +96,7 @@ class WrapperUser() extends RidToHash{
   def toJsonGetUserOut(userBO: UserBO): JsonUserOut = {
     val userIdHash = userBO.userId match {
       case Some(userId) => 
-        Some(setIdAndHash(userId))
+        Some(RidToHash.setIdAndHash(userId)._2)
       case None => None
     } 
     

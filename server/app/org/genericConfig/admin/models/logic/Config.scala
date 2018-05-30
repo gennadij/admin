@@ -26,8 +26,8 @@ object Config{
    * 
    * @return
    */
-  def addConfig(userId: String, configUrl: String): ConfigBO = {
-    new Config(userId).addConfig(configUrl)
+  def addConfig(configBO: ConfigBO): ConfigBO = {
+    new Config(configBO).addConfig
   }
   /**
    * @author Gennadi Heimann
@@ -38,8 +38,8 @@ object Config{
    * 
    * @return
    */
-  def getConfigs(userId: String): ConfigBO = {
-    new Config(userId).getConfigs
+  def getConfigs(configBO: ConfigBO): ConfigBO = {
+    new Config(configBO).getConfigs
   }
   
   /**
@@ -51,8 +51,8 @@ object Config{
    * 
    * @return
    */
-  def deleteConfig(configId: String, configUrl: String): ConfigBO = {
-    new Config("").deleteConfig(configId, configUrl)
+  def deleteConfig(configBO: ConfigBO): ConfigBO = {
+    new Config(configBO).deleteConfig
   }
   
   /**
@@ -65,7 +65,7 @@ object Config{
    * @return
    */
   def getConfigTree(configId: String): ConfigTreeBO = {
-    new Config("").getConfigTree(configId)
+    new Config(null).getConfigTree(configId)
   }
   
   /**
@@ -77,13 +77,13 @@ object Config{
    * 
    * @return
    */
-  def updateConfig(configId: String, configUrl: String): ConfigBO = {
-    new Config("").updateConfig(configId, configUrl)
+  def updateConfig(configBO: ConfigBO): ConfigBO = {
+    new Config(configBO).updateConfig
   }
   
 }
 
-class Config(userId: String) {
+class Config(configBO: ConfigBO) {
   
   /**
    * @author Gennadi Heimann
@@ -94,34 +94,40 @@ class Config(userId: String) {
    * 
    * @return
    */
-  private def addConfig(configUrl: String): ConfigBO = {
+  private def addConfig: ConfigBO = {
     
-    val configBO: ConfigBO = Persistence.addConfig(userId, configUrl)
-    configBO.status.addConfig match {
-      case Some(AddConfigAdded()) => {
-        val statusConfigAppend : Status = Persistence.appendConfigTo(userId, configBO.configs.head.configId)
+    val configUrl = configBO.configs.get.head.configUrl.get
+    val userId = configBO.userId.get
+    
+    val cBO: ConfigBO = Persistence.addConfig(userId, configUrl)
+    cBO.status.get.addConfig.get match {
+      case AddConfigAdded() => {
+        Logger.info(configBO.toString())
+        
+        val statusConfigAppend : Status = 
+          Persistence.appendConfigTo(userId, cBO.configs.get.head.configId.get)
         statusConfigAppend match {
           case Success() => {
-            configBO
+            cBO
           }
           case _ => {
             ConfigBO(
-                status = StatusConfig(Some(AddConfigError()),
+                status = Some(StatusConfig(Some(AddConfigError()),
                     None,
                     None,
                     None,
                     Some(statusConfigAppend)
                 )
-            )
+            ))
             //TODO erzeugte Config soll geloescht werden
           }
         }
       }
-      case Some(AddConfigAlreadyExist()) => {
-        configBO
+      case AddConfigAlreadyExist() => {
+        cBO
       }
-      case Some(AddConfigError()) => {
-        configBO
+      case AddConfigError() => {
+        cBO
       }
     }
   }
@@ -136,7 +142,7 @@ class Config(userId: String) {
    * @return
    */
   private def getConfigs: ConfigBO = {
-    Persistence.getConfigs(userId)
+    Persistence.getConfigs(configBO.userId.get)
   }
   
   /**
@@ -148,12 +154,16 @@ class Config(userId: String) {
    * 
    * @return
    */
-  private def deleteConfig(configId: String, configUrl: String): ConfigBO = {
-    Persistence.deleteConfig(configId, configUrl)
+  private def deleteConfig: ConfigBO = {
+    Persistence.deleteConfig(
+        configBO.configs.get.head.configId.get, 
+        configBO.configs.get.head.configUrl.get)
   }
   
-  private def updateConfig(configId: String, configUrl: String): ConfigBO = {
-    Persistence.updateConfig(configId, configUrl)
+  private def updateConfig: ConfigBO = {
+    Persistence.updateConfig(
+        configBO.configs.get.head.configId.get, 
+        configBO.configs.get.head.configUrl.get)
   }
   
   /**

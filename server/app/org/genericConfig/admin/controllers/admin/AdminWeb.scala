@@ -63,7 +63,7 @@ trait AdminWeb {
   private def getUser(receivedMessage: JsValue, admin: Admin): JsValue = {
     val loginIn: JsResult[JsonUserIn] = Json.fromJson[JsonUserIn](receivedMessage)
     loginIn match {
-      case s : JsSuccess[JsonUserIn] => Json.toJson(admin.login(loginIn.get))
+      case s : JsSuccess[JsonUserIn] => Json.toJson(admin.getUser(loginIn.get))
       case e : JsError => jsonError(JsonNames.GET_USER, e)
     }
   }
@@ -71,11 +71,9 @@ trait AdminWeb {
   private def addConfig(receivedMessage: JsValue, admin: Admin): JsValue = {
     val addConfigIn: JsResult[JsonAddConfigIn] = Json.fromJson[JsonAddConfigIn](receivedMessage)
     addConfigIn match {
-      case s : JsSuccess[JsonAddConfigIn] => s.get
-      case e : JsError => Logger.error("Errors -> ADD_CONFIG: " + JsError.toJson(e).toString())
+      case s : JsSuccess[JsonAddConfigIn] => Json.toJson(admin.addConfig(addConfigIn.get))
+      case e : JsError => jsonError(JsonNames.ADD_CONFIG, e)
     }
-    val addConfigOut: JsonAddConfigOut = admin.addConfig(addConfigIn.get)
-    Json.toJson(addConfigOut)
   }
   
   private def addFirstStep(receivedMessage: JsValue, admin: Admin): JsValue = {

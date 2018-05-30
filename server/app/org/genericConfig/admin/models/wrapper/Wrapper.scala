@@ -27,9 +27,9 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param 
+   * @param JsonUserIn
    * 
-   * @return 
+   * @return UserBO
    */
   def toAddUserBO(jsonUserIn: JsonUserIn): UserBO = {
     new WrapperUser().toAddUserBO(jsonUserIn)
@@ -40,9 +40,9 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param 
+   * @param UserBO
    * 
-   * @return
+   * @return JsonUserOut
    */
   def toJsonAddUserOut(userBO: UserBO): JsonUserOut = {
     new WrapperUser().toJsonAddUserOut(userBO)
@@ -53,9 +53,9 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param 
+   * @param JsonUserIn
    * 
-   * @return
+   * @return UserBO
    */
   def toGetUserBO(jsonUserIn: JsonUserIn): UserBO = {
     new WrapperUser().toGetUserBO(jsonUserIn)
@@ -64,11 +64,11 @@ trait Wrapper{
    /**
    * @author Gennadi Heimann
    * 
-   * @version 0.1.5
+   * @version 0.1.6
    * 
-   * @param LoginSC
+   * @param UserBO
    * 
-   * @return JsonLoginSC
+   * @return JsonUserOut
    */
   def toJsonGetUserOut(userBO: UserBO): JsonUserOut = {
     new WrapperUser().toJsonGetUserOut(userBO)
@@ -77,14 +77,40 @@ trait Wrapper{
   /**
    * @author Gennadi Heimann
    * 
-   * @version 0.1.5
+   * @version 0.1.6
    * 
-   * @param CreateConfigSC
+   * @param JsonAddConfigIn
    * 
-   * @return JsonCreateConfigSC
+   * @return ConfigBO
+   */
+  def toAddConfigBO(jsonAddconfigIn: JsonAddConfigIn): ConfigBO = {
+    new WrapperConfig().toAddConfigBO(jsonAddconfigIn)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param ConfigBO
+   * 
+   * @return JsonAddConfigOut
    */
   def toJsonAddConfigOut(configBO: ConfigBO): JsonAddConfigOut = {
-    new WrapperConfig(configBO).toJsonAddConfigOut
+    new WrapperConfig().toJsonAddConfigOut(configBO)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param JsonAddConfigIn
+   * 
+   * @return ConfigBO
+   */
+  def toGetConfigsBO(jsonAddconfigIn: JsonGetConfigsIn): ConfigBO = {
+    new WrapperConfig().toGetConfigsBO(jsonAddconfigIn)
   }
   
   /**
@@ -92,13 +118,26 @@ trait Wrapper{
    * 
    * @version 0.1.5
    * 
-   * @param 
+   * @param ConfigBO
    * 
-   * @return 
+   * @return JsonGetConfigsOut
    */
   
   def toJsonGetConfigsOut(configBO:ConfigBO): JsonGetConfigsOut = {
-    new WrapperConfig(configBO).toJsonGetConfigsOut
+    new WrapperConfig().toJsonGetConfigsOut(configBO)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param JsonDeleteConfigIn
+   * 
+   * @return ConfigBO
+   */
+  def toDeleteConfigBO(jsonDeleteConfigIn: JsonDeleteConfigIn): ConfigBO = {
+    new WrapperConfig().toDeleteConfigBO(jsonDeleteConfigIn)
   }
   
   /**
@@ -106,25 +145,38 @@ trait Wrapper{
    * 
    * @version 0.1.5
    * 
-   * @param JsonFirstStepCS
+   * @param ConfigBO
    * 
-   * @return FirstStepCS
+   * @return JsonDeleteConfigOut
    */
   def toJsonDeleteConfigOut(configBO: ConfigBO): JsonDeleteConfigOut = {
-    new WrapperConfig(configBO).toJsonDeleteConfigOut
+    new WrapperConfig().toJsonDeleteConfigOut(configBO)
+  }
+
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param JsonDeleteConfigIn
+   * 
+   * @return ConfigBO
+   */
+  def toUpdateConfigBO(jsonUpdateConfigIn: JsonUpdateConfigIn): ConfigBO = {
+    new WrapperConfig().toUpdateConfigBO(jsonUpdateConfigIn)
   }
   
   /**
    * @author Gennadi Heimann
    * 
-   * @version 0.1.5
+   * @version 0.1.6
    * 
-   * @param JsonFirstStepCS
+   * @param ConfigBO
    * 
-   * @return FirstStepCS
+   * @return JsonUpdateConfigOut
    */
   def toJsonUpdateConfigOut(configBO: ConfigBO): JsonUpdateConfigOut = {
-    new WrapperConfig(configBO).toJsonUpdateConfigOut
+    new WrapperConfig().toJsonUpdateConfigOut(configBO)
   }
   /**
    * @author Gennadi Heimann

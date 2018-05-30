@@ -1,4 +1,4 @@
-package models.v016.config
+package org.genericConfig.admin.models.config
 
 import org.specs2.mutable.Specification
 import org.specs2.specification.BeforeAfterAll

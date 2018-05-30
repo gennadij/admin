@@ -9,7 +9,7 @@ import play.api.libs.json.Json
  */
 
 case class JsonAddConfigParams (
-    adminId: String, 
+    userId: String, 
     configUrl: String
 )
 

@@ -4,13 +4,19 @@ import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.shared.common.json.JsonStatus
 import org.genericConfig.admin.shared.config.bo.ConfigBO
 import org.genericConfig.admin.shared.common.json.JsonConfig
+import org.genericConfig.admin.shared.config.bo.Configuration
+import org.genericConfig.admin.shared.common.status.Status
+import org.genericConfig.admin.models.logic.RidToHash
+import play.api.LoggerLike
+import play.api.Logger
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 25.05.2018
  */
-class WrapperConfig(configBO: ConfigBO) {
+class WrapperConfig {
+  
   
   /**
    * @author Gennadi Heimann
@@ -21,59 +27,60 @@ class WrapperConfig(configBO: ConfigBO) {
    * 
    * @return 
    */
-  private[wrapper] def toJsonAddConfigOut: JsonAddConfigOut = {
+  
+  private[wrapper] def toAddConfigBO(jsonConfigIn: JsonAddConfigIn): ConfigBO = {
+    
+//    val (id, hash) = setIdAndHash(jsonConfigIn.params.userId)
+    Logger.info("userId " + jsonConfigIn.params.userId)
+    val id = RidToHash.getId(jsonConfigIn.params.userId)
+    Logger.info("id " + id)
+    ConfigBO(
+        userId = Some(id),
+        configs = Some(List(Configuration(configUrl = Some(jsonConfigIn.params.configUrl))))
+    )
+  }
+  
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  private[wrapper] def toJsonAddConfigOut(configBO: ConfigBO): JsonAddConfigOut = {
+    
+    val userIdHash = RidToHash.getHash(configBO.userId.get)
+    
+    val (id, configIdHash) = RidToHash.setIdAndHash(configBO.configs.get.head.configId.get)
+    
     JsonAddConfigOut(
         result = JsonAddConfigResult(
-            configBO.userId,
+            Some(userIdHash),
             configBO.configs match {
-              case List() => ""
+              case Some(List()) => None
               case _ => {
-                configBO.configs.head.configId
+                Some(configIdHash)
               }
             },
             JsonConfigStatus(
-                configBO.status.addConfig match {
-                  case Some(addConfig) => 
-                    Some(JsonStatus(
-                      addConfig.status,
-                      addConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.getConfigs match {
-                  case Some(getConfigs) => 
-                    Some(JsonStatus(
-                      getConfigs.status,
-                      getConfigs.message
-                    ))
-                  case None => None
-                },
-                configBO.status.deleteConfig match {
-                  case Some(deleteConfig) => 
-                    Some(JsonStatus(
-                      deleteConfig.status,
-                      deleteConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.updateConfig match {
-                  case Some(updateConfig) => 
-                    Some(JsonStatus(
-                      updateConfig.status,
-                      updateConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.common match {
-                  case Some(common) => 
-                    Some(JsonStatus(
-                      common.status,
-                      common.message
-                    ))
-                  case None => None
-                }
+                setStatus(configBO.status.get.addConfig) ,
+                setStatus(configBO.status.get.getConfigs),
+                setStatus(configBO.status.get.deleteConfig),
+                setStatus(configBO.status.get.updateConfig),
+                setStatus(configBO.status.get.common)
             )
         )
+    )
+  }
+  
+  private[wrapper] def toGetConfigsBO(jsonGetConfigsIn: JsonGetConfigsIn): ConfigBO = {
+    
+    val uId = RidToHash.getId(jsonGetConfigsIn.params.userId)
+    ConfigBO(
+        userId = Some(uId)
     )
   }
   
@@ -86,60 +93,36 @@ class WrapperConfig(configBO: ConfigBO) {
    * 
    * @return 
    */
-  private[wrapper] def toJsonGetConfigsOut: JsonGetConfigsOut = {
-    val cBOs: List[JsonConfig] = configBO.configs map { configBO => {
+  private[wrapper] def toJsonGetConfigsOut(configBO: ConfigBO): JsonGetConfigsOut = {
+    
+    val userIdHash = RidToHash.getHash(configBO.userId.get)
+    
+    val cBOs: List[JsonConfig] = configBO.configs.get map { config => {
       JsonConfig(
-          configBO.configId,
-          configBO.configUrl
+          RidToHash.getHash(config.configId.get),
+          config.configUrl.get
       )
     }}
     JsonGetConfigsOut(
         result = JsonGetConfigsResult(
-            configBO.userId,
+            userIdHash,
             cBOs,
             JsonConfigStatus(
-                configBO.status.addConfig match {
-                  case Some(status) => 
-                    Some(JsonStatus(
-                        status.status,
-                        status.message
-                    ))
-                  case None => None
-                },
-                configBO.status.getConfigs match {
-                  case Some(getConfigs) => 
-                    Some(JsonStatus(
-                      getConfigs.status,
-                      getConfigs.message
-                    ))
-                  case None => None
-                },
-                configBO.status.deleteConfig match {
-                  case Some(deleteConfig) => 
-                    Some(JsonStatus(
-                      deleteConfig.status,
-                      deleteConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.updateConfig match {
-                  case Some(updateConfig) => 
-                    Some(JsonStatus(
-                      updateConfig.status,
-                      updateConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.common match {
-                  case Some(status) => 
-                    Some(JsonStatus(
-                        status.status,
-                        status.message
-                    ))
-                  case None => None
-                }
+                setStatus(configBO.status.get.addConfig) ,
+                setStatus(configBO.status.get.getConfigs),
+                setStatus(configBO.status.get.deleteConfig),
+                setStatus(configBO.status.get.updateConfig),
+                setStatus(configBO.status.get.common)
             )
         )
+    )
+  }
+  
+  private[wrapper] def toDeleteConfigBO(jsonDeleteConfigIn: JsonDeleteConfigIn): ConfigBO = {
+    ConfigBO(
+        configs = Some(List(Configuration(
+            Some(RidToHash.getId(jsonDeleteConfigIn.params.configId)), 
+            Some(jsonDeleteConfigIn.params.configUrl))))
     )
   }
   
@@ -152,51 +135,16 @@ class WrapperConfig(configBO: ConfigBO) {
    * 
    * @return 
    */
-  private[wrapper] def toJsonDeleteConfigOut: JsonDeleteConfigOut = {
+  private[wrapper] def toJsonDeleteConfigOut(configBO: ConfigBO): JsonDeleteConfigOut = {
     JsonDeleteConfigOut(
         result = JsonDeleteConfigsResult(
-            configBO.userId,
+            RidToHash.getHash(configBO.userId.get),
             JsonConfigStatus(
-                configBO.status.addConfig match {
-                  case Some(addConfig) => 
-                    Some(JsonStatus(
-                      addConfig.status,
-                      addConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.getConfigs match {
-                  case Some(getConfigs) => 
-                    Some(JsonStatus(
-                      getConfigs.status,
-                      getConfigs.message
-                    ))
-                  case None => None
-                },
-                configBO.status.deleteConfig match {
-                  case Some(deleteConfig) => 
-                    Some(JsonStatus(
-                      deleteConfig.status,
-                      deleteConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.updateConfig match {
-                  case Some(updateConfig) => 
-                    Some(JsonStatus(
-                      updateConfig.status,
-                      updateConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.common match {
-                  case Some(common) => 
-                    Some(JsonStatus(
-                      common.status,
-                      common.message
-                    ))
-                  case None => None
-                }
+                setStatus(configBO.status.get.addConfig) ,
+                setStatus(configBO.status.get.getConfigs),
+                setStatus(configBO.status.get.deleteConfig),
+                setStatus(configBO.status.get.updateConfig),
+                setStatus(configBO.status.get.common)
             )
         )
     )
@@ -211,53 +159,47 @@ class WrapperConfig(configBO: ConfigBO) {
    * 
    * @return 
    */
-  private[wrapper] def toJsonUpdateConfigOut: JsonUpdateConfigOut = {
+  private[wrapper] def toUpdateConfigBO(jsonUpdateConfigIn: JsonUpdateConfigIn): ConfigBO = {
+    ConfigBO(
+        configs = Some(List(Configuration(
+            Some(RidToHash.getId(jsonUpdateConfigIn.params.configId)),
+            Some(jsonUpdateConfigIn.params.configUrl)
+        ))))
+  }
+  
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param 
+   * 
+   * @return 
+   */
+  private[wrapper] def toJsonUpdateConfigOut(configBO: ConfigBO): JsonUpdateConfigOut = {
     JsonUpdateConfigOut(
         result = JsonUpdateConfigResult(
-            configBO.userId,
+            RidToHash.getHash(configBO.userId.get),
             JsonConfigStatus(
-                configBO.status.addConfig match {
-                  case Some(addConfig) => 
-                    Some(JsonStatus(
-                      addConfig.status,
-                      addConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.getConfigs match {
-                  case Some(getConfigs) => 
-                    Some(JsonStatus(
-                      getConfigs.status,
-                      getConfigs.message
-                    ))
-                  case None => None
-                },
-                configBO.status.deleteConfig match {
-                  case Some(deleteConfig) => 
-                    Some(JsonStatus(
-                      deleteConfig.status,
-                      deleteConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.updateConfig match {
-                  case Some(updateConfig) => 
-                    Some(JsonStatus(
-                      updateConfig.status,
-                      updateConfig.message
-                    ))
-                  case None => None
-                },
-                configBO.status.common match {
-                  case Some(common) => 
-                    Some(JsonStatus(
-                      common.status,
-                      common.message
-                    ))
-                  case None => None
-                }
+                setStatus(configBO.status.get.addConfig) ,
+                setStatus(configBO.status.get.getConfigs),
+                setStatus(configBO.status.get.deleteConfig),
+                setStatus(configBO.status.get.updateConfig),
+                setStatus(configBO.status.get.common)
             )
         )
     )
+  }
+  
+  private def setStatus(status: Option[Status]): Option[JsonStatus] = {
+    status match {
+      case Some(status) => 
+        Some(JsonStatus(
+            status.status,
+            status.message
+        ))
+      case None => None
+    }
   }
 }

@@ -1,25 +1,21 @@
-package models.v012
+package org.genericConfig.admin.models.config
 
-import com.orientechnologies.orient.core.db.record.OIdentifiable
-import com.orientechnologies.orient.core.id.ORID
-import com.orientechnologies.orient.core.sql.OCommandSQL
-import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
-import com.tinkerpop.blueprints.impls.orient.{OrientGraph, OrientVertex}
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
 import org.specs2.runner.JUnitRunner
 import org.specs2.specification.BeforeAfterAll
 import models.preparingConfigs.PrepareConfigsForSpecsv012
 import models.preparingConfigs.GeneralFunctionToPrepareConfigs
-import play.api.Logger
 import play.api.libs.json.JsValue
 import play.api.libs.json.Json
 import org.genericConfig.admin.controllers.websocket.WebClient
-import models.preparingConfigs.PrepareConfigsForSpecsv011
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.config.status.AddConfigAlreadyExist
 import org.genericConfig.admin.shared.common.status.ODBRecordDuplicated
 import util.CommonFunction
+import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
+import play.api.libs.json.JsValue.jsValueToJsLookup
+import play.api.libs.json.Json.toJsFieldJsValueWrapper
 
 /**
 	* Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
