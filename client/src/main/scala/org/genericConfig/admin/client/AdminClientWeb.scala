@@ -16,6 +16,9 @@ import org.genericConfig.admin.client.config.DeleteConfig
 import org.genericConfig.admin.client.config.EditConfig
 import org.genericConfig.admin.shared.step.json.JsonStepOut
 import org.genericConfig.admin.client.step.AddStep
+import org.genericConfig.admin.client.user.GetUser
+import org.genericConfig.admin.shared.error.json.{JsonErrorIn, JsonErrorParams}
+import org.genericConfig.admin.shared.user.json.JsonUserOut
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -27,32 +30,39 @@ class AdminClienWeb(websocket: WebSocket) {
   
   def handleMessage(receivedMessage: JsValue) = {
     (receivedMessage \ "json").asOpt[String] match {
-      case Some(JsonNames.ADD_USER) => ???//register(receivedMessage, admin)
-      case Some(JsonNames.GET_USER) => ???//login(receivedMessage, admin)
+      case Some(JsonNames.ADD_USER) => ??? //register(receivedMessage, admin)
+      case Some(JsonNames.GET_USER) => getUser(receivedMessage)
       case Some(JsonNames.ADD_CONFIG) => addConfig(receivedMessage)
       case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage)
       case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage)
       case Some(JsonNames.UPDATE_CONFIG) => updateConfig(receivedMessage)
       case Some(JsonNames.ADD_FIRST_STEP) => addFirstStep(receivedMessage)
       case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage)
-      case Some(JsonNames.CREATE_COMPONENT) => ???//createComponent(receivedMessage, admin)
-      case Some(JsonNames.ADD_STEP) => ???//createStep(receivedMessage, admin)
-      case Some(JsonNames.CONNECTION_COMPONENT_TO_STEP) => ???//connectComponentToStep(receivedMessage, admin)
-      case Some(JsonNames.CREATE_DEPENDENCY) => ???//createDependency(receivedMessage, admin)
+      case Some(JsonNames.CREATE_COMPONENT) => ??? //createComponent(receivedMessage, admin)
+      case Some(JsonNames.ADD_STEP) => ??? //createStep(receivedMessage, admin)
+      case Some(JsonNames.CONNECTION_COMPONENT_TO_STEP) => ??? //connectComponentToStep(receivedMessage, admin)
+      case Some(JsonNames.CREATE_DEPENDENCY) => ??? //createDependency(receivedMessage, admin)
       case Some(JsonNames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL) => ???
 //        visualProposalForAdditionalStepsInOneLevel(receivedMessage, admin)
       case _ => Json.obj("error" -> "keinen Treffer")
     }
   }
-  
-  private def getConfigs(receivedMessage: JsValue) = {
+
+  private def getUser(receivedMessage: JsValue): Unit = {
+    val getUserOut: JsResult[JsonUserOut] = Json.fromJson[JsonUserOut](receivedMessage)
+    getUserOut match {
+      case s: JsSuccess[JsonUserOut] => new GetUser(websocket).drawUser(getUserOut.get)
+      case e: JsError => println("Errors -> " + JsonNames.GET_USER + ": " + JsError.toJson(e).toString())
+    }
+  }
+
+  private def getConfigs(receivedMessage: JsValue): Unit = {
     val getConfigsIn: JsResult[JsonGetConfigsOut] = Json.fromJson[JsonGetConfigsOut](receivedMessage)
     getConfigsIn match {
-      case s: JsSuccess[JsonGetConfigsOut] => s.get
-      case e: JsError => println("Errors -> CREATE_DEPENDENCY: " + JsError.toJson(e).toString())
+      case s: JsSuccess[JsonGetConfigsOut] => new GetConfig(websocket).drawAllConfigs(getConfigsIn.get)
+      case e: JsError => println("Error -> : " + JsonNames.GET_CONFIGS + " -> " + JsError.toJson(e).toString())
     }
-    new GetConfig(websocket).drawAllConfigs(getConfigsIn.get)
-    JsValue
+
   }
   
   private def configTree(receivedMessage: JsValue) = {

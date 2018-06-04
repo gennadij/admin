@@ -21,10 +21,12 @@ import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeParams
  */
 class GetConfig(websocket: WebSocket) extends CommonFunction{
 
-  cleanPage
+
   
   def drawAllConfigs(getConfigsOut: JsonGetConfigsOut): Unit = {
-    
+
+    cleanPage
+
     val status: String = getConfigsOut.result.status.getConfigs.get.status + " , " + 
         getConfigsOut.result.status.common.get.status
     

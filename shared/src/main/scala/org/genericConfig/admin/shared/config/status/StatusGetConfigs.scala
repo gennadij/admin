@@ -10,8 +10,8 @@ import org.genericConfig.admin.shared.common.status.Status
  */
 sealed abstract class StatusGetConfigs extends Status
 
-case class GetConfigsGot() extends StatusGetConfigs {
-  def status: String = "GET_CONFIGS_GOT"
+case class GetConfigsSuccess() extends StatusGetConfigs {
+  def status: String = "GET_CONFIGS_SUCCESS"
   def message: String = ""
 }
 

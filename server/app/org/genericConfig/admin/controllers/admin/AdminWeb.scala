@@ -1,6 +1,7 @@
 package org.genericConfig.admin.controllers.admin
 
 import play.api.libs.json._
+
 import scala.collection.immutable.Seq
 import play.api.Logger
 import org.genericConfig.admin.models.json.component.JsonComponentIn
@@ -15,6 +16,7 @@ import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.shared.step.json._
 import org.genericConfig.admin.shared.error.json._
 import org.genericConfig.admin.shared.user.json.JsonUserIn
+import play.mvc.BodyParser
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -137,11 +139,9 @@ trait AdminWeb {
   private def configTree(receivedMessage: JsValue, admin: Admin): JsValue = {
     val configTreeIn: JsResult[JsonConfigTreeIn] = Json.fromJson[JsonConfigTreeIn](receivedMessage)
     configTreeIn match {
-      case s : JsSuccess[JsonConfigTreeIn] => s.get
-      case e : JsError => Logger.error("Errors -> CONFIG_TREE: " + JsError.toJson(e).toString())
+      case s : JsSuccess[JsonConfigTreeIn] => Json.toJson(admin.getConfigTree(configTreeIn.get.params.configId))
+      case e : JsError => jsonError(JsonNames.CONFIG_TREE, e)
     }
-    val configTreeOut: JsonConfigTreeOut = admin.getConfigTree(configTreeIn.get.params.configId)
-    Json.toJson(configTreeOut)
   }
   
   private def createDependency(receivedMessage: JsValue, admin: Admin): JsValue = {
@@ -175,12 +175,9 @@ trait AdminWeb {
   private def getConfigs(receivedMessage: JsValue, admin: Admin): JsValue = {
     val getConfigsIn: JsResult[JsonGetConfigsIn] = Json.fromJson[JsonGetConfigsIn](receivedMessage)
     getConfigsIn match {
-      case s: JsSuccess[JsonGetConfigsIn] => s.get
-      case e: JsError => Logger.error("Errors -> CREATE_DEPENDENCY: " + JsError.toJson(e).toString())
+      case s: JsSuccess[JsonGetConfigsIn] => Json.toJson(admin.getConfigs(getConfigsIn.get))
+      case e: JsError => jsonError(JsonNames.GET_CONFIGS, e)
     }
-    
-    val getConfigsOut: JsonGetConfigsOut  = admin.getConfigs(getConfigsIn.get)
-    Json.toJson(getConfigsOut)
    }
   
   private def deleteConfig(receivedMessage: JsValue, admin: Admin): JsValue = {

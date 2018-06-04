@@ -161,5 +161,4 @@ trait CommonFunction {
     graph.commit
     res
   }
-  
 }

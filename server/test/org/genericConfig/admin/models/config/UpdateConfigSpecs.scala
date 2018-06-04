@@ -12,7 +12,7 @@ import play.api.libs.json.Json
 import org.genericConfig.admin.shared.common.status.Success
 import org.genericConfig.admin.shared.config.status.UpdateConfigUpdated
 import play.api.libs.json.JsValue
-import org.genericConfig.admin.shared.config.status.GetConfigsGot
+import org.genericConfig.admin.shared.config.status.GetConfigsSuccess
 import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
@@ -23,7 +23,7 @@ import play.api.libs.json.Json.toJsFieldJsValueWrapper
  * Created by Gennadi Heimann 09.05.2018
  */
 @RunWith(classOf[JUnitRunner])
-class ScenarioSpecs_v016_6 extends Specification 
+class UpdateConfigSpecs extends Specification
                            with BeforeAfterAll
                            with CommonFunction{
   
@@ -86,7 +86,7 @@ class ScenarioSpecs_v016_6 extends Specification
       (getConfigsOut \ "result" \ "configs").asOpt[Set[JsValue]].get.size === 1
       ((getConfigsOut \ "result" \ "configs")(0) \ "configUrl").asOpt[String].get === "//http://contig1/user_v016_4_updated"
       (getConfigsOut \ "result" \ "status" \ "addConfig").asOpt[String] === None
-      (getConfigsOut \ "result" \ "status" \ "getConfigs" \ "status").asOpt[String].get === GetConfigsGot().status
+      (getConfigsOut \ "result" \ "status" \ "getConfigs" \ "status").asOpt[String].get === GetConfigsSuccess().status
       (getConfigsOut \ "result" \ "status" \ "deleteConfig").asOpt[String] === None
       (getConfigsOut \ "result" \ "status" \ "updateConfig").asOpt[String] === None
       (getConfigsOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status

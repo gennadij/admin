@@ -1,7 +1,9 @@
 package org.genericConfig.admin.client
 
+import org.genericConfig.admin.shared.common.json.JsonNames
 import org.scalajs.dom
 import org.scalajs.jquery.jQuery
+
 import scala.scalajs.js.JSON
 import scala.scalajs.js.Dynamic
 import scala.scalajs._
@@ -33,22 +35,18 @@ object Websocket {
     }
     
     socket.onopen = { (e: dom.Event) => {
-        println("Websocket open")
-        //user mit 3 Configs (leer)
-//        val getConfigs = """{"json":"GetConfigs", "params":{"userId":"#24:52"}}"""
-        // user mit 1 Config 1 Step 3 Components
-//        val getConfigs = """{"json":"GetConfigs", "params":{"userId":"c33d8837e5d37dadab8dc1b4ede646ee"}}"""
-//        socket.send(getConfigs)
-        val getUser = Json.toJson(
-            JsonUserIn(
-                "getUser", 
-                JsonUserParams(
-                    "user_v016_4_client", 
-                    "user_v016_4_client"
-                )
-            )
-        ).toString
-        socket.send(getUser)
+      println("Websocket open")
+      val getUser = Json.toJson(
+          JsonUserIn(
+              JsonNames.GET_USER,
+              JsonUserParams(
+                  "user_v016_4_client",
+                  "user_v016_4_client"
+              )
+          )
+      ).toString
+      println("OUT -> " + getUser)
+      socket.send(getUser)
       }
     }
     

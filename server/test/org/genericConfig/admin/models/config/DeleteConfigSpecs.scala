@@ -21,7 +21,7 @@ import play.api.libs.json.Json.toJsFieldJsValueWrapper
  * Created by Gennadi Heimann 02.05.2018
  */
 @RunWith(classOf[JUnitRunner])
-class ScenarioSpecs_v016_4 extends Specification 
+class DeleteConfigSpecs extends Specification
                            with BeforeAfterAll
                            with CommonFunction{
   

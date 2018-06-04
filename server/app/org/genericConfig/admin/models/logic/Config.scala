@@ -4,7 +4,7 @@ import org.genericConfig.admin.models.persistence.Persistence
 import org.genericConfig.admin.shared.common.status._
 import org.genericConfig.admin.shared.config.status._
 import org.genericConfig.admin.shared.config.status._
-import org.genericConfig.admin.shared.config.bo._
+import org.genericConfig.admin.shared.config.bo.{ConfigBO, _}
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 import org.genericConfig.admin.models.persistence.orientdb.Graph
 import play.api.Logger
@@ -22,9 +22,9 @@ object Config{
    * 
    * @version 0.1.6
    * 
-   * @param
+   * @param ConfigBO
    * 
-   * @return
+   * @return ConfigBO
    */
   def addConfig(configBO: ConfigBO): ConfigBO = {
     new Config(configBO).addConfig

@@ -27,7 +27,7 @@ import play.api.libs.json.Json.toJsFieldJsValueWrapper
 	*/
 
 @RunWith(classOf[JUnitRunner])
-class TwoSameConfigUrlsSpecs  extends Specification
+class AddConfigWithSameConfigUrlsSpecs  extends Specification
                               with BeforeAfterAll
                               with GeneralFunctionToPrepareConfigs
                               with CommonFunction{

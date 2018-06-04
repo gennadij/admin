@@ -31,7 +31,7 @@ class LoginSpecs extends Specification with BeforeAfterAll{
   
   def afterAll(): Unit = {}
   def beforeAll(): Unit = {
-    PrepareConfigsForSpecsv011.prepareLogin(wC)
+    new PrepareUser().prepareLogin(wC)
   }
   
   def is = 

@@ -377,7 +377,7 @@ object Persistence {
     val (vConfigs, statusGetConfig, statusCommon): (Option[List[OrientVertex]], StatusGetConfigs, Status) = 
       Graph.getConfigs(userId)
     statusGetConfig match {
-      case GetConfigsGot() => {
+      case GetConfigsSuccess() => {
           ConfigBO(
               Some(userId),
               Some(vConfigs.get map (vConfig => {
@@ -387,7 +387,7 @@ object Persistence {
               })),
               Some(StatusConfig(
                   None, //addConfig
-                  Some(GetConfigsGot()), //getConfigs
+                  Some(GetConfigsSuccess()), //getConfigs
                   None, //deleteConfig
                   None, //updateConfig
                   Some(Success())

@@ -15,8 +15,9 @@ import org.genericConfig.admin.shared.common.status.ODBConnectionFail
 object Database {
   def getFactory(): (Option[OrientGraphFactory], Status) = {
     try {
-      val db = new Database("OrientDB").getFactory()
-      db.exists()
+      val db = new Database().getFactory()
+      Logger.info(db.toString)
+//      db.exists()
       (Some(db), Success())
     }catch{
           case e: Exception => {
@@ -26,20 +27,20 @@ object Database {
     }
 }
 
-class Database(name: String) {
-  
+class Database {
+
   def getFactory(): OrientGraphFactory = {
-    
+
     val db = TestDB()
-    
+
     db match {
-      case testDB: TestDB => 
+      case testDB: TestDB =>
         val uri = "remote:localhost/" + testDB.dbName
-        
+
           new OrientGraphFactory(uri, testDB.username, testDB.password)
-        
+
         }
-        
+
     }
   }
 }

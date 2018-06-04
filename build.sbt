@@ -14,10 +14,10 @@ lazy val server = (project in file("server")).settings(commonSettings).settings(
 	"org.specs2" % "specs2-junit_2.12" % "3.8.6" % "test",
 	
 	"com.tinkerpop.blueprints" % "blueprints-core" % "2.6.0",
-	"com.orientechnologies" % "orientdb-graphdb" % "2.2.12",
-	"com.orientechnologies" % "orientdb-client" % "2.2.12",
+	"com.orientechnologies" % "orientdb-graphdb" % "2.2.24",
+	"com.orientechnologies" % "orientdb-client" % "2.2.24",
 	"com.orientechnologies" % "orientdb-enterprise" % "2.1.24",
-	"com.orientechnologies" % "orientdb-core" % "2.2.12"
+	"com.orientechnologies" % "orientdb-core" % "2.2.24"
   ),
   // Compile the project before generating Eclipse files, so that generated .scala or .class files for views and routes are present
   EclipseKeys.preTasks := Seq(compile in Compile)

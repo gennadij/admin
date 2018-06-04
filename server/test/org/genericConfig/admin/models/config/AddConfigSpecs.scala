@@ -25,7 +25,7 @@ import util.CommonFunction
  */
 
 @RunWith(classOf[JUnitRunner])
-class AddingNewConfigSpecs extends Specification 
+class AddConfigSpecs extends Specification
                            with BeforeAfterAll
                            with CommonFunction
                            {

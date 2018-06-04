@@ -31,7 +31,7 @@ class AddingAlredyExistingAdminUserSpecs extends Specification with AdminWeb wit
   val wC = WebClient.init
   
   def beforeAll() = {
-    PrepareConfigsForSpecsv011.prepareWithAlredyExistingUser(wC)
+    new PrepareUser().prepareWithAlredyExistingUser(wC)
   }
   
   def afterAll() = {

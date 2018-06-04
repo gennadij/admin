@@ -22,7 +22,7 @@ import org.genericConfig.admin.shared.common.status.Success
  */
 
 @RunWith(classOf[JUnitRunner])
-class Scenario_v016_1 extends Specification 
+class AddSeveralConfigsSpecs extends Specification
                            with BeforeAfterAll
                            with CommonFunction{
   

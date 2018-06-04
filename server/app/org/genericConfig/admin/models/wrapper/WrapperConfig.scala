@@ -89,15 +89,20 @@ class WrapperConfig {
    * 
    * @version 0.1.6
    * 
-   * @param 
+   * @param ConfigBO
    * 
    * @return 
    */
   private[wrapper] def toJsonGetConfigsOut(configBO: ConfigBO): JsonGetConfigsOut = {
-    
+
+    Logger.info(configBO.toString)
+
     val userIdHash = RidToHash.getHash(configBO.userId.get)
     
     val cBOs: List[JsonConfig] = configBO.configs.get map { config => {
+
+      RidToHash.setIdAndHash(config.configId.get)
+
       JsonConfig(
           RidToHash.getHash(config.configId.get),
           config.configUrl.get

@@ -16,7 +16,7 @@ import com.tinkerpop.blueprints.Vertex
 import com.tinkerpop.blueprints.Direction
 import org.genericConfig.admin.models.persistence.db.orientdb.PropertyKey
 
-import scala.collection.JavaConversions._
+
 import play.api.Logger
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.persistence.Database
@@ -29,8 +29,8 @@ import org.genericConfig.admin.models.persistence.Database
 
 object PrepareConfigsForSpecsv011 extends AdminWeb with GeneralFunctionToPrepareConfigs {
   
-  val userWithAlredyExistingUser =         "userExist"
-  val userLogin =                          "user2"
+
+
   val userAddingNewConfig =                "user3"
   val userAddingFirstStep =                "user4"
   val userAddingComponentWithFirstStep =   "user5"
@@ -57,42 +57,7 @@ object PrepareConfigsForSpecsv011 extends AdminWeb with GeneralFunctionToPrepare
       login(userAddingNewConfig, wC)
     }
   }
-  
-  def prepareLogin(wC : WebClient) = {
-    
-    val graph: OrientGraph = OrientDB.getFactory.getTx
-    val sql: String = s"select count(username) from AdminUser where username like '$userLogin'"
-    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
-    graph.commit
-		val count: Int = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString().toInt).head
-    if(count == 1 ) {
-      Logger.info(s"Der User $userLogin ist schon erstellt worden")
-    }else{
-      registerNewUser(userLogin, wC)
-    
-      val adminId: String = login(userLogin, wC)
-    
-      println("adminId " + adminId)
-    
-      val configId: String = createNewConfig(adminId, "http://contig1/user2", wC)
-    
-      println("configId " + configId)
-    }
-  }
-  
-  def prepareWithAlredyExistingUser(wC: WebClient) = {
-    val graph: OrientGraph = OrientDB.getFactory.getTx
-    val sql: String = s"select count(username) from AdminUser where username like '$userWithAlredyExistingUser'"
-    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
-    graph.commit
-		val count: Int = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString().toInt).head
-    if(count == 1 ) {
-      Logger.info(s"Der User $userWithAlredyExistingUser ist schon erstellt worden")
-    }else {
-      registerNewUser(userWithAlredyExistingUser, wC)
-    }
-  }
-  
+
   def prepareAddingComponentWithFirstStep(wC: WebClient) = {
     val graph: OrientGraph = OrientDB.getFactory.getTx
     val sql: String = s"select count(username) from AdminUser where username like '$userAddingComponentWithFirstStep'"

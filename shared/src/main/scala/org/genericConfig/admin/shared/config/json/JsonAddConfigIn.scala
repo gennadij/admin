@@ -13,6 +13,7 @@ case class JsonAddConfigIn (
     json: String =JsonNames.ADD_CONFIG, 
     params: JsonAddConfigParams
 )
+
 object JsonAddConfigIn {
   implicit val format = Json.format[JsonAddConfigIn]
 }

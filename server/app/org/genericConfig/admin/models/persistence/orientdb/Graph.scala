@@ -383,7 +383,7 @@ class Graph(graph: OrientGraph) {
             _.asInstanceOf[OrientEdge].getVertex(Direction.IN))
       vConfigs match {
         case List() => (Some(vConfigs), GetConfigsEmpty(), Success())
-        case _      => (Some(vConfigs), GetConfigsGot(), Success())
+        case _      => (Some(vConfigs), GetConfigsSuccess(), Success())
       }
       
       

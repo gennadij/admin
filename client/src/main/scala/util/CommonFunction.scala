@@ -12,13 +12,13 @@ trait CommonFunction {
   
   
   def cleanPage = {
-    jQuery(HtmlElementIds.main).remove
-    jQuery(HtmlElementIds.status).remove()
+    jQuery(HtmlElementIds.mainJQuery).remove
+    jQuery(HtmlElementIds.statusJQuery).remove()
   }
   
   def drawNewStatus(status: String) {
     val htmlHeaderStatus = 
-      "<dev id='" + HtmlElementIds.status + "' class='" + HtmlElementIds.status + "status'>" + 
+      "<dev id='" + HtmlElementIds.statusHtml + "' class='" + HtmlElementIds.statusHtml + "'>" +
           status + 
       "</dev>"
   
