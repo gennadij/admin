@@ -1,7 +1,6 @@
 package org.genericConfig.admin.models.logic
 
 import org.genericConfig.admin.shared.step.bo.StepBO
-import org.genericConfig.admin.shared.step.json.JsonStepOut
 import org.genericConfig.admin.models.persistence.Persistence
 import org.genericConfig.admin.shared.step.status._
 import org.genericConfig.admin.shared.common.status.Status
@@ -21,9 +20,9 @@ object Step{
    * 
    * @version 0.1.6
    * 
-   * @param 
-   * 
-   * @return 
+   * @param stepBO: StepBO
+   *
+   * @return StepBO
    */
   def addFirstStep(stepBO: StepBO): StepBO = {
     new Step().addFirstStep(stepBO)
@@ -34,9 +33,9 @@ object Step{
    * 
    * @version 0.1.6
    * 
-   * @param 
+   * @param stepBO: StepBO
    * 
-   * @return 
+   * @return StepBO
    */
   def deleteFirstStep(stepBO: StepBO): StepBO = {
     new Step().deleteFirstStep(stepBO)
@@ -47,9 +46,9 @@ object Step{
    * 
    * @version 0.1.6
    * 
-   * @param 
+   * @param stepBO: StepBO
    * 
-   * @return 
+   * @return StepBO
    */
   def updateStep(stepBO: StepBO): StepBO = {
     new Step().updateStep(stepBO)
@@ -63,9 +62,9 @@ class Step {
    * 
    * @version 0.1.6
    * 
-   * @param 
+   * @param stepBO: StepBO
    * 
-   * @return 
+   * @return StepBO
    */
   private def addFirstStep(stepBO: StepBO): StepBO = {
     val firstStepBO: StepBO = Persistence.addStep(stepBO)
@@ -100,9 +99,9 @@ class Step {
    * 
    * @version 0.1.6
    * 
-   * @param 
+   * @param stepBO: StepBO
    * 
-   * @return 
+   * @return StepBO
    */
   private def deleteFirstStep(stepBO: StepBO): StepBO = {
     
@@ -132,9 +131,9 @@ class Step {
    * 
    * @version 0.1.6
    * 
-   * @param 
+   * @param stepBO: StepBO
    * 
-   * @return 
+   * @return StepBO
    */
   private def updateStep(stepBO: StepBO): StepBO = {
     Persistence.updateStep(stepBO)

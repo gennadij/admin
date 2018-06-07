@@ -1,28 +1,15 @@
 package org.genericConfig.admin.controllers.admin
 
+import org.genericConfig.admin.models.json.component.{JsonComponentIn, JsonComponentOut}
+import org.genericConfig.admin.models.json.connectionComponentToStep.{JsonConnectionComponentToStepIn, JsonConnectionComponentToStepOut}
+import org.genericConfig.admin.models.json.dependency.{JsonDependencyIn, JsonDependencyOut}
+import org.genericConfig.admin.models.logic._
 import org.genericConfig.admin.models.persistence.Persistence
-import play.api.libs.json.Writes
-import play.api.libs.json.Json
 import org.genericConfig.admin.models.tempConfig.TempConfigurations
-import com.tinkerpop.blueprints.impls.orient.OrientEdge
-import org.genericConfig.admin.models.persistence.db.orientdb.StepVertex
-import play.api.LoggerLike
-import play.api.Logger
-import org.genericConfig.admin.models.json.component.JsonComponentOut
-import org.genericConfig.admin.models.json.component.JsonComponentIn
-import org.genericConfig.admin.models.json.connectionComponentToStep.JsonConnectionComponentToStepIn
-import org.genericConfig.admin.models.json.connectionComponentToStep.JsonConnectionComponentToStepOut
-import org.genericConfig.admin.models.json.dependency.JsonDependencyIn
-import org.genericConfig.admin.models.json.dependency.JsonDependencyOut
 import org.genericConfig.admin.models.wrapper.Wrapper
 import org.genericConfig.admin.models.wrapper.step.StepIn
-import org.genericConfig.admin.models.json.StatusSuccessfulAdditionalStepInLevelCSCreated
-import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeIn
-import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
-import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
-import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
-import org.genericConfig.admin.models.logic._
 import org.genericConfig.admin.shared.config.json._
+import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
 import org.genericConfig.admin.shared.step.json._
 import org.genericConfig.admin.shared.user.json._
 
@@ -50,7 +37,7 @@ class Admin extends Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param JsonUserIn
+   * @param jsonUserIn: JsonUserIn
    * 
    * @return JsonUserOut
    */
@@ -62,7 +49,7 @@ class Admin extends Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param JsonUserIn
+   * @param jsonUserIn: JsonUserIn
    * 
    * @return JsonUserOut
    */
@@ -75,7 +62,7 @@ class Admin extends Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param JsonAddConfigIn
+   * @param jsonAddConfigIn: JsonAddConfigIn
    * 
    * @return JsonAddConfigOut
    */
@@ -89,9 +76,9 @@ class Admin extends Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param
+   * @param jsonGetConfigsIn : JsonGetConfigsIn
    * 
-   * @return
+   * @return JsonGetConfigsOut
    */
   def getConfigs(jsonGetConfigsIn: JsonGetConfigsIn): JsonGetConfigsOut = {
     toJsonGetConfigsOut(Config.getConfigs(toGetConfigsBO(jsonGetConfigsIn)))
@@ -102,9 +89,9 @@ class Admin extends Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param
+   * @param jsonDeleteConfigIn : JsonDeleteConfigIn
    * 
-   * @return
+   * @return JsonDeleteConfigOut
    */
   def deleteConfig(jsonDeleteConfigIn: JsonDeleteConfigIn): JsonDeleteConfigOut = {
     toJsonDeleteConfigOut(
@@ -117,9 +104,9 @@ class Admin extends Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param
+   * @param jsonUpdateConfigIn : JsonUpdateConfigIn
    * 
-   * @return
+   * @return JsonUpdateConfigOut
    */
   def updateConfig(jsonUpdateConfigIn: JsonUpdateConfigIn): JsonUpdateConfigOut = {
     toJsonUpdateConfigOut(
@@ -132,9 +119,9 @@ class Admin extends Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param
+   * @param configId: String
    * 
-   * @return
+   * @return JsonConfigTreeOut
    */
   def getConfigTree(configId: String): JsonConfigTreeOut = {
     toJsonConfigTreeOut(Config.getConfigTree(configId))
@@ -146,7 +133,7 @@ class Admin extends Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param 
+   * @param
    * 
    * @return 
    */

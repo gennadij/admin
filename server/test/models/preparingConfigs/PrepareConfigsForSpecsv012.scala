@@ -19,7 +19,7 @@ import org.genericConfig.admin.controllers.websocket.WebClient
 object PrepareConfigsForSpecsv012 extends AdminWeb with GeneralFunctionToPrepareConfigs{
   
   val userChangeLog012_3 =                       "user16"
-  val userTwoSameConfigUrls =                    "user13"
+
   val userTwoFirstStepsForOneConfig =            "user15"
   
   
@@ -35,87 +35,69 @@ object PrepareConfigsForSpecsv012 extends AdminWeb with GeneralFunctionToPrepare
   }
 
   def prepareChangeLog012_3(wC: WebClient) = {
-    val graph: OrientGraph = OrientDB.getFactory().getTx
-    val sql: String = s"select count(username) from AdminUser where username like '$userChangeLog012_3'"
-    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
-    graph.commit
-		val count: Int = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString().toInt).head
-    if(count == 1 ) {
-      Logger.info(s"Der User $userChangeLog012_3 ist schon erstellt worden")
-    }else {
-			registerNewUser(userChangeLog012_3, wC)
-
-			val adminId = login(userChangeLog012_3, wC)
-
-			println("adminId " + adminId)
-
-			val configId = createNewConfig(adminId, s"http://contig/$userChangeLog012_3", wC)
-
-			println("ConfigId" + configId)
-			
-			val firstStepId : String = addFirstStep(configId, webClient = wC)
-    
-      println("FirstStep " + firstStepId)
-      
-      //FirstStep -> 3 Components
-    
-      val componentId_1_1 = addComponentToStep(firstStepId, "Component_1", wC)
-    
-      println("Component 1 1 " + componentId_1_1)
-    
-      val componentId_1_2 = addComponentToStep(firstStepId, "Component_2", wC)
-    
-      println("Component 1 2 " + componentId_1_2)
-    
-      val componentId_1_3 = addComponentToStep(firstStepId, "Component_3", wC)
-    
-      println("Component 1 3 " + componentId_1_3)
-		}
+//    val graph: OrientGraph = OrientDB.getFactory().getTx
+//    val sql: String = s"select count(username) from AdminUser where username like '$userChangeLog012_3'"
+//    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+//    graph.commit
+//		val count: Int = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString().toInt).head
+//    if(count == 1 ) {
+//      Logger.info(s"Der User $userChangeLog012_3 ist schon erstellt worden")
+//    }else {
+//			registerNewUser(userChangeLog012_3, wC)
+//
+//			val adminId = login(userChangeLog012_3, wC)
+//
+//			println("adminId " + adminId)
+//
+//			val configId = createNewConfig(adminId, s"http://contig/$userChangeLog012_3", wC)
+//
+//			println("ConfigId" + configId)
+//
+//			val firstStepId : String = addFirstStep(configId, webClient = wC)
+//
+//      println("FirstStep " + firstStepId)
+//
+//      //FirstStep -> 3 Components
+//
+//      val componentId_1_1 = addComponentToStep(firstStepId, "Component_1", wC)
+//
+//      println("Component 1 1 " + componentId_1_1)
+//
+//      val componentId_1_2 = addComponentToStep(firstStepId, "Component_2", wC)
+//
+//      println("Component 1 2 " + componentId_1_2)
+//
+//      val componentId_1_3 = addComponentToStep(firstStepId, "Component_3", wC)
+//
+//      println("Component 1 3 " + componentId_1_3)
+//		}
   }
   
   def prepareTwoFirstStepsForOneConfig(wC: WebClient) = {
-    val graph: OrientGraph = OrientDB.getFactory().getTx
-    val sql: String = s"select count(username) from AdminUser where username like '$userTwoFirstStepsForOneConfig'"
-    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
-		graph.commit()
-    val count = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString().toInt).head
-		
-    if(count == 1 ) {
-      Logger.info(s"Der User $userTwoFirstStepsForOneConfig ist schon erstellt worden")
-    }else {
-			registerNewUser(userTwoFirstStepsForOneConfig, wC)
-
-			val adminId = login(userTwoFirstStepsForOneConfig, wC)
-
-			Logger.info("adminId " + adminId)
-
-			val configId = createNewConfig(adminId, s"http://contig/$userTwoFirstStepsForOneConfig", wC)
-
-			Logger.info("ConfigId" + configId)
-			
-			val firstStepId : String = addFirstStep(configId, webClient = wC)
-    
-      Logger.info("FirstStep " + firstStepId)
-		}
+//    val graph: OrientGraph = OrientDB.getFactory().getTx
+//    val sql: String = s"select count(username) from AdminUser where username like '$userTwoFirstStepsForOneConfig'"
+//    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+//		graph.commit()
+//    val count = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString().toInt).head
+//
+//    if(count == 1 ) {
+//      Logger.info(s"Der User $userTwoFirstStepsForOneConfig ist schon erstellt worden")
+//    }else {
+//			registerNewUser(userTwoFirstStepsForOneConfig, wC)
+//
+//			val adminId = login(userTwoFirstStepsForOneConfig, wC)
+//
+//			Logger.info("adminId " + adminId)
+//
+//			val configId = createNewConfig(adminId, s"http://contig/$userTwoFirstStepsForOneConfig", wC)
+//
+//			Logger.info("ConfigId" + configId)
+//
+//			val firstStepId : String = addFirstStep(configId, webClient = wC)
+//
+//      Logger.info("FirstStep " + firstStepId)
+//		}
   }
   
-  def prepareTwoSameConfigUrls(wC: WebClient) = {
-    val graph: OrientGraph = OrientDB.getFactory().getTx
-    val sql: String = s"select count(username) from AdminUser where username like '$userTwoSameConfigUrls'"
-    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
-		val count = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString().toInt).head
-    if(count == 1 ) {
-      Logger.info(s"Der User $userTwoSameConfigUrls ist schon erstellt worden")
-    }else {
-			registerNewUser(userTwoSameConfigUrls, wC)
 
-			val adminId_1 = login(userTwoSameConfigUrls, wC)
-
-			println("adminId " + adminId_1)
-
-			val configId_1 = createNewConfig(adminId_1, s"http://config/$userTwoSameConfigUrls", wC)
-
-			println("ConfigId" + configId_1)
-		}
-	}
 }

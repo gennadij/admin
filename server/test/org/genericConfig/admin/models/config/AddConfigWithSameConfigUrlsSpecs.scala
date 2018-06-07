@@ -1,70 +1,75 @@
 package org.genericConfig.admin.models.config
 
+import models.preparingConfigs.GeneralFunctionToPrepareConfigs
+import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.common.status.ODBRecordDuplicated
+import org.genericConfig.admin.shared.config.json.{JsonAddConfigIn, JsonAddConfigParams}
+import org.genericConfig.admin.shared.config.status.AddConfigAlreadyExist
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
 import org.specs2.runner.JUnitRunner
 import org.specs2.specification.BeforeAfterAll
-import models.preparingConfigs.PrepareConfigsForSpecsv012
-import models.preparingConfigs.GeneralFunctionToPrepareConfigs
-import play.api.libs.json.JsValue
-import play.api.libs.json.Json
-import org.genericConfig.admin.controllers.websocket.WebClient
-import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.config.status.AddConfigAlreadyExist
-import org.genericConfig.admin.shared.common.status.ODBRecordDuplicated
-import util.CommonFunction
+import play.api.Logger
 import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
-import play.api.libs.json.Json.toJsFieldJsValueWrapper
+import play.api.libs.json.{JsValue, Json}
+import util.CommonFunction
 
 /**
-	* Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
-	*
-	* Created by Gennadi Heimann 05.05.2017
-	*
-	* Username = user13
-	* Username = user14
-	*/
+  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+  *
+  * Created by Gennadi Heimann 05.05.2017
+  *
+  * Username = user13
+  * Username = user14
+  */
 
 @RunWith(classOf[JUnitRunner])
-class AddConfigWithSameConfigUrlsSpecs  extends Specification
-                              with BeforeAfterAll
-                              with GeneralFunctionToPrepareConfigs
-                              with CommonFunction{
-  
+class AddConfigWithSameConfigUrlsSpecs extends Specification
+  with BeforeAfterAll
+  with GeneralFunctionToPrepareConfigs
+  with CommonFunction {
 
-  val webClient = WebClient.init
-  
-	def beforeAll = {
-		PrepareConfigsForSpecsv012.prepareTwoSameConfigUrls(webClient)
-		val count = deleteAdmin("user14")
-		require(count == 1, count.toString)
-	}
-	def afterAll = {}
 
-	"Hier wird die Erzeugung von zwei verschiedenen AdminUser mit gleicher ConfigUrl spezifiziert" >> {
-		"ORecordDuplicatedException" >> {
-		  
-			registerNewUser("user14", webClient)
+  val webClient: WebClient = WebClient.init
 
-			val user14 = login("user14", webClient)
-			
-			val createConfigIn = Json.obj(
-          "json" -> JsonNames.ADD_CONFIG
-          , "params" -> Json.obj(
-              "adminId" -> user14,
-              "configUrl" -> "http://config/user13"
-          )
-      )
-			
-			val jsonConfigOut: JsValue = webClient.handleMessage(createConfigIn)
-//			Logger.info("createConfigIn " + createConfigIn)
-//      Logger.info("jsonConfigOut " + jsonConfigOut)
-    
-      (jsonConfigOut \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigAlreadyExist().status
-	    (jsonConfigOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === ODBRecordDuplicated().status
-			
-		}
-	}
-  
+  val configUrl = "http://config/user13"
+
+  def beforeAll: Unit = {
+    new PrepareConfig().prepareTwoSameConfigUrls(webClient)
+    val count = deleteAdmin("user14")
+    require(count == 1, count.toString)
+  }
+
+  def afterAll: Unit = {}
+
+  "Hier wird die Erzeugung von zwei verschiedenen AdminUser mit gleicher ConfigUrl spezifiziert" >> {
+    "ORecordDuplicatedException" >> {
+
+      registerNewUser("user14", webClient)
+
+      val user14 = login("user14", webClient)
+
+
+      val jsonAddConfigIn = Json.toJsObject(JsonAddConfigIn(
+        json = JsonNames.ADD_CONFIG,
+        params = JsonAddConfigParams(
+          userId = user14,
+          configUrl = configUrl
+        )
+      ))
+
+      Logger.info("IN " + jsonAddConfigIn)
+
+      val jsonAddConfigOut: JsValue = webClient.handleMessage(jsonAddConfigIn)
+
+      Logger.info("OUT " + jsonAddConfigOut)
+
+      (jsonAddConfigOut \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigAlreadyExist().status
+      (jsonAddConfigOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === ODBRecordDuplicated().status
+
+    }
+  }
+
 }

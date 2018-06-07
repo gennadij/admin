@@ -555,9 +555,9 @@ class Graph(graph: OrientGraph) {
    * 
    * @version 0.1.6
    * 
-   * @param String
+   * @param configId: String
    * 
-   * @return
+   * @return (String, Status)
    */
   
   private def getAdminUserId(configId: String): (String, Status) = {
@@ -582,11 +582,17 @@ class Graph(graph: OrientGraph) {
         Logger.error(e2.printStackTrace().toString)
         ("", ODBClassCastError())
       }
+      case e4: NullPointerException => {
+        graph.rollback()
+        Logger.error(e4.printStackTrace().toString)
+        ("", ODBNullPointer())
+      }
       case e3: Exception => {
         graph.rollback()
         Logger.error(e3.printStackTrace().toString)
         ("", ODBWriteError())
       }
+
     }
   }
   

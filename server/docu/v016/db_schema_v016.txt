@@ -1,43 +1,40 @@
-connect remote:localhost/TestDBv013 root root;
+connect remote:localhost/testDB root root;
 SET echo TRUE;
 
 CREATE CLASS AdminUser EXTENDS V;
-ALTER CLASS AdminUser STRICTMODE TRUE;
 CREATE PROPERTY AdminUser.username STRING;
-CREATE INDEX AdminUser.username UNIQUE;
-#alter class AdminUser strictmode true;
+CREATE INDEX username ON AdminUser (username) UNIQUE;
+CREATE PROPERTY AdminUser.password STRING;
+#ALTER CLASS AdminUser STRICTMODE TRUE;
 
 CREATE CLASS hasConfig EXTENDS E;
-#alter class hasConfig strictmode true;
+#ALTER CLASS hasConfig STRICTMODE TRUE;
 
 CREATE CLASS Config EXTENDS V;
 CREATE PROPERTY Config.configUrl STRING;
-CREATE INDEX Config.configUrl UNIQUE;
-#alter class Config strictmode true;
+CREATE INDEX configUrl ON Config (configUrl) UNIQUE;
+#ALTER CLASS Config STRICTMODE TRUE;
 
 CREATE CLASS hasStep EXTENDS E;
-#alter class hasStep strictmode true;
+#ALTER CLASS hasStep STRICTMODE TRUE;
 
 CREATE CLASS Step EXTENDS V;
 CREATE PROPERTY Step.kind STRING;
 CREATE PROPERTY Step.selectionCriteriumMin STRING;
 CREATE PROPERTY Step.selectionCriteriumMax STRING;
 CREATE PROPERTY Step.nameToShow STRING;
-#alter class Step strictmode true;
+#ALTER CLASS Step STRICTMODE TRUE;
 
 CREATE CLASS hasComponent EXTENDS E;
-ALTER CLASS hasComponent STRICTMODE TRUE;
-#alter class hasComponent strictmode true;
+#ALTER CLASS hasComponent STRICTMODE TRUE;
 
 CREATE CLASS Component EXTENDS V;
 CREATE PROPERTY Component.kind STRING;
 CREATE PROPERTY Component.nameToShow STRING;
-#alter class Component strictmode true;
+#ALTER CLASS Component STRICTMODE TRUE;
 
 CREATE CLASS hasDependency EXTENDS E;
 CREATE PROPERTY hasDependency.dependencyType STRING;
 CREATE PROPERTY hasDependency.visualization STRING;
 CREATE PROPERTY hasDependency.nameToShow STRING;
-#alter class hasDependency strictmode true;
-
-
+ALTER CLASS AdminUser STRICTMODE TRUE;

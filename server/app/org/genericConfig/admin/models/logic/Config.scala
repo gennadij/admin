@@ -22,7 +22,7 @@ object Config{
    * 
    * @version 0.1.6
    * 
-   * @param ConfigBO
+   * @param configBO: ConfigBO
    * 
    * @return ConfigBO
    */
@@ -34,9 +34,9 @@ object Config{
    * 
    * @version 0.1.6
    * 
-   * @param
+   * @param configBO: ConfigBO
    * 
-   * @return
+   * @return ConfigBO
    */
   def getConfigs(configBO: ConfigBO): ConfigBO = {
     new Config(configBO).getConfigs
@@ -47,9 +47,9 @@ object Config{
    * 
    * @version 0.1.6
    * 
-   * @param
+   * @param configBO: ConfigBO
    * 
-   * @return
+   * @return ConfigBO
    */
   def deleteConfig(configBO: ConfigBO): ConfigBO = {
     new Config(configBO).deleteConfig
@@ -60,9 +60,9 @@ object Config{
    * 
    * @version 0.1.6
    * 
-   * @param
+   * @param configId: String
    * 
-   * @return
+   * @return ConfigTreeBO
    */
   def getConfigTree(configId: String): ConfigTreeBO = {
     new Config(null).getConfigTree(configId)
@@ -73,9 +73,9 @@ object Config{
    * 
    * @version 0.1.6
    * 
-   * @param
+   * @param configBO: ConfigBO
    * 
-   * @return
+   * @return ConfigBO
    */
   def updateConfig(configBO: ConfigBO): ConfigBO = {
     new Config(configBO).updateConfig
@@ -90,9 +90,7 @@ class Config(configBO: ConfigBO) {
    * 
    * @version 0.1.6
    * 
-   * @param
-   * 
-   * @return
+   * @return ConfigBO
    */
   private def addConfig: ConfigBO = {
     
@@ -137,9 +135,7 @@ class Config(configBO: ConfigBO) {
    * 
    * @version 0.1.6
    * 
-   * @param
-   * 
-   * @return
+   * @return ConfigBO
    */
   private def getConfigs: ConfigBO = {
     Persistence.getConfigs(configBO.userId.get)
@@ -150,9 +146,7 @@ class Config(configBO: ConfigBO) {
    * 
    * @version 0.1.6
    * 
-   * @param
-   * 
-   * @return
+   * @return ConfigBO
    */
   private def deleteConfig: ConfigBO = {
     Persistence.deleteConfig(
@@ -171,9 +165,7 @@ class Config(configBO: ConfigBO) {
    * 
    * @version 0.1.6
    * 
-   * @param
-   * 
-   * @return
+   * @return ConfigBO
    */
   def getConfigTree(configId: String): ConfigTreeBO = {
     Persistence.getConfigTree(configId)

@@ -27,11 +27,11 @@ class GetEmptyConfigsSpecs extends Specification
                            with BeforeAfterAll
                            with CommonFunction{
   
-  val wC = WebClient.init
+  val wC: WebClient = WebClient.init
   var userId: String = ""
   val username = "user_v016_4"
   
-  def beforeAll() = {
+  def beforeAll(): Unit = {
     val (username, userId): (String, String) = addAdminUser(this.username)
     this.userId = userId
     Logger.info("username : " + username)
@@ -45,7 +45,7 @@ class GetEmptyConfigsSpecs extends Specification
     
   }
   
-  def afterAll() = {
+  def afterAll(): Unit = {
 //    Logger.info("Deleting Configs : " + deleteAllConfigs(this.username))
   }
   
@@ -63,10 +63,13 @@ class GetEmptyConfigsSpecs extends Specification
               "userId" -> this.userId
           )
       )
+
+      Logger.info("getConfigsIn " + getConfigsIn)
+
       val getConfigsOut = wC.handleMessage(getConfigsIn)
       
-//      Logger.info("getConfigsIn " + getConfigsIn)
-//      Logger.info("getConfigsOut " + getConfigsOut)
+      Logger.info("getConfigsOut " + getConfigsOut)
+
       (getConfigsOut \ "json").asOpt[String].get === JsonNames.GET_CONFIGS
       (getConfigsOut \ "result" \ "configs").asOpt[Set[JsValue]].get.size === 0
       (getConfigsOut \ "result" \ "status" \ "addConfig").asOpt[String] === None

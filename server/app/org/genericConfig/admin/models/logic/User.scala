@@ -16,9 +16,9 @@ object User {
    * 
    * @version 0.1.6
    * 
-   * @param 
+   * @param userBO: UserBO
    * 
-   * @return 
+   * @return UserBO
    */
   def addUser(userBO: UserBO): UserBO = {
     new User(userBO).addUser
@@ -29,9 +29,9 @@ object User {
    * 
    * @version 0.1.6
    * 
-   * @param 
+   * @param userBO: UserBO
    * 
-   * @return 
+   * @return UserBO
    */
   
   def getUser(userBO: UserBO): UserBO = {
@@ -47,9 +47,7 @@ class User(userBO: UserBO) {
    * 
    * @version 0.1.6
    * 
-   * @param 
-   * 
-   * @return 
+   * @return UserBO
    */
   private def addUser: UserBO = {
     Persistence.addUser(userBO.username.get, userBO.password.get)
@@ -60,9 +58,7 @@ class User(userBO: UserBO) {
    * 
    * @version 0.1.6
    * 
-   * @param 
-   * 
-   * @return 
+   * @return UserBO
    */
   
   private def getUser: UserBO = {

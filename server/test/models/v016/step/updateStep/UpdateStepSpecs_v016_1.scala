@@ -35,7 +35,7 @@ class UpdateStepSpecs_v016_1 extends Specification
     this.userId = userId
     val createConfigOut = createConfig(userId, "//http://contig/" + username, wC)
       
-    this.configId = (createConfigOut \ "result" \ "configId").asOpt[String].get
+    this.configId = createConfigOut.result.configId.get
     
     this.stepId = addStep(wC, configId = Some(this.configId)).get
     

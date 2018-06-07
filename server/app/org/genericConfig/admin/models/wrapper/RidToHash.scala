@@ -28,14 +28,22 @@ object RidToHash {
     }
   }
   
-  def getId(hash: String): String = {
+  def getId(hash: String): Option[String] = {
     val item = map.find(_._2 == hash )
-    item.get._1
+    item match {
+      case Some(i) => Some(i._1)
+      case None => None
+    }
+
+
   }
   
-  def getHash(id: String): String = {
+  def getHash(id: String): Option[String] = {
     val item = map.find(_._1 == id)
-    item.get._2
+    item match {
+      case Some(i) => Some(i._2)
+      case None => None
+    }
   }
   
   def cleanMap = {

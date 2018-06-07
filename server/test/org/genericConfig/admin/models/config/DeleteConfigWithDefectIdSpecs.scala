@@ -9,8 +9,9 @@ import org.genericConfig.admin.controllers.websocket.WebClient
 import play.api.Logger
 import org.genericConfig.admin.shared.common.json.JsonNames
 import play.api.libs.json.Json
-import org.genericConfig.admin.shared.config.status.DeleteConfigDefectID
-import org.genericConfig.admin.shared.common.status.Error
+import org.genericConfig.admin.shared.config.status.{DeleteConfigDefectID, DeleteConfigError}
+import org.genericConfig.admin.shared.common.status.{Error, ODBNullPointer}
+import org.genericConfig.admin.shared.config.json.{JsonDeleteConfigIn, JsonDeleteConfigParams}
 import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
@@ -44,17 +45,20 @@ class DeleteConfigWithDefectIdSpecs extends Specification
     "AdminUser=user_v016_5" >> {
       
 //      val createConfigOut = createConfig(userId, "//http://contig1/user_v016_5", wC)
-      
-//      val configId = (createConfigOut \ "result" \ "configId").asOpt[String].get
-      
+//
+//      val configId = createConfigOut.result.configId.get
+//
 //      Logger.info(configId)
       
-      val jsonDeleteConfigIn = Json.obj(
-          "json" -> JsonNames.DELET_CONFIG
-          , "params" -> Json.obj(
-              "configId" -> "1111",
-              "configUrl" -> "//http://contig1/user_v016_5"
+      val jsonDeleteConfigIn = Json.toJsObject(
+        JsonDeleteConfigIn(
+          json = JsonNames.DELET_CONFIG,
+          params = JsonDeleteConfigParams(
+            configId = "1111",
+            configUrl = "//http://contig1/user_v016_5"
           )
+
+        )
       )
       
       val jsonDeleteConfigOut = wC.handleMessage(jsonDeleteConfigIn)
@@ -66,8 +70,8 @@ class DeleteConfigWithDefectIdSpecs extends Specification
       (jsonDeleteConfigOut \ "result" \ "status" \ "addConfig").asOpt[String] === None
       (jsonDeleteConfigOut \ "result" \ "status" \ "getConfigs" \ "status").asOpt[String] === None
       (jsonDeleteConfigOut \ "result" \ "status" \ "updateConfig").asOpt[String] === None
-      (jsonDeleteConfigOut \ "result" \ "status" \ "deleteConfig" \ "status").asOpt[String].get === DeleteConfigDefectID().status
-      (jsonDeleteConfigOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Error().status
+      (jsonDeleteConfigOut \ "result" \ "status" \ "deleteConfig" \ "status").asOpt[String].get === DeleteConfigError().status
+      (jsonDeleteConfigOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === ODBNullPointer().status
     }
   }
 }

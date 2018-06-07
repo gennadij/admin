@@ -47,7 +47,7 @@ class UpdateConfigSpecs extends Specification
       
       val createConfigOut = createConfig(userId, "//http://contig1/user_v016_6", wC)
       
-      val configId = (createConfigOut \ "result" \ "configId").asOpt[String].get
+      val configId = createConfigOut.result.configId.get
       
       Logger.info(configId)
       

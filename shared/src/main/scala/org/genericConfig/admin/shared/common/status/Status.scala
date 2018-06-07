@@ -35,6 +35,11 @@ case class ODBWriteError() extends Status{
   def message: String = "Beim Laden hat einen Fehler in Datenbank aufgetreten"
 }
 
+case class ODBNullPointer() extends Status{
+  def status: String = "ODB_NULL_POINTER"
+  def message: String = "Beim Laden hat einen Fehler in Datenbank aufgetreten"
+}
+
 case class ODBRecordDuplicated() extends Status{
   def status: String = "ODB_RECORD_DUPLICATED"
   def message: String = "Beim Laden hat einen Fehler in Datenbank aufgetreten"
