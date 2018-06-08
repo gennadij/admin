@@ -942,9 +942,9 @@ class Graph(graph: OrientGraph) {
    * 
    * @version 0.1.6
    * 
-   * @param
+   * @param stepBO: StepBO
    * 
-   * @return
+   * @return (Option[OrientVertex], StatusAddStep, Status)
    */
   def addStep(stepBO: StepBO): (Option[OrientVertex], StatusAddStep, Status) = {
     
@@ -954,18 +954,18 @@ class Graph(graph: OrientGraph) {
           //create Step
           (None, AddStepSuccess(), Success())
         }
-        case None => {
+        case None =>
           //create FirstStep
           stepBO.configId match {
-            case Some(configId) => 
+            case Some(configId) =>
               val vConfig: OrientVertex = graph.getVertex(configId)
               vConfig match {
                 case null => (None, AddStepDefectComponentOrConfigId(), ODBRecordIdDefect())
-                case _ => {
+                case _ =>
                   val countOfFirstSteps: Int = vConfig.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_FIRST_STEP).asScala.toList.size
                   countOfFirstSteps match {
-                    case count if count > 0 => (None, AddStepAlreadyExist(), Error()) 
-                    case _=> {
+                    case count if count > 0 => (None, AddStepAlreadyExist(), Error())
+                    case _=>
                       val vFirstStep: OrientVertex = graph.addVertex(
                           PropertyKeys.CLASS + PropertyKeys.VERTEX_STEP,
                           PropertyKeys.NAME_TO_SHOW, stepBO.nameToShow.get,
@@ -973,16 +973,12 @@ class Graph(graph: OrientGraph) {
                           PropertyKeys.SELECTION_CRITERIUM_MIN, stepBO.selectionCriteriumMin.get.toString,
                           PropertyKeys.SELECTION_CRITERIUM_MAX, stepBO.selectionCriteriumMax.get.toString
                       )
-                      graph.commit
+                      graph.commit()
                       (Some(vFirstStep), AddStepSuccess(), Success())
-                    }
                   }
-                }
               }
-              
             case None => (None, AddStepDefectComponentOrConfigId(), ODBRecordIdDefect())
           }
-        }
       }
     }catch{
       case e1: ORecordDuplicatedException => {

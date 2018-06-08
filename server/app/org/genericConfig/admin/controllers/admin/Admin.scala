@@ -133,9 +133,9 @@ class Admin extends Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param
+   * @param jsonFirstStepIn: JsonStepIn
    * 
-   * @return 
+   * @return JsonStepOut
    */
   def addFirstStep(jsonFirstStepIn: JsonStepIn): JsonStepOut = {
     toJsonStepOut(Step.addFirstStep(toStepBO(jsonFirstStepIn)))

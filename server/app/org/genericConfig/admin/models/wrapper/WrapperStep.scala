@@ -132,6 +132,7 @@ class WrapperStep {
     * @return JsonStepOut
     */
   private def createJsonStepOut(stepBO: StepBO, json: String): JsonStepOut = {
+
     JsonStepOut(
       json = json,
       result = JsonStepResult(

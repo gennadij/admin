@@ -148,7 +148,7 @@ class AddingFirstStepSpecs extends Specification
       RidToHash.setIdAndHash("#1:1")
       val stepOut_3: JsValue = wC.handleMessage(jsonAddFirstStep_3)
       
-      Logger.info("->" + twiceStepConfigTreeSC)
+      Logger.info("->" + stepOut_3)
       
       (stepOut_3 \ "json").asOpt[String].get === JsonNames.ADD_FIRST_STEP
       (stepOut_3 \ "result" \ "status" \ "addStep" \ "status").asOpt[String].get === AddStepDefectComponentOrConfigId().status

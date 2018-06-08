@@ -538,9 +538,9 @@ object Persistence {
    * 
    * @version 0.1.6
    * 
-   * @param 
+   * @param id: String, stepId: String
    * 
-   * @return 
+   * @return (StatusAppendStep, Status)
    */
   def appendStepTo(id: String, stepId: String): (StatusAppendStep, Status) = {
     Graph.appendStepTo(id, stepId)
