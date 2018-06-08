@@ -1,8 +1,8 @@
-package models.v011
+package org.genericConfig.admin.models.db
 
-import org.specs2.Specification
 import org.genericConfig.admin.models.persistence.OrientDB
 import org.junit.runner.RunWith
+import org.specs2.Specification
 import org.specs2.runner.JUnitRunner
 
 /**

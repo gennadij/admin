@@ -1,16 +1,13 @@
 package org.genericConfig.admin.models.step
 
-import models.preparingConfigs.PrepareConfigsForSpecsv011
 import org.genericConfig.admin.controllers.admin.AdminWeb
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.logic.RidToHash
-import org.genericConfig.admin.models.persistence.orientdb.PropertyKeys
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.{Error, ODBRecordIdDefect, Success}
-import org.genericConfig.admin.shared.config.status.StatusAddConfig
 import org.genericConfig.admin.shared.step.json.{JsonSelectionCriterium, JsonStepIn, JsonStepParams}
 import org.genericConfig.admin.shared.step.status.{AddStepAlreadyExist, AddStepDefectComponentOrConfigId, AddStepSuccess, AppendStepSuccess}
-import org.genericConfig.admin.shared.user.status.{AddUserAlreadyExist, AddUserError, AddUserSuccess, StatusAddUser}
+import org.genericConfig.admin.shared.user.status.{AddUserAlreadyExist, AddUserError, AddUserSuccess}
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
 import org.specs2.runner.JUnitRunner
@@ -19,7 +16,6 @@ import play.api.Logger
 import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.{JsValue, Json}
-import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import util.CommonFunction
 
 /**
@@ -53,14 +49,14 @@ class AddFirstStepSpecs extends Specification
       case s if AddUserSuccess().status == s =>
         val (configId: String, _) = addConfig(userId, s"http://contig/$username")
 
-        val (configRId, configIdHash) = RidToHash.setIdAndHash(configId)
+        val (_, configIdHash) = RidToHash.setIdAndHash(configId)
 
         this.configId = configIdHash
 
       case s if AddUserAlreadyExist().status == s =>
         this.configId = getConfigId(usernamePassword = "user4", configUrl = s"http://contig/$username")
 
-        val (configRId, configIdHash) = RidToHash.setIdAndHash(configId)
+        val (_, configIdHash) = RidToHash.setIdAndHash(configId)
 
         this.configId = configIdHash
 

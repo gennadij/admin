@@ -1,20 +1,19 @@
-package models.v011
+package org.genericConfig.admin.models.configTree
 
-import org.specs2.mutable.Specification
-import org.specs2.specification.BeforeAfterAll
-import org.junit.runner.RunWith
-import org.specs2.runner.JUnitRunner
-import play.api.libs.json.Json
-import play.api.libs.json.JsValue
-import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
-import play.api.libs.json.JsValue.jsValueToJsLookup
-import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import models.preparingConfigs.PrepareConfigsForSpecsv011
-import play.api.Logger
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.Success
 import org.genericConfig.admin.shared.configTree.status.GetConfigTreeSuccess
+import org.junit.runner.RunWith
+import org.specs2.mutable.Specification
+import org.specs2.runner.JUnitRunner
+import org.specs2.specification.BeforeAfterAll
+import play.api.Logger
+import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
+import play.api.libs.json.JsValue.jsValueToJsLookup
+import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json.toJsFieldJsValueWrapper
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

@@ -1,17 +1,17 @@
-package models.v011
+package org.genericConfig.admin.models.configTree
 
-import org.junit.runner.RunWith
-import org.specs2.runner.JUnitRunner
-import org.specs2.mutable.Specification
-import play.api.libs.json.Json
-import org.genericConfig.admin.controllers.admin.AdminWeb
-import org.specs2.specification.BeforeAfterAll
-import org.genericConfig.admin.controllers.websocket.WebClient
 import models.preparingConfigs.PrepareConfigsForSpecsv011
+import org.genericConfig.admin.controllers.admin.AdminWeb
+import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.shared.common.json.JsonNames
-import play.api.Logger
 import org.genericConfig.admin.shared.common.status.Success
 import org.genericConfig.admin.shared.configTree.status.GetConfigTreeEmpty
+import org.junit.runner.RunWith
+import org.specs2.mutable.Specification
+import org.specs2.runner.JUnitRunner
+import org.specs2.specification.BeforeAfterAll
+import play.api.Logger
+import play.api.libs.json.Json
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

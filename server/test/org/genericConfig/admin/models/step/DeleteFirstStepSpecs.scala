@@ -4,16 +4,14 @@ import org.genericConfig.admin.controllers.admin.AdminWeb
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.common.status.{Error, ODBRecordIdDefect, Success}
-import org.genericConfig.admin.shared.config.status.StatusAddConfig
-import org.genericConfig.admin.shared.step.json.{JsonSelectionCriterium, JsonStepIn, JsonStepParams}
+import org.genericConfig.admin.shared.common.status.Success
+import org.genericConfig.admin.shared.step.json.{JsonStepIn, JsonStepParams}
 import org.genericConfig.admin.shared.step.status._
 import org.genericConfig.admin.shared.user.status.{AddUserAlreadyExist, AddUserError, AddUserSuccess}
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
 import org.specs2.runner.JUnitRunner
 import org.specs2.specification.BeforeAfterAll
-import play.api
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 import util.CommonFunction
@@ -42,9 +40,9 @@ class DeleteFirstStepSpecs extends Specification
       val (username: String, userId: String, status: String) = addUser(usernamePassword)
       status match {
         case s if AddUserSuccess().status == s =>
-          val (configId: String, status: StatusAddConfig) = addConfig(userId, s"http://contig/$username")
+          val (configId: String, _) = addConfig(userId, s"http://contig/$username")
 
-          val (configRId, configIdHash) = RidToHash.setIdAndHash(configId)
+          val (_, configIdHash) = RidToHash.setIdAndHash(configId)
 
           this.configIdHash = configIdHash
 
