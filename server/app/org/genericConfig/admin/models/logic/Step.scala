@@ -1,12 +1,10 @@
 package org.genericConfig.admin.models.logic
 
-import org.genericConfig.admin.shared.step.bo.StepBO
 import org.genericConfig.admin.models.persistence.Persistence
-import org.genericConfig.admin.shared.step.status._
-import org.genericConfig.admin.shared.common.status.Status
 import org.genericConfig.admin.shared.common.json.JsonNames
-import play.api.Logger
-import org.genericConfig.admin.shared.common.status.Success
+import org.genericConfig.admin.shared.common.status.{Status, Success}
+import org.genericConfig.admin.shared.step.bo.StepBO
+import org.genericConfig.admin.shared.step.status._
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -67,11 +65,12 @@ class Step {
    * @return StepBO
    */
   private def addFirstStep(stepBO: StepBO): StepBO = {
+
     val firstStepBO: StepBO = Persistence.addStep(stepBO)
-    Logger.info("firstStepBO " + firstStepBO)
+
     firstStepBO.status.get.addStep match {
       case Some(AddStepSuccess()) => 
-        val (appendStepStatus: StatusAppendStep, commonStatus: Status) = 
+        val (appendStepStatus: StatusAppendStep, _) =
           Persistence.appendStepTo(firstStepBO.configId.get, firstStepBO.stepId.get)
           appendStepStatus match {
             case AppendStepSuccess() => 
@@ -81,7 +80,7 @@ class Step {
                       appendStep = Some(AppendStepSuccess()),
                       common = firstStepBO.status.get.common)))
             case AppendStepError() => 
-              val (deleteStepStatus: StatusDeleteStep, commonStatus: Status) = 
+              val (_, _) =
                 Persistence.deleteStep(firstStepBO.stepId.get)
               
               firstStepBO.copy(json = Some(JsonNames.ADD_FIRST_STEP), 

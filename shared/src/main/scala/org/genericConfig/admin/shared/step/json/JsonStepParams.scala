@@ -9,11 +9,11 @@ import play.api.libs.json.Json
  */
 
 case class JsonStepParams (
-    configId: String,
-    componentId: String,
-    stepId: String,
-    nameToShow: String,
-    kind: String,
+    configId: String = "",
+    componentId: String = "",
+    stepId: String = "",
+    nameToShow: String = "",
+    kind: String = "",
     selectionCriterium: JsonSelectionCriterium
 )
 

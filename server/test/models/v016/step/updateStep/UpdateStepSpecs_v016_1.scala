@@ -22,7 +22,7 @@ class UpdateStepSpecs_v016_1 extends Specification
                              with BeforeAfterAll
                              with CommonFunction{
   
-  val wC = WebClient.init
+  val wC: WebClient = WebClient.init
   var userId: String = ""
   var configId: String = ""
   var stepId: String = ""
@@ -30,12 +30,12 @@ class UpdateStepSpecs_v016_1 extends Specification
   
   
   
-  def beforeAll() = {
-    val (username, userId): (String, String) = addAdminUser(this.username)
+  def beforeAll(): Unit = {
+    val (username, userId, _): (String, String, _) = addUser(this.username)
     this.userId = userId
-    val createConfigOut = createConfig(userId, "//http://contig/" + username, wC)
+    val (configId, _)= addConfig(userId, "//http://contig/" + username)
       
-    this.configId = createConfigOut.result.configId.get
+    this.configId = configId
     
     this.stepId = addStep(wC, configId = Some(this.configId)).get
     
@@ -45,7 +45,7 @@ class UpdateStepSpecs_v016_1 extends Specification
     Logger.info("stepId : " + stepId)
   }
   
-  def afterAll() = {
+  def afterAll(): Unit = {
     Logger.info("Deleting Step :" + + deleteStepAppendedToConfig(this.configId))
     Logger.info("Deleting Configs : " + deleteAllConfigs(this.username))
   }

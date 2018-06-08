@@ -32,7 +32,7 @@ class GetEmptyConfigsSpecs extends Specification
   val username = "user_v016_4"
   
   def beforeAll(): Unit = {
-    val (username, userId): (String, String) = addAdminUser(this.username)
+    val (username, userId, _): (String, String, _) = addUser(this.username)
     this.userId = userId
     Logger.info("username : " + username)
     Logger.info("userId : " + userId)

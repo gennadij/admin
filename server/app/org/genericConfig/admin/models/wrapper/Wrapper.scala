@@ -27,7 +27,7 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param JsonUserIn
+   * @param jsonUserIn: JsonUserIn
    * 
    * @return UserBO
    */
@@ -40,7 +40,7 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param UserBO
+   * @param userBO: UserBO
    * 
    * @return JsonUserOut
    */
@@ -53,7 +53,7 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param JsonUserIn
+   * @param jsonUserIn: JsonUserIn
    * 
    * @return UserBO
    */
@@ -66,7 +66,7 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param UserBO
+   * @param userBO: UserBO
    * 
    * @return JsonUserOut
    */
@@ -79,7 +79,7 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param JsonAddConfigIn
+   * @param jsonAddconfigIn: JsonAddConfigIn
    * 
    * @return ConfigBO
    */
@@ -92,7 +92,7 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param ConfigBO
+   * @param configBO: ConfigBO
    * 
    * @return JsonAddConfigOut
    */
@@ -105,7 +105,7 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param JsonAddConfigIn
+   * @param jsonAddconfigIn: JsonAddConfigIn
    * 
    * @return ConfigBO
    */
@@ -118,7 +118,7 @@ trait Wrapper{
    * 
    * @version 0.1.5
    * 
-   * @param ConfigBO
+   * @param configBO: ConfigBO
    * 
    * @return JsonGetConfigsOut
    */
@@ -132,7 +132,7 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param JsonDeleteConfigIn
+   * @param jsonDeleteConfigIn: JsonDeleteConfigIn
    * 
    * @return ConfigBO
    */
@@ -145,7 +145,7 @@ trait Wrapper{
    * 
    * @version 0.1.5
    * 
-   * @param ConfigBO
+   * @param configBO: ConfigBO
    * 
    * @return JsonDeleteConfigOut
    */
@@ -158,7 +158,7 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param JsonDeleteConfigIn
+   * @param jsonUpdateConfigIn: JsonDeleteConfigIn
    * 
    * @return ConfigBO
    */
@@ -171,7 +171,7 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param ConfigBO
+   * @param configBO: ConfigBO
    * 
    * @return JsonUpdateConfigOut
    */
@@ -183,143 +183,27 @@ trait Wrapper{
    * 
    * @version 0.1.5
    * 
-   * @param JsonStepCS
+   * @param jsonStepIn: JsonStepCS
    * 
    * @return StepCS
    */
   def toStepBO(jsonStepIn: JsonStepIn): StepBO = {
-    jsonStepIn.json match {
-      case json if json == JsonNames.ADD_FIRST_STEP => 
-        StepBO(
-            Some(jsonStepIn.json),
-            Some(jsonStepIn.params.configId), //configId
-            None,//componentId
-            Some(jsonStepIn.params.nameToShow), // nameToShow
-            Some(jsonStepIn.params.kind), // kind
-            Some(jsonStepIn.params.selectionCriterium.min), // selectionCriteriumMin
-            Some(jsonStepIn.params.selectionCriterium.max), // selectionCriteriumMax
-            None, // stepId
-            None // status
-        )
-      case json if json == JsonNames.DELETE_FIRST_STEP || json == JsonNames.DELETE_STEP => 
-        StepBO(
-            Some(jsonStepIn.json), 
-            None, //configId 
-            None,//componentId
-            None, // nameToShow
-            None, // kind
-            None, // selectionCriteriumMin
-            None, // selectionCriteriumMax
-            Some(jsonStepIn.params.stepId), // stepId
-            None // status
-        )
-      case json if json == JsonNames.UPDATE_FIRST_STEP || json == JsonNames.UPDATE_STEP  => 
-        StepBO(
-            Some(jsonStepIn.json),
-            None, //configId
-            None,//componentId
-            Some(jsonStepIn.params.nameToShow), // nameToShow
-            Some(jsonStepIn.params.kind), // kind
-            Some(jsonStepIn.params.selectionCriterium.min), // selectionCriteriumMin
-            Some(jsonStepIn.params.selectionCriterium.max), // selectionCriteriumMax
-            Some(jsonStepIn.params.stepId), // stepId
-            None // status
-        )
-      case json if json == JsonNames.ADD_STEP =>
-        StepBO(
-            Some(jsonStepIn.json),
-            None, //configId
-            Some(jsonStepIn.params.componentId),//componentId
-            Some(jsonStepIn.params.nameToShow), // nameToShow
-            Some(jsonStepIn.params.kind), // kind
-            Some(jsonStepIn.params.selectionCriterium.min), // selectionCriteriumMin
-            Some(jsonStepIn.params.selectionCriterium.max), // selectionCriteriumMax
-            None, // stepId
-            None // status
-        )
-    }
+    new WrapperStep().toStepBO(jsonStepIn)
   }
   /**
    * @author Gennadi Heimann
    * 
    * @version 0.1.5
    * 
-   * @param StepSC
+   * @param stepBO: StepBO
    * 
    * @return JsonStepSC
    */
   def toJsonStepOut(stepBO: StepBO): JsonStepOut = {
-    stepBO.json.get match {
-      case json if json == JsonNames.ADD_FIRST_STEP => 
-        createJsonStepOut(stepBO, json)
-      case json if json == JsonNames.DELETE_FIRST_STEP => 
-        createJsonStepOut(stepBO, json)
-      case json if json == JsonNames.UPDATE_FIRST_STEP => 
-       createJsonStepOut(stepBO, json)
-      case json if json == JsonNames.ADD_STEP =>
-       createJsonStepOut(stepBO, json)
-      case json if json == JsonNames.DELETE_STEP => 
-        createJsonStepOut(stepBO, json)
-      case json if json == JsonNames.UPDATE_STEP => 
-        createJsonStepOut(stepBO, json)
-    }
+    new WrapperStep().toJsonStepOut(stepBO)
   }
   
-  private def createJsonStepOut(stepBO: StepBO, json: String): JsonStepOut = {
-    JsonStepOut(
-        json = json,
-        result = JsonStepResult(
-            stepBO.stepId match {
-              case Some(stepId) => Some(stepId)
-              case None => None
-            },
-            Set(),
-            Set(),
-            JsonStepStatus(
-                stepBO.status.get.addStep match {
-                  case Some(addStep) => 
-                    Some(JsonStatus(
-                      addStep.status,
-                      addStep.message
-                    ))
-                  case None => None
-                },
-                stepBO.status.get.deleteStep match {
-                  case Some(deleteStep) => 
-                    Some(JsonStatus(
-                      deleteStep.status,
-                      deleteStep.message
-                    ))
-                  case None => None
-                },
-                stepBO.status.get.updateStep match {
-                  case Some(updateStep) => 
-                    Some(JsonStatus(
-                      updateStep.status,
-                      updateStep.message
-                    ))
-                  case None => None
-                },
-                stepBO.status.get.appendStep match {
-                  case Some(appendStep) => 
-                    Some(JsonStatus(
-                      appendStep.status,
-                      appendStep.message
-                    ))
-                  case None => None
-                },
-                stepBO.status.get.common match {
-                  case Some(common) => 
-                    Some(JsonStatus(
-                      common.status,
-                      common.message
-                    ))
-                  case None => None
-                }
-            )
-        )
-    )
-  }
+
   
 
   /**

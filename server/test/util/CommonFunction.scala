@@ -8,7 +8,7 @@ import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.models.persistence.orientdb.Graph
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.config.bo.{ConfigBO, Configuration}
-import org.genericConfig.admin.shared.config.json.{JsonAddConfigIn, JsonAddConfigOut, JsonAddConfigParams}
+import org.genericConfig.admin.shared.config.status.{GetConfigsEmpty, GetConfigsError, GetConfigsSuccess, StatusAddConfig}
 import org.genericConfig.admin.shared.user.bo.UserBO
 import org.genericConfig.admin.shared.user.json.{JsonUserIn, JsonUserOut, JsonUserParams}
 import play.api.Logger
@@ -21,7 +21,7 @@ import play.api.libs.json.{JsValue, Json}
   */
 trait CommonFunction {
 
-  def addAdminUser(username: String): (String, String) = {
+  def addUser(username: String): (String, String, String) = {
 
     val jsonAddUserIn = Json.toJsObject(JsonUserIn(
       json = JsonNames.ADD_USER,
@@ -42,40 +42,30 @@ trait CommonFunction {
 
     //    Logger.info("OUT " + jsonAddUserOut)
 
-    (addUserOut.get.result.username.get, addUserOut.get.result.userId.get)
+    (addUserOut.get.result.username.get, addUserOut.get.result.userId.get, addUserOut.get.result.status.addUser.get.status)
   }
 
   def deleteAllConfigs(username: String): Int = {
     Graph.deleteAllConfigs(username)
   }
 
-  def createConfig(uId: String, cUrl: String, wC: WebClient): JsonAddConfigOut = {
-    val newConfigIn = Json.toJsObject(
-      JsonAddConfigIn(
-        json = JsonNames.ADD_CONFIG,
-        params = JsonAddConfigParams(
-          userId = uId,
-          configUrl = cUrl
-        )
-      )
+  def addConfig(userId: String, configUrl: String): (String, StatusAddConfig) = {
+
+    val configBOIn = ConfigBO(
+      userId = Some(userId),
+      configs = Some(List(Configuration(configUrl = Some(configUrl))))
     )
+    val configBOOut = Config.addConfig(configBOIn)
 
-    Logger.info("IN " + newConfigIn)
-
-    val newConfigOut = wC.handleMessage(newConfigIn)
-
-    Logger.info("OUT " + newConfigOut)
-
-    val addConfigOut = Json.fromJson[JsonAddConfigOut](newConfigOut).get
-
-    addConfigOut
+    (configBOOut.configs.get.head.configId.get, configBOOut.status.get.addConfig.get)
   }
 
-  def deleteStepAppendedToConfig(configId: String) = {
+
+  def deleteStepAppendedToConfig(configId: String): Int = {
     Graph.deleteStepAppendedToConfig(configId)
   }
 
-  def getConfigs(userId: String, wC: WebClient) = {
+  def getConfigs(userId: String, wC: WebClient): Set[String] = {
     val getConfigsIn = Json.obj(
       "json" -> JsonNames.GET_CONFIGS
       , "params" -> Json.obj(
@@ -148,23 +138,23 @@ trait CommonFunction {
 
   def deleteConfigVertex(username: String): Int = {
     val sql: String = s"DELETE VERTEX Config where @rid IN (SELECT OUT('hasConfig') FROM AdminUser WHERE username='$username')"
-    val graph: OrientGraph = Database.getFactory()._1.getOrElse(null).getTx
+    val graph: OrientGraph = Database.getFactory()._1.orNull.getTx
     val res: Int = graph
       .command(new OCommandSQL(sql)).execute()
-    graph.commit
+    graph.commit()
     Logger.info("Deleting count: " + res)
     res
   }
 
   def deleteAdmin(username: String): Int = {
-    val graph: OrientGraph = Database.getFactory()._1.getOrElse(null).getTx
+    val graph: OrientGraph = Database.getFactory()._1.orNull.getTx
     val res: Int = graph
       .command(new OCommandSQL(s"DELETE VERTEX AdminUser where username='$username'")).execute()
-    graph.commit
+    graph.commit()
     res
   }
 
-  def registerNewUser(userPassword: String, webClient: WebClient) = {
+  def registerNewUser(userPassword: String, webClient: WebClient): Unit = {
     val registerCS = Json.obj(
       "json" -> JsonNames.ADD_USER
       , "params" -> Json.obj(
@@ -179,14 +169,7 @@ trait CommonFunction {
     require((registerSC \ "result" \ "username").asOpt[String].get == userPassword, s"Username: $userPassword")
   }
 
-  def login(userPassword: String, webClient: WebClient): String = {
-    //    val jsonGerUserIn = Json.toJsObject(JsonUserIn(
-    //      json = JsonNames.GET_USER,
-    //      params = JsonUserParams(
-    //        username = userPassword,
-    //        password = userPassword
-    //      )
-    //    ))
+  def getUserId(userPassword: String, webClient: WebClient): String = {
 
     val userBO = UserBO(
       username = Some(userPassword),
@@ -195,28 +178,42 @@ trait CommonFunction {
 
     val userBOOut = User.getUser(userBO)
 
-
-    //    val loginSC = webClient.handleMessage(jsonGerUserIn)
-
-    //    val jsonGetUserOut = Json.fromJson[JsonUserOut](loginSC)
-    //
-    //    jsonGetUserOut.getOrElse(null).result.userId.get
     userBOOut.userId.get
   }
 
-  def createNewConfig(userId: String, configUrl: String, webClient: WebClient): String = {
 
-    val addConfigIn = ConfigBO(
-      Some(userId),
-      Some(List(new Configuration(
-        None,
-        Some(configUrl)
-      ))),
-      None
+
+  def getConfigId(usernamePassword: String, configUrl: String = ""): String = {
+
+    val userBOIn = UserBO(
+      username = Some(usernamePassword),
+      password = Some(usernamePassword)
     )
 
-    val addConfigOut: ConfigBO = Config.addConfig(addConfigIn)
+    val userBOOut = User.getUser(userBOIn)
 
-    addConfigOut.configs.get.head.configId.get
+    val configBOIn = ConfigBO(
+      userId = Some(userBOOut.userId.get)
+    )
+
+    val configBOOut = Config.getConfigs(configBOIn)
+    configBOOut.status.get.getConfigs.get match {
+      case GetConfigsSuccess() =>
+        configBOOut.configs.get.head.configId.get
+      case GetConfigsEmpty() =>
+        val addConfigBOIn = ConfigBO(
+          userId = Some(userBOOut.userId.get),
+          configs = Some(List(Configuration(configUrl = Some(configUrl))))
+        )
+
+        val addConfigBOOut = Config.addConfig(addConfigBOIn)
+
+        addConfigBOOut.configs.get.head.configId.get
+      case GetConfigsError() => {
+        configBOOut.status.get.getConfigs.get.status
+      }
+    }
+
+
   }
 }

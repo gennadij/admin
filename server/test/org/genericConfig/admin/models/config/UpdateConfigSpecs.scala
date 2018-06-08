@@ -27,27 +27,25 @@ class UpdateConfigSpecs extends Specification
                            with BeforeAfterAll
                            with CommonFunction{
   
-  val wC = WebClient.init
+  val wC: WebClient = WebClient.init
   var userId: String = ""
   val username = "user_v016_6"
   
-  def beforeAll() = {
-    val (username, userId): (String, String) = addAdminUser(this.username)
+  def beforeAll(): Unit = {
+    val (username, userId, _): (String, String, _) = addUser(this.username)
     this.userId = userId
     Logger.info("username : " + username)
     Logger.info("userId : " + userId)
   }
   
-  def afterAll() = {
+  def afterAll(): Unit = {
     Logger.info("Deleting Configs : " + deleteAllConfigs(this.username))
   }
   
   "Diese Spezifikation spezifiziert die Editierung einer Konfigurationen" >> {
     "AdminUser=user_v016_6" >> {
       
-      val createConfigOut = createConfig(userId, "//http://contig1/user_v016_6", wC)
-      
-      val configId = createConfigOut.result.configId.get
+      val (configId, _) = addConfig(userId, "//http://contig1/user_v016_6")
       
       Logger.info(configId)
       

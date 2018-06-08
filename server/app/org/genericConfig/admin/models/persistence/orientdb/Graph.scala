@@ -228,9 +228,9 @@ object Graph{
    * 
    * @version 0.1.6
    * 
-   * @param String
+   * @param stepBO: StepBO
    * 
-   * @return
+   * @return (Option[OrientVertex], StatusAddStep, Status)
    */
   def addStep(stepBO: StepBO): (Option[OrientVertex], StatusAddStep, Status) = {
     (Database.getFactory(): @unchecked) match {
@@ -247,9 +247,9 @@ object Graph{
    * 
    * @version 0.1.6
    * 
-   * @param
+   * @param id: String, stepId: String
    * 
-   * @return
+   * @return (StatusAppendStep, Status)
    */
   def appendStepTo(id: String, stepId: String): (StatusAppendStep, Status) = {
     

@@ -30,7 +30,7 @@ class PrepareConfig extends CommonFunction {
     }else{
       registerNewUser(userAddingNewConfig, wC)
 
-      login(userAddingNewConfig, wC)
+      getUserId(userAddingNewConfig, wC)
     }
   }
 
@@ -44,11 +44,11 @@ class PrepareConfig extends CommonFunction {
     }else {
       registerNewUser(userTwoSameConfigUrls, wC)
 
-      val adminId_1 = login(userTwoSameConfigUrls, wC)
+      val adminId_1 = getUserId(userTwoSameConfigUrls, wC)
 
       println("adminId " + adminId_1)
 
-      val configId_1 = createNewConfig(adminId_1, s"http://config/$userTwoSameConfigUrls", wC)
+      val configId_1 = addConfig(adminId_1, s"http://config/$userTwoSameConfigUrls")
 
       println("ConfigId" + configId_1)
     }

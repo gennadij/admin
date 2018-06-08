@@ -33,8 +33,8 @@ class AddSeveralConfigsSpecs extends Specification
   val configUrl_2 = "//http://contig1/user_1_v016_2"
   val configUrl_3 = "//http://contig1/user_1_v016_3"
 
-  def beforeAll() = {
-    val (username, userId): (String, String) = addAdminUser(this.username)
+  def beforeAll(): Unit = {
+    val (userId, _, _): (String, String, _) = addUser(this.username)
     this.userId = userId
   }
 

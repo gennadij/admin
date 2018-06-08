@@ -1,20 +1,19 @@
 package org.genericConfig.admin.models.config
 
-import org.specs2.mutable.Specification
-import org.specs2.specification.BeforeAfterAll
-import util.CommonFunction
-import org.junit.runner.RunWith
-import org.specs2.runner.JUnitRunner
 import org.genericConfig.admin.controllers.websocket.WebClient
-import play.api.Logger
 import org.genericConfig.admin.shared.common.json.JsonNames
-import play.api.libs.json.Json
-import org.genericConfig.admin.shared.config.status.{DeleteConfigDefectID, DeleteConfigError}
-import org.genericConfig.admin.shared.common.status.{Error, ODBNullPointer}
+import org.genericConfig.admin.shared.common.status.ODBNullPointer
 import org.genericConfig.admin.shared.config.json.{JsonDeleteConfigIn, JsonDeleteConfigParams}
+import org.genericConfig.admin.shared.config.status.DeleteConfigError
+import org.junit.runner.RunWith
+import org.specs2.mutable.Specification
+import org.specs2.runner.JUnitRunner
+import org.specs2.specification.BeforeAfterAll
+import play.api.Logger
 import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
-import play.api.libs.json.Json.toJsFieldJsValueWrapper
+import play.api.libs.json.Json
+import util.CommonFunction
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -26,18 +25,18 @@ class DeleteConfigWithDefectIdSpecs extends Specification
                            with BeforeAfterAll
                            with CommonFunction{
   
-  val wC = WebClient.init
+  val wC: WebClient = WebClient.init
   var userId: String = ""
   val username = "user_v016_5"
   
-  def beforeAll() = {
-    val (username, userId): (String, String) = addAdminUser(this.username)
+  def beforeAll(): Unit = {
+    val (username, userId, _): (String, String, _) = addUser(this.username)
     this.userId = userId
     Logger.info("username : " + username)
     Logger.info("userId : " + userId)
   }
   
-  def afterAll() = {
+  def afterAll(): Unit = {
 //    Logger.info("Deleting Configs : " + deleteAllConfigs(this.username))
   }
   

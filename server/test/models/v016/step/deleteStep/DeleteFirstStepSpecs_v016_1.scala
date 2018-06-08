@@ -1,16 +1,16 @@
 package models.v016.step.deleteStep
 
-import org.specs2.mutable.Specification
-import org.specs2.specification.BeforeAfterAll
-import util.CommonFunction
-import org.junit.runner.RunWith
-import org.specs2.runner.JUnitRunner
 import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.common.status.Success
+import org.genericConfig.admin.shared.step.status.DeleteStepSuccess
+import org.junit.runner.RunWith
+import org.specs2.mutable.Specification
+import org.specs2.runner.JUnitRunner
+import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
 import play.api.libs.json.Json
-import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.step.status.DeleteStepSuccess
-import org.genericConfig.admin.shared.common.status.Success
+import util.CommonFunction
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -23,18 +23,18 @@ class DeleteFirstStepSpecs_v016_1 extends Specification
                            with BeforeAfterAll
                            with CommonFunction{
   
-  val wC = WebClient.init
+  val wC: WebClient = WebClient.init
   var userId: String = ""
   var configId: String = ""
   var stepId: String = ""
   val username = "user_deleteStep_v016_1"
   
-  def beforeAll() = {
-    val (username, userId): (String, String) = addAdminUser(this.username)
+  def beforeAll(): Unit = {
+    val (username, userId, _): (String, String, String) = addUser(this.username)
     this.userId = userId
-    val createConfigOut = createConfig(userId, "//http://contig/" + username, wC)
+    val (configId: String, _) = addConfig(userId, "//http://contig/" + username)
       
-    this.configId = createConfigOut.result.configId.get
+    this.configId = configId
     
     this.stepId = addStep(wC, configId = Some(this.configId)).get
     
@@ -44,7 +44,7 @@ class DeleteFirstStepSpecs_v016_1 extends Specification
     Logger.info("stepId : " + stepId)
   }
   
-  def afterAll() = {
+  def afterAll(): Unit = {
     Logger.info("Deleting Step :" + + deleteStepAppendedToConfig(this.configId))
     Logger.info("Deleting Configs : " + deleteAllConfigs(this.username))
   }

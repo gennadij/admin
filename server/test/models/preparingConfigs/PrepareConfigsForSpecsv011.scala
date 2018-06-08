@@ -32,7 +32,7 @@ object PrepareConfigsForSpecsv011 extends AdminWeb with GeneralFunctionToPrepare
 
 
 
-  val userAddingFirstStep =                "user4"
+
   val userAddingComponentWithFirstStep =   "user5"
   val userAddingNewComponent =             "user6"
   val userConfigTreeFirstStep3Components = "user7"

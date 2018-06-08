@@ -45,11 +45,11 @@ class PrepareUser extends CommonFunction{
     }else{
       registerNewUser(userLogin, wC)
 
-      val adminId: String = login(userLogin, wC)
+      val adminId: String = getUserId(userLogin, wC)
 
       println("adminId " + adminId)
 
-      val configId: String = createNewConfig(adminId, "http://contig1/user2", wC)
+      val (configId, _) = addConfig(adminId, "http://contig1/user2")
 
       println("configId " + configId)
     }

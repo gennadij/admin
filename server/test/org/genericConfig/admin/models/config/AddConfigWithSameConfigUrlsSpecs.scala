@@ -49,7 +49,7 @@ class AddConfigWithSameConfigUrlsSpecs extends Specification
 
       registerNewUser("user14", webClient)
 
-      val user14 = login("user14", webClient)
+      val user14 = getUserId("user14", webClient)
 
 
       val jsonAddConfigIn = Json.toJsObject(JsonAddConfigIn(

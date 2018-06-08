@@ -30,7 +30,7 @@ class DeleteConfigSpecs extends Specification
   val username = "user_v016_4"
   
   def beforeAll(): Unit = {
-    val (username, userId): (String, String) = addAdminUser(this.username)
+    val (username, userId, _): (String, String, String) = addUser(this.username)
     this.userId = userId
     Logger.info("username : " + username)
     Logger.info("userId : " + userId)
@@ -43,10 +43,8 @@ class DeleteConfigSpecs extends Specification
   "Diese Spezifikation spezifiziert die Entfernng einer Konfigurationen" >> {
     "AdminUser=user_v016_4" >> {
       
-      val createConfigOut = createConfig(userId, "//http://contig1/user_v016_4", wC)
-      
-      val configId = createConfigOut.result.configId.get
-      
+      val (configId, _) = addConfig(userId, "//http://contig1/user_v016_4")
+
       val jsonDeleteConfigIn = Json.toJsObject(
         JsonDeleteConfigIn(
           json = JsonNames.DELET_CONFIG,
