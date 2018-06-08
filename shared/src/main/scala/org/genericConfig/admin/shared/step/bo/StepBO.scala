@@ -16,5 +16,5 @@ case class StepBO (
     selectionCriteriumMin: Option[Int] = None,
     selectionCriteriumMax: Option[Int] = None,
     stepId: Option[String] = None,
-    status: Option[StatusStep]
+    status: Option[StatusStep] = None
 )

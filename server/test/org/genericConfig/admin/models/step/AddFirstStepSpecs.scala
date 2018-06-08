@@ -35,7 +35,7 @@ import util.CommonFunction
  */
 
 @RunWith(classOf[JUnitRunner])
-class AddingFirstStepSpecs extends Specification 
+class AddFirstStepSpecs extends Specification
                           with AdminWeb
                           with BeforeAfterAll
                           with CommonFunction{
@@ -51,7 +51,7 @@ class AddingFirstStepSpecs extends Specification
     val (username: String, userId: String, status: String) = addUser(usernamePassword)
     status match {
       case s if AddUserSuccess().status == s =>
-        val (configId: String, status: StatusAddConfig) = addConfig(userId, s"http://contig/$username")
+        val (configId: String, _) = addConfig(userId, s"http://contig/$username")
 
         val (configRId, configIdHash) = RidToHash.setIdAndHash(configId)
 
@@ -85,10 +85,10 @@ class AddingFirstStepSpecs extends Specification
           configId = configId,
           nameToShow = "FirstStep",
           kind = "first",
-          selectionCriterium = JsonSelectionCriterium(
+          selectionCriterium = Some(JsonSelectionCriterium(
             min = 1,
             max = 1
-          )
+          ))
         )
       ))
 
@@ -111,10 +111,10 @@ class AddingFirstStepSpecs extends Specification
           configId = configId,
           nameToShow = "FirstStep",
           kind = "first",
-          selectionCriterium = JsonSelectionCriterium(
+          selectionCriterium = Some(JsonSelectionCriterium(
             min = 1,
             max = 1
-          )
+          ))
         )
       ))
 
@@ -136,10 +136,10 @@ class AddingFirstStepSpecs extends Specification
           configId = "#1:1",
           nameToShow = "FirstStep",
           kind = "first",
-          selectionCriterium = JsonSelectionCriterium(
+          selectionCriterium = Some(JsonSelectionCriterium(
             min = 1,
             max = 1
-          )
+          ))
         )
       ))
 

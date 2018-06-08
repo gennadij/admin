@@ -55,10 +55,10 @@ class AddStep(websocket: WebSocket) {
             "", //stepId: String,
             nameToShow.toString, //nameToShow: String,
             "first", //kind: String,
-            JsonSelectionCriterium(
+            Some(JsonSelectionCriterium(
                 scMin.toString.toInt,
                 scMax.toString.toInt
-            ), //selectionCriterium: JsonSelectionCriterium
+            )) //selectionCriterium: JsonSelectionCriterium
         )
     )).toString
     

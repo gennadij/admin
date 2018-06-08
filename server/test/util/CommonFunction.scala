@@ -3,12 +3,14 @@ package util
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import org.genericConfig.admin.controllers.websocket.WebClient
-import org.genericConfig.admin.models.logic.{Config, User}
+import org.genericConfig.admin.models.logic.{Config, RidToHash, Step, User}
 import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.models.persistence.orientdb.Graph
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.config.bo.{ConfigBO, Configuration}
 import org.genericConfig.admin.shared.config.status.{GetConfigsEmpty, GetConfigsError, GetConfigsSuccess, StatusAddConfig}
+import org.genericConfig.admin.shared.step.bo.StepBO
+import org.genericConfig.admin.shared.step.json.JsonSelectionCriterium
 import org.genericConfig.admin.shared.user.bo.UserBO
 import org.genericConfig.admin.shared.user.json.{JsonUserIn, JsonUserOut, JsonUserParams}
 import play.api.Logger
@@ -55,7 +57,12 @@ trait CommonFunction {
       userId = Some(userId),
       configs = Some(List(Configuration(configUrl = Some(configUrl))))
     )
+
+    Logger.info("IN " + configBOIn)
+
     val configBOOut = Config.addConfig(configBOIn)
+
+    Logger.info("OUT " + configBOOut)
 
     (configBOOut.configs.get.head.configId.get, configBOOut.status.get.addConfig.get)
   }
@@ -82,54 +89,50 @@ trait CommonFunction {
     jsConfigsIds map (jsCId => (jsCId \ "configId").asOpt[String].get)
   }
 
-  def addStep(wC: WebClient, configId: Option[String] = None, componentId: Option[String] = None): Option[String] = {
+  def addStep(configId: Option[String] = None, componentId: Option[String] = None): Option[String] = {
 
     configId match {
       case Some(configId) =>
-        val stepIn = Json.obj(
-          "json" -> JsonNames.ADD_FIRST_STEP,
-          "params" -> Json.obj(
-            "configId" -> configId,
-            "componentId" -> "",
-            "stepId" -> "",
-            "nameToShow" -> "FirstStep",
-            "kind" -> "first",
-            "selectionCriterium" -> Json.obj(
-              "min" -> 1,
-              "max" -> 1
-            )
-          )
+
+//        val configRId = RidToHash.getId(configId)
+
+        val addstepBOIn = StepBO(
+          json = Some(JsonNames.ADD_FIRST_STEP),
+          configId = Some(configId),
+          nameToShow = Some("FirstStep"),
+          kind = Some("first"),
+          selectionCriteriumMax = Some(1),
+          selectionCriteriumMin = Some(1)
         )
 
-        Logger.info("<-" + stepIn)
+        Logger.info("IN " + addstepBOIn)
 
-        val stepOut: JsValue = wC.handleMessage(stepIn)
+        val addStepBOOut = Step.addFirstStep(addstepBOIn)
 
-        Logger.info("->" + stepOut)
-        (stepOut \ "result" \ "stepId").asOpt[String]
+        Logger.info("OUT" + addStepBOOut)
+
+        addStepBOOut.stepId
       case None =>
         componentId match {
           case Some(componentId) =>
-            val stepIn = Json.obj(
-              "json" -> JsonNames.ADD_FIRST_STEP,
-              "params" -> Json.obj(
-                "configId" -> "",
-                "componentId" -> componentId,
-                "nameToShow" -> "FirstStep",
-                "kind" -> "first",
-                "selectionCriterium" -> Json.obj(
-                  "min" -> 1,
-                  "max" -> 1
-                )
-              )
+
+            val componentRUId = RidToHash.getId(componentId)
+
+            val addstepBOIn = StepBO(
+              json = Some(JsonNames.ADD_FIRST_STEP),
+              configId = Some(componentRUId.get),
+              nameToShow = Some("Step"),
+              kind = Some("default"),
+              selectionCriteriumMax = Some(1),
+              selectionCriteriumMin = Some(1)
             )
 
-            Logger.info("<-" + stepIn)
+            Logger.info("IN" + addstepBOIn)
 
-            val stepOut: JsValue = wC.handleMessage(stepIn)
+            val stepOut: JsValue = ??? //Step.addFirstStep(addstepBOIn)
 
-            Logger.info("->" + stepOut)
-            (stepOut \ "result" \ "stepId").asOpt[String]
+            Logger.info("OUT " + stepOut)
+            ???
 
           case None => None
         }

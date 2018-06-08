@@ -14,7 +14,7 @@ case class JsonStepParams (
     stepId: String = "",
     nameToShow: String = "",
     kind: String = "",
-    selectionCriterium: JsonSelectionCriterium
+    selectionCriterium: Option[JsonSelectionCriterium] = None
 )
 
 object JsonStepParams {

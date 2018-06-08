@@ -36,8 +36,8 @@ class WrapperStep {
           None,//componentId
           Some(jsonStepIn.params.nameToShow), // nameToShow
           Some(jsonStepIn.params.kind), // kind
-          Some(jsonStepIn.params.selectionCriterium.min), // selectionCriteriumMin
-          Some(jsonStepIn.params.selectionCriterium.max), // selectionCriteriumMax
+          Some(jsonStepIn.params.selectionCriterium.get.min), // selectionCriteriumMin
+          Some(jsonStepIn.params.selectionCriterium.get.max), // selectionCriteriumMax
           None, // stepId
           None // status
         )
@@ -66,8 +66,8 @@ class WrapperStep {
           None,//componentId
           Some(jsonStepIn.params.nameToShow), // nameToShow
           Some(jsonStepIn.params.kind), // kind
-          Some(jsonStepIn.params.selectionCriterium.min), // selectionCriteriumMin
-          Some(jsonStepIn.params.selectionCriterium.max), // selectionCriteriumMax
+          Some(jsonStepIn.params.selectionCriterium.get.min), // selectionCriteriumMin
+          Some(jsonStepIn.params.selectionCriterium.get.max), // selectionCriteriumMax
           Some(stepRId.get), // stepId
           None // status
         )
@@ -80,8 +80,8 @@ class WrapperStep {
           Some(componentRId.get),//componentId
           Some(jsonStepIn.params.nameToShow), // nameToShow
           Some(jsonStepIn.params.kind), // kind
-          Some(jsonStepIn.params.selectionCriterium.min), // selectionCriteriumMin
-          Some(jsonStepIn.params.selectionCriterium.max), // selectionCriteriumMax
+          Some(jsonStepIn.params.selectionCriterium.get.min), // selectionCriteriumMin
+          Some(jsonStepIn.params.selectionCriterium.get.max), // selectionCriteriumMax
           None, // stepId
           None // status
         )
@@ -108,8 +108,8 @@ class WrapperStep {
         createJsonStepOut(stepBO, json)
       case json if json == JsonNames.DELETE_FIRST_STEP =>
         createJsonStepOut(stepBO, json)
-      case json if json == JsonNames.UPDATE_FIRST_STEP =>
-        createJsonStepOut(stepBO, json)
+//      case json if json == JsonNames.UPDATE_FIRST_STEP =>
+//        createJsonStepOut(stepBO, json)
       case json if json == JsonNames.ADD_STEP =>
         ???
 //        createJsonStepOut(stepBO, json)
@@ -117,8 +117,7 @@ class WrapperStep {
         ???
 //        createJsonStepOut(stepBO, json)
       case json if json == JsonNames.UPDATE_STEP =>
-        ???
-//        createJsonStepOut(stepBO, json)
+        createJsonStepOut(stepBO, json)
     }
   }
 
