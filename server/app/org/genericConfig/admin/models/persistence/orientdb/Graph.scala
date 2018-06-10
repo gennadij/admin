@@ -337,6 +337,7 @@ class Graph(graph: OrientGraph) {
    */
   
   private def getUser(username: String, password: String): (Option[OrientVertex], StatusGetUser, Status) = {
+    //TODO OCommandExecutionException
     
     try {
       val dynElemUsers: OrientDynaElementIterable = 
@@ -460,7 +461,7 @@ class Graph(graph: OrientGraph) {
           "class:" + PropertyKeys.VERTEX_CONFIG,
           PropertyKeys.CONFIG_URL, configUrl)
         graph.commit
-        (Some(vConfig), AddConfigAdded(), Success())
+        (Some(vConfig), AddConfigSuccess(), Success())
     }catch{
       case e1: ORecordDuplicatedException => {
         Logger.error(e1.printStackTrace().toString)
@@ -495,7 +496,7 @@ class Graph(graph: OrientGraph) {
       val res: Int = graph.command(new OCommandSQL(sql)).execute()
       graph.commit
       res match {
-        case 1 => (DeleteConfigDeleted(), Success())
+        case 1 => (DeleteConfigSuccess(), Success())
         case _ => (DeleteConfigDefectID(), Error())
       }
     }catch{

@@ -36,13 +36,13 @@ trait CommonFunction {
 
     val wC = WebClient.init
 
-    //    Logger.info("IN " + jsonAddUserIn)
+//        Logger.info("IN " + jsonAddUserIn)
 
     val jsonAddUserOut = wC.handleMessage(jsonAddUserIn)
 
     val addUserOut = Json.fromJson[JsonUserOut](jsonAddUserOut)
 
-    //    Logger.info("OUT " + jsonAddUserOut)
+//        Logger.info("OUT " + jsonAddUserOut)
 
     (addUserOut.get.result.username.get, addUserOut.get.result.userId.get, addUserOut.get.result.status.addUser.get.status)
   }
@@ -58,11 +58,11 @@ trait CommonFunction {
       configs = Some(List(Configuration(configUrl = Some(configUrl))))
     )
 
-    Logger.info("IN " + configBOIn)
+//    Logger.info("IN " + configBOIn)
 
     val configBOOut = Config.addConfig(configBOIn)
 
-    Logger.info("OUT " + configBOOut)
+//    Logger.info("OUT " + configBOOut)
 
     (configBOOut.configs.get.head.configId.get, configBOOut.status.get.addConfig.get)
   }

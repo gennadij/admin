@@ -37,4 +37,4 @@ CREATE CLASS hasDependency EXTENDS E;
 CREATE PROPERTY hasDependency.dependencyType STRING;
 CREATE PROPERTY hasDependency.visualization STRING;
 CREATE PROPERTY hasDependency.nameToShow STRING;
-ALTER CLASS AdminUser STRICTMODE TRUE;
+#ALTER CLASS hasDependency STRICTMODE TRUE;

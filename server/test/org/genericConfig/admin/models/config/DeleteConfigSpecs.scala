@@ -4,7 +4,7 @@ import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.Success
 import org.genericConfig.admin.shared.config.json.{JsonDeleteConfigIn, JsonDeleteConfigParams}
-import org.genericConfig.admin.shared.config.status.DeleteConfigDeleted
+import org.genericConfig.admin.shared.config.status.DeleteConfigSuccess
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
 import org.specs2.runner.JUnitRunner
@@ -66,7 +66,7 @@ class DeleteConfigSpecs extends Specification
       (jsonDeleteConfigOut \ "result" \ "status" \ "addConfig").asOpt[String] === None
       (jsonDeleteConfigOut \ "result" \ "status" \ "getConfigs" \ "status").asOpt[String] === None
       (jsonDeleteConfigOut \ "result" \ "status" \ "updateConfig").asOpt[String] === None
-      (jsonDeleteConfigOut \ "result" \ "status" \ "deleteConfig" \ "status").asOpt[String].get === DeleteConfigDeleted().status
+      (jsonDeleteConfigOut \ "result" \ "status" \ "deleteConfig" \ "status").asOpt[String].get === DeleteConfigSuccess().status
       (jsonDeleteConfigOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
     }
   }

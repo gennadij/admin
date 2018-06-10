@@ -202,7 +202,7 @@ object Persistence {
     val (vConfig, statusAddConfig, statusCommon) : (Option[OrientVertex], StatusAddConfig, Status) = 
       Graph.addConfig(configUrl)
     statusAddConfig match {
-      case AddConfigAdded() => {
+      case AddConfigSuccess() => {
         ConfigBO(
             Some(userId),
             Some(List(Configuration(
@@ -210,7 +210,7 @@ object Persistence {
                 Some(vConfig.get.getProperty(PropertyKeys.CONFIG_URL))
             ))),
             Some(StatusConfig(
-                Some(AddConfigAdded()),
+                Some(AddConfigSuccess()),
                 None, None, None, Some(Success())
             )
         ))

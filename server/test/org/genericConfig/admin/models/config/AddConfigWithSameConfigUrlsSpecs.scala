@@ -35,27 +35,40 @@ class AddConfigWithSameConfigUrlsSpecs extends Specification
   val webClient: WebClient = WebClient.init
 
   val configUrl = "http://config/user13"
+  val usernamePassword = "user13"
+
+  var userId = "test"
 
   def beforeAll: Unit = {
-    new PrepareConfig().prepareTwoSameConfigUrls(webClient)
-    val count = deleteAdmin("user14")
-    require(count == 1, count.toString)
+//    new PrepareConfig().prepareTwoSameConfigUrls(webClient)
+//    val count = deleteAdmin("user14")
+//    require(count == 1, count.toString)
+
+    val (username, userId, statusAddUser) = addUser(usernamePassword)
+
+    this.userId = userId
+
+    val (configId, statusAddConfig) =  addConfig(userId, this.configUrl)
+
+
   }
 
-  def afterAll: Unit = {}
+  def afterAll: Unit = {
+    Logger.info("Count of deleted Configs " + deleteAllConfigs(usernamePassword))
+  }
 
   "Hier wird die Erzeugung von zwei verschiedenen AdminUser mit gleicher ConfigUrl spezifiziert" >> {
     "ORecordDuplicatedException" >> {
 
-      registerNewUser("user14", webClient)
+//      registerNewUser("user14", webClient)
 
-      val user14 = getUserId("user14", webClient)
+//      val user14 = getUserId("user14", webClient)
 
 
       val jsonAddConfigIn = Json.toJsObject(JsonAddConfigIn(
         json = JsonNames.ADD_CONFIG,
         params = JsonAddConfigParams(
-          userId = user14,
+          userId = this.userId,
           configUrl = configUrl
         )
       ))

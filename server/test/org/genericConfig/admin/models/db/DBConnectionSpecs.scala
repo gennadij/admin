@@ -1,6 +1,6 @@
 package org.genericConfig.admin.models.db
 
-import org.genericConfig.admin.models.persistence.OrientDB
+import org.genericConfig.admin.models.persistence.{Database, OrientDB}
 import org.junit.runner.RunWith
 import org.specs2.Specification
 import org.specs2.runner.JUnitRunner
@@ -21,6 +21,6 @@ class DBConnectionSpecs extends Specification{
     """
   
   
-  def e1 = OrientDB.getFactory().getTx.toString() must_== "orientgraph[remote:localhost/testDB]"
+  def e1 = Database.getFactory()._1.get.getTx.toString() === "orientgraph[remote:localhost/testDB]"
   
 }

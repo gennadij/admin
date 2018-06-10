@@ -27,7 +27,7 @@ import play.api.Logger
 @RunWith(classOf[JUnitRunner])
 class LoginSpecs extends Specification with BeforeAfterAll{
   
-  val wC = WebClient.init
+  val wC: WebClient = WebClient.init
   
   def afterAll(): Unit = {}
   def beforeAll(): Unit = {

@@ -9,7 +9,7 @@ import org.genericConfig.admin.shared.common.status.Status
  */
 sealed abstract class StatusDeleteConfig extends Status
 
-case class DeleteConfigDeleted() extends StatusDeleteConfig {
+case class DeleteConfigSuccess() extends StatusDeleteConfig {
   def status: String = "DELETE_CONFIG_DELETED"
   def message: String = ""
 }

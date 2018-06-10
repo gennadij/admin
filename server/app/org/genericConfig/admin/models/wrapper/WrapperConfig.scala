@@ -24,12 +24,8 @@ class WrapperConfig {
 
   private[wrapper] def toAddConfigBO(jsonConfigIn: JsonAddConfigIn): ConfigBO = {
 
-    val userId = RidToHash.getId(jsonConfigIn.params.userId) match {
-      case Some(id) => id
-      case None => "-1"
-    }
     ConfigBO(
-      userId = Some(userId),
+      userId = Some(jsonConfigIn.params.userId),
       configs = Some(List(Configuration(configUrl = Some(jsonConfigIn.params.configUrl))))
     )
   }
@@ -43,21 +39,12 @@ class WrapperConfig {
     */
   private[wrapper] def toJsonAddConfigOut(configBO: ConfigBO): JsonAddConfigOut = {
 
-    val userIdHash = RidToHash.getHash(configBO.userId.get) match {
-      case Some(id) => id
-      case None => "-1"
-    }
-    val (_, configIdHash) = configBO.configs match {
-      case Some(configs) => RidToHash.setIdAndHash(configs.head.configId.get)
-      case None => ("", "-1")
-    }
-
     JsonAddConfigOut(
       result = JsonAddConfigResult(
-        Some(userIdHash),
+        Some(configBO.userId.get),
         configId = configBO.configs match {
-          case Some(List()) => None
-          case _ => Some(configIdHash)
+          case Some(configs) => Some(configs.head.configId.get)
+          case None => None
         },
         status = JsonConfigStatus(
           setStatus(configBO.status.get.addConfig),

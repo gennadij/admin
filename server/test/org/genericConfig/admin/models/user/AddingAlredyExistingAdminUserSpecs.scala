@@ -6,14 +6,10 @@ import org.specs2.specification.BeforeAfterAll
 import org.specs2.runner.JUnitRunner
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
-import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
-import play.api.libs.json.Json.toJsFieldJsValueWrapper
-import models.preparingConfigs.PrepareConfigsForSpecsv011
 import org.genericConfig.admin.controllers.websocket.WebClient
 import play.api.Logger
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.common.status.Success
 import org.genericConfig.admin.shared.user.status.AddUserAlreadyExist
 import org.genericConfig.admin.shared.common.status.Error
 
@@ -28,13 +24,13 @@ import org.genericConfig.admin.shared.common.status.Error
 @RunWith(classOf[JUnitRunner])
 class AddingAlredyExistingAdminUserSpecs extends Specification with AdminWeb with BeforeAfterAll{
 
-  val wC = WebClient.init
+  val wC: WebClient = WebClient.init
   
-  def beforeAll() = {
+  def beforeAll(): Unit = {
     new PrepareUser().prepareWithAlredyExistingUser(wC)
   }
   
-  def afterAll() = {
+  def afterAll(): Unit = {
   }
   
   "Specification spezifiziert die Registrierung des exestierenden Users" >> {

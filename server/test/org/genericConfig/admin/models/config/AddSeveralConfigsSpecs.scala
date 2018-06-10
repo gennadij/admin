@@ -4,7 +4,7 @@ import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.Success
 import org.genericConfig.admin.shared.config.json.{JsonAddConfigIn, JsonAddConfigParams}
-import org.genericConfig.admin.shared.config.status.AddConfigAdded
+import org.genericConfig.admin.shared.config.status.AddConfigSuccess
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
 import org.specs2.runner.JUnitRunner
@@ -34,7 +34,7 @@ class AddSeveralConfigsSpecs extends Specification
   val configUrl_3 = "//http://contig1/user_1_v016_3"
 
   def beforeAll(): Unit = {
-    val (userId, _, _): (String, String, _) = addUser(this.username)
+    val (_, userId, _): (String, String, _) = addUser(this.username)
     this.userId = userId
   }
 
@@ -53,11 +53,14 @@ class AddSeveralConfigsSpecs extends Specification
           configUrl = this.configUrl_1
         )
       ))
+
+      Logger.info("IN " + jsonAddConfigIn_1)
+
       val jsonAddConfigOut_1 = wC.handleMessage(jsonAddConfigIn_1)
 
       Logger.info("OUT " + jsonAddConfigOut_1)
 
-      (jsonAddConfigOut_1 \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigAdded().status
+      (jsonAddConfigOut_1 \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigSuccess().status
       (jsonAddConfigOut_1 \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
 
       val jsonAddConfigIn_2 = Json.toJsObject(JsonAddConfigIn(
@@ -73,7 +76,7 @@ class AddSeveralConfigsSpecs extends Specification
 
       Logger.info("OUT " + jsonAddConfigOut_2)
 
-      (jsonAddConfigOut_2 \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigAdded().status
+      (jsonAddConfigOut_2 \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigSuccess().status
       (jsonAddConfigOut_2 \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
 
       val jsonAddConfigIn_3 = Json.toJsObject(JsonAddConfigIn(
@@ -90,7 +93,7 @@ class AddSeveralConfigsSpecs extends Specification
 
       Logger.info("OUT " + jsonAddConfigOut_3)
 
-      (jsonAddConfigOut_3 \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigAdded().status
+      (jsonAddConfigOut_3 \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigSuccess().status
       (jsonAddConfigOut_3 \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
     }
   }

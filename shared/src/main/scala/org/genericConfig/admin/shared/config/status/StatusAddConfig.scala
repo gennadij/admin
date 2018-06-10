@@ -10,7 +10,7 @@ import org.genericConfig.admin.shared.common.status.Status
  */
 sealed abstract class StatusAddConfig extends Status
 
-case class AddConfigAdded() extends StatusAddConfig {
+case class AddConfigSuccess() extends StatusAddConfig {
   def status: String = "ADD_CONFIG_ADDED"
   def message: String = ""
 }
@@ -22,5 +22,10 @@ case class AddConfigAlreadyExist() extends StatusAddConfig {
 
 case class AddConfigError() extends StatusAddConfig {
   def status: String = "ADD_CONFIG_ERROR"
+  def message: String = ""
+}
+
+case class AddConfigidHashNotExist() extends StatusAddConfig {
+  def status: String = "ADD_ID_HASH_NOT_EXIST"
   def message: String = ""
 }
