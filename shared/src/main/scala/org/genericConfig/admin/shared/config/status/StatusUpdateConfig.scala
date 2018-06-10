@@ -20,7 +20,7 @@ case class UpdateConfigError() extends StatusUpdateConfig {
   def message: String = ""
 }
 
-//case class UpdateConfigDefectID() extends StatusUpdateConfig {
-//  def status: String = "DELETE_CONFIG_DEFECT_ID"
-//  def message: String = ""
-//}
+case class UpdateConfigIdHashNotExist() extends StatusUpdateConfig {
+  def status: String = "DELETE_CONFIG_ID_HASH_NOT_EXIST"
+  def message: String = ""
+}

@@ -209,17 +209,17 @@ object Graph{
    * 
    * @version 0.1.6
    * 
-   * @param String
+   * @param configId: String, configUrl: String
    * 
-   * @return
+   * @return (Option[OrientVertex], StatusUpdateConfig, Status)
    */
-  def updateConfig(configId: String, configUrl: String): (StatusUpdateConfig, Status) = {
+  def updateConfig(configId: String, configUrl: String): (Option[OrientVertex], StatusUpdateConfig, Status) = {
     (Database.getFactory(): @unchecked) match {
       case (Some(dbFactory), Success()) => 
         val graph: OrientGraph = dbFactory.getTx()
         new Graph(graph).updateConfig(configId, configUrl)
       case (None, ODBConnectionFail()) => 
-        (UpdateConfigError(), ODBConnectionFail())
+        (None, UpdateConfigError(), ODBConnectionFail())
     }
   }
 
@@ -523,30 +523,34 @@ class Graph(graph: OrientGraph) {
    * 
    * @version 0.1.6
    * 
-   * @param String, String
+   * @param configId: String, configUrl: String
    * 
-   * @return
+   * @return (StatusUpdateConfig, Status)
    */
-  def updateConfig(configId: String, configUrl: String): (StatusUpdateConfig, Status) = {
+  def updateConfig(configId: String, configUrl: String): (Option[OrientVertex], StatusUpdateConfig, Status) = {
     try {
       graph.getVertex(configId).setProperty(PropertyKeys.CONFIG_URL, configUrl)
+
       graph.commit
-      (UpdateConfigUpdated(), Success())
+
+      val vUpdatedConfig = graph.getVertex(configId)
+
+      (Some(vUpdatedConfig), UpdateConfigUpdated(), Success())
     }catch{
       case e1: ORecordDuplicatedException => {
         Logger.error(e1.printStackTrace().toString)
         graph.rollback()
-        (UpdateConfigError(), ODBRecordDuplicated())
+        (None, UpdateConfigError(), ODBRecordDuplicated())
       }
       case e2 : ClassCastException => {
         graph.rollback()
         Logger.error(e2.printStackTrace().toString)
-        (UpdateConfigError(), ODBClassCastError())
+        (None, UpdateConfigError(), ODBClassCastError())
       }
       case e3: Exception => {
         graph.rollback()
         Logger.error(e3.printStackTrace().toString)
-        (UpdateConfigError(), ODBWriteError())
+        (None, UpdateConfigError(), ODBWriteError())
       }
     }
   }

@@ -134,7 +134,36 @@ class Config(configBO: ConfigBO) {
     * @return ConfigBO
     */
   private def getConfigs: ConfigBO = {
-    Persistence.getConfigs(configBO.userId.get)
+
+    RidToHash.getId(this.configBO.userId.get) match {
+      case Some(rId) =>
+        val configBOOut = Persistence.getConfigs(rId)
+
+        val userIdHash: Option[String] = RidToHash.getHash(configBOOut.userId.get)
+
+
+        val configurations: List[Configuration] = configBOOut.configs match {
+          case Some(configs) =>
+            configs.map(config => {
+              val configIdHash: String = RidToHash.getHash(config.configId.get) match {
+                case Some(idHash) => idHash
+                case None => RidToHash.setIdAndHash(config.configId.get)._2
+              }
+              Configuration(
+                Some(configIdHash),
+                config.configUrl
+              )
+            })
+          case None => List()
+        }
+
+        configBOOut.copy(userId = userIdHash, configs = Some(configurations))
+
+      case None => ConfigBO(
+        status = Some(StatusConfig(getConfigs = Some(GetConfigsIdHashNotExist())))
+      )
+    }
+
   }
 
   /**
@@ -143,15 +172,48 @@ class Config(configBO: ConfigBO) {
     * @return ConfigBO
     */
   private def deleteConfig: ConfigBO = {
-    Persistence.deleteConfig(
-      configBO.configs.get.head.configId.get,
-      configBO.configs.get.head.configUrl.get)
+    RidToHash.getId(configBO.configs.get.head.configId.get) match {
+      case Some(rId) =>
+        val configBOOut: ConfigBO = Persistence.deleteConfig(
+          rId,
+          configBO.configs.get.head.configUrl.get
+        )
+
+        val userIdHash: Option[String] = RidToHash.getHash(configBOOut.userId.get) match {
+          case Some(idHash) => Some(idHash)
+          case None => Some("")
+        }
+
+        configBOOut.copy(userId = userIdHash)
+      case None => ConfigBO(
+        userId = Some(""),
+        status = Some(StatusConfig(deleteConfig = Some(DeleteConfigIdHashNotExist()), common = Some(ODBRecordIdDefect())))
+      )
+    }
   }
 
   private def updateConfig: ConfigBO = {
-    Persistence.updateConfig(
-      configBO.configs.get.head.configId.get,
-      configBO.configs.get.head.configUrl.get)
+    RidToHash.getId(configBO.configs.get.head.configId.get) match {
+      case Some(rId) =>
+        val configBOOut: ConfigBO = Persistence.updateConfig(
+          rId,
+          configBO.configs.get.head.configUrl.get
+        )
+        val userIdHash: Option[String] = RidToHash.getHash(configBOOut.userId.get)
+
+
+        val configuration: Option[List[Configuration]] = configBOOut.configs match {
+          case Some(configs) => Some(List(Configuration(
+            RidToHash.getHash(configs.head.configId.get),
+            configs.head.configUrl
+          )))
+          case None => None
+        }
+        configBOOut.copy(userId = userIdHash, configs = configuration)
+      case None => ConfigBO(
+        status = Some(StatusConfig(updateConfig = Some(UpdateConfigIdHashNotExist())))
+      )
+    }
   }
 
   /**

@@ -59,13 +59,8 @@ class WrapperConfig {
 
   private[wrapper] def toGetConfigsBO(jsonGetConfigsIn: JsonGetConfigsIn): ConfigBO = {
 
-    val uId = RidToHash.getId(jsonGetConfigsIn.params.userId) match {
-      case Some(id) => id
-      case None => "-1"
-    }
-
     ConfigBO(
-      userId = Some(uId)
+      userId = Some(jsonGetConfigsIn.params.userId)
     )
   }
 
@@ -77,35 +72,18 @@ class WrapperConfig {
     */
   private[wrapper] def toJsonGetConfigsOut(configBO: ConfigBO): JsonGetConfigsOut = {
 
-    Logger.info(configBO.toString)
-
-    val userIdHash = RidToHash.getHash(configBO.userId.get) match {
-      case Some(id) => id
-      case None => "-1"
-    }
-
-
     val cBOs: List[JsonConfig] = configBO.configs match {
       case Some(configs) => configs map { config => {
-
-        RidToHash.setIdAndHash(config.configId.get)
-
-        val configId = RidToHash.getHash(config.configId.get) match {
-          case Some(id) => id
-          case None => "-1"
-        }
-
         JsonConfig(
-          configId,
+          config.configId.get,
           config.configUrl.get
         )
-      }
-      }
+      }}
       case None => List()
     }
     JsonGetConfigsOut(
       result = JsonGetConfigsResult(
-        userIdHash,
+        configBO.userId.get,
         cBOs,
         JsonConfigStatus(
           setStatus(configBO.status.get.addConfig),
@@ -118,18 +96,11 @@ class WrapperConfig {
     )
   }
 
-  private[wrapper] def toDeleteConfigBO(jsonDeleteConfigIn: JsonDeleteConfigIn): ConfigBO
-
-  = {
-
-    val configId = RidToHash.getId(jsonDeleteConfigIn.params.configId) match {
-      case Some(id) => id
-      case None => "-1"
-    }
+  private[wrapper] def toDeleteConfigBO(jsonDeleteConfigIn: JsonDeleteConfigIn): ConfigBO = {
 
     ConfigBO(
       configs = Some(List(Configuration(
-        Some(configId),
+        Some(jsonDeleteConfigIn.params.configId),
         Some(jsonDeleteConfigIn.params.configUrl))))
     )
   }
@@ -140,23 +111,11 @@ class WrapperConfig {
     * @param  configBO : ConfigBO
     * @return ConfigBO
     */
-  private[wrapper] def toJsonDeleteConfigOut(configBO: ConfigBO): JsonDeleteConfigOut
-
-  = {
-
-    val userRId = configBO.userId match {
-      case Some(id) => id
-      case None => "-1"
-    }
-
-    val userId = RidToHash.getHash(userRId) match {
-      case Some(id) => id
-      case None => ""
-    }
-
+  private[wrapper] def toJsonDeleteConfigOut(configBO: ConfigBO): JsonDeleteConfigOut = {
+    Logger.info("ConfigBO" + configBO)
     JsonDeleteConfigOut(
       result = JsonDeleteConfigsResult(
-        userId,
+        configBO.userId.get,
         JsonConfigStatus(
           setStatus(configBO.status.get.addConfig),
           setStatus(configBO.status.get.getConfigs),
@@ -174,18 +133,10 @@ class WrapperConfig {
     * @param jsonUpdateConfigIn : JsonUpdateConfigIn
     * @return ConfigBO
     */
-  private[wrapper] def toUpdateConfigBO(jsonUpdateConfigIn: JsonUpdateConfigIn): ConfigBO
-
-  = {
-
-    val configId = RidToHash.getId(jsonUpdateConfigIn.params.configId) match {
-      case Some(id) => id
-      case None => "-1"
-    }
-
+  private[wrapper] def toUpdateConfigBO(jsonUpdateConfigIn: JsonUpdateConfigIn): ConfigBO = {
     ConfigBO(
       configs = Some(List(Configuration(
-        Some(configId),
+        Some(jsonUpdateConfigIn.params.configId),
         Some(jsonUpdateConfigIn.params.configUrl)
       ))))
   }
@@ -197,18 +148,10 @@ class WrapperConfig {
     * @param configBO : ConfigBO
     * @return JsonUpdateConfigOut
     */
-  private[wrapper] def toJsonUpdateConfigOut(configBO: ConfigBO): JsonUpdateConfigOut
-
-  = {
-
-    val userId = RidToHash.getHash(configBO.userId.get) match {
-      case Some(id) => id
-      case None => "-1"
-    }
-
+  private[wrapper] def toJsonUpdateConfigOut(configBO: ConfigBO): JsonUpdateConfigOut = {
     JsonUpdateConfigOut(
       result = JsonUpdateConfigResult(
-        userId,
+        configBO.userId.get,
         JsonConfigStatus(
           setStatus(configBO.status.get.addConfig),
           setStatus(configBO.status.get.getConfigs),
@@ -220,9 +163,7 @@ class WrapperConfig {
     )
   }
 
-  private def setStatus(status: Option[Status]): Option[JsonStatus]
-
-  = status match {
+  private def setStatus(status: Option[Status]): Option[JsonStatus] = status match {
     case Some(s) =>
       Some(JsonStatus(
         s.status,

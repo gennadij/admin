@@ -280,7 +280,7 @@ object Persistence {
       }
       case _ => {
         ConfigBO(
-            None, None,
+            Some(userId), None,
             Some(StatusConfig(
                 None,    //addConfig: Option[StatusAddConfig], 
                 None,    //getConfigs: Option[StatusGetConfigs], 
@@ -304,11 +304,16 @@ object Persistence {
    */
   def updateConfig(configId: String, configUrl: String): ConfigBO = {
     val (userId, status): (String, Status) = Graph.getAdminUserId(configId)
-    val (statusUpdateConfig, statusCommon): (StatusUpdateConfig, Status) = Graph.updateConfig(configId: String, configUrl: String)
+    val (vUpdatedConfig, statusUpdateConfig, statusCommon): (Option[OrientVertex], StatusUpdateConfig, Status) =
+      Graph.updateConfig(configId: String, configUrl: String)
     status match {
       case Success() => {
         ConfigBO(
-            Some(userId), None,
+            Some(userId),
+            Some(List((Configuration(
+              configId = Some(vUpdatedConfig.get.getIdentity.toString),
+              configUrl = Some(vUpdatedConfig.get.getProperty(PropertyKey.CONFIG_URL))
+            )))),
             Some(StatusConfig(
                 None,    //addConfig: Option[StatusAddConfig], 
                 None,    //getConfigs: Option[StatusGetConfigs], 
@@ -320,7 +325,7 @@ object Persistence {
       }
       case _ => {
         ConfigBO(
-            None, None, Some(StatusConfig(
+            Some(userId), None, Some(StatusConfig(
                 None,    //addConfig: Option[StatusAddConfig], 
                 None,    //getConfigs: Option[StatusGetConfigs], 
                 None,//deleteConfig: Option[StatusDeleteConfig], 
@@ -382,7 +387,7 @@ object Persistence {
               Some(userId),
               Some(vConfigs.get map (vConfig => {
                 Configuration(
-                    Some(vConfig.getIdentity.toString), 
+                    Some(vConfig.getIdentity.toString),
                     Some(vConfig.getProperty(PropertyKey.CONFIG_URL)))
               })),
               Some(StatusConfig(
@@ -393,13 +398,13 @@ object Persistence {
                   Some(Success())
               )
           ))
-        
+
       }
       case GetConfigsEmpty() => ConfigBO(
           Some(userId), None,
           Some(StatusConfig(None, Some(GetConfigsEmpty()), None, None, Some(Success()))))
-      case GetConfigsError() => 
-        ConfigBO(None, None, Some(StatusConfig(None, Some(GetConfigsError()), None, None, Some(statusCommon))))
+      case GetConfigsError() =>
+        ConfigBO(Some(userId), None, Some(StatusConfig(None, Some(GetConfigsError()), None, None, Some(statusCommon))))
     }
   }
   

@@ -2,9 +2,9 @@ package org.genericConfig.admin.models.config
 
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.common.status.ODBNullPointer
+import org.genericConfig.admin.shared.common.status.{ODBNullPointer, ODBRecordIdDefect}
 import org.genericConfig.admin.shared.config.json.{JsonDeleteConfigIn, JsonDeleteConfigParams}
-import org.genericConfig.admin.shared.config.status.DeleteConfigError
+import org.genericConfig.admin.shared.config.status.{DeleteConfigError, DeleteConfigIdHashNotExist}
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
 import org.specs2.runner.JUnitRunner
@@ -48,7 +48,7 @@ class DeleteConfigWithDefectIdSpecs extends Specification
 //      val configId = createConfigOut.result.configId.get
 //
 //      Logger.info(configId)
-      
+
       val jsonDeleteConfigIn = Json.toJsObject(
         JsonDeleteConfigIn(
           json = JsonNames.DELET_CONFIG,
@@ -59,18 +59,19 @@ class DeleteConfigWithDefectIdSpecs extends Specification
 
         )
       )
-      
-      val jsonDeleteConfigOut = wC.handleMessage(jsonDeleteConfigIn)
-      
+
       Logger.info("<- " + jsonDeleteConfigIn)
+
+      val jsonDeleteConfigOut = wC.handleMessage(jsonDeleteConfigIn)
+
       Logger.info("-> " + jsonDeleteConfigOut)
       
       (jsonDeleteConfigOut \ "json").asOpt[String].get === JsonNames.DELET_CONFIG
       (jsonDeleteConfigOut \ "result" \ "status" \ "addConfig").asOpt[String] === None
       (jsonDeleteConfigOut \ "result" \ "status" \ "getConfigs" \ "status").asOpt[String] === None
       (jsonDeleteConfigOut \ "result" \ "status" \ "updateConfig").asOpt[String] === None
-      (jsonDeleteConfigOut \ "result" \ "status" \ "deleteConfig" \ "status").asOpt[String].get === DeleteConfigError().status
-      (jsonDeleteConfigOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === ODBNullPointer().status
+      (jsonDeleteConfigOut \ "result" \ "status" \ "deleteConfig" \ "status").asOpt[String].get === DeleteConfigIdHashNotExist().status
+      (jsonDeleteConfigOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === ODBRecordIdDefect().status
     }
   }
 }

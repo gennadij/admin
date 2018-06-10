@@ -24,3 +24,9 @@ case class GetConfigsError() extends StatusGetConfigs {
   def status: String = "GET_CONFIGS_ERROR"
   def message: String = ""
 }
+
+case class GetConfigsIdHashNotExist() extends StatusGetConfigs {
+  def status: String = "GET_CONFIGS_ID_HASH_NOT_EXIST"
+  def message: String = ""
+}
+

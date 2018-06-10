@@ -56,10 +56,11 @@ class UpdateConfigSpecs extends Specification
               "configUrl" -> "//http://contig1/user_v016_4_updated"
           )
       )
-      
-      val jsonEditConfigOut = wC.handleMessage(jsonEditConfigIn)
-      
+
       Logger.info("<- " + jsonEditConfigIn)
+
+      val jsonEditConfigOut = wC.handleMessage(jsonEditConfigIn)
+
       Logger.info("-> " + jsonEditConfigOut)
       
       (jsonEditConfigOut \ "json").asOpt[String].get === JsonNames.UPDATE_CONFIG
@@ -75,9 +76,10 @@ class UpdateConfigSpecs extends Specification
               "userId" -> this.userId
           )
       )
-      val getConfigsOut = wC.handleMessage(getConfigsIn)
-      
       Logger.info("getConfigsIn " + getConfigsIn)
+
+      val getConfigsOut = wC.handleMessage(getConfigsIn)
+
       Logger.info("getConfigsOut " + getConfigsOut)
     
       (getConfigsOut \ "json").asOpt[String].get === JsonNames.GET_CONFIGS
