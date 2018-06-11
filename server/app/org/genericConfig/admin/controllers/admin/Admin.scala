@@ -159,9 +159,9 @@ class Admin extends Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param 
+   * @param jsonStepIn: JsonStepIn
    * 
-   * @return 
+   * @return JsonStepOut
    */
   def updateStep(jsonStepIn: JsonStepIn): JsonStepOut = {
     toJsonStepOut(Step.updateStep(toStepBO(jsonStepIn)))
@@ -172,11 +172,11 @@ class Admin extends Wrapper{
    * 
    * @version 0.1.0
    * 
-   * @param ComponentCS
+   * @param jsonComponentIn: JsonComponentIn
    * 
-   * @return ComponentSC
+   * @return JsonComponentOut
    */
-  def createComponent(jsonComponentIn: JsonComponentIn): JsonComponentOut = {
+  def addComponent(jsonComponentIn: JsonComponentIn): JsonComponentOut = {
 //    toJsonComponentOut(Persistence.createComponent(toComponentIn(jsonComponentIn)))
     ???
   }
@@ -186,29 +186,29 @@ class Admin extends Wrapper{
    * 
    * @version 0.1.0
    * 
-   * @param StepCS
+   * @param jsonStepIn: JsonStepIn
    * 
-   * @return StepSC
+   * @return JsonStepOut
    */
   
-  def createStep(jsonStepIn: JsonStepIn): JsonStepOut = {
+  def addStep(jsonStepIn: JsonStepIn): JsonStepOut = {
     
 //    toJsonStepOut(Persistence.createStep(toStepIn(jsonStepIn)))
     ???
   }
   
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.0
-   * 
-   * Verbindet bestehnde Component mit bestehenden Step
-   * Sowohl Component alsauch Step muessen bereits exestieren
-   * 
-   * @param ConnectionComponentToStepCS
-   * 
-   * @return ConnectionComponentToStepSC
-   */
+//  /**
+//   * @author Gennadi Heimann
+//   *
+//   * @version 0.1.0
+//   *
+//   * Verbindet bestehnde Component mit bestehenden Step
+//   * Sowohl Component alsauch Step muessen bereits exestieren
+//   *
+//   * @param ConnectionComponentToStepCS
+//   *
+//   * @return ConnectionComponentToStepSC
+//   */
   def connectComponentToStep(
       jsonConnectionComponentToStepIn: JsonConnectionComponentToStepIn
       ): JsonConnectionComponentToStepOut = {
@@ -220,29 +220,29 @@ class Admin extends Wrapper{
     ???
   }
 
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.2
-   * 
-   * @param dependencyCS
-   * 
-   * @return ConfigTreeSC
-   */
+//  /**
+//   * @author Gennadi Heimann
+//   *
+//   * @version 0.1.2
+//   *
+//   * @param dependencyCS
+//   *
+//   * @return ConfigTreeSC
+//   */
   def createDependency(jsonDependencyIn: JsonDependencyIn): JsonDependencyOut = {
 //    toJsonDependencyOut(Persistence.createDependency(toDependencyIn(jsonDependencyIn)))
     ???
   }
   
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.5
-   * 
-   * @param VisualProposalForAdditionalStepsInOneLevelCS
-   * 
-   * @return StepSC
-   */
+//  /**
+//   * @author Gennadi Heimann
+//   *
+//   * @version 0.1.5
+//   *
+//   * @param VisualProposalForAdditionalStepsInOneLevelCS
+//   *
+//   * @return StepSC
+//   */
   
   def visualProposalForAdditionalStepsInOneLevel(
       jsonVisualProposalForAdditionalStepsInOneLevelIn: JsonVisualProposalForAdditionalStepsInOneLevelIn): JsonStepOut = {
@@ -272,14 +272,14 @@ class Admin extends Wrapper{
     ???
   }
   
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.0
-   * 
-   * @param 
-   * 
-   * @return 
-   */
+//  /**
+//   * @author Gennadi Heimann
+//   *
+//   * @version 0.1.0
+//   *
+//   * @param
+//   *
+//   * @return
+//   */
   def logout(): Boolean = ???
 }

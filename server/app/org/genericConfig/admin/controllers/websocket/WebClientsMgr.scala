@@ -21,7 +21,7 @@ object WebClientsMgr {
 
 class WebClientsMgr extends Actor {
   
-  def receive = process(Set.empty)
+  def receive: Receive = process(Set.empty)
   
   def process(subscribers: Set[ActorRef]): Receive = {
     case Join => 

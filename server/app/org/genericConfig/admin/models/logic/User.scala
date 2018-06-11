@@ -21,7 +21,7 @@ object User {
    * @return UserBO
    */
   def addUser(userBO: UserBO): UserBO = {
-    new User(userBO).addUser
+    new User(userBO).addUser()
   }
   
   /**
@@ -49,7 +49,7 @@ class User(userBO: UserBO) {
    * 
    * @return UserBO
    */
-  private def addUser: UserBO = {
+  private def addUser(): UserBO = {
     Persistence.addUser(userBO.username.get, userBO.password.get)
   }
   

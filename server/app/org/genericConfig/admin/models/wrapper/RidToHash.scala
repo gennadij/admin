@@ -1,8 +1,8 @@
-package org.genericConfig.admin.models.logic
+package org.genericConfig.admin.models.wrapper
 
 import play.api.Logger
-import org.genericConfig.admin.models.persistence.orientdb.Graph
-import org.genericConfig.admin.models.wrapper.WrapperUser
+
+import scala.collection.mutable
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -12,20 +12,17 @@ import org.genericConfig.admin.models.wrapper.WrapperUser
 object RidToHash {
   
   
-  var map = scala.collection.mutable.Map[String, String]()
+  var map: mutable.Map[String, String] = scala.collection.mutable.Map[String, String]()
   
   
-  def setIdAndHash(id: String): (String, String) = {
-    (map.exists(_._1 == id): @unchecked) match {
-      case false =>
-        val hash = calculateHash(id)
-        map += (id -> hash)
-        map.foreach(item => Logger.info("Item" + item.toString))
-        (id, hash)
-      case true => 
-        map.foreach(item => Logger.info("Item" + item.toString))
-        (id, calculateHash(id))
-    }
+  def setIdAndHash(id: String): (String, String) = if (map.exists(_._1 == id): @unchecked) {
+    map.foreach(item => Logger.info("Item" + item.toString))
+    (id, calculateHash(id))
+  } else {
+    val hash = calculateHash(id)
+    map += (id -> hash)
+    map.foreach(item => Logger.info("Item" + item.toString))
+    (id, hash)
   }
   
   def getId(hash: String): Option[String] = {
@@ -46,13 +43,13 @@ object RidToHash {
     }
   }
   
-  def cleanMap = {
+  def cleanMap: mutable.Map[String, String] = {
     map.empty
   }
   
-  def calculateHash(id: String) = {
-    import java.security.MessageDigest
+  def calculateHash(id: String): String = {
     import java.math.BigInteger
+    import java.security.MessageDigest
     val md = MessageDigest.getInstance("MD5")
     val digest = md.digest(id.getBytes)
     val bigInt = new BigInteger(1, digest)

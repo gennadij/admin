@@ -1,6 +1,5 @@
 package org.genericConfig.admin.models.wrapper
 
-import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.shared.common.json.{JsonConfig, JsonStatus}
 import org.genericConfig.admin.shared.common.status.Status
 import org.genericConfig.admin.shared.config.bo.{ConfigBO, Configuration}
