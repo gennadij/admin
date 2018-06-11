@@ -1,14 +1,10 @@
 package org.genericConfig.admin.models.logic
 
-import akka.dispatch.forkjoin.ForkJoinPool
 import org.genericConfig.admin.models.persistence.Persistence
 import org.genericConfig.admin.shared.common.status._
-import org.genericConfig.admin.shared.config.status._
-import org.genericConfig.admin.shared.config.status._
 import org.genericConfig.admin.shared.config.bo.{ConfigBO, _}
+import org.genericConfig.admin.shared.config.status._
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
-import org.genericConfig.admin.models.persistence.orientdb.Graph
-import play.api.Logger
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -25,7 +21,7 @@ object Config {
     * @return ConfigBO
     */
   def addConfig(configBO: ConfigBO): ConfigBO = {
-    new Config(configBO).addConfig
+    new Config(configBO).addConfig()
   }
 
   /**
@@ -45,7 +41,7 @@ object Config {
     * @return ConfigBO
     */
   def deleteConfig(configBO: ConfigBO): ConfigBO = {
-    new Config(configBO).deleteConfig
+    new Config(configBO).deleteConfig()
   }
 
   /**
@@ -65,7 +61,7 @@ object Config {
     * @return ConfigBO
     */
   def updateConfig(configBO: ConfigBO): ConfigBO = {
-    new Config(configBO).updateConfig
+    new Config(configBO).updateConfig()
   }
 
 }
@@ -77,7 +73,7 @@ class Config(configBO: ConfigBO) {
     * @version 0.1.6
     * @return ConfigBO
     */
-  private def addConfig: ConfigBO = {
+  private def addConfig(): ConfigBO = {
 
     val configUrl = configBO.configs.get.head.configUrl.get
     val userIdHash = configBO.userId.get
@@ -86,12 +82,12 @@ class Config(configBO: ConfigBO) {
       case Some(id) =>
         val cBO: ConfigBO = Persistence.addConfig(id, configUrl)
         cBO.status.get.addConfig.get match {
-          case AddConfigSuccess() => {
+          case AddConfigSuccess() =>
             val statusConfigAppend: Status =
               Persistence.appendConfigTo(id, cBO.configs.get.head.configId.get)
             statusConfigAppend match {
-              case Success() => {
-                val (configRId, configIdHash) = RidToHash.setIdAndHash(cBO.configs.get.head.configId.get)
+              case Success() =>
+                val (_, configIdHash) = RidToHash.setIdAndHash(cBO.configs.get.head.configId.get)
 
                 val configuration = Configuration(
                   Some(configIdHash),
@@ -99,8 +95,7 @@ class Config(configBO: ConfigBO) {
                 )
 
                 cBO.copy(configs = Some(List(configuration)))
-              }
-              case _ => {
+              case _ =>
 
                 val configBODelete: ConfigBO = Persistence.deleteConfig(cBO.configs.get.head.configId.get, cBO.configs.get.head.configUrl.get)
 
@@ -111,15 +106,11 @@ class Config(configBO: ConfigBO) {
                     common = Some(statusConfigAppend)
                   )
                   ))
-              }
             }
-          }
-          case AddConfigAlreadyExist() => {
+          case AddConfigAlreadyExist() =>
             cBO
-          }
-          case AddConfigError() => {
+          case AddConfigError() =>
             cBO
-          }
         }
       case None => ConfigBO(status = Some(StatusConfig(addConfig = Some(AddConfigidHashNotExist()))))
     }
@@ -171,7 +162,7 @@ class Config(configBO: ConfigBO) {
     * @version 0.1.6
     * @return ConfigBO
     */
-  private def deleteConfig: ConfigBO = {
+  private def deleteConfig(): ConfigBO = {
     RidToHash.getId(configBO.configs.get.head.configId.get) match {
       case Some(rId) =>
         val configBOOut: ConfigBO = Persistence.deleteConfig(
@@ -192,7 +183,7 @@ class Config(configBO: ConfigBO) {
     }
   }
 
-  private def updateConfig: ConfigBO = {
+  private def updateConfig(): ConfigBO = {
     RidToHash.getId(configBO.configs.get.head.configId.get) match {
       case Some(rId) =>
         val configBOOut: ConfigBO = Persistence.updateConfig(

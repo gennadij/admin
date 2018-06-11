@@ -1,11 +1,8 @@
 package org.genericConfig.admin.controllers.websocket
 
-import akka.actor.Actor
-import akka.actor.ActorRef
-import akka.actor.Props
-import play.api.libs.json.JsValue
+import akka.actor.{Actor, ActorRef, Props}
 import play.api.Logger
-import play.api.libs.json.Json
+import play.api.libs.json.JsValue
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -24,9 +21,9 @@ class ClientActor(out: ActorRef, webClientsMgr: ActorRef) extends Actor{
   
   webClientsMgr ! Join
   
-  override def postStop() = webClientsMgr ! Leave
+  override def postStop(): Unit = webClientsMgr ! Leave
   
-  def receive = {
+  def receive: PartialFunction[Any, Unit] = {
     case msg: JsValue =>
       Logger.debug("ClientAktor " + this.hashCode() +" receive => " + msg)
       webClientsMgr ! ClientSentMessage(webClient.handleMessage(msg))

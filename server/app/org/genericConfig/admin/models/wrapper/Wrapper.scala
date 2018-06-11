@@ -1,16 +1,15 @@
 package org.genericConfig.admin.models.wrapper
 
-import org.genericConfig.admin.shared.configTree.json._
 import org.genericConfig.admin.shared.common.json._
-import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.shared.config.bo._
+import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.shared.configTree.bo._
-import org.genericConfig.admin.shared.step.json._
-import org.genericConfig.admin.shared.step.bo._
+import org.genericConfig.admin.shared.configTree.json._
 import org.genericConfig.admin.shared.configTree.status._
-import org.genericConfig.admin.models.logic.RidToHash
-import org.genericConfig.admin.shared.user.json._
+import org.genericConfig.admin.shared.step.bo._
+import org.genericConfig.admin.shared.step.json._
 import org.genericConfig.admin.shared.user.bo.UserBO
+import org.genericConfig.admin.shared.user.json._
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

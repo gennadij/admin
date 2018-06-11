@@ -1,10 +1,8 @@
 package org.genericConfig.admin.models.wrapper
 
-import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.shared.common.json.{JsonNames, JsonStatus}
 import org.genericConfig.admin.shared.step.bo.StepBO
 import org.genericConfig.admin.shared.step.json.{JsonStepIn, JsonStepOut, JsonStepResult, JsonStepStatus}
-import play.api.Logger
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

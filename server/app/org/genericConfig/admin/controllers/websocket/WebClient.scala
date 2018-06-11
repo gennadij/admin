@@ -10,7 +10,7 @@ import org.genericConfig.admin.controllers.admin.AdminWeb
 import org.genericConfig.admin.controllers.admin.Admin
 
 object WebClient {
-  def init = {
+  def init: WebClient = {
     new WebClient
   }
 }

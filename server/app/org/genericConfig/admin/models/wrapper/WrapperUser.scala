@@ -1,10 +1,8 @@
 package org.genericConfig.admin.models.wrapper
 
-import org.genericConfig.admin.shared.common.json.JsonStatus
-import org.genericConfig.admin.shared.user.json._
+import org.genericConfig.admin.shared.common.json.{JsonNames, JsonStatus}
 import org.genericConfig.admin.shared.user.bo.UserBO
-import org.genericConfig.admin.models.logic.RidToHash
-import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.user.json._
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -18,9 +16,9 @@ class WrapperUser{
    * 
    * @version 0.1.6
    * 
-   * @param 
+   * @param jsonUserIn: JsonUserIn
    * 
-   * @return 
+   * @return  UserBO
    */
   
   def toAddUserBO(jsonUserIn: JsonUserIn): UserBO = {
@@ -35,9 +33,9 @@ class WrapperUser{
    * 
    * @version 0.1.6
    * 
-   * @param 
+   * @param jsonUserIn: JsonUserIn
    * 
-   * @return 
+   * @return UserBO
    */
   
   def toGetUserBO(jsonUserIn: JsonUserIn): UserBO = {
@@ -52,9 +50,9 @@ class WrapperUser{
    * 
    * @version 0.1.6
    * 
-   * @param 
+   * @param userBO: UserBO
    * 
-   * @return 
+   * @return JsonUserOut
    */
   def toJsonAddUserOut(userBO: UserBO): JsonUserOut = {
     
@@ -89,9 +87,9 @@ class WrapperUser{
    * 
    * @version 0.1.5
    * 
-   * @param LoginSC
+   * @param userBO: UserBO
    * 
-   * @return JsonLoginSC
+   * @return JsonUserOut
    */
   def toJsonGetUserOut(userBO: UserBO): JsonUserOut = {
     val userIdHash = userBO.userId match {
