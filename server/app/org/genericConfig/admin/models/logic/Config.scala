@@ -5,6 +5,7 @@ import org.genericConfig.admin.shared.common.status._
 import org.genericConfig.admin.shared.config.bo.{ConfigBO, _}
 import org.genericConfig.admin.shared.config.status._
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
+import org.genericConfig.admin.models.wrapper.RidToHash
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

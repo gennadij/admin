@@ -2,7 +2,6 @@ package org.genericConfig.admin.models.step
 
 import org.genericConfig.admin.controllers.admin.AdminWeb
 import org.genericConfig.admin.controllers.websocket.WebClient
-import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.{Error, ODBRecordIdDefect, Success}
 import org.genericConfig.admin.shared.step.json.{JsonSelectionCriterium, JsonStepIn, JsonStepParams}
@@ -17,6 +16,7 @@ import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.{JsValue, Json}
 import util.CommonFunction
+import org.genericConfig.admin.models.wrapper.RidToHash
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

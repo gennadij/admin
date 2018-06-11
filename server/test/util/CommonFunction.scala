@@ -3,7 +3,6 @@ package util
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import org.genericConfig.admin.controllers.websocket.WebClient
-import org.genericConfig.admin.models.logic.{Config, RidToHash, Step, User}
 import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.models.persistence.orientdb.Graph
 import org.genericConfig.admin.shared.common.json.JsonNames
@@ -15,6 +14,10 @@ import org.genericConfig.admin.shared.user.bo.UserBO
 import org.genericConfig.admin.shared.user.json.{JsonUserIn, JsonUserOut, JsonUserParams}
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
+import org.genericConfig.admin.models.wrapper.RidToHash
+import org.genericConfig.admin.models.logic.Config
+import org.genericConfig.admin.models.logic.Step
+import org.genericConfig.admin.models.logic.User
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
