@@ -53,7 +53,7 @@ class AddConfigSpecs extends Specification
       val jsonGetUserIn: JsValue = Json.toJsObject(getUserIn)
 
       val loginSC = wC.handleMessage(jsonGetUserIn)
-      (loginSC \ "result" \ "status" \ "common" \ "status").asOpt[String].get must_== Success().status
+      (loginSC \ "result" \  "status" \ "common" \ "status").asOpt[String].get must_== Success().status
 
       Logger.info(loginSC.toString())
 
