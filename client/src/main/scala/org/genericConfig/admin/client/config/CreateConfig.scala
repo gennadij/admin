@@ -25,13 +25,13 @@ class CreateConfig(websocket: WebSocket, userId: String) extends CommonFunction 
       "<p>Create Konfiguration</p>" +
       drawInputField(HtmlElementIds.inputGonfigUrlHtml, "configUrl") +
       drawButton(HtmlElementIds.addConfigHtml, "save") + 
-      drawButton(HtmlElementIds.showConfigsHtml, "Konfigurationen") +
+      drawButton(HtmlElementIds.getConfigsHtml, "Konfigurationen") +
     "</dev>" 
     
       drawNewMain(htmlMain)
    
     jQuery(HtmlElementIds.addConfigJQuery).on("click", () => saveConfig)
-    jQuery(HtmlElementIds.showConfigsJQuery).on("click", () => showConfigs)
+    jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => showConfigs)
   }
 
   def saveConfig = {

@@ -11,6 +11,7 @@ import org.genericConfig.admin.shared.config.json.JsonGetConfigsParams
 import play.api.libs.json.Json
 import org.genericConfig.admin.client.step.AddStep
 import util.CommonFunction
+import util.HtmlElementIds
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -24,22 +25,17 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction{
   def drawConfigTree(configTree: JsonConfigTreeOut) = {
     
     configTree.result.status.getConfigTree.get.status match {
-      case status if status == GetConfigTreeSuccess().status => {
-        updateStatus(status, configTree.result.status.common.get.status)
+      case status if status == GetConfigTreeSuccess().status =>
+        cleanPage
+        drawNewStatus(status + " | " + configTree.result.status.common.get.status)
         drawConfigTreeNotEmpty(configTree)
-      }
-      case status if status == GetConfigTreeEmpty().status => 
-        updateStatus(status, configTree.result.status.common.get.status)
-        //TODO GetConfigTree need configId
+      case status if status == GetConfigTreeEmpty().status =>
+        cleanPage
+        drawNewStatus(status + " | " + configTree.result.status.common.get.status)
         drawConfigTreeEmpty(configTree)
       case status if status == GetConfigTreeError().status => 
-        updateStatus(status, configTree.result.status.common.get.status)
-      
+        drawNewStatus(status + " | " + configTree.result.status.common.get.status)
     }
-    
-    //TODO wrapper in share move
-    
-
   }
   
   private def drawConfigTreeNotEmpty(configTree: JsonConfigTreeOut) = {
@@ -109,7 +105,7 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction{
     
     jQuery(s"#editStep$stepId").on("click", () => editStep())
     
-    jQuery(s"#showConfigs").on("click", () => showConfigs(configTree.result.userId.get))
+    jQuery(s"#showConfigs").on("click", () => getConfigs(configTree.result.userId.get))
     
     val componentIds = components map {c => prepareIdForHtml(c.componentId)}
     
@@ -131,26 +127,26 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction{
   }
   
   
-  def drawConfigTreeEmpty(configTree: JsonConfigTreeOut) = {
-    val htmlMain =  
-      """<dev id='main' class='main'> 
-      <p>Konfiguration</p>
-      <dev id='addStep' class='button'> Schritt erstellen </dev>
-      <dev id='showConfigs' class='button'> Konfigurationen </dev>
-    </dev> """
-         
-    jQuery(htmlMain).appendTo(jQuery("section"))
+  private def drawConfigTreeEmpty(configTree: JsonConfigTreeOut) = {
     
-    jQuery(s"#addStep").on("click", () => addStep(configTree))
-    jQuery(s"#showConfigs").on("click", () => showConfigs(configTree.result.userId.get))
-    //TODO GetConfigs defecte userId abfangen
+    val htmlMain =  
+      "<dev id='main' class='main'>" +
+      "<p>Konfiguration</p>" + 
+      drawButton(HtmlElementIds.addStepHtml, "Schritt erstellen") +
+      drawButton(HtmlElementIds.getConfigsHtml, "Konfigurationen") + 
+    "</dev>"
+         
+    drawNewMain(htmlMain)
+    
+    jQuery(HtmlElementIds.addStepJQuery).on("click", () => addStep(configTree))
+    jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => getConfigs(configTree.result.userId.get))
   }
  
   private def addStep(configTree: JsonConfigTreeOut) = {
-    new AddStep(websocket).addStep(configTree)
+    new AddStep(websocket).addFirstStep(configTree)
   }
   
-  def showConfigs(userId: String) = {
+  private def getConfigs(userId: String) = {
     val jsonGetConfigs: String  = Json.toJson(JsonGetConfigsIn(
         params = JsonGetConfigsParams(
             userId
@@ -177,12 +173,12 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction{
     println("editStep")
   }
   
-  def updateStatus(getConfigTreeStatus: String, commonStatus: String) = {
-    val htmlHeader = 
-      s"<dev id='status' class='status'>" + 
-        getConfigTreeStatus + " , " + commonStatus + 
-      "</dev>"
-    jQuery("#status").remove()
-    jQuery(htmlHeader).appendTo(jQuery("header"))
-  }
+//  def updateStatus(getConfigTreeStatus: String, commonStatus: String) = {
+//    val htmlHeader = 
+//      s"<dev id='status' class='status'>" + 
+//        getConfigTreeStatus + " , " + commonStatus + 
+//      "</dev>"
+//    jQuery("#status").remove()
+//    jQuery(htmlHeader).appendTo(jQuery("header"))
+//  }
 }

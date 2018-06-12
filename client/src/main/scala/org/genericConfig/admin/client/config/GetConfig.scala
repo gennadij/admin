@@ -51,14 +51,14 @@ class GetConfig(websocket: WebSocket) extends CommonFunction{
       val htmlConfig =  
         "<dev id='" + config.configId + "' class='config'> " +
           "<div id='text_for_config'>" + config.configId + " || " + config.configUrl + "</dev>" +
-          drawButton(HtmlElementIds.showConfigsHtml + config.configId, "Show") +
+          drawButton(HtmlElementIds.getConfigsHtml + config.configId, "Show") +
           drawButton(HtmlElementIds.updateConfigHtml + config.configId, "Edit") +
           drawButton(HtmlElementIds.deleteConfigHtml + config.configId, "Delete") +
         "</dev> "
            
       jQuery(htmlConfig).appendTo(jQuery(HtmlElementIds.mainJQuery))
       
-      jQuery(HtmlElementIds.showConfigsJQuery + config.configId).on("click", () => showConfig(config.configId))
+      jQuery(HtmlElementIds.getConfigsJQuery + config.configId).on("click", () => showConfig(config.configId))
       
       jQuery(HtmlElementIds.updateConfigJQuery + config.configId).on("click", () => 
         editConfig(config.configId, config.configUrl, getConfigsOut.result.userId))

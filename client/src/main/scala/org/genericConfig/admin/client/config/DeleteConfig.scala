@@ -27,12 +27,12 @@ class DeleteConfig(websocket: WebSocket) extends CommonFunction{
     "<dev id='main' class='main'>" +  
       "<p>Delete Konfiguration</p>" +
       drawButton(HtmlElementIds.deleteConfigHtml, "Delete")+
-      drawButton(HtmlElementIds.showConfigsHtml, "Konfigurationen") +
+      drawButton(HtmlElementIds.getConfigsHtml, "Konfigurationen") +
     "</dev>" 
     
       drawNewMain(htmlMain)
    
-    jQuery(HtmlElementIds.showConfigsJQuery).on("click", () => showConfigs(userId))
+    jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => showConfigs(userId))
     jQuery(HtmlElementIds.deleteConfigJQuery).on("click", () => delete(configId, configUrl))
   }
   

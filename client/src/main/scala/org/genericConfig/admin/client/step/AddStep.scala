@@ -9,6 +9,10 @@ import org.genericConfig.admin.shared.step.json.JsonSelectionCriterium
 import play.api.libs.json.Json
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
 import org.genericConfig.admin.shared.step.json.JsonStepOut
+import util.CommonFunction
+import util.HtmlElementIds
+import org.genericConfig.admin.shared.config.json.JsonGetConfigsIn
+import org.genericConfig.admin.shared.config.json.JsonGetConfigsParams
 
 
 /**
@@ -16,36 +20,32 @@ import org.genericConfig.admin.shared.step.json.JsonStepOut
  * 
  * Created by Gennadi Heimann 18.05.2018
  */
-class AddStep(websocket: WebSocket) {
+class AddStep(websocket: WebSocket) extends CommonFunction {
   
-  def addStep(configTree: JsonConfigTreeOut) = {
+  def addFirstStep(configTree: JsonConfigTreeOut) = {
     
-    jQuery("#main").remove()
+    cleanPage
     
     val htmlMain =  
-    """<dev id='main' class='main'> 
-      <p>Neuen Schritt erstellen</p>
-      nameToShow <input id='inputStepNameToShow' type='text'> </br> </br>
-      Selection Criterium MIN <input id='inputSelectionCriteriumMin' type='text'> </br> </br>
-      Selection Criterium MAX <input id='inputSelectionCriteriumMax' type='text'> </br> </br>
-      <dev id='saveStep' class='button'> Speichern </dev>
-      <dev id='showConfig' class='button'> Konfiguration </dev>
-    </dev> """
+    "<dev id='main' class='main'>" +
+      "<p>Neuen Schritt erstellen</p>" +
+      drawInputField(HtmlElementIds.inputStepNameToShowHtml, "nameToShow") +
+      drawInputField(HtmlElementIds.inputSelectionCriteriumMinHtml, "Selection Criterium MIN", "number") + 
+      drawInputField(HtmlElementIds.inputSelectionCriteriumMaxHtml, "Selection Criterium MAX", "number") +
+      drawButton(HtmlElementIds.addStepHtml, "Speichern") +
+      drawButton(HtmlElementIds.getConfigsHtml, "Konfiguration") +
+    "</dev>"
     
-    jQuery(htmlMain).appendTo(jQuery("section"))
+    drawNewMain(htmlMain)
    
-    jQuery(s"#saveStep").on("click", () => saveStep(configTree.result.configId.get))
-    jQuery(s"#showConfig").on("click", () => showConfigTree(configTree.result.configId.get))
+    jQuery(HtmlElementIds.addStepJQuery).on("click", () => saveStep(configTree.result.configId.get))
+    jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => getConfigs(configTree.result.userId.get))
   }
   
   private def saveStep(configId: String) = {
-    val nameToShow = jQuery("#inputStepNameToShow").value()
-    val scMin = jQuery("#inputSelectionCriteriumMin").value()
-    val scMax = jQuery("#inputSelectionCriteriumMax").value()
-    
-    println("saveStep " + nameToShow)
-    println("saveStep " + scMin)
-    println("saveStep " + scMax)
+    val nameToShow: Dynamic = jQuery(HtmlElementIds.inputStepNameToShowJQuery).value()
+    val scMin: Dynamic = jQuery(HtmlElementIds.inputSelectionCriteriumMinJQuery).value()
+    val scMax: Dynamic = jQuery(HtmlElementIds.inputSelectionCriteriumMaxJQuery).value()
     
     val jsonStepIn = Json.toJson(JsonStepIn(
         JsonNames.ADD_FIRST_STEP,
@@ -56,8 +56,8 @@ class AddStep(websocket: WebSocket) {
             nameToShow.toString, //nameToShow: String,
             "first", //kind: String,
             Some(JsonSelectionCriterium(
-                scMin.toString.toInt,
-                scMax.toString.toInt
+                min = scMin.toString.toInt,
+                max = scMax.toString.toInt
             )) //selectionCriterium: JsonSelectionCriterium
         )
     )).toString
@@ -66,8 +66,15 @@ class AddStep(websocket: WebSocket) {
     websocket.send(jsonStepIn)
   }
   
-  private def showConfigTree(configId: String) = {
-    println("showConfig")
+  private def getConfigs(userId: String) = {
+    val jsonGetConfigs: String  = Json.toJson(JsonGetConfigsIn(
+        params = JsonGetConfigsParams(
+            userId
+        )
+    )).toString
+    
+    println("OUT -> " + jsonGetConfigs)
+    websocket.send(jsonGetConfigs)
   }
   
   def updateStatus(addStep: JsonStepOut) = {
