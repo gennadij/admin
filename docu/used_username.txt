@@ -3,13 +3,16 @@ user -> LoginWithNotExistUserSpecs
 user1 -> AddingNewAdminUserSpecs
 user2 -> LoginSpecs
 user3 -> AddConfigSpecs
-user4
+user4 -> AddFirstStepSpecs
+user9 -> ConfigTreeEmptySpecs
 user13 -> AddConfigWithSameConfigUrlsSpecs
 user14
-user_1_v016
-user_v016_2
-user_v016_4
-user_v016_5
-user_v016_6
+user15 -> TwoFirstStepsForOneConfigSpecs
+user_1_v016 -> AddSeveralConfigsSpecs
+user_v016_2 -> GetSeveralConfigsSpecs
+user_v016_4 -> DeleteConfigSpecs, GetEmptyConfigsSpecs
+user_v016_5 -> DeleteConfigWithDefectIdSpecs
+user_v016_6 -> UpdateConfigSpec
+user_v016_7 -> GetEmptyConfigsSpecs
 user_v016_10 -> DeleteFirstStepSpecs
 user_updateStep_v016_1 -> UpdateStepSpecs
