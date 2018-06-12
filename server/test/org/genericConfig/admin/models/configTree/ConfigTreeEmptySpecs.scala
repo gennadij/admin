@@ -12,6 +12,10 @@ import org.specs2.runner.JUnitRunner
 import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
 import play.api.libs.json.Json
+import util.CommonFunction
+import org.genericConfig.admin.shared.user.status.AddUserSuccess
+import org.genericConfig.admin.shared.user.status.AddUserAlreadyExist
+import org.genericConfig.admin.shared.user.status.AddUserError
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -22,45 +26,45 @@ import play.api.libs.json.Json
  */
 
 @RunWith(classOf[JUnitRunner])
-class ConfigTreeEmptySpecs extends Specification with AdminWeb with BeforeAfterAll {
+class ConfigTreeEmptySpecs extends Specification 
+                           with AdminWeb 
+                           with BeforeAfterAll
+                           with CommonFunction {
 
-  val wC = WebClient.init
+  val wC: WebClient = WebClient.init
+  
+  val usernamePassword = "user9"
+  
+  var configId = ""
   
   def afterAll(): Unit = {
-    PrepareConfigsForSpecsv011.prepareConfigTreeEmpty(wC)
+    
   }
   
   def beforeAll(): Unit = {
+    val (username: String, userId: String, status: String) = addUser(usernamePassword)
+    Logger.info(username + userId + status)
+      status match {
+        case s if AddUserSuccess().status == s =>
+          val (configId: String, _) = addConfig(userId, s"http://contig/$username")
+          this.configId = configId
+        case s if AddUserAlreadyExist().status == s =>
+          this.configId = getConfigId(usernamePassword = usernamePassword, configUrl = s"http://contig/$username")
+        case s if AddUserError().status == s =>  
+          Logger.info("Fehler bei der Vorbereitung")
+      }
   }
       
   "Diese Specification prueft die leere Konfiguration" >> {
-    val loginClientServer = Json.obj(
-        "json" -> JsonNames.GET_USER
-        ,"params" -> Json.obj(
-            "username" -> "user9",
-            "password" -> "user9"
-        )
-    )
-    
-    val loginOut = wC.handleMessage(loginClientServer)
-    
-    Logger.info("->" + loginOut)
-    
-    val configId = ((loginOut \ "result" \ "configs")(0) \ "configId").asOpt[String].get
-    
-    
-    
-    (loginOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
-    
     val configTreeIn = Json.obj(
         "json" -> JsonNames.CONFIG_TREE
         ,"params" -> Json.obj(
             "configId" -> configId
         )
     )
-    val configTreeOut = wC.handleMessage(configTreeIn)
     
     Logger.info("<- " + configTreeIn)
+    val configTreeOut = wC.handleMessage(configTreeIn)
     Logger.info("-> " + configTreeOut)
     
     (configTreeOut \ "json").asOpt[String].get === JsonNames.CONFIG_TREE

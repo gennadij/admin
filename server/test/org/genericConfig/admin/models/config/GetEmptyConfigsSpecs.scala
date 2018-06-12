@@ -29,20 +29,12 @@ class GetEmptyConfigsSpecs extends Specification
   
   val wC: WebClient = WebClient.init
   var userId: String = ""
-  val username = "user_v016_4"
+  val username = "user_v016_7"
   
   def beforeAll(): Unit = {
+    Logger.info("BeforAll")
     val (username, userId, _): (String, String, _) = addUser(this.username)
     this.userId = userId
-    Logger.info("username : " + username)
-    Logger.info("userId : " + userId)
-    
-//    createConfig(userId, "//http://contig1/user_1_v016_1", wC)
-    
-//    createConfig(userId, "//http://contig1/user_1_v016_2", wC)
-	  
-//    createConfig(userId, "//http://contig1/user_1_v016_3", wC)
-    
   }
   
   def afterAll(): Unit = {

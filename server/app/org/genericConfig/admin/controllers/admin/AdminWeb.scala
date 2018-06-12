@@ -133,7 +133,7 @@ trait AdminWeb {
   private def configTree(receivedMessage: JsValue, admin: Admin): JsValue = {
     val configTreeIn: JsResult[JsonConfigTreeIn] = Json.fromJson[JsonConfigTreeIn](receivedMessage)
     configTreeIn match {
-      case _: JsSuccess[JsonConfigTreeIn] => Json.toJson(admin.getConfigTree(configTreeIn.get.params.configId))
+      case _: JsSuccess[JsonConfigTreeIn] => Json.toJson(admin.getConfigTree(configTreeIn.get))
       case e : JsError => jsonError(JsonNames.CONFIG_TREE, e)
     }
   }

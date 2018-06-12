@@ -95,7 +95,7 @@ class WrapperStep {
     *
     * @return JsonStepOut
     */
-  def toJsonStepOut(stepBO: StepBO): JsonStepOut = {
+  private[wrapper] def toJsonStepOut(stepBO: StepBO): JsonStepOut = {
     stepBO.json.get match {
       case json if json == JsonNames.ADD_FIRST_STEP =>
         createJsonStepOut(stepBO, json)

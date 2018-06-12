@@ -303,11 +303,11 @@ object Persistence {
     * @param configId: String
     * @return ConfigTreeBO
     */
-  def getConfigTree(configId: String): ConfigTreeBO = {
+  def getConfigTree(configTreeBO: ConfigTreeBO): ConfigTreeBO = {
     val (configTree, statusGetConfigTree, commonStatus): (Option[StepForConfigTreeBO], StatusGetConfigTree, Status) =
-      Graph.getConfigTree(configId)
+      Graph.getConfigTree(configTreeBO.configId.get)
 
-    val (userId: String, status: Status) = Persistence.getUserId(configId)
+    val (userId: String, status: Status) = Persistence.getUserId(configTreeBO.configId.get)
 
     statusGetConfigTree match {
       case GetConfigTreeSuccess() =>
@@ -315,56 +315,56 @@ object Persistence {
           case Success() =>
             ConfigTreeBO(
               Some(userId),
-              Some(configId),
+              configTreeBO.configId,
               configTree,
-              StatusConfigTree(
+              Some(StatusConfigTree(
                 GetConfigTreeSuccess(),
                 Success()
               )
-            )
+            ))
           case _ =>
             ConfigTreeBO(
               None,
               None,
               None,
-              StatusConfigTree(
+              Some(StatusConfigTree(
                 GetConfigTreeError(),
                 status
               )
-            )
+            ))
         }
       case GetConfigTreeEmpty() =>
         status match {
           case Success() =>
             ConfigTreeBO(
               Some(userId),
-              Some(configId),
+              configTreeBO.configId,
               None,
-              StatusConfigTree(
+              Some(StatusConfigTree(
                 GetConfigTreeEmpty(),
                 Success()
               )
-            )
+            ))
           case _ =>
             ConfigTreeBO(
               None,
               None,
               None,
-              StatusConfigTree(
+              Some(StatusConfigTree(
                 GetConfigTreeError(),
                 status
               )
-            )
+            ))
         }
       case GetConfigTreeError() => ConfigTreeBO(
         None,
         None,
         None,
-        StatusConfigTree(
+        Some(StatusConfigTree(
           GetConfigTreeError(),
           commonStatus
         )
-      )
+      ))
     }
   }
 

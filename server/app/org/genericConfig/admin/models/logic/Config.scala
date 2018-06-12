@@ -6,6 +6,7 @@ import org.genericConfig.admin.shared.config.bo.{ConfigBO, _}
 import org.genericConfig.admin.shared.config.status._
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 import org.genericConfig.admin.models.wrapper.RidToHash
+import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -51,8 +52,8 @@ object Config {
     * @param configId : String
     * @return ConfigTreeBO
     */
-  def getConfigTree(configId: String): ConfigTreeBO = {
-    new Config(null).getConfigTree(configId)
+  def getConfigTree(configTreeBO: ConfigTreeBO): ConfigTreeBO = {
+    new Config(null).getConfigTree(configTreeBO)
   }
 
   /**
@@ -112,12 +113,12 @@ class Config(configBO: ConfigBO) {
             cBO
           case AddConfigError() =>
             cBO
+          case AddConfigIdHashNotExist() => {
+            cBO
+          }
         }
       case None => ConfigBO(status = Some(StatusConfig(addConfig = Some(AddConfigIdHashNotExist()))))
     }
-    //    val userId = configBO.userId.get
-
-
   }
 
   /**
@@ -213,7 +214,15 @@ class Config(configBO: ConfigBO) {
     * @version 0.1.6
     * @return ConfigBO
     */
-  def getConfigTree(configId: String): ConfigTreeBO = {
-    Persistence.getConfigTree(configId)
+  def getConfigTree(configTreeBO: ConfigTreeBO): ConfigTreeBO = {
+    
+    val configTreeBOOut: ConfigTreeBO = 
+      Persistence.getConfigTree(configTreeBO.copy(configId = RidToHash.getRId(configTreeBO.configId.get)))
+      
+    configTreeBOOut.copy(
+        userId = RidToHash.getHash(configTreeBOOut.userId.get), 
+        configId = RidToHash.getHash(configTreeBOOut.configId.get)
+    )
   }
 }
+

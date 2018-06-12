@@ -9,8 +9,8 @@ import org.genericConfig.admin.shared.configTree.status.StatusConfigTree
  * Created by Gennadi Heimann 27.04.2018
  */
 case class ConfigTreeBO (
-    userId: Option[String],
-    configId: Option[String],
-    configTree: Option[StepForConfigTreeBO],
-    status: StatusConfigTree
+    userId: Option[String] = None,
+    configId: Option[String] = None,
+    configTree: Option[StepForConfigTreeBO] = None,
+    status: Option[StatusConfigTree] = None
 )

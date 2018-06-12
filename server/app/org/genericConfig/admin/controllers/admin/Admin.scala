@@ -12,6 +12,8 @@ import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
 import org.genericConfig.admin.shared.step.json._
 import org.genericConfig.admin.shared.user.json._
+import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
+import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeIn
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -123,8 +125,9 @@ class Admin extends Wrapper{
    * 
    * @return JsonConfigTreeOut
    */
-  def getConfigTree(configId: String): JsonConfigTreeOut = {
-    toJsonConfigTreeOut(Config.getConfigTree(configId))
+  def getConfigTree(jsonConfigTreeIn: JsonConfigTreeIn): JsonConfigTreeOut = {
+    
+    toJsonConfigTreeOut(Config.getConfigTree(toConfigTreeBO(jsonConfigTreeIn)))
   }
   
   

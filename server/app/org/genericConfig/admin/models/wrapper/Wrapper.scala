@@ -177,6 +177,33 @@ trait Wrapper{
   def toJsonUpdateConfigOut(configBO: ConfigBO): JsonUpdateConfigOut = {
     new WrapperConfig().toJsonUpdateConfigOut(configBO)
   }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param ConfigTreeOut
+   * 
+   * @return JsonConfigTreeOut
+   */
+  def toJsonConfigTreeOut(configTreeBO: ConfigTreeBO): JsonConfigTreeOut = {
+    new WrapperConfigTree().toJsonConfigTreeOut(configTreeBO)
+  }
+  
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.6
+   * 
+   * @param ConfigTreeOut
+   * 
+   * @return JsonConfigTreeOut
+   */
+  def toConfigTreeBO(jsonConfigTreeIn: JsonConfigTreeIn): ConfigTreeBO = {
+    new WrapperConfigTree().toConfigTreeBO(jsonConfigTreeIn)
+  }
+  
   /**
    * @author Gennadi Heimann
    * 
@@ -277,136 +304,6 @@ trait Wrapper{
 //        )
 //    )
 //  }
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.5
-   * 
-   * @param ConfigTreeOut
-   * 
-   * @return JsonConfigTreeOut
-   */
-  def toJsonConfigTreeOut(configTreeBO: ConfigTreeBO): JsonConfigTreeOut = {
-    
-    configTreeBO.status.getConfigTree match {
-      case GetConfigTreeSuccess() => {
-        JsonConfigTreeOut(
-            result = JsonConfigTreeResult(
-                Some(configTreeBO.userId.get),
-                Some(configTreeBO.configId.get),
-                Some(JsonConfigTreeStep(
-                    configTreeBO.configTree.get.stepId,
-                    configTreeBO.configTree.get.kind,
-                    getJsonConfigTreeComponents(configTreeBO.configTree.get.components)
-                )),
-                JsonConfigTreeStatus(
-                    Some(JsonStatus(
-                        configTreeBO.status.getConfigTree.status,
-                        configTreeBO.status.getConfigTree.message
-                    )),
-                    Some(JsonStatus(
-                        configTreeBO.status.common.status,
-                        configTreeBO.status.common.message
-                    ))
-                )
-            )
-        )
-      }
-      case GetConfigTreeEmpty() => {
-        JsonConfigTreeOut(
-            result = JsonConfigTreeResult(
-                Some(configTreeBO.userId.get),
-                Some(configTreeBO.configId.get),
-                None, 
-                JsonConfigTreeStatus(
-                    Some(JsonStatus(
-                        configTreeBO.status.getConfigTree.status,
-                        configTreeBO.status.getConfigTree.message
-                    )),
-                    Some(JsonStatus(
-                        configTreeBO.status.common.status,
-                        configTreeBO.status.common.message
-                    ))
-                )
-            )
-        )
-      }
-      case GetConfigTreeError() => {
-        JsonConfigTreeOut(
-            result = JsonConfigTreeResult(
-                None,
-                None,
-                None, 
-                JsonConfigTreeStatus(
-                    Some(JsonStatus(
-                        configTreeBO.status.getConfigTree.status,
-                        configTreeBO.status.getConfigTree.message
-                    )),
-                    Some(JsonStatus(
-                        configTreeBO.status.common.status,
-                        configTreeBO.status.common.message
-                    ))
-                )
-            )
-        )
-      }
-    }
-  }
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.5
-   * 
-   * @param Set[Option[Component]]
-   * 
-   * @return Set[JsonConfigTreeComponent]
-   */
-  def getJsonConfigTreeComponents(components: Set[Option[ComponentForConfigTreeBO]]): Set[JsonConfigTreeComponent] = {
-    
-    components.map{
-      component => {
-        component.get.nextStepId match {
-          case Some(step) => {
-            component.get.nextStep match {
-              case Some(step) => {
-                JsonConfigTreeComponent(
-                    component.get.componentId,
-                    component.get.kind,
-                    Some(component.get.nextStepId.get),
-                    Some(JsonConfigTreeStep(
-                        component.get.nextStep.get.stepId,
-                        component.get.nextStep.get.kind,
-                        getJsonConfigTreeComponents(component.get.nextStep.get.components)
-                    ))
-                )
-              }
-              case None => {
-                JsonConfigTreeComponent(
-                    component.get.componentId,
-                    component.get.kind,
-                    Some(component.get.nextStepId.get),
-                    None
-                )
-              }
-            }
-            
-          }
-          case None => {
-            JsonConfigTreeComponent(
-                component.get.componentId,
-                component.get.kind,
-                Some("last"),
-                None
-            )
-          }
-        }
-        
-      }
-    }
-  }
-  
   /**
    * @author Gennadi Heimann
    * 
