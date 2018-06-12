@@ -10,29 +10,30 @@ import org.genericConfig.admin.shared.config.json.JsonGetConfigsParams
 import scala.scalajs.js.timers._
 import org.genericConfig.admin.shared.config.json.JsonDeleteConfigIn
 import org.genericConfig.admin.shared.config.json.JsonDeleteConfigParams
+import util.CommonFunction
+import util.HtmlElementIds
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 03.05.2018
  */
-class DeleteConfig(websocket: WebSocket) {
+class DeleteConfig(websocket: WebSocket) extends CommonFunction{
   
   def deleteConfig(configId: String, configUrl: String, userId: String) = {
-    jQuery("#main").remove()
-    jQuery("#status").remove()
+    cleanPage
     
     val htmlMain =  
-    """<dev id='main' class='main'> 
-      <p>Delete Konfiguration</p>
-      <dev id='deleteConfig' class='button'> Delete </dev>
-      <dev id='showConfigs' class='button'> Konfigurationen </dev>
-    </dev> """
+    "<dev id='main' class='main'>" +  
+      "<p>Delete Konfiguration</p>" +
+      drawButton(HtmlElementIds.deleteConfigHtml, "Delete")+
+      drawButton(HtmlElementIds.showConfigsHtml, "Konfigurationen") +
+    "</dev>" 
     
-    jQuery(htmlMain).appendTo(jQuery("section"))
+      drawNewMain(htmlMain)
    
-    jQuery(s"#showConfigs").on("click", () => showConfigs(userId))
-    jQuery(s"#deleteConfig").on("click", () => delete(configId, configUrl))
+    jQuery(HtmlElementIds.showConfigsJQuery).on("click", () => showConfigs(userId))
+    jQuery(HtmlElementIds.deleteConfigJQuery).on("click", () => delete(configId, configUrl))
   }
   
   def delete(configId: String, configUrl: String) = {

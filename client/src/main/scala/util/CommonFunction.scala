@@ -37,4 +37,8 @@ trait CommonFunction {
     "<dev id='" + id + "' class='button'> " + text + " </dev>"
   }
   
+  def drawInputField(id: String, label: String): String = {
+    label + " <input id='" + id + "' type='text'>"
+  }
+  
 }

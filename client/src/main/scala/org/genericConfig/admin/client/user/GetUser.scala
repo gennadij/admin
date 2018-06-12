@@ -23,13 +23,19 @@ class GetUser(websocket: WebSocket) extends CommonFunction{
 
     val htmlMain =
       "<dev id='main' class='main'>" +
-        "<p>GetUser Page</p>" +
+        "<p>User Page</p> </br>" +
+        "<p> userId = " + getUserOut.result.userId + "</p>" + 
+        "<p> Username = " + getUserOut.result.username + "</p>" + 
           drawButton(HtmlElementIds.getConfigsHtml, "GetConfigs") +
+          drawButton(HtmlElementIds.deleteConfigHtml, "DeleteUser") +
+          drawButton(HtmlElementIds.updateConfigHtml, "UpdateUser") +
         "</dev>"
 
     drawNewMain(htmlMain)
 
     jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => getConfigs(getUserOut.result.userId.get))
+    jQuery(HtmlElementIds.deleteConfigJQuery).on("click", () => deleteUser(getUserOut.result.userId.get))
+    jQuery(HtmlElementIds.updateConfigJQuery).on("click", () => updateUser(getUserOut.result.userId.get))
   }
 
   private def getConfigs(userId: String) = {
@@ -40,6 +46,14 @@ class GetUser(websocket: WebSocket) extends CommonFunction{
       )
     )).toString
     websocket.send(getConfigsIn)
+  }
+  
+  private def deleteUser(userId: String) = {
+    println("DeleteUser")
+  }
+  
+  private def updateUser(userId: String) = {
+    println("UpdateUser")
   }
 
 }

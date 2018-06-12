@@ -35,7 +35,7 @@ class GetConfig(websocket: WebSocket) extends CommonFunction{
     val htmlMain =  
     "<dev id='main' class='main'>" + 
       "<p>Konfigurationen</p>" + 
-      drawButton(HtmlElementIds.addConfig, "New Config") + 
+      drawButton(HtmlElementIds.addConfigHtml, "New Config") + 
     "</dev>"
     
     drawNewMain(htmlMain)
@@ -51,16 +51,16 @@ class GetConfig(websocket: WebSocket) extends CommonFunction{
       val htmlConfig =  
         "<dev id='" + config.configId + "' class='config'> " +
           "<div id='text_for_config'>" + config.configId + " || " + config.configUrl + "</dev>" +
-          drawButton(HtmlElementIds.showConfig + config.configId, "Show") +
-          drawButton(HtmlElementIds.editConfigHtml + config.configId, "Edit") +
+          drawButton(HtmlElementIds.showConfigsHtml + config.configId, "Show") +
+          drawButton(HtmlElementIds.updateConfigHtml + config.configId, "Edit") +
           drawButton(HtmlElementIds.deleteConfigHtml + config.configId, "Delete") +
         "</dev> "
            
       jQuery(htmlConfig).appendTo(jQuery(HtmlElementIds.mainJQuery))
       
-      jQuery(HtmlElementIds.showConfigJQuery + config.configId).on("click", () => showConfig(config.configId))
+      jQuery(HtmlElementIds.showConfigsJQuery + config.configId).on("click", () => showConfig(config.configId))
       
-      jQuery(HtmlElementIds.editConfigJQuery + config.configId).on("click", () => 
+      jQuery(HtmlElementIds.updateConfigJQuery + config.configId).on("click", () => 
         editConfig(config.configId, config.configUrl, getConfigsOut.result.userId))
       
       jQuery(HtmlElementIds.deleteConfigJQuery + config.configId).on("click", () => 
@@ -78,7 +78,7 @@ class GetConfig(websocket: WebSocket) extends CommonFunction{
         )
     ).toString
     
-    println("-> " + jsonConfigTree)
+    println("IN " + jsonConfigTree)
     websocket.send(jsonConfigTree)
     jQuery("#main").remove()
   }
