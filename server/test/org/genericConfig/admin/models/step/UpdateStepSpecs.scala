@@ -28,61 +28,33 @@ class UpdateStepSpecs extends Specification
   
   val wC: WebClient = WebClient.init
   var userId: String = ""
-  var configIdHash: String = ""
-  var configRId: String = ""
-  var stepIdHash: String = ""
+  var configId: String = ""
+  var stepId: String = ""
   val usernamePassword = "user_updateStep_v016_1"
 
 
   def beforeAll(): Unit = {
     val (username: String, userId: String, status: String) = addUser(usernamePassword)
-
-    this.userId = RidToHash.getId(userId).get
+    
     status match {
       case s if AddUserSuccess().status == s =>
-        Logger.info("AddUserSuccess()")
-        val (configId: String, status: StatusAddConfig) = addConfig(this.userId, s"http://contig/$username")
-
-        val (configRId, configIdHash) = RidToHash.setIdAndHash(configId)
-
-        this.configRId = configRId
-
-        this.configIdHash = configIdHash
-
-        val stepRId = addStep(Some(configRId), None)
-
-        this.stepIdHash = RidToHash.setIdAndHash(stepRId.get)._2
-
+        
+        val (configId: String, status: StatusAddConfig) = addConfig(userId, s"http://contig/$username")
+        this.configId = configId
+        this.stepId = addStep(Some(configId), None).get
       case s if AddUserAlreadyExist().status == s =>
-
-        Logger.info("AddUserAlreadyExist()")
-
-//        val (configId: String, status: StatusAddConfig) = addConfig(this.userId, s"http://contig/$username")
-
         val configId = getConfigId(usernamePassword = usernamePassword, configUrl = s"http://contig/$username")
-
-        val (configRId, configIdHash) = RidToHash.setIdAndHash(configId)
-
-        this.configRId = configRId
-
-        this.configIdHash = configIdHash
-
-        Logger.info(configId)
-        Logger.info(configIdHash)
-
-        val stepRId = addStep(Some(configRId), None)
-
-        this.stepIdHash = RidToHash.setIdAndHash(stepRId.get)._2
-
+        this.configId = configId
+        this.stepId = addStep(Some(configId), None).get
       case s if AddUserError().status == s =>
         Logger.info("Fehler bei der Vorbereitung")
-
     }
   }
   
   def afterAll(): Unit = {
-    Logger.info("Deleting Step :" + + deleteStepAppendedToConfig(this.configRId))
-//    Logger.info("Deleting Configs : " + deleteAllConfigs(this.usernamePassword))
+    val configRid = RidToHash.getRId(this.configId)
+    val count: Int = deleteStepAppendedToConfig(configRid.get)
+    require(count == 1 , "Deleting Step :" + count)
   }
   
   "Diese Spezifikation spezifiziert die Editierung eines Schrittes" >> {
@@ -91,7 +63,7 @@ class UpdateStepSpecs extends Specification
       val jsonUpdateStepIn = Json.toJsObject(JsonStepIn(
         json = JsonNames.UPDATE_STEP,
         params = JsonStepParams(
-          stepId = this.stepIdHash,
+          stepId = this.stepId,
           nameToShow = "FirstStep_updated",
           kind = "first_updated",
           selectionCriterium = Some(JsonSelectionCriterium(
@@ -101,9 +73,9 @@ class UpdateStepSpecs extends Specification
         )
       ))
 
-      Logger.info("-> " + jsonUpdateStepIn)
+      Logger.info("IN  " + jsonUpdateStepIn)
       val jsonUpdateStepOut = wC.handleMessage(jsonUpdateStepIn)
-      Logger.info("<- " + jsonUpdateStepOut)
+      Logger.info("OUT " + jsonUpdateStepOut)
       
       (jsonUpdateStepOut \ "json").asOpt[String].get === JsonNames.UPDATE_STEP
       (jsonUpdateStepOut \ "result" \ "status" \ "updateStep" \ "status").asOpt[String].get === UpdateStepSuccess().status

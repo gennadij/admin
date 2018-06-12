@@ -47,20 +47,18 @@ object Persistence {
     statusAddUser match {
       case AddUserSuccess() =>
         UserBO(
-          Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),
-          None,
-          Some(vUser.get.getIdentity.toString),
-          Some(StatusUser(
+          username = Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),
+          userId = Some(vUser.get.getIdentity.toString),
+          status =Some(StatusUser(
             addUser = Some(AddUserSuccess()),
             common = Some(Success())
           ))
         )
       case AddUserAlreadyExist() =>
         UserBO(
-          Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),
-          None,
-          Some(vUser.get.getIdentity.toString),
-          Some(StatusUser(
+          username = Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),
+          userId = Some(vUser.get.getIdentity.toString),
+          status = Some(StatusUser(
             addUser = Some(AddUserAlreadyExist()),
             common = Some(Error())
           ))
@@ -98,6 +96,7 @@ object Persistence {
         )
       case GetUserError() =>
         UserBO(
+          username = Some(username),
           status = Some(StatusUser(
             getUser = Some(GetUserError()),
             common = Some(commonStatus)

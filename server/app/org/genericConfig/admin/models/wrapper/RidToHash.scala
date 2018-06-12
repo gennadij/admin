@@ -12,21 +12,21 @@ import scala.collection.mutable
 object RidToHash {
   
   
-  var map: mutable.Map[String, String] = scala.collection.mutable.Map[String, String]()
+  var idHash: mutable.Map[String, String] = scala.collection.mutable.Map[String, String]()
   
   
-  def setIdAndHash(id: String): (String, String) = if (map.exists(_._1 == id): @unchecked) {
-    map.foreach(item => Logger.info("Item" + item.toString))
+  def setIdAndHash(id: String): (String, String) = if (idHash.exists(_._1 == id)) {
+    idHash.foreach(item => Logger.info("Item" + item.toString))
     (id, calculateHash(id))
   } else {
     val hash = calculateHash(id)
-    map += (id -> hash)
-    map.foreach(item => Logger.info("Item" + item.toString))
+    idHash += (id -> hash)
+    idHash.foreach(item => Logger.info("Item" + item.toString))
     (id, hash)
   }
   
-  def getId(hash: String): Option[String] = {
-    val item = map.find(_._2 == hash )
+  def getRId(hash: String): Option[String] = {
+    val item = idHash.find(_._2 == hash )
     item match {
       case Some(i) => Some(i._1)
       case None => None
@@ -36,7 +36,7 @@ object RidToHash {
   }
   
   def getHash(id: String): Option[String] = {
-    val item = map.find(_._1 == id)
+    val item = idHash.find(_._1 == id)
     item match {
       case Some(i) => Some(i._2)
       case None => None
@@ -44,7 +44,7 @@ object RidToHash {
   }
   
   def cleanMap: mutable.Map[String, String] = {
-    map.empty
+    idHash.empty
   }
   
   def calculateHash(id: String): String = {

@@ -28,3 +28,9 @@ case class AddStepDefectComponentOrConfigId() extends StatusAddStep {
   def status: String = "ADD_STEP_DEFECT_COMPONENT_OR_CONFIG_ID"
   def message: String = ""
 }
+
+case class AddStepIdHashNotExist() extends StatusAddStep {
+  def status: String = "ADD_STEP_ID_HASH_NOT_EXIST"
+  def message: String = ""
+}
+

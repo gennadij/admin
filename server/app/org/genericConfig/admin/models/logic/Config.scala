@@ -79,7 +79,7 @@ class Config(configBO: ConfigBO) {
     val configUrl = configBO.configs.get.head.configUrl.get
     val userIdHash = configBO.userId.get
 
-    RidToHash.getId(userIdHash) match {
+    RidToHash.getRId(userIdHash) match {
       case Some(id) =>
         val cBO: ConfigBO = Persistence.addConfig(id, configUrl)
         cBO.status.get.addConfig.get match {
@@ -113,7 +113,7 @@ class Config(configBO: ConfigBO) {
           case AddConfigError() =>
             cBO
         }
-      case None => ConfigBO(status = Some(StatusConfig(addConfig = Some(AddConfigidHashNotExist()))))
+      case None => ConfigBO(status = Some(StatusConfig(addConfig = Some(AddConfigIdHashNotExist()))))
     }
     //    val userId = configBO.userId.get
 
@@ -127,7 +127,7 @@ class Config(configBO: ConfigBO) {
     */
   private def getConfigs: ConfigBO = {
 
-    RidToHash.getId(this.configBO.userId.get) match {
+    RidToHash.getRId(this.configBO.userId.get) match {
       case Some(rId) =>
         val configBOOut = Persistence.getConfigs(rId)
 
@@ -164,7 +164,7 @@ class Config(configBO: ConfigBO) {
     * @return ConfigBO
     */
   private def deleteConfig(): ConfigBO = {
-    RidToHash.getId(configBO.configs.get.head.configId.get) match {
+    RidToHash.getRId(configBO.configs.get.head.configId.get) match {
       case Some(rId) =>
         val configBOOut: ConfigBO = Persistence.deleteConfig(
           rId,
@@ -185,7 +185,7 @@ class Config(configBO: ConfigBO) {
   }
 
   private def updateConfig(): ConfigBO = {
-    RidToHash.getId(configBO.configs.get.head.configId.get) match {
+    RidToHash.getRId(configBO.configs.get.head.configId.get) match {
       case Some(rId) =>
         val configBOOut: ConfigBO = Persistence.updateConfig(
           rId,

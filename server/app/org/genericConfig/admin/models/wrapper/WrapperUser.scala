@@ -56,16 +56,16 @@ class WrapperUser{
    */
   def toJsonAddUserOut(userBO: UserBO): JsonUserOut = {
     
-    val userIdHash = userBO.userId match {
-      case Some(userId) => 
-        Some(RidToHash.setIdAndHash(userId)._2)
-      case None => None
-    }
+//    val userIdHash = userBO.userId match {
+//      case Some(userId) => 
+//        Some(RidToHash.setIdAndHash(userId)._2)
+//      case None => None
+//    }
     
     JsonUserOut(
         json = JsonNames.ADD_USER,
         result = JsonUserResult(
-          userIdHash,
+          userBO.userId,
           userBO.username,
           JsonUserStatus(
               addUser = userBO.status.get.addUser match {
@@ -92,16 +92,16 @@ class WrapperUser{
    * @return JsonUserOut
    */
   def toJsonGetUserOut(userBO: UserBO): JsonUserOut = {
-    val userIdHash = userBO.userId match {
-      case Some(userId) => 
-        Some(RidToHash.setIdAndHash(userId)._2)
-      case None => None
-    } 
+//    val userIdHash = userBO.userId match {
+//      case Some(userId) => 
+//        Some(RidToHash.setIdAndHash(userId)._2)
+//      case None => None
+//    } 
     
     JsonUserOut(
         json = JsonNames.GET_USER,
         result = JsonUserResult(
-            userIdHash,
+            userBO.userId,
             userBO.username,
             JsonUserStatus(
                 getUser = userBO.status.get.getUser match {

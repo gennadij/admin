@@ -2,6 +2,9 @@ package org.genericConfig.admin.models.logic
 
 import org.genericConfig.admin.models.persistence.Persistence
 import org.genericConfig.admin.shared.user.bo.UserBO
+import org.genericConfig.admin.models.wrapper.RidToHash
+import org.genericConfig.admin.shared.user.status.AddUserError
+import org.genericConfig.admin.shared.user.status.GetUserSuccess
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -21,7 +24,7 @@ object User {
    * @return UserBO
    */
   def addUser(userBO: UserBO): UserBO = {
-    new User(userBO).addUser()
+    new User(userBO).addUser
   }
   
   /**
@@ -49,8 +52,12 @@ class User(userBO: UserBO) {
    * 
    * @return UserBO
    */
-  private def addUser(): UserBO = {
-    Persistence.addUser(userBO.username.get, userBO.password.get)
+  private def addUser: UserBO = {
+    val userBOOut: UserBO = Persistence.addUser(userBO.username.get, userBO.password.get)
+    userBOOut.status.get.addUser match {
+      case Some(AddUserError()) => userBOOut
+      case _ => userBOOut.copy(userId = Some(RidToHash.setIdAndHash(userBOOut.userId.get)._2))
+    }
   }
   
   /**
@@ -62,6 +69,10 @@ class User(userBO: UserBO) {
    */
   
   private def getUser: UserBO = {
-    Persistence.getUser(userBO.username.get, userBO.password.get)
+    val userBOOut: UserBO = Persistence.getUser(userBO.username.get, userBO.password.get)
+    userBOOut.status.get.getUser match {
+      case Some(GetUserSuccess()) => userBOOut.copy(userId = Some(RidToHash.setIdAndHash(userBOOut.userId.get)._2))
+      case _ => userBOOut
+    }
   }
 }

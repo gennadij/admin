@@ -5,6 +5,7 @@ import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.{Status, Success}
 import org.genericConfig.admin.shared.step.bo.StepBO
 import org.genericConfig.admin.shared.step.status._
+import org.genericConfig.admin.models.wrapper.RidToHash
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -65,31 +66,38 @@ class Step {
    * @return StepBO
    */
   private def addFirstStep(stepBO: StepBO): StepBO = {
-
-    val firstStepBO: StepBO = Persistence.addStep(stepBO)
-
-    firstStepBO.status.get.addStep match {
-      case Some(AddStepSuccess()) => 
-        val (appendStepStatus: StatusAppendStep, _) =
-          Persistence.appendStepTo(firstStepBO.configId.get, firstStepBO.stepId.get)
-          appendStepStatus match {
-            case AppendStepSuccess() => 
-              firstStepBO.copy(json = Some(JsonNames.ADD_FIRST_STEP), 
-                  status = Some(StatusStep(
-                      addStep = firstStepBO.status.get.addStep,
-                      appendStep = Some(AppendStepSuccess()),
-                      common = firstStepBO.status.get.common)))
-            case AppendStepError() => 
-              val (_, _) =
-                Persistence.deleteStep(firstStepBO.stepId.get)
-              
-              firstStepBO.copy(json = Some(JsonNames.ADD_FIRST_STEP), 
-                  status = Some(StatusStep(
-                      addStep = firstStepBO.status.get.addStep,
-                      appendStep = Some(AppendStepError()),
-                      common = firstStepBO.status.get.common)))
-          }
-      case _ => firstStepBO.copy(json = Some(JsonNames.ADD_FIRST_STEP))
+  
+    RidToHash.getRId(stepBO.configId.get) match {
+      case Some(configRid) => 
+        val firstStepBO: StepBO = Persistence.addStep(stepBO.copy(configId = Some(configRid)))
+        firstStepBO.status.get.addStep match {
+          case Some(AddStepSuccess()) => 
+              val (appendStepStatus: StatusAppendStep, _) = Persistence.appendStepTo(configRid, firstStepBO.stepId.get)
+              appendStepStatus match {
+                case AppendStepSuccess() => 
+                  firstStepBO.copy(
+                      json = Some(JsonNames.ADD_FIRST_STEP),
+                      configId = RidToHash.getHash(configRid),
+                      stepId = Some(RidToHash.setIdAndHash(firstStepBO.stepId.get)._2),
+                      status = Some(StatusStep(
+                          addStep = Some(AddStepSuccess()),
+                          appendStep = Some(AppendStepSuccess()),
+                          common = firstStepBO.status.get.common)))
+                case AppendStepError() => 
+                  val (statusDeleteStep: StatusDeleteStep, _: Status) = Persistence.deleteStep(firstStepBO.stepId.get)
+                  
+                  firstStepBO.copy(json = Some(JsonNames.ADD_FIRST_STEP), 
+                      status = Some(StatusStep(
+                          addStep = Some(AddStepDefectComponentOrConfigId()),
+                          deleteStep = Some(statusDeleteStep),
+                          appendStep = Some(AppendStepError()),
+                          common = firstStepBO.status.get.common)))
+              }
+          case _ => firstStepBO.copy(json = Some(JsonNames.ADD_FIRST_STEP))
+        }
+      case None => StepBO(
+          json = Some(JsonNames.ADD_FIRST_STEP),
+          status = Some(StatusStep(addStep = Some(AddStepIdHashNotExist()))))
     }
   }
   

@@ -61,11 +61,11 @@ trait CommonFunction {
       configs = Some(List(Configuration(configUrl = Some(configUrl))))
     )
 
-//    Logger.info("IN " + configBOIn)
+    Logger.info("IN " + configBOIn)
 
     val configBOOut = Config.addConfig(configBOIn)
 
-//    Logger.info("OUT " + configBOOut)
+    Logger.info("OUT " + configBOOut)
 
     (configBOOut.configs.get.head.configId.get, configBOOut.status.get.addConfig.get)
   }
@@ -119,7 +119,7 @@ trait CommonFunction {
         componentId match {
           case Some(componentId) =>
 
-            val componentRUId = RidToHash.getId(componentId)
+            val componentRUId = RidToHash.getRId(componentId)
 
             val addstepBOIn = StepBO(
               json = Some(JsonNames.ADD_FIRST_STEP),
@@ -219,7 +219,5 @@ trait CommonFunction {
         configBOOut.status.get.getConfigs.get.status
       }
     }
-
-
   }
 }

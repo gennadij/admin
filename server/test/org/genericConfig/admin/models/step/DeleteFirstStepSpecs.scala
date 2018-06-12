@@ -28,9 +28,9 @@ class DeleteFirstStepSpecs extends Specification
                               with CommonFunction{
 
 
-    var configIdHash = ""
+    var configId = ""
 
-    var stepIdHash = ""
+    var stepId = ""
 
     val wC: WebClient = WebClient.init
 
@@ -41,38 +41,19 @@ class DeleteFirstStepSpecs extends Specification
       status match {
         case s if AddUserSuccess().status == s =>
           val (configId: String, _) = addConfig(userId, s"http://contig/$username")
-
-          val (_, configIdHash) = RidToHash.setIdAndHash(configId)
-
-          this.configIdHash = configIdHash
-
-          val stepRId= addStep(Some(configId), None)
-
-          this.stepIdHash = RidToHash.setIdAndHash(stepRId.get)._2
-
+          this.configId = configId
+          this.stepId = addStep(Some(configId), None).get
         case s if AddUserAlreadyExist().status == s =>
-          val configId = getConfigId(usernamePassword = usernamePassword, configUrl = s"http://contig/$username")
-
-          val (configRId, configIdHash) = RidToHash.setIdAndHash(configId)
-
-          this.configIdHash = configIdHash
-
-          val stepRId= addStep(Some(configRId), None)
-
-          this.stepIdHash = RidToHash.setIdAndHash(stepRId.get)._2
-
+          this.configId = getConfigId(usernamePassword = usernamePassword, configUrl = s"http://contig/$username")
+          this.stepId = addStep(Some(this.configId), None).get
         case s if AddUserError().status == s =>
           Logger.info("Fehler bei der Vorbereitung")
-
       }
-
-
-
     }
 
     def afterAll(): Unit = {
-      val count = deleteStepAppendedToConfig(RidToHash.getId(configIdHash).get)
-      require(count == 1, "Anzahl der geloeschten Steps " + count)
+      val count = deleteStepAppendedToConfig(RidToHash.getRId(this.configId).get)
+      require(count == 0, "Anzahl der geloeschten Steps " + count)
     }
 
 
@@ -82,7 +63,7 @@ class DeleteFirstStepSpecs extends Specification
         val jsonDeleteFirstStep = Json.toJsObject(JsonStepIn(
           json = JsonNames.DELETE_FIRST_STEP,
           params = JsonStepParams(
-            stepId = this.stepIdHash,
+            stepId = this.stepId,
         )))
 
         Logger.info("IN " + jsonDeleteFirstStep)

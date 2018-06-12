@@ -24,13 +24,13 @@ class WrapperStep {
 
     jsonStepIn.json match {
       case json if json == JsonNames.ADD_FIRST_STEP =>
-        val configRid = RidToHash.getId(jsonStepIn.params.configId) match {
-          case Some(id) => id
-          case None => "-1"
-        }
+//        val configRid = RidToHash.getId(jsonStepIn.params.configId) match {
+//          case Some(id) => id
+//          case None => "-1"
+//        }
         StepBO(
           Some(jsonStepIn.json),
-          Some(configRid), //configId
+          Some(jsonStepIn.params.configId), //configId
           None,//componentId
           Some(jsonStepIn.params.nameToShow), // nameToShow
           Some(jsonStepIn.params.kind), // kind
@@ -41,7 +41,7 @@ class WrapperStep {
         )
       case json if json == JsonNames.DELETE_FIRST_STEP || json == JsonNames.DELETE_STEP =>
 
-        val stepRId = RidToHash.getId(jsonStepIn.params.stepId)
+        val stepRId = RidToHash.getRId(jsonStepIn.params.stepId)
 
         StepBO(
           Some(jsonStepIn.json),
@@ -56,7 +56,7 @@ class WrapperStep {
         )
       case json if json == JsonNames.UPDATE_FIRST_STEP || json == JsonNames.UPDATE_STEP  =>
 
-        val stepRId = RidToHash.getId(jsonStepIn.params.stepId)
+        val stepRId = RidToHash.getRId(jsonStepIn.params.stepId)
 
         StepBO(
           Some(jsonStepIn.json),
@@ -71,7 +71,7 @@ class WrapperStep {
         )
       case json if json == JsonNames.ADD_STEP =>
 
-        val componentRId = RidToHash.getId(jsonStepIn.params.componentId)
+        val componentRId = RidToHash.getRId(jsonStepIn.params.componentId)
         StepBO(
           Some(jsonStepIn.json),
           None, //configId
@@ -98,11 +98,6 @@ class WrapperStep {
   def toJsonStepOut(stepBO: StepBO): JsonStepOut = {
     stepBO.json.get match {
       case json if json == JsonNames.ADD_FIRST_STEP =>
-        stepBO.stepId match {
-          case Some(id) => RidToHash.setIdAndHash(id)
-          case None => "-1"
-        }
-
         createJsonStepOut(stepBO, json)
       case json if json == JsonNames.DELETE_FIRST_STEP =>
         createJsonStepOut(stepBO, json)
@@ -133,10 +128,7 @@ class WrapperStep {
     JsonStepOut(
       json = json,
       result = JsonStepResult(
-        stepBO.stepId match {
-          case Some(stepId) => Some(RidToHash.getHash(stepId).get)
-          case None => None
-        },
+        stepBO.stepId,
         Set(),
         Set(),
         JsonStepStatus(
