@@ -1,6 +1,7 @@
 package org.genericConfig.admin.controllers.admin
 
-import org.genericConfig.admin.models.json.component.{JsonComponentIn, JsonComponentOut}
+import org.genericConfig.admin.models.json.component.{JsonComponentOu}
+import org.genericConfig.admin.shared.component.json.JsonComponentOuticConfig.admin.shared.component.json.JsonComponentIn
 import org.genericConfig.admin.models.json.connectionComponentToStep.{JsonConnectionComponentToStepIn, JsonConnectionComponentToStepOut}
 import org.genericConfig.admin.models.json.dependency.{JsonDependencyIn, JsonDependencyOut}
 import org.genericConfig.admin.shared.common.json.JsonNames
@@ -37,7 +38,7 @@ trait AdminWeb {
       case Some(JsonNames.UPDATE_STEP) => updateStep(receivedMessage, admin)
       case Some(JsonNames.ADD_STEP) => addStep(receivedMessage, admin)
       
-      case Some(JsonNames.CREATE_COMPONENT) => createComponent(receivedMessage, admin)
+      case Some(JsonNames.ADD_COMPONENT) => addComponent(receivedMessage, admin)
       case Some(JsonNames.CONNECTION_COMPONENT_TO_STEP) => connectComponentToStep(receivedMessage, admin)
       
       case Some(JsonNames.CREATE_DEPENDENCY) => createDependency(receivedMessage, admin)
@@ -96,27 +97,19 @@ trait AdminWeb {
     }
   }
   
-  private def createComponent(receivedMessage: JsValue, admin: Admin): JsValue = {
-    val componentIn: JsResult[JsonComponentIn] = Json.fromJson[JsonComponentIn](receivedMessage)
-    componentIn match {
-      case s : JsSuccess[JsonComponentIn] => s.get
-      case e : JsError => Logger.error("Errors -> CREATE_COMPONENT: " + JsError.toJson(e).toString())
+  private def addComponent(receivedMessage: JsValue, admin: Admin): JsValue = {
+    Json.fromJson[JsonComponentIn](receivedMessage) match {
+      case componentIn : JsSuccess[JsonComponentIn] => Json.toJson(admin.addComponent(componentIn.get))
+      case e : JsError => jsonError(JsonNames.ADD_COMPONENT, e)
     }
-    val componentOut: JsonComponentOut = admin.addComponent(componentIn.get)
-    Json.toJson(componentOut)
   }
   
   private def addStep(receivedMessage: JsValue, admin: Admin): JsValue = {
-    val stepIn: JsResult[JsonStepIn] = Json.fromJson[JsonStepIn](receivedMessage)
-    stepIn match {
-      case s : JsSuccess[JsonStepIn] => s.get
-      case e : JsError => Logger.error("Errors -> CREATE_STEPT: " + JsError.toJson(e).toString())
+    Json.fromJson[JsonStepIn](receivedMessage) match {
+      case stepIn : JsSuccess[JsonStepIn] => Json.toJson(admin.addStep(stepIn.get))
+      case e : JsError => jsonError(JsonNames.ADD_STEP, e)
     }
-    val stepOut: JsonStepOut = admin.addStep(stepIn.get)
-    Json.toJson(stepOut)
   }
-  
-  
   
   private def connectComponentToStep(receivedMessage: JsValue, admin: Admin): JsValue = {
     val connectionComponentToStepIn: JsResult[JsonConnectionComponentToStepIn] = 
@@ -131,9 +124,8 @@ trait AdminWeb {
   }
   
   private def configTree(receivedMessage: JsValue, admin: Admin): JsValue = {
-    val configTreeIn: JsResult[JsonConfigTreeIn] = Json.fromJson[JsonConfigTreeIn](receivedMessage)
-    configTreeIn match {
-      case _: JsSuccess[JsonConfigTreeIn] => Json.toJson(admin.getConfigTree(configTreeIn.get))
+    Json.fromJson[JsonConfigTreeIn](receivedMessage) match {
+      case configTreeIn: JsSuccess[JsonConfigTreeIn] => Json.toJson(admin.getConfigTree(configTreeIn.get))
       case e : JsError => jsonError(JsonNames.CONFIG_TREE, e)
     }
   }

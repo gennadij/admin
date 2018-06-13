@@ -1,6 +1,5 @@
 package org.genericConfig.admin.controllers.admin
 
-import org.genericConfig.admin.models.json.component.{JsonComponentIn, JsonComponentOut}
 import org.genericConfig.admin.models.json.connectionComponentToStep.{JsonConnectionComponentToStepIn, JsonConnectionComponentToStepOut}
 import org.genericConfig.admin.models.json.dependency.{JsonDependencyIn, JsonDependencyOut}
 import org.genericConfig.admin.models.logic._
@@ -14,6 +13,8 @@ import org.genericConfig.admin.shared.step.json._
 import org.genericConfig.admin.shared.user.json._
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeIn
+import org.genericConfig.admin.shared.component.json.JsonComponentIn
+import org.genericConfig.admin.shared.component.json.JsonComponentOut
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -180,8 +181,7 @@ class Admin extends Wrapper{
    * @return JsonComponentOut
    */
   def addComponent(jsonComponentIn: JsonComponentIn): JsonComponentOut = {
-//    toJsonComponentOut(Persistence.createComponent(toComponentIn(jsonComponentIn)))
-    ???
+    toJsonComponentOut(Component.addComponent(toComponentBO(jsonComponentIn)))
   }
   
   /**

@@ -16,7 +16,7 @@ object Database {
   def getFactory(): (Option[OrientGraphFactory], Status) = {
     try {
       val db = new Database().getFactory()
-//      db.exists()
+      db.exists()
       (Some(db), Success())
     }catch{
           case e: Exception => {

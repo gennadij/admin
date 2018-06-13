@@ -21,6 +21,14 @@ import org.genericConfig.admin.shared.step.json.JsonDependencyForAdditionalSteps
 import org.genericConfig.admin.shared.step.status._
 import org.genericConfig.admin.shared.user.bo.UserBO
 import org.genericConfig.admin.shared.user.status._
+import org.genericConfig.admin.shared.component.bo.ComponentBO
+import org.genericConfig.admin.shared.component.status.StatusAddComponent
+import org.genericConfig.admin.shared.component.status.AddComponentSuccess
+import org.genericConfig.admin.shared.component.status.AddComponentError
+import org.genericConfig.admin.shared.component.status.StatusComponent
+import org.genericConfig.admin.shared.component.status.AppendComponentError
+import org.genericConfig.admin.shared.component.status.StatusAppendComponent
+import org.genericConfig.admin.shared.component.status.AppendComponentSuccess
 
 
 /**
@@ -429,6 +437,16 @@ object Persistence {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
+    * @param stepId: String
+    * @return (StatusDeleteStep, Status)
+    */
+  def deleteStep(stepId: String): (StatusDeleteStep, Status) = {
+    Graph.deleteStep(stepId)
+  }
+  
+  /**
+    * @author Gennadi Heimann
+    * @version 0.1.6
     * @param stepBO: StepBO
     * @return StepBO
     */
@@ -456,64 +474,87 @@ object Persistence {
         )
     }
   }
+  /**
+   * @author Gennadi Heimann
+   *
+   * @version 0.1.0
+   *
+   * @param ComponentCS
+   *
+   * @return ComponentSC
+   */
+  def addComponent(componentBO: ComponentBO): ComponentBO = {
+    val (vComponent, statusAddComponnet, statusCommon): (Option[OrientVertex], StatusAddComponent, Status) = 
+      Graph.addComponent(componentBO)
 
-
-
-
-
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.6
-//    * @param
-//    * @return
-//    */
-  def deleteStep(stepId: String): (StatusDeleteStep, Status) = {
-    Graph.deleteStep(stepId)
+    statusAddComponnet match {
+      case AddComponentSuccess() => 
+        val (statusAppendComponent, statusCommon): (StatusAppendComponent, Status) = 
+          Graph.appendComponentToStep(componentBO)
+        statusAppendComponent match {
+          case AppendComponentSuccess() => 
+            ComponentBO(
+                stepId = componentBO.stepId,
+                componentId = Some(vComponent.get.getIdentity.toString),
+                nameToShow = Some(vComponent.get.getProperty(PropertyKeys.NAME_TO_SHOW)),
+                kind = Some(vComponent.get.getProperty(PropertyKeys.KIND)),
+                status = Some(StatusComponent(
+                    addComponent = Some(AddComponentSuccess()),
+                    appendComponent = Some(AppendComponentSuccess()),
+                    common = Some(statusCommon)
+                ))
+            )
+          case AppendComponentError() => 
+            ComponentBO(
+                status = Some(StatusComponent(
+                    addComponent = Some(AddComponentError()),
+                    appendComponent = Some(AppendComponentError()),
+                    common = Some(statusCommon)
+                ))
+            )
+        }
+      case AddComponentError() => 
+        ComponentBO(
+            status = Some(StatusComponent(
+                addComponent = Some(AddComponentError()),
+                appendComponent = Some(AppendComponentError()),
+                common = Some(statusCommon)
+            ))
+        )
+    }
+      
+      
+      
+      
+      vComponent match {
+      case Some(vComponent) => {
+        val eHasComponent: Option[OrientEdge] = HasComponentEdge.hasComponent(componentBO, vComponent)
+        eHasComponent match {
+          case Some(eHasComponent) => {
+            ComponentBO(
+                vComponent.getIdentity.toString,
+                StatusSuccessfulComponentCreated.status,
+                StatusSuccessfulComponentCreated.message
+            )
+          }
+          case None => {
+            ComponentOut(
+                "",
+                StatusErrorComponentGeneral.status,
+                StatusErrorComponentGeneral.message
+            )
+          }
+        }
+      }
+      case None => {
+        ComponentOut(
+            "",
+            StatusErrorComponentGeneral.status,
+            StatusErrorComponentGeneral.message
+        )
+      }
+    }
   }
-
-  //  /**
-  //   * creting von new Component and connect thies new Component with Step from param
-  //   *
-  //   * @author Gennadi Heimann
-  //   *
-  //   * @version 0.1.0
-  //   *
-  //   * @param ComponentCS
-  //   *
-  //   * @return ComponentSC
-  //   */
-  //  def createComponent(componentIn: ComponentIn): ComponentOut = {
-  //    val vComponent: Option[OrientVertex] = ComponentVertex.component(componentIn)
-  //
-  //    vComponent match {
-  //      case Some(vComponent) => {
-  //        val eHasComponent: Option[OrientEdge] = HasComponentEdge.hasComponent(componentIn, vComponent)
-  //        eHasComponent match {
-  //          case Some(eHasComponent) => {
-  //            ComponentOut(
-  //                vComponent.getIdentity.toString,
-  //                StatusSuccessfulComponentCreated.status,
-  //                StatusSuccessfulComponentCreated.message
-  //            )
-  //          }
-  //          case None => {
-  //            ComponentOut(
-  //                "",
-  //                StatusErrorComponentGeneral.status,
-  //                StatusErrorComponentGeneral.message
-  //            )
-  //          }
-  //        }
-  //      }
-  //      case None => {
-  //        ComponentOut(
-  //            "",
-  //            StatusErrorComponentGeneral.status,
-  //            StatusErrorComponentGeneral.message
-  //        )
-  //      }
-  //    }
-  //  }
 
 //  /**
 //    * @author Gennadi Heimann

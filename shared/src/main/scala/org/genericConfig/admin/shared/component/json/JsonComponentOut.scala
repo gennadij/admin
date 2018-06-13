@@ -1,4 +1,4 @@
-package org.genericConfig.admin.models.json.component
+package org.genericConfig.admin.shared.component.json
 
 import play.api.libs.json.Json
 import org.genericConfig.admin.shared.common.json.JsonNames
@@ -10,8 +10,8 @@ import org.genericConfig.admin.shared.common.json.JsonNames
  */
 
 case class JsonComponentOut (
-    json: String = JsonNames.CREATE_COMPONENT,
-    result: ComponentResult
+    json: String,
+    result: JsonComponentResult
 )
 
 object JsonComponentOut {

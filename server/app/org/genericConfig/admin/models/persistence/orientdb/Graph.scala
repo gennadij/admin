@@ -16,6 +16,13 @@ import play.api.Logger
 
 import scala.collection.JavaConverters._
 import org.genericConfig.admin.models.wrapper.RidToHash
+import org.genericConfig.admin.shared.component.bo.ComponentBO
+import org.genericConfig.admin.shared.component.status.AddComponentSuccess
+import org.genericConfig.admin.shared.component.status.AddComponentError
+import org.genericConfig.admin.shared.component.status.StatusAddComponent
+import org.genericConfig.admin.shared.component.status.StatusAppendComponent
+import org.genericConfig.admin.shared.component.status.AppendComponentSuccess
+import org.genericConfig.admin.shared.component.status.AppendComponentError
 
 
 /**
@@ -242,7 +249,7 @@ object Graph {
     * @return Int
     */
   def deleteStepAppendedToConfig(configId: String): Int = {
-    ((Database.getFactory(): @unchecked): @unchecked) match {
+    (Database.getFactory(): @unchecked) match {
       case (Some(dbFactory), Success()) =>
         val graph: OrientGraph = dbFactory.getTx
         new Graph(graph).deleteStepAppendedToConfig(configId)
@@ -258,12 +265,32 @@ object Graph {
     * @return (StatusUpdateStep, Status)
     */
   def updateStep(stepBO: StepBO): (StatusUpdateStep, Status) = {
-    ((Database.getFactory(): @unchecked): @unchecked) match {
+    (Database.getFactory(): @unchecked) match {
       case (Some(dbFactory), Success()) =>
         val graph: OrientGraph = dbFactory.getTx
         new Graph(graph).updateStep(stepBO)
       case (None, ODBConnectionFail()) =>
         (UpdateStepError(), ODBConnectionFail())
+    }
+  }
+  
+  def addComponent(componentBO: ComponentBO): (Option[OrientVertex], StatusAddComponent, Status) = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), Success()) =>
+        val graph: OrientGraph = dbFactory.getTx
+        new Graph(graph).addComponent(componentBO)
+      case (None, ODBConnectionFail()) =>
+        (None, AddComponentError(), ODBConnectionFail())
+    }
+  }
+  
+  def appendComponentToStep(componentBO: ComponentBO): (StatusAppendComponent, Status) = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), Success()) =>
+        val graph: OrientGraph = dbFactory.getTx
+        new Graph(graph).appendComponentTo(componentBO)
+      case (None, ODBConnectionFail()) =>
+        (AppendComponentError(), ODBConnectionFail())
     }
   }
 }
@@ -814,7 +841,76 @@ class Graph(graph: OrientGraph) {
     }
   }
 
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.0
+   * 
+   * @param
+   * 
+   * @return
+   */
+  private def addComponent(componentBO: ComponentBO): (Option[OrientVertex], StatusAddComponent, Status) = {
+    try{
+      val vComponent: OrientVertex = graph.addVertex(
+          "class:" + PropertyKeys.VERTEX_COMPONENT, 
+          PropertyKeys.NAME_TO_SHOW, componentBO.nameToShow,
+          PropertyKeys.KIND, componentBO.kind
+      )
+    graph.commit
+    (Some(vComponent), AddComponentSuccess(), Success())
+    }catch{
+      case e: ORecordDuplicatedException =>
+        Logger.error(e.printStackTrace().toString)
+        graph.rollback()
+        (None, AddComponentError(), ODBRecordDuplicated())
+      case e: ClassCastException =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (None, AddComponentError(), ODBClassCastError())
+      case e: Exception =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (None, AddComponentError(), ODBWriteError())
+    }
+  }
   
+  /**
+   * @author Gennadi Heimann
+   * 
+   * @version 0.1.0
+   * 
+   * @param componentCS: ComponentCS, componentSC: ComponentSC
+   * 
+   * @return OrientEdge
+   */
+  
+  private def appendComponentTo(componentBO: ComponentBO): (StatusAppendComponent, Status) = {
+    try{
+      val eHasComponent = graph.addEdge(
+          "class:" + PropertyKeys.EDGE_HAS_COMPONENT, 
+          graph.getVertex(componentBO.stepId), 
+          graph.getVertex(componentBO.componentId), 
+          PropertyKeys.EDGE_HAS_COMPONENT
+      )
+      graph.commit
+    
+      (AppendComponentSuccess(), Success())
+    }catch{
+      case e: ORecordDuplicatedException =>
+        Logger.error(e.printStackTrace().toString)
+        graph.rollback()
+        (AppendComponentError(), ODBRecordDuplicated())
+      case e: ClassCastException =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (AppendComponentError(), ODBClassCastError())
+      case e: Exception =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (AppendComponentError(), ODBWriteError())
+    }
+  }
 
   /**
     * @author Gennadi Heimann

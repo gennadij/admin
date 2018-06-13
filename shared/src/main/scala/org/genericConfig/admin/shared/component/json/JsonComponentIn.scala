@@ -1,4 +1,4 @@
-package org.genericConfig.admin.models.json.component
+package org.genericConfig.admin.shared.component.json
 
 import play.api.libs.json.Json
 import org.genericConfig.admin.shared.common.json.JsonNames
@@ -11,8 +11,8 @@ import org.genericConfig.admin.shared.common.json.JsonNames
  * {jsonId : 8, dto : Component, params : {adminId : #40:0, kind : immutable}
  */
 case class JsonComponentIn (
-    json: String = JsonNames.CREATE_COMPONENT,
-    params: ComponentParams
+    json: String,
+    params: JsonComponentParams
 )
 
 object JsonComponentIn {

@@ -1,4 +1,4 @@
-package org.genericConfig.admin.models.json.component
+package org.genericConfig.admin.shared.component.json
 
 import play.api.libs.json.Json
 
@@ -7,12 +7,12 @@ import play.api.libs.json.Json
  * 
  * Created by Gennadi Heimann 1.1.2017
  */
-case class ComponentParams (
+case class JsonComponentParams (
     stepId: String,
     nameToShow: String,
     kind: String
 )
 
-object ComponentParams {
-  implicit val format = Json.reads[ComponentParams]
+object JsonComponentParams {
+  implicit val format = Json.reads[JsonComponentParams]
 }

@@ -10,6 +10,10 @@ import org.genericConfig.admin.shared.step.bo._
 import org.genericConfig.admin.shared.step.json._
 import org.genericConfig.admin.shared.user.bo.UserBO
 import org.genericConfig.admin.shared.user.json._
+import org.genericConfig.admin.shared.component.bo.ComponentBO
+import org.genericConfig.admin.shared.component.json.JsonComponentIn
+import org.genericConfig.admin.shared.component.json.JsonComponentOut
+import org.genericConfig.admin.shared.component.json.JsonComponentResult
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -228,45 +232,32 @@ trait Wrapper{
   def toJsonStepOut(stepBO: StepBO): JsonStepOut = {
     new WrapperStep().toJsonStepOut(stepBO)
   }
-  
-
-  
 
   /**
    * @author Gennadi Heimann
    * 
-   * @version 0.1.5
+   * @version 0.1.6
    * 
-   * @param JsonComponentCS
+   * @param jsonComponentIn : JsonComponentIn
    * 
-   * @return JsonFirstStepSC
+   * @return ComponentBO
    */
-//  def toComponentIn(jsonComponentIn : JsonComponentIn): ComponentIn = {
-//    ComponentIn(
-//        jsonComponentIn.params.stepId
-//        , jsonComponentIn.params.nameToShow
-//        , jsonComponentIn.params.kind
-//    )
-//  }
+  def toComponentBO(jsonComponentIn : JsonComponentIn): ComponentBO = {
+    new WrapperComponent().toComponentBO(jsonComponentIn)
+  }
   
   /**
    * @author Gennadi Heimann
    * 
-   * @version 0.1.5
+   * @version 0.1.6
    * 
-   * @param ComponentSC
+   * @param componentBO: ComponentBO
    * 
-   * @return JsonComponentSC
+   * @return JsonComponentOut
    */
-//  def toJsonComponentOut(componentOut: ComponentOut): JsonComponentOut = {
-//    JsonComponentOut(
-//        result = ComponentResult(
-//            componentOut.componentId
-//            , componentOut.status
-//            , componentOut.message
-//        )
-//    )
-//  }
+  def toJsonComponentOut(componentBO: ComponentBO): JsonComponentOut = {
+    new WrapperComponent().toJsonComponentOut(componentBO)
+  }
   
   /**
    * @author Gennadi Heimann

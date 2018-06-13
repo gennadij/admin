@@ -128,7 +128,7 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
   
   def addComponentToStep(stepId: String, nameToShow: String = "Component", wC: WebClient): String = {
     val componentCS = Json.obj(
-        "json" -> JsonNames.CREATE_COMPONENT
+        "json" -> JsonNames.ADD_COMPONENT
         ,"params" -> Json.obj(
             "stepId" -> stepId,
             "nameToShow" -> nameToShow,

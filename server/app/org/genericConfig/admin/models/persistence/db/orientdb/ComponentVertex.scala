@@ -21,35 +21,7 @@ import com.tinkerpop.blueprints.Edge
  */
 object ComponentVertex {
   
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.0
-   * 
-   * @param
-   * 
-   * @return
-   */
-  def component(componentCS: ComponentIn): Option[OrientVertex] = {
-    val graph: OrientGraph = OrientDB.getFactory().getTx
-    
-    val vComponent: Any = try{
-      val vComponent: OrientVertex = graph.addVertex(
-          "class:" + PropertyKey.VERTEX_COMPONENT, 
-          PropertyKey.NAME_TO_SHOW, componentCS.nameToShow,
-          PropertyKey.KIND, componentCS.kind
-      )
-    graph.commit
-    vComponent
-    }catch{
-      case e: Exception => graph.rollback()
-    }
-    
-    vComponent match {
-      case vComponent: OrientVertex => Some(vComponent)
-      case e: Exception => None
-    }
-  }
+  
   
   /**
    * @author Gennadi Heimann
