@@ -218,6 +218,8 @@ class Config(configBO: ConfigBO) {
     
     val configTreeBOOut: ConfigTreeBO = 
       Persistence.getConfigTree(configTreeBO.copy(configId = RidToHash.getRId(configTreeBO.configId.get)))
+    
+    
       
     configTreeBOOut.copy(
         userId = RidToHash.getHash(configTreeBOOut.userId.get), 
