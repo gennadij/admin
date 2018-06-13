@@ -24,8 +24,8 @@ class GetUser(websocket: WebSocket) extends CommonFunction{
     val htmlMain =
       "<dev id='main' class='main'>" +
         "<p>User Page</p> </br>" +
-        "<p> userId = " + getUserOut.result.userId + "</p>" + 
-        "<p> Username = " + getUserOut.result.username + "</p>" + 
+        "<p> userId: " + getUserOut.result.userId.get.subSequence(0, 6) + "</p>" + 
+        "<p> Username: " + getUserOut.result.username.get + "</p>" + 
           drawButton(HtmlElementIds.getConfigsHtml, "GetConfigs") +
           drawButton(HtmlElementIds.deleteConfigHtml, "DeleteUser") +
           drawButton(HtmlElementIds.updateConfigHtml, "UpdateUser") +

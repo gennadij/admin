@@ -39,4 +39,16 @@ object HtmlElementIds {
   
   def inputSelectionCriteriumMaxHtml = "inputSelectionCriteriumMax"
   def inputSelectionCriteriumMaxJQuery = "#inputSelectionCriteriumMax"
+  
+  def updateStepHtml = "updateStep"
+  def updateStepJQuery = "#updateStep"
+  
+  def deleteStepHtml = "deleteStep"
+  def deleteStepJQuery = "deleteStep"
+  
+  def addComponentHtml = "addComponent"
+  def addComponentJQuery = "#addComponent"
+  
+  def deleteComponentHtml = "deleteComponent"
+  def deleteComponentJQuery = "#deleteComponent"
 }

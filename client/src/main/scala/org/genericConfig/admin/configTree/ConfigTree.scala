@@ -86,24 +86,26 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction{
     val htmlStep =  
       "<dev> " +
         "<div id='" + stepId + "' class='step'>" +
-          "ID " + stepId  + 
-          "<dev id='editStep" + stepId + "'  class='button'>" + 
-            "Edit" + 
-          "</dev>" + 
-          "<dev id='removeStep" + stepId + "' class='button'>" + 
-            "Remove" + 
-          "</dev>" + 
+          "ID " + stepId.subSequence(0, 6) + "   " + 
+          drawButton(HtmlElementIds.updateStepHtml, "update step") + 
+          drawButton(HtmlElementIds.deleteStepHtml, "delete step") + 
+          drawButton(HtmlElementIds.addComponentHtml, "add component") +
+          drawButton(HtmlElementIds.deleteComponentHtml, "delete component") +
           " </br>" + 
           "Kind " + stepKind  + 
           htmlComponents + 
         "</div>" +
       "</dev> "
          
-    jQuery(htmlStep).appendTo(jQuery("#main"))
+    jQuery(htmlStep).appendTo(jQuery(HtmlElementIds.mainJQuery))
     
-    jQuery(s"#editStep$stepId").on("click", () => editStep())
+    jQuery(HtmlElementIds.updateStepJQuery + stepId).on("click", () => editStep())
     
-    jQuery(s"#showConfigs").on("click", () => getConfigs(configTree.result.userId.get))
+    jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => getConfigs(configTree.result.userId.get))
+    
+    jQuery(HtmlElementIds.addComponentJQuery).on("click", () => addComponent)
+    
+    jQuery(HtmlElementIds.deleteComponentJQuery).on("click", () => deleteComponent)
     
     val componentIds = components map {c => prepareIdForHtml(c.componentId)}
     
@@ -124,6 +126,13 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction{
     }
   }
   
+  private def deleteComponent = {
+    println("delete Component")
+  }
+  
+  private def addComponent = {
+    println("addComponent")
+  }
   
   private def drawConfigTreeEmpty(configTree: JsonConfigTreeOut) = {
     
