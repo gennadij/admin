@@ -39,22 +39,20 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction{
   }
   
   private def drawConfigTreeNotEmpty(configTree: JsonConfigTreeOut) = {
-    println("drawConfigTree")
-    val stepIdRow = configTree.result.step.get.stepId
-
-    val stepId = prepareIdForHtml(stepIdRow)
+    val stepId = configTree.result.step.get.stepId
     
     val stepKind = configTree.result.step.get.kind
     
     val htmlMain =  
     "<dev id='main' class='main'> " +
         "<p>Konfigurationsbaum</p>" +
-        "<dev id='showConfigs' class='button'>" + 
-            "Konfigurationen" + 
+        drawButton(HtmlElementIds.getConfigsHtml, "Konfigurationen") + 
         "</dev>" +
     "</dev>"
     
     jQuery(htmlMain).appendTo(jQuery("section"))
+    
+    jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => getConfigs(configTree.result.userId.get))
     
     val components: Set[JsonConfigTreeComponent] = configTree.result.step.get.components
     
@@ -88,7 +86,7 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction{
     val htmlStep =  
       "<dev> " +
         "<div id='" + stepId + "' class='step'>" +
-          "ID " + stepIdRow  + 
+          "ID " + stepId  + 
           "<dev id='editStep" + stepId + "'  class='button'>" + 
             "Edit" + 
           "</dev>" + 
