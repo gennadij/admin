@@ -33,7 +33,6 @@ object PrepareConfigsForSpecsv011 extends AdminWeb with GeneralFunctionToPrepare
 
 
 
-  val userAddingComponentWithFirstStep =   "user5"
   val userAddingNewComponent =             "user6"
   val userConfigTreeFirstStep3Components = "user7"
   val userAddingStep =                     "user8"
@@ -41,30 +40,7 @@ object PrepareConfigsForSpecsv011 extends AdminWeb with GeneralFunctionToPrepare
   val userStepComponentPropertyNameToSchow = "user11"
   val userDefectAddingStep =               "user12_v0.1.5"
   val userAddingDefectComponent =             "user6_v0.1.5"
-  
-  
 
-
-  def prepareAddingComponentWithFirstStep(wC: WebClient) = {
-//    val graph: OrientGraph = OrientDB.getFactory.getTx
-//    val sql: String = s"select count(username) from AdminUser where username like '$userAddingComponentWithFirstStep'"
-//    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
-//    graph.commit
-//		val count: Int = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString().toInt).head
-//    if(count == 1 ) {
-//      Logger.info(s"Der User $userAddingComponentWithFirstStep ist schon erstellt worden")
-//    }else {
-//      registerNewUser(userAddingComponentWithFirstStep, wC)
-//
-//      val adminId = login(userAddingComponentWithFirstStep, wC)
-//
-//      println("adminId " + adminId)
-//
-//      val configId = createNewConfig(adminId, "http://contig/user5", wC)
-//
-//      println("ConfigId" + configId)
-//    }
-  }
   
   def prepareAddingFirstStep(wC: WebClient) = {
 //    val graph: OrientGraph = OrientDB.getFactory.getTx
