@@ -1,5 +1,6 @@
 package org.genericConfig.admin.controllers.admin
 
+import org.genericConfig.admin.shared.component.json._
 import org.genericConfig.admin.models.json.connectionComponentToStep.{JsonConnectionComponentToStepIn, JsonConnectionComponentToStepOut}
 import org.genericConfig.admin.models.json.dependency.{JsonDependencyIn, JsonDependencyOut}
 import org.genericConfig.admin.shared.common.json.JsonNames

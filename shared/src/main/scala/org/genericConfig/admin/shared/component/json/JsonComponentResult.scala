@@ -11,9 +11,9 @@ import play.api.libs.json.Json
 
 case class JsonComponentResult (
     componentId: String,
-    status: Nothing
+    status: JsonComponentStatus
 )
 
 object JsonComponentResult {
-  implicit val format = Json.writes[JsonComponentResult]
+  implicit val format = Json.format[JsonComponentResult]
 }

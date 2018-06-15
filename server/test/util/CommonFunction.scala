@@ -18,6 +18,7 @@ import org.genericConfig.admin.models.wrapper.RidToHash
 import org.genericConfig.admin.models.logic.Config
 import org.genericConfig.admin.models.logic.Step
 import org.genericConfig.admin.models.logic.User
+import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -108,11 +109,11 @@ trait CommonFunction {
           selectionCriteriumMin = Some(1)
         )
 
-        Logger.info("IN " + addstepBOIn)
+//        Logger.info("IN " + addstepBOIn)
 
         val addStepBOOut = Step.addFirstStep(addstepBOIn)
 
-        Logger.info("OUT" + addStepBOOut)
+//        Logger.info("OUT" + addStepBOOut)
 
         addStepBOOut.stepId
       case None =>
@@ -140,6 +141,13 @@ trait CommonFunction {
           case None => None
         }
     }
+  }
+
+  def getConfigTree(configId: String): ConfigTreeBO = {
+    val getCondifTreeBOIn = ConfigTreeBO(
+      configId = Some(configId)
+    )
+    Config.getConfigTree(getCondifTreeBOIn)
   }
 
   def deleteConfigVertex(username: String): Int = {
@@ -219,5 +227,24 @@ trait CommonFunction {
         configBOOut.status.get.getConfigs.get.status
       }
     }
+  }
+
+  /**
+    * @author Gennadi Heimann
+    *
+    * @version 0.1.6
+    *
+    * @param stepId: String
+    *
+    * @return Int
+    */
+
+  def deleteComponents(stepId: String): Int = {
+    val graph: OrientGraph = Database.getFactory()._1.get.getTx
+    val stepRId = RidToHash.getRId(stepId)
+    val sql: String = s"delete VERTEX Component where @rid in (select out('hasComponent') from Step where @rid='${stepRId.get}')"
+    val res: Int = graph.command(new OCommandSQL(sql)).execute()
+    graph.commit
+    res
   }
 }

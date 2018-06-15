@@ -13,17 +13,7 @@ import com.tinkerpop.blueprints.Edge
 import com.tinkerpop.blueprints.Vertex
 import com.tinkerpop.blueprints.Direction
 import org.genericConfig.admin.models.persistence.db.orientdb.PropertyKey
-import org.genericConfig.admin.models.json.StatusSuccessfulFirstStepCreated
-import play.api.Logger
-import org.genericConfig.admin.models.json.StatusSuccessfulRegist
-import org.genericConfig.admin.models.json.StatusSuccessfulLogin
-import org.genericConfig.admin.models.json.StatusSuccessfulConfig
-import org.genericConfig.admin.models.json.StatusSuccessfulComponentCreated
-import org.genericConfig.admin.models.json.StatusSuccessfulStepCreated
-import org.genericConfig.admin.models.json.StatusSuccessfulConnectionComponentToStep
 import org.genericConfig.admin.controllers.websocket.WebClient
-import org.genericConfig.admin.models.wrapper.step.StepIn
-import org.genericConfig.admin.models.json.StatusSuccessfulAdditionalStepInLevelCSCreated
 import org.genericConfig.admin.shared.common.json.JsonNames
 
 /**
@@ -97,7 +87,6 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
 			)
 		)
 		val jsonServerClient: JsValue = webClient.handleMessage(jsonClientServer)
-		    require((jsonServerClient \ "result" \ "status").asOpt[String].get == StatusSuccessfulLogin.status)
 		val configId = ((jsonServerClient \ "result" \ "configs")(0) \ "configId").asOpt[String].get
 		configId
 	}
@@ -119,10 +108,6 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
       )
       val firstStepSC: JsValue = webClient.handleMessage(firstStepCS)
       
-      require((firstStepSC \ "result" \ "status").asOpt[String].get == StatusSuccessfulFirstStepCreated.status)
-      
-      require((firstStepSC \ "result" \ "message").asOpt[String].get == StatusSuccessfulFirstStepCreated.message)
-      
       (firstStepSC \ "result" \ "stepId").asOpt[String].get
   }
   
@@ -136,9 +121,7 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
         )
     )
     val componentSC: JsValue = wC.handleMessage(componentCS)
-    require((componentSC \ "result" \ "status").asOpt[String].get == StatusSuccessfulComponentCreated.status)
-    require((componentSC \ "result" \ "message").asOpt[String].get == StatusSuccessfulComponentCreated.message)
-    
+
     (componentSC \ "result" \ "componentId").asOpt[String].get
   }
 
@@ -171,7 +154,6 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
 			)
 		val stepSCWithDependencies = wC.handleMessage(visualProposal)
 		
-		require((stepSCWithDependencies \ "result" \ "status").asOpt[String].get == StatusSuccessfulAdditionalStepInLevelCSCreated.status)
 		(stepSCWithDependencies \ "result" \ "stepId").asOpt[String].get
 	}
 
@@ -185,8 +167,6 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
 		)
 		val connectionComponentToStepSC = wC.handleMessage(connectionComponentToStepCS)
 
-		require((connectionComponentToStepSC \ "result" \ "status").asOpt[String].get == 
-		  StatusSuccessfulConnectionComponentToStep.status)
 	}
 
 	def getComponentId(nameToShow: String): String = {

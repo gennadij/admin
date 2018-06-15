@@ -11,16 +11,6 @@ import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.Direction
 import org.genericConfig.admin.models.persistence.OrientDB
 import play.api.Logger
-import org.genericConfig.admin.models.wrapper.step.StepIn
-import org.genericConfig.admin.models.wrapper.step.StepOut
-import org.genericConfig.admin.models.json.StatusErrorFaultyConfigId
-import org.genericConfig.admin.models.json.StatusErrorFirstStepExist
-import org.genericConfig.admin.models.json.StatusSuccessfulFirstStepCreated
-import org.genericConfig.admin.models.json.StatusErrorFaultyComponentId
-import org.genericConfig.admin.models.json.StatusErrorStepExist
-import org.genericConfig.admin.models.json.StatusSuccessfulStepCreated
-import org.genericConfig.admin.models.json.StatusErrorGeneral
-import org.genericConfig.admin.models.json.StatusErrorWriteToDB
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -30,72 +20,72 @@ import org.genericConfig.admin.models.json.StatusErrorWriteToDB
 
 object StepVertex {
   
-    /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.0
-   * @version 0.1.1
-   * @version 0.1.3
-   * @version 0.1.5
-   * 
-   * @param
-   * 
-   * @return
-   */
-  def step(stepCS: StepIn): StepOut = {
-    // TODO v 016 Erzeugen einen Step und Verbinden zu diesem Step in separaten Anfragen bearbeiten
-    //Pruefen wenn Stepp schon exestiert nur Component zu der vorhandenen Step verbinden.
-    // Es soll geprueft werden, nach dem der FirstStep erzeugt wurde, 
-    // wenn keine HasStep erstellt wurde sollte eine exception geworfen 
-    val graph: OrientGraph = OrientDB.getFactory().getTx
-    
-    
-    val componentId: String = stepCS.componentId
-    
-    try{
-      val vComponent = graph.getVertex(componentId)
-    
-      vComponent match {
-        case null => getErrorStepSC(StatusErrorFaultyComponentId.status, StatusErrorFaultyComponentId.message)
-        case _ => {
-          val countsOfSteps: Int = vComponent.getEdges(Direction.OUT, PropertyKey.EDGE_HAS_STEP).asScala.toList.size
-          countsOfSteps match {
-            case count if count > 0 => {
-              getErrorStepSC(StatusErrorStepExist.status, StatusErrorStepExist.message)
-            }
-            case _ => {
-              val vStep: Option[OrientVertex] = writeStepToDB(stepCS)
-              vStep match {
-                case Some(vStep) => {
-                  val step = getSuccessfulStepSC(vStep.getIdentity.toString, 
-                		  StatusSuccessfulStepCreated.status, StatusSuccessfulStepCreated.message)
-                		  step
-                }
-                case None => getErrorStepSC(StatusErrorGeneral.status, StatusErrorGeneral.message)
-              }
-              
-            }
-          }
-        }
-      }
-    }catch{
-      case e: Exception => {
-        graph.rollback()
-        getErrorStepSC(StatusErrorWriteToDB.status, StatusErrorWriteToDB.message)
-      }
-    }
-  }
+//    /**
+//   * @author Gennadi Heimann
+//   *
+//   * @version 0.1.0
+//   * @version 0.1.1
+//   * @version 0.1.3
+//   * @version 0.1.5
+//   *
+//   * @param
+//   *
+//   * @return
+//   */
+//  def step(stepCS: StepIn): StepOut = {
+//    // TODO v 016 Erzeugen einen Step und Verbinden zu diesem Step in separaten Anfragen bearbeiten
+//    //Pruefen wenn Stepp schon exestiert nur Component zu der vorhandenen Step verbinden.
+//    // Es soll geprueft werden, nach dem der FirstStep erzeugt wurde,
+//    // wenn keine HasStep erstellt wurde sollte eine exception geworfen
+//    val graph: OrientGraph = OrientDB.getFactory().getTx
+//
+//
+//    val componentId: String = stepCS.componentId
+//
+//    try{
+//      val vComponent = graph.getVertex(componentId)
+//
+//      vComponent match {
+//        case null => getErrorStepSC(StatusErrorFaultyComponentId.status, StatusErrorFaultyComponentId.message)
+//        case _ => {
+//          val countsOfSteps: Int = vComponent.getEdges(Direction.OUT, PropertyKey.EDGE_HAS_STEP).asScala.toList.size
+//          countsOfSteps match {
+//            case count if count > 0 => {
+//              getErrorStepSC(StatusErrorStepExist.status, StatusErrorStepExist.message)
+//            }
+//            case _ => {
+//              val vStep: Option[OrientVertex] = writeStepToDB(stepCS)
+//              vStep match {
+//                case Some(vStep) => {
+//                  val step = getSuccessfulStepSC(vStep.getIdentity.toString,
+//                		  StatusSuccessfulStepCreated.status, StatusSuccessfulStepCreated.message)
+//                		  step
+//                }
+//                case None => getErrorStepSC(StatusErrorGeneral.status, StatusErrorGeneral.message)
+//              }
+//
+//            }
+//          }
+//        }
+//      }
+//    }catch{
+//      case e: Exception => {
+//        graph.rollback()
+//        getErrorStepSC(StatusErrorWriteToDB.status, StatusErrorWriteToDB.message)
+//      }
+//    }
+//  }
   
   
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.3
-   * 
-   * @param
-   * 
-   * @return
-   */
+//  /**
+//   * @author Gennadi Heimann
+//   *
+//   * @version 0.1.3
+//   *
+//   * @param
+//   *
+//   * @return
+//   */
 
 //  def firstStep(firstStepCS: FirstStepIn): FirstStepOut = {
 //    
@@ -138,15 +128,15 @@ object StepVertex {
 //    }
 //  }
   
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.0
-   * 
-   * @param
-   * 
-   * @return
-   */
+//  /**
+//   * @author Gennadi Heimann
+//   *
+//   * @version 0.1.0
+//   *
+//   * @param
+//   *
+//   * @return
+//   */
   
   def removeStep(configId: String): Int = {
     val graph: OrientGraph = OrientDB.getFactory().getTx
@@ -194,15 +184,15 @@ object StepVertex {
 //        )
 //  }
   
-  private def getErrorStepSC(status: String, message: String): StepOut = {
-    StepOut(
-        "",
-        status,
-        message,
-        Set.empty,
-        Set.empty
-    )
-  }
+//  private def getErrorStepSC(status: String, message: String): StepOut = {
+//    StepOut(
+//        "",
+//        status,
+//        message,
+//        Set.empty,
+//        Set.empty
+//    )
+//  }
   
 //  private def getSuccessfulFirstStepSC(stepId: String, status: String, message: String): FirstStepOut = {
 //    FirstStepOut(
@@ -212,15 +202,15 @@ object StepVertex {
 //    )
 //  }
   
-  private def getSuccessfulStepSC(stepId: String, status: String, message: String) = {
-    StepOut(
-        stepId,
-        status,
-        message,
-        Set.empty,
-        Set.empty
-    )
-  }
+//  private def getSuccessfulStepSC(stepId: String, status: String, message: String) = {
+//    StepOut(
+//        stepId,
+//        status,
+//        message,
+//        Set.empty,
+//        Set.empty
+//    )
+//  }
   
 //  private def writeFirstStepToDB(firstStepCS: FirstStepIn): Option[OrientVertex] = {
 //    val graph: OrientGraph = OrientDB.getFactory().getTx
@@ -245,56 +235,56 @@ object StepVertex {
 //    }
 //  }
   
-  private def writeStepToDB(stepCS: StepIn): Option[OrientVertex] = {
-    val graph: OrientGraph = OrientDB.getFactory().getTx
-    try{
-      val vStep: OrientVertex = graph.addVertex(
-        "class:" + PropertyKey.VERTEX_STEP,
-        PropertyKey.KIND, stepCS.kind,
-        PropertyKey.NAME_TO_SHOW, stepCS.nameToShow,
-        PropertyKey.SELECTION_CRITERIUM_MIN, stepCS.selectionCriteriumMin.toString,
-        PropertyKey.SELECTION_CRITERIUM_MAX, stepCS.selectionCriteriumMax.toString
-      )
-      graph.commit
-      Some(vStep)
-    }catch{
-      case e: Exception => {
-        graph.rollback()
-        None
-      }
-    }
-    
-  }
+//  private def writeStepToDB(stepCS: StepIn): Option[OrientVertex] = {
+//    val graph: OrientGraph = OrientDB.getFactory().getTx
+//    try{
+//      val vStep: OrientVertex = graph.addVertex(
+//        "class:" + PropertyKey.VERTEX_STEP,
+//        PropertyKey.KIND, stepCS.kind,
+//        PropertyKey.NAME_TO_SHOW, stepCS.nameToShow,
+//        PropertyKey.SELECTION_CRITERIUM_MIN, stepCS.selectionCriteriumMin.toString,
+//        PropertyKey.SELECTION_CRITERIUM_MAX, stepCS.selectionCriteriumMax.toString
+//      )
+//      graph.commit
+//      Some(vStep)
+//    }catch{
+//      case e: Exception => {
+//        graph.rollback()
+//        None
+//      }
+//    }
+//
+//  }
   
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.5
-   * 
-   * @param
-   * 
-   * @return
-   */
-  
-  def getStep(stepId: String): Option[StepIn] = {
-     val graph: OrientGraph = OrientDB.getFactory().getTx
-      try{
-      val vStep = graph.getVertex(stepId)
-      
-      Some(
-          StepIn(
-              "",
-              vStep.getProperty(PropertyKey.NAME_TO_SHOW),
-              vStep.getProperty(PropertyKey.KIND),
-              vStep.getProperty(PropertyKey.SELECTION_CRITERIUM_MIN),
-              vStep.getProperty(PropertyKey.SELECTION_CRITERIUM_MAX)
-          )
-      )
-    }catch{
-      case e: Exception => {
-        graph.rollback()
-        None
-      }
-    }
-   }
+//  /**
+//   * @author Gennadi Heimann
+//   *
+//   * @version 0.1.5
+//   *
+//   * @param
+//   *
+//   * @return
+//   */
+//
+//  def getStep(stepId: String): Option[StepIn] = {
+//     val graph: OrientGraph = OrientDB.getFactory().getTx
+//      try{
+//      val vStep = graph.getVertex(stepId)
+//
+//      Some(
+//          StepIn(
+//              "",
+//              vStep.getProperty(PropertyKey.NAME_TO_SHOW),
+//              vStep.getProperty(PropertyKey.KIND),
+//              vStep.getProperty(PropertyKey.SELECTION_CRITERIUM_MIN),
+//              vStep.getProperty(PropertyKey.SELECTION_CRITERIUM_MAX)
+//          )
+//      )
+//    }catch{
+//      case e: Exception => {
+//        graph.rollback()
+//        None
+//      }
+//    }
+//   }
 }

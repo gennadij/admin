@@ -1,5 +1,6 @@
 package org.genericConfig.admin.models.persistence.orientdb
 
+import com.orientechnologies.orient.core.exception.OValidationException
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
 import com.tinkerpop.blueprints.{Direction, Edge, Vertex}
@@ -619,19 +620,19 @@ class Graph(graph: OrientGraph) {
     * @author Gennadi Heimann
     * @version 0.1.6
     * @param step: Option[OrientVertex]
-    * @return Set[Option[ComponentForConfigTreeBO]]
+    * @return Set[Option[ComponentForConfigTreeBO\]\]
     */
   private def getComponents(step: Option[OrientVertex]): Set[Option[ComponentForConfigTreeBO]] = {
 
     val components: Set[Option[ComponentForConfigTreeBO]] = step match {
-      case Some(step) => {
-        val eHasComponents: List[Edge] = step.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT).asScala.toList
+      case Some(s) =>
+        val eHasComponents: List[Edge] = s.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT).asScala.toList
         val components: List[Option[ComponentForConfigTreeBO]] = eHasComponents.map { eHasComponent => {
           val vComponent: OrientVertex = eHasComponent.getVertex(Direction.IN).asInstanceOf[OrientVertex]
           val eHasSteps: List[Edge] = vComponent.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList
           val component: Option[ComponentForConfigTreeBO] = eHasSteps match {
-            case List() => {
-              val componentIdHash: String = RidToHash.setIdAndHash(vComponent.getIdentity.toString())._2 
+            case List() =>
+              val componentIdHash: String = RidToHash.setIdAndHash(vComponent.getIdentity.toString())._2
               //create last component
               Some(ComponentForConfigTreeBO(
                 componentIdHash,
@@ -639,8 +640,7 @@ class Graph(graph: OrientGraph) {
                 None,
                 None
               ))
-            }
-            case eHasSteps => {
+            case _ =>
               val nextSteps: List[StepForConfigTreeBO] = eHasSteps.map {
                 eHasStep => {
                   val vStep: OrientVertex = eHasStep.getVertex(Direction.IN).asInstanceOf[OrientVertex]
@@ -654,7 +654,7 @@ class Graph(graph: OrientGraph) {
                 }
               }
               val defaultComponent: Option[ComponentForConfigTreeBO] = nextSteps.size match {
-                case count if count == 1 => {
+                case count if count == 1 =>
                   val componentIdHash: String = RidToHash.setIdAndHash(vComponent.getIdentity.toString())._2
                   Some(ComponentForConfigTreeBO(
                     componentIdHash,
@@ -662,17 +662,14 @@ class Graph(graph: OrientGraph) {
                     Some(nextSteps.head.stepId),
                     Some(nextSteps.head)
                   ))
-                }
                 case _ => None // Fehler eine Komponente kann nicht 2 Steps haben
               }
               defaultComponent
-            }
           }
           component
         }} //end eHasComponents.map
         val componentsWithoutDuplicate = findDuplicate(components)
         componentsWithoutDuplicate.toSet
-      }
       case None => Set.empty
     }
     components
@@ -687,7 +684,7 @@ class Graph(graph: OrientGraph) {
   def addStep(stepBO: StepBO): (Option[OrientVertex], StatusAddStep, Status) = {
     try {
       stepBO.componentId match {
-        case Some(componentId) =>
+        case Some(_) =>
           //create Step
           (None, AddStepSuccess(), Success())
         case None =>
@@ -742,10 +739,8 @@ class Graph(graph: OrientGraph) {
     try {
       val v: OrientVertex = graph.getVertex(id)
       val vStep: OrientVertex = graph.getVertex(stepId)
-      val eHasSetep = graph.addEdge(
-        PropertyKeys.CLASS + PropertyKeys.EDGE_HAS_FIRST_STEP,
-        v,
-        vStep,
+      graph.addEdge(
+        PropertyKeys.CLASS + PropertyKeys.EDGE_HAS_FIRST_STEP, v, vStep,
         PropertyKeys.EDGE_HAS_FIRST_STEP
       )
       graph.commit()
@@ -806,7 +801,7 @@ class Graph(graph: OrientGraph) {
   def deleteStepAppendedToConfig(configId: String): Int = {
     val res: Int = graph
       .command(new OCommandSQL(s"DELETE VERTEX Step where @rid IN (SELECT out() from Config where @rid='$configId')")).execute()
-    graph.commit
+    graph.commit()
     res
   }
 
@@ -846,9 +841,9 @@ class Graph(graph: OrientGraph) {
    * 
    * @version 0.1.0
    * 
-   * @param
+   * @param componentBO: ComponentBO
    * 
-   * @return
+   * @return (Option[OrientVertex], StatusAddComponent, Status)
    */
   private def addComponent(componentBO: ComponentBO): (Option[OrientVertex], StatusAddComponent, Status) = {
     try{
@@ -857,7 +852,7 @@ class Graph(graph: OrientGraph) {
           PropertyKeys.NAME_TO_SHOW, componentBO.nameToShow,
           PropertyKeys.KIND, componentBO.kind
       )
-    graph.commit
+    graph.commit()
     (Some(vComponent), AddComponentSuccess(), Success())
     }catch{
       case e: ORecordDuplicatedException =>
@@ -880,20 +875,20 @@ class Graph(graph: OrientGraph) {
    * 
    * @version 0.1.0
    * 
-   * @param componentCS: ComponentCS, componentSC: ComponentSC
+   * @param componentBO: ComponentBO
    * 
    * @return OrientEdge
    */
   
   private def appendComponentTo(componentBO: ComponentBO): (StatusAppendComponent, Status) = {
     try{
-      val eHasComponent = graph.addEdge(
-          "class:" + PropertyKeys.EDGE_HAS_COMPONENT, 
-          graph.getVertex(componentBO.stepId), 
-          graph.getVertex(componentBO.componentId), 
+      graph.addEdge(
+          "class:" + PropertyKeys.EDGE_HAS_COMPONENT,
+          graph.getVertex(componentBO.stepId.get),
+          graph.getVertex(componentBO.componentId.get),
           PropertyKeys.EDGE_HAS_COMPONENT
       )
-      graph.commit
+      graph.commit()
     
       (AppendComponentSuccess(), Success())
     }catch{
@@ -905,6 +900,14 @@ class Graph(graph: OrientGraph) {
         graph.rollback()
         Logger.error(e.printStackTrace().toString)
         (AppendComponentError(), ODBClassCastError())
+      case e: NullPointerException =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (AppendComponentError(), ODBNullPointer())
+      case e: OValidationException =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (AppendComponentError(), ODBValidationException())
       case e: Exception =>
         graph.rollback()
         Logger.error(e.printStackTrace().toString)
@@ -915,12 +918,11 @@ class Graph(graph: OrientGraph) {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param
-    * @return
+    * @param components: List[Option[ComponentForConfigTreeBO\]\]
+    * @return List[Option[ComponentForConfigTreeBO\]\]
     */
   def findDuplicate(
-                     components: List[Option[ComponentForConfigTreeBO]]): List[Option[ComponentForConfigTreeBO]] = components match {
-
+    components: List[Option[ComponentForConfigTreeBO]]): List[Option[ComponentForConfigTreeBO]] = components match {
     case List() => List()
     case x :: xs => insert(x, findDuplicate(xs))
   }
@@ -928,13 +930,13 @@ class Graph(graph: OrientGraph) {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param
-    * @return
+    * @param x : Option[ComponentForConfigTreeBO],
+    *        xs: List[Option[ComponentForConfigTreeBO]
+    * @return List[Option[ComponentForConfigTreeBO\]\]
     */
   def insert(
-              x: Option[ComponentForConfigTreeBO],
-              xs: List[Option[ComponentForConfigTreeBO]]): List[Option[ComponentForConfigTreeBO]] = xs match {
-
+    x: Option[ComponentForConfigTreeBO],
+    xs: List[Option[ComponentForConfigTreeBO]]): List[Option[ComponentForConfigTreeBO]] = xs match {
     case List() => List(x)
     case y :: ys => if (x.get.nextStepId == y.get.nextStepId)
       Some(x.get.copy(nextStep = None)) :: xs
@@ -947,16 +949,16 @@ class Graph(graph: OrientGraph) {
     *
     * @author Gennadi Heimann
     * @version 0.1.0
-    * @param configId
+    * @param configId: String
     * @return Count of deleted Vertexes
     */
 
-  def deleteAllStepsAndComponent(configId: String) = {
+  def deleteAllStepsAndComponent(configId: String): Int = {
     val sql: String = s"DELETE VERTEX V where @rid IN (traverse out() from (select out('hasFirstStep') " +
       s"from Config where @rid='$configId'))"
     val res: Int = graph
       .command(new OCommandSQL(sql)).execute()
-    graph.commit
+    graph.commit()
     res
   }
 }

@@ -14,5 +14,5 @@ case class JsonComponentParams (
 )
 
 object JsonComponentParams {
-  implicit val format = Json.reads[JsonComponentParams]
+  implicit val format = Json.format[JsonComponentParams]
 }

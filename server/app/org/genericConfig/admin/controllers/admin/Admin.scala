@@ -3,18 +3,12 @@ package org.genericConfig.admin.controllers.admin
 import org.genericConfig.admin.models.json.connectionComponentToStep.{JsonConnectionComponentToStepIn, JsonConnectionComponentToStepOut}
 import org.genericConfig.admin.models.json.dependency.{JsonDependencyIn, JsonDependencyOut}
 import org.genericConfig.admin.models.logic._
-import org.genericConfig.admin.models.persistence.Persistence
-import org.genericConfig.admin.models.tempConfig.TempConfigurations
 import org.genericConfig.admin.models.wrapper.Wrapper
-import org.genericConfig.admin.models.wrapper.step.StepIn
+import org.genericConfig.admin.shared.component.json.{JsonComponentIn, JsonComponentOut}
 import org.genericConfig.admin.shared.config.json._
-import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
+import org.genericConfig.admin.shared.configTree.json.{JsonConfigTreeIn, JsonConfigTreeOut}
 import org.genericConfig.admin.shared.step.json._
 import org.genericConfig.admin.shared.user.json._
-import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
-import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeIn
-import org.genericConfig.admin.shared.component.json.JsonComponentIn
-import org.genericConfig.admin.shared.component.json.JsonComponentOut
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -122,8 +116,8 @@ class Admin extends Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param configId: String
-   * 
+   * @param jsonConfigTreeIn: JsonConfigTreeIn
+   *
    * @return JsonConfigTreeOut
    */
   def getConfigTree(jsonConfigTreeIn: JsonConfigTreeIn): JsonConfigTreeOut = {
@@ -254,14 +248,14 @@ class Admin extends Wrapper{
 //      toVisualProposalForAdditionalStepsInOneLevelIn(jsonVisualProposalForAdditionalStepsInOneLevelIn)
       
     //hole Step aus der Temp
-    val stepCS: Option[StepIn] = TempConfigurations.getAndRemoveAdditionalStepInLevelCS
+//    val stepCS: Option[StepIn] = TempConfigurations.getAndRemoveAdditionalStepInLevelCS
     
 //    val dependencies: Set[JsonDependencyForAdditionalStepsInOneLevel] = Persistence.createDependenciesForAdditionalStepInLevelCS(
 //        stepCS, visualProposalForAdditionalStepsInOneLevel)
     
     //TODO v016 Prüfe auf leere Dependencies und Set.empty
     
-    val tempStep = Persistence.createAditionalStepInLevelCS(stepCS.get)
+//    val tempStep = Persistence.createAditionalStepInLevelCS(stepCS.get)
     
 //    JsonStepOut(
 //        result = JsonStepResult(

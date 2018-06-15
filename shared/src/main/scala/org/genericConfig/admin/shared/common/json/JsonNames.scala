@@ -23,7 +23,7 @@ object JsonNames {
   val DELETE_FIRST_STEP: String = "DeleteFirstStep"
   val UPDATE_FIRST_STEP: String = "UpdateFirstStep"
   
-  val ADD_COMPONENT: String = "CreateComponent"
+  val ADD_COMPONENT: String = "AddComponent"
   val CONFIG_TREE: String = "ConfigTree"
   val CONNECTION_COMPONENT_TO_STEP: String = "ConnectionComponentToStep"
   val CREATE_DEPENDENCY: String = "CreateDependency"

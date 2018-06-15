@@ -2,16 +2,11 @@ package org.genericConfig.admin.models.persistence.db.orientdb
 
 import scala.collection.JavaConverters._
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
-import com.tinkerpop.blueprints.impls.orient.OrientVertexType
-import com.orientechnologies.orient.core.metadata.schema.OType
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.genericConfig.admin.models.persistence.OrientDB
 import com.tinkerpop.blueprints.Direction
-import org.genericConfig.admin.models.wrapper.component.ComponentIn
-import org.genericConfig.admin.models.wrapper.component.ComponentOut
-import com.tinkerpop.blueprints.impls.orient.OrientEdge
 import com.tinkerpop.blueprints.Edge
 
 /**
@@ -74,45 +69,5 @@ object ComponentVertex {
         None
       }
     }
-  }
-  
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.0
-   * 
-   * @param
-   * 
-   * @return
-   */
-//  def deleteComponent(adminId: String) = {
-//    val graph: OrientGraph = OrientDB.getGraph
-//    val res: Int = graph
-//      .command(new OCommandSQL(s"DELETE VERTEX Component where adminId='$adminId'")).execute()
-//    graph.commit
-//  }
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.0
-   * 
-   * @param
-   * 
-   * @return
-   */
-  def update() = ???
-  
-  def deleteComponents(stepId: String): Int = {
-//    delete VERTEX Component where @rid in (select out('hasConfig').out('hasFirstStep').out('hasComponent') from AdminUser where username='user6')
-//    delete VERTEX Component where @rid in (select @rid from Step where @rid='')
-    val graph: OrientGraph = OrientDB.getFactory().getTx
-    val sql: String = s"delete VERTEX Component where @rid in " + 
-      s"(select out('hasComponent') from Step where @rid='$stepId')"
-    val res: Int = graph
-      .command(new OCommandSQL(sql)).execute()
-    graph.commit
-    res
   }
 }

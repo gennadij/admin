@@ -9,9 +9,6 @@ import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import com.tinkerpop.blueprints.impls.orient.OrientEdge
 import org.genericConfig.admin.models.wrapper.dependency.DependencyOut
 import org.genericConfig.admin.models.wrapper.dependency.DependencyIn
-import org.genericConfig.admin.models.json.StatusWarningAdditionalStepInLevelCS
-import org.genericConfig.admin.models.json.StatusSuccessfulGeneral
-import org.genericConfig.admin.models.json.StatusErrorGeneral
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
 import com.orientechnologies.orient.core.sql.OCommandSQL
 
@@ -51,42 +48,42 @@ object HasDependencyEdge {
       
   }
     
-  def checkForAdditionalStepInLevelComponentToStep(componentId: String): String = {
-    
-    val siblings: Option[List[OrientVertex]] = ComponentVertex.getAllSiblings(componentId)
-    
-    
-     siblings match {
-      case Some(siblings) => 
-        val vSteps: List[Vertex] = siblings.flatMap(_.getEdges(Direction.OUT, "hasStep").asScala.toList.map(_.getVertex(Direction.IN)))
-        vSteps.size match {
-          case count if count > 0 => {
-            // Der Step wurde schon in Level ComponentToStep angelegt, fuer weitere Steps braucht man hier Dependencies
-            // Der Benutzer bekommt ein Warning und Vorschlag die Dependencies einzulegen oder Strep gar nicht einzulegen
-            
-            ComponentVertex.getFatherStep(componentId) match {
-              case Some(fatherStep) => {
-                fatherStep match {
-                  case sC if fatherStep.getProperty(PropertyKey.SELECTION_CRITERIUM_MIN).toString.toInt > 1 =>
-                    StatusWarningAdditionalStepInLevelCS.status
-                  case sC if fatherStep.getProperty(PropertyKey.SELECTION_CRITERIUM_MAX).toString.toInt > 1 => 
-                    StatusWarningAdditionalStepInLevelCS.status
-                  case sC if fatherStep.getProperty(PropertyKey.SELECTION_CRITERIUM_MIN).toString.toInt == 1 => 
-                    StatusSuccessfulGeneral.status
-                  case sC if fatherStep.getProperty(PropertyKey.SELECTION_CRITERIUM_MAX).toString.toInt == 1 => 
-                    StatusSuccessfulGeneral.status
-                  case _ => StatusErrorGeneral.status
-                }
-              }
-              case None => StatusErrorGeneral.status
-            }
-          }
-          case count if count == 0 => StatusSuccessfulGeneral.status
-          case _ => StatusErrorGeneral.status
-        }
-      case None => StatusErrorGeneral.status
-    }
-  }
+//  def checkForAdditionalStepInLevelComponentToStep(componentId: String): String = {
+//
+//    val siblings: Option[List[OrientVertex]] = ComponentVertex.getAllSiblings(componentId)
+//
+//
+//     siblings match {
+//      case Some(siblings) =>
+//        val vSteps: List[Vertex] = siblings.flatMap(_.getEdges(Direction.OUT, "hasStep").asScala.toList.map(_.getVertex(Direction.IN)))
+//        vSteps.size match {
+//          case count if count > 0 => {
+//            // Der Step wurde schon in Level ComponentToStep angelegt, fuer weitere Steps braucht man hier Dependencies
+//            // Der Benutzer bekommt ein Warning und Vorschlag die Dependencies einzulegen oder Strep gar nicht einzulegen
+//
+//            ComponentVertex.getFatherStep(componentId) match {
+//              case Some(fatherStep) => {
+//                fatherStep match {
+//                  case sC if fatherStep.getProperty(PropertyKey.SELECTION_CRITERIUM_MIN).toString.toInt > 1 =>
+//                    StatusWarningAdditionalStepInLevelCS.status
+//                  case sC if fatherStep.getProperty(PropertyKey.SELECTION_CRITERIUM_MAX).toString.toInt > 1 =>
+//                    StatusWarningAdditionalStepInLevelCS.status
+//                  case sC if fatherStep.getProperty(PropertyKey.SELECTION_CRITERIUM_MIN).toString.toInt == 1 =>
+//                    StatusSuccessfulGeneral.status
+//                  case sC if fatherStep.getProperty(PropertyKey.SELECTION_CRITERIUM_MAX).toString.toInt == 1 =>
+//                    StatusSuccessfulGeneral.status
+//                  case _ => StatusErrorGeneral.status
+//                }
+//              }
+//              case None => StatusErrorGeneral.status
+//            }
+//          }
+//          case count if count == 0 => StatusSuccessfulGeneral.status
+//          case _ => StatusErrorGeneral.status
+//        }
+//      case None => StatusErrorGeneral.status
+//    }
+//  }
   
   def createDependenciesForAdditionalStepInLevelCS(
       targetComponentId: String,

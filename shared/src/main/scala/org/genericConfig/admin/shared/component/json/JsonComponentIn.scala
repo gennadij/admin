@@ -16,5 +16,5 @@ case class JsonComponentIn (
 )
 
 object JsonComponentIn {
-    implicit val format = Json.reads[JsonComponentIn]
+    implicit val format = Json.format[JsonComponentIn]
 }

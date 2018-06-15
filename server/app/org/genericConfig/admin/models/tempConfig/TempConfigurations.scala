@@ -1,6 +1,5 @@
 package org.genericConfig.admin.models.tempConfig
 
-import org.genericConfig.admin.models.wrapper.step.StepIn
 import play.api.Logger
 
 
@@ -18,7 +17,7 @@ object TempConfigurations {
   /**
    * Temporaerer Step 
    */
-  private var tempStep: Option[StepIn] = None
+  private var tempStep: Option[/*StepIn*/ Any] = None
   
   /**
    * @author Gennadi Heimann
@@ -27,11 +26,11 @@ object TempConfigurations {
    * 
    * Wenn der temporaerer Step belegt ist wird eine Exeption geworfen
    * 
-   * @param Option[StepSC]
+   * @param
    * 
    * @return Unit
    */
-  def setAdditionalStepInLevelCS(step: Option[StepIn]): Unit = {
+  def setAdditionalStepInLevelCS(step: Option[/*StepIn*/ Any]): Unit = {
     tempStep = tempStep match {
       case None => step
       case Some(tempStep) => throw new Exception("Der temporaerer Step wurde schon fruer mit einem Step belegt!")
@@ -49,7 +48,7 @@ object TempConfigurations {
    * 
    * @return Option[StepSC]
    */
-  def getAndRemoveAdditionalStepInLevelCS: Option[StepIn] = {
+  def getAndRemoveAdditionalStepInLevelCS: Option[/*StepIn*/ Any] = {
     val step = tempStep match {
       case None => throw new Exception("Der temporaerer Step wurde noch nicht gesetzt")
       case Some(tempStep) => Some(tempStep)
