@@ -11,6 +11,8 @@ import play.api.libs.json.Json
 
 case class JsonComponentResult (
     componentId: String,
+    nameToShow: String,
+    kind: String,
     status: JsonComponentStatus
 )
 

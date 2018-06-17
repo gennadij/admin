@@ -849,8 +849,8 @@ class Graph(graph: OrientGraph) {
     try{
       val vComponent: OrientVertex = graph.addVertex(
           "class:" + PropertyKeys.VERTEX_COMPONENT, 
-          PropertyKeys.NAME_TO_SHOW, componentBO.nameToShow,
-          PropertyKeys.KIND, componentBO.kind
+          PropertyKeys.NAME_TO_SHOW, componentBO.nameToShow.get,
+          PropertyKeys.KIND, componentBO.kind.get
       )
     graph.commit()
     (Some(vComponent), AddComponentSuccess(), Success())

@@ -1,114 +1,131 @@
-//package models.v011
-//
-//import org.specs2.mutable.Specification
-//import models.admin.AdminWeb
-//import org.specs2.specification.BeforeAfterAll
-//import org.junit.runner.RunWith
-//import org.specs2.runner.JUnitRunner
-//import play.api.libs.json.Json
-//import models.json.DTOIds
-//import models.json.DTONames
-//import play.api.libs.json.JsValue
-//import models.persistence.db.orientdb.ComponentVertex
-//import models.preparingConfigs.GeneralFunctionToPrepareConfigs
-//import models.persistence.GlobalConfigForDB
-//import models.persistence.TestDB
-//import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
-//import play.api.libs.json.JsValue.jsValueToJsLookup
-//import play.api.libs.json.Json.toJsFieldJsValueWrapper
-//import models.json.StatusSuccessfulComponentCreated
-//import models.preparingConfigs.PrepareConfigsForSpecsv011
-//import models.websocket.WebClient
-//
-///**
-// * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
-// * 
-// * Created by Gennadi Heimann 16.01.2017
-// * 
-// * Username = user6
-// */
-//
-//@RunWith(classOf[JUnitRunner])
-//class AddingNewComponentSpecs extends Specification 
-//    with BeforeAfterAll
-//    with GeneralFunctionToPrepareConfigs{
-//  
-//  val wC = WebClient.init
-//  
-//  def beforeAll() = {
-//    PrepareConfigsForSpecsv011.prepareAddingNewComponent(wC)
-//    val firstStepId = getFirstStep("user6")
-//    val count = ComponentVertex.deleteComponents(firstStepId)
-//    require(count == 4, "Anzahl der geloeschten Components " + count)
-//  }
-//  def afterAll() = {}
-//  
-//  
-//  "Diese Specification spezifiziert das Hinzufügen von der Component zu dem Step (user6)" >> {
-//    "Fuege 3 Components zu dem Firststep hinzu" >> {
-//      val firstStepId = getFirstStep("user6")
-//        
-//      val componentCS_1 = Json.obj(
-//        "dtoId" -> DTOIds.CREATE_COMPONENT,
-//        "dto" -> DTONames.CREATE_COMPONENT
-//        ,"params" -> Json.obj(
-//          "stepId" -> firstStepId,
-//          "nameToShow" -> "Component",
-//          "kind" -> "immutable"
-//        )
-//      )
-//      
-//      val componentSC_1: JsValue = wC.handleMessage(componentCS_1)
-//      (componentSC_1 \ "dtoId").asOpt[Int].get === DTOIds.CREATE_COMPONENT
-//      (componentSC_1 \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT
-//      (componentSC_1 \ "result" \ "status").asOpt[String].get === StatusSuccessfulComponentCreated.status
-//      (componentSC_1 \ "result" \ "message").asOpt[String].get === StatusSuccessfulComponentCreated.message
-//      
-//      val componentCS_2 = Json.obj(
-//        "dtoId" -> DTOIds.CREATE_COMPONENT,
-//        "dto" -> DTONames.CREATE_COMPONENT
-//        ,"params" -> Json.obj(
-//          "stepId" -> firstStepId,
-//          "nameToShow" -> "Component",
-//          "kind" -> "immutable"
-//        )
-//      )
-//      val componentSC_2: JsValue = wC.handleMessage(componentCS_2)
-//      (componentSC_2 \ "dtoId").asOpt[Int].get === DTOIds.CREATE_COMPONENT
-//      (componentSC_2 \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT
-//      (componentSC_2 \ "result" \ "status").asOpt[String].get === StatusSuccessfulComponentCreated.status
-//      (componentSC_2 \ "result" \ "message").asOpt[String].get === StatusSuccessfulComponentCreated.message
-//      
-//      val componentCS_3 = Json.obj(
-//        "dtoId" -> DTOIds.CREATE_COMPONENT,
-//        "dto" -> DTONames.CREATE_COMPONENT
-//        ,"params" -> Json.obj(
-//          "stepId" -> firstStepId,
-//          "nameToShow" -> "Component",
-//          "kind" -> "immutable"
-//        )
-//      )
-//      val componentSC_3: JsValue = wC.handleMessage(componentCS_3)
-//      (componentSC_3 \ "dtoId").asOpt[Int].get === DTOIds.CREATE_COMPONENT
-//      (componentSC_3 \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT
-//      (componentSC_3 \ "result" \ "status").asOpt[String].get === StatusSuccessfulComponentCreated.status
-//      (componentSC_3 \ "result" \ "message").asOpt[String].get === StatusSuccessfulComponentCreated.message
-//      
-//      val componentCS_4 = Json.obj(
-//        "dtoId" -> DTOIds.CREATE_COMPONENT,
-//        "dto" -> DTONames.CREATE_COMPONENT
-//        ,"params" -> Json.obj(
-//          "stepId" -> firstStepId,
-//          "nameToShow" -> "Component",
-//          "kind" -> "immutable"
-//        )
-//      )
-//      val componentSC_4: JsValue = wC.handleMessage(componentCS_4)
-//      (componentSC_4 \ "dtoId").asOpt[Int].get === DTOIds.CREATE_COMPONENT
-//      (componentSC_4 \ "dto").asOpt[String].get === DTONames.CREATE_COMPONENT
-//      (componentSC_4 \ "result" \ "status").asOpt[String].get === StatusSuccessfulComponentCreated.status
-//      (componentSC_4 \ "result" \ "message").asOpt[String].get === StatusSuccessfulComponentCreated.message
-//    
-//    }
-//  }
-//}
+package org.genericConfig.admin.models.component
+
+import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.common.status.Success
+import org.genericConfig.admin.shared.component.json.{JsonComponentIn, JsonComponentParams}
+import org.genericConfig.admin.shared.component.status.{AddComponentSuccess, AppendComponentSuccess}
+import org.genericConfig.admin.shared.user.status.{AddUserAlreadyExist, AddUserError, AddUserSuccess}
+import org.junit.runner.RunWith
+import org.specs2.mutable.Specification
+import org.specs2.runner.JUnitRunner
+import org.specs2.specification.BeforeAfterAll
+import play.api.Logger
+import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
+import play.api.libs.json.JsValue.jsValueToJsLookup
+import play.api.libs.json.{JsValue, Json}
+import util.CommonFunction
+
+/**
+  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+  *
+  * Created by Gennadi Heimann 16.01.2017
+  *
+  * Username = user6
+  */
+
+@RunWith(classOf[JUnitRunner])
+class AddingNewComponentSpecs extends Specification
+  with BeforeAfterAll
+  with CommonFunction {
+
+  val wC: WebClient = WebClient.init
+
+  val usernamePassword = "user6"
+  var userId = ""
+  var stepId = ""
+
+  def beforeAll(): Unit = {
+    val (username: String, userId: String, status: String) = addUser(this.usernamePassword)
+
+    status match {
+      case s if AddUserSuccess().status == s =>
+
+        val configId: String = addConfig(userId, s"http://contig/$username")._1
+        this.stepId = addStep(Some(configId), None).get
+      case s if AddUserAlreadyExist().status == s =>
+        val configId = getConfigId(usernamePassword = this.usernamePassword, configUrl = s"http://contig/$username")
+        val configTreeBO = getConfigTree(configId)
+
+        this.stepId = configTreeBO.configTree.get.stepId
+
+      case s if AddUserError().status == s =>
+        Logger.info("Fehler bei der Vorbereitung")
+    }
+  }
+
+  def afterAll(): Unit = {
+    val count = deleteComponents(this.stepId)
+    require(count == 3, "deleted components " + count)
+
+  }
+
+
+  "Diese Specification spezifiziert das Hinzufügen von der Component zu dem Step (user6)" >> {
+    "Fuege 3 Components zu dem Firststep hinzu" >> {
+
+      val jsonAddComponentIn_1 = Json.toJson(JsonComponentIn(
+        json = JsonNames.ADD_COMPONENT,
+        params = JsonComponentParams(
+          stepId = stepId,
+          nameToShow = "Component 1",
+          kind = "immutable"
+        )
+      ))
+      Logger.info("IN " + jsonAddComponentIn_1)
+      val jsonAddComponentOut_1: JsValue = wC.handleMessage(jsonAddComponentIn_1)
+      Logger.info("OUT " + jsonAddComponentOut_1)
+
+      (jsonAddComponentOut_1 \ "json").asOpt[String] === Some(JsonNames.ADD_COMPONENT)
+      (jsonAddComponentOut_1 \ "result" \ "nameToShow").asOpt[String] === Some("Component 1")
+      (jsonAddComponentOut_1 \ "result" \ "kind").asOpt[String] === Some("immutable")
+      (jsonAddComponentOut_1 \ "result" \ "status" \ "addComponent" \ "status").asOpt[String] ===
+        Some(AddComponentSuccess().status)
+      (jsonAddComponentOut_1 \ "result" \ "status" \ "appendComponent" \ "status").asOpt[String] ===
+        Some(AppendComponentSuccess().status)
+      (jsonAddComponentOut_1 \ "result" \ "status" \ "common" \ "status").asOpt[String] === Some(Success().status)
+
+      val jsonAddComponentIn_2 = Json.toJson(JsonComponentIn(
+        json = JsonNames.ADD_COMPONENT,
+        params = JsonComponentParams(
+          stepId = stepId,
+          nameToShow = "Component 1",
+          kind = "immutable"
+        )
+      ))
+      Logger.info("IN " + jsonAddComponentIn_2)
+      val jsonAddComponentOut_2: JsValue = wC.handleMessage(jsonAddComponentIn_2)
+      Logger.info("OUT " + jsonAddComponentOut_2)
+
+      (jsonAddComponentOut_2 \ "json").asOpt[String] === Some(JsonNames.ADD_COMPONENT)
+      (jsonAddComponentOut_2 \ "result" \ "nameToShow").asOpt[String] === Some("Component 1")
+      (jsonAddComponentOut_2 \ "result" \ "kind").asOpt[String] === Some("immutable")
+      (jsonAddComponentOut_2 \ "result" \ "status" \ "addComponent" \ "status").asOpt[String] ===
+        Some(AddComponentSuccess().status)
+      (jsonAddComponentOut_2 \ "result" \ "status" \ "appendComponent" \ "status").asOpt[String] ===
+        Some(AppendComponentSuccess().status)
+      (jsonAddComponentOut_2 \ "result" \ "status" \ "common" \ "status").asOpt[String] === Some(Success().status)
+
+      val jsonAddComponentIn_3 = Json.toJson(JsonComponentIn(
+        json = JsonNames.ADD_COMPONENT,
+        params = JsonComponentParams(
+          stepId = stepId,
+          nameToShow = "Component 1",
+          kind = "immutable"
+        )
+      ))
+      Logger.info("IN " + jsonAddComponentIn_3)
+      val jsonAddComponentOut_3: JsValue = wC.handleMessage(jsonAddComponentIn_1)
+      Logger.info("OUT " + jsonAddComponentOut_3)
+
+      (jsonAddComponentOut_3 \ "json").asOpt[String] === Some(JsonNames.ADD_COMPONENT)
+      (jsonAddComponentOut_3 \ "result" \ "nameToShow").asOpt[String] === Some("Component 1")
+      (jsonAddComponentOut_3 \ "result" \ "kind").asOpt[String] === Some("immutable")
+      (jsonAddComponentOut_3 \ "result" \ "status" \ "addComponent" \ "status").asOpt[String] ===
+        Some(AddComponentSuccess().status)
+      (jsonAddComponentOut_3 \ "result" \ "status" \ "appendComponent" \ "status").asOpt[String] ===
+        Some(AppendComponentSuccess().status)
+      (jsonAddComponentOut_3 \ "result" \ "status" \ "common" \ "status").asOpt[String] === Some(Success().status)
+    }
+  }
+}

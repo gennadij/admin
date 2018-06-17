@@ -484,7 +484,7 @@ object Persistence {
         val (statusAppendComponent, statusCommon): (StatusAppendComponent, Status) = 
           Graph.appendComponentToStep(componentBOForAppend)
         statusAppendComponent match {
-          case AppendComponentSuccess() => 
+          case AppendComponentSuccess() =>
             ComponentBO(
                 stepId = componentBO.stepId,
                 componentId = Some(vComponent.get.getIdentity.toString),
