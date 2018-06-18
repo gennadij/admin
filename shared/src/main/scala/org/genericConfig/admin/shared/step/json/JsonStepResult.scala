@@ -1,10 +1,7 @@
 package org.genericConfig.admin.shared.step.json
 
-import play.api.libs.json.Json
-import org.genericConfig.admin.shared.common.json.JsonStatus
 import play.api.libs.functional.syntax._
-import play.api.libs.json.Format
-import play.api.libs.json.JsPath
+import play.api.libs.json.{Format, JsPath}
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

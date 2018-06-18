@@ -11,14 +11,41 @@ import org.genericConfig.admin.shared.component.bo.ComponentBO
   * Created by Gennadi Heimann 13.06.2018
   */
 object Component {
-  
+
+  /**
+    * @author Gennadi Heimann
+    *
+    * @version 0.1.0
+    *
+    * @param componentBO: ComponentBO
+    *
+    * @return ComponentBO
+    */
   def addComponent(componentBO: ComponentBO): ComponentBO = {
     val stepRid = RidToHash.getRId(componentBO.stepId.get)
-    val compponentBOOut: ComponentBO = Persistence.addComponent(componentBO.copy(stepId = stepRid))
+    val componentBOOut: ComponentBO = Persistence.addComponent(componentBO.copy(stepId = stepRid))
 
-    compponentBOOut.copy(
+    componentBOOut.copy(
       json = Some(JsonNames.ADD_COMPONENT),
-      componentId = Some(RidToHash.setIdAndHash(compponentBOOut.componentId.get)._2)
+      componentId = Some(RidToHash.setIdAndHash(componentBOOut.componentId.get)._2)
+    )
+  }
+
+  /**
+    * @author Gennadi Heimann
+    *
+    * @version 0.1.0
+    *
+    * @param componentBO: ComponentBO
+    *
+    * @return ComponentBO
+    */
+  def deleteComponent(componentBO: ComponentBO): ComponentBO = {
+    val componentBOIn = componentBO.copy(componentId = RidToHash.getRId(componentBO.componentId.get))
+    val componentBOOut: ComponentBO = Persistence.deleteComponent(componentBOIn)
+
+    componentBOOut.copy(
+      json = Some(JsonNames.DELETE_COMPONENT)
     )
   }
 }

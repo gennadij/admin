@@ -15,9 +15,9 @@ import org.genericConfig.admin.shared.user.json.{JsonUserIn, JsonUserOut, JsonUs
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 import org.genericConfig.admin.models.wrapper.RidToHash
-import org.genericConfig.admin.models.logic.Config
-import org.genericConfig.admin.models.logic.Step
-import org.genericConfig.admin.models.logic.User
+import org.genericConfig.admin.models.logic.{Component, Config, Step, User}
+import org.genericConfig.admin.shared.component.bo.ComponentBO
+import org.genericConfig.admin.shared.component.status.StatusAddComponent
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 
 /**
@@ -246,5 +246,19 @@ trait CommonFunction {
     val res: Int = graph.command(new OCommandSQL(sql)).execute()
     graph.commit
     res
+  }
+
+  def addComponentToStep(stepId: String): (String, StatusAddComponent) = {
+
+    val componentBOIn = ComponentBO(
+      json = Some(JsonNames.ADD_COMPONENT),
+      stepId = Some(stepId),
+      nameToShow = Some("Component to Delete"),
+      kind = Some("immutable")
+    )
+
+    val componentBOOut = Component.addComponent(componentBOIn)
+
+    (componentBOOut.componentId.get, componentBOOut.status.get.addComponent.get)
   }
 }

@@ -464,6 +464,7 @@ object Persistence {
         )
     }
   }
+
   /**
    * @author Gennadi Heimann
    *
@@ -516,6 +517,21 @@ object Persistence {
     }
   }
 
+  /**
+    * @author Gennadi Heimann
+    *
+    * @version 0.1.0
+    *
+    * @param componentBO: ComponentBO
+    *
+    * @return ComponentBO
+    */
+  def deleteComponent(componentBO: ComponentBO): ComponentBO = {
+    val (statusDeleteComponent, statusCommon): (StatusDeleteComponent, Status)= Graph.deleteComponent(componentBO)
+    ComponentBO(status = Some(StatusComponent(
+      deleteComponent = Some(statusDeleteComponent), common = Some(statusCommon)
+    )))
+  }
 //  /**
 //    * @author Gennadi Heimann
 //    * @version 0.1.0

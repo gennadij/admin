@@ -15,11 +15,11 @@ case class DeleteStepSuccess() extends StatusDeleteStep {
 }
 
 case class DeleteStepError() extends StatusDeleteStep {
-  def status: String = "Delete_STEP_ERROR"
+  def status: String = "DELETE_STEP_ERROR"
   def message: String = ""
 }
 
 case class DeleteStepDefectID() extends StatusDeleteStep {
-  def status: String = "DELETE_CONFIG_DEFECT_ID"
+  def status: String = "DELETE_STEP_DEFECT_ID"
   def message: String = ""
 }

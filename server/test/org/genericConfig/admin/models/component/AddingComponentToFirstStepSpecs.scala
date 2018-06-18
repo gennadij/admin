@@ -66,17 +66,17 @@ class AddingComponentToFirstStepSpecs extends Specification
       val jsonAddComponentIn = Json.toJson(JsonComponentIn(
         json = JsonNames.ADD_COMPONENT,
         params = JsonComponentParams(
-          stepId = stepId,
-          nameToShow = "Component 1",
-          kind = "immutable"
+          stepId = Some(stepId),
+          nameToShow = Some("Component 1"),
+          kind = Some("immutable")
         )
       ))
       Logger.info("IN " + jsonAddComponentIn)
       val jsonAddComponentOut: JsValue = wC.handleMessage(jsonAddComponentIn)
       Logger.info("OUT " + jsonAddComponentOut)
       (jsonAddComponentOut \ "json").asOpt[String] === Some(JsonNames.ADD_COMPONENT)
-//      (jsonAddComponentOut \ "result" \ "nameToShow").asOpt[String] === Some("Component 1")
-//      (jsonAddComponentOut \ "result" \ "kind").asOpt[String] === Some("immutable")
+      (jsonAddComponentOut \ "result" \ "nameToShow").asOpt[String] === Some("Component 1")
+      (jsonAddComponentOut \ "result" \ "kind").asOpt[String] === Some("immutable")
       (jsonAddComponentOut \ "result" \ "status" \ "addComponent" \ "status").asOpt[String] ===
         Some(AddComponentSuccess().status)
       (jsonAddComponentOut \ "result" \ "status" \ "appendComponent" \ "status").asOpt[String] ===

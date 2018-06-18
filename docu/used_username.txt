@@ -17,3 +17,4 @@ user_v016_6 -> UpdateConfigSpec
 user_v016_7 -> GetEmptyConfigsSpecs
 user_v016_10 -> DeleteFirstStepSpecs
 user_updateStep_v016_1 -> UpdateStepSpecs
+user_v016_11 -> DeleteComponentSpecs

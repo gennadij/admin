@@ -67,9 +67,9 @@ class AddingNewComponentSpecs extends Specification
       val jsonAddComponentIn_1 = Json.toJson(JsonComponentIn(
         json = JsonNames.ADD_COMPONENT,
         params = JsonComponentParams(
-          stepId = stepId,
-          nameToShow = "Component 1",
-          kind = "immutable"
+          stepId = Some(stepId),
+          nameToShow = Some("Component 1"),
+          kind = Some("immutable")
         )
       ))
       Logger.info("IN " + jsonAddComponentIn_1)
@@ -88,9 +88,9 @@ class AddingNewComponentSpecs extends Specification
       val jsonAddComponentIn_2 = Json.toJson(JsonComponentIn(
         json = JsonNames.ADD_COMPONENT,
         params = JsonComponentParams(
-          stepId = stepId,
-          nameToShow = "Component 1",
-          kind = "immutable"
+          stepId = Some(stepId),
+          nameToShow = Some("Component 1"),
+          kind = Some("immutable")
         )
       ))
       Logger.info("IN " + jsonAddComponentIn_2)
@@ -109,9 +109,9 @@ class AddingNewComponentSpecs extends Specification
       val jsonAddComponentIn_3 = Json.toJson(JsonComponentIn(
         json = JsonNames.ADD_COMPONENT,
         params = JsonComponentParams(
-          stepId = stepId,
-          nameToShow = "Component 1",
-          kind = "immutable"
+          stepId = Some(stepId),
+          nameToShow = Some("Component 1"),
+          kind = Some("immutable")
         )
       ))
       Logger.info("IN " + jsonAddComponentIn_3)

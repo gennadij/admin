@@ -10,7 +10,7 @@ import org.genericConfig.admin.shared.common.status.Status
 case class StatusComponent (
     addComponent: Option[StatusAddComponent] = None,
     appendComponent: Option[StatusAppendComponent] = None,
-    deleteComponent: Option[Any] = None,
+    deleteComponent: Option[StatusDeleteComponent] = None,
     updateComponent: Option[Any] = None,
     common: Option[Status] = None
 )
