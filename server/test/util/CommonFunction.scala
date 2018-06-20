@@ -248,13 +248,13 @@ trait CommonFunction {
     res
   }
 
-  def addComponentToStep(stepId: String): (String, StatusAddComponent) = {
+  def addComponentToStep(stepId: String, nameToShow: String, kind: String): (String, StatusAddComponent) = {
 
     val componentBOIn = ComponentBO(
       json = Some(JsonNames.ADD_COMPONENT),
       stepId = Some(stepId),
-      nameToShow = Some("Component to Delete"),
-      kind = Some("immutable")
+      nameToShow = Some(nameToShow),
+      kind = Some(kind)
     )
 
     val componentBOOut = Component.addComponent(componentBOIn)

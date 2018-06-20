@@ -192,6 +192,21 @@ class Admin extends Wrapper{
   }
 
   /**
+    * @author Gennadi Heimann
+    *
+    * @version 0.1.0
+    *
+    * @param jsonComponentIn: JsonComponentIn
+    *
+    * @return JsonComponentOut
+    */
+  def updateComponent(jsonComponentIn: JsonComponentIn): JsonComponentOut = {
+    toJsonComponentOut(Component.updateComponent(toComponentBO(jsonComponentIn)))
+  }
+
+
+
+  /**
    * @author Gennadi Heimann
    * 
    * @version 0.1.0

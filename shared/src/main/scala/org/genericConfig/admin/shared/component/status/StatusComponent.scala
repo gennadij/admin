@@ -11,6 +11,6 @@ case class StatusComponent (
     addComponent: Option[StatusAddComponent] = None,
     appendComponent: Option[StatusAppendComponent] = None,
     deleteComponent: Option[StatusDeleteComponent] = None,
-    updateComponent: Option[Any] = None,
+    updateComponent: Option[StatusUpdateComponent] = None,
     common: Option[Status] = None
 )

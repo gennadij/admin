@@ -10,7 +10,6 @@ import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import org.genericConfig.admin.controllers.websocket.WebClient
-import models.preparingConfigs.PrepareConfigsForSpecsv011
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.Success
 import org.genericConfig.admin.shared.user.status.GetUserSuccess

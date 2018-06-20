@@ -48,4 +48,25 @@ object Component {
       json = Some(JsonNames.DELETE_COMPONENT)
     )
   }
+
+  /**
+    * @author Gennadi Heimann
+    *
+    * @version 0.1.0
+    *
+    * @param componentBO: ComponentBO
+    *
+    * @return ComponentBO
+    */
+  def updateComponent(componentBO: ComponentBO): ComponentBO = {
+    val componentRid = RidToHash.getRId(componentBO.componentId.get)
+    val componentBOOut: ComponentBO = Persistence.updateComponent(
+      componentBO.copy(componentId = componentRid)
+    )
+
+    componentBOOut.copy(
+      json = Some(JsonNames.UPDATE_COMPONENT),
+      componentId = RidToHash.getHash(componentBOOut.componentId.get)
+    )
+  }
 }

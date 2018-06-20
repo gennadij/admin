@@ -47,7 +47,7 @@ object Persistence {
         UserBO(
           username = Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),
           userId = Some(vUser.get.getIdentity.toString),
-          status =Some(StatusUser(
+          status = Some(StatusUser(
             addUser = Some(AddUserSuccess()),
             common = Some(Success())
           ))
@@ -74,7 +74,7 @@ object Persistence {
   /**
     * @author Gennadi Heimann
     * @version 0.1.0
-    * @param username: String, password: String
+    * @param username : String, password: String
     * @return UserBO
     */
   def getUser(username: String, password: String): UserBO = {
@@ -122,7 +122,7 @@ object Persistence {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param configId: String
+    * @param configId : String
     * @return String, Status
     */
   def getUserId(configId: String): (String, Status) = {
@@ -132,7 +132,7 @@ object Persistence {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param userId: String, configUrl: String
+    * @param userId : String, configUrl: String
     * @return ConfigBO
     */
   def addConfig(userId: String, configUrl: String): ConfigBO = {
@@ -176,7 +176,7 @@ object Persistence {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param userId: String, configId: String
+    * @param userId : String, configId: String
     * @return Status
     */
   def appendConfigTo(userId: String, configId: String): Status = {
@@ -186,7 +186,7 @@ object Persistence {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param userId: String
+    * @param userId : String
     * @return ConfigBO
     */
   def getConfigs(userId: String): ConfigBO = {
@@ -220,7 +220,7 @@ object Persistence {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param configId: String, configUrl: String
+    * @param configId : String, configUrl: String
     * @return ConfigBO
     */
   def deleteConfig(configId: String, configUrl: String): ConfigBO = {
@@ -258,7 +258,7 @@ object Persistence {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param configId: String, configUrl: String
+    * @param configId : String, configUrl: String
     * @return ConfigBO
     */
   def updateConfig(configId: String, configUrl: String): ConfigBO = {
@@ -298,7 +298,7 @@ object Persistence {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param configTreeBO: ConfigTreeBO
+    * @param configTreeBO : ConfigTreeBO
     * @return ConfigTreeBO
     */
   def getConfigTree(configTreeBO: ConfigTreeBO): ConfigTreeBO = {
@@ -319,7 +319,7 @@ object Persistence {
                 GetConfigTreeSuccess(),
                 Success()
               )
-            ))
+              ))
           case _ =>
             ConfigTreeBO(
               None,
@@ -329,7 +329,7 @@ object Persistence {
                 GetConfigTreeError(),
                 status
               )
-            ))
+              ))
         }
       case GetConfigTreeEmpty() =>
         status match {
@@ -342,7 +342,7 @@ object Persistence {
                 GetConfigTreeEmpty(),
                 Success()
               )
-            ))
+              ))
           case _ =>
             ConfigTreeBO(
               None,
@@ -352,7 +352,7 @@ object Persistence {
                 GetConfigTreeError(),
                 status
               )
-            ))
+              ))
         }
       case GetConfigTreeError() => ConfigTreeBO(
         None,
@@ -362,14 +362,14 @@ object Persistence {
           GetConfigTreeError(),
           commonStatus
         )
-      ))
+        ))
     }
   }
 
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param stepBO: StepBO
+    * @param stepBO : StepBO
     * @return StepBO
     */
   def addStep(stepBO: StepBO): StepBO = {
@@ -427,17 +427,17 @@ object Persistence {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param stepId: String
+    * @param stepId : String
     * @return (StatusDeleteStep, Status)
     */
   def deleteStep(stepId: String): (StatusDeleteStep, Status) = {
     Graph.deleteStep(stepId)
   }
-  
+
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param stepBO: StepBO
+    * @param stepBO : StepBO
     * @return StepBO
     */
   def updateStep(stepBO: StepBO): StepBO = {
@@ -466,179 +466,207 @@ object Persistence {
   }
 
   /**
-   * @author Gennadi Heimann
-   *
-   * @version 0.1.0
-   *
-   * @param componentBO: ComponentBO
-   *
-   * @return ComponentBO
-   */
+    * @author Gennadi Heimann
+    * @version 0.1.0
+    * @param componentBO : ComponentBO
+    * @return ComponentBO
+    */
   def addComponent(componentBO: ComponentBO): ComponentBO = {
-    val (vComponent, statusAddComponnet, statusCommon): (Option[OrientVertex], StatusAddComponent, Status) = 
+    val (vComponent, statusAddComponnet, statusCommon): (Option[OrientVertex], StatusAddComponent, Status) =
       Graph.addComponent(componentBO)
 
     statusAddComponnet match {
       case AddComponentSuccess() =>
         val componentBOForAppend =
           ComponentBO(stepId = componentBO.stepId, componentId = Some(vComponent.get.getIdentity.toString))
-        val (statusAppendComponent, statusCommon): (StatusAppendComponent, Status) = 
+        val (statusAppendComponent, statusCommon): (StatusAppendComponent, Status) =
           Graph.appendComponentToStep(componentBOForAppend)
         statusAppendComponent match {
           case AppendComponentSuccess() =>
             ComponentBO(
-                stepId = componentBO.stepId,
-                componentId = Some(vComponent.get.getIdentity.toString),
-                nameToShow = Some(vComponent.get.getProperty(PropertyKeys.NAME_TO_SHOW)),
-                kind = Some(vComponent.get.getProperty(PropertyKeys.KIND)),
-                status = Some(StatusComponent(
-                    addComponent = Some(AddComponentSuccess()),
-                    appendComponent = Some(AppendComponentSuccess()),
-                    common = Some(statusCommon)
-                ))
+              stepId = componentBO.stepId,
+              componentId = Some(vComponent.get.getIdentity.toString),
+              nameToShow = Some(vComponent.get.getProperty(PropertyKeys.NAME_TO_SHOW)),
+              kind = Some(vComponent.get.getProperty(PropertyKeys.KIND)),
+              status = Some(StatusComponent(
+                addComponent = Some(AddComponentSuccess()),
+                appendComponent = Some(AppendComponentSuccess()),
+                common = Some(statusCommon)
+              ))
             )
-          case AppendComponentError() => 
+          case AppendComponentError() =>
             ComponentBO(
-                status = Some(StatusComponent(
-                    addComponent = Some(AddComponentError()),
-                    appendComponent = Some(AppendComponentError()),
-                    common = Some(statusCommon)
-                ))
-            )
-        }
-      case AddComponentError() => 
-        ComponentBO(
-            status = Some(StatusComponent(
+              status = Some(StatusComponent(
                 addComponent = Some(AddComponentError()),
                 appendComponent = Some(AppendComponentError()),
                 common = Some(statusCommon)
-            ))
+              ))
+            )
+        }
+      case AddComponentError() =>
+        ComponentBO(
+          status = Some(StatusComponent(
+            addComponent = Some(AddComponentError()),
+            appendComponent = Some(AppendComponentError()),
+            common = Some(statusCommon)
+          ))
         )
     }
   }
 
   /**
     * @author Gennadi Heimann
-    *
     * @version 0.1.0
-    *
-    * @param componentBO: ComponentBO
-    *
+    * @param componentBO : ComponentBO
     * @return ComponentBO
     */
   def deleteComponent(componentBO: ComponentBO): ComponentBO = {
-    val (statusDeleteComponent, statusCommon): (StatusDeleteComponent, Status)= Graph.deleteComponent(componentBO)
+    val (statusDeleteComponent, statusCommon): (StatusDeleteComponent, Status) = Graph.deleteComponent(componentBO)
     ComponentBO(status = Some(StatusComponent(
       deleteComponent = Some(statusDeleteComponent), common = Some(statusCommon)
     )))
   }
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.0
-//    * @param StepSC
-//    * @return StepCS
-//    */
-//  def createStep(stepIn: StepIn): StepOut = {
-//
-//    val status: String = HasDependencyEdge.checkForAdditionalStepInLevelComponentToStep(stepIn.componentId)
-//
-//    status match {
-//      case StatusSuccessfulGeneral.status => {
-//        val stepSC: StepOut = StepVertex.step(stepIn)
-//
-//        stepSC.status match {
-//          case StatusErrorFaultyComponentId.status => {
-//            stepSC
-//          }
-//          case StatusErrorStepExist.status => {
-//            stepSC
-//          }
-//          case StatusSuccessfulStepCreated.status => {
-//            val eHasStep: OrientEdge = HasStepEdge.hasStep(stepIn, stepSC)
-//            eHasStep match {
-//              case null => {
-//                StepOut(
-//                  "",
-//                  StatusErrorFaultyStepId.status,
-//                  StatusErrorFaultyStepId.message,
-//                  Set.empty,
-//                  Set.empty
-//                )
-//              }
-//              case _ => stepSC
-//            }
-//          }
-//        }
-//      }
-//      case StatusWarningAdditionalStepInLevelCS.status => {
-//        // Speichere StepCS temporaer
-//        try {
-//          TempConfigurations.setAdditionalStepInLevelCS(Some(stepIn))
-//        } catch {
-//          case e: Exception => e.printStackTrace()
-//        }
-//
-//        StepOut(
-//          "",
-//          StatusWarningAdditionalStepInLevelCS.status,
-//          StatusWarningAdditionalStepInLevelCS.message,
-//          VisualizationProposal.proposal,
-//          Set.empty
-//        )
-//      }
-//      case StatusErrorGeneral.status => {
-//        StepOut(
-//          "",
-//          StatusErrorGeneral.status,
-//          StatusErrorGeneral.message,
-//          Set.empty,
-//          Set.empty
-//        )
-//      }
-//    }
-//  }
 
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.5
-//    *
-//    *          Nach der pruefung in der Methode createStep
-//    *          wird hier der zusaetzlicher Schritt in der Level ComponentStep angelegt
-//    * @param StepSC
-//    * @return StepCS
-//    */
-//  def createAditionalStepInLevelCS(stepCS: StepIn) = {
-//
-//    val stepSC: StepOut = StepVertex.step(stepCS)
-//
-//    stepSC.status match {
-//      case StatusSuccessfulStepCreated.status => {
-//        val eHasStep: OrientEdge = HasStepEdge.hasStep(stepCS, stepSC)
-//        eHasStep match {
-//          case null => {
-//            StepOut(
-//              "",
-//              StatusErrorFaultyStepId.status,
-//              StatusErrorFaultyStepId.message,
-//              Set.empty,
-//              Set.empty
-//            )
-//          }
-//          case _ => stepSC
-//        }
-//      }
-//      case _ => stepSC
-//    }
-//  }
+  /**
+    * @author Gennadi Heimann
+    * @version 0.1.0
+    * @param componentBO : ComponentBO
+    * @return ComponentBO
+    */
+  def updateComponent(componentBO: ComponentBO): ComponentBO = {
+    val (vComponent, statusUpdateComponnet, statusCommon): (Option[OrientVertex], StatusUpdateComponent, Status) =
+      Graph.updateComponent(componentBO)
 
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.0
-//    * @param ConnectionComponentToStepCS
-//    * @param componentId : String,
-//    * @param stepId      : String
-//    * @return ConnectionComponentToStepSC
-//    */
+    statusUpdateComponnet match {
+      case UpdateComponentSuccess() =>
+        ComponentBO(
+          json = Some(JsonNames.UPDATE_COMPONENT),
+          componentId = componentBO.componentId,
+          nameToShow = componentBO.nameToShow,
+          kind = componentBO.kind,
+          status = Some(StatusComponent(
+            updateComponent = Some(UpdateComponentSuccess()),
+            common = Some(Success())
+          )
+          ))
+      case UpdateComponentError() =>
+        ComponentBO(
+          json = Some(JsonNames.UPDATE_COMPONENT),
+          status = Some(StatusComponent(
+            updateComponent = Some(UpdateComponentError()),
+            common = Some(statusCommon)
+          ))
+        )
+    }
+  }
+
+  //  /**
+  //    * @author Gennadi Heimann
+  //    * @version 0.1.0
+  //    * @param StepSC
+  //    * @return StepCS
+  //    */
+  //  def createStep(stepIn: StepIn): StepOut = {
+  //
+  //    val status: String = HasDependencyEdge.checkForAdditionalStepInLevelComponentToStep(stepIn.componentId)
+  //
+  //    status match {
+  //      case StatusSuccessfulGeneral.status => {
+  //        val stepSC: StepOut = StepVertex.step(stepIn)
+  //
+  //        stepSC.status match {
+  //          case StatusErrorFaultyComponentId.status => {
+  //            stepSC
+  //          }
+  //          case StatusErrorStepExist.status => {
+  //            stepSC
+  //          }
+  //          case StatusSuccessfulStepCreated.status => {
+  //            val eHasStep: OrientEdge = HasStepEdge.hasStep(stepIn, stepSC)
+  //            eHasStep match {
+  //              case null => {
+  //                StepOut(
+  //                  "",
+  //                  StatusErrorFaultyStepId.status,
+  //                  StatusErrorFaultyStepId.message,
+  //                  Set.empty,
+  //                  Set.empty
+  //                )
+  //              }
+  //              case _ => stepSC
+  //            }
+  //          }
+  //        }
+  //      }
+  //      case StatusWarningAdditionalStepInLevelCS.status => {
+  //        // Speichere StepCS temporaer
+  //        try {
+  //          TempConfigurations.setAdditionalStepInLevelCS(Some(stepIn))
+  //        } catch {
+  //          case e: Exception => e.printStackTrace()
+  //        }
+  //
+  //        StepOut(
+  //          "",
+  //          StatusWarningAdditionalStepInLevelCS.status,
+  //          StatusWarningAdditionalStepInLevelCS.message,
+  //          VisualizationProposal.proposal,
+  //          Set.empty
+  //        )
+  //      }
+  //      case StatusErrorGeneral.status => {
+  //        StepOut(
+  //          "",
+  //          StatusErrorGeneral.status,
+  //          StatusErrorGeneral.message,
+  //          Set.empty,
+  //          Set.empty
+  //        )
+  //      }
+  //    }
+  //  }
+
+  //  /**
+  //    * @author Gennadi Heimann
+  //    * @version 0.1.5
+  //    *
+  //    *          Nach der pruefung in der Methode createStep
+  //    *          wird hier der zusaetzlicher Schritt in der Level ComponentStep angelegt
+  //    * @param StepSC
+  //    * @return StepCS
+  //    */
+  //  def createAditionalStepInLevelCS(stepCS: StepIn) = {
+  //
+  //    val stepSC: StepOut = StepVertex.step(stepCS)
+  //
+  //    stepSC.status match {
+  //      case StatusSuccessfulStepCreated.status => {
+  //        val eHasStep: OrientEdge = HasStepEdge.hasStep(stepCS, stepSC)
+  //        eHasStep match {
+  //          case null => {
+  //            StepOut(
+  //              "",
+  //              StatusErrorFaultyStepId.status,
+  //              StatusErrorFaultyStepId.message,
+  //              Set.empty,
+  //              Set.empty
+  //            )
+  //          }
+  //          case _ => stepSC
+  //        }
+  //      }
+  //      case _ => stepSC
+  //    }
+  //  }
+
+  //  /**
+  //    * @author Gennadi Heimann
+  //    * @version 0.1.0
+  //    * @param ConnectionComponentToStepCS
+  //    * @param componentId : String,
+  //    * @param stepId      : String
+  //    * @return ConnectionComponentToStepSC
+  //    */
 
   def connectComponentToStep(
                               connectionComponentToStepIn: ConnectionComponentToStepIn
@@ -667,7 +695,7 @@ object Persistence {
      * 
      */
 
-//    HasStepEdge.hasStep(connectionComponentToStepIn)
+    //    HasStepEdge.hasStep(connectionComponentToStepIn)
 
     //    val status: String = HasDependencyEdge.checkForAdditionalStepInLevelComponentToStep(connectionComponentToStepIn.componentId)
     //
@@ -711,137 +739,137 @@ object Persistence {
     ???
   }
 
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.5
-//    * @param
-//    * @return
-//    */
-//  def connectToAditionalStepInLevelCS(stepCS: StepIn) = {
-//
-//    val stepSC: StepOut = StepVertex.step(stepCS)
-//
-//    stepSC.status match {
-//      case StatusSuccessfulStepCreated.status => {
-//        val eHasStep: OrientEdge = HasStepEdge.hasStep(stepCS, stepSC)
-//        eHasStep match {
-//          case null => {
-//            StepOut(
-//              "",
-//              StatusErrorFaultyStepId.status,
-//              StatusErrorFaultyStepId.message,
-//              Set.empty,
-//              Set.empty
-//            )
-//          }
-//          case _ => stepSC
-//        }
-//      }
-//      case _ => stepSC
-//    }
-//  }
+  //  /**
+  //    * @author Gennadi Heimann
+  //    * @version 0.1.5
+  //    * @param
+  //    * @return
+  //    */
+  //  def connectToAditionalStepInLevelCS(stepCS: StepIn) = {
+  //
+  //    val stepSC: StepOut = StepVertex.step(stepCS)
+  //
+  //    stepSC.status match {
+  //      case StatusSuccessfulStepCreated.status => {
+  //        val eHasStep: OrientEdge = HasStepEdge.hasStep(stepCS, stepSC)
+  //        eHasStep match {
+  //          case null => {
+  //            StepOut(
+  //              "",
+  //              StatusErrorFaultyStepId.status,
+  //              StatusErrorFaultyStepId.message,
+  //              Set.empty,
+  //              Set.empty
+  //            )
+  //          }
+  //          case _ => stepSC
+  //        }
+  //      }
+  //      case _ => stepSC
+  //    }
+  //  }
 
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.2
-//    *
-//    *          ChangeLog 0.1.2_3
-//    * @param DependencyCS
-//    * @return DependencySC
-//    */
+  //  /**
+  //    * @author Gennadi Heimann
+  //    * @version 0.1.2
+  //    *
+  //    *          ChangeLog 0.1.2_3
+  //    * @param DependencyCS
+  //    * @return DependencySC
+  //    */
   def createDependency(dependencyIn: DependencyIn): DependencyOut = {
 
-//    val eHasDependency: Option[OrientEdge] = HasDependencyEdge.createDependency(dependencyIn)
-//
-//    eHasDependency match {
-//      case Some(eHasDependency) => {
-//        DependencyOut(
-//          dependencyIn.componentFromId,
-//          dependencyIn.componentToId,
-//          eHasDependency.getIdentity.toString,
-//          eHasDependency.getProperty(PropertyKey.DEPENDENCY_TYPE),
-//          eHasDependency.getProperty(PropertyKey.VISUALIZATION),
-//          eHasDependency.getProperty(PropertyKey.NAME_TO_SHOW),
-//          StatusSuccessfulDependencyCreated.status,
-//          StatusSuccessfulDependencyCreated.message
-//        )
-//      }
-//      case None => {
-//        DependencyOut(
-//          "",
-//          "",
-//          "",
-//          "",
-//          "",
-//          "",
-//          StatusErrorDependencyCreated.status,
-//          StatusErrorDependencyCreated.message
-//        )
-//      }
-//    }
-  ???
+    //    val eHasDependency: Option[OrientEdge] = HasDependencyEdge.createDependency(dependencyIn)
+    //
+    //    eHasDependency match {
+    //      case Some(eHasDependency) => {
+    //        DependencyOut(
+    //          dependencyIn.componentFromId,
+    //          dependencyIn.componentToId,
+    //          eHasDependency.getIdentity.toString,
+    //          eHasDependency.getProperty(PropertyKey.DEPENDENCY_TYPE),
+    //          eHasDependency.getProperty(PropertyKey.VISUALIZATION),
+    //          eHasDependency.getProperty(PropertyKey.NAME_TO_SHOW),
+    //          StatusSuccessfulDependencyCreated.status,
+    //          StatusSuccessfulDependencyCreated.message
+    //        )
+    //      }
+    //      case None => {
+    //        DependencyOut(
+    //          "",
+    //          "",
+    //          "",
+    //          "",
+    //          "",
+    //          "",
+    //          StatusErrorDependencyCreated.status,
+    //          StatusErrorDependencyCreated.message
+    //        )
+    //      }
+    //    }
+    ???
   }
 
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.5
-//    *
-//    *          Aus dem TempStep die Target-ComponentId heraushollen
-//    *
-//    *          Suche alle Sibling-Componente
-//    *
-//    *          Erstelle Dependencies aus der Target-Component zu alle Sibling-Components
-//    * @param
-//    * @return
-//    */
+  //  /**
+  //    * @author Gennadi Heimann
+  //    * @version 0.1.5
+  //    *
+  //    *          Aus dem TempStep die Target-ComponentId heraushollen
+  //    *
+  //    *          Suche alle Sibling-Componente
+  //    *
+  //    *          Erstelle Dependencies aus der Target-Component zu alle Sibling-Components
+  //    * @param
+  //    * @return
+  //    */
   def createDependenciesForAdditionalStepInLevelCS(
                                                     stepCS: Option[Any],
                                                     visualProposalForAdditionalStepsInOneLevelIn: VisualProposalForAdditionalStepsInOneLevelIn
                                                   ): Set[JsonDependencyForAdditionalStepsInOneLevel] = {
 
-  //    val targetComponentId = stepCS.get.componentId
-  //    val siblingComponents: Option[List[OrientVertex]] = ComponentVertex.getAllSiblings(targetComponentId)
-  //    // TODO v016 JsonDependencyForAdditionalStepsInOneLevel == None
-  //    // Bei der Impl von neu Redising von Status diese Status abfangen
-  //    siblingComponents match {
-  //      case Some(siblingComponents) => {
-  //        val eDependencies: List[Option[OrientEdge]] = HasDependencyEdge.createDependenciesForAdditionalStepInLevelCS(
-  //          targetComponentId,
-  //          siblingComponents,
-  //          visualProposalForAdditionalStepsInOneLevelIn)
-  //
-  //        eDependencies.map(eDep => {
-  //          eDep match {
-  //            case Some(eDep) => {
-  //              JsonDependencyForAdditionalStepsInOneLevel(
-  //                eDep.getVertex(Direction.OUT).getIdentity.toString,
-  //                eDep.getVertex(Direction.IN).getIdentity.toString,
-  //                eDep.getIdentity.toString,
-  //                eDep.getProperty(PropertyKey.DEPENDENCY_TYPE),
-  //                eDep.getProperty(PropertyKey.VISUALIZATION),
-  //                eDep.getProperty(PropertyKey.NAME_TO_SHOW)
-  //              )
-  //            }
-  //            case None => {
-  //              JsonDependencyForAdditionalStepsInOneLevel(
-  //                "",
-  //                "",
-  //                "",
-  //                "",
-  //                "",
-  //                ""
-  //              )
-  //            }
-  //          }
-  //        }).toSet
-  //      }
-  //      case None => {
-  //        Set.empty
-  //      }
-  //    }
-  //
-  //
-  //  }
-  ???
-}
+    //    val targetComponentId = stepCS.get.componentId
+    //    val siblingComponents: Option[List[OrientVertex]] = ComponentVertex.getAllSiblings(targetComponentId)
+    //    // TODO v016 JsonDependencyForAdditionalStepsInOneLevel == None
+    //    // Bei der Impl von neu Redising von Status diese Status abfangen
+    //    siblingComponents match {
+    //      case Some(siblingComponents) => {
+    //        val eDependencies: List[Option[OrientEdge]] = HasDependencyEdge.createDependenciesForAdditionalStepInLevelCS(
+    //          targetComponentId,
+    //          siblingComponents,
+    //          visualProposalForAdditionalStepsInOneLevelIn)
+    //
+    //        eDependencies.map(eDep => {
+    //          eDep match {
+    //            case Some(eDep) => {
+    //              JsonDependencyForAdditionalStepsInOneLevel(
+    //                eDep.getVertex(Direction.OUT).getIdentity.toString,
+    //                eDep.getVertex(Direction.IN).getIdentity.toString,
+    //                eDep.getIdentity.toString,
+    //                eDep.getProperty(PropertyKey.DEPENDENCY_TYPE),
+    //                eDep.getProperty(PropertyKey.VISUALIZATION),
+    //                eDep.getProperty(PropertyKey.NAME_TO_SHOW)
+    //              )
+    //            }
+    //            case None => {
+    //              JsonDependencyForAdditionalStepsInOneLevel(
+    //                "",
+    //                "",
+    //                "",
+    //                "",
+    //                "",
+    //                ""
+    //              )
+    //            }
+    //          }
+    //        }).toSet
+    //      }
+    //      case None => {
+    //        Set.empty
+    //      }
+    //    }
+    //
+    //
+    //  }
+    ???
+  }
 }

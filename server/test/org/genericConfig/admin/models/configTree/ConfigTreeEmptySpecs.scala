@@ -1,6 +1,5 @@
 package org.genericConfig.admin.models.configTree
 
-import models.preparingConfigs.PrepareConfigsForSpecsv011
 import org.genericConfig.admin.controllers.admin.AdminWeb
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.shared.common.json.JsonNames

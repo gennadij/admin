@@ -4,7 +4,7 @@ import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.Success
 import org.genericConfig.admin.shared.component.json.{JsonComponentIn, JsonComponentParams}
-import org.genericConfig.admin.shared.component.status.{AddComponentSuccess, AppendComponentSuccess, DeleteComponentSuccess}
+import org.genericConfig.admin.shared.component.status.{AddComponentSuccess, AppendComponentSuccess}
 import org.genericConfig.admin.shared.config.status.StatusAddConfig
 import org.genericConfig.admin.shared.user.status.{AddUserAlreadyExist, AddUserError, AddUserSuccess}
 import org.specs2.mutable.Specification
@@ -18,11 +18,11 @@ import util.CommonFunction
   *
   * Created by Gennadi Heimann 18.06.2018
   */
-class DeleteComponentSpecs extends Specification
+class UpdateComponentSpecs extends Specification
   with BeforeAfterAll
   with CommonFunction{
 
-  val usernamePassword = "user_v016_11"
+  val usernamePassword = "user_v016_12"
   var userId = ""
   var stepId = ""
   var componentId = ""
@@ -36,14 +36,13 @@ class DeleteComponentSpecs extends Specification
 
         val (configId: String, _: StatusAddConfig) = addConfig(userId, s"http://contig/$username")
         this.stepId = addStep(Some(configId), None).get
-        this.componentId = addComponentToStep(this.stepId, "Component to Delete", "immutable")._1
-
+        this.componentId = addComponentToStep(this.stepId, "Component", "immutable")._1
       case s if AddUserAlreadyExist().status == s =>
         val configId = getConfigId(usernamePassword = this.usernamePassword, configUrl = s"http://contig/$username")
         val configTreeBO = getConfigTree(configId)
 
         this.stepId = configTreeBO.configTree.get.stepId
-        this.componentId = addComponentToStep(this.stepId, "Component to Delete", "immutable")._1
+        this.componentId = addComponentToStep(this.stepId, "Component", "immutable")._1
 
       case s if AddUserError().status == s =>
         Logger.info("Fehler bei der Vorbereitung")
@@ -51,18 +50,20 @@ class DeleteComponentSpecs extends Specification
   }
 
   def afterAll(): Unit = {
-//    val count = deleteComponents(this.stepId)
-//    require(count == 1, "deleted components " + count)
+    val count = deleteComponents(this.stepId)
+    require(count == 1, "deleted components " + count)
 
   }
 
-  "Diese Specification spezifiziert das Entfernen der Komponenten" >> {
-    "Delete Component" >> {
+  "Diese Specification spezifiziert das Hinzufügen von der Component zu dem FirstStep user5" >> {
+    "FirstStep -> Component hinzufuegen" >> {
 
       val jsonAddComponentIn = Json.toJson(JsonComponentIn(
-        json = JsonNames.DELETE_COMPONENT,
+        json = JsonNames.UPDATE_COMPONENT,
         params = JsonComponentParams(
-          componentId = Some(this.componentId)
+          componentId = Some(this.componentId),
+          nameToShow = Some("Component 1 updated"),
+          kind = Some("immutable updated")
         )
       ))
 
@@ -72,10 +73,17 @@ class DeleteComponentSpecs extends Specification
 
       Logger.info("OUT " + jsonAddComponentOut)
 
-      (jsonAddComponentOut \ "json").asOpt[String] === Some(JsonNames.DELETE_COMPONENT)
-      (jsonAddComponentOut \ "result" \ "status" \ "deleteComponent" \ "status").asOpt[String] ===
-        Some(DeleteComponentSuccess().status)
+      (jsonAddComponentOut \ "json").asOpt[String] === Some(JsonNames.UPDATE_COMPONENT)
+      (jsonAddComponentOut \ "result" \ "componentId").asOpt[String].get.size === 10
+      (jsonAddComponentOut \ "result" \ "nameToShow").asOpt[String] === Some("Component 1 updated")
+      (jsonAddComponentOut \ "result" \ "kind").asOpt[String] === Some("immutable updated")
+      (jsonAddComponentOut \ "result" \ "status" \ "addComponent" \ "status").asOpt[String] ===
+        Some(AddComponentSuccess().status)
+      (jsonAddComponentOut \ "result" \ "status" \ "appendComponent" \ "status").asOpt[String] ===
+        Some(AppendComponentSuccess().status)
       (jsonAddComponentOut \ "result" \ "status" \ "common" \ "status").asOpt[String] === Some(Success().status)
+
+
     }
   }
 

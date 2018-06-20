@@ -20,6 +20,8 @@ import play.api.libs.json._
 
 trait AdminWeb {
 
+
+
   def handleMessage(receivedMessage: JsValue, admin: Admin): JsValue = {
     (receivedMessage \ "json").asOpt[String] match {
       case Some(JsonNames.ADD_USER) => addUser(receivedMessage, admin)
@@ -39,6 +41,7 @@ trait AdminWeb {
       
       case Some(JsonNames.ADD_COMPONENT) => addComponent(receivedMessage, admin)
       case Some(JsonNames.DELETE_COMPONENT) => deleteComponent(receivedMessage, admin)
+      case Some(JsonNames.UPDATE_COMPONENT) => updateComponent(receivedMessage, admin)
       case Some(JsonNames.CONNECTION_COMPONENT_TO_STEP) => connectComponentToStep(receivedMessage, admin)
       
       case Some(JsonNames.CREATE_DEPENDENCY) => createDependency(receivedMessage, admin)
@@ -192,6 +195,14 @@ trait AdminWeb {
     deleteComponentIn match {
       case s: JsSuccess[JsonComponentIn] => Json.toJson(admin.deleteComponent(s.get))
       case e: JsError => jsonError(JsonNames.DELETE_COMPONENT, e)
+    }
+  }
+
+  private def updateComponent(receivedMessage: JsValue, admin: Admin): JsValue = {
+    val updateComponentIn: JsResult[JsonComponentIn] = Json.fromJson[JsonComponentIn](receivedMessage)
+    updateComponentIn match {
+      case s: JsSuccess[JsonComponentIn] => Json.toJson(admin.updateComponent(s.get))
+      case e: JsError => jsonError(JsonNames.UPDATE_COMPONENT, e)
     }
   }
   

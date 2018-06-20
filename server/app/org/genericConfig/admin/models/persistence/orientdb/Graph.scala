@@ -14,7 +14,6 @@ import org.genericConfig.admin.shared.step.bo.StepBO
 import org.genericConfig.admin.shared.step.status._
 import org.genericConfig.admin.shared.user.status._
 import play.api.Logger
-
 import scala.collection.JavaConverters._
 import org.genericConfig.admin.models.wrapper.RidToHash
 import org.genericConfig.admin.shared.component.bo.ComponentBO
@@ -316,6 +315,22 @@ object Graph {
         new Graph(graph).deleteComponent(componentBO)
       case (None, ODBConnectionFail()) =>
         (DeleteComponentError(), ODBConnectionFail())
+    }
+  }
+
+  /**
+    * @author Gennadi Heimann
+    * @version 0.1.6
+    * @param componentBO: ComponentBO
+    * @return (Option[OrientVertex], StatusAddComponent, Status)
+    */
+  def updateComponent(componentBO: ComponentBO): (Option[OrientVertex], StatusUpdateComponent, Status) = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), Success()) =>
+        val graph: OrientGraph = dbFactory.getTx
+        new Graph(graph).updateComponent(componentBO)
+      case (None, ODBConnectionFail()) =>
+        (None, UpdateComponentError(), ODBConnectionFail())
     }
   }
 }
@@ -898,7 +913,6 @@ class Graph(graph: OrientGraph) {
     * @param componentBO : ComponentBO
     * @return OrientEdge
     */
-
   private def appendComponentTo(componentBO: ComponentBO): (StatusAppendComponent, Status) = {
     try {
       graph.addEdge(
@@ -940,7 +954,6 @@ class Graph(graph: OrientGraph) {
     * @param componentBO : ComponentBO
     * @return OrientEdge
     */
-
   private def deleteComponent(componentBO: ComponentBO): (StatusDeleteComponent, Status) = {
     try {
       val sql: String = s"DELETE VERTEX Component where @rid=${componentBO.componentId.get}"
@@ -963,6 +976,35 @@ class Graph(graph: OrientGraph) {
         graph.rollback()
         Logger.error(e.printStackTrace().toString)
         (DeleteComponentError(), ODBWriteError())
+    }
+  }
+
+  /**
+    * @author Gennadi Heimann
+    * @version 0.1.0
+    * @param componentBO : ComponentBO
+    * @return (Option[OrientVertex], StatusUpdateComponent, Status)
+    */
+  private def updateComponent(componentBO: ComponentBO): (Option[OrientVertex], StatusUpdateComponent, Status) = {
+    try {
+      val vComponent: OrientVertex = graph.getVertex(componentBO.componentId.get)
+      vComponent.setProperty(PropertyKeys.NAME_TO_SHOW, componentBO.nameToShow.get)
+      vComponent.setProperty(PropertyKeys.KIND, componentBO.kind.get)
+      graph.commit()
+      (Some(vComponent),UpdateComponentSuccess(), Success())
+    } catch {
+      case e: ORecordDuplicatedException =>
+        Logger.error(e.printStackTrace().toString)
+        graph.rollback()
+        (None, UpdateComponentError(), ODBRecordDuplicated())
+      case e: ClassCastException =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (None, UpdateComponentError(), ODBClassCastError())
+      case e: Exception =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (None, UpdateComponentError(), ODBWriteError())
     }
   }
 

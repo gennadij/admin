@@ -25,6 +25,7 @@ object JsonNames {
   
   val ADD_COMPONENT: String = "AddComponent"
   val DELETE_COMPONENT: String = "DeleteComponent"
+  val UPDATE_COMPONENT: String = "UpdateComponent"
   val CONFIG_TREE: String = "ConfigTree"
   val CONNECTION_COMPONENT_TO_STEP: String = "ConnectionComponentToStep"
   val CREATE_DEPENDENCY: String = "CreateDependency"

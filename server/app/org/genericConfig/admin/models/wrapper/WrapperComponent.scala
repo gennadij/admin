@@ -32,8 +32,14 @@ class WrapperComponent {
           json = Some(jsonComponentIn.json),
           componentId = jsonComponentIn.params.componentId
         )
+      case json if json == JsonNames.UPDATE_COMPONENT =>
+        ComponentBO(
+          json = Some(jsonComponentIn.json),
+          componentId = jsonComponentIn.params.componentId,
+          nameToShow = Some(jsonComponentIn.params.nameToShow.get),
+          kind = Some(jsonComponentIn.params.kind.get)
+        )
     }
-
   }
 
   /**
@@ -68,15 +74,15 @@ class WrapperComponent {
               },
               deleteComponent = componentBO.status.get.deleteComponent match {
                 case Some(deleteComponent) => Some(JsonStatus(
-                  status = "",
-                  message = ""
+                  status = deleteComponent.status,
+                  message = deleteComponent.message
                 ))
                 case None => None
               },
               updateComponent = componentBO.status.get.updateComponent match {
                 case Some(updateComponent) => Some(JsonStatus(
-                  status = "",
-                  message = ""
+                  status = updateComponent.status,
+                  message = updateComponent.message
                 ))
                 case None => None
               },
@@ -90,7 +96,7 @@ class WrapperComponent {
             )
           )
         )
-      case json if json == JsonNames.DELETE_COMPONENT => {
+      case json if json == JsonNames.DELETE_COMPONENT =>
         JsonComponentOut(
           json = componentBO.json.get,
           result = JsonComponentResult(
@@ -118,8 +124,8 @@ class WrapperComponent {
               },
               updateComponent = componentBO.status.get.updateComponent match {
                 case Some(updateComponent) => Some(JsonStatus(
-                  status = "",
-                  message = ""
+                  status = updateComponent.status,
+                  message = updateComponent.message
                 ))
                 case None => None
               },
@@ -133,7 +139,52 @@ class WrapperComponent {
             )
           )
         )
-      }
+      case json if json == JsonNames.UPDATE_COMPONENT =>
+        JsonComponentOut(
+          json = componentBO.json.get,
+          result = JsonComponentResult(
+            componentId = componentBO.componentId,
+            nameToShow = componentBO.nameToShow,
+            kind = componentBO.kind,
+            status = JsonComponentStatus(
+              addComponent = componentBO.status.get.addComponent match {
+                case Some(addComponent) => Some(JsonStatus(
+                  status = addComponent.status,
+                  message = addComponent.message
+                ))
+                case None => None
+              },
+              appendComponent = componentBO.status.get.appendComponent match {
+                case Some(appendComponent) => Some(JsonStatus(
+                  status = appendComponent.status,
+                  message = appendComponent.message
+                ))
+                case None => None
+              },
+              deleteComponent = componentBO.status.get.deleteComponent match {
+                case Some(deleteComponent) => Some(JsonStatus(
+                  status = deleteComponent.status,
+                  message = deleteComponent.message
+                ))
+                case None => None
+              },
+              updateComponent = componentBO.status.get.updateComponent match {
+                case Some(updateComponent) => Some(JsonStatus(
+                  status = updateComponent.status,
+                  message = updateComponent.message
+                ))
+                case None => None
+              },
+              common = componentBO.status.get.common match {
+                case Some(common) => Some(JsonStatus(
+                  status = common.status,
+                  message = common.message
+                ))
+                case None => None
+              }
+            )
+          )
+        )
     }
   }
 }
