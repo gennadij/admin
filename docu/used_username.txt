@@ -5,6 +5,7 @@ user2 -> LoginSpecs
 user3 -> AddConfigSpecs
 user4 -> AddFirstStepSpecs
 user5 -> AddingComponentWithFirstStepSpecs
+user7 -> ConfigTreeFirstStep3ComponentsSpecs
 user9 -> ConfigTreeEmptySpecs
 user13 -> AddConfigWithSameConfigUrlsSpecs
 user14
