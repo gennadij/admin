@@ -20,7 +20,6 @@ import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.status._
 
 
-
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
   *
@@ -273,7 +272,7 @@ object Graph {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param componentBO: ComponentBO
+    * @param componentBO : ComponentBO
     * @return (Option[OrientVertex], StatusAddComponent, Status)
     */
   def addComponent(componentBO: ComponentBO): (Option[OrientVertex], StatusAddComponent, Status) = {
@@ -289,7 +288,7 @@ object Graph {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param componentBO: ComponentBO
+    * @param componentBO : ComponentBO
     * @return (StatusAppendComponent, Status)
     */
   def appendComponentToStep(componentBO: ComponentBO): (StatusAppendComponent, Status) = {
@@ -305,7 +304,7 @@ object Graph {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param componentBO: ComponentBO
+    * @param componentBO : ComponentBO
     * @return (StatusDeleteComponent, Status)
     */
   def deleteComponent(componentBO: ComponentBO): (StatusDeleteComponent, Status) = {
@@ -321,7 +320,7 @@ object Graph {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param componentBO: ComponentBO
+    * @param componentBO : ComponentBO
     * @return (Option[OrientVertex], StatusAddComponent, Status)
     */
   def updateComponent(componentBO: ComponentBO): (Option[OrientVertex], StatusUpdateComponent, Status) = {
@@ -622,19 +621,18 @@ class Graph(graph: OrientGraph) {
     */
   private def getConfigTree(configId: String): (Option[StepForConfigTreeBO], StatusGetConfigTree, Status) = {
     try {
-      val firstSteps: List[OrientVertex] =
+      val vFirstStep: List[OrientVertex] =
         graph.getVertex(configId)
           .getEdges(Direction.OUT, "hasFirstStep")
           .asScala.toList.map(eHasFirstStep => {
           eHasFirstStep.getVertex(Direction.IN).asInstanceOf[OrientVertex]
         })
-      firstSteps.size match {
+      vFirstStep.size match {
         case count if count == 1 =>
-          val stepIdHash: String = RidToHash.setIdAndHash(firstSteps.head.getIdentity.toString)._2
           val configTree = Some(StepForConfigTreeBO(
-            stepIdHash,
-            firstSteps.head.getProperty(PropertyKeys.KIND),
-            getComponents(Some(firstSteps.head))
+            vFirstStep.head.getIdentity.toString,
+            vFirstStep.head.getProperty(PropertyKeys.KIND),
+            getComponents(vFirstStep.head)
           ))
           (configTree, GetConfigTreeSuccess(), Success())
         case _ => (None, GetConfigTreeEmpty(), Success())
@@ -661,58 +659,55 @@ class Graph(graph: OrientGraph) {
     * @param step : Option[OrientVertex]
     * @return Set[Option[ComponentForConfigTreeBO\]\]
     */
-  private def getComponents(step: Option[OrientVertex]): Set[Option[ComponentForConfigTreeBO]] = {
+  private def getComponents(step: OrientVertex): Set[Option[ComponentForConfigTreeBO]] = {
 
-    val components: Set[Option[ComponentForConfigTreeBO]] = step match {
-      case Some(s) =>
-        val eHasComponents: List[Edge] = s.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT).asScala.toList
-        val components: List[Option[ComponentForConfigTreeBO]] = eHasComponents.map { eHasComponent => {
-          val vComponent: OrientVertex = eHasComponent.getVertex(Direction.IN).asInstanceOf[OrientVertex]
-          val eHasSteps: List[Edge] = vComponent.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList
-          val component: Option[ComponentForConfigTreeBO] = eHasSteps match {
-            case List() =>
-              val componentIdHash: String = RidToHash.setIdAndHash(vComponent.getIdentity.toString())._2
-              //create last component
-              Some(ComponentForConfigTreeBO(
-                componentIdHash,
-                vComponent.getProperty(PropertyKeys.KIND),
-                None,
-                None
-              ))
-            case _ =>
-              val nextSteps: List[StepForConfigTreeBO] = eHasSteps.map {
-                eHasStep => {
-                  val vStep: OrientVertex = eHasStep.getVertex(Direction.IN).asInstanceOf[OrientVertex]
-                  val components: Set[Option[ComponentForConfigTreeBO]] = getComponents(Some(vStep))
-                  val stepIdHash: String = RidToHash.setIdAndHash(vStep.getIdentity.toString)._2
-                  StepForConfigTreeBO(
-                    stepIdHash,
-                    vStep.getProperty(PropertyKeys.KIND),
-                    components
-                  )
-                }
+    val eHasComponents: List[Edge] = step.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT).asScala.toList
+
+    val componentsForConfigTreeBO: List[Option[ComponentForConfigTreeBO]] = eHasComponents.map {
+      eHasComponent =>
+        val vComponent: OrientVertex = eHasComponent.getVertex(Direction.IN).asInstanceOf[OrientVertex]
+        val eHasSteps: List[Edge] = vComponent.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList
+        val componentForConfigTreeBO: Option[ComponentForConfigTreeBO] = eHasSteps match {
+          case List() =>
+            //create last componentForConfigTreeBO
+            Some(ComponentForConfigTreeBO(
+              vComponent.getIdentity.toString(),
+              vComponent.getProperty(PropertyKeys.KIND),
+              None,
+              None
+            ))
+          case _ =>
+            //get nestStep of componentForConfigTreeBO
+            val nextSteps: List[StepForConfigTreeBO] = eHasSteps.map {
+              eHasStep => {
+                val vStep: OrientVertex = eHasStep.getVertex(Direction.IN).asInstanceOf[OrientVertex]
+                val components: Set[Option[ComponentForConfigTreeBO]] = getComponents(vStep)
+                StepForConfigTreeBO(
+                  vStep.getIdentity.toString,
+                  vStep.getProperty(PropertyKeys.KIND),
+                  components
+                )
               }
-              val defaultComponent: Option[ComponentForConfigTreeBO] = nextSteps.size match {
-                case count if count == 1 =>
-                  val componentIdHash: String = RidToHash.setIdAndHash(vComponent.getIdentity.toString())._2
-                  Some(ComponentForConfigTreeBO(
-                    componentIdHash,
-                    vComponent.getProperty(PropertyKeys.KIND),
-                    Some(nextSteps.head.stepId),
-                    Some(nextSteps.head)
-                  ))
-                case _ => None // Fehler eine Komponente kann nicht 2 Steps haben
-              }
-              defaultComponent
-          }
-          component
+            }
+            // get all componentForConfigTreeBO form nextStep
+            val defaultComponent: Option[ComponentForConfigTreeBO] = nextSteps.size match {
+              case count if count == 1 =>
+                Some(ComponentForConfigTreeBO(
+                  vComponent.getIdentity.toString(),
+                  vComponent.getProperty(PropertyKeys.KIND),
+                  Some(nextSteps.head.stepId),
+                  Some(nextSteps.head)
+                ))
+              case _ => None // Fehler eine Komponente kann nicht 2 Steps haben
+            }
+            defaultComponent
         }
-        } //end eHasComponents.map
-      val componentsWithoutDuplicate = findDuplicate(components)
-        componentsWithoutDuplicate.toSet
-      case None => Set.empty
+        componentForConfigTreeBO
     }
-    components
+
+    val componentsWithoutDuplicate = findDuplicate(componentsForConfigTreeBO)
+
+    componentsWithoutDuplicate.toSet
   }
 
   /**
@@ -991,7 +986,7 @@ class Graph(graph: OrientGraph) {
       vComponent.setProperty(PropertyKeys.NAME_TO_SHOW, componentBO.nameToShow.get)
       vComponent.setProperty(PropertyKeys.KIND, componentBO.kind.get)
       graph.commit()
-      (Some(vComponent),UpdateComponentSuccess(), Success())
+      (Some(vComponent), UpdateComponentSuccess(), Success())
     } catch {
       case e: ORecordDuplicatedException =>
         Logger.error(e.printStackTrace().toString)

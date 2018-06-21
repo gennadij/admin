@@ -187,7 +187,7 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param ConfigTreeOut
+   * @param configTreeBO: ConfigTreeBO
    * 
    * @return JsonConfigTreeOut
    */
@@ -200,9 +200,9 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param ConfigTreeOut
+   * @param jsonConfigTreeIn: JsonConfigTreeIn
    * 
-   * @return JsonConfigTreeOut
+   * @return ConfigTreeBO
    */
   def toConfigTreeBO(jsonConfigTreeIn: JsonConfigTreeIn): ConfigTreeBO = {
     new WrapperConfigTree().toConfigTreeBO(jsonConfigTreeIn)

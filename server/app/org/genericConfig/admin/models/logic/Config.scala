@@ -7,6 +7,7 @@ import org.genericConfig.admin.shared.config.status._
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 import org.genericConfig.admin.models.wrapper.RidToHash
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
+import play.api.Logger
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -23,7 +24,7 @@ object Config {
     * @return ConfigBO
     */
   def addConfig(configBO: ConfigBO): ConfigBO = {
-    new Config(configBO).addConfig()
+    new Config(Some(configBO)).addConfig
   }
 
   /**
@@ -33,7 +34,7 @@ object Config {
     * @return ConfigBO
     */
   def getConfigs(configBO: ConfigBO): ConfigBO = {
-    new Config(configBO).getConfigs
+    new Config(Some(configBO)).getConfigs
   }
 
   /**
@@ -43,17 +44,17 @@ object Config {
     * @return ConfigBO
     */
   def deleteConfig(configBO: ConfigBO): ConfigBO = {
-    new Config(configBO).deleteConfig()
+    new Config(Some(configBO)).deleteConfig
   }
 
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param configId : String
+    * @param configTreeBO: ConfigTreeBOs
     * @return ConfigTreeBO
     */
   def getConfigTree(configTreeBO: ConfigTreeBO): ConfigTreeBO = {
-    new Config(null).getConfigTree(configTreeBO)
+    new Config().getConfigTree(configTreeBO)
   }
 
   /**
@@ -63,12 +64,12 @@ object Config {
     * @return ConfigBO
     */
   def updateConfig(configBO: ConfigBO): ConfigBO = {
-    new Config(configBO).updateConfig()
+    new Config(Some(configBO)).updateConfig
   }
 
 }
 
-class Config(configBO: ConfigBO) {
+class Config(configBO: Option[ConfigBO] = None) {
 
   /**
     * @author Gennadi Heimann
@@ -77,8 +78,8 @@ class Config(configBO: ConfigBO) {
     */
   private def addConfig(): ConfigBO = {
 
-    val configUrl = configBO.configs.get.head.configUrl.get
-    val userIdHash = configBO.userId.get
+    val configUrl = configBO.get.configs.get.head.configUrl.get
+    val userIdHash = configBO.get.userId.get
 
     RidToHash.getRId(userIdHash) match {
       case Some(id) =>
@@ -128,7 +129,7 @@ class Config(configBO: ConfigBO) {
     */
   private def getConfigs: ConfigBO = {
 
-    RidToHash.getRId(this.configBO.userId.get) match {
+    RidToHash.getRId(this.configBO.get.userId.get) match {
       case Some(rId) =>
         val configBOOut = Persistence.getConfigs(rId)
 
@@ -164,12 +165,12 @@ class Config(configBO: ConfigBO) {
     * @version 0.1.6
     * @return ConfigBO
     */
-  private def deleteConfig(): ConfigBO = {
-    RidToHash.getRId(configBO.configs.get.head.configId.get) match {
+  private def deleteConfig: ConfigBO = {
+    RidToHash.getRId(configBO.get.configs.get.head.configId.get) match {
       case Some(rId) =>
         val configBOOut: ConfigBO = Persistence.deleteConfig(
           rId,
-          configBO.configs.get.head.configUrl.get
+          configBO.get.configs.get.head.configUrl.get
         )
 
         val userIdHash: Option[String] = RidToHash.getHash(configBOOut.userId.get) match {
@@ -185,12 +186,12 @@ class Config(configBO: ConfigBO) {
     }
   }
 
-  private def updateConfig(): ConfigBO = {
-    RidToHash.getRId(configBO.configs.get.head.configId.get) match {
+  private def updateConfig: ConfigBO = {
+    RidToHash.getRId(configBO.get.configs.get.head.configId.get) match {
       case Some(rId) =>
         val configBOOut: ConfigBO = Persistence.updateConfig(
           rId,
-          configBO.configs.get.head.configUrl.get
+          configBO.get.configs.get.head.configUrl.get
         )
         val userIdHash: Option[String] = RidToHash.getHash(configBOOut.userId.get)
 
@@ -218,7 +219,8 @@ class Config(configBO: ConfigBO) {
     
     val configTreeBOOut: ConfigTreeBO = 
       Persistence.getConfigTree(configTreeBO.copy(configId = RidToHash.getRId(configTreeBO.configId.get)))
-    
+
+    Logger.info("configTreeBOOut " + configTreeBOOut)
     
       
     configTreeBOOut.copy(
