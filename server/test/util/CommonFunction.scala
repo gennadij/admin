@@ -40,13 +40,13 @@ trait CommonFunction {
 
     val wC = WebClient.init
 
-//        Logger.info("IN " + jsonAddUserIn)
+    //        Logger.info("IN " + jsonAddUserIn)
 
     val jsonAddUserOut = wC.handleMessage(jsonAddUserIn)
 
     val addUserOut = Json.fromJson[JsonUserOut](jsonAddUserOut)
 
-//        Logger.info("OUT " + jsonAddUserOut)
+    //        Logger.info("OUT " + jsonAddUserOut)
 
     (addUserOut.get.result.username.get, addUserOut.get.result.userId.get, addUserOut.get.result.status.addUser.get.status)
   }
@@ -93,28 +93,23 @@ trait CommonFunction {
     jsConfigsIds map (jsCId => (jsCId \ "configId").asOpt[String].get)
   }
 
-  def addStep(configId: Option[String] = None, componentId: Option[String] = None): Option[String] = {
+  def addStep(
+               configId: Option[String] = None,
+               componentId: Option[String] = None,
+               nameToShow: Option[String] = Some("Step"),
+               kind: Option[String] = Some("default")): Option[String] = {
 
     configId match {
       case Some(configId) =>
-
-//        val configRId = RidToHash.getId(configId)
-
         val addstepBOIn = StepBO(
-          json = Some(JsonNames.ADD_FIRST_STEP),
-          configId = Some(configId),
-          nameToShow = Some("FirstStep"),
-          kind = Some("first"),
+          json = Some(JsonNames.ADD_STEP),
+          appendToId = Some(configId),
+          nameToShow = nameToShow,
+          kind = kind,
           selectionCriteriumMax = Some(1),
           selectionCriteriumMin = Some(1)
         )
-
-//        Logger.info("IN " + addstepBOIn)
-
-        val addStepBOOut = Step.addFirstStep(addstepBOIn)
-
-//        Logger.info("OUT" + addStepBOOut)
-
+        val addStepBOOut = Step.addStep(addstepBOIn)
         addStepBOOut.stepId
       case None =>
         componentId match {
@@ -123,8 +118,8 @@ trait CommonFunction {
             val componentRUId = RidToHash.getRId(componentId)
 
             val addstepBOIn = StepBO(
-              json = Some(JsonNames.ADD_FIRST_STEP),
-              configId = Some(componentRUId.get),
+              json = Some(JsonNames.ADD_STEP),
+              appendToId = Some(componentRUId.get),
               nameToShow = Some("Step"),
               kind = Some("default"),
               selectionCriteriumMax = Some(1),
@@ -196,7 +191,6 @@ trait CommonFunction {
   }
 
 
-
   def getConfigId(usernamePassword: String, configUrl: String = ""): String = {
 
     val userBOIn = UserBO(
@@ -231,11 +225,8 @@ trait CommonFunction {
 
   /**
     * @author Gennadi Heimann
-    *
     * @version 0.1.6
-    *
-    * @param stepId: String
-    *
+    * @param stepId : String
     * @return Int
     */
 

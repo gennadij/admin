@@ -9,8 +9,7 @@ import play.api.libs.json.Json
  */
 
 case class JsonStepParams (
-    configId: String = "",
-    componentId: String = "",
+    appendToId: String = "",
     stepId: String = "",
     nameToShow: String = "",
     kind: String = "",

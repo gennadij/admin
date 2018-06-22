@@ -48,10 +48,9 @@ class AddStep(websocket: WebSocket) extends CommonFunction {
     val scMax: Dynamic = jQuery(HtmlElementIds.inputSelectionCriteriumMaxJQuery).value()
     
     val jsonStepIn = Json.toJson(JsonStepIn(
-        JsonNames.ADD_FIRST_STEP,
+        JsonNames.ADD_STEP,
         JsonStepParams(
             configId, //configId: String,
-            "", //componentId: String,
             "", //stepId: String,
             nameToShow.toString, //nameToShow: String,
             "first", //kind: String,

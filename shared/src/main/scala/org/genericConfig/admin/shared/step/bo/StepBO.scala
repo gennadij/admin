@@ -9,8 +9,7 @@ import org.genericConfig.admin.shared.step.status.StatusStep
  */
 case class StepBO (
     json: Option[String] = None,
-    configId: Option[String] = None,
-    componentId: Option[String] = None,
+    appendToId: Option[String] = None,
     nameToShow: Option[String] = None,
     kind: Option[String] = None,
     selectionCriteriumMin: Option[Int] = None,

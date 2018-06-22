@@ -61,7 +61,7 @@ class DeleteFirstStepSpecs extends Specification
       "FirstStep loeschen" >> {
 
         val jsonDeleteFirstStep = Json.toJsObject(JsonStepIn(
-          json = JsonNames.DELETE_FIRST_STEP,
+          json = JsonNames.DELETE_STEP,
           params = JsonStepParams(
             stepId = this.stepId,
         )))
@@ -72,7 +72,7 @@ class DeleteFirstStepSpecs extends Specification
 
         Logger.info("OUT " + jsonDeleteFirstStepOut )
 
-        (jsonDeleteFirstStepOut \ "json").asOpt[String].get === JsonNames.DELETE_FIRST_STEP
+        (jsonDeleteFirstStepOut \ "json").asOpt[String].get === JsonNames.DELETE_STEP
         (jsonDeleteFirstStepOut \ "result" \ "status" \ "addStep" \ "status").asOpt[String] === None
         (jsonDeleteFirstStepOut \ "result" \ "status" \ "deleteStep" \ "status").asOpt[String] === Some(DeleteStepSuccess().status)
         (jsonDeleteFirstStepOut \ "result" \ "status" \ "updateStep" \ "status").asOpt[String] === None

@@ -23,15 +23,10 @@ class WrapperStep {
   private[wrapper] def toStepBO(jsonStepIn: JsonStepIn): StepBO = {
 
     jsonStepIn.json match {
-      case json if json == JsonNames.ADD_FIRST_STEP =>
-//        val configRid = RidToHash.getId(jsonStepIn.params.configId) match {
-//          case Some(id) => id
-//          case None => "-1"
-//        }
+      case json if json == JsonNames.ADD_STEP =>
         StepBO(
           Some(jsonStepIn.json),
-          Some(jsonStepIn.params.configId), //configId
-          None,//componentId
+          Some(jsonStepIn.params.appendToId),
           Some(jsonStepIn.params.nameToShow), // nameToShow
           Some(jsonStepIn.params.kind), // kind
           Some(jsonStepIn.params.selectionCriterium.get.min), // selectionCriteriumMin
@@ -39,48 +34,28 @@ class WrapperStep {
           None, // stepId
           None // status
         )
-      case json if json == JsonNames.DELETE_FIRST_STEP || json == JsonNames.DELETE_STEP =>
-
-        val stepRId = RidToHash.getRId(jsonStepIn.params.stepId)
+      case json if json == JsonNames.DELETE_STEP || json == JsonNames.DELETE_STEP =>
 
         StepBO(
           Some(jsonStepIn.json),
-          None, //configId
-          None,//componentId
+          None,
           None, // nameToShow
           None, // kind
           None, // selectionCriteriumMin
           None, // selectionCriteriumMax
-          Some(stepRId.get), // stepId
+          Some(jsonStepIn.params.stepId), // stepId
           None // status
         )
-      case json if json == JsonNames.UPDATE_FIRST_STEP || json == JsonNames.UPDATE_STEP  =>
-
-        val stepRId = RidToHash.getRId(jsonStepIn.params.stepId)
+      case json if json == JsonNames.UPDATE_STEP || json == JsonNames.UPDATE_STEP  =>
 
         StepBO(
           Some(jsonStepIn.json),
-          None, //configId
-          None,//componentId
+          None,
           Some(jsonStepIn.params.nameToShow), // nameToShow
           Some(jsonStepIn.params.kind), // kind
           Some(jsonStepIn.params.selectionCriterium.get.min), // selectionCriteriumMin
           Some(jsonStepIn.params.selectionCriterium.get.max), // selectionCriteriumMax
-          Some(stepRId.get), // stepId
-          None // status
-        )
-      case json if json == JsonNames.ADD_STEP =>
-
-        val componentRId = RidToHash.getRId(jsonStepIn.params.componentId)
-        StepBO(
-          Some(jsonStepIn.json),
-          None, //configId
-          Some(componentRId.get),//componentId
-          Some(jsonStepIn.params.nameToShow), // nameToShow
-          Some(jsonStepIn.params.kind), // kind
-          Some(jsonStepIn.params.selectionCriterium.get.min), // selectionCriteriumMin
-          Some(jsonStepIn.params.selectionCriterium.get.max), // selectionCriteriumMax
-          None, // stepId
+          Some(jsonStepIn.params.stepId), // stepId
           None // status
         )
     }
@@ -97,18 +72,11 @@ class WrapperStep {
     */
   private[wrapper] def toJsonStepOut(stepBO: StepBO): JsonStepOut = {
     stepBO.json.get match {
-      case json if json == JsonNames.ADD_FIRST_STEP =>
-        createJsonStepOut(stepBO, json)
-      case json if json == JsonNames.DELETE_FIRST_STEP =>
-        createJsonStepOut(stepBO, json)
-//      case json if json == JsonNames.UPDATE_FIRST_STEP =>
-//        createJsonStepOut(stepBO, json)
       case json if json == JsonNames.ADD_STEP =>
-        ???
-//        createJsonStepOut(stepBO, json)
+        val j = createJsonStepOut(stepBO, json)
+        j
       case json if json == JsonNames.DELETE_STEP =>
-        ???
-//        createJsonStepOut(stepBO, json)
+        createJsonStepOut(stepBO, json)
       case json if json == JsonNames.UPDATE_STEP =>
         createJsonStepOut(stepBO, json)
     }

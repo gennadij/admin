@@ -34,14 +34,15 @@ trait AdminWeb {
       
       case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage, admin)
       
-      case Some(JsonNames.ADD_FIRST_STEP) => addFirstStep(receivedMessage, admin)
-      case Some(JsonNames.DELETE_FIRST_STEP) => deleteFirstStep(receivedMessage, admin)
-      case Some(JsonNames.UPDATE_STEP) => updateStep(receivedMessage, admin)
       case Some(JsonNames.ADD_STEP) => addStep(receivedMessage, admin)
+      case Some(JsonNames.DELETE_STEP) => deleteStep(receivedMessage, admin)
+      case Some(JsonNames.UPDATE_STEP) => updateStep(receivedMessage, admin)
       
       case Some(JsonNames.ADD_COMPONENT) => addComponent(receivedMessage, admin)
       case Some(JsonNames.DELETE_COMPONENT) => deleteComponent(receivedMessage, admin)
       case Some(JsonNames.UPDATE_COMPONENT) => updateComponent(receivedMessage, admin)
+
+
       case Some(JsonNames.CONNECTION_COMPONENT_TO_STEP) => connectComponentToStep(receivedMessage, admin)
       
       case Some(JsonNames.CREATE_DEPENDENCY) => createDependency(receivedMessage, admin)
@@ -76,19 +77,11 @@ trait AdminWeb {
     }
   }
   
-  private def addFirstStep(receivedMessage: JsValue, admin: Admin): JsValue = {
-    val firstStepIn: JsResult[JsonStepIn] = Json.fromJson[JsonStepIn](receivedMessage)
-    firstStepIn match {
-      case _ : JsSuccess[JsonStepIn] => Json.toJson(admin.addFirstStep(firstStepIn.get))
-      case e : JsError => jsonError("ADD_FIRST_STEP", e)
-    }
-  }
-  
-  private def deleteFirstStep(receivedMessage: JsValue, admin: Admin): JsValue = {
+  private def deleteStep(receivedMessage: JsValue, admin: Admin): JsValue = {
     val deleteFirstStepIn: JsResult[JsonStepIn] = Json.fromJson[JsonStepIn](receivedMessage)
     deleteFirstStepIn match {
       case _ : JsSuccess[JsonStepIn] => Json.toJson(admin.deleteFirstStep(deleteFirstStepIn.get))
-      case e : JsError => jsonError(JsonNames.DELETE_FIRST_STEP, e)
+      case e : JsError => jsonError(JsonNames.DELETE_STEP, e)
     }
   }
   

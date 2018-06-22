@@ -376,11 +376,11 @@ object Persistence {
 
     val (vStep: Option[OrientVertex], addStepStatus: StatusAddStep, commonStatus: Status) =
       Graph.addStep(stepBO)
+
     addStepStatus match {
       case AddStepSuccess() =>
         StepBO(
-          configId = stepBO.configId,
-          componentId = stepBO.componentId,
+          appendToId = stepBO.appendToId,
           stepId = Some(vStep.get.getIdentity.toString),
           status = Some(StatusStep(
             addStep = Some(AddStepSuccess()),

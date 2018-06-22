@@ -61,9 +61,9 @@ class TwoFirstStepsForOneConfigSpecs   extends Specification
     "2 FirstStep sind nicht erlaubt" >> {
       
       val jsonAddFirstStep = Json.toJsObject(JsonStepIn(
-        json = JsonNames.ADD_FIRST_STEP,
+        json = JsonNames.ADD_STEP,
         params = JsonStepParams(
-          configId = configId,
+          appendToId = configId,
           nameToShow = "FirstStep",
           kind = "first",
           selectionCriterium = Some(JsonSelectionCriterium(
@@ -77,7 +77,7 @@ class TwoFirstStepsForOneConfigSpecs   extends Specification
       
       Logger.info("OUT " + jsonFirstStepOut_1 )
       
-      (jsonFirstStepOut_1 \ "json").asOpt[String].get === JsonNames.ADD_FIRST_STEP
+      (jsonFirstStepOut_1 \ "json").asOpt[String].get === JsonNames.ADD_STEP
       (jsonFirstStepOut_1 \ "result" \ "status" \ "addStep" \ "status").asOpt[String] === Some(AddStepAlreadyExist().status)
       (jsonFirstStepOut_1 \ "result" \ "status" \ "deleteStep" \ "status").asOpt[String] === None
       (jsonFirstStepOut_1 \ "result" \ "status" \ "updateStep" \ "status").asOpt[String] === None

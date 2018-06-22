@@ -718,35 +718,10 @@ class Graph(graph: OrientGraph) {
     */
   def addStep(stepBO: StepBO): (Option[OrientVertex], StatusAddStep, Status) = {
     try {
-      stepBO.componentId match {
-        case Some(_) =>
-          //create Step
-          (None, AddStepSuccess(), Success())
-        case None =>
-          //create FirstStep
-          stepBO.configId match {
-            case Some(configId) =>
-              val vConfig: OrientVertex = graph.getVertex(configId)
-              vConfig match {
-                case null => (None, AddStepDefectComponentOrConfigId(), ODBRecordIdDefect())
-                case _ =>
-                  val countOfFirstSteps: Int = vConfig.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_FIRST_STEP).asScala.toList.size
-                  countOfFirstSteps match {
-                    case count if count > 0 => (None, AddStepAlreadyExist(), Error())
-                    case _ =>
-                      val vFirstStep: OrientVertex = graph.addVertex(
-                        PropertyKeys.CLASS + PropertyKeys.VERTEX_STEP,
-                        PropertyKeys.NAME_TO_SHOW, stepBO.nameToShow.get,
-                        PropertyKeys.KIND, stepBO.kind.get,
-                        PropertyKeys.SELECTION_CRITERIUM_MIN, stepBO.selectionCriteriumMin.get.toString,
-                        PropertyKeys.SELECTION_CRITERIUM_MAX, stepBO.selectionCriteriumMax.get.toString
-                      )
-                      graph.commit()
-                      (Some(vFirstStep), AddStepSuccess(), Success())
-                  }
-              }
-            case None => (None, AddStepDefectComponentOrConfigId(), ODBRecordIdDefect())
-          }
+      stepBO.appendToId match {
+        case Some(appendToId) =>
+          addStepTo(stepBO = stepBO, rId = appendToId)
+        case None => (None, AddStepDefectComponentOrConfigId(), ODBRecordIdDefect())
       }
     } catch {
       case e: ORecordDuplicatedException =>
@@ -767,6 +742,34 @@ class Graph(graph: OrientGraph) {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
+    * @param stepBO: StepBO, rId: String
+    * @return (Option[OrientVertex], StatusAddStep, Status)
+    */
+  private def addStepTo(stepBO: StepBO, rId: String): (Option[OrientVertex], StatusAddStep, Status) = {
+    val v: OrientVertex = graph.getVertex(rId)
+    v match {
+      case null => (None, AddStepDefectComponentOrConfigId(), ODBRecordIdDefect())
+      case _ =>
+        val countOfSteps: Int = v.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList.size
+        countOfSteps match {
+          case count if count > 0 => (None, AddStepAlreadyExist(), Error())
+          case _ =>
+            val vStep: OrientVertex = graph.addVertex(
+              PropertyKeys.CLASS + PropertyKeys.VERTEX_STEP,
+              PropertyKeys.NAME_TO_SHOW, stepBO.nameToShow.get,
+              PropertyKeys.KIND, stepBO.kind.get,
+              PropertyKeys.SELECTION_CRITERIUM_MIN, stepBO.selectionCriteriumMin.get.toString,
+              PropertyKeys.SELECTION_CRITERIUM_MAX, stepBO.selectionCriteriumMax.get.toString
+            )
+            graph.commit()
+            (Some(vStep), AddStepSuccess(), Success())
+        }
+    }
+  }
+
+  /**
+    * @author Gennadi Heimann
+    * @version 0.1.6
     * @param id : String, stepId: String
     * @return (StatusAppendStep, Status)
     */
@@ -775,8 +778,8 @@ class Graph(graph: OrientGraph) {
       val v: OrientVertex = graph.getVertex(id)
       val vStep: OrientVertex = graph.getVertex(stepId)
       graph.addEdge(
-        PropertyKeys.CLASS + PropertyKeys.EDGE_HAS_FIRST_STEP, v, vStep,
-        PropertyKeys.EDGE_HAS_FIRST_STEP
+        PropertyKeys.CLASS + PropertyKeys.EDGE_HAS_STEP, v, vStep,
+        PropertyKeys.EDGE_HAS_STEP
       )
       graph.commit()
       (AppendStepSuccess(), Success())

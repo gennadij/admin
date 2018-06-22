@@ -13,7 +13,6 @@ object PropertyKeys {
   val VERTEX_STEP = "Step"
   val VERTEX_COMPONENT = "Component"
   val EDGE_HAS_CONFIG = "hasConfig"
-  val EDGE_HAS_FIRST_STEP = "hasFirstStep"
   val EDGE_HAS_COMPONENT = "hasComponent"
   val EDGE_HAS_STEP = "hasStep"
   val EDGE_HAS_DEPENDENCY = "hasDependency"
