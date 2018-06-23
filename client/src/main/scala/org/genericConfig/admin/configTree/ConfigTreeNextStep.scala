@@ -35,7 +35,7 @@ class ConfigTreeNextStep {
     
     components foreach { component => 
       val componentId = numPattern.findAllIn(component.componentId).toArray.mkString
-      val nextStepId = numPattern.findAllIn(component.nextStepId.get).toArray.mkString
+//      val nextStepId = numPattern.findAllIn(component.nextStepId.get).toArray.mkString
       
       htmlComponents = htmlComponents + 
         "<div id='" + componentId + "' class='component'>" + 
@@ -48,9 +48,9 @@ class ConfigTreeNextStep {
           "<dev id='removeComponent" + componentId + "' class='button'>" + 
             "Remove" + 
           "</dev>" + 
-          "<div id='" + nextStepId + "' class='nextStep'>" + 
-            "nextStep " + component.nextStepId.get  + 
-            "<dev id='selectNextStep" + nextStepId + "' class='button'>" + 
+//          "<div id='" + nextStepId + "' class='nextStep'>" +
+//            "nextStep " + component.nextStepId.get  +
+//            "<dev id='selectNextStep" + nextStepId + "' class='button'>" +
               "nextStep" + 
             "</dev>" + 
           "</div>" + 

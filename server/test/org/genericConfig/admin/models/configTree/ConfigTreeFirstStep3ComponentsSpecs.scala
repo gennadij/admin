@@ -46,7 +46,7 @@ class ConfigTreeFirstStep3ComponentsSpecs extends Specification
         val (configId: String, _: StatusAddConfig) = addConfig(userId, s"http://contig/$username")
 
         this.configId = configId
-        this.stepId = addStep(Some(configId), None).get
+        this.stepId = addStep(Some(configId), nameToShow = Some("First Step"), kind = Some("first")).get
 
         this.componentId_1 = addComponentToStep(this.stepId, "Component1", "immutable1")._1
         this.componentId_2 = addComponentToStep(this.stepId, "Component2", "immutable2")._1

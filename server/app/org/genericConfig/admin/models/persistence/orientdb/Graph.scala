@@ -623,7 +623,7 @@ class Graph(graph: OrientGraph) {
     try {
       val vFirstStep: List[OrientVertex] =
         graph.getVertex(configId)
-          .getEdges(Direction.OUT, "hasFirstStep")
+          .getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP)
           .asScala.toList.map(eHasFirstStep => {
           eHasFirstStep.getVertex(Direction.IN).asInstanceOf[OrientVertex]
         })
@@ -631,6 +631,7 @@ class Graph(graph: OrientGraph) {
         case count if count == 1 =>
           val configTree = Some(StepForConfigTreeBO(
             vFirstStep.head.getIdentity.toString,
+            vFirstStep.head.getProperty(PropertyKeys.NAME_TO_SHOW),
             vFirstStep.head.getProperty(PropertyKeys.KIND),
             getComponents(vFirstStep.head)
           ))
@@ -661,53 +662,55 @@ class Graph(graph: OrientGraph) {
     */
   private def getComponents(step: OrientVertex): Set[Option[ComponentForConfigTreeBO]] = {
 
-    val eHasComponents: List[Edge] = step.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT).asScala.toList
-
-    val componentsForConfigTreeBO: List[Option[ComponentForConfigTreeBO]] = eHasComponents.map {
-      eHasComponent =>
-        val vComponent: OrientVertex = eHasComponent.getVertex(Direction.IN).asInstanceOf[OrientVertex]
-        val eHasSteps: List[Edge] = vComponent.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList
-        val componentForConfigTreeBO: Option[ComponentForConfigTreeBO] = eHasSteps match {
-          case List() =>
-            //create last componentForConfigTreeBO
-            Some(ComponentForConfigTreeBO(
-              vComponent.getIdentity.toString(),
-              vComponent.getProperty(PropertyKeys.KIND),
-              None,
-              None
-            ))
-          case _ =>
-            //get nestStep of componentForConfigTreeBO
-            val nextSteps: List[StepForConfigTreeBO] = eHasSteps.map {
-              eHasStep => {
-                val vStep: OrientVertex = eHasStep.getVertex(Direction.IN).asInstanceOf[OrientVertex]
-                val components: Set[Option[ComponentForConfigTreeBO]] = getComponents(vStep)
-                StepForConfigTreeBO(
-                  vStep.getIdentity.toString,
-                  vStep.getProperty(PropertyKeys.KIND),
-                  components
-                )
+    val componentsForConfigTreeBO: List[Option[ComponentForConfigTreeBO]] =
+      step.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT).asScala.toList map {
+        eHasComponent =>
+          val vComponent: OrientVertex = eHasComponent.getVertex(Direction.IN).asInstanceOf[OrientVertex]
+          val eHasSteps: List[Edge] = vComponent.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList
+          val componentForConfigTreeBO: Option[ComponentForConfigTreeBO] = eHasSteps match {
+            case List() =>
+              //create last componentForConfigTreeBO
+              Some(ComponentForConfigTreeBO(
+                componentId = vComponent.getIdentity.toString(),
+                nameToShow = vComponent.getProperty(PropertyKeys.NAME_TO_SHOW),
+                kind = vComponent.getProperty(PropertyKeys.KIND),
+                nextStep = None
+              ))
+            case _ =>
+              //get nestStep of componentForConfigTreeBO
+              val nextSteps: List[StepForConfigTreeBO] = eHasSteps.map {
+                eHasStep => {
+                  val vStep: OrientVertex = eHasStep.getVertex(Direction.IN).asInstanceOf[OrientVertex]
+                  val components: Set[Option[ComponentForConfigTreeBO]] = getComponents(vStep)
+                  StepForConfigTreeBO(
+                    stepId = vStep.getIdentity.toString,
+                    nameToShow = vStep.getProperty(PropertyKeys.NAME_TO_SHOW),
+                    kind = vStep.getProperty(PropertyKeys.KIND),
+                    components = components
+                  )
+                }
               }
-            }
-            // get all componentForConfigTreeBO form nextStep
-            val defaultComponent: Option[ComponentForConfigTreeBO] = nextSteps.size match {
-              case count if count == 1 =>
-                Some(ComponentForConfigTreeBO(
-                  vComponent.getIdentity.toString(),
-                  vComponent.getProperty(PropertyKeys.KIND),
-                  Some(nextSteps.head.stepId),
-                  Some(nextSteps.head)
-                ))
-              case _ => None // Fehler eine Komponente kann nicht 2 Steps haben
-            }
-            defaultComponent
-        }
-        componentForConfigTreeBO
-    }
+              // get all componentForConfigTreeBO form nextStep
+              val defaultComponent: Option[ComponentForConfigTreeBO] = nextSteps.size match {
+                case count if count == 1 =>
+                  Some(ComponentForConfigTreeBO(
+                    componentId = vComponent.getIdentity.toString(),
+                    nameToShow = vComponent.getProperty(PropertyKeys.NAME_TO_SHOW),
+                    kind = vComponent.getProperty(PropertyKeys.KIND),
+                    nextStep = Some(nextSteps.head)
+                  ))
+                case _ => None // Fehler eine Komponente kann nicht 2 Steps haben
+              }
+              defaultComponent
+          }
+          componentForConfigTreeBO
+      }
 
-    val componentsWithoutDuplicate = findDuplicate(componentsForConfigTreeBO)
-
-    componentsWithoutDuplicate.toSet
+//    val componentsWithoutDuplicate = findDuplicate(componentsForConfigTreeBO)
+//
+//    componentsWithoutDuplicate.toSet
+    //TODO findDuplicate implement in logik
+    componentsForConfigTreeBO.toSet
   }
 
   /**
@@ -742,7 +745,7 @@ class Graph(graph: OrientGraph) {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param stepBO: StepBO, rId: String
+    * @param stepBO : StepBO, rId: String
     * @return (Option[OrientVertex], StatusAddStep, Status)
     */
   private def addStepTo(stepBO: StepBO, rId: String): (Option[OrientVertex], StatusAddStep, Status) = {
@@ -1006,33 +1009,33 @@ class Graph(graph: OrientGraph) {
     }
   }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param components : List[Option[ComponentForConfigTreeBO\]\]
-    * @return List[Option[ComponentForConfigTreeBO\]\]
-    */
-  def findDuplicate(
-                     components: List[Option[ComponentForConfigTreeBO]]): List[Option[ComponentForConfigTreeBO]] = components match {
-    case List() => List()
-    case x :: xs => insert(x, findDuplicate(xs))
-  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param x : Option[ComponentForConfigTreeBO],
-    *          xs: List[Option[ComponentForConfigTreeBO]
-    * @return List[Option[ComponentForConfigTreeBO\]\]
-    */
-  def insert(
-              x: Option[ComponentForConfigTreeBO],
-              xs: List[Option[ComponentForConfigTreeBO]]): List[Option[ComponentForConfigTreeBO]] = xs match {
-    case List() => List(x)
-    case y :: ys => if (x.get.nextStepId == y.get.nextStepId)
-      Some(x.get.copy(nextStep = None)) :: xs
-    else y :: insert(x, ys)
-  }
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param components : List[Option[ComponentForConfigTreeBO\]\]
+//    * @return List[Option[ComponentForConfigTreeBO\]\]
+//    */
+//  def findDuplicate(
+//                     components: List[Option[ComponentForConfigTreeBO]]): List[Option[ComponentForConfigTreeBO]] = components match {
+//    case List() => List()
+//    case x :: xs => insert(x, findDuplicate(xs))
+//  }
+//
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param x : Option[ComponentForConfigTreeBO],
+//    *          xs: List[Option[ComponentForConfigTreeBO]
+//    * @return List[Option[ComponentForConfigTreeBO\]\]
+//    */
+//  def insert(
+//              x: Option[ComponentForConfigTreeBO],
+//              xs: List[Option[ComponentForConfigTreeBO]]): List[Option[ComponentForConfigTreeBO]] = xs match {
+//    case List() => List(x)
+//    case y :: ys => if (x.get.nextStepId == y.get.nextStepId)
+//      Some(x.get.copy(nextStep = None)) :: xs
+//    else y :: insert(x, ys)
+//  }
 
 
   /**

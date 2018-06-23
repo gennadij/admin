@@ -97,9 +97,9 @@ class Step {
     */
   private def deleteStep(stepBO: StepBO): StepBO = {
 
-    val stepRId = RidToHash.getRId(stepBO.stepId.get)
+    val stepBOIn = stepBO.copy(stepId = RidToHash.getRId(stepBO.stepId.get))
 
-    val (deleteStepStatus: StatusDeleteStep, commonStatus: Status) = Persistence.deleteStep(stepBO.stepId.get)
+    val (deleteStepStatus: StatusDeleteStep, commonStatus: Status) = Persistence.deleteStep(stepBOIn.stepId.get)
 
     deleteStepStatus match {
       case DeleteStepSuccess() =>

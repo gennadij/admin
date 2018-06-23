@@ -60,7 +60,7 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction{
     
     components foreach { component => 
       val componentId = prepareIdForHtml(component.componentId)
-      val nextStepId = prepareIdForHtml(component.nextStepId.get)
+//      val nextStepId = prepareIdForHtml(component.nextStepId.get)
       
       htmlComponents = htmlComponents + 
         "<div id='" + componentId + "' class='component'>" + 
@@ -73,9 +73,9 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction{
           "<dev id='removeComponent" + componentId + "' class='button'>" + 
             "Remove" + 
           "</dev>" + 
-          "<div id='" + nextStepId + "' class='nextStep'>" + 
-            "nextStep " + component.nextStepId.get  + 
-            "<dev id='selectNextStep" + nextStepId + "' class='button'>" + 
+//          "<div id='" + nextStepId + "' class='nextStep'>" +
+//            "nextStep " + component.nextStepId.get  +
+//            "<dev id='selectNextStep" + nextStepId + "' class='button'>" +
               "nextStep" + 
             "</dev>" + 
           "</div>" + 
@@ -113,17 +113,17 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction{
       jQuery(s"#editComponent$componentId").on("click", () => editComponent())
     }
     
-    val nextSteps: Set[(String, JsonConfigTreeStep)] = components map {c => 
-      c.nextStep match {
-        case Some(nextStep) => (prepareIdForHtml(c.nextStepId.get), c.nextStep.get)
-        case None => (prepareIdForHtml(c.nextStepId.get), null)
-      }
-    }
+//    val nextSteps: Set[(String, JsonConfigTreeStep)] = components map {c =>
+//      c.nextStep match {
+//        case Some(nextStep) => (prepareIdForHtml(c.nextStepId.get), c.nextStep.get)
+//        case None => (prepareIdForHtml(c.nextStepId.get), null)
+//      }
+//    }
     
-    nextSteps foreach { nextStepId =>
-      val nSId = nextStepId._1
-      jQuery(s"#selectNextStep$nSId").on("click", () => selectNextStep(nextStepId._2))
-    }
+//    nextSteps foreach { nextStepId =>
+//      val nSId = nextStepId._1
+//      jQuery(s"#selectNextStep$nSId").on("click", () => selectNextStep(nextStepId._2))
+//    }
   }
   
   private def deleteComponent = {

@@ -93,49 +93,20 @@ trait CommonFunction {
     jsConfigsIds map (jsCId => (jsCId \ "configId").asOpt[String].get)
   }
 
-  def addStep(
-               configId: Option[String] = None,
-               componentId: Option[String] = None,
-               nameToShow: Option[String] = Some("Step"),
-               kind: Option[String] = Some("default")): Option[String] = {
+  def addStep(appendToId: Option[String] = None,
+              nameToShow: Option[String] = Some("Step"),
+              kind: Option[String] = Some("default")): Option[String] = {
 
-    configId match {
-      case Some(configId) =>
-        val addstepBOIn = StepBO(
-          json = Some(JsonNames.ADD_STEP),
-          appendToId = Some(configId),
-          nameToShow = nameToShow,
-          kind = kind,
-          selectionCriteriumMax = Some(1),
-          selectionCriteriumMin = Some(1)
-        )
-        val addStepBOOut = Step.addStep(addstepBOIn)
-        addStepBOOut.stepId
-      case None =>
-        componentId match {
-          case Some(componentId) =>
-
-            val componentRUId = RidToHash.getRId(componentId)
-
-            val addstepBOIn = StepBO(
-              json = Some(JsonNames.ADD_STEP),
-              appendToId = Some(componentRUId.get),
-              nameToShow = Some("Step"),
-              kind = Some("default"),
-              selectionCriteriumMax = Some(1),
-              selectionCriteriumMin = Some(1)
-            )
-
-            Logger.info("IN" + addstepBOIn)
-
-            val stepOut: JsValue = ??? //Step.addFirstStep(addstepBOIn)
-
-            Logger.info("OUT " + stepOut)
-            ???
-
-          case None => None
-        }
-    }
+    val addstepBOIn = StepBO(
+      json = Some(JsonNames.ADD_STEP),
+      appendToId = appendToId,
+      nameToShow = nameToShow,
+      kind = kind,
+      selectionCriteriumMax = Some(1),
+      selectionCriteriumMin = Some(1)
+    )
+    val addStepBOOut = Step.addStep(addstepBOIn)
+    addStepBOOut.stepId
   }
 
   def getConfigTree(configId: String): ConfigTreeBO = {
@@ -233,7 +204,9 @@ trait CommonFunction {
   def deleteComponents(stepId: String): Int = {
     val graph: OrientGraph = Database.getFactory()._1.get.getTx
     val stepRId = RidToHash.getRId(stepId)
-    val sql: String = s"delete VERTEX Component where @rid in (select out('hasComponent') from Step where @rid='${stepRId.get}')"
+    val sql: String = s"delete VERTEX Component where @rid in (select out('hasComponent') from Step where @rid='${
+      stepRId.get
+    }')"
     val res: Int = graph.command(new OCommandSQL(sql)).execute()
     graph.commit
     res
