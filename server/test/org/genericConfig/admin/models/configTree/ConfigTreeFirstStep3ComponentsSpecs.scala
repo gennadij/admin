@@ -31,11 +31,17 @@ class ConfigTreeFirstStep3ComponentsSpecs extends Specification
 
   val wC: WebClient = WebClient.init
   val usernamePassword = "user7"
-  var stepId = ""
+  var stepId_1 = ""
+  var stepId_2 = ""
+  var stepId_3 = ""
   var configId = ""
-  var componentId_1 = ""
-  var componentId_2 = ""
-  var componentId_3 = ""
+  var componentId_1_1 = ""
+  var componentId_1_2 = ""
+  var componentId_1_3 = ""
+  var componentId_2_1 = ""
+  var componentId_2_2 = ""
+  var componentId_3_1 = ""
+  var componentId_3_2 = ""
 
   def beforeAll(): Unit = {
     val (username: String, userId: String, status: String) = addUser(this.usernamePassword)
@@ -46,11 +52,23 @@ class ConfigTreeFirstStep3ComponentsSpecs extends Specification
         val (configId: String, _: StatusAddConfig) = addConfig(userId, s"http://contig/$username")
 
         this.configId = configId
-        this.stepId = addStep(Some(configId), nameToShow = Some("First Step"), kind = Some("first")).get
+        this.stepId_1 = addStep(Some(configId), nameToShow = Some("First Step"), kind = Some("first")).get
 
-        this.componentId_1 = addComponentToStep(this.stepId, "Component1", "immutable1")._1
-        this.componentId_2 = addComponentToStep(this.stepId, "Component2", "immutable2")._1
-        this.componentId_3 = addComponentToStep(this.stepId, "Component3", "immutable3")._1
+        this.componentId_1_1 = addComponentToStep(this.stepId_1, "Component11", "immutable1")._1
+        this.componentId_1_2 = addComponentToStep(this.stepId_1, "Component12", "immutable2")._1
+        this.componentId_1_3 = addComponentToStep(this.stepId_1, "Component13", "immutable3")._1
+
+        this.stepId_2 = addStep(Some(componentId_1_1), nameToShow = Some("Step 2"), kind = Some("default")).get
+
+        this.stepId_3 = addStep(appendToId = Some(componentId_1_3), nameToShow = Some("Step 3"), kind = Some("default")).get
+
+        this.componentId_2_1 = addComponentToStep(this.stepId_2, nameToShow = "Component21", kind = "immutable")._1
+        this.componentId_2_2 = addComponentToStep(this.stepId_2, nameToShow = "Component22", kind = "immutable")._1
+
+        this.componentId_3_1 = addComponentToStep(this.stepId_3, nameToShow = "Component31", kind = "immutable")._1
+        this.componentId_3_1 = addComponentToStep(this.stepId_3, nameToShow = "Component31", kind = "immutable")._1
+
+
 
       case s if AddUserAlreadyExist().status == s =>
         val configId = getConfigId(usernamePassword = this.usernamePassword, configUrl = s"http://contig/$username")

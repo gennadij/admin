@@ -128,6 +128,16 @@ class Admin extends Wrapper {
 
   /**
     * @author Gennadi Heimann
+    * @version 0.1.6
+    * @param jsonStepIn : JsonStepIn
+    * @return JsonStepOut
+    */
+  def appendStepTo(jsonStepIn: JsonStepIn): JsonStepOut = {
+    toJsonStepOut(Step.appendSTepTo(toStepBO(jsonStepIn)))
+  }
+
+  /**
+    * @author Gennadi Heimann
     * @version 0.1.0
     * @param jsonComponentIn : JsonComponentIn
     * @return JsonComponentOut

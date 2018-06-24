@@ -43,6 +43,17 @@ object Step {
   def updateStep(stepBO: StepBO): StepBO = {
     new Step().updateStep(stepBO)
   }
+
+  /**
+    * @author Gennadi Heimann
+    * @version 0.1.6
+    * @param stepBO : StepBO
+    * @return StepBO
+    */
+  def appendSTepTo(stepBO: StepBO): StepBO = {
+    new Step().appendStepTo(stepBO)
+  }
+
 }
 
 class Step {
@@ -130,6 +141,11 @@ class Step {
     val stepRId = RidToHash.getRId(stepBO.stepId.get)
 
     Persistence.updateStep(stepBO.copy(stepId = stepRId))
+  }
+
+  private def appendStepTo(stepBO: StepBO): StepBO = {
+    val componentRid = RidToHash.getRId(stepBO.appendToId.get)
+    val stepRid = RidToHash.getRId(stepBO.stepId.get)
   }
 }
 
