@@ -1,6 +1,7 @@
 package org.genericConfig.admin.models.component
 
 import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.models.wrapper.RidToHash
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.Success
 import org.genericConfig.admin.shared.component.json.{JsonComponentIn, JsonComponentParams}
@@ -42,13 +43,14 @@ class AddingNewComponentSpecs extends Specification
       case s if AddUserSuccess().status == s =>
 
         val configId: String = addConfig(userId, s"http://contig/$username")._1
-        this.stepId = addStep(Some(configId), None).get
+        this.stepId = addStep(Some(configId), nameToShow = Some("Step 1"), kind = Some("first")).get
       case s if AddUserAlreadyExist().status == s =>
         val configId = getConfigId(usernamePassword = this.usernamePassword, configUrl = s"http://contig/$username")
         val configTreeBO = getConfigTree(configId)
 
-        this.stepId = configTreeBO.configTree.get.stepId
 
+        this.stepId = configTreeBO.configTree.get.stepId
+        this.stepId = RidToHash.setIdAndHash(this.stepId)._2
       case s if AddUserError().status == s =>
         Logger.info("Fehler bei der Vorbereitung")
     }

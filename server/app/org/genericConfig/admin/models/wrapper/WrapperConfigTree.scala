@@ -1,6 +1,6 @@
 package org.genericConfig.admin.models.wrapper
 
-import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
+import org.genericConfig.admin.shared.configTree.bo.{ComponentForConfigTreeBO, ConfigTreeBO, StepForConfigTreeBO}
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
 import org.genericConfig.admin.shared.configTree.status.GetConfigTreeSuccess
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeResult
@@ -10,7 +10,6 @@ import org.genericConfig.admin.shared.common.json.JsonStatus
 import org.genericConfig.admin.shared.configTree.status.GetConfigTreeEmpty
 import org.genericConfig.admin.shared.configTree.status.GetConfigTreeError
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeComponent
-import org.genericConfig.admin.shared.configTree.bo.ComponentForConfigTreeBO
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeIn
 
 /**
@@ -50,7 +49,8 @@ class WrapperConfigTree {
               configTreeBO.configTree.get.stepId,
               configTreeBO.configTree.get.nameToShow,
               configTreeBO.configTree.get.kind,
-              getJsonConfigTreeComponents(configTreeBO.configTree.get.components)
+              getNextSteps(configTreeBO.configTree.get),
+              getJsonConfigTreeComponents_(configTreeBO.configTree.get.components)
             )),
             JsonConfigTreeStatus(
               Some(JsonStatus(
@@ -106,40 +106,85 @@ class WrapperConfigTree {
     }
   }
 
+
+
+  private def getNextSteps(nextStep: StepForConfigTreeBO): Set[JsonConfigTreeStep] = {
+    val nextSteps: List[JsonConfigTreeStep] = nextStep.nextSteps.toList map (
+      nS =>
+        JsonConfigTreeStep(
+          nS.stepId,
+          nS.nameToShow,
+          nS.kind,
+          {
+            val nSSS: List[JsonConfigTreeStep] = nS.nextSteps.toList.map(nSS =>
+              JsonConfigTreeStep(
+                nS.stepId,
+                nS.nameToShow,
+                nS.kind,
+                getNextSteps(nSS),
+                getJsonConfigTreeComponents_(nS.components)
+              ))
+            nSSS.toSet
+          },
+          getJsonConfigTreeComponents_(nS.components)
+        )
+    )
+    nextSteps.toSet
+  }
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
     * @param components : Set[Option[ComponentForConfigTreeBO\]\]
     * @return Set[JsonConfigTreeComponent]
     */
-  private def getJsonConfigTreeComponents(components: Set[Option[ComponentForConfigTreeBO]]): Set[JsonConfigTreeComponent] = {
+  private def getJsonConfigTreeComponents_(components: Set[Option[ComponentForConfigTreeBO]]): Set[JsonConfigTreeComponent] = {
 
     components.map {
       component => {
-        component.get.nextStep match {
-          case Some(step) => {
-            JsonConfigTreeComponent(
-              component.get.componentId,
-              component.get.nameToShow,
-              component.get.kind,
-              Some(JsonConfigTreeStep(
-                component.get.nextStep.get.stepId,
-                component.get.nextStep.get.nameToShow,
-                component.get.nextStep.get.kind,
-                getJsonConfigTreeComponents(component.get.nextStep.get.components)
-              ))
-            )
-          }
-          case None => {
-            JsonConfigTreeComponent(
-              component.get.componentId,
-              component.get.nameToShow,
-              component.get.kind,
-              None
-            )
-          }
-        }
+        JsonConfigTreeComponent(
+          component.get.componentId,
+          component.get.nameToShow,
+          component.get.kind,
+          component.get.nextStepId
+        )
       }
     }
   }
+
+  /**
+    * @author Gennadi Heimann
+    * @version 0.1.6
+    * @param components : Set[Option[ComponentForConfigTreeBO\]\]
+    * @return Set[JsonConfigTreeComponent]
+    */
+//  private def getJsonConfigTreeComponents(components: Set[Option[ComponentForConfigTreeBO]]): Set[JsonConfigTreeComponent] = {
+//
+//    components.map {
+//      component => {
+//        component.get.nextStep match {
+//          case Some(step) => {
+//            JsonConfigTreeComponent(
+//              component.get.componentId,
+//              component.get.nameToShow,
+//              component.get.kind,
+//              Some(JsonConfigTreeStep(
+//                component.get.nextStep.get.stepId,
+//                component.get.nextStep.get.nameToShow,
+//                component.get.nextStep.get.kind,
+//                getJsonConfigTreeComponents(component.get.nextStep.get.components)
+//              ))
+//            )
+//          }
+//          case None => {
+//            JsonConfigTreeComponent(
+//              component.get.componentId,
+//              component.get.nameToShow,
+//              component.get.kind,
+//              None
+//            )
+//          }
+//        }
+//      }
+//    }
+//  }
 }

@@ -50,8 +50,8 @@ object Step {
     * @param stepBO : StepBO
     * @return StepBO
     */
-  def appendSTepTo(stepBO: StepBO): StepBO = {
-    new Step().appendStepTo(stepBO)
+  def connectComponentToStep(stepBO: StepBO): StepBO = {
+    new Step().connectComponentToStep(stepBO)
   }
 
 }
@@ -143,9 +143,38 @@ class Step {
     Persistence.updateStep(stepBO.copy(stepId = stepRId))
   }
 
-  private def appendStepTo(stepBO: StepBO): StepBO = {
+  /**
+    * @author Gennadi Heimann
+    *
+    * @version 0.1.0
+    *
+    * @param stepBO: StepBO
+    *
+    * @return ComponentBO
+    */
+  def connectComponentToStep(stepBO: StepBO): StepBO = {
     val componentRid = RidToHash.getRId(stepBO.appendToId.get)
     val stepRid = RidToHash.getRId(stepBO.stepId.get)
+
+    val (statusAppendStep, statusCommon): (StatusAppendStep, Status) =
+      Persistence.appendStepTo(id = componentRid.get, stepId = stepRid.get)
+
+    statusAppendStep match {
+      case AppendStepSuccess() => StepBO(
+        json = Some(JsonNames.CONNECT_COMPONENT_TO_STEP),
+        status = Some(StatusStep(
+          appendStep = Some(AppendStepSuccess()),
+          common = Some(statusCommon)
+        ))
+      )
+      case AppendStepError() => StepBO(
+        json = Some(JsonNames.CONNECT_COMPONENT_TO_STEP),
+        status = Some(StatusStep(
+          appendStep = Some(AppendStepError()),
+          common = Some(statusCommon)
+        ))
+      )
+    }
   }
 }
 

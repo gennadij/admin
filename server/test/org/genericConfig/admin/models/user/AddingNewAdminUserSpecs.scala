@@ -61,7 +61,7 @@ class AddingNewAdminUserSpecs extends Specification
         (registerSC \ "json").asOpt[String].get === JsonNames.ADD_USER
       }
       "userId" >> {
-        (registerSC \ "result" \ "userId").asOpt[String].get.size must_== 32
+        (registerSC \ "result" \ "userId").asOpt[String].get.size must be_<=(32)
       }
       "username" >> {
         (registerSC \ "result" \ "username").asOpt[String].get must_== "user1"

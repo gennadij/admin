@@ -45,7 +45,7 @@ class UpdateStepSpecs extends Specification
       case s if AddUserAlreadyExist().status == s =>
         val configId = getConfigId(usernamePassword = usernamePassword, configUrl = s"http://contig/$username")
         this.configId = configId
-        this.stepId = addStep(Some(configId), None).get
+        this.stepId = addStep(Some(configId), nameToShow = Some("Step 1"), kind = Some("first")).get
       case s if AddUserError().status == s =>
         Logger.info("Fehler bei der Vorbereitung")
     }

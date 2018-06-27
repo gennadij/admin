@@ -1,6 +1,5 @@
 package org.genericConfig.admin.controllers.admin
 
-import org.genericConfig.admin.models.json.connectionComponentToStep.{JsonConnectionComponentToStepIn, JsonConnectionComponentToStepOut}
 import org.genericConfig.admin.models.json.dependency.{JsonDependencyIn, JsonDependencyOut}
 import org.genericConfig.admin.models.logic._
 import org.genericConfig.admin.models.wrapper.Wrapper
@@ -129,11 +128,11 @@ class Admin extends Wrapper {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param jsonStepIn : JsonStepIn
+    * @param jsonStepIn: JsonstepIn
     * @return JsonStepOut
     */
-  def appendStepTo(jsonStepIn: JsonStepIn): JsonStepOut = {
-    toJsonStepOut(Step.appendSTepTo(toStepBO(jsonStepIn)))
+  def connectComponentToStep(jsonStepIn: JsonStepIn): JsonStepOut = {
+    toJsonStepOut(Step.connectComponentToStep(toStepBO(jsonStepIn = jsonStepIn)))
   }
 
   /**
@@ -164,30 +163,6 @@ class Admin extends Wrapper {
     */
   def updateComponent(jsonComponentIn: JsonComponentIn): JsonComponentOut = {
     toJsonComponentOut(Component.updateComponent(toComponentBO(jsonComponentIn)))
-  }
-
-
-  //  /**
-  //   * @author Gennadi Heimann
-  //   *
-  //   * @version 0.1.0
-  //   *
-  //   * Verbindet bestehnde Component mit bestehenden Step
-  //   * Sowohl Component alsauch Step muessen bereits exestieren
-  //   *
-  //   * @param ConnectionComponentToStepCS
-  //   *
-  //   * @return ConnectionComponentToStepSC
-  //   */
-  def connectComponentToStep(
-                              jsonConnectionComponentToStepIn: JsonConnectionComponentToStepIn
-                            ): JsonConnectionComponentToStepOut = {
-    //    toJsonConnectionComponentToStepOut(
-    //        Persistence.connectComponentToStep(
-    //            toConnectionComponentToStepIn(jsonConnectionComponentToStepIn)
-    //        )
-    //    )
-    ???
   }
 
   //  /**
@@ -241,15 +216,4 @@ class Admin extends Wrapper {
     //    )
     ???
   }
-
-  //  /**
-  //   * @author Gennadi Heimann
-  //   *
-  //   * @version 0.1.0
-  //   *
-  //   * @param
-  //   *
-  //   * @return
-  //   */
-  def logout(): Boolean = ???
 }

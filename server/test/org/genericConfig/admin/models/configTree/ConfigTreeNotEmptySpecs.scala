@@ -25,7 +25,7 @@ import util.CommonFunction
  */
 
 @RunWith(classOf[JUnitRunner])
-class ConfigTreeFirstStep3ComponentsSpecs extends Specification
+class ConfigTreeNotEmptySpecs extends Specification
                                           with BeforeAfterAll
                                           with CommonFunction{
 
@@ -42,6 +42,10 @@ class ConfigTreeFirstStep3ComponentsSpecs extends Specification
   var componentId_2_2 = ""
   var componentId_3_1 = ""
   var componentId_3_2 = ""
+
+  // TODO der nextStep wird in dem Step gehalten, im Component wird nur Verweis auf dem Step gehalten.
+  // TODO Bei dem Verbinden von dem Step werden volgende Json verwendet
+  // TODO CONNECT_TO_STEP
 
   def beforeAll(): Unit = {
     val (username: String, userId: String, status: String) = addUser(this.usernamePassword)
@@ -62,11 +66,11 @@ class ConfigTreeFirstStep3ComponentsSpecs extends Specification
 
         this.stepId_3 = addStep(appendToId = Some(componentId_1_3), nameToShow = Some("Step 3"), kind = Some("default")).get
 
-        this.componentId_2_1 = addComponentToStep(this.stepId_2, nameToShow = "Component21", kind = "immutable")._1
-        this.componentId_2_2 = addComponentToStep(this.stepId_2, nameToShow = "Component22", kind = "immutable")._1
-
-        this.componentId_3_1 = addComponentToStep(this.stepId_3, nameToShow = "Component31", kind = "immutable")._1
-        this.componentId_3_1 = addComponentToStep(this.stepId_3, nameToShow = "Component31", kind = "immutable")._1
+//        this.componentId_2_1 = addComponentToStep(this.stepId_2, nameToShow = "Component21", kind = "immutable")._1
+//        this.componentId_2_2 = addComponentToStep(this.stepId_2, nameToShow = "Component22", kind = "immutable")._1
+//
+//        this.componentId_3_1 = addComponentToStep(this.stepId_3, nameToShow = "Component31", kind = "immutable")._1
+//        this.componentId_3_1 = addComponentToStep(this.stepId_3, nameToShow = "Component31", kind = "immutable")._1
 
 
 

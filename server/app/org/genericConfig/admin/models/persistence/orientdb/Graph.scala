@@ -630,10 +630,11 @@ class Graph(graph: OrientGraph) {
       vFirstStep.size match {
         case count if count == 1 =>
           val configTree = Some(StepForConfigTreeBO(
-            vFirstStep.head.getIdentity.toString,
-            vFirstStep.head.getProperty(PropertyKeys.NAME_TO_SHOW),
-            vFirstStep.head.getProperty(PropertyKeys.KIND),
-            getComponents(vFirstStep.head)
+            stepId = vFirstStep.head.getIdentity.toString,
+            nameToShow = vFirstStep.head.getProperty(PropertyKeys.NAME_TO_SHOW),
+            kind =  vFirstStep.head.getProperty(PropertyKeys.KIND),
+            nextSteps = getNextSteps(vFirstStep.head),
+            getComponents_(vFirstStep.head)
           ))
           (configTree, GetConfigTreeSuccess(), Success())
         case _ => (None, GetConfigTreeEmpty(), Success())
@@ -660,58 +661,114 @@ class Graph(graph: OrientGraph) {
     * @param step : Option[OrientVertex]
     * @return Set[Option[ComponentForConfigTreeBO\]\]
     */
-  private def getComponents(step: OrientVertex): Set[Option[ComponentForConfigTreeBO]] = {
-
-    val componentsForConfigTreeBO: List[Option[ComponentForConfigTreeBO]] =
+  private def getComponents_(step: OrientVertex): Set[Option[ComponentForConfigTreeBO]] = {
+    val componentForConfigTreeBOs: List[Option[ComponentForConfigTreeBO]] =
       step.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT).asScala.toList map {
         eHasComponent =>
           val vComponent: OrientVertex = eHasComponent.getVertex(Direction.IN).asInstanceOf[OrientVertex]
           val eHasSteps: List[Edge] = vComponent.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList
-          val componentForConfigTreeBO: Option[ComponentForConfigTreeBO] = eHasSteps match {
-            case List() =>
-              //create last componentForConfigTreeBO
-              Some(ComponentForConfigTreeBO(
-                componentId = vComponent.getIdentity.toString(),
-                nameToShow = vComponent.getProperty(PropertyKeys.NAME_TO_SHOW),
-                kind = vComponent.getProperty(PropertyKeys.KIND),
-                nextStep = None
-              ))
-            case _ =>
-              //get nestStep of componentForConfigTreeBO
-              val nextSteps: List[StepForConfigTreeBO] = eHasSteps.map {
-                eHasStep => {
-                  val vStep: OrientVertex = eHasStep.getVertex(Direction.IN).asInstanceOf[OrientVertex]
-                  val components: Set[Option[ComponentForConfigTreeBO]] = getComponents(vStep)
-                  StepForConfigTreeBO(
-                    stepId = vStep.getIdentity.toString,
-                    nameToShow = vStep.getProperty(PropertyKeys.NAME_TO_SHOW),
-                    kind = vStep.getProperty(PropertyKeys.KIND),
-                    components = components
-                  )
-                }
-              }
-              // get all componentForConfigTreeBO form nextStep
-              val defaultComponent: Option[ComponentForConfigTreeBO] = nextSteps.size match {
-                case count if count == 1 =>
-                  Some(ComponentForConfigTreeBO(
-                    componentId = vComponent.getIdentity.toString(),
-                    nameToShow = vComponent.getProperty(PropertyKeys.NAME_TO_SHOW),
-                    kind = vComponent.getProperty(PropertyKeys.KIND),
-                    nextStep = Some(nextSteps.head)
-                  ))
-                case _ => None // Fehler eine Komponente kann nicht 2 Steps haben
-              }
-              defaultComponent
+          val nextStepId: String = eHasSteps match {
+            case List() => "last"
+            case _ => eHasSteps.head.getVertex(Direction.IN).asInstanceOf[OrientVertex].getIdentity.toString()
           }
-          componentForConfigTreeBO
-      }
 
-//    val componentsWithoutDuplicate = findDuplicate(componentsForConfigTreeBO)
-//
-//    componentsWithoutDuplicate.toSet
-    //TODO findDuplicate implement in logik
-    componentsForConfigTreeBO.toSet
+          Some(ComponentForConfigTreeBO(
+            componentId = vComponent.getIdentity.toString(),
+            nameToShow = vComponent.getProperty(PropertyKeys.NAME_TO_SHOW),
+            kind = vComponent.getProperty(PropertyKeys.KIND),
+            nextStepId = nextStepId
+          ))
+      }
+    componentForConfigTreeBOs.toSet
   }
+
+  private def getNextSteps(step: OrientVertex): Set[StepForConfigTreeBO] = {
+    val stepForConfigTreeBOs: List[StepForConfigTreeBO] =
+      step.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT).asScala.toList map {
+      eHasComponent =>
+        val vComponent: OrientVertex = eHasComponent.getVertex(Direction.IN).asInstanceOf[OrientVertex]
+        val eHasSteps: List[Edge] = vComponent.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList
+        eHasSteps match {
+          case List() =>
+            StepForConfigTreeBO(
+              stepId = "",
+              nameToShow = "",
+              kind = "",
+              nextSteps = Set(),
+              components = Set()
+            )
+          case _ =>
+            val vStep: OrientVertex = eHasSteps.head.getVertex(Direction.IN).asInstanceOf[OrientVertex]
+                StepForConfigTreeBO(
+                  stepId = vStep.getIdentity.toString,
+                  nameToShow = vStep.getProperty(PropertyKeys.NAME_TO_SHOW),
+                  kind = vStep.getProperty(PropertyKeys.KIND),
+                  nextSteps = getNextSteps(vStep),
+                  components = getComponents_(vStep)
+                )
+        }
+    }
+    stepForConfigTreeBOs.toSet
+  }
+
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param step : Option[OrientVertex]
+//    * @return Set[Option[ComponentForConfigTreeBO\]\]
+//    */
+//  private def getComponents(step: OrientVertex): Set[Option[ComponentForConfigTreeBO]] = {
+//
+//    val componentsForConfigTreeBO: List[Option[ComponentForConfigTreeBO]] =
+//      step.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT).asScala.toList map {
+//        eHasComponent =>
+//          val vComponent: OrientVertex = eHasComponent.getVertex(Direction.IN).asInstanceOf[OrientVertex]
+//          val eHasSteps: List[Edge] = vComponent.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList
+//          val componentForConfigTreeBO: Option[ComponentForConfigTreeBO] = eHasSteps match {
+//            case List() =>
+//              //create last componentForConfigTreeBO
+//              Some(ComponentForConfigTreeBO(
+//                componentId = vComponent.getIdentity.toString(),
+//                nameToShow = vComponent.getProperty(PropertyKeys.NAME_TO_SHOW),
+//                kind = vComponent.getProperty(PropertyKeys.KIND),
+//                nextStep = None
+//              ))
+//            case _ =>
+//              //get nestStep of componentForConfigTreeBO
+//              val nextSteps: List[StepForConfigTreeBO] = eHasSteps.map {
+//                eHasStep => {
+//                  val vStep: OrientVertex = eHasStep.getVertex(Direction.IN).asInstanceOf[OrientVertex]
+//                  val components: Set[Option[ComponentForConfigTreeBO]] = getComponents(vStep)
+//                  StepForConfigTreeBO(
+//                    stepId = vStep.getIdentity.toString,
+//                    nameToShow = vStep.getProperty(PropertyKeys.NAME_TO_SHOW),
+//                    kind = vStep.getProperty(PropertyKeys.KIND),
+//                    components = components
+//                  )
+//                }
+//              }
+//              // get all componentForConfigTreeBO form nextStep
+//              val defaultComponent: Option[ComponentForConfigTreeBO] = nextSteps.size match {
+//                case count if count == 1 =>
+//                  Some(ComponentForConfigTreeBO(
+//                    componentId = vComponent.getIdentity.toString(),
+//                    nameToShow = vComponent.getProperty(PropertyKeys.NAME_TO_SHOW),
+//                    kind = vComponent.getProperty(PropertyKeys.KIND),
+//                    nextStep = Some(nextSteps.head)
+//                  ))
+//                case _ => None // Fehler eine Komponente kann nicht 2 Steps haben
+//              }
+//              defaultComponent
+//          }
+//          componentForConfigTreeBO
+//      }
+//
+//    //    val componentsWithoutDuplicate = findDuplicate(componentsForConfigTreeBO)
+//    //
+//    //    componentsWithoutDuplicate.toSet
+//    //TODO findDuplicate implement in logik
+//    componentsForConfigTreeBO.toSet
+//  }
 
   /**
     * @author Gennadi Heimann
@@ -1009,33 +1066,33 @@ class Graph(graph: OrientGraph) {
     }
   }
 
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.6
-//    * @param components : List[Option[ComponentForConfigTreeBO\]\]
-//    * @return List[Option[ComponentForConfigTreeBO\]\]
-//    */
-//  def findDuplicate(
-//                     components: List[Option[ComponentForConfigTreeBO]]): List[Option[ComponentForConfigTreeBO]] = components match {
-//    case List() => List()
-//    case x :: xs => insert(x, findDuplicate(xs))
-//  }
-//
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.6
-//    * @param x : Option[ComponentForConfigTreeBO],
-//    *          xs: List[Option[ComponentForConfigTreeBO]
-//    * @return List[Option[ComponentForConfigTreeBO\]\]
-//    */
-//  def insert(
-//              x: Option[ComponentForConfigTreeBO],
-//              xs: List[Option[ComponentForConfigTreeBO]]): List[Option[ComponentForConfigTreeBO]] = xs match {
-//    case List() => List(x)
-//    case y :: ys => if (x.get.nextStepId == y.get.nextStepId)
-//      Some(x.get.copy(nextStep = None)) :: xs
-//    else y :: insert(x, ys)
-//  }
+  //  /**
+  //    * @author Gennadi Heimann
+  //    * @version 0.1.6
+  //    * @param components : List[Option[ComponentForConfigTreeBO\]\]
+  //    * @return List[Option[ComponentForConfigTreeBO\]\]
+  //    */
+  //  def findDuplicate(
+  //                     components: List[Option[ComponentForConfigTreeBO]]): List[Option[ComponentForConfigTreeBO]] = components match {
+  //    case List() => List()
+  //    case x :: xs => insert(x, findDuplicate(xs))
+  //  }
+  //
+  //  /**
+  //    * @author Gennadi Heimann
+  //    * @version 0.1.6
+  //    * @param x : Option[ComponentForConfigTreeBO],
+  //    *          xs: List[Option[ComponentForConfigTreeBO]
+  //    * @return List[Option[ComponentForConfigTreeBO\]\]
+  //    */
+  //  def insert(
+  //              x: Option[ComponentForConfigTreeBO],
+  //              xs: List[Option[ComponentForConfigTreeBO]]): List[Option[ComponentForConfigTreeBO]] = xs match {
+  //    case List() => List(x)
+  //    case y :: ys => if (x.get.nextStepId == y.get.nextStepId)
+  //      Some(x.get.copy(nextStep = None)) :: xs
+  //    else y :: insert(x, ys)
+  //  }
 
 
   /**

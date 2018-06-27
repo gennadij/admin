@@ -1,6 +1,7 @@
 package org.genericConfig.admin.models.component
 
 import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.models.wrapper.RidToHash
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.Success
 import org.genericConfig.admin.shared.component.json.{JsonComponentIn, JsonComponentParams}
@@ -35,14 +36,15 @@ class UpdateComponentSpecs extends Specification
       case s if AddUserSuccess().status == s =>
 
         val (configId: String, _: StatusAddConfig) = addConfig(userId, s"http://contig/$username")
-        this.stepId = addStep(Some(configId), None).get
+        this.stepId = addStep(Some(configId), nameToShow = Some("Step 1"), kind = Some("first")).get
         this.componentId = addComponentToStep(this.stepId, "Component", "immutable")._1
       case s if AddUserAlreadyExist().status == s =>
         val configId = getConfigId(usernamePassword = this.usernamePassword, configUrl = s"http://contig/$username")
         val configTreeBO = getConfigTree(configId)
 
         this.stepId = configTreeBO.configTree.get.stepId
-
+        //TODO
+        this.stepId = RidToHash.setIdAndHash(this.stepId)._2
         this.componentId = addComponentToStep(this.stepId, "Component", "immutable")._1
       case s if AddUserError().status == s =>
         Logger.info("Fehler bei der Vorbereitung")
@@ -74,7 +76,7 @@ class UpdateComponentSpecs extends Specification
       Logger.info("OUT " + jsonAddComponentOut)
 
       (jsonAddComponentOut \ "json").asOpt[String] === Some(JsonNames.UPDATE_COMPONENT)
-      (jsonAddComponentOut \ "result" \ "componentId").asOpt[String].get.size === 32
+      (jsonAddComponentOut \ "result" \ "componentId").asOpt[String].get.length must be_<=(32)
       (jsonAddComponentOut \ "result" \ "nameToShow").asOpt[String] === Some("Component 1 updated")
       (jsonAddComponentOut \ "result" \ "kind").asOpt[String] === Some("immutable updated")
       (jsonAddComponentOut \ "result" \ "status" \ "updateComponent" \ "status").asOpt[String] ===

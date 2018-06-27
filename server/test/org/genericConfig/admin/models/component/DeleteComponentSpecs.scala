@@ -1,10 +1,11 @@
 package org.genericConfig.admin.models.component
 
 import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.models.wrapper.RidToHash
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.Success
 import org.genericConfig.admin.shared.component.json.{JsonComponentIn, JsonComponentParams}
-import org.genericConfig.admin.shared.component.status.{AddComponentSuccess, AppendComponentSuccess, DeleteComponentSuccess}
+import org.genericConfig.admin.shared.component.status.DeleteComponentSuccess
 import org.genericConfig.admin.shared.config.status.StatusAddConfig
 import org.genericConfig.admin.shared.user.status.{AddUserAlreadyExist, AddUserError, AddUserSuccess}
 import org.specs2.mutable.Specification
@@ -35,7 +36,7 @@ class DeleteComponentSpecs extends Specification
       case s if AddUserSuccess().status == s =>
 
         val (configId: String, _: StatusAddConfig) = addConfig(userId, s"http://contig/$username")
-        this.stepId = addStep(Some(configId), None).get
+        this.stepId = addStep(Some(configId), nameToShow = Some("Step1"), kind = Some("first")).get
         this.componentId = addComponentToStep(this.stepId, "Component to Delete", "immutable")._1
 
       case s if AddUserAlreadyExist().status == s =>
@@ -43,6 +44,8 @@ class DeleteComponentSpecs extends Specification
         val configTreeBO = getConfigTree(configId)
 
         this.stepId = configTreeBO.configTree.get.stepId
+        //TODO
+        this.stepId = RidToHash.setIdAndHash(this.stepId)._2
         this.componentId = addComponentToStep(this.stepId, "Component to Delete", "immutable")._1
 
       case s if AddUserError().status == s =>
@@ -50,11 +53,7 @@ class DeleteComponentSpecs extends Specification
     }
   }
 
-  def afterAll(): Unit = {
-//    val count = deleteComponents(this.stepId)
-//    require(count == 1, "deleted components " + count)
-
-  }
+  def afterAll(): Unit = {}
 
   "Diese Specification spezifiziert das Entfernen der Komponenten" >> {
     "Delete Component" >> {

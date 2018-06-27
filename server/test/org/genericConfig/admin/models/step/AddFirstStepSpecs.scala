@@ -86,7 +86,7 @@ class AddFirstStepSpecs extends Specification
       Logger.info("OUT " + firstStepSC )
       
       (firstStepSC \ "json").asOpt[String].get === JsonNames.ADD_STEP
-      (firstStepSC \ "result" \ "stepId").asOpt[String].get.size === 32
+      (firstStepSC \ "result" \ "stepId").asOpt[String].get.length must be_>=(32)
       (firstStepSC \ "result" \ "status" \ "addStep" \ "status").asOpt[String].get === AddStepSuccess().status
       (firstStepSC \ "result" \ "status" \ "deleteStep" \ "status").asOpt[String] === None
       (firstStepSC \ "result" \ "status" \ "updateStep" \ "status").asOpt[String] === None

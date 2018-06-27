@@ -36,14 +36,14 @@ trait AdminWeb {
       case Some(JsonNames.ADD_STEP) => addStep(receivedMessage, admin)
       case Some(JsonNames.DELETE_STEP) => deleteStep(receivedMessage, admin)
       case Some(JsonNames.UPDATE_STEP) => updateStep(receivedMessage, admin)
-      case Some(JsonNames.APPEND_STEP_TO) => ???
-      
+      case Some(JsonNames.CONNECT_COMPONENT_TO_STEP) => connectComponentToStep(receivedMessage, admin)
+
       case Some(JsonNames.ADD_COMPONENT) => addComponent(receivedMessage, admin)
       case Some(JsonNames.DELETE_COMPONENT) => deleteComponent(receivedMessage, admin)
       case Some(JsonNames.UPDATE_COMPONENT) => updateComponent(receivedMessage, admin)
 
 
-      case Some(JsonNames.CONNECTION_COMPONENT_TO_STEP) => ??? //connectComponentToStep(receivedMessage, admin)
+
       
       case Some(JsonNames.CREATE_DEPENDENCY) => createDependency(receivedMessage, admin)
       
@@ -99,7 +99,7 @@ trait AdminWeb {
       case e : JsError => jsonError(JsonNames.ADD_COMPONENT, e)
     }
   }
-  
+
   private def addStep(receivedMessage: JsValue, admin: Admin): JsValue = {
     Json.fromJson[JsonStepIn](receivedMessage) match {
       case stepIn : JsSuccess[JsonStepIn] => Json.toJson(admin.addStep(stepIn.get))
@@ -107,13 +107,13 @@ trait AdminWeb {
     }
   }
 
-  private def appendStepTo(receivedMessage: JsValue, admin: Admin): JsValue = {
+  private def connectComponentToStep(receivedMessage: JsValue, admin: Admin): JsValue = {
     Json.fromJson[JsonStepIn](receivedMessage) match {
-      case stepIn : JsSuccess[JsonStepIn] => Json.toJson(admin.appendStepTo(stepIn.get))
-      case e : JsError => jsonError(JsonNames.APPEND_STEP_TO, e)
+      case stepIn : JsSuccess[JsonStepIn] => Json.toJson(admin.connectComponentToStep(stepIn.get))
+      case e : JsError => jsonError(JsonNames.CONNECT_COMPONENT_TO_STEP, e)
     }
   }
-  
+
 //  private def connectComponentToStep(receivedMessage: JsValue, admin: Admin): JsValue = {
 //    val connectionComponentToStepIn: JsResult[JsonConnectionComponentToStepIn] =
 //      Json.fromJson[JsonConnectionComponentToStepIn](receivedMessage)
@@ -125,28 +125,28 @@ trait AdminWeb {
 //      admin.connectComponentToStep(connectionComponentToStepIn.get)
 //    Json.toJson(connectionComponentToStepOut)
 //  }
-  
+
   private def configTree(receivedMessage: JsValue, admin: Admin): JsValue = {
     Json.fromJson[JsonConfigTreeIn](receivedMessage) match {
       case configTreeIn: JsSuccess[JsonConfigTreeIn] => Json.toJson(admin.getConfigTree(configTreeIn.get))
       case e : JsError => jsonError(JsonNames.CONFIG_TREE, e)
     }
   }
-  
+
   private def createDependency(receivedMessage: JsValue, admin: Admin): JsValue = {
     val dependencyIn: JsResult[JsonDependencyIn] = Json.fromJson[JsonDependencyIn](receivedMessage)
     dependencyIn match {
       case s: JsSuccess[JsonDependencyIn] => s.get
       case e: JsError => Logger.error("Errors -> CREATE_DEPENDENCY: " + JsError.toJson(e).toString())
     }
-    
+
     val dependencyOut: JsonDependencyOut  = admin.createDependency(dependencyIn.get)
     Json.toJson(dependencyOut)
    }
-  
+
   private def visualProposalForAdditionalStepsInOneLevel(
       receivedMessage: JsValue, admin: Admin): JsValue = {
-    val visualProposalForAdditionalStepsInOneLevelIn: JsResult[JsonVisualProposalForAdditionalStepsInOneLevelIn] = 
+    val visualProposalForAdditionalStepsInOneLevelIn: JsResult[JsonVisualProposalForAdditionalStepsInOneLevelIn] =
       Json.fromJson[JsonVisualProposalForAdditionalStepsInOneLevelIn](receivedMessage)
     visualProposalForAdditionalStepsInOneLevelIn match {
       case s: JsSuccess[JsonVisualProposalForAdditionalStepsInOneLevelIn] => s.get
@@ -154,12 +154,12 @@ trait AdminWeb {
         Logger.error("Errors -> VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL: " +
             JsError.toJson(e).toString())
     }
-    
+
     val stepOut = admin.visualProposalForAdditionalStepsInOneLevel(
         visualProposalForAdditionalStepsInOneLevelIn.get)
     Json.toJson(stepOut)
   }
-  
+
   private def getConfigs(receivedMessage: JsValue, admin: Admin): JsValue = {
     val getConfigsIn: JsResult[JsonGetConfigsIn] = Json.fromJson[JsonGetConfigsIn](receivedMessage)
     getConfigsIn match {
@@ -167,25 +167,25 @@ trait AdminWeb {
       case e: JsError => jsonError(JsonNames.GET_CONFIGS, e)
     }
    }
-  
+
   private def deleteConfig(receivedMessage: JsValue, admin: Admin): JsValue = {
     val deleteConfigIn: JsResult[JsonDeleteConfigIn] = Json.fromJson[JsonDeleteConfigIn](receivedMessage)
     deleteConfigIn match {
       case s: JsSuccess[JsonDeleteConfigIn] => s.get
       case e: JsError => Logger.error("Errors -> CREATE_DEPENDENCY: " + JsError.toJson(e).toString())
     }
-    
+
     val deleteConfigOut: JsonDeleteConfigOut  = admin.deleteConfig(deleteConfigIn.get)
     Json.toJson(deleteConfigOut)
    }
-  
+
   private def updateConfig(receivedMessage: JsValue, admin: Admin): JsValue = {
     val editConfigIn: JsResult[JsonUpdateConfigIn] = Json.fromJson[JsonUpdateConfigIn](receivedMessage)
     editConfigIn match {
       case s: JsSuccess[JsonUpdateConfigIn] => s.get
       case e: JsError => Logger.error("Errors -> EDIT_CONFIG: " + JsError.toJson(e).toString())
     }
-    
+
     val editConfigOut: JsonUpdateConfigOut  = admin.updateConfig(editConfigIn.get)
     Json.toJson(editConfigOut)
    }

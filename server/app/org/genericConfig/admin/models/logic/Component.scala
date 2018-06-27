@@ -3,7 +3,9 @@ package org.genericConfig.admin.models.logic
 import org.genericConfig.admin.models.persistence.Persistence
 import org.genericConfig.admin.models.wrapper.RidToHash
 import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.common.status.Status
 import org.genericConfig.admin.shared.component.bo.ComponentBO
+import org.genericConfig.admin.shared.step.status.{AppendStepError, AppendStepSuccess, StatusAppendStep}
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

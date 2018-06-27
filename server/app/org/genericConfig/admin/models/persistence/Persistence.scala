@@ -3,8 +3,6 @@ package org.genericConfig.admin.models.persistence
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.genericConfig.admin.models.persistence.db.orientdb._
 import org.genericConfig.admin.models.persistence.orientdb.{Graph, PropertyKeys}
-import org.genericConfig.admin.models.wrapper.connectionComponentToStep.{ConnectionComponentToStepIn, ConnectionComponentToStepOut}
-import org.genericConfig.admin.models.wrapper.dependency.{DependencyIn, DependencyOut}
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status._
@@ -668,9 +666,9 @@ object Persistence {
   //    * @return ConnectionComponentToStepSC
   //    */
 
-  def connectComponentToStep(
-                              connectionComponentToStepIn: ConnectionComponentToStepIn
-                            ): ConnectionComponentToStepOut = {
+//  def connectComponentToStep(
+//                              connectionComponentToStepIn: ConnectionComponentToStepIn
+//                            ): ConnectionComponentToStepOut = {
 
     /*
      * TODO v016 dasselbe wie bei createStep implementieren aber einen Partnercomponent beruecksichtigen
@@ -736,8 +734,8 @@ object Persistence {
     //        )
     //      }
     //    }
-    ???
-  }
+//    ???
+//  }
 
   //  /**
   //    * @author Gennadi Heimann
@@ -777,7 +775,7 @@ object Persistence {
   //    * @param DependencyCS
   //    * @return DependencySC
   //    */
-  def createDependency(dependencyIn: DependencyIn): DependencyOut = {
+//  def createDependency(dependencyIn: DependencyIn): DependencyOut = {
 
     //    val eHasDependency: Option[OrientEdge] = HasDependencyEdge.createDependency(dependencyIn)
     //
@@ -807,8 +805,8 @@ object Persistence {
     //        )
     //      }
     //    }
-    ???
-  }
+//    ???
+//  }
 
   //  /**
   //    * @author Gennadi Heimann

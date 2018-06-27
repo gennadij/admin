@@ -10,5 +10,6 @@ case class StepForConfigTreeBO(
                                 stepId: String,
                                 nameToShow: String,
                                 kind: String,
+                                nextSteps: Set[StepForConfigTreeBO],
                                 components: Set[Option[ComponentForConfigTreeBO]]
                               )

@@ -158,17 +158,17 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
 		(stepSCWithDependencies \ "result" \ "stepId").asOpt[String].get
 	}
 
-	def connectComponentToStep(stepId: String, componentId: String, wC: WebClient): Unit = {
-		val connectionComponentToStepCS = Json.obj(
-			"json" -> JsonNames.CONNECTION_COMPONENT_TO_STEP,
-			"params" -> Json.obj(
-				"componentId" -> componentId,
-				"stepId" -> stepId
-			)
-		)
-		val connectionComponentToStepSC = wC.handleMessage(connectionComponentToStepCS)
-
-	}
+//	def connectComponentToStep(stepId: String, componentId: String, wC: WebClient): Unit = {
+//		val connectionComponentToStepCS = Json.obj(
+//			"json" -> JsonNames.CONNECTION_COMPONENT_TO_STEP,
+//			"params" -> Json.obj(
+//				"componentId" -> componentId,
+//				"stepId" -> stepId
+//			)
+//		)
+//		val connectionComponentToStepSC = wC.handleMessage(connectionComponentToStepCS)
+//
+//	}
 
 	def getComponentId(nameToShow: String): String = {
 		val graph: OrientGraph = OrientDB.getFactory().getTx

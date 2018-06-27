@@ -34,7 +34,7 @@ class WrapperStep {
           None, // stepId
           None // status
         )
-      case json if json == JsonNames.DELETE_STEP || json == JsonNames.DELETE_STEP =>
+      case json if json == JsonNames.DELETE_STEP =>
 
         StepBO(
           Some(jsonStepIn.json),
@@ -46,7 +46,7 @@ class WrapperStep {
           Some(jsonStepIn.params.stepId), // stepId
           None // status
         )
-      case json if json == JsonNames.UPDATE_STEP || json == JsonNames.UPDATE_STEP  =>
+      case json if json == JsonNames.UPDATE_STEP  =>
 
         StepBO(
           Some(jsonStepIn.json),
@@ -57,6 +57,12 @@ class WrapperStep {
           Some(jsonStepIn.params.selectionCriterium.get.max), // selectionCriteriumMax
           Some(jsonStepIn.params.stepId), // stepId
           None // status
+        )
+      case json if json == JsonNames.CONNECT_COMPONENT_TO_STEP  =>
+        StepBO(
+          json = Some(jsonStepIn.json),
+          appendToId = Some(jsonStepIn.params.appendToId),
+          stepId = Some(jsonStepIn.params.stepId)
         )
     }
   }
@@ -73,11 +79,12 @@ class WrapperStep {
   private[wrapper] def toJsonStepOut(stepBO: StepBO): JsonStepOut = {
     stepBO.json.get match {
       case json if json == JsonNames.ADD_STEP =>
-        val j = createJsonStepOut(stepBO, json)
-        j
+        createJsonStepOut(stepBO, json)
       case json if json == JsonNames.DELETE_STEP =>
         createJsonStepOut(stepBO, json)
       case json if json == JsonNames.UPDATE_STEP =>
+        createJsonStepOut(stepBO, json)
+      case json if json == JsonNames.CONNECT_COMPONENT_TO_STEP=>
         createJsonStepOut(stepBO, json)
     }
   }

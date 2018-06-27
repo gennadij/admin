@@ -49,8 +49,8 @@ class TwoFirstStepsForOneConfigSpecs   extends Specification
         this.configId = configId
         addStep(Some(configId), None)
       case s if AddUserAlreadyExist().status == s =>
-        this.configId = getConfigId(usernamePassword = "user4", configUrl = s"http://contig/$username")
-        addStep(Some(configId), None)
+        this.configId = getConfigId(usernamePassword = usernamePassword, configUrl = s"http://contig/$username")
+        addStep(Some(configId), nameToShow = Some("Stepo 1"), kind = Some("first"))
       case s if AddUserError().status == s =>
         Logger.info("Fehler bei der Vorbereitung")
     }

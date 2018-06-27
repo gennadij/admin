@@ -18,13 +18,13 @@ object JsonNames {
   val ADD_STEP: String = "AddStep"
   val DELETE_STEP: String = "DeleteStep"
   val UPDATE_STEP: String = "UpdateStep"
-  val APPEND_STEP_TO: String = "AppendStepTo"
-  
+  val CONNECT_COMPONENT_TO_STEP: String = "ConnectComponentToStep"
+
   val ADD_COMPONENT: String = "AddComponent"
   val DELETE_COMPONENT: String = "DeleteComponent"
   val UPDATE_COMPONENT: String = "UpdateComponent"
   val CONFIG_TREE: String = "ConfigTree"
-  val CONNECTION_COMPONENT_TO_STEP: String = "ConnectionComponentToStep"
+
   val CREATE_DEPENDENCY: String = "CreateDependency"
   val VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL: String = 
     "VisualProposalForAdditionalStepsInOneLevel" 

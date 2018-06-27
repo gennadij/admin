@@ -45,7 +45,7 @@ class DeleteFirstStepSpecs extends Specification
           this.stepId = addStep(Some(configId), None).get
         case s if AddUserAlreadyExist().status == s =>
           this.configId = getConfigId(usernamePassword = usernamePassword, configUrl = s"http://contig/$username")
-          this.stepId = addStep(Some(this.configId), None).get
+          this.stepId = addStep(Some(this.configId), nameToShow = Some("Step 1"), kind = Some("first")).get
         case s if AddUserError().status == s =>
           Logger.info("Fehler bei der Vorbereitung")
       }
