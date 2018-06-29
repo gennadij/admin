@@ -10,10 +10,10 @@ import org.genericConfig.admin.client.config.GetConfig
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
-import org.genericConfig.admin.configTree.ConfigTree
 import org.genericConfig.admin.client.config.CreateConfig
 import org.genericConfig.admin.client.config.DeleteConfig
 import org.genericConfig.admin.client.config.EditConfig
+import org.genericConfig.admin.client.configTree.ConfigTree
 import org.genericConfig.admin.shared.step.json.JsonStepOut
 import org.genericConfig.admin.client.step.AddStep
 import org.genericConfig.admin.client.user.GetUser
@@ -36,7 +36,7 @@ class AdminClienWeb(websocket: WebSocket) {
       case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage)
       case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage)
       case Some(JsonNames.UPDATE_CONFIG) => updateConfig(receivedMessage)
-      case Some(JsonNames.ADD_STEP) => addFirstStep(receivedMessage)
+      case Some(JsonNames.ADD_STEP) => addStep(receivedMessage)
       case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage)
       case Some(JsonNames.ADD_COMPONENT) => ??? //createComponent(receivedMessage, admin)
       case Some(JsonNames.CONNECT_COMPONENT_TO_STEP) => ??? //connectComponentToStep(receivedMessage, admin)
@@ -100,7 +100,7 @@ class AdminClienWeb(websocket: WebSocket) {
     new EditConfig(websocket).updateStatus(updateConfigOut.get)
   }
   
-  private def addFirstStep(receivedMessage: JsValue) = {
+  private def addStep(receivedMessage: JsValue) = {
     val addFirstStepOut: JsResult[JsonStepOut] = Json.fromJson[JsonStepOut](receivedMessage)
     addFirstStepOut match {
       case s: JsSuccess[JsonStepOut] => s.get

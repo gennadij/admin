@@ -1,14 +1,15 @@
 package org.genericConfig.admin.client.config
 
+import org.genericConfig.admin.client.configTree.ConfigTree
 import org.scalajs.dom.raw.WebSocket
 import org.scalajs.jquery.jQuery
-import org.genericConfig.admin.configTree.ConfigTree
 import org.genericConfig.admin.shared.config.json.JsonGetConfigsOut
 import org.genericConfig.admin.shared.common.json.JsonStatus
 import org.genericConfig.admin.shared.config.json.JsonDeleteConfigIn
 import org.genericConfig.admin.shared.config.json.JsonDeleteConfigParams
 import play.api.libs.json.Json
 import util.CommonFunction
+
 import scala.util.matching.Regex
 import util.HtmlElementIds
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeIn

@@ -22,7 +22,7 @@ import org.genericConfig.admin.shared.config.json.JsonGetConfigsParams
  */
 class AddStep(websocket: WebSocket) extends CommonFunction {
   
-  def addFirstStep(configTree: JsonConfigTreeOut) = {
+  def addStep(idToAppend: String, userId: String) = {
     
     cleanPage
     
@@ -38,8 +38,8 @@ class AddStep(websocket: WebSocket) extends CommonFunction {
     
     drawNewMain(htmlMain)
    
-    jQuery(HtmlElementIds.addStepJQuery).on("click", () => saveStep(configTree.result.configId.get))
-    jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => getConfigs(configTree.result.userId.get))
+    jQuery(HtmlElementIds.addStepJQuery).on("click", () => saveStep(idToAppend))
+    jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => getConfigs(userId))
   }
   
   private def saveStep(configId: String) = {

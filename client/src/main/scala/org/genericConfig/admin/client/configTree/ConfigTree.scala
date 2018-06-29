@@ -1,4 +1,4 @@
-package org.genericConfig.admin.configTree
+package org.genericConfig.admin.client.configTree
 
 import org.scalajs.jquery.jQuery
 import org.scalajs.dom.raw.WebSocket
@@ -145,12 +145,12 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction{
          
     drawNewMain(htmlMain)
     
-    jQuery(HtmlElementIds.addStepJQuery).on("click", () => addStep(configTree))
+    jQuery(HtmlElementIds.addStepJQuery).on("click", () => addStep(configTree.result.configId.get, configTree.result.userId.get))
     jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => getConfigs(configTree.result.userId.get))
   }
  
-  private def addStep(configTree: JsonConfigTreeOut) = {
-    new AddStep(websocket).addFirstStep(configTree)
+  private def addStep(idToAppend: String, userId: String) = {
+    new AddStep(websocket).addStep(idToAppend, userId)
   }
   
   private def getConfigs(userId: String) = {
