@@ -2,9 +2,7 @@ package org.genericConfig.admin.models.logic
 
 import org.genericConfig.admin.models.persistence.Persistence
 import org.genericConfig.admin.shared.user.bo.UserBO
-import org.genericConfig.admin.models.wrapper.RidToHash
-import org.genericConfig.admin.shared.user.status.AddUserError
-import org.genericConfig.admin.shared.user.status.GetUserSuccess
+import org.genericConfig.admin.shared.user.status.{AddUserError, GetUserSuccess}
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

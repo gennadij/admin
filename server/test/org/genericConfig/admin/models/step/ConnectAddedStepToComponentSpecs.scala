@@ -1,7 +1,7 @@
 package org.genericConfig.admin.models.step
 
 import org.genericConfig.admin.controllers.websocket.WebClient
-import org.genericConfig.admin.models.wrapper.RidToHash
+import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.Success
 import org.genericConfig.admin.shared.config.status.StatusAddConfig

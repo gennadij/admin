@@ -1,4 +1,4 @@
-package org.genericConfig.admin.models.wrapper
+package org.genericConfig.admin.models.logic
 
 import play.api.Logger
 
@@ -54,5 +54,9 @@ object RidToHash {
     val digest = md.digest(id.getBytes)
     val bigInt = new BigInteger(1, digest)
     bigInt.toString(16)
+  }
+
+  def printHashes: Unit = {
+    idHash foreach(iH => Logger.info("id: " + iH._1 + " -> " + "hash: " + iH._2))
   }
 }

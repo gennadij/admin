@@ -3,6 +3,7 @@ package org.genericConfig.admin.models.step
 import org.genericConfig.admin.controllers.admin.AdminWeb
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models._
+import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.{Error, ODBRecordIdDefect, Success}
 import org.genericConfig.admin.shared.step.json.{JsonSelectionCriterium, JsonStepIn, JsonStepParams}
@@ -17,7 +18,6 @@ import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.{JsValue, Json}
 import util.CommonFunction
-import org.genericConfig.admin.models.wrapper.RidToHash
 import org.genericConfig.admin.shared.step.status.AddStepIdHashNotExist
 
 /**
@@ -59,7 +59,7 @@ class AddStepSpecs extends Specification
       case s if AddUserAlreadyExist().status == s =>
         this.configId = getConfigId(usernamePassword = usernamePassword, configUrl = s"http://contig/$usernamePassword")
 
-        this.componentId = getConfigTree(this.configId).configTree.get.components.head.get.componentId
+        this.componentId = getConfigTree(this.configId).configTree.get.components.head.componentId
       case s if AddUserError().status == s =>
         Logger.info("Fehler bei der Vorbereitung")
 

@@ -14,8 +14,8 @@ import org.genericConfig.admin.shared.user.bo.UserBO
 import org.genericConfig.admin.shared.user.json.{JsonUserIn, JsonUserOut, JsonUserParams}
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
-import org.genericConfig.admin.models.wrapper.RidToHash
-import org.genericConfig.admin.models.logic.{Component, Config, Step, User}
+import org.genericConfig.admin.models.logic._
+import org.genericConfig.admin.shared.common.status.Status
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.status.StatusAddComponent
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
@@ -224,5 +224,16 @@ trait CommonFunction {
     val componentBOOut = Component.addComponent(componentBOIn)
 
     (componentBOOut.componentId.get, componentBOOut.status.get.addComponent.get)
+  }
+
+  def connectComponentToStep(stepId: String, componentId: String): Status = {
+    val connectCToSIn = StepBO(
+      appendToId = Some(componentId),
+      stepId = Some(stepId)
+    )
+
+    val connectCToSOut = Step.connectComponentToStep(connectCToSIn)
+
+    connectCToSOut.status.get.common.get
   }
 }

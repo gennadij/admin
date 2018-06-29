@@ -4,10 +4,7 @@ import org.genericConfig.admin.models.persistence.Persistence
 import org.genericConfig.admin.shared.common.status._
 import org.genericConfig.admin.shared.config.bo.{ConfigBO, _}
 import org.genericConfig.admin.shared.config.status._
-import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
-import org.genericConfig.admin.models.wrapper.RidToHash
-import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
-import play.api.Logger
+import org.genericConfig.admin.shared.configTree.bo.{ComponentForConfigTreeBO, ConfigTreeBO, StepForConfigTreeBO}
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -215,15 +212,49 @@ class Config(configBO: Option[ConfigBO] = None) {
     * @version 0.1.6
     * @return ConfigBO
     */
-  def getConfigTree(configTreeBO: ConfigTreeBO): ConfigTreeBO = {
+  private def getConfigTree(configTreeBO: ConfigTreeBO): ConfigTreeBO = {
     
     val configTreeBOOut: ConfigTreeBO = 
       Persistence.getConfigTree(configTreeBO.copy(configId = RidToHash.getRId(configTreeBO.configId.get)))
 
     configTreeBOOut.copy(
         userId = RidToHash.getHash(configTreeBOOut.userId.get), 
-        configId = RidToHash.getHash(configTreeBOOut.configId.get)
+        configId = RidToHash.getHash(configTreeBOOut.configId.get),
+        configTree = setHashForConfigTree(configTreeBOOut.configTree)
     )
+  }
+
+  private def setHashForConfigTree(configTree: Option[StepForConfigTreeBO]): Option[StepForConfigTreeBO] = {
+    configTree match {
+      case Some(cT) => Some(cT.copy(
+            stepId = RidToHash.setIdAndHash(cT.stepId)._2,
+            nextSteps = setHashForNextSteps(cT.nextSteps),
+            components = setHashForComponents(cT.components)
+          ))
+      case None => None
+    }
+  }
+
+  private def setHashForComponents(components: Set[ComponentForConfigTreeBO]): Set[ComponentForConfigTreeBO] = {
+    components map(c => {
+      c.copy(componentId = RidToHash.setIdAndHash(c.componentId)._2, nextStepId = getHashForNextStepId(c.nextStepId))
+    })
+  }
+
+  private def setHashForNextSteps(nextSteps: Set[StepForConfigTreeBO]): Set[StepForConfigTreeBO] = {
+    nextSteps map { nSs =>
+      nSs.copy(
+        stepId = RidToHash.setIdAndHash(nSs.stepId)._2,
+        nextSteps = setHashForNextSteps(nSs.nextSteps),
+        components = setHashForComponents(nSs.components))
+    }
+  }
+
+  private def getHashForNextStepId(nextStepId: String): String = {
+    nextStepId match {
+      case "last" => "last"
+      case _ => RidToHash.setIdAndHash(nextStepId)._2
+    }
   }
 }
 

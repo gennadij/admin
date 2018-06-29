@@ -5,7 +5,6 @@ import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.{Status, Success}
 import org.genericConfig.admin.shared.step.bo.StepBO
 import org.genericConfig.admin.shared.step.status._
-import org.genericConfig.admin.models.wrapper.RidToHash
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

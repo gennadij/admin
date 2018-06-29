@@ -1,6 +1,7 @@
 package org.genericConfig.admin.models.step
 
 import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.Success
 import org.genericConfig.admin.shared.config.status.StatusAddConfig
@@ -14,7 +15,6 @@ import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
 import play.api.libs.json.Json
 import util.CommonFunction
-import org.genericConfig.admin.models.wrapper.RidToHash
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

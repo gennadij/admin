@@ -137,15 +137,15 @@ class WrapperConfigTree {
     * @param components : Set[Option[ComponentForConfigTreeBO\]\]
     * @return Set[JsonConfigTreeComponent]
     */
-  private def getJsonConfigTreeComponents_(components: Set[Option[ComponentForConfigTreeBO]]): Set[JsonConfigTreeComponent] = {
+  private def getJsonConfigTreeComponents_(components: Set[ComponentForConfigTreeBO]): Set[JsonConfigTreeComponent] = {
 
     components.map {
       component => {
         JsonConfigTreeComponent(
-          component.get.componentId,
-          component.get.nameToShow,
-          component.get.kind,
-          component.get.nextStepId
+          component.componentId,
+          component.nameToShow,
+          component.kind,
+          component.nextStepId
         )
       }
     }
