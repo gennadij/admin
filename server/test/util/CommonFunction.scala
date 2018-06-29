@@ -76,6 +76,10 @@ trait CommonFunction {
     Graph.deleteStepAppendedToConfig(configId)
   }
 
+  def deleteStepAppendToComponent(componentId: String): Int = {
+    Graph.deleteStepAppendedToComponent(componentId)
+  }
+
   def getConfigs(userId: String, wC: WebClient): Set[String] = {
     val getConfigsIn = Json.obj(
       "json" -> JsonNames.GET_CONFIGS

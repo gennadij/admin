@@ -257,6 +257,22 @@ object Graph {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
+    * @param componentId: String
+    * @return Int
+    */
+  def deleteStepAppendedToComponent(componentId: String): Int = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), Success()) =>
+        val graph: OrientGraph = dbFactory.getTx
+        new Graph(graph).deleteStepAppendedToComponent(componentId)
+      case (None, ODBConnectionFail()) =>
+        0
+    }
+  }
+
+  /**
+    * @author Gennadi Heimann
+    * @version 0.1.6
     * @param stepBO : StepBO
     * @return (StatusUpdateStep, Status)
     */
@@ -668,9 +684,9 @@ class Graph(graph: OrientGraph) {
         eHasComponent =>
           val vComponent: OrientVertex = eHasComponent.getVertex(Direction.IN).asInstanceOf[OrientVertex]
           val eHasSteps: List[Edge] = vComponent.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList
-          val nextStepId: String = eHasSteps match {
-            case List() => "last"
-            case _ => eHasSteps.head.getVertex(Direction.IN).asInstanceOf[OrientVertex].getIdentity.toString()
+          val nextStepId: Option[String] = eHasSteps match {
+            case List() => None
+            case _ => Some(eHasSteps.head.getVertex(Direction.IN).asInstanceOf[OrientVertex].getIdentity.toString())
           }
 
           ComponentForConfigTreeBO(
@@ -900,6 +916,19 @@ class Graph(graph: OrientGraph) {
   private def deleteStepAppendedToConfig(configId: String): Int = {
     val res: Int = graph
       .command(new OCommandSQL(s"DELETE VERTEX Step where @rid IN (SELECT out() from Config where @rid='$configId')")).execute()
+    graph.commit()
+    res
+  }
+
+  /**
+    * @author Gennadi Heimann
+    * @version 0.1.6
+    * @param componentId: String
+    * @return Int count of deleted Vertexes
+    */
+  private def deleteStepAppendedToComponent(componentId: String): Int = {
+    val res: Int = graph
+      .command(new OCommandSQL(s"DELETE VERTEX Step where @rid IN (SELECT out() from Component where @rid='$componentId')")).execute()
     graph.commit()
     res
   }

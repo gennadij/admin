@@ -3,10 +3,8 @@ package org.genericConfig.admin.models.configTree
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.common.status.Success
 import org.genericConfig.admin.shared.config.status.StatusAddConfig
 import org.genericConfig.admin.shared.configTree.json.{JsonConfigTreeIn, JsonConfigTreeParams}
-import org.genericConfig.admin.shared.configTree.status.GetConfigTreeSuccess
 import org.genericConfig.admin.shared.user.status.{AddUserAlreadyExist, AddUserError, AddUserSuccess}
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
@@ -16,7 +14,6 @@ import play.api.Logger
 import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.{JsValue, Json}
-import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import util.CommonFunction
 
 /**
@@ -121,47 +118,47 @@ class ConfigTreeNotEmptySpecs extends Specification
     ((configTreeOut \ "result" \ "step" \ "components")(0) \ "componentId").asOpt[String].get.length must be_<=(32) and be_>=(30)
     ((configTreeOut \ "result" \ "step" \ "components")(0) \ "nameToShow").asOpt[String].get === "Component11"
     ((configTreeOut \ "result" \ "step" \ "components")(0) \ "kind").asOpt[String].get === "immutable1"
-    ((configTreeOut \ "result" \ "step" \ "components")(0) \ "nextStep").asOpt[String].get.length must be_<=(32) and be_>=(30)
-    (((configTreeOut \ "result" \ "step" \ "components")(1)) \ "componentId").asOpt[String].get.length must be_<=(32) and be_>=(30)
-    (((configTreeOut \ "result" \ "step" \ "components")(1)) \ "nameToShow").asOpt[String].get === "Component12"
-    (((configTreeOut \ "result" \ "step" \ "components")(1)) \ "kind").asOpt[String].get === "immutable2"
-    (((configTreeOut \ "result" \ "step" \ "components")(1)) \ "nextStep").asOpt[String].get.length must be_<=(32) and be_>=(30)
-    (((configTreeOut \ "result" \ "step" \ "components")(2)) \ "componentId").asOpt[String].get.length must be_<=(32) and be_>=(30)
-    (((configTreeOut \ "result" \ "step" \ "components")(2)) \ "nameToShow").asOpt[String].get === "Component13"
-    (((configTreeOut \ "result" \ "step" \ "components")(2)) \ "kind").asOpt[String].get === "immutable3"
-    (((configTreeOut \ "result" \ "step" \ "components")(2)) \ "nextStep").asOpt[String].get.length must be_<=(32) and be_>=(30)
-    (((configTreeOut \ "result" \ "step" \ "components")(3)) \ "componentId").asOpt[String].get.length must be_<=(32) and be_>=(30)
+    ((configTreeOut \ "result" \ "step" \ "components")(0) \ "nextStepId").asOpt[String].get.length must be_<=(32) and be_>=(30)
+    ((configTreeOut \ "result" \ "step" \ "components")(1) \ "componentId").asOpt[String].get.length must be_<=(32) and be_>=(30)
+    ((configTreeOut \ "result" \ "step" \ "components")(1) \ "nameToShow").asOpt[String].get === "Component12"
+    ((configTreeOut \ "result" \ "step" \ "components")(1) \ "kind").asOpt[String].get === "immutable2"
+    ((configTreeOut \ "result" \ "step" \ "components")(1) \ "nextStepId").asOpt[String].get.length must be_<=(32) and be_>=(30)
+    ((configTreeOut \ "result" \ "step" \ "components")(2) \ "componentId").asOpt[String].get.length must be_<=(32) and be_>=(30)
+    ((configTreeOut \ "result" \ "step" \ "components")(2) \ "nameToShow").asOpt[String].get === "Component13"
+    ((configTreeOut \ "result" \ "step" \ "components")(2) \ "kind").asOpt[String].get === "immutable3"
+    ((configTreeOut \ "result" \ "step" \ "components")(2) \ "nextStepId").asOpt[String].get.length must be_<=(32) and be_>=(30)
+    ((configTreeOut \ "result" \ "step" \ "components")(3) \ "componentId").asOpt[String].get.length must be_<=(32) and be_>=(30)
     ((configTreeOut \ "result" \ "step" \ "components")(3) \ "nameToShow").asOpt[String].get === "Component14"
     ((configTreeOut \ "result" \ "step" \ "components")(3) \ "kind").asOpt[String].get === "immutable4"
-    (((configTreeOut \ "result" \ "step" \ "components")(3)) \ "nextStep").asOpt[String] === Some("last")
+    ((configTreeOut \ "result" \ "step" \ "components")(3) \ "nextStepId").asOpt[String] === None
     (configTreeOut \ "result" \ "step" \ "nextSteps").asOpt[Set[JsValue]].get.size === 2
 
     (((configTreeOut \ "result" \ "step" \ "nextSteps")(0)) \ "stepId").asOpt[String].get.length must be_<=(32) and be_>=(30)
     (((configTreeOut \ "result" \ "step" \ "nextSteps")(0)) \ "nameToShow").asOpt[String] === Some("Step 2")
     (((configTreeOut \ "result" \ "step" \ "nextSteps")(0)) \ "kind").asOpt[String] === Some("default")
     (((configTreeOut \ "result" \ "step" \ "nextSteps")(0)) \ "components").asOpt[Set[JsValue]].get.size === 2
-    (((((configTreeOut \ "result" \ "step" \ "nextSteps")(0)) \ "components")(0)) \ "componentId").asOpt[String].get.length must be_<=(32) and be_>=(30)
-    (((((configTreeOut \ "result" \ "step" \ "nextSteps")(0)) \ "components")(0)) \ "nameToShow").asOpt[String].get === "Component21"
-    (((((configTreeOut \ "result" \ "step" \ "nextSteps")(0)) \ "components")(0)) \ "kind").asOpt[String].get === "immutable"
-    (((((configTreeOut \ "result" \ "step" \ "nextSteps")(0)) \ "components")(0)) \ "nextStep").asOpt[String] === Some("last")
-    (((((configTreeOut \ "result" \ "step" \ "nextSteps")(0)) \ "components")(1)) \ "componentId").asOpt[String].get.length must be_<=(32) and be_>=(30)
-    (((((configTreeOut \ "result" \ "step" \ "nextSteps")(0)) \ "components")(1)) \ "nameToShow").asOpt[String].get === "Component22"
-    (((((configTreeOut \ "result" \ "step" \ "nextSteps")(0)) \ "components")(1)) \ "kind").asOpt[String].get === "immutable"
-    (((((configTreeOut \ "result" \ "step" \ "nextSteps")(0)) \ "components")(1)) \ "nextStep").asOpt[String] === Some("last")
+    ((((configTreeOut \ "result" \ "step" \ "nextSteps")(0) \ "components")(0)) \ "componentId").asOpt[String].get.length must be_<=(32) and be_>=(30)
+    ((((configTreeOut \ "result" \ "step" \ "nextSteps")(0) \ "components")(0)) \ "nameToShow").asOpt[String].get === "Component21"
+    ((((configTreeOut \ "result" \ "step" \ "nextSteps")(0) \ "components")(0)) \ "kind").asOpt[String].get === "immutable"
+    ((((configTreeOut \ "result" \ "step" \ "nextSteps")(0) \ "components")(0)) \ "nextStepId").asOpt[String] === None
+    ((((configTreeOut \ "result" \ "step" \ "nextSteps")(0) \ "components")(1)) \ "componentId").asOpt[String].get.length must be_<=(32) and be_>=(30)
+    ((((configTreeOut \ "result" \ "step" \ "nextSteps")(0) \ "components")(1)) \ "nameToShow").asOpt[String].get === "Component22"
+    ((((configTreeOut \ "result" \ "step" \ "nextSteps")(0) \ "components")(1)) \ "kind").asOpt[String].get === "immutable"
+    ((((configTreeOut \ "result" \ "step" \ "nextSteps")(0) \ "components")(1)) \ "nextStepId").asOpt[String] === None
     (((configTreeOut \ "result" \ "step" \ "nextSteps")(0)) \ "nextSteps").asOpt[Set[JsValue]].get.size === 0
 
-    (((configTreeOut \ "result" \ "step" \ "nextSteps")(1)) \ "stepId").asOpt[String].get.length must be_<=(32) and be_>=(30)
-    (((configTreeOut \ "result" \ "step" \ "nextSteps")(1)) \ "nameToShow").asOpt[String] === Some("Step 3")
-    (((configTreeOut \ "result" \ "step" \ "nextSteps")(1)) \ "kind").asOpt[String] === Some("default")
-    (((configTreeOut \ "result" \ "step" \ "nextSteps")(1)) \ "components").asOpt[Set[JsValue]].get.size === 2
+    ((configTreeOut \ "result" \ "step" \ "nextSteps")(1) \ "stepId").asOpt[String].get.length must be_<=(32) and be_>=(30)
+    ((configTreeOut \ "result" \ "step" \ "nextSteps")(1) \ "nameToShow").asOpt[String] === Some("Step 3")
+    ((configTreeOut \ "result" \ "step" \ "nextSteps")(1) \ "kind").asOpt[String] === Some("default")
+    ((configTreeOut \ "result" \ "step" \ "nextSteps")(1) \ "components").asOpt[Set[JsValue]].get.size === 2
     (((((configTreeOut \ "result" \ "step" \ "nextSteps")(1)) \ "components")(0)) \ "componentId").asOpt[String].get.length must be_<=(32) and be_>=(30)
     (((((configTreeOut \ "result" \ "step" \ "nextSteps")(1)) \ "components")(0)) \ "nameToShow").asOpt[String].get === "Component31"
     (((((configTreeOut \ "result" \ "step" \ "nextSteps")(1)) \ "components")(0)) \ "kind").asOpt[String].get === "immutable"
-    (((((configTreeOut \ "result" \ "step" \ "nextSteps")(1)) \ "components")(0)) \ "nextStep").asOpt[String] === Some("last")
+    (((((configTreeOut \ "result" \ "step" \ "nextSteps")(1)) \ "components")(0)) \ "nextStepId").asOpt[String] === None
     (((((configTreeOut \ "result" \ "step" \ "nextSteps")(1)) \ "components")(1)) \ "componentId").asOpt[String].get.length must be_<=(32) and be_>=(30)
     (((((configTreeOut \ "result" \ "step" \ "nextSteps")(1)) \ "components")(1)) \ "nameToShow").asOpt[String].get === "Component31"
     (((((configTreeOut \ "result" \ "step" \ "nextSteps")(1)) \ "components")(1)) \ "kind").asOpt[String].get === "immutable"
-    (((((configTreeOut \ "result" \ "step" \ "nextSteps")(1)) \ "components")(1)) \ "nextStep").asOpt[String] === Some("last")
-    (((configTreeOut \ "result" \ "step" \ "nextSteps")(1)) \ "nextSteps").asOpt[Set[JsValue]].get.size === 0
+    (((((configTreeOut \ "result" \ "step" \ "nextSteps")(1)) \ "components")(1)) \ "nextStepId").asOpt[String] === None
+    ((configTreeOut \ "result" \ "step" \ "nextSteps")(1) \ "nextSteps").asOpt[Set[JsValue]].get.size === 0
   }
 }

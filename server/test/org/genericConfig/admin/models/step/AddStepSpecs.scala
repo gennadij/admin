@@ -4,6 +4,7 @@ import org.genericConfig.admin.controllers.admin.AdminWeb
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models._
 import org.genericConfig.admin.models.logic.RidToHash
+import org.genericConfig.admin.models.persistence.orientdb.Graph
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.{Error, ODBRecordIdDefect, Success}
 import org.genericConfig.admin.shared.step.json.{JsonSelectionCriterium, JsonStepIn, JsonStepParams}
@@ -67,8 +68,8 @@ class AddStepSpecs extends Specification
   }
 
   def afterAll(): Unit = {
-//    val count = deleteStepAppendedToConfig(RidToHash.getRId(configId).get)
-//    require(count == 1, "Anzahl der geloeschten Steps " + count)
+    val count = Graph.deleteStepAppendedToComponent(RidToHash.getRId(configId).get)
+    require(count == 1, "Anzahl der geloeschten Steps " + count)
   }
 
 
@@ -90,17 +91,16 @@ class AddStepSpecs extends Specification
 
       Logger.info("IN " + jsonAddStep)
 
-//      val firstStepSC: JsValue = wC.handleMessage(jsonAddStep)
+      val jsonAddStepOut: JsValue = wC.handleMessage(jsonAddStep)
 
-//      Logger.info("OUT " + firstStepSC )
+      Logger.info("OUT " + jsonAddStepOut )
 
-//      (firstStepSC \ "json").asOpt[String].get === JsonNames.ADD_STEP
-//      (firstStepSC \ "result" \ "status" \ "addStep" \ "status").asOpt[String].get === AddStepSuccess().status
-//      (firstStepSC \ "result" \ "status" \ "deleteStep" \ "status").asOpt[String] === None
-//      (firstStepSC \ "result" \ "status" \ "updateStep" \ "status").asOpt[String] === None
-//      (firstStepSC \ "result" \ "status" \ "appendStep" \ "status").asOpt[String].get === AppendStepSuccess().status
-//      (firstStepSC \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
-      "" === ""
+      (jsonAddStepOut \ "json").asOpt[String].get === JsonNames.ADD_STEP
+      (jsonAddStepOut \ "result" \ "status" \ "addStep" \ "status").asOpt[String].get === AddStepSuccess().status
+      (jsonAddStepOut \ "result" \ "status" \ "deleteStep" \ "status").asOpt[String] === None
+      (jsonAddStepOut \ "result" \ "status" \ "updateStep" \ "status").asOpt[String] === None
+      (jsonAddStepOut \ "result" \ "status" \ "appendStep" \ "status").asOpt[String].get === AppendStepSuccess().status
+      (jsonAddStepOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
     }
   }
 }

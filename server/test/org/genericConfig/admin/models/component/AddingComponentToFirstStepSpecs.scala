@@ -49,8 +49,6 @@ class AddingComponentToFirstStepSpecs extends Specification
         val configTreeBO = getConfigTree(configId)
 
         this.stepId = configTreeBO.configTree.get.stepId
-        //TODO
-        this.stepId = RidToHash.setIdAndHash(this.stepId)._2
 
       case s if AddUserError().status == s =>
         Logger.info("Fehler bei der Vorbereitung")

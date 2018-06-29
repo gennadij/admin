@@ -10,5 +10,5 @@ case class ComponentForConfigTreeBO(
                                      componentId: String,
                                      nameToShow: String,
                                      kind: String,
-                                     nextStepId: String
+                                     nextStepId: Option[String]
                                    )

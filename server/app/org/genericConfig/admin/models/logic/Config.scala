@@ -250,10 +250,10 @@ class Config(configBO: Option[ConfigBO] = None) {
     }
   }
 
-  private def getHashForNextStepId(nextStepId: String): String = {
+  private def getHashForNextStepId(nextStepId: Option[String]): Option[String] = {
     nextStepId match {
-      case "last" => "last"
-      case _ => RidToHash.setIdAndHash(nextStepId)._2
+      case Some(nsId) => Some(RidToHash.setIdAndHash(nsId)._2)
+      case None => None
     }
   }
 }

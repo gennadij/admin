@@ -50,7 +50,6 @@ class AddingNewComponentSpecs extends Specification
 
 
         this.stepId = configTreeBO.configTree.get.stepId
-        this.stepId = RidToHash.setIdAndHash(this.stepId)._2
       case s if AddUserError().status == s =>
         Logger.info("Fehler bei der Vorbereitung")
     }

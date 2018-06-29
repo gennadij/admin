@@ -52,29 +52,12 @@ class ConnectAddedStepToComponentSpecs extends Specification
 
         this.stepId_1 = configTreeBO.configTree.get.stepId
 
-        this.stepId_1 = RidToHash.setIdAndHash(this.stepId_1)._2
-
         this.componentId_1 = addComponentToStep(this.stepId_1, "Component 1", "immutable")._1
         this.componentId_2 = addComponentToStep(this.stepId_1, "Component 2", "immutable")._1
         this.componentId_3 = addComponentToStep(this.stepId_1, "Component 3", "immutable")._1
         this.stepId_2 = addStep(Some(componentId_1), nameToShow = Some("Step 2"), kind = Some("default")).get
         this.stepId_3 = addStep(Some(componentId_2), nameToShow = Some("Step 3"), kind = Some("default")).get
 
-//        this.stepId_3 = configTreeBO.configTree.get.nextSteps.filter(_.nameToShow == "Step 3" ).head.stepId
-//        Logger("this.stepId_3" + this.stepId_3)
-//        this.componentId_3 =
-//          configTreeBO.configTree.get.components.filter(_.get.nameToShow == "Component 3" ).head.get.componentId
-//
-//        Logger("this.componentId_3" + this.componentId_3)
-//
-//        this.stepId_3 = RidToHash.setIdAndHash(this.stepId_3)._2
-//        Logger("this.stepId_3" + this.stepId_3)
-//        this.componentId_3 = RidToHash.setIdAndHash(this.componentId_3)._2
-//        Logger("this.componentId_3" + this.componentId_3)
-
-        //TODO
-//        this.stepId_1 = RidToHash.setIdAndHash(this.stepId_1)._2
-//        this.componentId_1 = addComponentToStep(this.stepId_1, "Component", "immutable")._1
       case s if AddUserError().status == s =>
         Logger.info("Fehler bei der Vorbereitung")
     }

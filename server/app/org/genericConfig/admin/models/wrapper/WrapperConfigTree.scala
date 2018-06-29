@@ -40,7 +40,7 @@ class WrapperConfigTree {
   private[wrapper] def toJsonConfigTreeOut(configTreeBO: ConfigTreeBO): JsonConfigTreeOut = {
 
     configTreeBO.status.get.getConfigTree match {
-      case GetConfigTreeSuccess() => {
+      case GetConfigTreeSuccess() =>
         JsonConfigTreeOut(
           result = JsonConfigTreeResult(
             Some(configTreeBO.userId.get),
@@ -64,8 +64,7 @@ class WrapperConfigTree {
             )
           )
         )
-      }
-      case GetConfigTreeEmpty() => {
+      case GetConfigTreeEmpty() =>
         JsonConfigTreeOut(
           result = JsonConfigTreeResult(
             Some(configTreeBO.userId.get),
@@ -83,8 +82,7 @@ class WrapperConfigTree {
             )
           )
         )
-      }
-      case GetConfigTreeError() => {
+      case GetConfigTreeError() =>
         JsonConfigTreeOut(
           result = JsonConfigTreeResult(
             None,
@@ -102,7 +100,6 @@ class WrapperConfigTree {
             )
           )
         )
-      }
     }
   }
 
@@ -151,12 +148,12 @@ class WrapperConfigTree {
     }
   }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param components : Set[Option[ComponentForConfigTreeBO\]\]
-    * @return Set[JsonConfigTreeComponent]
-    */
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param components : Set[Option[ComponentForConfigTreeBO\]\]
+//    * @return Set[JsonConfigTreeComponent]
+//    */
 //  private def getJsonConfigTreeComponents(components: Set[Option[ComponentForConfigTreeBO]]): Set[JsonConfigTreeComponent] = {
 //
 //    components.map {

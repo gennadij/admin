@@ -43,8 +43,7 @@ class UpdateComponentSpecs extends Specification
         val configTreeBO = getConfigTree(configId)
 
         this.stepId = configTreeBO.configTree.get.stepId
-        //TODO
-        this.stepId = RidToHash.setIdAndHash(this.stepId)._2
+
         this.componentId = addComponentToStep(this.stepId, "Component", "immutable")._1
       case s if AddUserError().status == s =>
         Logger.info("Fehler bei der Vorbereitung")
