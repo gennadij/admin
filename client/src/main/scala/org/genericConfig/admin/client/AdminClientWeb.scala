@@ -1,5 +1,6 @@
 package org.genericConfig.admin.client
 
+import org.genericConfig.admin.client.component.Component
 import play.api.libs.json.JsValue
 import play.api.libs.json.Json
 import play.api.libs.json.JsResult
@@ -17,6 +18,7 @@ import org.genericConfig.admin.client.configTree.ConfigTree
 import org.genericConfig.admin.shared.step.json.JsonStepOut
 import org.genericConfig.admin.client.step.AddStep
 import org.genericConfig.admin.client.user.GetUser
+import org.genericConfig.admin.shared.component.json.{JsonComponentIn, JsonComponentOut}
 import org.genericConfig.admin.shared.error.json.{JsonErrorIn, JsonErrorParams}
 import org.genericConfig.admin.shared.user.json.JsonUserOut
 
@@ -38,12 +40,20 @@ class AdminClienWeb(websocket: WebSocket) {
       case Some(JsonNames.UPDATE_CONFIG) => updateConfig(receivedMessage)
       case Some(JsonNames.ADD_STEP) => addStep(receivedMessage)
       case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage)
-      case Some(JsonNames.ADD_COMPONENT) => ??? //createComponent(receivedMessage, admin)
+      case Some(JsonNames.ADD_COMPONENT) => addComponent(receivedMessage)
       case Some(JsonNames.CONNECT_COMPONENT_TO_STEP) => ??? //connectComponentToStep(receivedMessage, admin)
       case Some(JsonNames.CREATE_DEPENDENCY) => ??? //createDependency(receivedMessage, admin)
       case Some(JsonNames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL) => ???
 //        visualProposalForAdditionalStepsInOneLevel(receivedMessage, admin)
       case _ => Json.obj("error" -> "keinen Treffer")
+    }
+  }
+
+  private def addComponent(receivedMessage: JsValue): Unit = {
+    val jsonComponentOut: JsResult[JsonComponentOut] = Json.fromJson[JsonComponentOut](receivedMessage)
+    jsonComponentOut match {
+      case jCOut: JsSuccess[JsonComponentOut] => new Component(websocket).updateStatus(jCOut.value)
+      case e: JsError => println("Errors -> " + JsonNames.ADD_COMPONENT + ": " + JsError.toJson(e).toString())
     }
   }
 
@@ -61,7 +71,6 @@ class AdminClienWeb(websocket: WebSocket) {
       case s: JsSuccess[JsonGetConfigsOut] => new GetConfig(websocket).drawAllConfigs(getConfigsIn.get)
       case e: JsError => println("Error -> : " + JsonNames.GET_CONFIGS + " -> " + JsError.toJson(e).toString())
     }
-
   }
   
   private def configTree(receivedMessage: JsValue) = {

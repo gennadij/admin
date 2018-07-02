@@ -51,4 +51,10 @@ object HtmlElementIds {
   
   def deleteComponentHtml = "deleteComponent"
   def deleteComponentJQuery = "#deleteComponent"
+
+  def updateComponentHtml = "updateComponent"
+  def updateComponentJQuery = "#updateComponent"
+
+  def removeComponentHtml = "removeComponent"
+  def removeComponentJQuery = "#removeComponent"
 }

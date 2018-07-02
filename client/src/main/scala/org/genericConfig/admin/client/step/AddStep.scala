@@ -42,7 +42,7 @@ class AddStep(websocket: WebSocket) extends CommonFunction {
     jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => getConfigs(userId))
   }
   
-  private def saveStep(configId: String) = {
+  private def saveStep(idToAppend: String) = {
     val nameToShow: Dynamic = jQuery(HtmlElementIds.inputStepNameToShowJQuery).value()
     val scMin: Dynamic = jQuery(HtmlElementIds.inputSelectionCriteriumMinJQuery).value()
     val scMax: Dynamic = jQuery(HtmlElementIds.inputSelectionCriteriumMaxJQuery).value()
@@ -50,14 +50,14 @@ class AddStep(websocket: WebSocket) extends CommonFunction {
     val jsonStepIn = Json.toJson(JsonStepIn(
         JsonNames.ADD_STEP,
         JsonStepParams(
-            configId, //configId: String,
-            "", //stepId: String,
-            nameToShow.toString, //nameToShow: String,
-            "first", //kind: String,
+            appendToId = idToAppend,
+            stepId = "",
+            nameToShow = nameToShow.toString,
+            kind = "first",
             Some(JsonSelectionCriterium(
                 min = scMin.toString.toInt,
                 max = scMax.toString.toInt
-            )) //selectionCriterium: JsonSelectionCriterium
+            ))
         )
     )).toString
     
