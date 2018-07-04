@@ -119,12 +119,6 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction {
     this.stepIds += stepId
 
     val htmlComponents = drawComponents(step.components)
-//    match {
-//      case components if components.isEmpty =>
-//        "Scritt hat keine Komponente"
-//      case components => components
-//    }
-
 
     val htmlStep =
       "<div id='" + stepId + "' class='step'>" +

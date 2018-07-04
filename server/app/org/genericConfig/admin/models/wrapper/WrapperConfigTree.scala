@@ -11,6 +11,7 @@ import org.genericConfig.admin.shared.configTree.status.GetConfigTreeEmpty
 import org.genericConfig.admin.shared.configTree.status.GetConfigTreeError
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeComponent
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeIn
+import play.api.Logger
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -39,7 +40,7 @@ class WrapperConfigTree {
     */
   private[wrapper] def toJsonConfigTreeOut(configTreeBO: ConfigTreeBO): JsonConfigTreeOut = {
 
-    configTreeBO.status.get.getConfigTree match {
+    val debug = configTreeBO.status.get.getConfigTree match {
       case GetConfigTreeSuccess() =>
         JsonConfigTreeOut(
           result = JsonConfigTreeResult(
@@ -50,7 +51,7 @@ class WrapperConfigTree {
               configTreeBO.configTree.get.nameToShow,
               configTreeBO.configTree.get.kind,
               getNextSteps(configTreeBO.configTree.get),
-              getJsonConfigTreeComponents_(configTreeBO.configTree.get.components)
+              getJsonConfigTreeComponents(configTreeBO.configTree.get.components)
             )),
             JsonConfigTreeStatus(
               Some(JsonStatus(
@@ -101,6 +102,9 @@ class WrapperConfigTree {
           )
         )
     }
+
+    Logger.info("jsonConfigTreeOut " + debug)
+    debug
   }
 
 
@@ -115,15 +119,15 @@ class WrapperConfigTree {
           {
             val nSSS: List[JsonConfigTreeStep] = nS.nextSteps.toList.map(nSS =>
               JsonConfigTreeStep(
-                nS.stepId,
-                nS.nameToShow,
-                nS.kind,
+                nSS.stepId,
+                nSS.nameToShow,
+                nSS.kind,
                 getNextSteps(nSS),
-                getJsonConfigTreeComponents_(nS.components)
+                getJsonConfigTreeComponents(nSS.components)
               ))
             nSSS.toSet
           },
-          getJsonConfigTreeComponents_(nS.components)
+          getJsonConfigTreeComponents(nS.components)
         )
     )
     nextSteps.toSet
@@ -134,7 +138,7 @@ class WrapperConfigTree {
     * @param components : Set[Option[ComponentForConfigTreeBO\]\]
     * @return Set[JsonConfigTreeComponent]
     */
-  private def getJsonConfigTreeComponents_(components: Set[ComponentForConfigTreeBO]): Set[JsonConfigTreeComponent] = {
+  private def getJsonConfigTreeComponents(components: Set[ComponentForConfigTreeBO]): Set[JsonConfigTreeComponent] = {
 
     components.map {
       component => {

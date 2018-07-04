@@ -5,6 +5,7 @@ import org.genericConfig.admin.shared.common.status._
 import org.genericConfig.admin.shared.config.bo.{ConfigBO, _}
 import org.genericConfig.admin.shared.config.status._
 import org.genericConfig.admin.shared.configTree.bo.{ComponentForConfigTreeBO, ConfigTreeBO, StepForConfigTreeBO}
+import play.api.Logger
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -217,11 +218,13 @@ class Config(configBO: Option[ConfigBO] = None) {
     val configTreeBOOut: ConfigTreeBO = 
       Persistence.getConfigTree(configTreeBO.copy(configId = RidToHash.getRId(configTreeBO.configId.get)))
 
-    configTreeBOOut.copy(
+    val debug = configTreeBOOut.copy(
         userId = RidToHash.getHash(configTreeBOOut.userId.get), 
         configId = RidToHash.getHash(configTreeBOOut.configId.get),
         configTree = setHashForConfigTree(configTreeBOOut.configTree)
     )
+//    Logger.info("configTreeBOOut" + debug)
+    debug
   }
 
   private def setHashForConfigTree(configTree: Option[StepForConfigTreeBO]): Option[StepForConfigTreeBO] = {
