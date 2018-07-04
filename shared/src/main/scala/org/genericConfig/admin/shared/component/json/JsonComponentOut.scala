@@ -15,5 +15,5 @@ case class JsonComponentOut (
 )
 
 object JsonComponentOut {
-  implicit val format = Json.writes[JsonComponentOut]
+  implicit val format = Json.format[JsonComponentOut]
 }

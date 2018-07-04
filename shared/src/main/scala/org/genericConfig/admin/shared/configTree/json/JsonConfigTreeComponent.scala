@@ -11,7 +11,7 @@ import play.api.libs.functional.syntax.{unlift, _}
 
 case class JsonConfigTreeComponent(
                                     componentId: String,
-                                    nameTOShow: String,
+                                    nameToShow: String,
                                     kind: String,
                                     nextStepId: Option[String]
                                   )

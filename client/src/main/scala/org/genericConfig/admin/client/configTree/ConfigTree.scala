@@ -14,12 +14,19 @@ import org.genericConfig.admin.client.step.AddStep
 import util.CommonFunction
 import util.HtmlElementIds
 
+import scala.collection.mutable
+
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
   *
   * Created by Gennadi Heimann 26.04.2018
   */
 class ConfigTree(websocket: WebSocket) extends CommonFunction {
+
+
+  var componentIds: mutable.ListBuffer[String] = scala.collection.mutable.ListBuffer()
+
+  var stepIds: mutable.ListBuffer[String] = scala.collection.mutable.ListBuffer()
 
   cleanPage
 
@@ -40,103 +47,37 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction {
   }
 
   private def drawConfigTreeNotEmpty(configTree: JsonConfigTreeOut) = {
-    val stepId = configTree.result.step.get.stepId
-
-    val stepKind = configTree.result.step.get.kind
 
     val htmlMain =
-      "<dev id='main' class='main'> " +
+      "<div id='main' class='main'> " +
         "<p>Konfigurationsbaum</p>" +
         drawButton(HtmlElementIds.getConfigsHtml, "Konfigurationen") +
-        "</dev>" +
-        "</dev>"
+      "</div>"
 
     drawNewMain(htmlMain)
 
     jQuery(drawFirstStep(configTree.result.step.get)).appendTo(jQuery(HtmlElementIds.mainJQuery))
 
+    println("Step ID " + this.stepIds)
+    println("Component ID" + this.componentIds)
+
+    val userId = configTree.result.userId.get
+
     jQuery(HtmlElementIds.updateStepJQuery).on("click", () => updateStep)
 
     jQuery(HtmlElementIds.deleteStepJQuery).on("click", () => deleteStep)
 
-    jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => getConfigs(configTree.result.userId.get))
+    jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => getConfigs(userId))
 
-    jQuery(HtmlElementIds.addComponentJQuery).on("click", () => addComponent())
+    this.stepIds foreach(id => {
+      jQuery(HtmlElementIds.addComponentJQuery + id).on("click", () => addComponent(id, userId))
 
-    jQuery(HtmlElementIds.deleteComponentJQuery).on("click", () => deleteComponent)
+    })
 
-    //    jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => getConfigs(configTree.result.userId.get))
-
-    //    val components: Set[JsonConfigTreeComponent] = configTree.result.step.get.components
-
-    //    var htmlComponents = ""
-    //
-    //    components foreach { component =>
-    //      val componentId = prepareIdForHtml(component.componentId)
-    ////      val nextStepId = prepareIdForHtml(component.nextStepId.get)
-    //
-    //      htmlComponents = htmlComponents +
-    //        "<div id='" + componentId + "' class='component'>" +
-    //          "ID " + component.componentId +
-    //          "</br>" +
-    //          "Kind " + component.kind +
-    //          "<dev id='editComponent" + componentId + "' class='button'>" +
-    //            "Edit" +
-    //          "</dev>" +
-    //          "<dev id='removeComponent" + componentId + "' class='button'>" +
-    //            "Remove" +
-    //          "</dev>" +
-    ////          "<div id='" + nextStepId + "' class='nextStep'>" +
-    ////            "nextStep " + component.nextStepId.get  +
-    ////            "<dev id='selectNextStep" + nextStepId + "' class='button'>" +
-    //              "nextStep" +
-    //            "</dev>" +
-    //          "</div>" +
-    //        "</div>"
-    //    }
-
-
-    //    val htmlStep =
-    //      "<dev> " +
-    //        "<div id='" + stepId + "' class='step'>" +
-    //          "ID " + stepId.subSequence(0, 6) + "   " +
-    //          drawButton(HtmlElementIds.updateStepHtml, "update step") +
-    //          drawButton(HtmlElementIds.deleteStepHtml, "delete step") +
-    //          drawButton(HtmlElementIds.addComponentHtml, "add component") +
-    //          drawButton(HtmlElementIds.deleteComponentHtml, "delete component") +
-    //          " </br>" +
-    //          "Kind " + stepKind  +
-    ////          htmlComponents +
-    //        "</div>" +
-    //      "</dev>"
-    //
-    //    jQuery(htmlStep).appendTo(jQuery(HtmlElementIds.mainJQuery))
-    //
-    //    jQuery(HtmlElementIds.updateStepJQuery + stepId).on("click", () => editStep())
-    //
-    //    jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => getConfigs(configTree.result.userId.get))
-    //
-    //    jQuery(HtmlElementIds.addComponentJQuery).on("click", () => addComponent)
-    //
-    //    jQuery(HtmlElementIds.deleteComponentJQuery).on("click", () => deleteComponent)
-    //
-    //    val componentIds = components map {c => prepareIdForHtml(c.componentId)}
-    //
-    //    componentIds foreach { componentId =>
-    //      jQuery(s"#editComponent$componentId").on("click", () => editComponent())
-    //    }
-
-    //    val nextSteps: Set[(String, JsonConfigTreeStep)] = components map {c =>
-    //      c.nextStep match {
-    //        case Some(nextStep) => (prepareIdForHtml(c.nextStepId.get), c.nextStep.get)
-    //        case None => (prepareIdForHtml(c.nextStepId.get), null)
-    //      }
-    //    }
-
-    //    nextSteps foreach { nextStepId =>
-    //      val nSId = nextStepId._1
-    //      jQuery(s"#selectNextStep$nSId").on("click", () => selectNextStep(nextStepId._2))
-    //    }
+    this.componentIds foreach(cId => {
+      jQuery(HtmlElementIds.deleteComponentJQuery + cId).on("click", () => deleteComponent)
+      jQuery(HtmlElementIds.addStepJQuery + cId).on("click", () => addStep(cId, userId))
+    })
   }
 
   def drawComponents(components: Set[JsonConfigTreeComponent]): String = {
@@ -144,41 +85,95 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction {
     var htmlComponents = ""
 
     components foreach { component =>
-      val componentId = prepareIdForHtml(component.componentId)
-      //      val nextStepId = prepareIdForHtml(component.nextStepId.get)
+      val componentId = component.componentId
+      val nextStepId = component.nextStepId
+
+      this.componentIds += componentId
 
       htmlComponents = htmlComponents +
         "<div id='" + componentId + "' class='component'>" +
-        "ID " + component.componentId.subSequence(0, 6) +
-        "</br>" +
-        "Kind " + component.kind +
-        drawButton(HtmlElementIds.updateComponentHtml, "update component") +
-        drawButton(HtmlElementIds.removeComponentHtml, "remove component") +
+          "ID " + component.componentId.subSequence(0, 6) +
+          "</br>" +
+          "Kind: " + component.kind +
+          "</br>" +
+          "nameToShow: " + component.nameToShow +
+          "</br>" +
+          drawButton(HtmlElementIds.updateComponentHtml + componentId, "update component") +
+          drawButton(HtmlElementIds.deleteComponentHtml + componentId, "delete component") +
+          drawButton(HtmlElementIds.addStepHtml + componentId, "add step") +
+          drawButton(HtmlElementIds.connectToStepHtml + componentId, "connect to step") +
         "</div>"
     }
-
-    htmlComponents
+    if(components.size == 0)
+      "Scritt hat keine Komponente"
+    else
+      htmlComponents
   }
 
   def drawFirstStep(step: JsonConfigTreeStep): String = {
     val stepId = step.stepId
     val kind = step.kind
 
-    val htmlStep =
-      "<div> " +
-        "<div id='" + stepId + "' class='step'>" +
-          "ID " + stepId.subSequence(0, 6) + "   " +
-          drawButton(HtmlElementIds.updateStepHtml, "update step") +
-          drawButton(HtmlElementIds.deleteStepHtml, "delete step") +
-          drawButton(HtmlElementIds.addComponentHtml, "add component") +
-          drawButton(HtmlElementIds.deleteComponentHtml, "delete component") +
-          " </br>" +
-          "Kind " + kind +
-          drawComponents(step.components) +
-          "</div>" +
-        "</div> "
+    var htmlNextStep = ""
 
-    htmlStep
+    this.stepIds += stepId
+
+    val htmlComponents = drawComponents(step.components)
+//    match {
+//      case components if components.isEmpty =>
+//        "Scritt hat keine Komponente"
+//      case components => components
+//    }
+
+
+    val htmlStep =
+      "<div id='" + stepId + "' class='step'>" +
+        "ID " + stepId.subSequence(0, 6) + "   " +
+        "</br>" +
+        "Kind " + kind +
+        "</br>" +
+        "nameToShow: " + step.nameToShow +
+        "</br>" +
+        drawButton(HtmlElementIds.updateStepHtml + stepId, "update step") +
+        drawButton(HtmlElementIds.deleteStepHtml + stepId, "delete step") +
+        drawButton(HtmlElementIds.addComponentHtml + stepId, "add component") +
+        " </br>" +
+        htmlComponents +
+      "</div>"
+
+    htmlNextStep = drawNextSteps(htmlNextStep, step.nextSteps)
+
+    htmlStep + htmlNextStep
+  }
+
+  private def drawNextSteps(htmlNextStep: String, nextSteps: Set[JsonConfigTreeStep]): String = {
+
+    var htmlNextSteps = htmlNextStep
+
+    nextSteps foreach (nextStep => {
+      this.stepIds += nextStep.stepId
+
+      val htmlComponents = drawComponents(nextStep.components)
+
+        htmlNextSteps = htmlNextSteps + "<div id='" + nextStep.stepId + "' class='step'>" +
+        "ID " + nextStep.stepId.subSequence(0, 6) +
+        "</br>" +
+        "Kind " + nextStep.kind +
+        "</br>" +
+        "nameToShow: " + nextStep.nameToShow +
+        "</br>" +
+        drawButton(HtmlElementIds.updateStepHtml + nextStep.stepId, "update step") +
+        drawButton(HtmlElementIds.deleteStepHtml + nextStep.stepId, "delete step") +
+        drawButton(HtmlElementIds.addComponentHtml + nextStep.stepId, "add component") +
+        "</br>" +
+        htmlComponents +
+        "</div>"
+
+      if (nextStep.nextSteps.size >= 1)
+        htmlNextSteps + drawNextSteps(htmlNextSteps, nextStep.nextSteps)
+    })
+
+    htmlNextSteps
   }
 
   private def deleteComponent = {
@@ -186,7 +181,9 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction {
   }
 
   private def addComponent(stepId: String, userId: String) = {
-    println("add component")
+//    println("add component")
+//    println(stepId)
+//    println(userId)
     new Component(websocket).addComponent(stepId, userId)
   }
 
@@ -201,11 +198,11 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction {
   private def drawConfigTreeEmpty(configTree: JsonConfigTreeOut) = {
 
     val htmlMain =
-      "<dev id='main' class='main'>" +
+      "<div id='main' class='main'>" +
         "<p>Konfiguration</p>" +
         drawButton(HtmlElementIds.addStepHtml, "Schritt erstellen") +
         drawButton(HtmlElementIds.getConfigsHtml, "Konfigurationen") +
-        "</dev>"
+        "</div>"
 
     drawNewMain(htmlMain)
 

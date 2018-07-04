@@ -5,6 +5,7 @@ package util
  * 
  * Created by Gennadi Heimann 25.05.2018
  */
+
 object HtmlElementIds {
   def mainHtml =             "main"
   def mainJQuery =           "#main"
@@ -55,6 +56,6 @@ object HtmlElementIds {
   def updateComponentHtml = "updateComponent"
   def updateComponentJQuery = "#updateComponent"
 
-  def removeComponentHtml = "removeComponent"
-  def removeComponentJQuery = "#removeComponent"
+  def connectToStepHtml = "connectToStep"
+  def connectToStepJQuery = "#connectToStep"
 }

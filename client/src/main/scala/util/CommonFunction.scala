@@ -18,9 +18,9 @@ trait CommonFunction {
   
   def drawNewStatus(status: String) {
     val htmlHeaderStatus = 
-      "<dev id='" + HtmlElementIds.statusHtml + "' class='" + HtmlElementIds.statusHtml + "'>" +
+      "<div id='" + HtmlElementIds.statusHtml + "' class='" + HtmlElementIds.statusHtml + "'>" +
           status + 
-      "</dev>"
+      "</div>"
   
     jQuery(htmlHeaderStatus).appendTo(jQuery("header"))
   }
@@ -34,7 +34,7 @@ trait CommonFunction {
   }
   
   def drawButton(id: String, text: String) = {
-    "<dev id='" + id + "' class='button'> " + text + " </dev>"
+    "<div id='" + id + "' class='button'> " + text + " </div>"
   }
   
   def drawInputField(id: String, label: String, typeofInput: String = "text"): String = {

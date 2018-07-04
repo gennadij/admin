@@ -11,7 +11,7 @@ import util.{CommonFunction, HtmlElementIds}
 class Component(websocket: WebSocket) extends CommonFunction {
 
   def addComponent(stepId: String, userId: String) = {
-
+//    println("stepId" + stepId)
     cleanPage
 
     val htmlMain =
@@ -29,19 +29,21 @@ class Component(websocket: WebSocket) extends CommonFunction {
   }
 
   private def saveComponent(stepId: String) = {
+//    println(stepId)
     val nameToShow: Dynamic = jQuery(HtmlElementIds.inputStepNameToShowJQuery).value()
 
-    val jsonComponentIn = Json.toJson(JsonComponentIn(
+    val jsonComponentOut = Json.toJson(JsonComponentIn(
       json = JsonNames.ADD_COMPONENT,
       params = JsonComponentParams(
         stepId = Some(stepId),
-        nameToShow = Some(nameToShow.toString)
+        nameToShow = Some(nameToShow.toString),
+        kind = Some("immutable")
         )
       )
     ).toString
 
-    println("OUT -> " + jsonComponentIn)
-    websocket.send(jsonComponentIn)
+    println("OUT -> " + jsonComponentOut)
+    websocket.send(jsonComponentOut)
   }
 
   private def getConfigs(userId: String) = {
