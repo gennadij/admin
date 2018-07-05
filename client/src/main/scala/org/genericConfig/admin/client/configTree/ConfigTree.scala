@@ -1,7 +1,7 @@
 package org.genericConfig.admin.client.configTree
 
 import org.genericConfig.admin.client.component.Component
-import org.scalajs.jquery.jQuery
+import org.scalajs.jquery.{JQuery, jQuery}
 import org.scalajs.dom.raw.WebSocket
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeComponent
@@ -30,7 +30,7 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction {
 
   cleanPage
 
-  def drawConfigTree(configTree: JsonConfigTreeOut) = {
+  def drawConfigTree(configTree: JsonConfigTreeOut): Unit = {
 
     configTree.result.status.getConfigTree.get.status match {
       case status if status == GetConfigTreeSuccess().status =>
@@ -46,7 +46,7 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction {
     }
   }
 
-  private def drawConfigTreeNotEmpty(configTree: JsonConfigTreeOut) = {
+  private def drawConfigTreeNotEmpty(configTree: JsonConfigTreeOut): Unit = {
 
     val htmlMain =
       "<div id='main' class='main'> " +
@@ -56,16 +56,15 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction {
 
     drawNewMain(htmlMain)
 
-    jQuery(drawFirstStep(configTree.result.step.get)).appendTo(jQuery(HtmlElementIds.mainJQuery))
+    val stepsHtml = drawFirstStep(configTree.result.step.get)
 
-    println("Step ID " + this.stepIds)
-    println("Component ID" + this.componentIds)
+    jQuery(stepsHtml).appendTo(jQuery(HtmlElementIds.mainJQuery))
 
     val userId = configTree.result.userId.get
 
-    jQuery(HtmlElementIds.updateStepJQuery).on("click", () => updateStep)
+    jQuery(HtmlElementIds.updateStepJQuery).on("click", () => updateStep())
 
-    jQuery(HtmlElementIds.deleteStepJQuery).on("click", () => deleteStep)
+    jQuery(HtmlElementIds.deleteStepJQuery).on("click", () => deleteStep())
 
     jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => getConfigs(userId))
 
@@ -75,7 +74,7 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction {
     })
 
     this.componentIds foreach(cId => {
-      jQuery(HtmlElementIds.deleteComponentJQuery + cId).on("click", () => deleteComponent)
+      jQuery(HtmlElementIds.deleteComponentJQuery + cId).on("click", () => deleteComponent())
       jQuery(HtmlElementIds.addStepJQuery + cId).on("click", () => addStep(cId, userId))
     })
   }
@@ -86,17 +85,22 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction {
 
     components foreach { component =>
       val componentId = component.componentId
-      val nextStepId = component.nextStepId
+      val nextStepId = component.nextStepId match {
+        case Some(id) => id.subSequence(0,6)
+        case None => "last component"
+      }
 
       this.componentIds += componentId
 
       htmlComponents = htmlComponents +
         "<div id='" + componentId + "' class='component'>" +
           "ID " + component.componentId.subSequence(0, 6) +
-          "</br>" +
+          "&emsp; || &emsp;" +
           "Kind: " + component.kind +
-          "</br>" +
+          "&emsp; || &emsp;" +
           "nameToShow: " + component.nameToShow +
+          "&emsp; || &emsp;" +
+          "nextStep: " + nextStepId +
           "</br>" +
           drawButton(HtmlElementIds.updateComponentHtml + componentId, "update component") +
           drawButton(HtmlElementIds.deleteComponentHtml + componentId, "delete component") +
@@ -104,7 +108,7 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction {
           drawButton(HtmlElementIds.connectToStepHtml + componentId, "connect to step") +
         "</div>"
     }
-    if(components.size == 0)
+    if(components.isEmpty)
       "Scritt hat keine Komponente"
     else
       htmlComponents
@@ -112,84 +116,66 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction {
 
   def drawFirstStep(step: JsonConfigTreeStep): String = {
     val stepId = step.stepId
-    val kind = step.kind
-
-    var htmlNextStep = ""
 
     this.stepIds += stepId
 
+    val htmlStep = drawHtmlStep(step)
+
+    val htmlNextStep_ = drawNextSteps_(step.nextSteps)
+
+    htmlStep + htmlNextStep_.mkString
+  }
+
+  private def drawNextSteps_(nextSteps: Set[JsonConfigTreeStep]): Set[String] = {
+
+    nextSteps map (nSS => {
+
+      this.stepIds += nSS.stepId
+
+      val html = drawHtmlStep(nSS)
+
+      val nextStepsHtml = drawNextSteps_(nSS.nextSteps)
+
+      html + nextStepsHtml.mkString
+    })
+  }
+
+  private def drawHtmlStep(step: JsonConfigTreeStep): String = {
+
     val htmlComponents = drawComponents(step.components)
 
-    val htmlStep =
-      "<div id='" + stepId + "' class='step'>" +
-        "ID " + stepId.subSequence(0, 6) + "   " +
-        "</br>" +
-        "Kind " + kind +
-        "</br>" +
-        "nameToShow: " + step.nameToShow +
-        "</br>" +
-        drawButton(HtmlElementIds.updateStepHtml + stepId, "update step") +
-        drawButton(HtmlElementIds.deleteStepHtml + stepId, "delete step") +
-        drawButton(HtmlElementIds.addComponentHtml + stepId, "add component") +
-        " </br>" +
-        htmlComponents +
+    "<div id='" + step.stepId + "' class='step'>" +
+      "ID: " + step.stepId.subSequence(0, 6) +
+      "&emsp; || &emsp;" +
+      "Kind " + step.kind +
+      "&emsp; || &emsp;" +
+      "nameToShow: " + step.nameToShow +
+      "</br>" +
+      drawButton(HtmlElementIds.updateStepHtml + step.stepId, "update step") +
+      drawButton(HtmlElementIds.deleteStepHtml + step.stepId, "delete step") +
+      drawButton(HtmlElementIds.addComponentHtml + step.stepId, "add component") +
+      "</br>" +
+      htmlComponents +
       "</div>"
-
-    htmlNextStep = drawNextSteps(htmlNextStep, step.nextSteps)
-
-    htmlStep + htmlNextStep
   }
 
-  private def drawNextSteps(htmlNextStep: String, nextSteps: Set[JsonConfigTreeStep]): String = {
-
-    var htmlNextSteps = htmlNextStep
-
-    nextSteps foreach (nextStep => {
-      this.stepIds += nextStep.stepId
-
-      val htmlComponents = drawComponents(nextStep.components)
-
-        htmlNextSteps = htmlNextSteps + "<div id='" + nextStep.stepId + "' class='step'>" +
-        "ID " + nextStep.stepId.subSequence(0, 6) +
-        "</br>" +
-        "Kind " + nextStep.kind +
-        "</br>" +
-        "nameToShow: " + nextStep.nameToShow +
-        "</br>" +
-        drawButton(HtmlElementIds.updateStepHtml + nextStep.stepId, "update step") +
-        drawButton(HtmlElementIds.deleteStepHtml + nextStep.stepId, "delete step") +
-        drawButton(HtmlElementIds.addComponentHtml + nextStep.stepId, "add component") +
-        "</br>" +
-        htmlComponents +
-        "</div>"
-
-      if (nextStep.nextSteps.size >= 1)
-        htmlNextSteps + drawNextSteps(htmlNextSteps, nextStep.nextSteps)
-    })
-
-    htmlNextSteps
-  }
-
-  private def deleteComponent = {
+  private def deleteComponent() : Unit = {
     println("delete Component")
   }
 
   private def addComponent(stepId: String, userId: String) = {
-//    println("add component")
-//    println(stepId)
-//    println(userId)
     new Component(websocket).addComponent(stepId, userId)
   }
 
-  private def updateStep = {
+  private def updateStep(): Unit = {
     println("update step")
   }
 
-  private def deleteStep = {
+  private def deleteStep(): Unit = {
     println("delete step")
   }
 
-  private def drawConfigTreeEmpty(configTree: JsonConfigTreeOut) = {
+  private def drawConfigTreeEmpty(configTree: JsonConfigTreeOut):JQuery = {
 
     val htmlMain =
       "<div id='main' class='main'>" +
@@ -204,11 +190,11 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction {
     jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => getConfigs(configTree.result.userId.get))
   }
 
-  private def addStep(idToAppend: String, userId: String) = {
+  private def addStep(idToAppend: String, userId: String): Unit = {
     new AddStep(websocket).addStep(idToAppend, userId)
   }
 
-  private def getConfigs(userId: String) = {
+  private def getConfigs(userId: String): Unit = {
     val jsonGetConfigs: String = Json.toJson(JsonGetConfigsIn(
       params = JsonGetConfigsParams(
         userId
