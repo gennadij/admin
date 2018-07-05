@@ -8,10 +8,6 @@ ChangeLog 09.01.2017
     FirstStep wird immer an der Config Vertex angehaengt
 
     NextStep wird immer an der Component Vertex angehaengt
-    
-    deswegen wird es automatisch bei der erzeugen der jeweiligen Steps die Verbindungsedge erzeugt
-        - ConnComponentToStep
-        - ConnStepToComponent
 
 ChangeLog 06.01.2017
     Vertex Step
@@ -26,7 +22,6 @@ ChangeLog 06.01.2017
         - adminId
     
     AdminUser -> Config -> FitstStep
-        Alle TD die An der Client desendet werden mit einem HASH Wert verschluesseln oder 
-        verschluesselte Kommunikation
+        Alle TD die An der Client desendet werden mit einem HASH Wert
         
     Version 0.0.1 created 31.01.2017
