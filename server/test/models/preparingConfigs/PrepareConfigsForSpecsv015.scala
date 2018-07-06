@@ -261,62 +261,6 @@ object PrepareConfigsForSpecsv015 extends AdminWeb with GeneralFunctionToPrepare
 //		}
   }
   
-  def addingNewDependencyBetweenTwoComponent(wC: WebClient) = {
-//    val username = UsernamesForSpecs.addingNewDependencyBetweenTwoComponent
-//
-//    val sql: String = s"select count(username) from AdminUser where username like '$username'"
-//
-//    val result: Any = OrientDB.executeSQLQuery(sql)
-//
-//    result match {
-//		  case e: Exception => Logger.error(e.printStackTrace().toString())
-//		  case res: OrientDynaElementIterable => {
-//        val count: Int = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString().toInt).head
-//        if(count == 1 ) {
-//          Logger.info(s"Der User $username ist schon erstellt worden")
-//        }else{
-//          registerNewUser(username, wC)
-//
-//          val adminId = login(username, wC)
-//
-//          val configUrl = s"http://config/$username"
-//
-//          val configId = createNewConfig(adminId, configUrl, wC)
-////                 S1
-////               /   \
-////             /      \
-////          /          \
-////        C1            C2
-////         \           /
-////           \       /
-////             \   /
-////              S2
-////            /  \   \
-////         /      \    \
-////      /          \     \
-////    C3           C4     C5
-//
-//          val firstStepId = addFirstStep(configId, 1, 1, s"firstStep_$username", wC)
-//
-//          val component_1_1 = addComponentToStep(firstStepId, s"component_1_1_$username", wC)
-//
-//          val component_1_2 = addComponentToStep(firstStepId, s"component_1_2_$username", wC)
-//
-//          val step_2 = addStep(component_1_1, "immutable", 1, 1, s"step_2_$username", wC)
-//
-//          connectComponentToStep(step_2, component_1_2, wC)
-//
-//          val component_2_1 = addComponentToStep(step_2, s"component_2_1_$username", wC)
-//
-//          val component_2_2 = addComponentToStep(step_2, s"component_2_2_$username", wC)
-//
-//          val component_2_3 = addComponentToStep(step_2, s"component_2_3_$username", wC)
-//        }
-//      }
-//		  case _ => Logger.error("Some Error")
-//		}
-  }
-  
   
 //  def severalInstancesForWebClientSpecWC1(wC: WebClient) = {
 //    val username = UsernamesForSpecs.severalInstancesForWebClientWC1

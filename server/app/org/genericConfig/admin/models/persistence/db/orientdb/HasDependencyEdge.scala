@@ -132,14 +132,4 @@ object HasDependencyEdge {
   private def assembleNameToSchowForDependency(componentOut: String, componentIn: String): String = {
     s"($componentOut) ----> ($componentIn)"
   }
-  
-  def deleteDependency(nameToShow: String): Int = {
-    // DELETE EDGE hasDependency WHERE nameToShow="dependency_C2_C3_user28_v015" 
-    val sqlQuery = s"DELETE EDGE hasDependency WHERE nameToShow='$nameToShow'"
-    
-    val graph: OrientGraph = OrientDB.getFactory().getTx
-    val res: Int = graph.command(new OCommandSQL(sqlQuery)).execute()
-    graph.commit
-    res
-  }
 }

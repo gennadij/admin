@@ -26,10 +26,6 @@ import org.genericConfig.admin.shared.user.status._
   */
 object Persistence {
 
-  //TODO DOcu aus der OrientDB
-  //Without an index against the property name, this query can take up a lot of time. You can improve performance by creating a new index against the name property:
-  //http://orientdb.com/docs/last/Graph-VE.html
-
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
@@ -606,8 +602,7 @@ object Persistence {
 //                            ): ConnectionComponentToStepOut = {
 
     /*
-     * TODO v016 dasselbe wie bei createStep implementieren aber einen Partnercomponent beruecksichtigen
-     * 
+     *
      * 
      * 
      * * suche alle Siblings des Components 
@@ -762,7 +757,6 @@ object Persistence {
 
     //    val targetComponentId = stepCS.get.componentId
     //    val siblingComponents: Option[List[OrientVertex]] = ComponentVertex.getAllSiblings(targetComponentId)
-    //    // TODO v016 JsonDependencyForAdditionalStepsInOneLevel == None
     //    // Bei der Impl von neu Redising von Status diese Status abfangen
     //    siblingComponents match {
     //      case Some(siblingComponents) => {

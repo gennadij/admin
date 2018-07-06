@@ -201,8 +201,6 @@ class Admin extends Wrapper {
     //    val dependencies: Set[JsonDependencyForAdditionalStepsInOneLevel] = Persistence.createDependenciesForAdditionalStepInLevelCS(
     //        stepCS, visualProposalForAdditionalStepsInOneLevel)
 
-    //TODO v016 Prüfe auf leere Dependencies und Set.empty
-
     //    val tempStep = Persistence.createAditionalStepInLevelCS(stepCS.get)
 
     //    JsonStepOut(

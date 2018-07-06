@@ -126,25 +126,24 @@ trait GeneralFunctionToPrepareConfigs extends AdminWeb {
     (componentSC \ "result" \ "componentId").asOpt[String].get
   }
 
-	def addStep(componentId: String, kind: String, min: Int, max: Int, nameToShow: String, webClient: WebClient): String = {
-		//TODO erweitern auf die Dependencies
-	  
-	  val stepCS = Json.obj(
-			"json" -> JsonNames.ADD_STEP,
-			"params" -> Json.obj(
-				"componentId" -> componentId,
-				"nameToShow" -> nameToShow,
-				"kind" -> kind,
-				"selectionCriterium" -> Json.obj(
-					"min" -> min,
-					"max" -> max
-				)
-			)
-		)
-		val stepSC = webClient.handleMessage(stepCS)
-//		require((stepSC \ "result" \ "status").asOpt[String].get == StatusSuccessfulStepCreated.status)
-		(stepSC \ "result" \ "stepId").asOpt[String].get
-	}
+//	def addStep(componentId: String, kind: String, min: Int, max: Int, nameToShow: String, webClient: WebClient): String = {
+//
+//	  val stepCS = Json.obj(
+//			"json" -> JsonNames.ADD_STEP,
+//			"params" -> Json.obj(
+//				"componentId" -> componentId,
+//				"nameToShow" -> nameToShow,
+//				"kind" -> kind,
+//				"selectionCriterium" -> Json.obj(
+//					"min" -> min,
+//					"max" -> max
+//				)
+//			)
+//		)
+//		val stepSC = webClient.handleMessage(stepCS)
+////		require((stepSC \ "result" \ "status").asOpt[String].get == StatusSuccessfulStepCreated.status)
+//		(stepSC \ "result" \ "stepId").asOpt[String].get
+//	}
 	
 	def visualProposal(visualProposal: String, wC: WebClient): String = {
 	  val visualProposal = Json.obj(

@@ -68,9 +68,6 @@ class AddConfigSpecs extends Specification
 
       val createConfigSC = wC.handleMessage(createConfigCS)
 
-      //TODO com.orientechnologies.orient.core.exception.OValidationException: analysieren
-
-
       Logger.info("OUT " + createConfigSC)
 
       (createConfigSC \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigSuccess().status

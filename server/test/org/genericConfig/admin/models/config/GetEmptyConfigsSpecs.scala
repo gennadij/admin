@@ -46,9 +46,6 @@ class GetEmptyConfigsSpecs extends Specification
   "Diese Spezifikation spezifiziert das Holen von allen Konfigurationen" >> {
     "fuer einen AdminUser. Der User hat keine Konfigurationen" >> {
       
-      //TODO com.orientechnologies.orient.core.exception.OValidationException: analysieren
-      //Special type of exception which indicates that invalid index id was passed into storage and index data should be reloaded
-      
       val getConfigsIn = Json.obj(
           "json" -> JsonNames.GET_CONFIGS
           , "params" -> Json.obj(

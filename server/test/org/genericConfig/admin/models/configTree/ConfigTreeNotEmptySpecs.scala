@@ -42,10 +42,6 @@ class ConfigTreeNotEmptySpecs extends Specification
   var componentId_3_1 = ""
   var componentId_3_2 = ""
 
-  // TODO der nextStep wird in dem Step gehalten, im Component wird nur Verweis auf dem Step gehalten.
-  // TODO Bei dem Verbinden von dem Step werden volgende Json verwendet
-  // TODO CONNECT_TO_STEP
-
   def beforeAll(): Unit = {
     val (username: String, userId: String, status: String) = addUser(this.usernamePassword)
 
