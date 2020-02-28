@@ -16,7 +16,7 @@ ChangeLog version 0.1.6
     Die Div-Boxen werden mit Hilfe der JS-Lib JsPlumb erstellt und verbunden.
     
 # 2.@created on  30.07.2017
-    @finished on 
+    @finished on 28.02.2020
     
     Integration in die Scala.js fuer Frontend - WebClient
     
@@ -114,13 +114,13 @@ ChangeLog version 0.1.6
        
        
 # 2.@created on  3.11.2017
-    @finished on 
+    @finished on 28.02.2020
     
     1. Difenierte TODOs aus dem Configurator
         # - es soll nur einen FirstStep bei der Config geben
 		
 # 3.@created on     08.11.2017
-    @finished on    
+    @finished on    28.02.2020
 	
 	Integration der scala.js in die Play-Project
 	https://github.com/vmunier/play-scalajs.g8
@@ -128,14 +128,14 @@ ChangeLog version 0.1.6
 	https://elements.heroku.com/buttons/jkutner/play-with-scalajs-example
 
 # 4.@created on     08.11.2017
-    @finished on    
+    @finished on    28.02.2020
     
     Implementierung von dem Schritt bei dem mehrere Komponente ausgewaehlt werden koennen
     
 # 5.@created on     09.11.2017
     @finished on    
     
-    Bei der Erstellung von einem Schrit muss sichergestellt werden, dass nur einen Schritt zu 
+    Bei der Erstellung von einem Schritt muss sichergestellt werden, dass nur einen Schritt zu
     der Komponente verbunden wird
     
 # 5.@created on     24.11.2017

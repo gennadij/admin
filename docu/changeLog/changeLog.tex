@@ -1,0 +1,100 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+\begin{titlepage}
+\author{Gennadi Heimann} 
+\title{Change Log} 
+\date{29.12.2017} 
+\maketitle
+\end{titlepage}
+
+\section{v1.0.0}
+
+\noindent \textbf{@created on 09.11.2017}\\
+\textbf{@finished on}\\
+
+\noindent Bei der Erstellung von einem Schritt muss sichergestellt werden, dass nur einen 
+Schritt zu der Komponente verbunden wird\\
+
+\noindent \textbf{@created on 24.11.2017}\\
+\textbf{@finished on }\\
+
+\noindent Edge von Config zu FirstStep muss hasStep heißen\\
+
+\noindent \textbf{@created on 09.11.2017}\\
+\textbf{@finished on}\\
+
+\noindent In SelectionCriterium darf nicht min > max sein\\
+
+\noindent \textbf{@created on 30.01.2018}\\
+\textbf{@finished on }\\
+
+\noindent Globale Einstellungen fuer die Konfiguration.
+Der Vertex Config bekommt einen zusaetzlichen Vertex <GlobalSettings> angehaengt.
+In <GlobalSettings> werden die Einstellungen fuer gesamte Konfiguration definiert.
+Folgende Einstellungen werden gemacht configurationCourse: [sequence or sabstitute] :
+\begin{itemize}
+	\item sequence\\ 
+	Die Schritte werden hintereinander ausgeführt. Die abgearbeitete Schritte 
+	werden nicht aus der GUI entfernt. Der Benutzer kann jederzeit aus der schon bearbeteten
+	Schritt die Komponente entfernen oder bearbeiten.\\
+   \item sabstitute\\ 
+   Die Schritte werden hintereinader ausgeführt. Die abgearbeitete Schritt 
+	wird aus der GUI entfernt und danach neue geladen. Das Zurückkehern wird über der Aktion
+   des Benutzers ausgeführt. Der Benutzer sieht nur einen aktuellen Schritt in der GUI.\\
+\end{itemize}
+
+\noindent \textbf{@created on 10.04.2018}\\
+\textbf{@finished on }\\
+
+\noindent Beim nicht erreichtem Server Error an Client senden. Connection Error fangen.\\
+
+\noindent \textbf{@created on 18.04.2018}\\
+\textbf{@finished on }\\
+
+\noindent Status un BO von Registration und Login zu dem UserBO und StatusUser zusammenfuehren\\
+
+\section{v1.0.1}
+
+\noindent \textbf{@created on 15.05.2017}\\
+\textbf{@finished on }\\
+
+\noindent Implementierung des Login\\
+Docu zu der Login.\\
+https://www.lightbend.com/activator/template/bootzooka\\
+http://www.lightbend.com/activator/template/play-oauth2-scala\\
+https://scalaplayschool.wordpress.com/2014/08/27/lesson-12-a-login-action-with-scala-play-angular-bootstrap/\\
+https://www.playframework.com/documentation/2.0.4/ScalaSecurity\\
+https://github.com/nezasa/play-login-sample\\
+https://www.playframework.com/documentation/2.1.1/JavaGuide4\\
+http://ics-software-engineering.github.io/play-example-login/\\
+        
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
