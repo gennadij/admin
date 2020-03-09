@@ -1,7 +1,7 @@
 package org.genericConfig.admin.models.wrapper
 
 import org.genericConfig.admin.shared.common.json.{JsonConfig, JsonStatus}
-import org.genericConfig.admin.shared.common.status.Status
+import org.genericConfig.admin.shared.common.status.Error
 import org.genericConfig.admin.shared.config.bo.{ConfigBO, Configuration}
 import org.genericConfig.admin.shared.config.json._
 import play.api.Logger
@@ -162,7 +162,7 @@ class WrapperConfig {
     )
   }
 
-  private def setStatus(status: Option[Status]): Option[JsonStatus] = status match {
+  private def setStatus(status: Option[Error]): Option[JsonStatus] = status match {
     case Some(s) =>
       Some(JsonStatus(
         s.status,

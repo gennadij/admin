@@ -2,7 +2,7 @@ package org.genericConfig.admin.models.logic
 
 import org.genericConfig.admin.models.persistence.Persistence
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.common.status.{Status, Success}
+import org.genericConfig.admin.shared.common.status.{Error, Success}
 import org.genericConfig.admin.shared.step.bo.StepBO
 import org.genericConfig.admin.shared.step.status._
 
@@ -109,7 +109,7 @@ class Step {
 
     val stepBOIn = stepBO.copy(stepId = RidToHash.getRId(stepBO.stepId.get))
 
-    val (deleteStepStatus: StatusDeleteStep, commonStatus: Status) = Persistence.deleteStep(stepBOIn.stepId.get)
+    val (deleteStepStatus: StatusDeleteStep, commonStatus: Error) = Persistence.deleteStep(stepBOIn.stepId.get)
 
     deleteStepStatus match {
       case DeleteStepSuccess() =>
@@ -155,7 +155,7 @@ class Step {
     val componentRid = RidToHash.getRId(stepBO.appendToId.get)
     val stepRid = RidToHash.getRId(stepBO.stepId.get)
 
-    val (statusAppendStep, statusCommon): (StatusAppendStep, Status) =
+    val (statusAppendStep, statusCommon): (StatusAppendStep, Error) =
       Persistence.appendStepTo(id = componentRid.get, stepId = stepRid.get)
 
     statusAppendStep match {

@@ -84,7 +84,7 @@ class Config(configBO: Option[ConfigBO] = None) {
         val cBO: ConfigBO = Persistence.addConfig(id, configUrl)
         cBO.status.get.addConfig.get match {
           case AddConfigSuccess() =>
-            val statusConfigAppend: Status =
+            val statusConfigAppend: Error =
               Persistence.appendConfigTo(id, cBO.configs.get.head.configId.get)
             statusConfigAppend match {
               case Success() =>

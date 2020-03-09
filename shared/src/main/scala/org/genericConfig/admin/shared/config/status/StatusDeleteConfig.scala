@@ -1,13 +1,13 @@
 package org.genericConfig.admin.shared.config.status
 
-import org.genericConfig.admin.shared.common.status.Status
+import org.genericConfig.admin.shared.common.status.Error
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 24.04.2018
  */
-sealed abstract class StatusDeleteConfig extends Status
+sealed abstract class StatusDeleteConfig extends Error
 
 case class DeleteConfigSuccess() extends StatusDeleteConfig {
   def status: String = "DELETE_CONFIG_SUCCESS"

@@ -1,13 +1,13 @@
 package org.genericConfig.admin.shared.configTree.status
 
-import org.genericConfig.admin.shared.common.status.Status
+import org.genericConfig.admin.shared.common.status.Error
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 27.04.2018
  */
-sealed abstract class StatusGetConfigTree extends Status
+sealed abstract class StatusGetConfigTree extends Error
 
 
 case class GetConfigTreeError() extends StatusGetConfigTree{

@@ -1,13 +1,13 @@
 package org.genericConfig.admin.shared.component.status
 
-import org.genericConfig.admin.shared.common.status.Status
+import org.genericConfig.admin.shared.common.status.Error
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
   *
   * Created by Gennadi Heimann 19.06.2018
   */
-sealed abstract class StatusUpdateComponent extends Status
+sealed abstract class StatusUpdateComponent extends Error
 
 case class UpdateComponentSuccess() extends StatusUpdateComponent {
   def status: String = "UPDATE_COMPONENT_SUCCESS"

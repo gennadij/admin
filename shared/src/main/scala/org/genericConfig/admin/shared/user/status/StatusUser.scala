@@ -1,6 +1,6 @@
 package org.genericConfig.admin.shared.user.status
 
-import org.genericConfig.admin.shared.common.status.Status
+import org.genericConfig.admin.shared.common.status.Error
 
 
 /**
@@ -14,5 +14,5 @@ case class StatusUser(
     deleteUser: Option[StatusDeleteUser] = None,
     getUser: Option[StatusGetUser] = None,
     updateUser: Option[StatusUpdateUser] = None,
-    common: Option[Status] = None
+    common: Option[Error] = None
 )

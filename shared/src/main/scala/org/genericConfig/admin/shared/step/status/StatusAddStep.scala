@@ -1,13 +1,13 @@
 package org.genericConfig.admin.shared.step.status
 
-import org.genericConfig.admin.shared.common.status.Status
+import org.genericConfig.admin.shared.common.status.Error
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 14.05.2018
  */
-sealed abstract class StatusAddStep extends Status
+sealed abstract class StatusAddStep extends Error
 
 case class AddStepSuccess() extends StatusAddStep {
   def status: String = "ADD_STEP_SUCCESS"

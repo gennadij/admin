@@ -1,6 +1,6 @@
 package org.genericConfig.admin.shared.configTree.status
 
-import org.genericConfig.admin.shared.common.status.Status
+import org.genericConfig.admin.shared.common.status.Error
 
 
 /**
@@ -10,5 +10,5 @@ import org.genericConfig.admin.shared.common.status.Status
  */
 case class StatusConfigTree (
     getConfigTree: StatusGetConfigTree,
-    common: Status
+    common: Error
 )

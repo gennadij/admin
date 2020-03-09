@@ -15,7 +15,7 @@ import org.genericConfig.admin.shared.user.json.{JsonUserIn, JsonUserOut, JsonUs
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 import org.genericConfig.admin.models.logic._
-import org.genericConfig.admin.shared.common.status.Status
+import org.genericConfig.admin.shared.common.status.Error
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.status.StatusAddComponent
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
@@ -230,7 +230,7 @@ trait CommonFunction {
     (componentBOOut.componentId.get, componentBOOut.status.get.addComponent.get)
   }
 
-  def connectComponentToStep(stepId: String, componentId: String): Status = {
+  def connectComponentToStep(stepId: String, componentId: String): Error = {
     val connectCToSIn = StepBO(
       appendToId = Some(componentId),
       stepId = Some(stepId)

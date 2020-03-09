@@ -3,7 +3,7 @@ package org.genericConfig.admin.models.persistence
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory
 import com.orientechnologies.orient.core.exception.OStorageException
 import play.api.Logger
-import org.genericConfig.admin.shared.common.status.Status
+import org.genericConfig.admin.shared.common.status.Error
 import org.genericConfig.admin.shared.common.status.Success
 import org.genericConfig.admin.shared.common.status.ODBConnectionFail
 
@@ -13,15 +13,15 @@ import org.genericConfig.admin.shared.common.status.ODBConnectionFail
  * Created by Gennadi Heimann 10.04.2018
  */
 object Database {
-  def getFactory(): (Option[OrientGraphFactory], Status) = {
+  def getFactory(): (Option[OrientGraphFactory], Option[Error]) = {
     try {
       val db = new Database().getFactory()
       db.exists()
-      (Some(db), Success())
+      (Some(db), None)
     }catch{
           case e: Exception => {
             Logger.error(e.printStackTrace().toString)
-            (None, ODBConnectionFail())
+            (None, Some(ODBConnectionFail()))
           }
     }
 }

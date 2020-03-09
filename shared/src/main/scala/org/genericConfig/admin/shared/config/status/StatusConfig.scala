@@ -1,6 +1,6 @@
 package org.genericConfig.admin.shared.config.status
 
-import org.genericConfig.admin.shared.common.status.{ODBConnectionFail, Status}
+import org.genericConfig.admin.shared.common.status.{ODBConnectionFail, Error}
 
 
 /**
@@ -13,5 +13,5 @@ case class StatusConfig (
     getConfigs: Option[StatusGetConfigs] = None,
     deleteConfig: Option[StatusDeleteConfig] = None,
     updateConfig: Option[StatusUpdateConfig] = None,
-    common: Option[Status] = None
+    common: Option[Error] = None
 )

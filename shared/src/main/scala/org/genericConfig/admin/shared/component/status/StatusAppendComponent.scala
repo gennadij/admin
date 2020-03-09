@@ -1,6 +1,6 @@
 package org.genericConfig.admin.shared.component.status
 
-import org.genericConfig.admin.shared.common.status.Status
+import org.genericConfig.admin.shared.common.status.Error
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -8,7 +8,7 @@ import org.genericConfig.admin.shared.common.status.Status
  * Created by Gennadi Heimann Jun 13, 2018
  */
 
-sealed abstract class StatusAppendComponent extends Status
+sealed abstract class StatusAppendComponent extends Error
 
 
 case class AppendComponentSuccess() extends StatusAppendComponent {
