@@ -15,6 +15,7 @@ import org.genericConfig.admin.shared.configTree.status._
 import org.genericConfig.admin.shared.step.bo._
 import org.genericConfig.admin.shared.step.json.JsonDependencyForAdditionalStepsInOneLevel
 import org.genericConfig.admin.shared.step.status._
+import org.genericConfig.admin.shared.user.UserDTO
 import org.genericConfig.admin.shared.user.bo.UserBO
 import org.genericConfig.admin.shared.user.status._
 
@@ -32,7 +33,7 @@ object Persistence {
     * @param username : String, password: String
     * @return UserBO
     */
-  def addUser(username: String, password: String): UserBO = {
+  def addUser(username: String, password: String): UserDTO = {
     val (vUser: Option[OrientVertex], statusAddUser: StatusAddUser, _: Status) =
       Graph.addUser(username, password)
 

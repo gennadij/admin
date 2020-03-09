@@ -1,6 +1,7 @@
 package org.genericConfig.admin.models.logic
 
 import org.genericConfig.admin.models.persistence.Persistence
+import org.genericConfig.admin.shared.user.UserDTO
 import org.genericConfig.admin.shared.user.bo.UserBO
 import org.genericConfig.admin.shared.user.status.{AddUserError, GetUserSuccess}
 
@@ -21,8 +22,8 @@ object User {
    * 
    * @return UserBO
    */
-  def addUser(userBO: UserBO): UserBO = {
-    new User(userBO).addUser
+  def addUser(user: UserDTO): UserDTO = {
+    new User(user).addUser
   }
   
   /**
@@ -41,7 +42,7 @@ object User {
   
 }
 
-class User(userBO: UserBO) {
+class User(user: UserDTO) {
   
   /**
    * @author Gennadi Heimann
@@ -50,8 +51,8 @@ class User(userBO: UserBO) {
    * 
    * @return UserBO
    */
-  private def addUser: UserBO = {
-    val userBOOut: UserBO = Persistence.addUser(userBO.username.get, userBO.password.get)
+  private def addUser: UserDTO = {
+    val userBOOut: UserDTO = Persistence.addUser(user.params.username, user.params.password)
     userBOOut.status.get.addUser match {
       case Some(AddUserError()) => userBOOut
       case _ => userBOOut.copy(userId = Some(RidToHash.setIdAndHash(userBOOut.userId.get)._2))
