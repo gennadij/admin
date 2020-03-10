@@ -49,7 +49,7 @@ object Graph {
     * @param username : String, password: String
     * @return (Option[OrientVertex], StatusGetUser, Status)
     */
-  def getUser(username: String, password: String): (Option[OrientVertex], StatusGetUser, Error) = {
+  def getUser(username: String, password: String): (Option[OrientVertex]/*, StatusGetUser*/, Error) = {
     ???
 //    (Database.getFactory(): @unchecked) match {
 //      case (Some(dbFactory), Success()) =>

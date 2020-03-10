@@ -12,11 +12,13 @@ sealed abstract class StatusAddComponent extends Error
 case class AddComponentSuccess() extends StatusAddComponent {
   def status: String = "ADD_COMPONENT_SUCCESS"
   def message: String = ""
+  def code :String = ""
 }
 
 case class AddComponentError() extends StatusAddComponent {
   def status: String = "ADD_COMPONENT_ERROR"
   def message: String = ""
+  def code :String = ""
 }
 
 //case class AddStepAlreadyExist() extends StatusAddStep {

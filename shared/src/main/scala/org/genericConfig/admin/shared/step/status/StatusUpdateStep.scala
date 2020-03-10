@@ -12,9 +12,11 @@ sealed abstract class StatusUpdateStep extends Error
 case class UpdateStepSuccess() extends StatusUpdateStep {
   def status: String = "UPDATE_STEP_SUCCESS"
   def message: String = ""
+  def code :String = ""
 }
 
 case class UpdateStepError() extends StatusUpdateStep {
   def status: String = "UPDATE_STEP_ERROR"
   def message: String = ""
+  def code :String = ""
 }

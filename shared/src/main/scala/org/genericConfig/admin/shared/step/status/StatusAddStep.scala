@@ -12,25 +12,30 @@ sealed abstract class StatusAddStep extends Error
 case class AddStepSuccess() extends StatusAddStep {
   def status: String = "ADD_STEP_SUCCESS"
   def message: String = ""
+  def code :String = ""
 }
 
 case class AddStepError() extends StatusAddStep {
   def status: String = "ADD_STEP_ERROR"
   def message: String = ""
+  def code :String = ""
 }
 
 case class AddStepAlreadyExist() extends StatusAddStep {
   def status: String = "ADD_STEP_ALREADY_EXIST"
   def message: String = ""
+  def code :String = ""
 }
 
 case class AddStepDefectComponentOrConfigId() extends StatusAddStep {
   def status: String = "ADD_STEP_DEFECT_COMPONENT_OR_CONFIG_ID"
   def message: String = ""
+  def code :String = ""
 }
 
 case class AddStepIdHashNotExist() extends StatusAddStep {
   def status: String = "ADD_STEP_ID_HASH_NOT_EXIST"
   def message: String = ""
+  def code :String = ""
 }
 

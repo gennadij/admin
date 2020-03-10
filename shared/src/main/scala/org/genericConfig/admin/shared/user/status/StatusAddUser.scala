@@ -12,6 +12,7 @@ sealed abstract class StatusAddUser extends Error
 case class AddUserSuccess() extends StatusAddUser {
   def status: String = "ADD_USER_SUCCESS"
   def message: String = ""
+  def code :String = ""
 }
 
 
@@ -19,5 +20,5 @@ case class AddUserSuccess() extends StatusAddUser {
 case class AddUserError() extends StatusAddUser {
   def status: String = "ADD_USER_ERROR"
   def message: String = ""
-  
+  def code :String = ""
 }

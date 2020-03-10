@@ -1,11 +1,8 @@
 package org.genericConfig.admin.models.persistence
 
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory
-import com.orientechnologies.orient.core.exception.OStorageException
+import org.genericConfig.admin.shared.common.status.{Error, ODBConnectionFail}
 import play.api.Logger
-import org.genericConfig.admin.shared.common.status.Error
-import org.genericConfig.admin.shared.common.status.Success
-import org.genericConfig.admin.shared.common.status.ODBConnectionFail
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

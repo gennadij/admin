@@ -2,7 +2,6 @@ package org.genericConfig.admin.models.logic
 
 import org.genericConfig.admin.models.persistence.Persistence
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.common.status.{Error, Success}
 import org.genericConfig.admin.shared.step.bo.StepBO
 import org.genericConfig.admin.shared.step.status._
 
@@ -106,28 +105,28 @@ class Step {
     * @return StepBO
     */
   private def deleteStep(stepBO: StepBO): StepBO = {
-
-    val stepBOIn = stepBO.copy(stepId = RidToHash.getRId(stepBO.stepId.get))
-
-    val (deleteStepStatus: StatusDeleteStep, commonStatus: Error) = Persistence.deleteStep(stepBOIn.stepId.get)
-
-    deleteStepStatus match {
-      case DeleteStepSuccess() =>
-        StepBO(
-          json = Some(JsonNames.DELETE_STEP),
-          status = Some(StatusStep(deleteStep = Some(DeleteStepSuccess()), common = Some(Success())))
-        )
-      case DeleteStepError() =>
-        StepBO(
-          json = Some(JsonNames.DELETE_STEP),
-          status = Some(StatusStep(deleteStep = Some(DeleteStepError()), common = Some(commonStatus)))
-        )
-      case DeleteStepDefectID() =>
-        StepBO(
-          json = Some(JsonNames.DELETE_STEP),
-          status = Some(StatusStep(deleteStep = Some(DeleteStepDefectID()), common = Some(commonStatus)))
-        )
-    }
+  ???
+//    val stepBOIn = stepBO.copy(stepId = RidToHash.getRId(stepBO.stepId.get))
+//
+//    val (deleteStepStatus: StatusDeleteStep, commonStatus: Error) = Persistence.deleteStep(stepBOIn.stepId.get)
+//
+//    deleteStepStatus match {
+//      case DeleteStepSuccess() =>
+//        StepBO(
+//          json = Some(JsonNames.DELETE_STEP),
+//          status = Some(StatusStep(deleteStep = Some(DeleteStepSuccess()), common = Some(Success())))
+//        )
+//      case DeleteStepError() =>
+//        StepBO(
+//          json = Some(JsonNames.DELETE_STEP),
+//          status = Some(StatusStep(deleteStep = Some(DeleteStepError()), common = Some(commonStatus)))
+//        )
+//      case DeleteStepDefectID() =>
+//        StepBO(
+//          json = Some(JsonNames.DELETE_STEP),
+//          status = Some(StatusStep(deleteStep = Some(DeleteStepDefectID()), common = Some(commonStatus)))
+//        )
+//    }
   }
 
   /**
@@ -152,28 +151,30 @@ class Step {
     * @return ComponentBO
     */
   def connectComponentToStep(stepBO: StepBO): StepBO = {
-    val componentRid = RidToHash.getRId(stepBO.appendToId.get)
-    val stepRid = RidToHash.getRId(stepBO.stepId.get)
-
-    val (statusAppendStep, statusCommon): (StatusAppendStep, Error) =
-      Persistence.appendStepTo(id = componentRid.get, stepId = stepRid.get)
-
-    statusAppendStep match {
-      case AppendStepSuccess() => StepBO(
-        json = Some(JsonNames.CONNECT_COMPONENT_TO_STEP),
-        status = Some(StatusStep(
-          appendStep = Some(AppendStepSuccess()),
-          common = Some(statusCommon)
-        ))
-      )
-      case AppendStepError() => StepBO(
-        json = Some(JsonNames.CONNECT_COMPONENT_TO_STEP),
-        status = Some(StatusStep(
-          appendStep = Some(AppendStepError()),
-          common = Some(statusCommon)
-        ))
-      )
-    }
+    ???
   }
+//    val componentRid = RidToHash.getRId(stepBO.appendToId.get)
+//    val stepRid = RidToHash.getRId(stepBO.stepId.get)
+//
+//    val (statusAppendStep, statusCommon): (StatusAppendStep, Error) =
+//      Persistence.appendStepTo(id = componentRid.get, stepId = stepRid.get)
+//
+//    statusAppendStep match {
+//      case AppendStepSuccess() => StepBO(
+//        json = Some(JsonNames.CONNECT_COMPONENT_TO_STEP),
+//        status = Some(StatusStep(
+//          appendStep = Some(AppendStepSuccess()),
+//          common = Some(statusCommon)
+//        ))
+//      )
+//      case AppendStepError() => StepBO(
+//        json = Some(JsonNames.CONNECT_COMPONENT_TO_STEP),
+//        status = Some(StatusStep(
+//          appendStep = Some(AppendStepError()),
+//          common = Some(statusCommon)
+//        ))
+//      )
+//    }
+//  }
 }
 

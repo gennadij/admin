@@ -14,9 +14,11 @@ sealed abstract class StatusAppendComponent extends Error
 case class AppendComponentSuccess() extends StatusAppendComponent {
   def status: String = "APPEND_COMPONENT_SUCCESS"
   def message: String = ""
+  def code :String = ""
 }
 
 case class AppendComponentError() extends StatusAppendComponent {
   def status: String = "APPEND_COMPONENT_ERROR"
   def message: String = ""
+  def code :String = ""
 }

@@ -3,7 +3,6 @@ package org.genericConfig.admin.models.logic
 import org.genericConfig.admin.models.persistence.Persistence
 import org.genericConfig.admin.shared.user.UserDTO
 import org.genericConfig.admin.shared.user.bo.UserBO
-import org.genericConfig.admin.shared.user.status.{AddUserError, GetUserSuccess}
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -18,7 +17,7 @@ object User {
    * 
    * @version 0.1.6
    * 
-   * @param userBO: UserBO
+   * @param user: UserDTO
    * 
    * @return UserBO
    */
@@ -37,25 +36,27 @@ object User {
    */
   
   def getUser(userBO: UserBO): UserBO = {
-    new User(userBO).getUser
+    ???
+    //new User(userBO).getUser
   }
   
 }
 
-class User(user: UserDTO) {
-  
+class User(userParam: UserDTO) {
+
   /**
    * @author Gennadi Heimann
-   * 
+   *
    * @version 0.1.6
-   * 
+   *
    * @return UserBO
    */
   private def addUser: UserDTO = {
-    val userBOOut: UserDTO = Persistence.addUser(user.params.username, user.params.password)
-    userBOOut.status.get.addUser match {
-      case Some(AddUserError()) => userBOOut
-      case _ => userBOOut.copy(userId = Some(RidToHash.setIdAndHash(userBOOut.userId.get)._2))
+    val userResult: UserDTO = Persistence.addUser(userParam.params.username, userParam.params.password)
+    userResult.result.errors match {
+      case None =>
+        userResult.copy(result = userResult.result.copy(userId = Some(RidToHash.setIdAndHash(userResult.result.userId.get)._2)))
+      case _ => userParam
     }
   }
   
@@ -68,10 +69,11 @@ class User(user: UserDTO) {
    */
   
   private def getUser: UserBO = {
-    val userBOOut: UserBO = Persistence.getUser(userBO.username.get, userBO.password.get)
-    userBOOut.status.get.getUser match {
-      case Some(GetUserSuccess()) => userBOOut.copy(userId = Some(RidToHash.setIdAndHash(userBOOut.userId.get)._2))
-      case _ => userBOOut
-    }
+    ???
+//    val userBOOut: UserBO = Persistence.getUser(userBO.username.get, userBO.password.get)
+//    userBOOut.status.get.getUser match {
+//      case Some(GetUserSuccess()) => userBOOut.copy(userId = Some(RidToHash.setIdAndHash(userBOOut.userId.get)._2))
+//      case _ => userBOOut
+//    }
   }
 }

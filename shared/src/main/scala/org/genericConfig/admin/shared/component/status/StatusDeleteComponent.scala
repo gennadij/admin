@@ -12,14 +12,17 @@ sealed abstract class StatusDeleteComponent extends Error
 case class DeleteComponentSuccess() extends StatusDeleteComponent {
   def status: String = "DELETE_COMPONENT_SUCCESS"
   def message: String = ""
+  def code :String = ""
 }
 
 case class DeleteComponentError() extends StatusDeleteComponent {
   def status: String = "DELETE_COMPONENT_ERROR"
   def message: String = ""
+  def code :String = ""
 }
 
 case class DeleteComponentDefectID() extends StatusDeleteComponent {
   def status: String = "DELETE_COMPONENT_DEFECT_ID"
   def message: String = ""
+  def code :String = ""
 }

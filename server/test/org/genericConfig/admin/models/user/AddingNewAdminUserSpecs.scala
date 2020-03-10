@@ -1,21 +1,18 @@
 package org.genericConfig.admin.models.user
 
 import org.genericConfig.admin.controllers.admin.AdminWeb
-import org.specs2.specification.BeforeAfterAll
-import org.specs2.runner.JUnitRunner
-import org.junit.runner.RunWith
+import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.models.wrapper.Wrapper
+import org.genericConfig.admin.shared.Actions
+import org.genericConfig.admin.shared.user.Error
 import org.specs2.mutable.Specification
+import org.specs2.specification.BeforeAfterAll
+import play.api.Logger
 import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
-import play.api.libs.json.Json.toJsFieldJsValueWrapper
-import org.genericConfig.admin.controllers.websocket.WebClient
-import play.api.Logger
-import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.common.status.Success
-import util.CommonFunction
 import play.api.libs.json.Json
-import org.genericConfig.admin.models.wrapper.Wrapper
-import org.genericConfig.admin.shared.user.status.AddUserSuccess
+import play.api.libs.json.Json.toJsFieldJsValueWrapper
+import util.CommonFunction
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -25,7 +22,7 @@ import org.genericConfig.admin.shared.user.status.AddUserSuccess
  * Username = user1
  */
 
-@RunWith(classOf[JUnitRunner])
+//@RunWith(classOf[JUnitRunner])
 class AddingNewAdminUserSpecs extends Specification 
                                 with AdminWeb 
                                 with BeforeAfterAll
@@ -45,32 +42,30 @@ class AddingNewAdminUserSpecs extends Specification
   
   "Specification spezifiziert die Registrierung des neuen Users" >> {
     "Das Hinzufuegen des nicht exstierenden/neuen User" >> {
-      val registerCS = Json.obj(
-          "json" -> JsonNames.ADD_USER
+      val userParams = Json.obj(
+          "action" -> Actions.ADD_USER
           ,"params" -> Json.obj(
                "username" -> "user1",
                "password"-> "user1"
-           )
+           ), "result" -> Json.obj(
+          "userId" -> "null",
+                "username" -> "",
+                "errors" -> Json.arr()
+        )
       )
       val wC = WebClient.init
-      val registerSC = wC.handleMessage(registerCS)
-      Logger.info("<- " + registerCS)
-      Logger.info("-> " + registerSC)
+      val userResult = wC.handleMessage(userParams)
+      Logger.info("<- " + userParams)
+      Logger.info("-> " + userResult)
       
-      "dto" >> {
-        (registerSC \ "json").asOpt[String].get === JsonNames.ADD_USER
+      "username" >> {
+        (userResult \ "result" \ "username").asOpt[String].get === "user1"
       }
       "userId" >> {
-        (registerSC \ "result" \ "userId").asOpt[String].get.size must be_<=(32)
+        (userResult \ "result" \ "userId").asOpt[String].get.size must be_<=(32)
       }
-      "username" >> {
-        (registerSC \ "result" \ "username").asOpt[String].get must_== "user1"
-      }
-      "status" >> {
-        (registerSC \ "result" \ "status" \ "addUser" \ "status").asOpt[String].get must_== AddUserSuccess().status
-      }
-      "message" >> {
-        (registerSC \ "result" \ "status" \ "common" \ "status").asOpt[String].get must_== Success().status
+      "errors" >> {
+        (userResult \ "result" \ "errors").asOpt[List[Error]] must_== None
       }
     }
   }

@@ -1,23 +1,17 @@
 package org.genericConfig.admin.models.persistence
 
-import akka.actor.dungeon.ChildrenContainer.UserRequest
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
-import org.genericConfig.admin.models.persistence.db.orientdb._
 import org.genericConfig.admin.models.persistence.orientdb.{Graph, PropertyKeys}
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
-import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.status
-import org.genericConfig.admin.shared.common.status._
 import org.genericConfig.admin.shared.component.bo.ComponentBO
-import org.genericConfig.admin.shared.component.status._
-import org.genericConfig.admin.shared.config.bo.{ConfigBO, Configuration}
-import org.genericConfig.admin.shared.config.status._
-import org.genericConfig.admin.shared.configTree.bo.{StepForConfigTreeBO, _}
-import org.genericConfig.admin.shared.configTree.status._
+import org.genericConfig.admin.shared.config.bo.ConfigBO
+import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.step.bo._
 import org.genericConfig.admin.shared.step.json.JsonDependencyForAdditionalStepsInOneLevel
 import org.genericConfig.admin.shared.step.status._
-import org.genericConfig.admin.shared.{Actions, user}
+import org.genericConfig.admin.shared.user.bo.UserBO
 import org.genericConfig.admin.shared.user.{Error, UserDTO, UserParams, UserResult}
 
 
@@ -72,8 +66,8 @@ object Persistence {
             userId = None,
             username = None,
             errors = Some(List(Error(
+              name = error.get.status,
               message = error.get.message,
-              name = "",
               code = error.get.code
             )))
           )
@@ -103,45 +97,45 @@ object Persistence {
     * @return UserBO
     */
   def getUser(username: String, password: String): UserBO = {
-
-    val (vUser: Option[OrientVertex], getUserStatus: StatusGetUser, commonStatus: Error) =
-      Graph.getUser(username, password)
-
-    getUserStatus match {
-      case GetUserSuccess() =>
-        UserBO(
-          username = Some(vUser.get.getProperty(PropertyKeys.USERNAME)),
-          userId = Some(vUser.get.getIdentity.toString),
-          status = Some(StatusUser(
-            getUser = Some(GetUserSuccess()),
-            common = Some(Success())
-          ))
-        )
-      case GetUserError() =>
-        UserBO(
-          username = Some(username),
-          status = Some(StatusUser(
-            getUser = Some(GetUserError()),
-            common = Some(commonStatus)
-          ))
-        )
-      case GetUserAlreadyExist() =>
-        UserBO(
-          username = Some(username),
-          status = Some(StatusUser(
-            getUser = Some(GetUserAlreadyExist()),
-            common = Some(commonStatus)
-          ))
-        )
-      case GetUserNotExist() =>
-        UserBO(
-          username = Some(username),
-          status = Some(StatusUser(
-            getUser = Some(GetUserNotExist()),
-            common = Some(commonStatus)
-          ))
-        )
-    }
+    ???
+//    val (vUser: Option[OrientVertex], getUserStatus: StatusGetUser, commonStatus: Error) =
+//      Graph.getUser(username, password)
+//
+//    getUserStatus match {
+//      case GetUserSuccess() =>
+//        UserBO(
+//          username = Some(vUser.get.getProperty(PropertyKeys.USERNAME)),
+//          userId = Some(vUser.get.getIdentity.toString),
+//          status = Some(StatusUser(
+//            getUser = Some(GetUserSuccess()),
+//            common = Some(Success())
+//          ))
+//        )
+//      case GetUserError() =>
+//        UserBO(
+//          username = Some(username),
+//          status = Some(StatusUser(
+//            getUser = Some(GetUserError()),
+//            common = Some(commonStatus)
+//          ))
+//        )
+//      case GetUserAlreadyExist() =>
+//        UserBO(
+//          username = Some(username),
+//          status = Some(StatusUser(
+//            getUser = Some(GetUserAlreadyExist()),
+//            common = Some(commonStatus)
+//          ))
+//        )
+//      case GetUserNotExist() =>
+//        UserBO(
+//          username = Some(username),
+//          status = Some(StatusUser(
+//            getUser = Some(GetUserNotExist()),
+//            common = Some(commonStatus)
+//          ))
+//        )
+//    }
   }
 
   /**
@@ -151,7 +145,8 @@ object Persistence {
     * @return String, Status
     */
   def getUserId(configId: String): (String, Error) = {
-    Graph.getUserId(configId)
+    ???
+//    Graph.getUserId(configId)
   }
 
   /**
@@ -161,41 +156,42 @@ object Persistence {
     * @return ConfigBO
     */
   def addConfig(userId: String, configUrl: String): ConfigBO = {
-    val (vConfig, statusAddConfig, statusCommon): (Option[OrientVertex], StatusAddConfig, Error) =
-      Graph.addConfig(configUrl)
-    statusAddConfig match {
-      case AddConfigSuccess() =>
-        ConfigBO(
-          Some(userId),
-          Some(List(Configuration(
-            Some(vConfig.get.getIdentity.toString),
-            Some(vConfig.get.getProperty(PropertyKeys.CONFIG_URL))
-          ))),
-          Some(StatusConfig(
-            Some(AddConfigSuccess()),
-            None, None, None, Some(Success())
-          )
-          ))
-      case AddConfigAlreadyExist() =>
-        ConfigBO(
-          Some(userId),
-          None,
-          Some(StatusConfig(
-            Some(AddConfigAlreadyExist()),
-            None, None, None, Some(statusCommon)
-          )
-          ))
-      case AddConfigError() =>
-        ConfigBO(
-          Some(userId),
-          None,
-          Some(StatusConfig(
-            Some(AddConfigError()),
-            None, None, None, Some(statusCommon)
-          )
-          )
-        )
-    }
+    ???
+//    val (vConfig, statusAddConfig, statusCommon): (Option[OrientVertex], StatusAddConfig, Error) =
+//      Graph.addConfig(configUrl)
+//    statusAddConfig match {
+//      case AddConfigSuccess() =>
+//        ConfigBO(
+//          Some(userId),
+//          Some(List(Configuration(
+//            Some(vConfig.get.getIdentity.toString),
+//            Some(vConfig.get.getProperty(PropertyKeys.CONFIG_URL))
+//          ))),
+//          Some(StatusConfig(
+//            Some(AddConfigSuccess()),
+//            None, None, None, Some(Success())
+//          )
+//          ))
+//      case AddConfigAlreadyExist() =>
+//        ConfigBO(
+//          Some(userId),
+//          None,
+//          Some(StatusConfig(
+//            Some(AddConfigAlreadyExist()),
+//            None, None, None, Some(statusCommon)
+//          )
+//          ))
+//      case AddConfigError() =>
+//        ConfigBO(
+//          Some(userId),
+//          None,
+//          Some(StatusConfig(
+//            Some(AddConfigError()),
+//            None, None, None, Some(statusCommon)
+//          )
+//          )
+//        )
+//    }
   }
 
   /**
@@ -204,7 +200,7 @@ object Persistence {
     * @param userId : String, configId: String
     * @return Status
     */
-  def appendConfigTo(userId: String, configId: String): Error = {
+  def appendConfigTo(userId: String, configId: String): status.Error = {
     Graph.appendConfigTo(userId, configId)
   }
 
@@ -215,31 +211,32 @@ object Persistence {
     * @return ConfigBO
     */
   def getConfigs(userId: String): ConfigBO = {
-    val (vConfigs, statusGetConfig, statusCommon): (Option[List[OrientVertex]], StatusGetConfigs, Error) =
-      Graph.getConfigs(userId)
-    statusGetConfig match {
-      case GetConfigsSuccess() =>
-        ConfigBO(
-          Some(userId),
-          Some(vConfigs.get map (vConfig => {
-            Configuration(
-              Some(vConfig.getIdentity.toString),
-              Some(vConfig.getProperty(PropertyKey.CONFIG_URL)))
-          })),
-          Some(StatusConfig(
-            None, //addConfig
-            Some(GetConfigsSuccess()), //getConfigs
-            None, //deleteConfig
-            None, //updateConfig
-            Some(Success())
-          )
-          ))
-      case GetConfigsEmpty() => ConfigBO(
-        Some(userId), None,
-        Some(StatusConfig(None, Some(GetConfigsEmpty()), None, None, Some(Success()))))
-      case GetConfigsError() =>
-        ConfigBO(Some(userId), None, Some(StatusConfig(None, Some(GetConfigsError()), None, None, Some(statusCommon))))
-    }
+    ???
+//    val (vConfigs, statusGetConfig, statusCommon): (Option[List[OrientVertex]], StatusGetConfigs, Error) =
+//      Graph.getConfigs(userId)
+//    statusGetConfig match {
+//      case GetConfigsSuccess() =>
+//        ConfigBO(
+//          Some(userId),
+//          Some(vConfigs.get map (vConfig => {
+//            Configuration(
+//              Some(vConfig.getIdentity.toString),
+//              Some(vConfig.getProperty(PropertyKey.CONFIG_URL)))
+//          })),
+//          Some(StatusConfig(
+//            None, //addConfig
+//            Some(GetConfigsSuccess()), //getConfigs
+//            None, //deleteConfig
+//            None, //updateConfig
+//            Some(Success())
+//          )
+//          ))
+//      case GetConfigsEmpty() => ConfigBO(
+//        Some(userId), None,
+//        Some(StatusConfig(None, Some(GetConfigsEmpty()), None, None, Some(Success()))))
+//      case GetConfigsError() =>
+//        ConfigBO(Some(userId), None, Some(StatusConfig(None, Some(GetConfigsError()), None, None, Some(statusCommon))))
+//    }
   }
 
   /**
@@ -249,35 +246,35 @@ object Persistence {
     * @return ConfigBO
     */
   def deleteConfig(configId: String, configUrl: String): ConfigBO = {
-
-    val (userId, status): (String, Error) = Graph.getUserId(configId)
-    val (statusDeleteConfig, statusCommon): (StatusDeleteConfig, Error) = Graph.deleteConfig(configId, configUrl: String)
-
-    status match {
-      case Success() =>
-        ConfigBO(
-          Some(userId), None,
-          Some(StatusConfig(
-            None, //addConfig: Option[StatusAddConfig],
-            None, //getConfigs: Option[StatusGetConfigs],
-            Some(statusDeleteConfig), //deleteConfig: Option[StatusDeleteConfig],
-            None, //updateConfig: Option[StatusUpdateConfig],
-            Some(statusCommon) //common: Option[Status
-          )
-          ))
-      case _ =>
-        ConfigBO(
-          Some(userId), None,
-          Some(StatusConfig(
-            None, //addConfig: Option[StatusAddConfig],
-            None, //getConfigs: Option[StatusGetConfigs],
-            Some(DeleteConfigError()), //deleteConfig: Option[StatusDeleteConfig],
-            None, //updateConfig: Option[StatusUpdateConfig],
-            Some(status) //common: Option[Status
-          )
-          )
-        )
-    }
+???
+//    val (userId, status): (String, Error) = Graph.getUserId(configId)
+//    val (statusDeleteConfig, statusCommon): (StatusDeleteConfig, Error) = Graph.deleteConfig(configId, configUrl: String)
+//
+//    status match {
+//      case Success() =>
+//        ConfigBO(
+//          Some(userId), None,
+//          Some(StatusConfig(
+//            None, //addConfig: Option[StatusAddConfig],
+//            None, //getConfigs: Option[StatusGetConfigs],
+//            Some(statusDeleteConfig), //deleteConfig: Option[StatusDeleteConfig],
+//            None, //updateConfig: Option[StatusUpdateConfig],
+//            Some(statusCommon) //common: Option[Status
+//          )
+//          ))
+//      case _ =>
+//        ConfigBO(
+//          Some(userId), None,
+//          Some(StatusConfig(
+//            None, //addConfig: Option[StatusAddConfig],
+//            None, //getConfigs: Option[StatusGetConfigs],
+//            Some(DeleteConfigError()), //deleteConfig: Option[StatusDeleteConfig],
+//            None, //updateConfig: Option[StatusUpdateConfig],
+//            Some(status) //common: Option[Status
+//          )
+//          )
+//        )
+//    }
   }
 
   /**
@@ -287,37 +284,38 @@ object Persistence {
     * @return ConfigBO
     */
   def updateConfig(configId: String, configUrl: String): ConfigBO = {
-    val (userId, status): (String, Error) = Graph.getUserId(configId)
-    val (vUpdatedConfig, statusUpdateConfig, statusCommon): (Option[OrientVertex], StatusUpdateConfig, Error) =
-      Graph.updateConfig(configId: String, configUrl: String)
-    status match {
-      case Success() =>
-        ConfigBO(
-          Some(userId),
-          Some(List(Configuration(
-            configId = Some(vUpdatedConfig.get.getIdentity.toString),
-            configUrl = Some(vUpdatedConfig.get.getProperty(PropertyKey.CONFIG_URL))
-          ))),
-          Some(StatusConfig(
-            None, //addConfig: Option[StatusAddConfig],
-            None, //getConfigs: Option[StatusGetConfigs],
-            None, //deleteConfig: Option[StatusDeleteConfig],
-            Some(statusUpdateConfig), //updateConfig: Option[StatusUpdateConfig],
-            Some(statusCommon) //common: Option[Status
-          )
-          ))
-      case _ =>
-        ConfigBO(
-          Some(userId), None, Some(StatusConfig(
-            None, //addConfig: Option[StatusAddConfig],
-            None, //getConfigs: Option[StatusGetConfigs],
-            None, //deleteConfig: Option[StatusDeleteConfig],
-            Some(UpdateConfigError()), //updateConfig: Option[StatusUpdateConfig],
-            Some(status) //common: Option[Status
-          )
-          )
-        )
-    }
+    ???
+//    val (userId, status): (String, Error) = Graph.getUserId(configId)
+//    val (vUpdatedConfig, statusUpdateConfig, statusCommon): (Option[OrientVertex], StatusUpdateConfig, Error) =
+//      Graph.updateConfig(configId: String, configUrl: String)
+//    status match {
+//      case Success() =>
+//        ConfigBO(
+//          Some(userId),
+//          Some(List(Configuration(
+//            configId = Some(vUpdatedConfig.get.getIdentity.toString),
+//            configUrl = Some(vUpdatedConfig.get.getProperty(PropertyKey.CONFIG_URL))
+//          ))),
+//          Some(StatusConfig(
+//            None, //addConfig: Option[StatusAddConfig],
+//            None, //getConfigs: Option[StatusGetConfigs],
+//            None, //deleteConfig: Option[StatusDeleteConfig],
+//            Some(statusUpdateConfig), //updateConfig: Option[StatusUpdateConfig],
+//            Some(statusCommon) //common: Option[Status
+//          )
+//          ))
+//      case _ =>
+//        ConfigBO(
+//          Some(userId), None, Some(StatusConfig(
+//            None, //addConfig: Option[StatusAddConfig],
+//            None, //getConfigs: Option[StatusGetConfigs],
+//            None, //deleteConfig: Option[StatusDeleteConfig],
+//            Some(UpdateConfigError()), //updateConfig: Option[StatusUpdateConfig],
+//            Some(status) //common: Option[Status
+//          )
+//          )
+//        )
+//    }
   }
 
   /**
@@ -327,68 +325,69 @@ object Persistence {
     * @return ConfigTreeBO
     */
   def getConfigTree(configTreeBO: ConfigTreeBO): ConfigTreeBO = {
-    val (configTree, statusGetConfigTree, commonStatus): (Option[StepForConfigTreeBO], StatusGetConfigTree, Error) =
-      Graph.getConfigTree(configTreeBO.configId.get)
-
-    val (userId: String, status: Error) = Persistence.getUserId(configTreeBO.configId.get)
-
-    statusGetConfigTree match {
-      case GetConfigTreeSuccess() =>
-        status match {
-          case Success() =>
-            ConfigTreeBO(
-              Some(userId),
-              configTreeBO.configId,
-              configTree,
-              Some(StatusConfigTree(
-                GetConfigTreeSuccess(),
-                Success()
-              )
-              ))
-          case _ =>
-            ConfigTreeBO(
-              None,
-              None,
-              None,
-              Some(StatusConfigTree(
-                GetConfigTreeError(),
-                status
-              )
-              ))
-        }
-      case GetConfigTreeEmpty() =>
-        status match {
-          case Success() =>
-            ConfigTreeBO(
-              Some(userId),
-              configTreeBO.configId,
-              None,
-              Some(StatusConfigTree(
-                GetConfigTreeEmpty(),
-                Success()
-              )
-              ))
-          case _ =>
-            ConfigTreeBO(
-              None,
-              None,
-              None,
-              Some(StatusConfigTree(
-                GetConfigTreeError(),
-                status
-              )
-              ))
-        }
-      case GetConfigTreeError() => ConfigTreeBO(
-        None,
-        None,
-        None,
-        Some(StatusConfigTree(
-          GetConfigTreeError(),
-          commonStatus
-        )
-        ))
-    }
+    ???
+//    val (configTree, statusGetConfigTree, commonStatus): (Option[StepForConfigTreeBO], StatusGetConfigTree, Error) =
+//      Graph.getConfigTree(configTreeBO.configId.get)
+//
+//    val (userId: String, status: Error) = Persistence.getUserId(configTreeBO.configId.get)
+//
+//    statusGetConfigTree match {
+//      case GetConfigTreeSuccess() =>
+//        status match {
+//          case Success() =>
+//            ConfigTreeBO(
+//              Some(userId),
+//              configTreeBO.configId,
+//              configTree,
+//              Some(StatusConfigTree(
+//                GetConfigTreeSuccess(),
+//                Success()
+//              )
+//              ))
+//          case _ =>
+//            ConfigTreeBO(
+//              None,
+//              None,
+//              None,
+//              Some(StatusConfigTree(
+//                GetConfigTreeError(),
+//                status
+//              )
+//              ))
+//        }
+//      case GetConfigTreeEmpty() =>
+//        status match {
+//          case Success() =>
+//            ConfigTreeBO(
+//              Some(userId),
+//              configTreeBO.configId,
+//              None,
+//              Some(StatusConfigTree(
+//                GetConfigTreeEmpty(),
+//                Success()
+//              )
+//              ))
+//          case _ =>
+//            ConfigTreeBO(
+//              None,
+//              None,
+//              None,
+//              Some(StatusConfigTree(
+//                GetConfigTreeError(),
+//                status
+//              )
+//              ))
+//        }
+//      case GetConfigTreeError() => ConfigTreeBO(
+//        None,
+//        None,
+//        None,
+//        Some(StatusConfigTree(
+//          GetConfigTreeError(),
+//          commonStatus
+//        )
+//        ))
+//    }
   }
 
   /**
@@ -398,45 +397,45 @@ object Persistence {
     * @return StepBO
     */
   def addStep(stepBO: StepBO): StepBO = {
-
-    val (vStep: Option[OrientVertex], addStepStatus: StatusAddStep, commonStatus: Error) =
-      Graph.addStep(stepBO)
-
-    addStepStatus match {
-      case AddStepSuccess() =>
-        StepBO(
-          appendToId = stepBO.appendToId,
-          stepId = Some(vStep.get.getIdentity.toString),
-          status = Some(StatusStep(
-            addStep = Some(AddStepSuccess()),
-            common = Some(Success())
-          ))
-        )
-      case AddStepError() =>
-        StepBO(
-          stepId = None,
-          status = Some(StatusStep(
-            addStep = Some(AddStepError()),
-            common = Some(commonStatus)
-          ))
-        )
-      case AddStepAlreadyExist() =>
-        StepBO(
-          stepId = None,
-          status = Some(StatusStep(
-            addStep = Some(AddStepAlreadyExist()),
-            common = Some(commonStatus)
-          ))
-        )
-      case AddStepDefectComponentOrConfigId() =>
-        StepBO(
-          stepId = None,
-          status = Some(StatusStep(
-            addStep = Some(AddStepDefectComponentOrConfigId()),
-            common = Some(commonStatus)
-          ))
-        )
-    }
+    ???
+//    val (vStep: Option[OrientVertex], addStepStatus: StatusAddStep, commonStatus: Error) =
+//      Graph.addStep(stepBO)
+//
+//    addStepStatus match {
+//      case AddStepSuccess() =>
+//        StepBO(
+//          appendToId = stepBO.appendToId,
+//          stepId = Some(vStep.get.getIdentity.toString),
+//          status = Some(StatusStep(
+//            addStep = Some(AddStepSuccess()),
+//            common = Some(Success())
+//          ))
+//        )
+//      case AddStepError() =>
+//        StepBO(
+//          stepId = None,
+//          status = Some(StatusStep(
+//            addStep = Some(AddStepError()),
+//            common = Some(commonStatus)
+//          ))
+//        )
+//      case AddStepAlreadyExist() =>
+//        StepBO(
+//          stepId = None,
+//          status = Some(StatusStep(
+//            addStep = Some(AddStepAlreadyExist()),
+//            common = Some(commonStatus)
+//          ))
+//        )
+//      case AddStepDefectComponentOrConfigId() =>
+//        StepBO(
+//          stepId = None,
+//          status = Some(StatusStep(
+//            addStep = Some(AddStepDefectComponentOrConfigId()),
+//            common = Some(commonStatus)
+//          ))
+//        )
+//    }
   }
 
   /**
@@ -446,7 +445,8 @@ object Persistence {
     * @return (StatusAppendStep, Status)
     */
   def appendStepTo(id: String, stepId: String): (StatusAppendStep, Error) = {
-    Graph.appendStepTo(id, stepId)
+  ???
+    //    Graph.appendStepTo(id, stepId)
   }
 
   /**
@@ -456,7 +456,8 @@ object Persistence {
     * @return (StatusDeleteStep, Status)
     */
   def deleteStep(stepId: String): (StatusDeleteStep, Error) = {
-    Graph.deleteStep(stepId)
+    ???
+//    Graph.deleteStep(stepId)
   }
 
   /**
@@ -466,28 +467,29 @@ object Persistence {
     * @return StepBO
     */
   def updateStep(stepBO: StepBO): StepBO = {
-    val (updateStepStatus: StatusUpdateStep, commonStatus: Error) = Graph.updateStep(stepBO)
-
-    updateStepStatus match {
-      case UpdateStepSuccess() =>
-        StepBO(
-          json = Some(JsonNames.UPDATE_STEP),
-          status = Some(StatusStep(
-            updateStep = Some(UpdateStepSuccess()),
-            common = Some(Success())
-          )
-          ))
-      case UpdateStepError() =>
-
-        StepBO(
-          json = Some(JsonNames.UPDATE_STEP),
-          status = Some(StatusStep(
-            updateStep = Some(UpdateStepError()),
-            common = Some(commonStatus)
-          )
-          )
-        )
-    }
+    ???
+//    val (updateStepStatus: StatusUpdateStep, commonStatus: Error) = Graph.updateStep(stepBO)
+//
+//    updateStepStatus match {
+//      case UpdateStepSuccess() =>
+//        StepBO(
+//          json = Some(JsonNames.UPDATE_STEP),
+//          status = Some(StatusStep(
+//            updateStep = Some(UpdateStepSuccess()),
+//            common = Some(Success())
+//          )
+//          ))
+//      case UpdateStepError() =>
+//
+//        StepBO(
+//          json = Some(JsonNames.UPDATE_STEP),
+//          status = Some(StatusStep(
+//            updateStep = Some(UpdateStepError()),
+//            common = Some(commonStatus)
+//          )
+//          )
+//        )
+//    }
   }
 
   /**
@@ -497,46 +499,47 @@ object Persistence {
     * @return ComponentBO
     */
   def addComponent(componentBO: ComponentBO): ComponentBO = {
-    val (vComponent, statusAddComponnet, statusCommon): (Option[OrientVertex], StatusAddComponent, Error) =
-      Graph.addComponent(componentBO)
-
-    statusAddComponnet match {
-      case AddComponentSuccess() =>
-        val componentBOForAppend =
-          ComponentBO(stepId = componentBO.stepId, componentId = Some(vComponent.get.getIdentity.toString))
-        val (statusAppendComponent, statusCommon): (StatusAppendComponent, Error) =
-          Graph.appendComponentToStep(componentBOForAppend)
-        statusAppendComponent match {
-          case AppendComponentSuccess() =>
-            ComponentBO(
-              stepId = componentBO.stepId,
-              componentId = Some(vComponent.get.getIdentity.toString),
-              nameToShow = Some(vComponent.get.getProperty(PropertyKeys.NAME_TO_SHOW)),
-              kind = Some(vComponent.get.getProperty(PropertyKeys.KIND)),
-              status = Some(StatusComponent(
-                addComponent = Some(AddComponentSuccess()),
-                appendComponent = Some(AppendComponentSuccess()),
-                common = Some(statusCommon)
-              ))
-            )
-          case AppendComponentError() =>
-            ComponentBO(
-              status = Some(StatusComponent(
-                addComponent = Some(AddComponentError()),
-                appendComponent = Some(AppendComponentError()),
-                common = Some(statusCommon)
-              ))
-            )
-        }
-      case AddComponentError() =>
-        ComponentBO(
-          status = Some(StatusComponent(
-            addComponent = Some(AddComponentError()),
-            appendComponent = Some(AppendComponentError()),
-            common = Some(statusCommon)
-          ))
-        )
-    }
+    ???
+//    val (vComponent, statusAddComponnet, statusCommon): (Option[OrientVertex], StatusAddComponent, Error) =
+//      Graph.addComponent(componentBO)
+//
+//    statusAddComponnet match {
+//      case AddComponentSuccess() =>
+//        val componentBOForAppend =
+//          ComponentBO(stepId = componentBO.stepId, componentId = Some(vComponent.get.getIdentity.toString))
+//        val (statusAppendComponent, statusCommon): (StatusAppendComponent, Error) =
+//          Graph.appendComponentToStep(componentBOForAppend)
+//        statusAppendComponent match {
+//          case AppendComponentSuccess() =>
+//            ComponentBO(
+//              stepId = componentBO.stepId,
+//              componentId = Some(vComponent.get.getIdentity.toString),
+//              nameToShow = Some(vComponent.get.getProperty(PropertyKeys.NAME_TO_SHOW)),
+//              kind = Some(vComponent.get.getProperty(PropertyKeys.KIND)),
+//              status = Some(StatusComponent(
+//                addComponent = Some(AddComponentSuccess()),
+//                appendComponent = Some(AppendComponentSuccess()),
+//                common = Some(statusCommon)
+//              ))
+//            )
+//          case AppendComponentError() =>
+//            ComponentBO(
+//              status = Some(StatusComponent(
+//                addComponent = Some(AddComponentError()),
+//                appendComponent = Some(AppendComponentError()),
+//                common = Some(statusCommon)
+//              ))
+//            )
+//        }
+//      case AddComponentError() =>
+//        ComponentBO(
+//          status = Some(StatusComponent(
+//            addComponent = Some(AddComponentError()),
+//            appendComponent = Some(AppendComponentError()),
+//            common = Some(statusCommon)
+//          ))
+//        )
+//    }
   }
 
   /**
@@ -546,10 +549,11 @@ object Persistence {
     * @return ComponentBO
     */
   def deleteComponent(componentBO: ComponentBO): ComponentBO = {
-    val (statusDeleteComponent, statusCommon): (StatusDeleteComponent, Error) = Graph.deleteComponent(componentBO)
-    ComponentBO(status = Some(StatusComponent(
-      deleteComponent = Some(statusDeleteComponent), common = Some(statusCommon)
-    )))
+    ???
+//    val (statusDeleteComponent, statusCommon): (StatusDeleteComponent, Error) = Graph.deleteComponent(componentBO)
+//    ComponentBO(status = Some(StatusComponent(
+//      deleteComponent = Some(statusDeleteComponent), common = Some(statusCommon)
+//    )))
   }
 
   /**
@@ -559,30 +563,31 @@ object Persistence {
     * @return ComponentBO
     */
   def updateComponent(componentBO: ComponentBO): ComponentBO = {
-    val (vComponent, statusUpdateComponnet, statusCommon): (Option[OrientVertex], StatusUpdateComponent, Error) =
-      Graph.updateComponent(componentBO)
-
-    statusUpdateComponnet match {
-      case UpdateComponentSuccess() =>
-        ComponentBO(
-          json = Some(JsonNames.UPDATE_COMPONENT),
-          componentId = componentBO.componentId,
-          nameToShow = componentBO.nameToShow,
-          kind = componentBO.kind,
-          status = Some(StatusComponent(
-            updateComponent = Some(UpdateComponentSuccess()),
-            common = Some(Success())
-          )
-          ))
-      case UpdateComponentError() =>
-        ComponentBO(
-          json = Some(JsonNames.UPDATE_COMPONENT),
-          status = Some(StatusComponent(
-            updateComponent = Some(UpdateComponentError()),
-            common = Some(statusCommon)
-          ))
-        )
-    }
+    ???
+//    val (vComponent, statusUpdateComponnet, statusCommon): (Option[OrientVertex], StatusUpdateComponent, Error) =
+//      Graph.updateComponent(componentBO)
+//
+//    statusUpdateComponnet match {
+//      case UpdateComponentSuccess() =>
+//        ComponentBO(
+//          json = Some(JsonNames.UPDATE_COMPONENT),
+//          componentId = componentBO.componentId,
+//          nameToShow = componentBO.nameToShow,
+//          kind = componentBO.kind,
+//          status = Some(StatusComponent(
+//            updateComponent = Some(UpdateComponentSuccess()),
+//            common = Some(Success())
+//          )
+//          ))
+//      case UpdateComponentError() =>
+//        ComponentBO(
+//          json = Some(JsonNames.UPDATE_COMPONENT),
+//          status = Some(StatusComponent(
+//            updateComponent = Some(UpdateComponentError()),
+//            common = Some(statusCommon)
+//          ))
+//        )
+//    }
   }
 
 
