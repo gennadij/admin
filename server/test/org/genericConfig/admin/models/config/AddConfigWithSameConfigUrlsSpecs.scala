@@ -2,6 +2,7 @@ package org.genericConfig.admin.models.config
 
 import models.preparingConfigs.GeneralFunctionToPrepareConfigs
 import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.common.status.ODBRecordDuplicated
 import org.genericConfig.admin.shared.config.json.{JsonAddConfigIn, JsonAddConfigParams}
@@ -14,7 +15,6 @@ import play.api.Logger
 import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.{JsValue, Json}
-import util.CommonFunction
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

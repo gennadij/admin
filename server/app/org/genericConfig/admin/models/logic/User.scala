@@ -2,7 +2,6 @@ package org.genericConfig.admin.models.logic
 
 import org.genericConfig.admin.models.persistence.Persistence
 import org.genericConfig.admin.shared.user.UserDTO
-import org.genericConfig.admin.shared.user.bo.UserBO
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -52,11 +51,11 @@ class User(userParam: UserDTO) {
    * @return UserBO
    */
   private def addUser: UserDTO = {
-    val userResult: UserDTO = Persistence.addUser(userParam.params.username, userParam.params.password)
-    userResult.result.errors match {
+    val userResult: UserDTO = Persistence.addUser(userParam.params.get.username, userParam.params.get.password)
+    userResult.result.get.errors match {
       case None =>
-        userResult.copy(result = userResult.result.copy(userId = Some(RidToHash.setIdAndHash(userResult.result.userId.get)._2)))
-      case _ => userParam
+        userResult.copy(result = Some(userResult.result.get.copy(userId = Some(RidToHash.setIdAndHash(userResult.result.get.userId.get)._2))))
+      case _ => userResult
     }
   }
   

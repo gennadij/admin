@@ -3,9 +3,9 @@ package org.genericConfig.admin.models.config
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientGraph, OrientVertex}
 import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.models.persistence.Database
 import play.api.Logger
-import util.CommonFunction
 
 import scala.collection.JavaConverters._
 

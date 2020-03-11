@@ -2,6 +2,7 @@ package org.genericConfig.admin.models.user
 
 import org.genericConfig.admin.controllers.admin.AdminWeb
 import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.models.wrapper.Wrapper
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.user.Error
@@ -12,7 +13,6 @@ import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.Json
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
-import util.CommonFunction
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -48,7 +48,7 @@ class AddingNewAdminUserSpecs extends Specification
                "username" -> "user1",
                "password"-> "user1"
            ), "result" -> Json.obj(
-          "userId" -> "null",
+            "userId" -> "",
                 "username" -> "",
                 "errors" -> Json.arr()
         )

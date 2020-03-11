@@ -1,7 +1,6 @@
 package org.genericConfig.admin.models.wrapper
 
 import org.genericConfig.admin.shared.common.json.{JsonNames, JsonStatus}
-import org.genericConfig.admin.shared.user.bo.UserBO
 import org.genericConfig.admin.shared.user.json._
 
 /**

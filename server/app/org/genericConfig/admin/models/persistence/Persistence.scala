@@ -11,8 +11,7 @@ import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.step.bo._
 import org.genericConfig.admin.shared.step.json.JsonDependencyForAdditionalStepsInOneLevel
 import org.genericConfig.admin.shared.step.status._
-import org.genericConfig.admin.shared.user.bo.UserBO
-import org.genericConfig.admin.shared.user.{Error, UserDTO, UserParams, UserResult}
+import org.genericConfig.admin.shared.user.{Error, UserDTO, UserResult}
 
 
 /**
@@ -36,15 +35,12 @@ object Persistence {
       case None =>
         UserDTO(
           action = Actions.ADD_USER,
-          params = UserParams(
-            username = username,
-            password = ""
-          ),
-          result = UserResult(
+          params = None,
+          result = Some(UserResult(
             userId = Some(vUser.get.getIdentity.toString),
             username = Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),
             errors = None
-          )
+          ))
         )
 
 //        UserBO(
@@ -58,11 +54,8 @@ object Persistence {
       case _ =>
         UserDTO(
           action = Actions.ADD_USER,
-          params = UserParams(
-            username = username,
-            password = ""
-          ),
-          result = UserResult(
+          params = None,
+          result = Some(UserResult(
             userId = None,
             username = None,
             errors = Some(List(Error(
@@ -70,7 +63,7 @@ object Persistence {
               message = error.get.message,
               code = error.get.code
             )))
-          )
+          ))
         )
 //        UserBO(
 //          username = Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),

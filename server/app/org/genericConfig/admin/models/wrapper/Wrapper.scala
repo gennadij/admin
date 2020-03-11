@@ -8,7 +8,6 @@ import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.configTree.json._
 import org.genericConfig.admin.shared.step.bo._
 import org.genericConfig.admin.shared.step.json._
-import org.genericConfig.admin.shared.user.bo.UserBO
 import org.genericConfig.admin.shared.user.json._
 
 /**

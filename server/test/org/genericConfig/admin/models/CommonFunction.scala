@@ -1,24 +1,22 @@
-package util
+package org.genericConfig.admin.models
 
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.models.logic._
 import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.models.persistence.orientdb.Graph
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.config.bo.{ConfigBO, Configuration}
-import org.genericConfig.admin.shared.config.status.{GetConfigsEmpty, GetConfigsError, GetConfigsSuccess, StatusAddConfig}
-import org.genericConfig.admin.shared.step.bo.StepBO
-import org.genericConfig.admin.shared.step.json.JsonSelectionCriterium
-import org.genericConfig.admin.shared.user.bo.UserBO
-import org.genericConfig.admin.shared.user.json.{JsonUserIn, JsonUserOut, JsonUserParams}
-import play.api.Logger
-import play.api.libs.json.{JsValue, Json}
-import org.genericConfig.admin.models.logic._
 import org.genericConfig.admin.shared.common.status.Error
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.status.StatusAddComponent
+import org.genericConfig.admin.shared.config.bo.{ConfigBO, Configuration}
+import org.genericConfig.admin.shared.config.status.{GetConfigsEmpty, GetConfigsError, GetConfigsSuccess, StatusAddConfig}
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
+import org.genericConfig.admin.shared.step.bo.StepBO
+import org.genericConfig.admin.shared.user.json.{JsonUserIn, JsonUserOut, JsonUserParams}
+import play.api.Logger
+import play.api.libs.json.{JsValue, Json}
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
