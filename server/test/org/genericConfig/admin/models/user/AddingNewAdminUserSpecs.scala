@@ -5,7 +5,7 @@ import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.models.wrapper.Wrapper
 import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.user.Error
+import org.genericConfig.admin.shared.user.ErrorDTO
 import org.specs2.mutable.Specification
 import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
@@ -65,7 +65,7 @@ class AddingNewAdminUserSpecs extends Specification
         (userResult \ "result" \ "userId").asOpt[String].get.size must be_<=(32)
       }
       "errors" >> {
-        (userResult \ "result" \ "errors").asOpt[List[Error]] must_== None
+        (userResult \ "result" \ "errors").asOpt[List[ErrorDTO]] must_== None
       }
     }
   }

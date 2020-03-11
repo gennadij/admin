@@ -7,7 +7,7 @@ import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.models.persistence.OrientDB
 import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.common.status.AddUserAlreadyExist
+import org.genericConfig.admin.shared.common.error.AddUserAlreadyExist
 import org.specs2.mutable.Specification
 import org.specs2.specification.BeforeAfterAll
 import play.api.Logger

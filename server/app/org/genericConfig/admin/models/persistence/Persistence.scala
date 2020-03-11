@@ -1,17 +1,17 @@
 package org.genericConfig.admin.models.persistence
 
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
+import org.genericConfig.admin.models.common.Error
 import org.genericConfig.admin.models.persistence.orientdb.{Graph, PropertyKeys}
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
-import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.common.status
+import org.genericConfig.admin.shared.{Actions, common}
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.config.bo.ConfigBO
 import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.step.bo._
 import org.genericConfig.admin.shared.step.json.JsonDependencyForAdditionalStepsInOneLevel
 import org.genericConfig.admin.shared.step.status._
-import org.genericConfig.admin.shared.user.{Error, UserDTO, UserResult}
+import org.genericConfig.admin.shared.user.{ErrorDTO, UserDTO, UserResultDTO}
 
 
 /**
@@ -28,7 +28,7 @@ object Persistence {
     * @return UserBO
     */
   def addUser(username: String, password: String): UserDTO = {
-    val (vUser: Option[OrientVertex], error : Option[status.Error]) =
+    val (vUser: Option[OrientVertex], error : Option[Error]) =
       Graph.addUser(username, password)
 
     error match {
@@ -36,50 +36,26 @@ object Persistence {
         UserDTO(
           action = Actions.ADD_USER,
           params = None,
-          result = Some(UserResult(
+          result = Some(UserResultDTO(
             userId = Some(vUser.get.getIdentity.toString),
             username = Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),
             errors = None
           ))
         )
-
-//        UserBO(
-//          username = Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),
-//          userId = Some(vUser.get.getIdentity.toString),
-//          status = Some(StatusUser(
-//            addUser = Some(AddUserSuccess()),
-//            common = Some(Success())
-//          ))
-//        )
       case _ =>
         UserDTO(
           action = Actions.ADD_USER,
           params = None,
-          result = Some(UserResult(
+          result = Some(UserResultDTO(
             userId = None,
             username = None,
-            errors = Some(List(Error(
+            errors = Some(List(ErrorDTO(
               name = error.get.status,
               message = error.get.message,
               code = error.get.code
             )))
           ))
         )
-//        UserBO(
-//          username = Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),
-//          userId = Some(vUser.get.getIdentity.toString),
-//          status = Some(StatusUser(
-//            addUser = Some(AddUserAlreadyExist()),
-//            common = Some(Error())
-//          ))
-//        )
-//      case _ =>
-//        UserBO(
-//          status = Some(StatusUser(
-//            addUser = Some(AddUserError()),
-//            common = Some(Error())
-//          ))
-//        )
     }
   }
 
@@ -89,47 +65,37 @@ object Persistence {
     * @param username : String, password: String
     * @return UserBO
     */
-  def getUser(username: String, password: String): UserBO = {
-    ???
-//    val (vUser: Option[OrientVertex], getUserStatus: StatusGetUser, commonStatus: Error) =
-//      Graph.getUser(username, password)
-//
-//    getUserStatus match {
-//      case GetUserSuccess() =>
-//        UserBO(
-//          username = Some(vUser.get.getProperty(PropertyKeys.USERNAME)),
-//          userId = Some(vUser.get.getIdentity.toString),
-//          status = Some(StatusUser(
-//            getUser = Some(GetUserSuccess()),
-//            common = Some(Success())
-//          ))
-//        )
-//      case GetUserError() =>
-//        UserBO(
-//          username = Some(username),
-//          status = Some(StatusUser(
-//            getUser = Some(GetUserError()),
-//            common = Some(commonStatus)
-//          ))
-//        )
-//      case GetUserAlreadyExist() =>
-//        UserBO(
-//          username = Some(username),
-//          status = Some(StatusUser(
-//            getUser = Some(GetUserAlreadyExist()),
-//            common = Some(commonStatus)
-//          ))
-//        )
-//      case GetUserNotExist() =>
-//        UserBO(
-//          username = Some(username),
-//          status = Some(StatusUser(
-//            getUser = Some(GetUserNotExist()),
-//            common = Some(commonStatus)
-//          ))
-//        )
-//    }
-  }
+  def getUser(username: String, password: String) : UserDTO = {
+    val (vUser: Option[OrientVertex], error: Option[Error]) =
+      Graph.getUser(username, password)
+
+    error match {
+      case None =>
+        UserDTO(
+          action = Actions.GET_USER,
+          params = None,
+          result = Some(UserResultDTO(
+            userId = Some(vUser.get.getIdentity.toString),
+            username = Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),
+            errors = None
+          ))
+        )
+      case _ =>
+        UserDTO(
+          action = Actions.GET_USER,
+          params = None,
+          result = Some(UserResultDTO(
+            userId = None,
+            username = None,
+            errors = Some(List(ErrorDTO(
+              name = error.get.status,
+              message = error.get.message,
+              code = error.get.code
+            )
+            ))
+          ))
+        )
+   }
 
   /**
     * @author Gennadi Heimann
@@ -137,7 +103,7 @@ object Persistence {
     * @param configId : String
     * @return String, Status
     */
-  def getUserId(configId: String): (String, Error) = {
+  def getUserId(configId: String): (String, ErrorDTO) = {
     ???
 //    Graph.getUserId(configId)
   }
@@ -193,7 +159,7 @@ object Persistence {
     * @param userId : String, configId: String
     * @return Status
     */
-  def appendConfigTo(userId: String, configId: String): status.Error = {
+  def appendConfigTo(userId: String, configId: String): error.Error = {
     Graph.appendConfigTo(userId, configId)
   }
 
@@ -437,7 +403,7 @@ object Persistence {
     * @param id : String, stepId: String
     * @return (StatusAppendStep, Status)
     */
-  def appendStepTo(id: String, stepId: String): (StatusAppendStep, Error) = {
+  def appendStepTo(id: String, stepId: String): (StatusAppendStep, ErrorDTO) = {
   ???
     //    Graph.appendStepTo(id, stepId)
   }
@@ -448,7 +414,7 @@ object Persistence {
     * @param stepId : String
     * @return (StatusDeleteStep, Status)
     */
-  def deleteStep(stepId: String): (StatusDeleteStep, Error) = {
+  def deleteStep(stepId: String): (StatusDeleteStep, ErrorDTO) = {
     ???
 //    Graph.deleteStep(stepId)
   }

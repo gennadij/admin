@@ -8,6 +8,7 @@ import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.configTree.json._
 import org.genericConfig.admin.shared.step.bo._
 import org.genericConfig.admin.shared.step.json._
+import org.genericConfig.admin.shared.user.UserDTO
 import org.genericConfig.admin.shared.user.json._
 
 /**
@@ -29,8 +30,9 @@ trait Wrapper{
    * 
    * @return UserBO
    */
-  def toAddUserBO(jsonUserIn: JsonUserIn): UserBO = {
-    new WrapperUser().toAddUserBO(jsonUserIn)
+  def toAddUserBO(jsonUserIn: JsonUserIn) = {
+    ???
+    //    new WrapperUser().toAddUserBO(jsonUserIn)
   }
   
   /**
@@ -42,8 +44,9 @@ trait Wrapper{
    * 
    * @return JsonUserOut
    */
-  def toJsonAddUserOut(userBO: UserBO): JsonUserOut = {
-    new WrapperUser().toJsonAddUserOut(userBO)
+  def toJsonAddUserOut(userBO: UserDTO): JsonUserOut = {
+    ???
+//    new WrapperUser().toJsonAddUserOut(userBO)
   }
   
   /**
@@ -55,7 +58,8 @@ trait Wrapper{
    * 
    * @return UserBO
    */
-  def toGetUserBO(jsonUserIn: JsonUserIn): UserBO = {
+  def toGetUserBO(jsonUserIn: JsonUserIn) = {
+    ???
     new WrapperUser().toGetUserBO(jsonUserIn)
   }
   
@@ -68,8 +72,9 @@ trait Wrapper{
    * 
    * @return JsonUserOut
    */
-  def toJsonGetUserOut(userBO: UserBO): JsonUserOut = {
-    new WrapperUser().toJsonGetUserOut(userBO)
+  def toJsonGetUserOut(userBO: UserDTO): JsonUserOut = {
+    ???
+    ///new WrapperUser().toJsonGetUserOut(userBO)
   }
   
   /**

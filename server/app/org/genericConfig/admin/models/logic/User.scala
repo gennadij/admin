@@ -29,14 +29,13 @@ object User {
    * 
    * @version 0.1.6
    * 
-   * @param userBO: UserBO
+   * @param userParams: UserBO
    * 
    * @return UserBO
    */
   
-  def getUser(userBO: UserBO): UserBO = {
-    ???
-    //new User(userBO).getUser
+  def getUser(userParams: UserDTO): UserDTO = {
+    new User(userParams).getUser
   }
   
 }
@@ -67,9 +66,8 @@ class User(userParam: UserDTO) {
    * @return UserBO
    */
   
-  private def getUser: UserBO = {
-    ???
-//    val userBOOut: UserBO = Persistence.getUser(userBO.username.get, userBO.password.get)
+  private def getUser : UserDTO = {
+    val userResult: UserDTO = Persistence.getUser(userParam.params.get.username, userParam.params.get.password)
 //    userBOOut.status.get.getUser match {
 //      case Some(GetUserSuccess()) => userBOOut.copy(userId = Some(RidToHash.setIdAndHash(userBOOut.userId.get)._2))
 //      case _ => userBOOut

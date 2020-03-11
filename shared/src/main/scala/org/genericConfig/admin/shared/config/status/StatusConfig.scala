@@ -1,6 +1,6 @@
 package org.genericConfig.admin.shared.config.status
 
-import org.genericConfig.admin.shared.common.status.{ODBConnectionFail, Error}
+import org.genericConfig.admin.shared.common.error.{ODBConnectionFail, Error}
 
 
 /**

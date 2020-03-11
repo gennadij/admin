@@ -7,4 +7,5 @@ package org.genericConfig.admin.shared
  */
 object Actions {
   val ADD_USER : String = "ADD_USER"
+  val GET_USER : String = "GET_USER"
 }

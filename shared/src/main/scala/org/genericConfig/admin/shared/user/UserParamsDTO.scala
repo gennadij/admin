@@ -7,11 +7,11 @@ import play.api.libs.json.Json
  *
  * Created by Gennadi Heimann 09.03.2020
  */
-case class UserParams (
+case class UserParamsDTO(
   username : String,
   password : String
 )
 
-object UserParams {
-  implicit  val format = Json.format[UserParams]
+object UserParamsDTO {
+  implicit  val format = Json.format[UserParamsDTO]
 }

@@ -7,7 +7,7 @@ import org.genericConfig.admin.models.logic._
 import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.models.persistence.orientdb.Graph
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.common.status.Error
+import org.genericConfig.admin.shared.common.error.Error
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.status.StatusAddComponent
 import org.genericConfig.admin.shared.config.bo.{ConfigBO, Configuration}

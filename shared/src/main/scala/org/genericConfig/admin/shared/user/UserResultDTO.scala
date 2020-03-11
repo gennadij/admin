@@ -4,16 +4,16 @@ package org.genericConfig.admin.shared.user
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Format, JsPath}
 
-case class UserResult(
+case class UserResultDTO(
                      userId: Option[String],
                      username : Option[String],
-                     errors : Option[List[Error]]
+                     errors : Option[List[ErrorDTO]]
                      )
 
-object UserResult {
-  implicit val format: Format[UserResult] = (
+object UserResultDTO {
+  implicit val format: Format[UserResultDTO] = (
     (JsPath \ "userId").format(Format.optionWithNull[String]) and
       (JsPath \ "username").format(Format.optionWithNull[String]) and
-      (JsPath \ "errors").format(Format.optionWithNull[List[Error]])
-    )(UserResult.apply, unlift(UserResult.unapply))
+      (JsPath \ "errors").format(Format.optionWithNull[List[ErrorDTO]])
+    )(UserResultDTO.apply, unlift(UserResultDTO.unapply))
 }

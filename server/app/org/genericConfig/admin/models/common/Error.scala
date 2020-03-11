@@ -1,4 +1,4 @@
-package org.genericConfig.admin.shared.common.status
+package org.genericConfig.admin.models.common
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -28,6 +28,12 @@ case class AddUserAlreadyExist() extends Error {
   def status: String = "ADD_USER_ALREADY_EXIST"
   def message: String = ""
   def code : String = ""
+}
+
+case class GetUserNotExist() extends Error {
+  def status: String = "GET_USER_NOT_EXIST"
+  def message: String = ""
+  def code :String = ""
 }
 
 case class ODBClassCastError() extends Error{

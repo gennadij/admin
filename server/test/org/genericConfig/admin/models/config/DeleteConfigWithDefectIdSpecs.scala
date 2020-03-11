@@ -3,7 +3,7 @@ package org.genericConfig.admin.models.config
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.common.status.{ODBNullPointer, ODBRecordIdDefect}
+import org.genericConfig.admin.shared.common.error.{ODBNullPointer, ODBRecordIdDefect}
 import org.genericConfig.admin.shared.config.json.{JsonDeleteConfigIn, JsonDeleteConfigParams}
 import org.genericConfig.admin.shared.config.status.{DeleteConfigError, DeleteConfigIdHashNotExist}
 import org.junit.runner.RunWith

@@ -1,6 +1,6 @@
 package org.genericConfig.admin.shared.configTree.status
 
-import org.genericConfig.admin.shared.common.status.Error
+import org.genericConfig.admin.shared.common.error.Error
 
 
 /**

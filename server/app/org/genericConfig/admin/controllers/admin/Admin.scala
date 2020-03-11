@@ -8,7 +8,6 @@ import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.shared.configTree.json.{JsonConfigTreeIn, JsonConfigTreeOut}
 import org.genericConfig.admin.shared.step.json._
 import org.genericConfig.admin.shared.user.UserDTO
-import org.genericConfig.admin.shared.user.json._
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -35,11 +34,12 @@ class Admin extends Wrapper {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param jsonUserIn : JsonUserIn
+    * @param userParams : JsonUserIn
     * @return JsonUserOut
     */
-  def getUser(jsonUserIn: JsonUserIn): JsonUserOut = {
-    toJsonGetUserOut(User.getUser(toGetUserBO(jsonUserIn)))
+  def getUser(userParams: UserDTO): UserDTO = {
+    User.getUser(userParams)
+    //toJsonGetUserOut(User.getUser(toGetUserBO(jsonUserIn)))
   }
 
   /**

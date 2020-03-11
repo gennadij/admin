@@ -10,15 +10,15 @@ import play.api.libs.functional.syntax._
  * Created by Gennadi Heimann 09.03.2020
  */
 case class UserDTO(
-  action : String = "",
-  params : Option[UserParams],
-  result : Option[UserResult]
+                    action : String = "",
+                    params : Option[UserParamsDTO],
+                    result : Option[UserResultDTO]
 )
 
 object UserDTO {
   implicit val format : Format[UserDTO] = (
     (JsPath \ "action").format(Format.of[String]) and
-      (JsPath \ "params").format(Format.optionWithNull[UserParams]) and
-      (JsPath \ "result").format(Format.optionWithNull[UserResult])
+      (JsPath \ "params").format(Format.optionWithNull[UserParamsDTO]) and
+      (JsPath \ "result").format(Format.optionWithNull[UserResultDTO])
     )(UserDTO.apply, unlift(UserDTO.unapply))
 }

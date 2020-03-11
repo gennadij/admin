@@ -1,12 +1,11 @@
 package org.genericConfig.admin.models.persistence.orientdb
 
-import com.orientechnologies.orient.core.exception.OValidationException
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
 import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientEdge, OrientGraph, OrientVertex}
-import com.tinkerpop.blueprints.{Direction, Edge, Vertex}
+import com.tinkerpop.blueprints.Vertex
+import org.genericConfig.admin.models.common.{AddUserAlreadyExist, Error, GetUserNotExist, ODBClassCastError, ODBConnectionFail, ODBReadError, ODBRecordDuplicated, UnknownError}
 import org.genericConfig.admin.models.persistence.Database
-import org.genericConfig.admin.shared.common.status._
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.status._
 import org.genericConfig.admin.shared.config.status._
@@ -14,7 +13,6 @@ import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.configTree.status._
 import org.genericConfig.admin.shared.step.bo.StepBO
 import org.genericConfig.admin.shared.step.status._
-import org.genericConfig.admin.shared.user
 import play.api.Logger
 
 import scala.collection.JavaConverters._
@@ -49,15 +47,14 @@ object Graph {
     * @param username : String, password: String
     * @return (Option[OrientVertex], StatusGetUser, Status)
     */
-  def getUser(username: String, password: String): (Option[OrientVertex]/*, StatusGetUser*/, Error) = {
-    ???
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), Success()) =>
-//        val graph: OrientGraph = dbFactory.getTx
-//        new Graph(graph).getUser(username, password)
-//      case (None, ODBConnectionFail()) =>
-//        (None, GetUserError(), ODBConnectionFail())
-//    }
+  def getUser(username: String, password: String): (Option[OrientVertex], Option[Error]) = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), None) =>
+        val graph: OrientGraph = dbFactory.getTx
+        new Graph(graph).getUser(username, password)
+      case (None, Some(ODBConnectionFail())) =>
+        (None, Some(ODBConnectionFail()))
+    }
   }
 
   /**
@@ -377,7 +374,6 @@ class Graph(graph: OrientGraph) {
     * @return (Option[OrientVertex], StatusAddUser, Status)
     */
   private def addUser(username: String, password: String): (Option[OrientVertex], Option[Error]) = {
-
     try {
       val vUser: List[Vertex] = graph.getVertices(PropertyKeys.USERNAME, username).asScala.toList
       if (vUser.isEmpty) {
@@ -409,34 +405,33 @@ class Graph(graph: OrientGraph) {
     * @param username : String, password: String
     * @return (Option[OrientVertex], StatusGetUser, Status)
     */
-//  private def getUser(username: String, password: String): (Option[OrientVertex], StatusGetUser, Error) = {
-//    //TODO OCommandExecutionException
-//
-//    try {
-//      val dynElemUsers: OrientDynaElementIterable =
-//        graph.command(new OCommandSQL(s"SELECT FROM AdminUser WHERE username='$username' and password='$password'")).execute()
-//      graph.commit()
-//      val vUsers: List[OrientVertex] = dynElemUsers.asScala.toList map (_.asInstanceOf[OrientVertex])
-//
-//      vUsers match {
-//        case userCount if userCount.size == 1 => (Some(vUsers.head), GetUserSuccess(), Success())
-//        case _ => (None, GetUserNotExist(), Error())
-//      }
-//    } catch {
-//      case e: ORecordDuplicatedException =>
-//        Logger.error(e.printStackTrace().toString)
-//        graph.rollback()
-//        (None, GetUserAlreadyExist(), ODBRecordDuplicated())
-//      case e: ClassCastException =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (None, GetUserError(), ODBClassCastError())
-//      case e: Exception =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (None, GetUserError(), ODBReadError())
-//    }
-//  }
+  private def getUser(username: String, password: String): (Option[OrientVertex], Option[Error]) = {
+
+    try {
+      val dynElemUsers: OrientDynaElementIterable =
+        graph.command(new OCommandSQL(s"SELECT FROM AdminUser WHERE username='$username' and password='$password'")).execute()
+      graph.commit()
+      val vUsers: List[OrientVertex] = dynElemUsers.asScala.toList map (_.asInstanceOf[OrientVertex])
+
+      vUsers match {
+        case userCount if userCount.size == 1 => (Some(vUsers.head), None)
+        case _ => (None, Some(GetUserNotExist()))
+      }
+    } catch {
+      case e: ORecordDuplicatedException =>
+        Logger.error(e.printStackTrace().toString)
+        graph.rollback()
+        (None, Some(ODBRecordDuplicated()))
+      case e: ClassCastException =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (None, Some(ODBClassCastError()))
+      case e: Exception =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (None, Some(ODBReadError()))
+    }
+  }
 
   /**
     * @author Gennadi Heimann

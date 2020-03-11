@@ -7,12 +7,12 @@ import play.api.libs.json.{Format, Json}
  *
  * Created by Gennadi Heimann 09.03.2020
  */
-case class Error (
+case class ErrorDTO(
                  message: String,
                  name : String,
                  code : String
                  )
 
-object Error{
-  implicit val format: Format[Error] = Json.format[Error]
+object ErrorDTO{
+  implicit val format: Format[ErrorDTO] = Json.format[ErrorDTO]
 }

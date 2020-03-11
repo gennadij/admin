@@ -1,7 +1,7 @@
 package org.genericConfig.admin.models.wrapper
 
 import org.genericConfig.admin.shared.common.json.{JsonConfig, JsonStatus}
-import org.genericConfig.admin.shared.common.status.Error
+import org.genericConfig.admin.shared.common.error.Error
 import org.genericConfig.admin.shared.config.bo.{ConfigBO, Configuration}
 import org.genericConfig.admin.shared.config.json._
 import play.api.Logger

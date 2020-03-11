@@ -21,7 +21,7 @@ trait AdminWeb {
   def handleMessage(receivedMessage: JsValue, admin: Admin): JsValue = {
     (receivedMessage \ "action").asOpt[String] match {
       case Some(Actions.ADD_USER) => addUser(receivedMessage, admin)
-//      case Some(JsonNames.GET_USER) => getUser(receivedMessage, admin)
+      case Some(JsonNames.GET_USER) => getUser(receivedMessage, admin)
       
 //      case Some(JsonNames.ADD_CONFIG) => addConfig(receivedMessage, admin)
 //      case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage, admin)
@@ -54,15 +54,15 @@ trait AdminWeb {
     val addUser: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
     addUser match {
       case s : JsSuccess[UserDTO] => Json.toJson(admin.addUser(s.value))
-      case e : JsError => jsonError(JsonNames.ADD_USER, e)
+      case e : JsError => jsonError(Actions.ADD_USER, e)
     }
   }
 
   private def getUser(receivedMessage: JsValue, admin: Admin): JsValue = {
-    val loginIn: JsResult[JsonUserIn] = Json.fromJson[JsonUserIn](receivedMessage)
-    loginIn match {
-      case _: JsSuccess[JsonUserIn] => Json.toJson(admin.getUser(loginIn.get))
-      case e : JsError => jsonError(JsonNames.GET_USER, e)
+    val getUser: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
+    getUser match {
+      case _: JsSuccess[UserDTO] => Json.toJson(admin.getUser(getUser.get))
+      case e : JsError => jsonError(Actions.GET_USER, e)
     }
   }
   

@@ -1,6 +1,6 @@
 package org.genericConfig.admin.shared.component.status
 
-import org.genericConfig.admin.shared.common.status.Error
+import org.genericConfig.admin.shared.common.error.Error
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

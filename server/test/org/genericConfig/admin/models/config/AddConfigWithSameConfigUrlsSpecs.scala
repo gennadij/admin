@@ -4,7 +4,7 @@ import models.preparingConfigs.GeneralFunctionToPrepareConfigs
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.common.status.ODBRecordDuplicated
+import org.genericConfig.admin.shared.common.error.ODBRecordDuplicated
 import org.genericConfig.admin.shared.config.json.{JsonAddConfigIn, JsonAddConfigParams}
 import org.genericConfig.admin.shared.config.status.AddConfigAlreadyExist
 import org.junit.runner.RunWith

@@ -1,7 +1,7 @@
 package org.genericConfig.admin.models.logic
 
 import org.genericConfig.admin.models.persistence.Persistence
-import org.genericConfig.admin.shared.common.status._
+import org.genericConfig.admin.shared.common.error._
 import org.genericConfig.admin.shared.config.bo.{ConfigBO, _}
 import org.genericConfig.admin.shared.config.status._
 import org.genericConfig.admin.shared.configTree.bo.{ComponentForConfigTreeBO, ConfigTreeBO, StepForConfigTreeBO}
