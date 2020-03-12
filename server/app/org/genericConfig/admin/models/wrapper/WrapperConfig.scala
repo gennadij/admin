@@ -1,10 +1,8 @@
 package org.genericConfig.admin.models.wrapper
 
-import org.genericConfig.admin.shared.common.json.{JsonConfig, JsonStatus}
-import org.genericConfig.admin.shared.common.error.Error
+import org.genericConfig.admin.shared.common.json.JsonStatus
 import org.genericConfig.admin.shared.config.bo.{ConfigBO, Configuration}
 import org.genericConfig.admin.shared.config.json._
-import play.api.Logger
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -37,23 +35,23 @@ class WrapperConfig {
     * @return JsonAddConfigOut
     */
   private[wrapper] def toJsonAddConfigOut(configBO: ConfigBO): JsonAddConfigOut = {
-
-    JsonAddConfigOut(
-      result = JsonAddConfigResult(
-        Some(configBO.userId.get),
-        configId = configBO.configs match {
-          case Some(configs) => Some(configs.head.configId.get)
-          case None => None
-        },
-        status = JsonConfigStatus(
-          setStatus(configBO.status.get.addConfig),
-          setStatus(configBO.status.get.getConfigs),
-          setStatus(configBO.status.get.deleteConfig),
-          setStatus(configBO.status.get.updateConfig),
-          setStatus(configBO.status.get.common)
-        )
-      )
-    )
+???
+//    JsonAddConfigOut(
+//      result = JsonAddConfigResult(
+//        Some(configBO.userId.get),
+//        configId = configBO.configs match {
+//          case Some(configs) => Some(configs.head.configId.get)
+//          case None => None
+//        },
+//        status = JsonConfigStatus(
+//          setStatus(configBO.status.get.addConfig),
+//          setStatus(configBO.status.get.getConfigs),
+//          setStatus(configBO.status.get.deleteConfig),
+//          setStatus(configBO.status.get.updateConfig),
+//          setStatus(configBO.status.get.common)
+//        )
+//      )
+//    )
   }
 
   private[wrapper] def toGetConfigsBO(jsonGetConfigsIn: JsonGetConfigsIn): ConfigBO = {
@@ -70,29 +68,29 @@ class WrapperConfig {
     * @return JsonGetConfigsOut
     */
   private[wrapper] def toJsonGetConfigsOut(configBO: ConfigBO): JsonGetConfigsOut = {
-
-    val cBOs: List[JsonConfig] = configBO.configs match {
-      case Some(configs) => configs map { config => {
-        JsonConfig(
-          config.configId.get,
-          config.configUrl.get
-        )
-      }}
-      case None => List()
-    }
-    JsonGetConfigsOut(
-      result = JsonGetConfigsResult(
-        configBO.userId.get,
-        cBOs,
-        JsonConfigStatus(
-          setStatus(configBO.status.get.addConfig),
-          setStatus(configBO.status.get.getConfigs),
-          setStatus(configBO.status.get.deleteConfig),
-          setStatus(configBO.status.get.updateConfig),
-          setStatus(configBO.status.get.common)
-        )
-      )
-    )
+???
+//    val cBOs: List[JsonConfig] = configBO.configs match {
+//      case Some(configs) => configs map { config => {
+//        JsonConfig(
+//          config.configId.get,
+//          config.configUrl.get
+//        )
+//      }}
+//      case None => List()
+//    }
+//    JsonGetConfigsOut(
+//      result = JsonGetConfigsResult(
+//        configBO.userId.get,
+//        cBOs,
+//        JsonConfigStatus(
+//          setStatus(configBO.status.get.addConfig),
+//          setStatus(configBO.status.get.getConfigs),
+//          setStatus(configBO.status.get.deleteConfig),
+//          setStatus(configBO.status.get.updateConfig),
+//          setStatus(configBO.status.get.common)
+//        )
+//      )
+//    )
   }
 
   private[wrapper] def toDeleteConfigBO(jsonDeleteConfigIn: JsonDeleteConfigIn): ConfigBO = {
@@ -111,19 +109,20 @@ class WrapperConfig {
     * @return ConfigBO
     */
   private[wrapper] def toJsonDeleteConfigOut(configBO: ConfigBO): JsonDeleteConfigOut = {
-    Logger.info("ConfigBO" + configBO)
-    JsonDeleteConfigOut(
-      result = JsonDeleteConfigsResult(
-        configBO.userId.get,
-        JsonConfigStatus(
-          setStatus(configBO.status.get.addConfig),
-          setStatus(configBO.status.get.getConfigs),
-          setStatus(configBO.status.get.deleteConfig),
-          setStatus(configBO.status.get.updateConfig),
-          setStatus(configBO.status.get.common)
-        )
-      )
-    )
+    ???
+//    Logger.info("ConfigBO" + configBO)
+//    JsonDeleteConfigOut(
+//      result = JsonDeleteConfigsResult(
+//        configBO.userId.get,
+//        JsonConfigStatus(
+//          setStatus(configBO.status.get.addConfig),
+//          setStatus(configBO.status.get.getConfigs),
+//          setStatus(configBO.status.get.deleteConfig),
+//          setStatus(configBO.status.get.updateConfig),
+//          setStatus(configBO.status.get.common)
+//        )
+//      )
+//    )
   }
 
   /**
@@ -148,26 +147,28 @@ class WrapperConfig {
     * @return JsonUpdateConfigOut
     */
   private[wrapper] def toJsonUpdateConfigOut(configBO: ConfigBO): JsonUpdateConfigOut = {
-    JsonUpdateConfigOut(
-      result = JsonUpdateConfigResult(
-        configBO.userId.get,
-        JsonConfigStatus(
-          setStatus(configBO.status.get.addConfig),
-          setStatus(configBO.status.get.getConfigs),
-          setStatus(configBO.status.get.deleteConfig),
-          setStatus(configBO.status.get.updateConfig),
-          setStatus(configBO.status.get.common)
-        )
-      )
-    )
+    ???
+//    JsonUpdateConfigOut(
+//      result = JsonUpdateConfigResult(
+//        configBO.userId.get,
+//        JsonConfigStatus(
+//          setStatus(configBO.status.get.addConfig),
+//          setStatus(configBO.status.get.getConfigs),
+//          setStatus(configBO.status.get.deleteConfig),
+//          setStatus(configBO.status.get.updateConfig),
+//          setStatus(configBO.status.get.common)
+//        )
+//      )
+//    )
   }
 
-  private def setStatus(status: Option[Error]): Option[JsonStatus] = status match {
-    case Some(s) =>
-      Some(JsonStatus(
-        s.status,
-        s.message
-      ))
-    case None => None
+  private def setStatus(status: Option[Error]): Option[JsonStatus] = {???
+//    status match {
+    //    case Some(s) =>
+//      Some(JsonStatus(
+//        s.status,
+//        s.message
+//      ))
+//    case None => None
   }
 }

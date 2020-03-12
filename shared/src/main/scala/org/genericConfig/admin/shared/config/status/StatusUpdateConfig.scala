@@ -1,14 +1,11 @@
 package org.genericConfig.admin.shared.config.status
 
-import org.genericConfig.admin.shared.common.error.Error
-
-
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 24.04.2018
  */
-sealed abstract  class StatusUpdateConfig extends Error
+sealed abstract  class StatusUpdateConfig //extends Error
 
 case class UpdateConfigUpdated() extends StatusUpdateConfig {
   def status: String = "UPDATE_CONFIG_UPDATED"

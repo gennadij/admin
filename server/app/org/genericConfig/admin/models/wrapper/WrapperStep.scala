@@ -1,8 +1,8 @@
 package org.genericConfig.admin.models.wrapper
 
-import org.genericConfig.admin.shared.common.json.{JsonNames, JsonStatus}
+import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.step.bo.StepBO
-import org.genericConfig.admin.shared.step.json.{JsonStepIn, JsonStepOut, JsonStepResult, JsonStepStatus}
+import org.genericConfig.admin.shared.step.json.{JsonStepIn, JsonStepOut}
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -99,56 +99,57 @@ class WrapperStep {
     * @return JsonStepOut
     */
   private def createJsonStepOut(stepBO: StepBO, json: String): JsonStepOut = {
+    ???
 
-    JsonStepOut(
-      json = json,
-      result = JsonStepResult(
-        stepBO.stepId,
-        Set(),
-        Set(),
-        JsonStepStatus(
-          stepBO.status.get.addStep match {
-            case Some(addStep) =>
-              Some(JsonStatus(
-                addStep.status,
-                addStep.message
-              ))
-            case None => None
-          },
-          stepBO.status.get.deleteStep match {
-            case Some(deleteStep) =>
-              Some(JsonStatus(
-                deleteStep.status,
-                deleteStep.message
-              ))
-            case None => None
-          },
-          stepBO.status.get.updateStep match {
-            case Some(updateStep) =>
-              Some(JsonStatus(
-                updateStep.status,
-                updateStep.message
-              ))
-            case None => None
-          },
-          stepBO.status.get.appendStep match {
-            case Some(appendStep) =>
-              Some(JsonStatus(
-                appendStep.status,
-                appendStep.message
-              ))
-            case None => None
-          },
-          stepBO.status.get.common match {
-            case Some(common) =>
-              Some(JsonStatus(
-                common.status,
-                common.message
-              ))
-            case None => None
-          }
-        )
-      )
-    )
+//    JsonStepOut(
+//      json = json,
+//      result = JsonStepResult(
+//        stepBO.stepId,
+//        Set(),
+//        Set(),
+//        JsonStepStatus(
+//          stepBO.status.get.addStep match {
+//            case Some(addStep) =>
+//              Some(JsonStatus(
+//                addStep.status,
+//                addStep.message
+//              ))
+//            case None => None
+//          },
+//          stepBO.status.get.deleteStep match {
+//            case Some(deleteStep) =>
+//              Some(JsonStatus(
+//                deleteStep.status,
+//                deleteStep.message
+//              ))
+//            case None => None
+//          },
+//          stepBO.status.get.updateStep match {
+//            case Some(updateStep) =>
+//              Some(JsonStatus(
+//                updateStep.status,
+//                updateStep.message
+//              ))
+//            case None => None
+//          },
+//          stepBO.status.get.appendStep match {
+//            case Some(appendStep) =>
+//              Some(JsonStatus(
+//                appendStep.status,
+//                appendStep.message
+//              ))
+//            case None => None
+//          },
+//          stepBO.status.get.common match {
+//            case Some(common) =>
+//              Some(JsonStatus(
+//                common.status,
+//                common.message
+//              ))
+//            case None => None
+//          }
+//        )
+//      )
+//    )
   }
 }

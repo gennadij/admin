@@ -4,7 +4,7 @@ import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.genericConfig.admin.models.common.Error
 import org.genericConfig.admin.models.persistence.orientdb.{Graph, PropertyKeys}
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
-import org.genericConfig.admin.shared.{Actions, common}
+import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.config.bo.ConfigBO
 import org.genericConfig.admin.shared.configTree.bo._
@@ -95,7 +95,8 @@ object Persistence {
             ))
           ))
         )
-   }
+    }
+  }
 
   /**
     * @author Gennadi Heimann
@@ -159,7 +160,7 @@ object Persistence {
     * @param userId : String, configId: String
     * @return Status
     */
-  def appendConfigTo(userId: String, configId: String): error.Error = {
+  def appendConfigTo(userId: String, configId: String): Error = {
     Graph.appendConfigTo(userId, configId)
   }
 

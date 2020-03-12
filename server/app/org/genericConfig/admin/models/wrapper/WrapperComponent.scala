@@ -1,8 +1,8 @@
 package org.genericConfig.admin.models.wrapper
 
-import org.genericConfig.admin.shared.common.json.{JsonNames, JsonStatus}
+import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.component.bo.ComponentBO
-import org.genericConfig.admin.shared.component.json.{JsonComponentIn, JsonComponentOut, JsonComponentResult, JsonComponentStatus}
+import org.genericConfig.admin.shared.component.json.{JsonComponentIn, JsonComponentOut}
 
 
 /**
@@ -49,142 +49,143 @@ class WrapperComponent {
     * @return JsonComponentOut
     */
   private[wrapper] def toJsonComponentOut(componentBO: ComponentBO): JsonComponentOut = {
-    componentBO.json.get match {
-      case json if json == JsonNames.ADD_COMPONENT =>
-        JsonComponentOut(
-          json = componentBO.json.get,
-          result = JsonComponentResult(
-            componentId = componentBO.componentId,
-            nameToShow = componentBO.nameToShow,
-            kind = componentBO.kind,
-            status = JsonComponentStatus(
-              addComponent = componentBO.status.get.addComponent match {
-                case Some(addComponent) => Some(JsonStatus(
-                  status = addComponent.status,
-                  message = addComponent.message
-                ))
-                case None => None
-              },
-              appendComponent = componentBO.status.get.appendComponent match {
-                case Some(appendComponent) => Some(JsonStatus(
-                  status = appendComponent.status,
-                  message = appendComponent.message
-                ))
-                case None => None
-              },
-              deleteComponent = componentBO.status.get.deleteComponent match {
-                case Some(deleteComponent) => Some(JsonStatus(
-                  status = deleteComponent.status,
-                  message = deleteComponent.message
-                ))
-                case None => None
-              },
-              updateComponent = componentBO.status.get.updateComponent match {
-                case Some(updateComponent) => Some(JsonStatus(
-                  status = updateComponent.status,
-                  message = updateComponent.message
-                ))
-                case None => None
-              },
-              common = componentBO.status.get.common match {
-                case Some(common) => Some(JsonStatus(
-                  status = common.status,
-                  message = common.message
-                ))
-                case None => None
-              }
-            )
-          )
-        )
-      case json if json == JsonNames.DELETE_COMPONENT =>
-        JsonComponentOut(
-          json = componentBO.json.get,
-          result = JsonComponentResult(
-            status = JsonComponentStatus(
-              addComponent = componentBO.status.get.addComponent match {
-                case Some(addComponent) => Some(JsonStatus(
-                  status = addComponent.status,
-                  message = addComponent.message
-                ))
-                case None => None
-              },
-              appendComponent = componentBO.status.get.appendComponent match {
-                case Some(appendComponent) => Some(JsonStatus(
-                  status = appendComponent.status,
-                  message = appendComponent.message
-                ))
-                case None => None
-              },
-              deleteComponent = componentBO.status.get.deleteComponent match {
-                case Some(deleteComponent) => Some(JsonStatus(
-                  status = deleteComponent.status,
-                  message = deleteComponent.message
-                ))
-                case None => None
-              },
-              updateComponent = componentBO.status.get.updateComponent match {
-                case Some(updateComponent) => Some(JsonStatus(
-                  status = updateComponent.status,
-                  message = updateComponent.message
-                ))
-                case None => None
-              },
-              common = componentBO.status.get.common match {
-                case Some(common) => Some(JsonStatus(
-                  status = common.status,
-                  message = common.message
-                ))
-                case None => None
-              }
-            )
-          )
-        )
-      case json if json == JsonNames.UPDATE_COMPONENT =>
-        JsonComponentOut(
-          json = componentBO.json.get,
-          result = JsonComponentResult(
-            componentId = componentBO.componentId,
-            nameToShow = componentBO.nameToShow,
-            kind = componentBO.kind,
-            status = JsonComponentStatus(
-              addComponent = componentBO.status.get.addComponent match {
-                case Some(addComponent) => Some(JsonStatus(
-                  status = addComponent.status,
-                  message = addComponent.message
-                ))
-                case None => None
-              },
-              appendComponent = componentBO.status.get.appendComponent match {
-                case Some(appendComponent) => Some(JsonStatus(
-                  status = appendComponent.status,
-                  message = appendComponent.message
-                ))
-                case None => None
-              },
-              deleteComponent = componentBO.status.get.deleteComponent match {
-                case Some(deleteComponent) => Some(JsonStatus(
-                  status = deleteComponent.status,
-                  message = deleteComponent.message
-                ))
-                case None => None
-              },
-              updateComponent = componentBO.status.get.updateComponent match {
-                case Some(updateComponent) => Some(JsonStatus(
-                  status = updateComponent.status,
-                  message = updateComponent.message
-                ))
-                case None => None
-              },
-              common = componentBO.status.get.common match {
-                case Some(common) => Some(JsonStatus(
-                  status = common.status,
-                  message = common.message
-                ))
-                case None => None
-              }
-            )
-          )
-        )
-    }
+    ???
+//    componentBO.json.get match {
+//      case json if json == JsonNames.ADD_COMPONENT =>
+//        JsonComponentOut(
+//          json = componentBO.json.get,
+//          result = JsonComponentResult(
+//            componentId = componentBO.componentId,
+//            nameToShow = componentBO.nameToShow,
+//            kind = componentBO.kind,
+//            status = JsonComponentStatus(
+//              addComponent = componentBO.status.get.addComponent match {
+//                case Some(addComponent) => Some(JsonStatus(
+//                  status = addComponent.status,
+//                  message = addComponent.message
+//                ))
+//                case None => None
+//              },
+//              appendComponent = componentBO.status.get.appendComponent match {
+//                case Some(appendComponent) => Some(JsonStatus(
+//                  status = appendComponent.status,
+//                  message = appendComponent.message
+//                ))
+//                case None => None
+//              },
+//              deleteComponent = componentBO.status.get.deleteComponent match {
+//                case Some(deleteComponent) => Some(JsonStatus(
+//                  status = deleteComponent.status,
+//                  message = deleteComponent.message
+//                ))
+//                case None => None
+//              },
+//              updateComponent = componentBO.status.get.updateComponent match {
+//                case Some(updateComponent) => Some(JsonStatus(
+//                  status = updateComponent.status,
+//                  message = updateComponent.message
+//                ))
+//                case None => None
+//              },
+//              common = componentBO.status.get.common match {
+//                case Some(common) => Some(JsonStatus(
+//                  status = common.status,
+//                  message = common.message
+//                ))
+//                case None => None
+//              }
+//            )
+//          )
+//        )
+//      case json if json == JsonNames.DELETE_COMPONENT =>
+//        JsonComponentOut(
+//          json = componentBO.json.get,
+//          result = JsonComponentResult(
+//            status = JsonComponentStatus(
+//              addComponent = componentBO.status.get.addComponent match {
+//                case Some(addComponent) => Some(JsonStatus(
+//                  status = addComponent.status,
+//                  message = addComponent.message
+//                ))
+//                case None => None
+//              },
+//              appendComponent = componentBO.status.get.appendComponent match {
+//                case Some(appendComponent) => Some(JsonStatus(
+//                  status = appendComponent.status,
+//                  message = appendComponent.message
+//                ))
+//                case None => None
+//              },
+//              deleteComponent = componentBO.status.get.deleteComponent match {
+//                case Some(deleteComponent) => Some(JsonStatus(
+//                  status = deleteComponent.status,
+//                  message = deleteComponent.message
+//                ))
+//                case None => None
+//              },
+//              updateComponent = componentBO.status.get.updateComponent match {
+//                case Some(updateComponent) => Some(JsonStatus(
+//                  status = updateComponent.status,
+//                  message = updateComponent.message
+//                ))
+//                case None => None
+//              },
+//              common = componentBO.status.get.common match {
+//                case Some(common) => Some(JsonStatus(
+//                  status = common.status,
+//                  message = common.message
+//                ))
+//                case None => None
+//              }
+//            )
+//          )
+//        )
+//      case json if json == JsonNames.UPDATE_COMPONENT =>
+//        JsonComponentOut(
+//          json = componentBO.json.get,
+//          result = JsonComponentResult(
+//            componentId = componentBO.componentId,
+//            nameToShow = componentBO.nameToShow,
+//            kind = componentBO.kind,
+//            status = JsonComponentStatus(
+//              addComponent = componentBO.status.get.addComponent match {
+//                case Some(addComponent) => Some(JsonStatus(
+//                  status = addComponent.status,
+//                  message = addComponent.message
+//                ))
+//                case None => None
+//              },
+//              appendComponent = componentBO.status.get.appendComponent match {
+//                case Some(appendComponent) => Some(JsonStatus(
+//                  status = appendComponent.status,
+//                  message = appendComponent.message
+//                ))
+//                case None => None
+//              },
+//              deleteComponent = componentBO.status.get.deleteComponent match {
+//                case Some(deleteComponent) => Some(JsonStatus(
+//                  status = deleteComponent.status,
+//                  message = deleteComponent.message
+//                ))
+//                case None => None
+//              },
+//              updateComponent = componentBO.status.get.updateComponent match {
+//                case Some(updateComponent) => Some(JsonStatus(
+//                  status = updateComponent.status,
+//                  message = updateComponent.message
+//                ))
+//                case None => None
+//              },
+//              common = componentBO.status.get.common match {
+//                case Some(common) => Some(JsonStatus(
+//                  status = common.status,
+//                  message = common.message
+//                ))
+//                case None => None
+//              }
+//            )
+//          )
+//        )
+//    }
   }
 }

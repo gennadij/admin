@@ -1,13 +1,11 @@
 package org.genericConfig.admin.shared.user.status
 
-import org.genericConfig.admin.shared.common.error.Error
-
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 28.05.2018
  */
-sealed abstract class StatusGetUser extends Error
+sealed abstract class StatusGetUser //extends Error
 
 case class GetUserSuccess() extends StatusGetUser {
   def status: String = "GET_USER_SUCCESS"

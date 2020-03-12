@@ -1,17 +1,7 @@
 package org.genericConfig.admin.models.wrapper
 
 import org.genericConfig.admin.shared.configTree.bo.{ComponentForConfigTreeBO, ConfigTreeBO, StepForConfigTreeBO}
-import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
-import org.genericConfig.admin.shared.configTree.status.GetConfigTreeSuccess
-import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeResult
-import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeStep
-import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeStatus
-import org.genericConfig.admin.shared.common.json.JsonStatus
-import org.genericConfig.admin.shared.configTree.status.GetConfigTreeEmpty
-import org.genericConfig.admin.shared.configTree.status.GetConfigTreeError
-import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeComponent
-import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeIn
-import play.api.Logger
+import org.genericConfig.admin.shared.configTree.json.{JsonConfigTreeComponent, JsonConfigTreeIn, JsonConfigTreeOut, JsonConfigTreeStep}
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -39,72 +29,73 @@ class WrapperConfigTree {
     * @return JsonConfigTreeOut
     */
   private[wrapper] def toJsonConfigTreeOut(configTreeBO: ConfigTreeBO): JsonConfigTreeOut = {
+    ???
 
-    val debug = configTreeBO.status.get.getConfigTree match {
-      case GetConfigTreeSuccess() =>
-        JsonConfigTreeOut(
-          result = JsonConfigTreeResult(
-            Some(configTreeBO.userId.get),
-            Some(configTreeBO.configId.get),
-            Some(JsonConfigTreeStep(
-              configTreeBO.configTree.get.stepId,
-              configTreeBO.configTree.get.nameToShow,
-              configTreeBO.configTree.get.kind,
-              getNextSteps(configTreeBO.configTree.get),
-              getJsonConfigTreeComponents(configTreeBO.configTree.get.components)
-            )),
-            JsonConfigTreeStatus(
-              Some(JsonStatus(
-                configTreeBO.status.get.getConfigTree.status,
-                configTreeBO.status.get.getConfigTree.message
-              )),
-              Some(JsonStatus(
-                configTreeBO.status.get.common.status,
-                configTreeBO.status.get.common.message
-              ))
-            )
-          )
-        )
-      case GetConfigTreeEmpty() =>
-        JsonConfigTreeOut(
-          result = JsonConfigTreeResult(
-            Some(configTreeBO.userId.get),
-            Some(configTreeBO.configId.get),
-            None,
-            JsonConfigTreeStatus(
-              Some(JsonStatus(
-                configTreeBO.status.get.getConfigTree.status,
-                configTreeBO.status.get.getConfigTree.message
-              )),
-              Some(JsonStatus(
-                configTreeBO.status.get.common.status,
-                configTreeBO.status.get.common.message
-              ))
-            )
-          )
-        )
-      case GetConfigTreeError() =>
-        JsonConfigTreeOut(
-          result = JsonConfigTreeResult(
-            None,
-            None,
-            None,
-            JsonConfigTreeStatus(
-              Some(JsonStatus(
-                configTreeBO.status.get.getConfigTree.status,
-                configTreeBO.status.get.getConfigTree.message
-              )),
-              Some(JsonStatus(
-                configTreeBO.status.get.common.status,
-                configTreeBO.status.get.common.message
-              ))
-            )
-          )
-        )
-    }
-
-    Logger.info("jsonConfigTreeOut " + debug)
-    debug
+//    val debug = configTreeBO.status.get.getConfigTree match {
+//      case GetConfigTreeSuccess() =>
+//        JsonConfigTreeOut(
+//          result = JsonConfigTreeResult(
+//            Some(configTreeBO.userId.get),
+//            Some(configTreeBO.configId.get),
+//            Some(JsonConfigTreeStep(
+//              configTreeBO.configTree.get.stepId,
+//              configTreeBO.configTree.get.nameToShow,
+//              configTreeBO.configTree.get.kind,
+//              getNextSteps(configTreeBO.configTree.get),
+//              getJsonConfigTreeComponents(configTreeBO.configTree.get.components)
+//            )),
+//            JsonConfigTreeStatus(
+//              Some(JsonStatus(
+//                configTreeBO.status.get.getConfigTree.status,
+//                configTreeBO.status.get.getConfigTree.message
+//              )),
+//              Some(JsonStatus(
+//                configTreeBO.status.get.common.status,
+//                configTreeBO.status.get.common.message
+//              ))
+//            )
+//          )
+//        )
+//      case GetConfigTreeEmpty() =>
+//        JsonConfigTreeOut(
+//          result = JsonConfigTreeResult(
+//            Some(configTreeBO.userId.get),
+//            Some(configTreeBO.configId.get),
+//            None,
+//            JsonConfigTreeStatus(
+//              Some(JsonStatus(
+//                configTreeBO.status.get.getConfigTree.status,
+//                configTreeBO.status.get.getConfigTree.message
+//              )),
+//              Some(JsonStatus(
+//                configTreeBO.status.get.common.status,
+//                configTreeBO.status.get.common.message
+//              ))
+//            )
+//          )
+//        )
+//      case GetConfigTreeError() =>
+//        JsonConfigTreeOut(
+//          result = JsonConfigTreeResult(
+//            None,
+//            None,
+//            None,
+//            JsonConfigTreeStatus(
+//              Some(JsonStatus(
+//                configTreeBO.status.get.getConfigTree.status,
+//                configTreeBO.status.get.getConfigTree.message
+//              )),
+//              Some(JsonStatus(
+//                configTreeBO.status.get.common.status,
+//                configTreeBO.status.get.common.message
+//              ))
+//            )
+//          )
+//        )
+//    }
+//
+//    Logger.info("jsonConfigTreeOut " + debug)
+//    debug
   }
 
 

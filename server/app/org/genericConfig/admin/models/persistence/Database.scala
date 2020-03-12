@@ -1,7 +1,7 @@
 package org.genericConfig.admin.models.persistence
 
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory
-import org.genericConfig.admin.shared.common.error.{Error, ODBConnectionFail}
+import org.genericConfig.admin.models.common.{Error, ODBConnectionFail}
 import play.api.Logger
 
 /**

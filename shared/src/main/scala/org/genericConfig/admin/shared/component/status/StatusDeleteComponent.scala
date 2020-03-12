@@ -1,13 +1,11 @@
 package org.genericConfig.admin.shared.component.status
 
-import org.genericConfig.admin.shared.common.error.Error
-
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
   *
   * Created by Gennadi Heimann 18.06.2018
   */
-sealed abstract class StatusDeleteComponent extends Error
+sealed abstract class StatusDeleteComponent //extends Error
 
 case class DeleteComponentSuccess() extends StatusDeleteComponent {
   def status: String = "DELETE_COMPONENT_SUCCESS"

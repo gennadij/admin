@@ -6,7 +6,7 @@ package org.genericConfig.admin.models.common
  * Created by Gennadi Heimann 11.04.2018
  */
 //TODO status gegen Name ersetzen
-abstract class Error {
+abstract class Error  {
   def status: String
   def message: String
   def code : String

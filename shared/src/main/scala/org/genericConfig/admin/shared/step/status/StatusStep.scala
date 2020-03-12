@@ -1,7 +1,5 @@
 package org.genericConfig.admin.shared.step.status
 
-import org.genericConfig.admin.shared.common.error.Error
-
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
@@ -12,5 +10,5 @@ case class StatusStep (
     deleteStep: Option[StatusDeleteStep] = None,
     updateStep: Option[StatusUpdateStep] = None,
     appendStep: Option[StatusAppendStep] = None,
-    common: Option[Error] = None
+    common: Option[Any] = None
 )
