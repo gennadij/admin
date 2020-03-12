@@ -68,10 +68,10 @@ class User(userParam: UserDTO) {
   
   private def getUser : UserDTO = {
     val userResult: UserDTO = Persistence.getUser(userParam.params.get.username, userParam.params.get.password)
-    ???
-//    userBOOut.status.get.getUser match {
-//      case Some(GetUserSuccess()) => userBOOut.copy(userId = Some(RidToHash.setIdAndHash(userBOOut.userId.get)._2))
-//      case _ => userBOOut
-//    }
+    userResult.result.get.errors match {
+      case None =>
+        userResult.copy(result = Some(userResult.result.get.copy(userId = Some(RidToHash.setIdAndHash(userResult.result.get.userId.get)._2))))
+      case _ => userResult
+    }
   }
 }

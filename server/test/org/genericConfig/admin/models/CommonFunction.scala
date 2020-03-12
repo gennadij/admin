@@ -7,11 +7,10 @@ import org.genericConfig.admin.models.logic._
 import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.models.persistence.orientdb.Graph
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.common.error.Error
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.status.StatusAddComponent
 import org.genericConfig.admin.shared.config.bo.{ConfigBO, Configuration}
-import org.genericConfig.admin.shared.config.status.{GetConfigsEmpty, GetConfigsError, GetConfigsSuccess, StatusAddConfig}
+import org.genericConfig.admin.shared.config.status.StatusAddConfig
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 import org.genericConfig.admin.shared.step.bo.StepBO
 import org.genericConfig.admin.shared.user.json.{JsonUserIn, JsonUserOut, JsonUserParams}
@@ -152,48 +151,48 @@ trait CommonFunction {
   }
 
   def getUserId(userPassword: String, webClient: WebClient): String = {
-
-    val userBO = UserBO(
-      username = Some(userPassword),
-      password = Some(userPassword)
-    )
-
-    val userBOOut = User.getUser(userBO)
-
-    userBOOut.userId.get
+""
+//    val userBO = UserBO(
+//      username = Some(userPassword),
+//      password = Some(userPassword)
+//    )
+//
+//    val userBOOut = User.getUser(userBO)
+//
+//    userBOOut.userId.get
   }
 
 
   def getConfigId(usernamePassword: String, configUrl: String = ""): String = {
-
-    val userBOIn = UserBO(
-      username = Some(usernamePassword),
-      password = Some(usernamePassword)
-    )
-
-    val userBOOut = User.getUser(userBOIn)
-
-    val configBOIn = ConfigBO(
-      userId = Some(userBOOut.userId.get)
-    )
-
-    val configBOOut = Config.getConfigs(configBOIn)
-    configBOOut.status.get.getConfigs.get match {
-      case GetConfigsSuccess() =>
-        configBOOut.configs.get.head.configId.get
-      case GetConfigsEmpty() =>
-        val addConfigBOIn = ConfigBO(
-          userId = Some(userBOOut.userId.get),
-          configs = Some(List(Configuration(configUrl = Some(configUrl))))
-        )
-
-        val addConfigBOOut = Config.addConfig(addConfigBOIn)
-
-        addConfigBOOut.configs.get.head.configId.get
-      case GetConfigsError() => {
-        configBOOut.status.get.getConfigs.get.status
-      }
-    }
+""
+//    val userBOIn = UserBO(
+//      username = Some(usernamePassword),
+//      password = Some(usernamePassword)
+//    )
+//
+//    val userBOOut = User.getUser(userBOIn)
+//
+//    val configBOIn = ConfigBO(
+//      userId = Some(userBOOut.userId.get)
+//    )
+//
+//    val configBOOut = Config.getConfigs(configBOIn)
+//    configBOOut.status.get.getConfigs.get match {
+//      case GetConfigsSuccess() =>
+//        configBOOut.configs.get.head.configId.get
+//      case GetConfigsEmpty() =>
+//        val addConfigBOIn = ConfigBO(
+//          userId = Some(userBOOut.userId.get),
+//          configs = Some(List(Configuration(configUrl = Some(configUrl))))
+//        )
+//
+//        val addConfigBOOut = Config.addConfig(addConfigBOIn)
+//
+//        addConfigBOOut.configs.get.head.configId.get
+//      case GetConfigsError() => {
+//        configBOOut.status.get.getConfigs.get.status
+//      }
+//    }
   }
 
   /**
@@ -228,14 +227,14 @@ trait CommonFunction {
     (componentBOOut.componentId.get, componentBOOut.status.get.addComponent.get)
   }
 
-  def connectComponentToStep(stepId: String, componentId: String): Error = {
-    val connectCToSIn = StepBO(
-      appendToId = Some(componentId),
-      stepId = Some(stepId)
-    )
-
-    val connectCToSOut = Step.connectComponentToStep(connectCToSIn)
-
-    connectCToSOut.status.get.common.get
+  def connectComponentToStep(stepId: String, componentId: String) = {
+//    val connectCToSIn = StepBO(
+//      appendToId = Some(componentId),
+//      stepId = Some(stepId)
+//    )
+//
+//    val connectCToSOut = Step.connectComponentToStep(connectCToSIn)
+//
+//    connectCToSOut.status.get.common.get
   }
 }

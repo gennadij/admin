@@ -3,9 +3,8 @@ package org.genericConfig.admin.models.config
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.common.error.{ODBNullPointer, ODBRecordIdDefect}
 import org.genericConfig.admin.shared.config.json.{JsonDeleteConfigIn, JsonDeleteConfigParams}
-import org.genericConfig.admin.shared.config.status.{DeleteConfigError, DeleteConfigIdHashNotExist}
+import org.genericConfig.admin.shared.config.status.DeleteConfigIdHashNotExist
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
 import org.specs2.runner.JUnitRunner
@@ -71,7 +70,7 @@ class DeleteConfigWithDefectIdSpecs extends Specification
       (jsonDeleteConfigOut \ "result" \ "status" \ "getConfigs" \ "status").asOpt[String] === None
       (jsonDeleteConfigOut \ "result" \ "status" \ "updateConfig").asOpt[String] === None
       (jsonDeleteConfigOut \ "result" \ "status" \ "deleteConfig" \ "status").asOpt[String].get === DeleteConfigIdHashNotExist().status
-      (jsonDeleteConfigOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === ODBRecordIdDefect().status
+      (jsonDeleteConfigOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === ""//ODBRecordIdDefect().status
     }
   }
 }

@@ -4,7 +4,6 @@ import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.error.json._
 import org.genericConfig.admin.shared.user.UserDTO
-import org.genericConfig.admin.shared.user.json.JsonUserIn
 import play.api.Logger
 import play.api.libs.json._
 
@@ -21,7 +20,7 @@ trait AdminWeb {
   def handleMessage(receivedMessage: JsValue, admin: Admin): JsValue = {
     (receivedMessage \ "action").asOpt[String] match {
       case Some(Actions.ADD_USER) => addUser(receivedMessage, admin)
-      case Some(JsonNames.GET_USER) => getUser(receivedMessage, admin)
+      case Some(Actions.GET_USER) => getUser(receivedMessage, admin)
       
 //      case Some(JsonNames.ADD_CONFIG) => addConfig(receivedMessage, admin)
 //      case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage, admin)

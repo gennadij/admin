@@ -1,19 +1,15 @@
 package org.genericConfig.admin.models.user
 
+import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.shared.Actions
+import org.genericConfig.admin.shared.user.ErrorDTO
 import org.specs2.Specification
-import play.api.libs.json.Json
-import play.api.libs.json.JsValue
-import org.junit.runner.RunWith
-import org.specs2.runner.JUnitRunner
 import org.specs2.specification.BeforeAfterAll
+import play.api.Logger
 import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
-import org.genericConfig.admin.controllers.websocket.WebClient
-import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.user.status.GetUserSuccess
-import play.api.Logger
+import play.api.libs.json.{JsValue, Json}
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -23,7 +19,7 @@ import play.api.Logger
  * Username = user2
  */
 
-@RunWith(classOf[JUnitRunner])
+//@RunWith(classOf[JUnitRunner])
 class LoginSpecs extends Specification with BeforeAfterAll{
 
   val wC: WebClient = WebClient.init
@@ -41,12 +37,11 @@ class LoginSpecs extends Specification with BeforeAfterAll{
           json                                                            $e2
           username                                                        $e4
           userId                                                          $e5
-          getUserStatus                                                   $e8
           commonStatus                                                    $e7
     """
   val user = "user2"
 
-  val jsonClientServer = Json.obj(
+  val userParams = Json.obj(
       "action" -> Actions.GET_USER
       ,"params" -> Json.obj(
           "username" -> user,
@@ -58,14 +53,13 @@ class LoginSpecs extends Specification with BeforeAfterAll{
       ))
 
 
-  val jsonServerClient: JsValue = wC.handleMessage(jsonClientServer)
+  val userResult: JsValue = wC.handleMessage(userParams)
 
-  Logger.info("jsonClientServer: " + jsonClientServer)
-  Logger.info("jsonServerClient: " + jsonServerClient)
+  Logger.info("jsonClientServer: " + userParams)
+  Logger.info("jsonServerClient: " + userResult)
 
-  def e2 = (jsonServerClient \ "json").asOpt[String].get must_== JsonNames.GET_USER
-  def e4 = (jsonServerClient \ "result" \ "username").asOpt[String].get must_== user
-  def e5 = (jsonServerClient \ "result" \ "userId").asOpt[String].get.size must_== 32
-  def e8 = (jsonServerClient \ "result" \ "status" \ "getUser" \ "status").asOpt[String].get must_== GetUserSuccess().status
-  def e7 = (jsonServerClient \ "result" \ "status" \ "common" \ "status").asOpt[String].get must_== Success().status
+  def e2 = (userResult \ "action").asOpt[String].get must_== Actions.GET_USER
+  def e4 = (userResult \ "result" \ "username").asOpt[String].get must_== user
+  def e5 = (userResult \ "result" \ "userId").asOpt[String].get.size must_== 32
+  def e7 = (userResult \ "result" \ "errors").asOpt[List[ErrorDTO]] must_== None
 }

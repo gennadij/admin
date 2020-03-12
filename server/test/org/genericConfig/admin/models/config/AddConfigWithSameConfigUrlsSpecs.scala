@@ -4,7 +4,6 @@ import models.preparingConfigs.GeneralFunctionToPrepareConfigs
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.common.error.ODBRecordDuplicated
 import org.genericConfig.admin.shared.config.json.{JsonAddConfigIn, JsonAddConfigParams}
 import org.genericConfig.admin.shared.config.status.AddConfigAlreadyExist
 import org.junit.runner.RunWith
@@ -80,7 +79,7 @@ class AddConfigWithSameConfigUrlsSpecs extends Specification
       Logger.info("OUT " + jsonAddConfigOut)
 
       (jsonAddConfigOut \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigAlreadyExist().status
-      (jsonAddConfigOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === ODBRecordDuplicated().status
+      (jsonAddConfigOut \ "result" \ "status" \ "common" \ "status").asOpt[String] ===  None
 
     }
   }
