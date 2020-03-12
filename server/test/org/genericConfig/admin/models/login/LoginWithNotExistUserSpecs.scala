@@ -1,4 +1,4 @@
-package org.genericConfig.admin.models.user
+package org.genericConfig.admin.models.login
 
 import org.genericConfig.admin.controllers.admin.AdminWeb
 import org.genericConfig.admin.controllers.websocket.WebClient

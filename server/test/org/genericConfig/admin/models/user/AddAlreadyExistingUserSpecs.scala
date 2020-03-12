@@ -24,7 +24,7 @@ import scala.collection.JavaConverters._
  * Username = user2
  */
 
-class AddingAlreadyExistingAdminUserSpecs
+class AddAlreadyExistingUserSpecs
   extends Specification
     with AdminWeb
     with BeforeAfterAll

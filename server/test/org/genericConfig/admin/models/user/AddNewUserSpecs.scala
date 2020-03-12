@@ -23,7 +23,7 @@ import play.api.libs.json.Json.toJsFieldJsValueWrapper
  */
 
 //@RunWith(classOf[JUnitRunner])
-class AddingNewAdminUserSpecs extends Specification 
+class AddNewUserSpecs extends Specification
                                 with AdminWeb 
                                 with BeforeAfterAll
                                 with CommonFunction
