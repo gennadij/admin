@@ -44,7 +44,7 @@ class LoginSpecs extends Specification with BeforeAfterAll with CommonFunction {
       if(count == 1 ) {
         Logger.info(s"Der User $userLogin ist schon erstellt worden")
       }else{
-        registerNewUser(userLogin, wC)
+        addUser(userLogin, wC)
 
         val adminId: String = getUserId(userLogin, wC)
 

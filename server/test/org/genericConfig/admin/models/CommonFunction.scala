@@ -6,6 +6,7 @@ import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.logic._
 import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.models.persistence.orientdb.Graph
+import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.status.StatusAddComponent
@@ -135,19 +136,24 @@ trait CommonFunction {
     res
   }
 
-  def registerNewUser(userPassword: String, webClient: WebClient): Unit = {
-    val registerCS = Json.obj(
-      "json" -> JsonNames.ADD_USER
+  def addUser(userPassword: String, webClient: WebClient): Unit = {
+    val userParams = Json.obj(
+      "action" -> Actions.ADD_USER
       , "params" -> Json.obj(
         "username" -> userPassword,
         "password" -> userPassword
+      ),
+      "result" -> Json.obj(
+        "userId" -> "",
+        "username" -> "",
+        "errors" -> Json.arr()
       )
     )
-    val registerSC = webClient.handleMessage(registerCS)
+    val userResult = webClient.handleMessage(userParams)
 
-    Logger.info("registerCS " + registerCS)
-    Logger.info("registerSC " + registerSC)
-    require((registerSC \ "result" \ "username").asOpt[String].get == userPassword, s"Username: $userPassword")
+    Logger.info("registerCS " + userParams)
+    Logger.info("registerSC " + userResult)
+    require((userResult \ "result" \ "username").asOpt[String].get == userPassword, s"Username: $userPassword")
   }
 
   def getUserId(userPassword: String, webClient: WebClient): String = {

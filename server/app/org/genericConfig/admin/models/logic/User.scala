@@ -18,10 +18,23 @@ object User {
    * 
    * @param user: UserDTO
    * 
-   * @return UserBO
+   * @return UserDTO
    */
   def addUser(user: UserDTO): UserDTO = {
     new User(user).addUser
+  }
+
+  /**
+   * @author Gennadi Heimann
+   *
+   * @version 0.1.6
+   *
+   * @param user: UserDTO
+   *
+   * @return UserDTO
+   */
+  def deleteUser(user: UserDTO): UserDTO = {
+    new User(user).deleteUser
   }
   
   /**
@@ -56,6 +69,23 @@ class User(userParam: UserDTO) {
         userResult.copy(result = Some(userResult.result.get.copy(userId = Some(RidToHash.setIdAndHash(userResult.result.get.userId.get)._2))))
       case _ => userResult
     }
+  }
+
+  /**
+   * @author Gennadi Heimann
+   *
+   * @version 0.1.6
+   *
+   * @return UserBO
+   */
+  private def deleteUser: UserDTO = {
+//    val userResult: UserDTO =
+      Persistence.deleteUser(userParam.params.get.username, userParam.params.get.password)
+//    userResult.result.get.errors match {
+//      case None =>
+//        userResult.copy(result = Some(userResult.result.get.copy(userId = Some(RidToHash.setIdAndHash(userResult.result.get.userId.get)._2))))
+//      case _ => userResult
+//    }
   }
   
   /**

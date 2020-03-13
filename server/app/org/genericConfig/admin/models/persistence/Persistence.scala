@@ -60,6 +60,44 @@ object Persistence {
   }
 
   /**
+   * @author Gennadi Heimann
+   * @version 0.1.6
+   * @param username : String, password: String
+   * @return UserDTO
+   */
+  def deleteUser(username: String, password: String): UserDTO = {
+    val (vUser: Option[OrientVertex], error : Option[Error]) =
+      Graph.deleteUser(username, password)
+
+    error match {
+      case None =>
+        UserDTO(
+          action = Actions.DELETE_USER,
+          params = None,
+          result = Some(UserResultDTO(
+            userId = None,
+            username = Some(username),
+            errors = None
+          ))
+        )
+      case _ =>
+        UserDTO(
+          action = Actions.DELETE_USER,
+          params = None,
+          result = Some(UserResultDTO(
+            userId = None,
+            username = None,
+            errors = Some(List(ErrorDTO(
+              name = error.get.status,
+              message = error.get.message,
+              code = error.get.code
+            )))
+          ))
+        )
+    }
+  }
+
+  /**
     * @author Gennadi Heimann
     * @version 0.1.0
     * @param username : String, password: String

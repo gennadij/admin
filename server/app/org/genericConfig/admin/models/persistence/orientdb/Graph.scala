@@ -29,13 +29,29 @@ object Graph {
     * @author Gennadi Heimann
     * @version 0.1.6
     * @param username : String, password: String
-    * @return (Option[OrientVertex], StatusAddUser, Status)
+    * @return (Option[OrientVertex], Option[Error])
     */
   def addUser(username: String, password: String): (Option[OrientVertex], Option[Error]) = {
     (Database.getFactory(): @unchecked) match {
       case (Some(dbFactory), None) =>
         val graph: OrientGraph = dbFactory.getTx
         new Graph(graph).addUser(username, password)
+      case (None, Some(ODBConnectionFail())) =>
+        (None, Some(ODBConnectionFail()))
+    }
+  }
+
+  /**
+   * @author Gennadi Heimann
+   * @version 0.1.6
+   * @param username : String, password: String
+   * @return (Option[OrientVertex], Option[Error])
+   */
+  def deleteUser(username: String, password: String): (Option[OrientVertex], Option[Error]) = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), None) =>
+        val graph: OrientGraph = dbFactory.getTx
+        new Graph(graph).deleteUser(username, password)
       case (None, Some(ODBConnectionFail())) =>
         (None, Some(ODBConnectionFail()))
     }
@@ -371,7 +387,7 @@ class Graph(graph: OrientGraph) {
     * @author Gennadi Heimann
     * @version 0.1.6
     * @param username : String, password: String
-    * @return (Option[OrientVertex], StatusAddUser, Status)
+    * @return (Option[OrientVertex], Option[Error])
     */
   private def addUser(username: String, password: String): (Option[OrientVertex], Option[Error]) = {
     try {
@@ -400,10 +416,38 @@ class Graph(graph: OrientGraph) {
   }
 
   /**
+   * @author Gennadi Heimann
+   * @version 0.1.6
+   * @param username : String, password: String
+   * @return (Option[OrientVertex], Option[Error])
+   */
+  private def deleteUser(username: String, password: String): (Option[OrientVertex], Option[Error]) = {
+    try {
+      val sql: String = s"DELETE VERTEX AdminUser where username='$username'"
+      val countOfDeletedVertax: Int = graph.command(new OCommandSQL(sql)).execute()
+      graph.commit()
+      if(countOfDeletedVertax == 1){
+        (None, None)
+      }else{
+        (None, Some(UnknownError()))
+      }
+    } catch {
+      case e: ClassCastException =>
+        graph.rollback()
+        Logger.error(message = e.printStackTrace().toString)
+        (None, Some(ODBClassCastError()))
+      case e: Exception =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (None, Some(ODBReadError()))
+    }
+  }
+
+  /**
     * @author Gennadi Heimann
     * @version 0.1.6
     * @param username : String, password: String
-    * @return (Option[OrientVertex], StatusGetUser, Status)
+    * @return (Option[OrientVertex], Option[Error])
     */
   private def getUser(username: String, password: String): (Option[OrientVertex], Option[Error]) = {
 

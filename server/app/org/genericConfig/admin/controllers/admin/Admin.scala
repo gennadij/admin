@@ -21,14 +21,21 @@ class Admin extends Wrapper {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param UserDTO : user
-    * @return JsonUserOut
+    * @param user : UserDTO
+    * @return UserDTO
     */
-//  def addUser(jsonUserIn: JsonUserIn): JsonUserOut = {
-//    toJsonAddUserOut(User.addUser(toAddUserBO(jsonUserIn)))
-//  }
   def addUser(user: UserDTO): UserDTO = {
     User.addUser(user)
+  }
+
+  /**
+   * @author Gennadi Heimann
+   * @version 0.1.6
+   * @param userParams : UserDTO
+   * @return UserDTO
+   */
+  def deleteUser(userParams: UserDTO): UserDTO = {
+    User.deleteUser(userParams)
   }
 
   /**
@@ -39,7 +46,6 @@ class Admin extends Wrapper {
     */
   def getUser(userParams: UserDTO): UserDTO = {
     User.getUser(userParams)
-    //toJsonGetUserOut(User.getUser(toGetUserBO(jsonUserIn)))
   }
 
   /**

@@ -49,7 +49,7 @@ class AddAlreadyExistingUserSpecs
     if(count == 1 ) {
       Logger.info(s"Der User $userWithAlreadyExistingUser ist schon erstellt worden")
     }else {
-      registerNewUser(userWithAlreadyExistingUser, wC)
+      addUser(userWithAlreadyExistingUser, wC)
     }
   }
 

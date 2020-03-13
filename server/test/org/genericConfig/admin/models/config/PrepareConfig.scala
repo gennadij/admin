@@ -28,7 +28,7 @@ class PrepareConfig extends CommonFunction {
     if(count == 1 ) {
       Logger.info(s"Der User $userAddingNewConfig ist schon erstellt worden")
     }else{
-      registerNewUser(userAddingNewConfig, wC)
+      addUser(userAddingNewConfig, wC)
 
       getUserId(userAddingNewConfig, wC)
     }
@@ -42,7 +42,7 @@ class PrepareConfig extends CommonFunction {
     if(count == 1 ) {
       Logger.info(s"Der User $userTwoSameConfigUrls ist schon erstellt worden")
     }else {
-      registerNewUser(userTwoSameConfigUrls, wC)
+      addUser(userTwoSameConfigUrls, wC)
 
       val adminId_1 = getUserId(userTwoSameConfigUrls, wC)
 
