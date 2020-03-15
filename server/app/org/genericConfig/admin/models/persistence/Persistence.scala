@@ -50,7 +50,7 @@ object Persistence {
             userId = None,
             username = None,
             errors = Some(List(ErrorDTO(
-              name = error.get.status,
+              name = error.get.name,
               message = error.get.message,
               code = error.get.code
             )))
@@ -88,7 +88,7 @@ object Persistence {
             userId = None,
             username = None,
             errors = Some(List(ErrorDTO(
-              name = error.get.status,
+              name = error.get.name,
               message = error.get.message,
               code = error.get.code
             )))
@@ -126,7 +126,7 @@ object Persistence {
             userId = None,
             username = None,
             errors = Some(List(ErrorDTO(
-              name = error.get.status,
+              name = error.get.name,
               message = error.get.message,
               code = error.get.code
             )

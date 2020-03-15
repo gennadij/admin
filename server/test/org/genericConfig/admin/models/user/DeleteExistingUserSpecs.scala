@@ -50,8 +50,8 @@ class DeleteExistingUserSpecs extends Specification
 
   }
 
-  "Specification spezifiziert die Registrierung des neuen Users" >> {
-    "Das Hinzufuegen des nicht exstierenden/neuen User" >> {
+  "Ein schon erstellter Benutzer wird geloescht. Es soll kein Fehler geben" >> {
+    "Client sendet action = DELETE_USER, username = userToDelete" >> {
       val userParams = Json.obj(
         "action" -> Actions.DELETE_USER
         ,"params" -> Json.obj(
@@ -65,17 +65,17 @@ class DeleteExistingUserSpecs extends Specification
       )
       val wC = WebClient.init
       val userResult = wC.handleMessage(userParams)
-      Logger.info("<- " + userParams)
-      Logger.info("-> " + userResult)
+//      Logger.info("<- " + userParams)
+//      Logger.info("-> " + userResult)
 
-      "username" >> {
+      "result.username = userToDelete" >> {
         (userResult \ "result" \ "username").asOpt[String].get === userToDelete
       }
-      "userId" >> {
-        (userResult \ "result" \ "userId").asOpt[String] === None
+      "result.userId = None" >> {
+        (userResult \ "result" \ "userId").asOpt[String] must beNone
       }
-      "errors" >> {
-        (userResult \ "result" \ "errors").asOpt[List[ErrorDTO]] must_== None
+      "result.errors = None" >> {
+        (userResult \ "result" \ "errors").asOpt[List[ErrorDTO]] must beNone
       }
     }
   }

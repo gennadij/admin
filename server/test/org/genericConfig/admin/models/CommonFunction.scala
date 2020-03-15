@@ -151,8 +151,8 @@ trait CommonFunction {
     )
     val userResult = webClient.handleMessage(userParams)
 
-    Logger.info("registerCS " + userParams)
-    Logger.info("registerSC " + userResult)
+//    Logger.info("registerCS " + userParams)
+//    Logger.info("registerSC " + userResult)
     require((userResult \ "result" \ "username").asOpt[String].get == userPassword, s"Username: $userPassword")
   }
 

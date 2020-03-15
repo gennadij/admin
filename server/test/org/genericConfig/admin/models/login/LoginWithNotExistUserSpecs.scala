@@ -58,5 +58,5 @@ class LoginWithNotExistUserSpecs extends Specification with AdminWeb  with Befor
   def e4 = (userResult \ "result" \ "username").asOpt[String] must_== None
   def e5 = (userResult \ "result" \ "userId").asOpt[String] must_== None
   def e7 = (userResult \ "result" \ "errors").asOpt[List[ErrorDTO]].get.size must_== 1
-  def e8 = ((userResult \ "result" \ "errors")(0) \ "name" ).asOpt[String].get must_== GetUserNotExist().status
+  def e8 = ((userResult \ "result" \ "errors")(0) \ "name" ).asOpt[String].get must_== GetUserNotExist().name
 }

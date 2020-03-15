@@ -40,8 +40,8 @@ class AddNewUserSpecs extends Specification
     
   }
   
-  "Specification spezifiziert die Registrierung des neuen Users" >> {
-    "Das Hinzufuegen des nicht exstierenden/neuen User" >> {
+  "Ein neuer Benutzer wird erstellt. Es soll kein Fehler geben." >> {
+    "Client sendet action = ADD_USER, username = user1" >> {
       val userParams = Json.obj(
           "action" -> Actions.ADD_USER
           ,"params" -> Json.obj(
@@ -55,16 +55,16 @@ class AddNewUserSpecs extends Specification
       )
       val wC = WebClient.init
       val userResult = wC.handleMessage(userParams)
-      Logger.info("<- " + userParams)
-      Logger.info("-> " + userResult)
+//      Logger.info("<- " + userParams)
+//      Logger.info("-> " + userResult)
       
-      "username" >> {
+      "result.username = user1" >> {
         (userResult \ "result" \ "username").asOpt[String].get === "user1"
       }
-      "userId" >> {
+      "result.userId <= 32" >> {
         (userResult \ "result" \ "userId").asOpt[String].get.size must be_<=(32)
       }
-      "errors" >> {
+      "result.errors = None" >> {
         (userResult \ "result" \ "errors").asOpt[List[ErrorDTO]] must_== None
       }
     }

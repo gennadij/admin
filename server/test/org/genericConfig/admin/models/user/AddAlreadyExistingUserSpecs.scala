@@ -20,10 +20,7 @@ import scala.collection.JavaConverters._
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  *
  * Created by Gennadi Heimann 13.01.2017
- *
- * Username = user2
  */
-
 class AddAlreadyExistingUserSpecs
   extends Specification
     with AdminWeb
@@ -53,8 +50,8 @@ class AddAlreadyExistingUserSpecs
     }
   }
 
-  "Specification spezifiziert die Registrierung des exestierenden Users" >> {
-    "schon exstierenden User hinzufuegen" >> {
+  "Ein neuer Benutzer wird mit schon exestierendem Namen erstellt. Es soll einen Fehler geben" >> {
+    "Sende Action ADD_USER mit username = userExist" >> {
       val userParams = Json.obj(
           "action" -> Actions.ADD_USER
           ,"params" -> Json.obj(
@@ -70,19 +67,19 @@ class AddAlreadyExistingUserSpecs
 
       val userResult = wC.handleMessage(userParams)
 
-      Logger.info("<- " + userParams)
-      Logger.info("-> " + userResult)
-      "action" >> {
+//      Logger.info("<- " + userParams)
+//      Logger.info("-> " + userResult)
+      "action = ADD_USER" >> {
         (userResult \ "action").asOpt[String].get === Actions.ADD_USER
       }
-      "params" >> {
+      "params = None" >> {
         (userResult \ "params").asOpt[String] === None
       }
-      "userId" >> {
+      "result.userId = None" >> {
         (userResult \ "result" \ "userId").asOpt[String] === None
       }
-      "errors" >> {
-        ((userResult \ "result" \ "errors")(0) \ "name" ).asOpt[String].get must_== AddUserAlreadyExist().status
+      "result.errors = ADD_USER_ALREADY_EXIST" >> {
+        ((userResult \ "result" \ "errors")(0) \ "name" ).asOpt[String].get must_== AddUserAlreadyExist().name
       }
     }
   }
