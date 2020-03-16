@@ -50,6 +50,20 @@ object User {
   def getUser(userParams: UserDTO): UserDTO = {
     new User(userParams).getUser
   }
+
+  /**
+    * @author Gennadi Heimann
+    *
+    * @version 0.1.6
+    *
+    * @param userParams: UserBO
+    *
+    * @return UserBO
+    */
+
+  def updateUser(userParams: UserDTO): UserDTO = {
+    new User(userParams).updateUser
+  }
   
 }
 
@@ -95,6 +109,29 @@ class User(userParam: UserDTO) {
     userResult.result.get.errors match {
       case None =>
         userResult.copy(result = Some(userResult.result.get.copy(userId = Some(RidToHash.setIdAndHash(userResult.result.get.userId.get)._2))))
+      case _ => userResult
+    }
+  }
+
+  /**
+    * @author Gennadi Heimann
+    *
+    * @version 0.1.6
+    *
+    * @return UserBO
+    */
+
+  private def updateUser : UserDTO = {
+    val userResult: UserDTO = Persistence.updateUser(
+      userParam.params.get.update.get.oldUsername,
+      userParam.params.get.update.get.newUsername
+    )
+    userResult.result.get.errors match {
+      case None =>
+        userResult.copy(result = Some(
+          userResult.result.get.copy(
+            userId = Some(RidToHash.setIdAndHash(userResult.result.get.userId.get)._2))
+        ))
       case _ => userResult
     }
   }

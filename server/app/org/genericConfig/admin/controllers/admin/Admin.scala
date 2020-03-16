@@ -51,6 +51,16 @@ class Admin extends Wrapper {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
+    * @param userParams : JsonUserIn
+    * @return JsonUserOut
+    */
+  def updateUser(userParams: UserDTO): UserDTO = {
+    User.updateUser(userParams)
+  }
+
+  /**
+    * @author Gennadi Heimann
+    * @version 0.1.6
     * @param jsonAddConfigIn : JsonAddConfigIn
     * @return JsonAddConfigOut
     */

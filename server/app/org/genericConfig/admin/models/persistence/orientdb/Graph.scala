@@ -73,6 +73,16 @@ object Graph {
     }
   }
 
+  def updateUserName(oldUsername: String, newUsername : String): (Option[OrientVertex], Option[Error]) = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), None) =>
+        val graph: OrientGraph = dbFactory.getTx
+        new Graph(graph).updateUserName(oldUsername, newUsername)
+      case (None, Some(ODBConnectionFail())) =>
+        (None, Some(ODBConnectionFail()))
+    }
+  }
+
   /**
     * @author Gennadi Heimann
     * @version 0.1.6

@@ -137,6 +137,39 @@ object Persistence {
     }
   }
 
+  def updateUser(oldUsername: String, newUsername: String) : UserDTO = {
+    val (vUser: Option[OrientVertex], error: Option[Error]) =
+      Graph.updateUserName(oldUsername, newUsername)
+
+    error match {
+      case None =>
+        UserDTO(
+          action = Actions.GET_USER,
+          params = None,
+          result = Some(UserResultDTO(
+            userId = Some(vUser.get.getIdentity.toString),
+            username = Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),
+            errors = None
+          ))
+        )
+      case _ =>
+        UserDTO(
+          action = Actions.GET_USER,
+          params = None,
+          result = Some(UserResultDTO(
+            userId = None,
+            username = None,
+            errors = Some(List(ErrorDTO(
+              name = error.get.name,
+              message = error.get.message,
+              code = error.get.code
+            )
+            ))
+          ))
+        )
+    }
+  }
+
   /**
     * @author Gennadi Heimann
     * @version 0.1.6

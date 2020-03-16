@@ -22,6 +22,7 @@ trait AdminWeb {
       case Some(Actions.ADD_USER) => addUser(receivedMessage, admin)
       case Some(Actions.DELETE_USER) => deleteUser(receivedMessage, admin)
       case Some(Actions.GET_USER) => getUser(receivedMessage, admin)
+      case Some(Actions.GET_USER) => updateUser(receivedMessage, admin)
       
 //      case Some(JsonNames.ADD_CONFIG) => addConfig(receivedMessage, admin)
 //      case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage, admin)
@@ -70,6 +71,14 @@ trait AdminWeb {
     val getUser: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
     getUser match {
       case _: JsSuccess[UserDTO] => Json.toJson(admin.getUser(getUser.get))
+      case e : JsError => jsonError(Actions.GET_USER, e)
+    }
+  }
+
+  private def updateUser(receivedMessage: JsValue, admin: Admin): JsValue = {
+    val updateUser: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
+    updateUser match {
+      case _: JsSuccess[UserDTO] => Json.toJson(admin.updateUser(updateUser.get))
       case e : JsError => jsonError(Actions.GET_USER, e)
     }
   }
