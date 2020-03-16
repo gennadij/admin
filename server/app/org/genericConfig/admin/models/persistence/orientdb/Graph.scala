@@ -424,9 +424,9 @@ class Graph(graph: OrientGraph) {
   private def deleteUser(username: String, password: String): (Option[OrientVertex], Option[Error]) = {
     try {
       val sql: String = s"DELETE VERTEX AdminUser where username='$username'"
-      val countOfDeletedVertax: Int = graph.command(new OCommandSQL(sql)).execute()
+      val countOfDeletedVertex: Int = graph.command(new OCommandSQL(sql)).execute()
       graph.commit()
-      if(countOfDeletedVertax == 1){
+      if(countOfDeletedVertex == 1){
         (None, None)
       }else{
         (None, Some(UnknownError()))
@@ -469,6 +469,37 @@ class Graph(graph: OrientGraph) {
       case e: ClassCastException =>
         graph.rollback()
         Logger.error(e.printStackTrace().toString)
+        (None, Some(ODBClassCastError()))
+      case e: Exception =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (None, Some(ODBReadError()))
+    }
+  }
+
+  //
+
+  /**
+   * @author Gennadi Heimann
+   * @version 0.1.6
+   * @param newUsername : String, oldUsername: String
+   * @return (Option[OrientVertex], Option[Error])
+   */
+  private def updateUserName(oldUsername: String, newUsername: String): (Option[OrientVertex], Option[Error]) = {
+
+    try {
+      val sql: String = s"update AdminUser set username='$newUsername' where username like '$oldUsername'"
+      val countOfDeletedVertex: Int = graph.command(new OCommandSQL(sql)).execute()
+      graph.commit()
+      if(countOfDeletedVertex == 1){
+        (None, None)
+      }else{
+        (None, Some(UnknownError()))
+      }
+    } catch {
+      case e: ClassCastException =>
+        graph.rollback()
+        Logger.error(message = e.printStackTrace().toString)
         (None, Some(ODBClassCastError()))
       case e: Exception =>
         graph.rollback()

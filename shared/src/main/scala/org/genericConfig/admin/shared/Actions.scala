@@ -9,4 +9,6 @@ object Actions {
   val ADD_USER : String = "ADD_USER"
   val DELETE_USER : String = "DELETE_USER"
   val GET_USER : String = "GET_USER"
+  val UPDATE_USERNAME : String = "UPDATE_USERNAME"
+  val UPDATE_USERPASSWORD : String = "UPDATE_USERPASSWORD"
 }

@@ -1,4 +1,4 @@
-package org.genericConfig.admin.shared.user
+package org.genericConfig.admin.shared.common
 
 import play.api.libs.json.{Format, Json}
 

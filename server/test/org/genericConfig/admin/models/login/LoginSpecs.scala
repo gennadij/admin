@@ -6,7 +6,7 @@ import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.models.persistence.OrientDB
 import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.user.ErrorDTO
+import org.genericConfig.admin.shared.common.ErrorDTO
 import org.specs2.Specification
 import org.specs2.specification.BeforeAfterAll
 import play.api.Logger

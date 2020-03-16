@@ -79,13 +79,7 @@ class User(userParam: UserDTO) {
    * @return UserBO
    */
   private def deleteUser: UserDTO = {
-//    val userResult: UserDTO =
-      Persistence.deleteUser(userParam.params.get.username, userParam.params.get.password)
-//    userResult.result.get.errors match {
-//      case None =>
-//        userResult.copy(result = Some(userResult.result.get.copy(userId = Some(RidToHash.setIdAndHash(userResult.result.get.userId.get)._2))))
-//      case _ => userResult
-//    }
+    Persistence.deleteUser(userParam.params.get.username, userParam.params.get.password)
   }
   
   /**

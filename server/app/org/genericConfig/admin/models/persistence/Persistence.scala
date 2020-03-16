@@ -5,13 +5,14 @@ import org.genericConfig.admin.models.common.Error
 import org.genericConfig.admin.models.persistence.orientdb.{Graph, PropertyKeys}
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.shared.Actions
+import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.config.bo.ConfigBO
 import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.step.bo._
 import org.genericConfig.admin.shared.step.json.JsonDependencyForAdditionalStepsInOneLevel
 import org.genericConfig.admin.shared.step.status._
-import org.genericConfig.admin.shared.user.{ErrorDTO, UserDTO, UserResultDTO}
+import org.genericConfig.admin.shared.user.{UserDTO, UserResultDTO}
 
 
 /**

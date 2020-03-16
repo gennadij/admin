@@ -1,6 +1,7 @@
 package org.genericConfig.admin.shared.user
 
 
+import org.genericConfig.admin.shared.common.ErrorDTO
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Format, JsPath}
 
