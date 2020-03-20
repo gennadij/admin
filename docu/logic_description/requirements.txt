@@ -1,0 +1,61 @@
+Anforderungen
+
+Cleint
+
+ - Client darf die Konfiguration jederzeit abändern. 
+
+ - Der Client kann jederzeit in die Vorherige Steps springen und der 
+   Konfigurator muss die Konfiguration neue bearbeiten.
+ - Innerhalb des Steps kann man die veränderbare Components definieren. 
+   Änderbare Components sind die Components, die beim Auswahl noch einen Wert 
+   eingestellt werden kann . Z.B. ein Slider, in dem man die Länge oder Anzahl 
+   einstellen kann. Die Abhängigkeit zu der anderen Components oder Steps wird 
+   dadurch komplizierter. Die Abhängigkeit hängt damit auch von dem Wert im 
+   Component ab.  
+ - Die Konfiguration kann willkürlich Verlaufen. Der User kann zu der 
+   vorherigen Schritten zurückkehren aber er kann nicht die Schritte überspringen.
+ - Der ConfigMgr sucht die Konfiguration anhand von der URL. Der AdminMgr legt 
+   zu jeder Konfiguration einen eindeutige URL.
+
+Admin
+
+-- Veränderung der Konfigutration kann nur Admin machen.
+
+Config
+
+-- Die Abhaengigkeit wird durch die Regeln, die in einer separater Datei abgelegt 
+   sind, gesteuert.
+-- Globale Einstellungen zur Konfigurator OrientDB separate Datenbank
+    -Datenbank
+    -
+    
+    
+    
+    new Requirements vo 17.05.2017
+    
+    
+Abhaengigkeiten bei der Komponenten innerhalb eines Schrittes.
+
+Die Abhaengigkeiten werden in dem Schritt gespeichert.
+Wenn beim Schritt mehrere NextSteps angehaengt werden. Wird der AdminUser 
+angefordert, die Abhaengigkeit in dem Step auszufuehlen. Diese Abhaengigkeit 
+wird bei dem Konfigurator die Kollisionen verhindern. 
+
+Der AdminUser kann das so einstellen, dass die die Kolisionen automarisch 
+oder manuell beheben weden.
+
+Kollisison sieht so aus:
+              -> Component1 -> nextStep1
+         Step -> Component2 -> nextStep1
+              -> Component3 -> nextStep2
+Einstellung zum Behenben
+
+if Component3 and (Component1 or Component2) then exclude Component3 
+
+exclude hat folgende Einstellungen
+	- ausgrauen Component3 wenn Wenn Regel zutrifft
+	- Fehlermeldung wenn Regel zutrifft
+	- kein Regel in diesem Fall nicht möglich da das weiteren Verlauf nich möglich
+require
+	- 
+	- 

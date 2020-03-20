@@ -1,79 +1,56 @@
+import sbtcrossproject.{crossProject, CrossType}
 
-//val mockito = "org.mockito" % "mockito-all" % "1.9.5" % "test"
-//val junit = "junit" % "junit" % "4.8.1" % "test"
-//val specs2Junit = "org.specs2" %% "specs2-junit" % "3.8.2" % "test"
-//val orientdbServer = "com.orientechnologies" % "orientdb-server" % "2.1.+"
+lazy val server = (project in file("server")).settings(commonSettings).settings(
+  scalaJSProjects := Seq(client),
+  pipelineStages in Assets := Seq(scalaJSPipeline),
+  pipelineStages := Seq(digest, gzip),
+  // triggers scalaJSPipeline when using compile or continuous compilation
+  compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
+  libraryDependencies ++= Seq(
+    "com.vmunier" %% "scalajs-scripts" % "1.1.2",
+    guice,
+    specs2 % Test,
 
+	"org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
 
+	"org.specs2" % "specs2-junit_2.12" % "3.8.6" % "test",
 
-//==============================================================================
+	"com.orientechnologies" % "orientdb-graphdb" % "3.0.1",
+  ),
+  // Compile the project before generating Eclipse files, so that generated .scala or .class files for views and routes are present
+//  EclipseKeys.preTasks := Seq(compile in Compile)
+).enablePlugins(PlayScala).
+  dependsOn(sharedJvm)
 
-// https://mvnrepository.com/artifact/org.scala-lang.modules/scala-xml_2.11
-val xml = "org.scala-lang.modules" % "scala-xml_2.11" % "1.0.6"
+lazy val client = (project in file("client")).settings(commonSettings).settings(
+  scalaJSUseMainModuleInitializer := true,
+  libraryDependencies ++= Seq(
+    "org.scala-js" %%% "scalajs-dom" % "0.9.5",
+	"be.doeraene" %%% "scalajs-jquery" % "0.9.1",
+	"com.typesafe.play" %%% "play-json" % "2.6.9"
+  ),
+  skip in packageJSDependencies := false,
+  jsDependencies ++= Seq(
+    "org.webjars" % "jquery" % "2.1.4" / "2.1.4/jquery.js",
+	"org.webjars" % "jquery-ui" % "1.11.4" / "jquery-ui.js" dependsOn "jquery.js"
+  )
+).enablePlugins(ScalaJSPlugin, ScalaJSWeb).
+  dependsOn(sharedJs)
 
-// https://mvnrepository.com/artifact/com.orientechnologies/orientdb-core
-val orientdbCore = "com.orientechnologies" % "orientdb-core" % "2.2.12"
-
-// https://mvnrepository.com/artifact/com.tinkerpop.blueprints/blueprints-core
-val bluprintsCore = "com.tinkerpop.blueprints" % "blueprints-core" % "2.6.0"
-
-// https://mvnrepository.com/artifact/com.orientechnologies/orientdb-graphdb
-val orientdbGraph = "com.orientechnologies" % "orientdb-graphdb" % "2.2.12"
-
-// https://mvnrepository.com/artifact/com.orientechnologies/orientdb-enterprise
-val orientdbEnterprise = "com.orientechnologies" % "orientdb-enterprise" % "2.1.24"
-
-// https://mvnrepository.com/artifact/com.orientechnologies/orientdb-client
-val orientdbClient = "com.orientechnologies" % "orientdb-client" % "2.2.12"
-
-// https://mvnrepository.com/artifact/com.orientechnologies/orientdb-tools
-val orientdbTools = "com.orientechnologies" % "orientdb-tools" % "2.2.12"
-
-// https://mvnrepository.com/artifact/com.typesafe.play/play-json_2.11
-val jsonFromPLay = "com.typesafe.play" % "play-json_2.11" % "2.5.9"
-
-// https://mvnrepository.com/artifact/org.specs2/specs2-core_2.11
-val specs2_core = "org.specs2" % "specs2-core_2.11" % "3.8.6" % "test"
-
-// https://mvnrepository.com/artifact/junit/junit
-val junit = "junit" % "junit" % "4.12" % "test"
-
-// https://mvnrepository.com/artifact/org.scala-tools/maven-scala-plugin
-val scalaTools = "org.scala-tools" % "maven-scala-plugin" % "2.15.2"
-
-// https://mvnrepository.com/artifact/org.specs2/specs2-junit_2.11
-val specs2JUnit = "org.specs2" % "specs2-junit_2.11" % "3.8.6"
-
-// https://mvnrepository.com/artifact/org.specs2/specs2_2.10
-val specs2 = "org.specs2" % "specs2_2.11" % "3.3"
+lazy val shared = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("shared"))
+  .settings(commonSettings).settings(
+  libraryDependencies += "com.typesafe.play" %% "play-json" % "2.6.9"
+)
+lazy val sharedJvm = shared.jvm
+lazy val sharedJs = shared.js
 
 
 lazy val commonSettings = Seq(
-	organization := "org.generic_configurator", 	
-	version := "0.1.1",
-	scalaVersion := "2.11.8",
-	publishMavenStyle := true
+  scalaVersion := "2.12.6",
+  organization := "org.genericConfig"
 )
 
-lazy val root = (project in file(".")).
-	settings(commonSettings: _*).
-	settings(
-		name := "admin",
-		libraryDependencies ++= Seq(
-		xml
-		,orientdbCore
-		,bluprintsCore
-		,orientdbGraph
-		,orientdbEnterprise
-		,orientdbClient
-		,orientdbTools
-		,jsonFromPLay
-		//,specs2_core
-		//,specs2
-		//,junit
-		,specs2JUnit
-		),
-		fork := true
-	)
-	
-
+// loads the server project at sbt startup
+onLoad in Global := (onLoad in Global).value andThen {s: State => "project server" :: s}

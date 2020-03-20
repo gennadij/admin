@@ -1,0 +1,27 @@
+ChangeLog version 0.1.1 -> done on 01.03.2017
+
+    -1. Hinzufuegen neue Property <nameToShow> in Vertex Component und Step 
+        (siehe docu db_schema.txt)
+
+ChangeLog 09.01.2017
+
+    FirstStep wird immer an der Config Vertex angehaengt
+
+    NextStep wird immer an der Component Vertex angehaengt
+
+ChangeLog 06.01.2017
+    Vertex Step
+        - selectionCriterium => definiert maximale und minimale Anzahl der ausgewaelten Komponenten in dem Step
+    new Vertex Config
+        + configUrl
+    AdminUser
+        - configUri
+    Step
+        - adminId
+    Component
+        - adminId
+    
+    AdminUser -> Config -> FitstStep
+        Alle TD die An der Client desendet werden mit einem HASH Wert
+        
+    Version 0.0.1 created 31.01.2017

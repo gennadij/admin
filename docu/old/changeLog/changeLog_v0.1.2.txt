@@ -1,0 +1,42 @@
+Legende
+- fertige Specification
+# defined Specification
+
+@created on 
+@finished on
+
+ChangeLog version 0.1.2
+   - 1. @created on     15.05.2017
+        @finished on    15.05.2017
+        Es darf nicht zwei gleiche Urls in der DB vorgefungen werden
+        Die Ueberpruefung im Configurator nicht notwendigt 
+        OrientDB UNIQUE-Index
+        TestUser = user13, user14
+        
+   - 2. @created on     15.05.2017
+        @finished on    15.05.2017
+        Der Vertax Config darf nur einen FirstStep haben
+        Die Ueberpruefung in dem Configurator nicht notwendigt
+        TestClass -> SpecsAddingFirstStep
+        
+   - 3. @created on     15.05.2017
+        @finished on    18.05.2017
+        Die selectedComponents können nur bei einem Step ausgewaelt werden.
+        Im Configurator bei der Suche ueber selectedComponent den selectedStep 
+        kann nur einen Step gefunden werden, deswegen ist diese ueberpruefung 
+        nicht notwaendigt.
+        
+        Das Problem stellt sich wie folgt aus
+              -> Component1 --hasStep--> nextStep1
+         Step -> Component2 --hasStep--> nextStep1
+              -> Component3 --hasStep--> nextStep2
+        Bei der Auswahl von Component2 und Component3 kann zu einer Kollesion 
+        im Configurator führen, da es keinen definierten nextStep gibt.
+        Das wird im Admin ausgeschlossen.
+        Der Configurator braucht nicht das ueberpruefen. 
+        Es muss ausgeschlossen werden, dass die Component2 oder Component1 
+        zusammen mit der Component3 ausgewaelt werden kann.
+        
+        Es wird ein neues Edge <hasDependency> angelegt.
+        
+        

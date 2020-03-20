@@ -1,0 +1,25 @@
+userExist -> AddingAlredyExistingAdminUserSpecs
+user -> LoginWithNotExistUserSpecs
+user1 -> AddingNewAdminUserSpecs
+user2 -> LoginSpecs
+user3 -> AddConfigSpecs
+user4 -> AddFirstStepSpecs
+user5 -> AddingComponentWithFirstStepSpecs
+user7 -> ConfigTreeFirstStep3ComponentsSpecs
+user8 -> AddStepSpecs
+user9 -> ConfigTreeEmptySpecs
+user13 -> AddConfigWithSameConfigUrlsSpecs
+user14
+user15 -> TwoFirstStepsForOneConfigSpecs
+user_1_v016 -> AddSeveralConfigsSpecs
+user_v016_2 -> GetSeveralConfigsSpecs
+user_v016_4 -> DeleteConfigSpecs, GetEmptyConfigsSpecs
+user_v016_5 -> DeleteConfigWithDefectIdSpecs
+user_v016_6 -> UpdateConfigSpec
+user_v016_7 -> GetEmptyConfigsSpecs
+user_v016_10 -> DeleteFirstStepSpecs
+user_updateStep_v016_1 -> UpdateStepSpecs
+user_v016_11 -> DeleteComponentSpecs
+user_v016_12 -> UpdateComponentSpecs
+user_v016_13 -> ConnectComponentToStep
+user28_v015  -> AddingNewDependencyBetweenTwoComponent

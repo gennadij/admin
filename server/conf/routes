@@ -1,0 +1,12 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+#GET        /                             org.genericConfig.admin.controllers.Application.index
+GET        /                             org.genericConfig.admin.controllers.HomeController.index
+GET        /admin                        org.genericConfig.admin.controllers.HomeController.websocket
+
+# Prefix must match `play.assets.urlPrefix`
+GET        /assets/*file                 controllers.Assets.at(file)
+GET        /versionedAssets/*file        controllers.Assets.versioned(path="/public", file: Asset)

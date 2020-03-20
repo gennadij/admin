@@ -1,0 +1,10 @@
+TODO Docu aus der OrientDB
+Without an index against the property name, this query can take up a lot of time.
+You can improve performance by creating a new index against the name property:
+
+http://orientdb.com/docs/last/Graph-VE.html
+
+
+06.07.2018 -> Nach der Überlegung, dass die BedienOberfläche des OrientDB fast komplett
+den Admin ersetzen kann, wird an dieser Stelle die Version 0.1.7 erzeugt und weiter am Konfigurator
+gearbeitet.

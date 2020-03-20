@@ -1,14 +1,24 @@
+<<<<<<< HEAD
 git remote -v -> view all connections
+=======
+cd git remote -v -> view all connections
+>>>>>>> 76bca7fff151d8f92d8c6120d12d236cf245dada
 git remote add <name> <url>
 
 https://github.com/gennadij/configurator.git
 git@github.com:gennadij/configurator.git
 
+<<<<<<< HEAD
 git remote rm <name>
 git remote rename <old-name> <new-name>
 
 
 
+=======
+git remote rm <name>bunt
+git remote rename <old-name> <new-name>
+
+>>>>>>> 76bca7fff151d8f92d8c6120d12d236cf245dada
 remote add configOnUbuntu ubuntu@generic-config.dnshome.de:/home/ubuntu/projects/config.git
 
 Tag
@@ -19,10 +29,35 @@ git tag
 
 https://git-scm.com/book/en/v2/Git-Basics-Tagging
 
+<<<<<<< HEAD
 greate new annotated tag
+=======
+delete tag git tag -d tag_name
+
+create new annotated tag
+>>>>>>> 76bca7fff151d8f92d8c6120d12d236cf245dada
 
 git tag -a v1.4 -m "my version 1.4"
 
 git show v1.4
 
 git push origin [tagname]
+<<<<<<< HEAD
+=======
+
+
+
+
+Geloeschte Branch bei Remote aber die Referenz in Lokal Repo exsistiert immer noch.
+
+git remote prune --dry-run origin
+
+Remote branch zu sich holen
+
+git pull <remote>
+git fetch <remote> <local:remote>
+
+Zu der in dem Vergangenheit liegende Revision kehren
+
+git checkout -b branchname <revision>
+>>>>>>> 76bca7fff151d8f92d8c6120d12d236cf245dada
