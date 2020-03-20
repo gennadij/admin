@@ -34,8 +34,6 @@ class LoginSpecs extends Specification with BeforeAfterAll with CommonFunction {
   def beforeAll(): Unit = {
     val userLogin =                          "user2"
 
-    def prepareLogin(wC : WebClient): Unit = {
-
       val graph: OrientGraph = OrientDB.getFactory().getTx
       val sql: String = s"select count(username) from AdminUser where username like '$userLogin'"
       val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
@@ -53,7 +51,6 @@ class LoginSpecs extends Specification with BeforeAfterAll with CommonFunction {
         val (configId, _) = addConfig(adminId, "http://contig1/user2")
 
         println("configId " + configId)
-      }
     }
   }
 

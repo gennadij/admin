@@ -2,6 +2,7 @@ package org.genericConfig.admin.client.user
 
 import org.genericConfig.admin.client.config.CreateConfig
 import org.genericConfig.admin.shared.config.json.{JsonGetConfigsIn, JsonGetConfigsParams}
+import org.genericConfig.admin.shared.user.UserDTO
 import org.genericConfig.admin.shared.user.json.JsonUserOut
 import org.scalajs.dom.raw.WebSocket
 import org.scalajs.jquery.jQuery
@@ -15,17 +16,20 @@ import util.{CommonFunction, HtmlElementIds}
   */
 class GetUser(websocket: WebSocket) extends CommonFunction{
 
-  def drawUser(getUserOut: JsonUserOut): Unit = {
+  def drawUser(userDTO: UserDTO): Unit = {
 
     cleanPage
 
-    drawNewStatus(getUserOut.result.status.getUser.get.status)
+    userDTO.result.get.errors match {
+      case None => drawNewStatus("Kein Fehler")
+      case _ => drawNewStatus(userDTO.result.get.errors.get.head.name)
+    }
 
-    val htmlMain =
+    val htmlMain : String =
       "<dev id='main' class='main'>" +
         "<p>User Page</p> </br>" +
-        "<p> userId: " + getUserOut.result.userId.get.subSequence(0, 6) + "</p>" + 
-        "<p> Username: " + getUserOut.result.username.get + "</p>" + 
+        "<p> userId: " + userDTO.result.get.userId.get.subSequence(0, 6) + "</p>" +
+        "<p> Username: " + userDTO.result.get.username.get + "</p>" +
           drawButton(HtmlElementIds.getConfigsHtml, "GetConfigs") +
           drawButton(HtmlElementIds.deleteConfigHtml, "DeleteUser") +
           drawButton(HtmlElementIds.updateConfigHtml, "UpdateUser") +
@@ -33,9 +37,9 @@ class GetUser(websocket: WebSocket) extends CommonFunction{
 
     drawNewMain(htmlMain)
 
-    jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => getConfigs(getUserOut.result.userId.get))
-    jQuery(HtmlElementIds.deleteConfigJQuery).on("click", () => deleteUser(getUserOut.result.userId.get))
-    jQuery(HtmlElementIds.updateConfigJQuery).on("click", () => updateUser(getUserOut.result.userId.get))
+    jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => getConfigs(userDTO.result.get.userId.get))
+    jQuery(HtmlElementIds.deleteConfigJQuery).on("click", () => deleteUser(userDTO.result.get.userId.get))
+    jQuery(HtmlElementIds.updateConfigJQuery).on("click", () => updateUser(userDTO.result.get.userId.get))
   }
 
   private def getConfigs(userId: String) = {

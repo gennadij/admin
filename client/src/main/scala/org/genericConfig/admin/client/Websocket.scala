@@ -1,6 +1,9 @@
 package org.genericConfig.admin.client
 
+import org.genericConfig.admin.client.start.StartPage
+import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import org.scalajs.dom
 import org.scalajs.jquery.jQuery
 
@@ -14,6 +17,9 @@ import play.api.libs.json.JsSuccess
 import play.api.libs.json.JsError
 import org.genericConfig.admin.shared.user.json.JsonUserIn
 import org.genericConfig.admin.shared.user.json.JsonUserParams
+import play.api.libs._
+
+import scala.util.matching.Regex
 
 //import scala.collection.JavaConverters._
 
@@ -21,32 +27,36 @@ import org.genericConfig.admin.shared.user.json.JsonUserParams
 object Websocket {
   val url = "ws://localhost:9000/admin"
 	val socket = new dom.WebSocket(url)
-  val numPattern = "[0-9]+".r
+  val numPattern: Regex = "[0-9]+".r
   
   def main(args: Array[String]): Unit = {
     
     println("main")
     socket.onmessage = {
       (e: dom.MessageEvent) => {
-        println("IN -> " + e.data.toString())
-        val jsValue: JsValue = Json.parse(e.data.toString())
-        new AdminClienWeb(socket).handleMessage(jsValue)
+        println("IN -> " + e.data.toString)
+        val jsValue: JsValue = Json.parse(e.data.toString)
+        new AdminClientWeb(socket).handleMessage(jsValue)
       }
     }
     
     socket.onopen = { (e: dom.Event) => {
       println("Websocket open")
-      val getUser = Json.toJson(
-          JsonUserIn(
-              JsonNames.GET_USER,
-              JsonUserParams(
-                  "user_v016_4_client",
-                  "user_v016_4_client"
-              )
-          )
-      ).toString
-      println("OUT -> " + getUser)
-      socket.send(getUser)
+      new StartPage().drawStartPage(socket)
+//      val getUser = Json.toJson(
+//        UserDTO(
+//          action = Actions.GET_USER,
+//          params = Some(UserParamsDTO(
+//            username = "user2",
+//            password = "user2",
+//            update = None,
+//
+//          )),
+//          result = None
+//        )
+//      ).toString
+//      println("OUT -> " + getUser)
+//      socket.send(getUser)
       }
     }
     

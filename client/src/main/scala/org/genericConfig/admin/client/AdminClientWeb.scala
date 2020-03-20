@@ -18,8 +18,10 @@ import org.genericConfig.admin.client.configTree.ConfigTree
 import org.genericConfig.admin.shared.step.json.JsonStepOut
 import org.genericConfig.admin.client.step.AddStep
 import org.genericConfig.admin.client.user.GetUser
+import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.component.json.{JsonComponentIn, JsonComponentOut}
 import org.genericConfig.admin.shared.error.json.{JsonErrorIn, JsonErrorParams}
+import org.genericConfig.admin.shared.user.UserDTO
 import org.genericConfig.admin.shared.user.json.JsonUserOut
 
 /**
@@ -27,25 +29,41 @@ import org.genericConfig.admin.shared.user.json.JsonUserOut
  * 
  * Created by Gennadi Heimann 25.04.2018
  */
-class AdminClienWeb(websocket: WebSocket) {
+class AdminClientWeb(websocket: WebSocket) {
   
   
-  def handleMessage(receivedMessage: JsValue) = {
-    (receivedMessage \ "json").asOpt[String] match {
-      case Some(JsonNames.ADD_USER) => ??? //register(receivedMessage, admin)
-      case Some(JsonNames.GET_USER) => getUser(receivedMessage)
-      case Some(JsonNames.ADD_CONFIG) => addConfig(receivedMessage)
-      case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage)
-      case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage)
-      case Some(JsonNames.UPDATE_CONFIG) => updateConfig(receivedMessage)
-      case Some(JsonNames.ADD_STEP) => addStep(receivedMessage)
-      case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage)
-      case Some(JsonNames.ADD_COMPONENT) => addComponent(receivedMessage)
-      case Some(JsonNames.CONNECT_COMPONENT_TO_STEP) => ??? //connectComponentToStep(receivedMessage, admin)
-      case Some(JsonNames.CREATE_DEPENDENCY) => ??? //createDependency(receivedMessage, admin)
-      case Some(JsonNames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL) => ???
+  def handleMessage(receivedMessage: JsValue): Any = {
+    (receivedMessage \ "action").asOpt[String] match {
+      case Some(Actions.ADD_USER) => addUser(receivedMessage)
+      case Some(Actions.GET_USER) => getUser(receivedMessage)
+//      case Some(JsonNames.ADD_CONFIG) => addConfig(receivedMessage)
+//      case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage)
+//      case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage)
+//      case Some(JsonNames.UPDATE_CONFIG) => updateConfig(receivedMessage)
+//      case Some(JsonNames.ADD_STEP) => addStep(receivedMessage)
+//      case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage)
+//      case Some(JsonNames.ADD_COMPONENT) => addComponent(receivedMessage)
+//      case Some(JsonNames.CONNECT_COMPONENT_TO_STEP) => ??? //connectComponentToStep(receivedMessage, admin)
+//      case Some(JsonNames.CREATE_DEPENDENCY) => ??? //createDependency(receivedMessage, admin)
+//      case Some(JsonNames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL) => ???
 //        visualProposalForAdditionalStepsInOneLevel(receivedMessage, admin)
       case _ => Json.obj("error" -> "keinen Treffer")
+    }
+  }
+
+  private def getUser(receivedMessage: JsValue): Unit = {
+    val userDTO: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
+    userDTO match {
+      case s: JsSuccess[UserDTO] => new GetUser(websocket).drawUser(userDTO.get)
+      case e: JsError => println("Errors -> " + JsonNames.GET_USER + ": " + JsError.toJson(e).toString())
+    }
+  }
+
+  private def addUser(receivedMessage: JsValue): Unit = {
+    val userDTO: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
+    userDTO match {
+      case s: JsSuccess[UserDTO] => ???
+      case e: JsError => println("Errors -> " + JsonNames.GET_USER + ": " + JsError.toJson(e).toString())
     }
   }
 
@@ -54,14 +72,6 @@ class AdminClienWeb(websocket: WebSocket) {
     jsonComponentOut match {
       case jCOut: JsSuccess[JsonComponentOut] => new Component(websocket).updateStatus(jCOut.value)
       case e: JsError => println("Errors -> " + JsonNames.ADD_COMPONENT + ": " + JsError.toJson(e).toString())
-    }
-  }
-
-  private def getUser(receivedMessage: JsValue): Unit = {
-    val getUserOut: JsResult[JsonUserOut] = Json.fromJson[JsonUserOut](receivedMessage)
-    getUserOut match {
-      case s: JsSuccess[JsonUserOut] => new GetUser(websocket).drawUser(getUserOut.get)
-      case e: JsError => println("Errors -> " + JsonNames.GET_USER + ": " + JsError.toJson(e).toString())
     }
   }
 

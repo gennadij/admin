@@ -1,6 +1,7 @@
 package util
 
-import org.scalajs.jquery.jQuery
+import org.scalajs.jquery.{JQuery, jQuery}
+
 import scala.util.matching.Regex
 
 /**
@@ -25,7 +26,7 @@ trait CommonFunction {
     jQuery(htmlHeaderStatus).appendTo(jQuery("header"))
   }
   
-  def drawNewMain(html: String) = {
+  def drawNewMain(html: String): JQuery = {
     jQuery(html).appendTo(jQuery(HtmlElementIds.section))
   }
   
