@@ -498,15 +498,34 @@ class Graph(graph: OrientGraph) {
   private def updateUserName(oldUsername: String, newUsername: String): (Option[OrientVertex], Option[Error]) = {
 
     try {
+      //update AdminUser set username='userUpdated11', password= "updated" where username like 'userUpdated11'
       val sql: String = s"update AdminUser set username='$newUsername' where username like '$oldUsername'"
-      val countOfDeletedVertex: Int = graph.command(new OCommandSQL(sql)).execute()
+      val res: Int = graph.command(new OCommandSQL(sql)).execute()
       graph.commit()
-      if(countOfDeletedVertex == 1){
-        (None, None)
-      }else{
-        (None, Some(UnknownError()))
-      }
+      // gibt immer 0 zurueck muss aber 1 zurueckgeben
+      // deswegen zur Gegenprüfung wird upgedatet user abgefragt wird
+
+//      val dynElemUsers: OrientDynaElementIterable =
+//        graph.command(new OCommandSQL(s"SELECT FROM AdminUser WHERE username='$newUsername'")).execute()
+//      graph.commit()
+//
+//      val vUsers: List[OrientVertex] = dynElemUsers.asScala.toList map (_.asInstanceOf[OrientVertex])
+//
+//      if(vUsers(1).getProperty(PropertyKeys.USERNAME) == newUsername){
+//        (None, None)
+//      }else{
+//        (None, Some(UnknownError()))
+//      }
+            if(res == 1){
+              (None, None)
+            }else{
+              (None, Some(UnknownError()))
+            }
     } catch {
+      case e: ORecordDuplicatedException =>
+        Logger.error(e.printStackTrace().toString)
+        graph.rollback()
+        (None, Some(ODBRecordDuplicated()))
       case e: ClassCastException =>
         graph.rollback()
         Logger.error(message = e.printStackTrace().toString)

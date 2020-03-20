@@ -141,7 +141,13 @@ trait CommonFunction {
       "action" -> Actions.ADD_USER
       , "params" -> Json.obj(
         "username" -> userPassword,
-        "password" -> userPassword
+        "password" -> userPassword,
+        "update" -> Json.obj(
+          "newUsername" -> "",
+          "oldUsername" -> "",
+          "newPassword" -> "",
+          "oldPassword" -> ""
+        )
       ),
       "result" -> Json.obj(
         "userId" -> "",
@@ -151,8 +157,8 @@ trait CommonFunction {
     )
     val userResult = webClient.handleMessage(userParams)
 
-//    Logger.info("registerCS " + userParams)
-//    Logger.info("registerSC " + userResult)
+    Logger.info("ADD_USER " + userParams)
+    Logger.info("ADD_USER " + userResult)
     require((userResult \ "result" \ "username").asOpt[String].get == userPassword, s"Username: $userPassword")
   }
 

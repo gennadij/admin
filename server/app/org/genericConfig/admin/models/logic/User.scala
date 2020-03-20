@@ -122,17 +122,15 @@ class User(userParam: UserDTO) {
     */
 
   private def updateUser : UserDTO = {
-    val userResult: UserDTO = Persistence.updateUser(
-      userParam.params.get.update.get.oldUsername,
-      userParam.params.get.update.get.newUsername
-    )
-    userResult.result.get.errors match {
-      case None =>
-        userResult.copy(result = Some(
-          userResult.result.get.copy(
-            userId = Some(RidToHash.setIdAndHash(userResult.result.get.userId.get)._2))
-        ))
-      case _ => userResult
+    (userParam.params.get.update.get.oldUsername, userParam.params.get.update.get.oldPassword) match {
+      case (username, "") =>
+        Persistence.updateUsername(
+          userParam.params.get.update.get.oldUsername,
+          userParam.params.get.update.get.newUsername
+        )
+      case ("", password) => ???
+      case (username, password) => ???
     }
+
   }
 }

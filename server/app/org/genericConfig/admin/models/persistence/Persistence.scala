@@ -2,6 +2,7 @@ package org.genericConfig.admin.models.persistence
 
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.genericConfig.admin.models.common.Error
+import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.models.persistence.orientdb.{Graph, PropertyKeys}
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.shared.Actions
@@ -137,24 +138,24 @@ object Persistence {
     }
   }
 
-  def updateUser(oldUsername: String, newUsername: String) : UserDTO = {
+  def updateUsername(oldUsername: String, newUsername: String) : UserDTO = {
     val (vUser: Option[OrientVertex], error: Option[Error]) =
       Graph.updateUserName(oldUsername, newUsername)
 
     error match {
       case None =>
         UserDTO(
-          action = Actions.GET_USER,
+          action = Actions.UPDATE_USER,
           params = None,
           result = Some(UserResultDTO(
-            userId = Some(vUser.get.getIdentity.toString),
+            userId = Some(RidToHash.setIdAndHash(vUser.get.getIdentity.toString)._2),
             username = Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),
             errors = None
           ))
         )
       case _ =>
         UserDTO(
-          action = Actions.GET_USER,
+          action = Actions.UPDATE_USER,
           params = None,
           result = Some(UserResultDTO(
             userId = None,

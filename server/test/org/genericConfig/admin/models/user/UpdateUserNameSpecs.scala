@@ -29,9 +29,10 @@ class UpdateUserNameSpecs extends Specification
 
   val wC: WebClient = WebClient.init
   val userToUpdate = "userToUpdate"
-  val userToUpdate_1 = "userToUpdate_1"
+  val userUpdated = "userToUpdated"
 
   def beforeAll(): Unit = {
+    Logger.info("Beforall")
     val graph: OrientGraph = OrientDB.getFactory().getTx
     val sql: String = s"select count(username) from AdminUser where username like '$userToUpdate'"
     val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
@@ -44,28 +45,40 @@ class UpdateUserNameSpecs extends Specification
     }
   }
 
-  def afterAll: Unit = {}
+  def afterAll: Unit = {
+    //TODO user userUpdated delete
+  }
 
   "Beim schon erstelltem Benutzer wird die Benutzername geaendert. Es soll kein Fehler geben" >> {
     "Client sendet action = UPDATE_USER, username = userToUpdate_1" >> {
       val userParams = Json.obj(
-        "action" -> Actions.UPDATE_USERNAME
+        "action" -> Actions.UPDATE_USER
         ,"params" -> Json.obj(
-          "username" -> userToUpdate_1,
-          "password"-> userToUpdate_1
+          "username" -> "",
+          "password"-> "",
+          "update" -> Json.obj(
+            "newUsername" -> userUpdated,
+            "oldUsername" -> userToUpdate,
+            "newPassword" -> "",
+            "oldPassword" -> ""
+          )
         ), "result" -> Json.obj(
           "userId" -> "",
           "username" -> "",
           "errors" -> Json.arr()
         )
       )
+      Logger.info("TEST")
       val wC = WebClient.init
       val userResult = wC.handleMessage(userParams)
-      //      Logger.info("<- " + userParams)
-      //      Logger.info("-> " + userResult)
+            Logger.info("<- " + userParams)
+            Logger.info("-> " + userResult)
 
+      "action = userToDelete" >> {
+        (userResult \ "action" ).asOpt[String].get === Actions.UPDATE_USER
+      }
       "result.username = userToDelete" >> {
-        (userResult \ "result" \ "username").asOpt[String].get === userToUpdate_1
+        (userResult \ "result" \ "username").asOpt[String].get === userUpdated
       }
       "result.userId = None" >> {
         (userResult \ "result" \ "userId").asOpt[String].get.size must be_<=(32)
