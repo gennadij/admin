@@ -41,7 +41,14 @@ class LoginWithNotExistUserSpecs extends Specification with AdminWeb  with Befor
     "action" -> Actions.GET_USER
     ,"params" -> Json.obj(
       "username" -> user,
-      "password"-> user),
+      "password"-> user,
+      "update" -> Json.obj(
+        "newUsername" -> "",
+        "oldUsername" -> "",
+        "newPassword" -> "",
+        "oldPassword" -> ""
+      ),
+    ),
     "result" -> Json.obj(
       "userId" -> "",
       "username" -> "",

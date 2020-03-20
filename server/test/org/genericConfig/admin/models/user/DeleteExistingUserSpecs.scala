@@ -12,7 +12,7 @@ import org.genericConfig.admin.shared.common.ErrorDTO
 import org.specs2.mutable.Specification
 import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 
 import scala.collection.JavaConverters._
 
@@ -30,6 +30,7 @@ class DeleteExistingUserSpecs extends Specification
 
   val wC: WebClient = WebClient.init
   val userToDelete = "userToDelete"
+  var userResult : JsValue = null
 
   def beforeAll() = {
     val graph: OrientGraph = OrientDB.getFactory().getTx
@@ -42,6 +43,27 @@ class DeleteExistingUserSpecs extends Specification
     }else {
       addUser(userToDelete, wC)
     }
+
+    val userParams = Json.obj(
+      "action" -> Actions.DELETE_USER
+      ,"params" -> Json.obj(
+        "username" -> userToDelete,
+        "password"-> userToDelete,
+        "update" -> Json.obj(
+          "newUsername" -> "",
+          "oldUsername" -> "",
+          "newPassword" -> "",
+          "oldPassword" -> ""
+        )
+      ), "result" -> Json.obj(
+        "userId" -> "",
+        "username" -> "",
+        "errors" -> Json.arr()
+      )
+    )
+
+    userResult = wC.handleMessage(userParams)
+
   }
 
   def afterAll() = {
@@ -50,22 +72,6 @@ class DeleteExistingUserSpecs extends Specification
 
   "Ein schon erstellter Benutzer wird geloescht. Es soll kein Fehler geben" >> {
     "Client sendet action = DELETE_USER, username = userToDelete" >> {
-      val userParams = Json.obj(
-        "action" -> Actions.DELETE_USER
-        ,"params" -> Json.obj(
-          "username" -> userToDelete,
-          "password"-> userToDelete
-        ), "result" -> Json.obj(
-          "userId" -> "",
-          "username" -> "",
-          "errors" -> Json.arr()
-        )
-      )
-      val wC = WebClient.init
-      val userResult = wC.handleMessage(userParams)
-//      Logger.info("<- " + userParams)
-//      Logger.info("-> " + userResult)
-
       "result.username = userToDelete" >> {
         (userResult \ "result" \ "username").asOpt[String].get === userToDelete
       }

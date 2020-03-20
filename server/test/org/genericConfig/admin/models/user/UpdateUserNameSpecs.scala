@@ -12,7 +12,7 @@ import org.genericConfig.admin.shared.common.ErrorDTO
 import org.specs2.mutable.Specification
 import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 
 import scala.collection.JavaConverters._
 
@@ -29,10 +29,11 @@ class UpdateUserNameSpecs extends Specification
 
   val wC: WebClient = WebClient.init
   val userToUpdate = "userToUpdate"
-  val userUpdated = "userToUpdated"
+  val userUpdated = "userUpdated"
+  var userResult : JsValue = null
 
   def beforeAll(): Unit = {
-    Logger.info("Beforall")
+
     val graph: OrientGraph = OrientDB.getFactory().getTx
     val sql: String = s"select count(username) from AdminUser where username like '$userToUpdate'"
     val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
@@ -43,52 +44,48 @@ class UpdateUserNameSpecs extends Specification
     }else {
       addUser(userToUpdate, wC)
     }
+
+    val userParams = Json.obj(
+      "action" -> Actions.UPDATE_USER
+      ,"params" -> Json.obj(
+        "username" -> "",
+        "password"-> "",
+        "update" -> Json.obj(
+          "newUsername" -> userUpdated,
+          "oldUsername" -> userToUpdate,
+          "newPassword" -> "",
+          "oldPassword" -> ""
+        )
+      ), "result" -> Json.obj(
+        "userId" -> "",
+        "username" -> "",
+        "errors" -> Json.arr()
+      )
+    )
+
+    Logger.info("<- " + userParams)
+
+    userResult = wC.handleMessage(userParams)
+
+    Logger.info("-> " + userResult)
+
   }
 
   def afterAll: Unit = {
-    //TODO user userUpdated delete
+    Logger.info("AfterAll")
+    val count = deleteAdmin(userUpdated)
+    require(count == 1, "Anzahl der geloescten AdminUserVertexes " + count)
   }
 
   "Beim schon erstelltem Benutzer wird die Benutzername geaendert. Es soll kein Fehler geben" >> {
-    "Client sendet action = UPDATE_USER, username = userToUpdate_1" >> {
-      val userParams = Json.obj(
-        "action" -> Actions.UPDATE_USER
-        ,"params" -> Json.obj(
-          "username" -> "",
-          "password"-> "",
-          "update" -> Json.obj(
-            "newUsername" -> userUpdated,
-            "oldUsername" -> userToUpdate,
-            "newPassword" -> "",
-            "oldPassword" -> ""
-          )
-        ), "result" -> Json.obj(
-          "userId" -> "",
-          "username" -> "",
-          "errors" -> Json.arr()
-        )
-      )
-      Logger.info("TEST")
-      val wC = WebClient.init
-      val userResult = wC.handleMessage(userParams)
-            Logger.info("<- " + userParams)
-            Logger.info("-> " + userResult)
-
-      "action = userToDelete" >> {
-        (userResult \ "action" ).asOpt[String].get === Actions.UPDATE_USER
-      }
-      "result.username = userToDelete" >> {
-        (userResult \ "result" \ "username").asOpt[String].get === userUpdated
-      }
-      "result.userId = None" >> {
-        (userResult \ "result" \ "userId").asOpt[String].get.size must be_<=(32)
-      }
-      "result.password = None" >> {
-        (userResult \ "result" \ "userId").asOpt[String].get == userToUpdate
-      }
-      "result.errors = None" >> {
-        (userResult \ "result" \ "errors").asOpt[List[ErrorDTO]] must beNone
-      }
+    "action = userToDelete" >> {
+      (userResult \ "action" ).asOpt[String].get === Actions.UPDATE_USER
+    }
+    "result.username = userUpdated" >> {
+      (userResult \ "result" \ "username").asOpt[String].get === userUpdated
+    }
+    "result.errors = None" >> {
+      (userResult \ "result" \ "errors").asOpt[List[ErrorDTO]] must beNone
     }
   }
 

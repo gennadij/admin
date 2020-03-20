@@ -29,15 +29,17 @@ class AddAlreadyExistingUserSpecs
 
   val wC: WebClient = WebClient.init
   val userWithAlreadyExistingUser =         "userExist"
+  var userResult : JsValue = null
 
   def beforeAll(): Unit = {
-    prepareWithAlreadyExistingUser(wC)
+    prepareAddAlreadyExistingUser(wC)
+
   }
 
   def afterAll(): Unit = {
   }
 
-  def prepareWithAlreadyExistingUser(wC: WebClient): Unit = {
+  def prepareAddAlreadyExistingUser(wC: WebClient): Unit = {
     val graph: OrientGraph = OrientDB.getFactory().getTx
     val sql: String = s"select count(username) from AdminUser where username like '$userWithAlreadyExistingUser'"
     val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
@@ -48,39 +50,42 @@ class AddAlreadyExistingUserSpecs
     }else {
       addUser(userWithAlreadyExistingUser, wC)
     }
+
+    val userParams = Json.obj(
+      "action" -> Actions.ADD_USER
+      ,"params" -> Json.obj(
+        "username" -> "userExist",
+        "password"-> "userExist",
+        "update" -> Json.obj(
+          "newUsername" -> "",
+          "oldUsername" -> "",
+          "newPassword" -> "",
+          "oldPassword" -> ""
+        )
+      ),
+      "result" -> Json.obj(
+        "userId" -> "",
+        "username" -> "",
+        "errors" -> Json.arr()
+      )
+    )
+
+    userResult = wC.handleMessage(userParams)
+
   }
 
   "Ein neuer Benutzer wird mit schon exestierendem Namen erstellt. Es soll einen Fehler geben" >> {
-    "Sende Action ADD_USER mit username = userExist" >> {
-      val userParams = Json.obj(
-          "action" -> Actions.ADD_USER
-          ,"params" -> Json.obj(
-          "username" -> "userExist",
-            "password"-> "userExist"
-           ),
-        "result" -> Json.obj(
-          "userId" -> "",
-          "username" -> "",
-          "errors" -> Json.arr()
-        )
-      )
-
-      val userResult = wC.handleMessage(userParams)
-
-//      Logger.info("<- " + userParams)
-//      Logger.info("-> " + userResult)
-      "action = ADD_USER" >> {
-        (userResult \ "action").asOpt[String].get === Actions.ADD_USER
-      }
-      "params = None" >> {
-        (userResult \ "params").asOpt[String] === None
-      }
-      "result.userId = None" >> {
-        (userResult \ "result" \ "userId").asOpt[String] === None
-      }
-      "result.errors = ADD_USER_ALREADY_EXIST" >> {
-        ((userResult \ "result" \ "errors")(0) \ "name" ).asOpt[String].get must_== AddUserAlreadyExist().name
-      }
+    "action = ADD_USER" >> {
+      (userResult \ "action").asOpt[String].get === Actions.ADD_USER
+    }
+    "params = None" >> {
+      (userResult \ "params").asOpt[String] === None
+    }
+    "result.userId = None" >> {
+      (userResult \ "result" \ "userId").asOpt[String] === None
+    }
+    "result.errors = ADD_USER_ALREADY_EXIST" >> {
+      ((userResult \ "result" \ "errors")(0) \ "name" ).asOpt[String].get must_== AddUserAlreadyExist().name
     }
   }
 }

@@ -2,7 +2,6 @@ package org.genericConfig.admin.models.persistence
 
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.genericConfig.admin.models.common.Error
-import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.models.persistence.orientdb.{Graph, PropertyKeys}
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.shared.Actions
@@ -148,8 +147,8 @@ object Persistence {
           action = Actions.UPDATE_USER,
           params = None,
           result = Some(UserResultDTO(
-            userId = Some(RidToHash.setIdAndHash(vUser.get.getIdentity.toString)._2),
-            username = Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),
+            userId = None,
+            username = Some(newUsername),
             errors = None
           ))
         )

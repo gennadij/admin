@@ -73,7 +73,14 @@ class LoginSpecs extends Specification with BeforeAfterAll with CommonFunction {
       "action" -> Actions.GET_USER
       ,"params" -> Json.obj(
           "username" -> user,
-          "password"-> user),
+          "password"-> user,
+          "update" -> Json.obj(
+            "newUsername" -> "",
+            "oldUsername" -> "",
+            "newPassword" -> "",
+            "oldPassword" -> ""
+          ),
+    ),
       "result" -> Json.obj(
         "userId" -> "",
         "username" -> "",

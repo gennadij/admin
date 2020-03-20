@@ -11,7 +11,7 @@ import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
 import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
 
 /**
@@ -29,44 +29,49 @@ class AddNewUserSpecs extends Specification
                                 with CommonFunction
                                 with Wrapper{
 
-  sequential
-  
+  var userResult : JsValue = null
+  val wC = WebClient.init
+
   def beforeAll() = {
+
+
+    val userParams = Json.obj(
+      "action" -> Actions.ADD_USER
+      ,"params" -> Json.obj(
+        "username" -> "user1",
+        "password"-> "user1",
+        "update" -> Json.obj(
+          "newUsername" -> "",
+          "oldUsername" -> "",
+          "newPassword" -> "",
+          "oldPassword" -> ""
+        )
+      ), "result" -> Json.obj(
+        "userId" -> "",
+        "username" -> "",
+        "errors" -> Json.arr()
+      )
+    )
+    Logger.info("TEST")
+
+    userResult = wC.handleMessage(userParams)
+    Logger.info("" + userResult)
+  }
+  
+  def afterAll() = {
     val count = deleteAdmin("user1")
     require(count == 1, "Anzahl der geloescten AdminUserVertexes " + count)
   }
   
-  def afterAll() = {
-    
-  }
-  
   "Ein neuer Benutzer wird erstellt. Es soll kein Fehler geben." >> {
-    "Client sendet action = ADD_USER, username = user1" >> {
-      val userParams = Json.obj(
-          "action" -> Actions.ADD_USER
-          ,"params" -> Json.obj(
-               "username" -> "user1",
-               "password"-> "user1"
-           ), "result" -> Json.obj(
-            "userId" -> "",
-                "username" -> "",
-                "errors" -> Json.arr()
-        )
-      )
-      val wC = WebClient.init
-      val userResult = wC.handleMessage(userParams)
-//      Logger.info("<- " + userParams)
-//      Logger.info("-> " + userResult)
-      
-      "result.username = user1" >> {
-        (userResult \ "result" \ "username").asOpt[String].get === "user1"
-      }
-      "result.userId <= 32" >> {
-        (userResult \ "result" \ "userId").asOpt[String].get.size must be_<=(32)
-      }
-      "result.errors = None" >> {
-        (userResult \ "result" \ "errors").asOpt[List[ErrorDTO]] must_== None
-      }
+    "result.username = user1" >> {
+      (userResult \ "result" \ "username").asOpt[String].get === "user1"
+    }
+    "result.userId <= 32" >> {
+      (userResult \ "result" \ "userId").asOpt[String].get.size must be_<=(32)
+    }
+    "result.errors = None" >> {
+      (userResult \ "result" \ "errors").asOpt[List[ErrorDTO]] must_== None
     }
   }
 }
