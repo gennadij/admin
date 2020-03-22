@@ -1,3 +1,3 @@
 #!/bin/bash
 
-/home/gennadi/development/tools/orientdb/bin/server.sh
+/home/gennadi/dev/tools/orientdb-3.0.28/bin/server.sh

@@ -43,20 +43,6 @@ object Websocket {
     socket.onopen = { (e: dom.Event) => {
       println("Websocket open")
       new StartPage().drawStartPage(socket)
-//      val getUser = Json.toJson(
-//        UserDTO(
-//          action = Actions.GET_USER,
-//          params = Some(UserParamsDTO(
-//            username = "user2",
-//            password = "user2",
-//            update = None,
-//
-//          )),
-//          result = None
-//        )
-//      ).toString
-//      println("OUT -> " + getUser)
-//      socket.send(getUser)
       }
     }
     
