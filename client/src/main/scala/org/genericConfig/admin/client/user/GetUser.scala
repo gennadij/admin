@@ -5,7 +5,6 @@ import org.genericConfig.admin.client.login.LoginPage
 import org.genericConfig.admin.client.start.StartPage
 import org.genericConfig.admin.shared.config.json.{JsonGetConfigsIn, JsonGetConfigsParams}
 import org.genericConfig.admin.shared.user.UserDTO
-import org.genericConfig.admin.shared.user.json.JsonUserOut
 import org.scalajs.dom.raw.WebSocket
 import org.scalajs.jquery.jQuery
 import play.api.libs.json.Json

@@ -23,7 +23,6 @@ trait AdminWeb {
       case Some(Actions.DELETE_USER) => deleteUser(receivedMessage, admin)
       case Some(Actions.GET_USER) => getUser(receivedMessage, admin)
       case Some(Actions.UPDATE_USER) => updateUser(receivedMessage, admin)
-      
 //      case Some(JsonNames.ADD_CONFIG) => addConfig(receivedMessage, admin)
 //      case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage, admin)
 //      case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage, admin)
@@ -84,13 +83,13 @@ trait AdminWeb {
   }
   
 //  private def addConfig(receivedMessage: JsValue, admin: Admin): JsValue = {
-//    val addConfigIn: JsResult[JsonAddConfigIn] = Json.fromJson[JsonAddConfigIn](receivedMessage)
+//    val addConfigIn: JsResult[Any] = Json.fromJson[Any](receivedMessage)
 //    addConfigIn match {
-//      case _ : JsSuccess[JsonAddConfigIn] => Json.toJson(admin.addConfig(addConfigIn.get))
+//      case _ : JsSuccess[Any] => Json.toJson(admin.addConfig(addConfigIn.get))
 //      case e : JsError => jsonError(JsonNames.ADD_CONFIG, e)
 //    }
 //  }
-//
+
 //  private def deleteStep(receivedMessage: JsValue, admin: Admin): JsValue = {
 //    val deleteFirstStepIn: JsResult[JsonStepIn] = Json.fromJson[JsonStepIn](receivedMessage)
 //    deleteFirstStepIn match {

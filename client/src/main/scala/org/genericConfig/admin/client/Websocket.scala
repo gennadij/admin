@@ -15,8 +15,6 @@ import play.api.libs.json.Json
 import play.api.libs.json.JsResult
 import play.api.libs.json.JsSuccess
 import play.api.libs.json.JsError
-import org.genericConfig.admin.shared.user.json.JsonUserIn
-import org.genericConfig.admin.shared.user.json.JsonUserParams
 import play.api.libs._
 
 import scala.util.matching.Regex

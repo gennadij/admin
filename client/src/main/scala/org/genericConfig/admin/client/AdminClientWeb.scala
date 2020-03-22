@@ -23,7 +23,6 @@ import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.component.json.{JsonComponentIn, JsonComponentOut}
 import org.genericConfig.admin.shared.error.json.{JsonErrorIn, JsonErrorParams}
 import org.genericConfig.admin.shared.user.UserDTO
-import org.genericConfig.admin.shared.user.json.JsonUserOut
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

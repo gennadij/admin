@@ -9,7 +9,6 @@ import org.genericConfig.admin.shared.configTree.json._
 import org.genericConfig.admin.shared.step.bo._
 import org.genericConfig.admin.shared.step.json._
 import org.genericConfig.admin.shared.user.UserDTO
-import org.genericConfig.admin.shared.user.json._
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -30,10 +29,10 @@ trait Wrapper{
    * 
    * @return UserBO
    */
-  def toAddUserBO(jsonUserIn: JsonUserIn) = {
-    ???
-    //    new WrapperUser().toAddUserBO(jsonUserIn)
-  }
+//  def toAddUserBO(jsonUserIn: JsonUserIn) = {
+//    ???
+//        new WrapperUser().toAddUserBO(jsonUserIn)
+//  }
   
   /**
    * @author Gennadi Heimann
@@ -44,10 +43,10 @@ trait Wrapper{
    * 
    * @return JsonUserOut
    */
-  def toJsonAddUserOut(userBO: UserDTO): JsonUserOut = {
-    ???
+//  def toJsonAddUserOut(userBO: UserDTO): JsonUserOut = {
+//    ???
 //    new WrapperUser().toJsonAddUserOut(userBO)
-  }
+//  }
   
   /**
    * @author Gennadi Heimann
@@ -58,10 +57,10 @@ trait Wrapper{
    * 
    * @return UserBO
    */
-  def toGetUserBO(jsonUserIn: JsonUserIn) = {
-    ???
-    new WrapperUser().toGetUserBO(jsonUserIn)
-  }
+//  def toGetUserBO(jsonUserIn: JsonUserIn) = {
+//    ???
+//    new WrapperUser().toGetUserBO(jsonUserIn)
+//  }
   
    /**
    * @author Gennadi Heimann
@@ -72,10 +71,10 @@ trait Wrapper{
    * 
    * @return JsonUserOut
    */
-  def toJsonGetUserOut(userBO: UserDTO): JsonUserOut = {
-    ???
+//  def toJsonGetUserOut(userBO: UserDTO): JsonUserOut = {
+//    ???
     ///new WrapperUser().toJsonGetUserOut(userBO)
-  }
+//  }
   
   /**
    * @author Gennadi Heimann
