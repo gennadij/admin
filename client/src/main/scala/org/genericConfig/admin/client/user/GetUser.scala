@@ -2,6 +2,7 @@ package org.genericConfig.admin.client.user
 
 import org.genericConfig.admin.client.config.CreateConfig
 import org.genericConfig.admin.client.login.LoginPage
+import org.genericConfig.admin.client.start.StartPage
 import org.genericConfig.admin.shared.config.json.{JsonGetConfigsIn, JsonGetConfigsParams}
 import org.genericConfig.admin.shared.user.UserDTO
 import org.genericConfig.admin.shared.user.json.JsonUserOut
@@ -32,6 +33,7 @@ class GetUser(webSocket: WebSocket) extends CommonFunction{
             drawButton(HtmlElementIds.getConfigsHtml, "GetConfigs") +
             drawButton(HtmlElementIds.deleteConfigHtml, "DeleteUser") +
             drawButton(HtmlElementIds.updateConfigHtml, "UpdateUser") +
+            drawButton(HtmlElementIds.startPageHtml, "startPage") +
             "</dev>"
 
         drawNewMain(htmlMain)
@@ -39,6 +41,7 @@ class GetUser(webSocket: WebSocket) extends CommonFunction{
         jQuery(HtmlElementIds.getConfigsJQuery).on("click", () => getConfigs(userDTO.result.get.userId.get))
         jQuery(HtmlElementIds.deleteConfigJQuery).on("click", () => deleteUser(userDTO.result.get.userId.get))
         jQuery(HtmlElementIds.updateConfigJQuery).on("click", () => updateUser(userDTO.result.get.userId.get))
+        jQuery(HtmlElementIds.startPageJQuery).on("click", () => startPage)
       case _ =>
         drawNewStatus(userDTO.result.get.errors.get.head.name)
         new LoginPage().drawLoginPage(webSocket, userDTO.result.get.errors)
@@ -47,6 +50,9 @@ class GetUser(webSocket: WebSocket) extends CommonFunction{
 
   }
 
+  private def startPage = {
+    new StartPage(webSocket).drawStartPage()
+  }
   private def getConfigs(userId: String) = {
     println("Get Configs")
     val getConfigsIn = Json.toJson(JsonGetConfigsIn(

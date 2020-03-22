@@ -42,7 +42,7 @@ object Websocket {
     
     socket.onopen = { (e: dom.Event) => {
       println("Websocket open")
-      new StartPage().drawStartPage(socket)
+      new StartPage(webSocket = socket).drawStartPage()
       }
     }
     

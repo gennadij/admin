@@ -46,7 +46,7 @@ class LoginPage extends  CommonFunction{
   }
 
   def startPage(webSocket: WebSocket) : Unit = {
-    new StartPage().drawStartPage(webSocket)
+    new StartPage(webSocket).drawStartPage()
   }
 
   def login(webSocket: WebSocket): Unit = {

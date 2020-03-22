@@ -12,6 +12,15 @@ object HtmlElementIds {
   
   def statusHtml =           "status"
   def statusJQuery =         "#status"
+
+  def usernameHtml =         "username"
+  def usernameJQuery =        "#username"
+
+  def passwordHtml =         "password"
+  def passwordJQuery =        "#password"
+
+  def startPageHtml =         "startPage"
+  def startPageJQuery =         "#startPage"
   
   def section =              "section"
   

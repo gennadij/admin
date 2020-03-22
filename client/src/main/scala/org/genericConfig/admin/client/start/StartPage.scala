@@ -6,8 +6,10 @@ import org.scalajs.dom.WebSocket
 import org.scalajs.jquery.{JQuery, jQuery}
 import util.{CommonFunction, HtmlElementIds}
 
-class StartPage extends CommonFunction{
-  def drawStartPage(webSocket: WebSocket): JQuery = {
+class StartPage(webSocket: WebSocket) extends CommonFunction{
+
+
+  def drawStartPage(): JQuery = {
     cleanPage
 
     val html =
@@ -18,16 +20,16 @@ class StartPage extends CommonFunction{
       "</dev>"
     drawNewMain(html)
 
-    jQuery("#login").on("click", () => login(webSocket))
-    jQuery("#registration").on("click", () => registration(webSocket))
+    jQuery("#login").on("click", () => login)
+    jQuery("#registration").on("click", () => registration)
   }
 
-  def login(webSocket: WebSocket): Unit = {
+  def login() : Unit = {
     new LoginPage().drawLoginPage(webSocket, None)
   }
 
-  def registration(webSocket: WebSocket) : Unit = {
-    new RegistrationPage().drawRegistrationPage(webSocket)
+  def registration() : Unit = {
+    new RegistrationPage().drawRegistrationPage(webSocket, None)
   }
 
 }

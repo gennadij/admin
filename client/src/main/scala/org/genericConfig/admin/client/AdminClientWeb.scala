@@ -15,6 +15,7 @@ import org.genericConfig.admin.client.config.CreateConfig
 import org.genericConfig.admin.client.config.DeleteConfig
 import org.genericConfig.admin.client.config.EditConfig
 import org.genericConfig.admin.client.configTree.ConfigTree
+import org.genericConfig.admin.client.registration.RegistrationPage
 import org.genericConfig.admin.shared.step.json.JsonStepOut
 import org.genericConfig.admin.client.step.AddStep
 import org.genericConfig.admin.client.user.GetUser
@@ -62,7 +63,7 @@ class AdminClientWeb(websocket: WebSocket) {
   private def addUser(receivedMessage: JsValue): Unit = {
     val userDTO: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
     userDTO match {
-      case s: JsSuccess[UserDTO] => ???
+      case s: JsSuccess[UserDTO] => new RegistrationPage().drawRegistrationPage(websocket, userDTO.get.result.get.errors)
       case e: JsError => println("Errors -> " + JsonNames.GET_USER + ": " + JsError.toJson(e).toString())
     }
   }
