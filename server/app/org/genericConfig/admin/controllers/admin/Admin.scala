@@ -4,6 +4,7 @@ import org.genericConfig.admin.models.json.dependency.{JsonDependencyIn, JsonDep
 import org.genericConfig.admin.models.logic._
 import org.genericConfig.admin.models.wrapper.Wrapper
 import org.genericConfig.admin.shared.component.json.{JsonComponentIn, JsonComponentOut}
+import org.genericConfig.admin.shared.config.ConfigDTO
 import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.shared.configTree.json.{JsonConfigTreeIn, JsonConfigTreeOut}
 import org.genericConfig.admin.shared.step.json._
@@ -61,12 +62,11 @@ class Admin extends Wrapper {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param jsonAddConfigIn : JsonAddConfigIn
-    * @return JsonAddConfigOut
+    * @param configDTO : ConfigDTO
+    * @return ConfigDTO
     */
-  def addConfig(jsonAddConfigIn: JsonAddConfigIn): JsonAddConfigOut = {
-    toJsonAddConfigOut(
-      Config.addConfig(toAddConfigBO(jsonAddConfigIn)))
+  def addConfig(configDTO: ConfigDTO): ConfigDTO = {
+      Config.addConfig(configDTO)
   }
 
   /**

@@ -8,6 +8,7 @@ import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.config.bo.ConfigBO
+import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigResultDTO}
 import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.step.bo._
 import org.genericConfig.admin.shared.step.json.JsonDependencyForAdditionalStepsInOneLevel
@@ -185,45 +186,40 @@ object Persistence {
     * @author Gennadi Heimann
     * @version 0.1.6
     * @param userId : String, configUrl: String
-    * @return ConfigBO
+    * @return ConfigDTO
     */
-  def addConfig(userId: String, configUrl: String): ConfigBO = {
-    ???
-//    val (vConfig, statusAddConfig, statusCommon): (Option[OrientVertex], StatusAddConfig, Error) =
-//      Graph.addConfig(configUrl)
-//    statusAddConfig match {
-//      case AddConfigSuccess() =>
-//        ConfigBO(
-//          Some(userId),
-//          Some(List(Configuration(
-//            Some(vConfig.get.getIdentity.toString),
-//            Some(vConfig.get.getProperty(PropertyKeys.CONFIG_URL))
-//          ))),
-//          Some(StatusConfig(
-//            Some(AddConfigSuccess()),
-//            None, None, None, Some(Success())
-//          )
-//          ))
-//      case AddConfigAlreadyExist() =>
-//        ConfigBO(
-//          Some(userId),
-//          None,
-//          Some(StatusConfig(
-//            Some(AddConfigAlreadyExist()),
-//            None, None, None, Some(statusCommon)
-//          )
-//          ))
-//      case AddConfigError() =>
-//        ConfigBO(
-//          Some(userId),
-//          None,
-//          Some(StatusConfig(
-//            Some(AddConfigError()),
-//            None, None, None, Some(statusCommon)
-//          )
-//          )
-//        )
-//    }
+  def addConfig(userId: String, configUrl: String): ConfigDTO = {
+
+    val (vConfig, error): (Option[OrientVertex], Option[Error]) =
+      Graph.addConfig(configUrl)
+    error match {
+      case None =>
+        ConfigDTO(
+          action = "",
+          params = None,
+          result = Some(ConfigResultDTO(
+            userId = Some(userId),
+            configId = Some(vConfig.get.getIdentity.toString),
+            configs = None,
+            errors = None
+          ))
+        )
+      case Some(error) =>
+        ConfigDTO(
+          action = "",
+          params = None,
+          result = Some(ConfigResultDTO(
+            userId = Some(userId),
+            configId = None,
+            configs = None,
+            errors = Some(List(ErrorDTO(
+              name = error.name,
+              message = error.message,
+              code = error.code
+            )))
+          )
+        ))
+    }
   }
 
   /**

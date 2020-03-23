@@ -10,13 +10,15 @@ import play.api.libs.functional.syntax._
   * Created by Gennadi Heimann 23.03.2020
   */
 case class ConfigParamsDTO (
-                             userId: String,
-                             configUrl: String
+                             userId: Option[String],
+                             configUrl: Option[String],
+                             update : Option[ConfigUpdateDTO]
                            )
 
 object ConfigParamsDTO {
   implicit val format : Format[ConfigParamsDTO] = (
-    (JsPath \ "userId").format(Format.of[String]) and
-      (JsPath \ "configUrl").format(Format.of[String])
-    )(ConfigParamsDTO.apply, unlift(ConfigParamsDTO.unapply))
+    (JsPath \ "userId").format(Format.optionWithNull[String]) and
+    (JsPath \ "configUrl").format(Format.optionWithNull[String])
+    (JsPath \ "update").format(Format.optionWithNull[ConfigUpdateDTO])
+  )(ConfigParamsDTO.apply, unlift(ConfigParamsDTO.unapply))
 }

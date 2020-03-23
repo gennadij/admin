@@ -20,18 +20,7 @@ class PrepareConfig extends CommonFunction {
   val userTwoSameConfigUrls =              "user13"
 
   def prepareAddingNewConfig(wC: WebClient): Any = {
-    val graph: OrientGraph = Database.getFactory._1.get.getTx
-    val sql: String = s"select count(username) from AdminUser where username like '$userAddingNewConfig'"
-    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
-    graph.commit
-    val count: Int = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString().toInt).head
-    if(count == 1 ) {
-      Logger.info(s"Der User $userAddingNewConfig ist schon erstellt worden")
-    }else{
-      addUser(userAddingNewConfig, wC)
 
-      getUserId(userAddingNewConfig, wC)
-    }
   }
 
   def prepareTwoSameConfigUrls(wC: WebClient): Unit = {

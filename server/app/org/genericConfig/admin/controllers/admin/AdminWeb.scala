@@ -2,6 +2,7 @@ package org.genericConfig.admin.controllers.admin
 
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.config.ConfigDTO
 import org.genericConfig.admin.shared.error.json._
 import org.genericConfig.admin.shared.user.UserDTO
 import play.api.Logger
@@ -23,7 +24,7 @@ trait AdminWeb {
       case Some(Actions.DELETE_USER) => deleteUser(receivedMessage, admin)
       case Some(Actions.GET_USER) => getUser(receivedMessage, admin)
       case Some(Actions.UPDATE_USER) => updateUser(receivedMessage, admin)
-//      case Some(JsonNames.ADD_CONFIG) => addConfig(receivedMessage, admin)
+      case Some(JsonNames.ADD_CONFIG) => addConfig(receivedMessage, admin)
 //      case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage, admin)
 //      case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage, admin)
 //      case Some(JsonNames.UPDATE_CONFIG) => updateConfig(receivedMessage, admin)
@@ -82,13 +83,13 @@ trait AdminWeb {
     }
   }
   
-//  private def addConfig(receivedMessage: JsValue, admin: Admin): JsValue = {
-//    val addConfigIn: JsResult[Any] = Json.fromJson[Any](receivedMessage)
-//    addConfigIn match {
-//      case _ : JsSuccess[Any] => Json.toJson(admin.addConfig(addConfigIn.get))
-//      case e : JsError => jsonError(JsonNames.ADD_CONFIG, e)
-//    }
-//  }
+  private def addConfig(receivedMessage: JsValue, admin: Admin): JsValue = {
+    val configResult: JsResult[ConfigDTO] = Json.fromJson[ConfigDTO](receivedMessage)
+    configResult match {
+      case _ : JsSuccess[ConfigDTO] => Json.toJson(admin.addConfig(configResult.get))
+      case e : JsError => jsonError(JsonNames.ADD_CONFIG, e)
+    }
+  }
 
 //  private def deleteStep(receivedMessage: JsValue, admin: Admin): JsValue = {
 //    val deleteFirstStepIn: JsResult[JsonStepIn] = Json.fromJson[JsonStepIn](receivedMessage)

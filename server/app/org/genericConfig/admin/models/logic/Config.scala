@@ -2,6 +2,7 @@ package org.genericConfig.admin.models.logic
 
 import org.genericConfig.admin.models.common.ODBRecordIdDefect
 import org.genericConfig.admin.models.persistence.Persistence
+import org.genericConfig.admin.shared.config.ConfigDTO
 import org.genericConfig.admin.shared.config.bo.{ConfigBO, _}
 import org.genericConfig.admin.shared.config.status._
 import org.genericConfig.admin.shared.configTree.bo.{ComponentForConfigTreeBO, ConfigTreeBO, StepForConfigTreeBO}
@@ -17,11 +18,11 @@ object Config {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param configBO : ConfigBO
-    * @return ConfigBO
+    * @param configDTO : ConfigDTO
+    * @return ConfigDTO
     */
-  def addConfig(configBO: ConfigBO): ConfigBO = {
-    new Config(Some(configBO)).addConfig
+  def addConfig(configDTO: ConfigDTO): ConfigDTO = {
+    new Config(configDTO).addConfig
   }
 
   /**
@@ -66,7 +67,7 @@ object Config {
 
 }
 
-class Config(configBO: Option[ConfigBO] = None) {
+class Config(configDTO: ConfigDTO) {
 
   /**
     * @author Gennadi Heimann
@@ -74,50 +75,49 @@ class Config(configBO: Option[ConfigBO] = None) {
     * @return ConfigBO
     */
   private def addConfig(): ConfigBO = {
-    ???
 
-//    val configUrl = configBO.get.configs.get.head.configUrl.get
-//    val userIdHash = configBO.get.userId.get
-//
-//    RidToHash.getRId(userIdHash) match {
-//      case Some(id) =>
-//        val cBO: ConfigBO = Persistence.addConfig(id, configUrl)
-//        cBO.status.get.addConfig.get match {
-//          case AddConfigSuccess() =>
-//            val statusConfigAppend: Error =
-//              Persistence.appendConfigTo(id, cBO.configs.get.head.configId.get)
-//            statusConfigAppend match {
-//              case Success() =>
-//                val (_, configIdHash) = RidToHash.setIdAndHash(cBO.configs.get.head.configId.get)
-//
-//                val configuration = Configuration(
-//                  Some(configIdHash),
-//                  cBO.configs.get.head.configUrl
-//                )
-//
-//                cBO.copy(configs = Some(List(configuration)))
-//              case _ =>
-//
-//                val configBODelete: ConfigBO = Persistence.deleteConfig(cBO.configs.get.head.configId.get, cBO.configs.get.head.configUrl.get)
-//
-//                ConfigBO(
-//                  status = Some(StatusConfig(
-//                    addConfig = Some(AddConfigError()),
-//                    deleteConfig = configBODelete.status.get.deleteConfig,
-//                    common = Some(statusConfigAppend)
-//                  )
-//                  ))
-//            }
-//          case AddConfigAlreadyExist() =>
-//            cBO
-//          case AddConfigError() =>
-//            cBO
-//          case AddConfigIdHashNotExist() => {
-//            cBO
-//          }
-//        }
-//      case None => ConfigBO(status = Some(StatusConfig(addConfig = Some(AddConfigIdHashNotExist()))))
-//    }
+    val configUrl : String = configDTO.params.get.configUrl.get
+    val userIdHash : String = configDTO.params.get.userId.get
+
+    RidToHash.getRId(userIdHash) match {
+      case Some(id) =>
+        val cBO: ConfigBO = Persistence.addConfig(id, configUrl)
+        cBO.status.get.addConfig.get match {
+          case AddConfigSuccess() =>
+            val statusConfigAppend: Error =
+              Persistence.appendConfigTo(id, cBO.configs.get.head.configId.get)
+            statusConfigAppend match {
+              case Success() =>
+                val (_, configIdHash) = RidToHash.setIdAndHash(cBO.configs.get.head.configId.get)
+
+                val configuration = Configuration(
+                  Some(configIdHash),
+                  cBO.configs.get.head.configUrl
+                )
+
+                cBO.copy(configs = Some(List(configuration)))
+              case _ =>
+
+                val configBODelete: ConfigBO = Persistence.deleteConfig(cBO.configs.get.head.configId.get, cBO.configs.get.head.configUrl.get)
+
+                ConfigBO(
+                  status = Some(StatusConfig(
+                    addConfig = Some(AddConfigError()),
+                    deleteConfig = configBODelete.status.get.deleteConfig,
+                    common = Some(statusConfigAppend)
+                  )
+                  ))
+            }
+          case AddConfigAlreadyExist() =>
+            cBO
+          case AddConfigError() =>
+            cBO
+          case AddConfigIdHashNotExist() => {
+            cBO
+          }
+        }
+      case None => ConfigBO(status = Some(StatusConfig(addConfig = Some(AddConfigIdHashNotExist()))))
+    }
   }
 
   /**
