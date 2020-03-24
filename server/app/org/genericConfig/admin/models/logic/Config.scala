@@ -1,8 +1,8 @@
 package org.genericConfig.admin.models.logic
 
-import org.genericConfig.admin.models.common.ODBRecordIdDefect
+import org.genericConfig.admin.models.common.{Error, ODBRecordIdDefect}
 import org.genericConfig.admin.models.persistence.Persistence
-import org.genericConfig.admin.shared.config.ConfigDTO
+import org.genericConfig.admin.shared.config.{ConfigDTO, UserConfigDTO}
 import org.genericConfig.admin.shared.config.bo.{ConfigBO, _}
 import org.genericConfig.admin.shared.config.status._
 import org.genericConfig.admin.shared.configTree.bo.{ComponentForConfigTreeBO, ConfigTreeBO, StepForConfigTreeBO}
@@ -74,46 +74,52 @@ class Config(configDTO: ConfigDTO) {
     * @version 0.1.6
     * @return ConfigBO
     */
-  private def addConfig(): ConfigBO = {
+  private def addConfig(): ConfigDTO = {
 
     val configUrl : String = configDTO.params.get.configUrl.get
     val userIdHash : String = configDTO.params.get.userId.get
 
     RidToHash.getRId(userIdHash) match {
       case Some(id) =>
-        val cBO: ConfigBO = Persistence.addConfig(id, configUrl)
-        cBO.status.get.addConfig.get match {
-          case AddConfigSuccess() =>
-            val statusConfigAppend: Error =
-              Persistence.appendConfigTo(id, cBO.configs.get.head.configId.get)
-            statusConfigAppend match {
-              case Success() =>
-                val (_, configIdHash) = RidToHash.setIdAndHash(cBO.configs.get.head.configId.get)
+        val resultConfigDTO: ConfigDTO = Persistence.addConfig(id, configUrl)
+        resultConfigDTO.result.get.errors match {
+          case None =>
+            val resultAppendConfigToUser: Option[Error] =
+              Persistence.appendConfigTo(id, resultConfigDTO.result.get.configs.get.head.configId.get)
+            resultAppendConfigToUser match {
+              case None =>
+                val (_, configIdHash) =
+                  RidToHash.setIdAndHash(resultConfigDTO.result.get.configs.get.head.configId.get)
 
-                val configuration = Configuration(
-                  Some(configIdHash),
-                  cBO.configs.get.head.configUrl
+                val userConfig = UserConfigDTO(
+                  configId = Some(configIdHash),
+                  configUrl = resultConfigDTO.result.get.configs.get.head.configUrl
                 )
 
-                cBO.copy(configs = Some(List(configuration)))
+                resultConfigDTO.copy(
+                  result = Some(resultConfigDTO.result.get.copy(
+                    configs = Some(List(userConfig)))
+                  )
+                )
               case _ =>
 
-                val configBODelete: ConfigBO = Persistence.deleteConfig(cBO.configs.get.head.configId.get, cBO.configs.get.head.configUrl.get)
+                val configBODelete: ConfigBO =
+                  Persistence.deleteConfig(resultConfigDTO.result.get.configs.get.head.configId.get, resultConfigDTO.configs.get.head.configUrl.get)
 
                 ConfigBO(
                   status = Some(StatusConfig(
                     addConfig = Some(AddConfigError()),
                     deleteConfig = configBODelete.status.get.deleteConfig,
-                    common = Some(statusConfigAppend)
+                    common = Some(resultAppendConfigToUser)
                   )
                   ))
             }
           case AddConfigAlreadyExist() =>
-            cBO
+            resultConfigDTO
           case AddConfigError() =>
-            cBO
+            resultConfigDTO
           case AddConfigIdHashNotExist() => {
-            cBO
+            resultConfigDTO
           }
         }
       case None => ConfigBO(status = Some(StatusConfig(addConfig = Some(AddConfigIdHashNotExist()))))

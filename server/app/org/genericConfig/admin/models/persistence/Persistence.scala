@@ -2,13 +2,13 @@ package org.genericConfig.admin.models.persistence
 
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.genericConfig.admin.models.common.Error
-import org.genericConfig.admin.models.persistence.orientdb.{Graph, PropertyKeys}
+import org.genericConfig.admin.models.persistence.orientdb.{Graph, GraphConfig, GraphUser, PropertyKeys}
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.config.bo.ConfigBO
-import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigResultDTO}
+import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigResultDTO, UserConfigDTO}
 import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.step.bo._
 import org.genericConfig.admin.shared.step.json.JsonDependencyForAdditionalStepsInOneLevel
@@ -31,7 +31,7 @@ object Persistence {
     */
   def addUser(username: String, password: String): UserDTO = {
     val (vUser: Option[OrientVertex], error : Option[Error]) =
-      Graph.addUser(username, password)
+      GraphUser.addUser(username, password)
 
     error match {
       case None =>
@@ -69,7 +69,7 @@ object Persistence {
    */
   def deleteUser(username: String, password: String): UserDTO = {
     val (vUser: Option[OrientVertex], error : Option[Error]) =
-      Graph.deleteUser(username, password)
+      GraphUser.deleteUser(username, password)
 
     error match {
       case None =>
@@ -107,7 +107,7 @@ object Persistence {
     */
   def getUser(username: String, password: String) : UserDTO = {
     val (vUser: Option[OrientVertex], error: Option[Error]) =
-      Graph.getUser(username, password)
+      GraphUser.getUser(username, password)
 
     error match {
       case None =>
@@ -140,7 +140,7 @@ object Persistence {
 
   def updateUsername(oldUsername: String, newUsername: String) : UserDTO = {
     val (vUser: Option[OrientVertex], error: Option[Error]) =
-      Graph.updateUserName(oldUsername, newUsername)
+      GraphUser.updateUserName(oldUsername, newUsername)
 
     error match {
       case None =>
@@ -191,32 +191,36 @@ object Persistence {
   def addConfig(userId: String, configUrl: String): ConfigDTO = {
 
     val (vConfig, error): (Option[OrientVertex], Option[Error]) =
-      Graph.addConfig(configUrl)
+      GraphConfig.addConfig(configUrl)
     error match {
       case None =>
         ConfigDTO(
-          action = "",
+          action = Actions.ADD_CONFIG,
           params = None,
           result = Some(ConfigResultDTO(
             userId = Some(userId),
-            configId = Some(vConfig.get.getIdentity.toString),
-            configs = None,
+            configs = Some(List(UserConfigDTO(
+              configId = Some(vConfig.get.getIdentity.toString())
+            ))),
             errors = None
           ))
         )
-      case Some(error) =>
+      case _ =>
         ConfigDTO(
-          action = "",
+          action = Actions.ADD_CONFIG,
           params = None,
           result = Some(ConfigResultDTO(
             userId = Some(userId),
-            configId = None,
             configs = None,
-            errors = Some(List(ErrorDTO(
-              name = error.name,
-              message = error.message,
-              code = error.code
-            )))
+            errors = Some(
+              List(
+                ErrorDTO(
+                  name = error.get.name,
+                  message = error.get.message,
+                  code = error.get.code
+                )
+              )
+            )
           )
         ))
     }
@@ -225,11 +229,11 @@ object Persistence {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param userId : String, configId: String
+    * @param fromUserId : String, configId: String
     * @return Status
     */
-  def appendConfigTo(userId: String, configId: String): Error = {
-    Graph.appendConfigTo(userId, configId)
+  def appendConfigTo(fromUserId: String, toConfigId: String): Option[Error] = {
+    GraphConfig.appendConfigTo(fromUserId, toConfigId)
   }
 
   /**
@@ -274,35 +278,34 @@ object Persistence {
     * @return ConfigBO
     */
   def deleteConfig(configId: String, configUrl: String): ConfigBO = {
-???
-//    val (userId, status): (String, Error) = Graph.getUserId(configId)
-//    val (statusDeleteConfig, statusCommon): (StatusDeleteConfig, Error) = Graph.deleteConfig(configId, configUrl: String)
-//
-//    status match {
-//      case Success() =>
-//        ConfigBO(
-//          Some(userId), None,
-//          Some(StatusConfig(
-//            None, //addConfig: Option[StatusAddConfig],
-//            None, //getConfigs: Option[StatusGetConfigs],
-//            Some(statusDeleteConfig), //deleteConfig: Option[StatusDeleteConfig],
-//            None, //updateConfig: Option[StatusUpdateConfig],
-//            Some(statusCommon) //common: Option[Status
-//          )
-//          ))
-//      case _ =>
-//        ConfigBO(
-//          Some(userId), None,
-//          Some(StatusConfig(
-//            None, //addConfig: Option[StatusAddConfig],
-//            None, //getConfigs: Option[StatusGetConfigs],
-//            Some(DeleteConfigError()), //deleteConfig: Option[StatusDeleteConfig],
-//            None, //updateConfig: Option[StatusUpdateConfig],
-//            Some(status) //common: Option[Status
-//          )
-//          )
-//        )
-//    }
+    val (userId, status): (String, Error) = Graph.getUserId(configId)
+    val (statusDeleteConfig, statusCommon): (StatusDeleteConfig, Error) = Graph.deleteConfig(configId, configUrl: String)
+
+    status match {
+      case Success() =>
+        ConfigBO(
+          Some(userId), None,
+          Some(StatusConfig(
+            None, //addConfig: Option[StatusAddConfig],
+            None, //getConfigs: Option[StatusGetConfigs],
+            Some(statusDeleteConfig), //deleteConfig: Option[StatusDeleteConfig],
+            None, //updateConfig: Option[StatusUpdateConfig],
+            Some(statusCommon) //common: Option[Status
+          )
+          ))
+      case _ =>
+        ConfigBO(
+          Some(userId), None,
+          Some(StatusConfig(
+            None, //addConfig: Option[StatusAddConfig],
+            None, //getConfigs: Option[StatusGetConfigs],
+            Some(DeleteConfigError()), //deleteConfig: Option[StatusDeleteConfig],
+            None, //updateConfig: Option[StatusUpdateConfig],
+            Some(status) //common: Option[Status
+          )
+          )
+        )
+    }
   }
 
   /**

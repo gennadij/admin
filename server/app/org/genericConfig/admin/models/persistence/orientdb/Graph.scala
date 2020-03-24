@@ -28,80 +28,6 @@ object Graph {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param username : String, password: String
-    * @return (Option[OrientVertex], Option[Error])
-    */
-  def addUser(username: String, password: String): (Option[OrientVertex], Option[Error]) = {
-    (Database.getFactory(): @unchecked) match {
-      case (Some(dbFactory), None) =>
-        val graph: OrientGraph = dbFactory.getTx
-        new Graph(graph).addUser(username, password)
-      case (None, Some(ODBConnectionFail())) =>
-        (None, Some(ODBConnectionFail()))
-    }
-  }
-
-  /**
-   * @author Gennadi Heimann
-   * @version 0.1.6
-   * @param username : String, password: String
-   * @return (Option[OrientVertex], Option[Error])
-   */
-  def deleteUser(username: String, password: String): (Option[OrientVertex], Option[Error]) = {
-    (Database.getFactory(): @unchecked) match {
-      case (Some(dbFactory), None) =>
-        val graph: OrientGraph = dbFactory.getTx
-        new Graph(graph).deleteUser(username, password)
-      case (None, Some(ODBConnectionFail())) =>
-        (None, Some(ODBConnectionFail()))
-    }
-  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param username : String, password: String
-    * @return (Option[OrientVertex], StatusGetUser, Status)
-    */
-  def getUser(username: String, password: String): (Option[OrientVertex], Option[Error]) = {
-    (Database.getFactory(): @unchecked) match {
-      case (Some(dbFactory), None) =>
-        val graph: OrientGraph = dbFactory.getTx
-        new Graph(graph).getUser(username, password)
-      case (None, Some(ODBConnectionFail())) =>
-        (None, Some(ODBConnectionFail()))
-    }
-  }
-
-  def updateUserName(oldUsername: String, newUsername : String): (Option[OrientVertex], Option[Error]) = {
-    (Database.getFactory(): @unchecked) match {
-      case (Some(dbFactory), None) =>
-        val graph: OrientGraph = dbFactory.getTx
-        new Graph(graph).updateUserName(oldUsername, newUsername)
-      case (None, Some(ODBConnectionFail())) =>
-        (None, Some(ODBConnectionFail()))
-    }
-  }
-
-  /**
-   * @author Gennadi Heimann
-   * @version 0.1.6
-   * @param configUrl : String
-   * @return (Option[OrientVertex], StatusAddConfig, Status)
-   */
-  def addConfig(configUrl: String): (Option[OrientVertex], Option[Error]) = {
-    (Database.getFactory(): @unchecked) match {
-      case (Some(dbFactory), None) =>
-        val graph: OrientGraph = dbFactory.getTx
-        new Graph(graph).addConfig(configUrl)
-      case (None, Some(ODBConnectionFail())) =>
-        (None, Some(ODBConnectionFail()))
-    }
-  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
     * @param configId : String
     * @return (String, Status)
     */
@@ -116,22 +42,7 @@ object Graph {
 //    }
   }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param userId : String, configId: String
-    * @return Status
-    */
-  def appendConfigTo(userId: String, configId: String): Error = {
-    ???
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), Success()) =>
-//        val graph: OrientGraph = dbFactory.getTx
-//        new Graph(graph).appendConfigTo(userId, configId)
-//      case (None, ODBConnectionFail()) =>
-//        ODBConnectionFail()
-//    }
-  }
+
 
   /**
     * @author Gennadi Heimann
@@ -150,22 +61,7 @@ object Graph {
 //    }
   }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param configId : String, configUrl: String
-    * @return (StatusDeleteConfig, Status)
-    */
-  def deleteConfig(configId: String, configUrl: String): (StatusDeleteConfig, Error) = {
-    ???
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), Success()) =>
-//        val graph: OrientGraph = dbFactory.getTx
-//        new Graph(graph).deleteConfig(configId, configUrl)
-//      case (None, ODBConnectionFail()) =>
-//        (DeleteConfigError(), ODBConnectionFail())
-//    }
-  }
+
 
   /**
     * @author Gennadi Heimann
@@ -392,164 +288,6 @@ object Graph {
 
 class Graph(graph: OrientGraph) {
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param username : String, password: String
-    * @return (Option[OrientVertex], Option[Error])
-    */
-  private def addUser(username: String, password: String): (Option[OrientVertex], Option[Error]) = {
-    try {
-      val vUser: List[Vertex] = graph.getVertices(PropertyKeys.USERNAME, username).asScala.toList
-      if (vUser.isEmpty) {
-        val vAdminUser: OrientVertex = graph.addVertex("class:" + PropertyKeys.VERTEX_ADMIN_USER,
-          PropertyKeys.USERNAME, username,
-          PropertyKeys.PASSWORD, password)
-        graph.commit()
-        (Some(vAdminUser), None)
-      } else if (vUser.size == 1) {
-        (Some(vUser.head.asInstanceOf[OrientVertex]), Some(AddUserAlreadyExist()))
-      } else {
-        (None, Some(UnknownError()))
-      }
-    } catch {
-      case e: ClassCastException =>
-        graph.rollback()
-        Logger.error(message = e.printStackTrace().toString)
-        (None, Some(ODBClassCastError()))
-      case e: Exception =>
-        graph.rollback()
-        Logger.error(e.printStackTrace().toString)
-        (None, Some(ODBWriteError()))
-    }
-  }
-
-  /**
-   * @author Gennadi Heimann
-   * @version 0.1.6
-   * @param username : String, password: String
-   * @return (Option[OrientVertex], Option[Error])
-   */
-  private def deleteUser(username: String, password: String): (Option[OrientVertex], Option[Error]) = {
-    try {
-      val sql: String = s"DELETE VERTEX AdminUser where username='$username'"
-      val countOfDeletedVertex: Int = graph.command(new OCommandSQL(sql)).execute()
-      graph.commit()
-      if(countOfDeletedVertex == 1){
-        (None, None)
-      }else{
-        (None, Some(UnknownError()))
-      }
-    } catch {
-      case e: ClassCastException =>
-        graph.rollback()
-        Logger.error(message = e.printStackTrace().toString)
-        (None, Some(ODBClassCastError()))
-      case e: Exception =>
-        graph.rollback()
-        Logger.error(e.printStackTrace().toString)
-        (None, Some(ODBReadError()))
-    }
-  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param username : String, password: String
-    * @return (Option[OrientVertex], Option[Error])
-    */
-  private def getUser(username: String, password: String): (Option[OrientVertex], Option[Error]) = {
-
-    try {
-      val dynElemUsers: OrientDynaElementIterable =
-        graph.command(new OCommandSQL(s"SELECT FROM AdminUser WHERE username='$username' and password='$password'")).execute()
-      graph.commit()
-      val vUsers: List[OrientVertex] = dynElemUsers.asScala.toList map (_.asInstanceOf[OrientVertex])
-
-      vUsers match {
-        case userCount if userCount.size == 1 => (Some(vUsers.head), None)
-        case _ => (None, Some(GetUserNotExist()))
-      }
-    } catch {
-      case e: ORecordDuplicatedException =>
-        Logger.error(e.printStackTrace().toString)
-        graph.rollback()
-        (None, Some(ODBRecordDuplicated()))
-      case e: ClassCastException =>
-        graph.rollback()
-        Logger.error(e.printStackTrace().toString)
-        (None, Some(ODBClassCastError()))
-      case e: Exception =>
-        graph.rollback()
-        Logger.error(e.printStackTrace().toString)
-        (None, Some(ODBReadError()))
-    }
-  }
-
-  //
-
-  /**
-   * @author Gennadi Heimann
-   * @version 0.1.6
-   * @param newUsername : String, oldUsername: String
-   * @return (Option[OrientVertex], Option[Error])
-   */
-  private def updateUserName(oldUsername: String, newUsername: String): (Option[OrientVertex], Option[Error]) = {
-
-    try {
-      val sql: String = s"update AdminUser set username='$newUsername' where username like '$oldUsername'"
-      val res: Int = graph.command(new OCommandSQL(sql)).execute()
-      graph.commit()
-
-      if(res == 1){
-        (None, None)
-      }else{
-        (None, Some(UnknownError()))
-      }
-    } catch {
-      case e: ORecordDuplicatedException =>
-        Logger.error(e.printStackTrace().toString)
-        graph.rollback()
-        (None, Some(ODBRecordDuplicated()))
-      case e: ClassCastException =>
-        graph.rollback()
-        Logger.error(message = e.printStackTrace().toString)
-        (None, Some(ODBClassCastError()))
-      case e: Exception =>
-        graph.rollback()
-        Logger.error(e.printStackTrace().toString)
-        (None, Some(ODBWriteError()))
-    }
-  }
-
-  /**
-   * @author Gennadi Heimann
-   * @version 0.1.6
-   * @param configUrl : String
-   * @return (Option[OrientVertex], StatusAddConfig, Status)
-   */
-    private def addConfig(configUrl: String): (Option[OrientVertex], Option[Error]) = {
-      try {
-        val vConfig: OrientVertex = graph.addVertex(
-          "class:" + PropertyKeys.VERTEX_CONFIG,
-          PropertyKeys.CONFIG_URL, configUrl)
-        graph.commit()
-        (Some(vConfig), None)
-      } catch {
-        case e: ORecordDuplicatedException =>
-          Logger.error(e.printStackTrace().toString)
-          graph.rollback()
-          (None, Some(ODBRecordDuplicated()))
-        case e: ClassCastException =>
-          graph.rollback()
-          Logger.error(e.printStackTrace().toString)
-          (None, Some(ODBClassCastError()))
-        case e: Exception =>
-          graph.rollback()
-          Logger.error(e.printStackTrace().toString)
-          (None, Some(ODBWriteError()))
-      }
-    }
 
   /**
     * @author Gennadi Heimann
@@ -590,39 +328,7 @@ class Graph(graph: OrientGraph) {
 
 
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param userId : String, configId: String
-    * @return Status
-    */
-//  private def appendConfigTo(userId: String, configId: String): Error = {
-//    try {
-//      val vUser: OrientVertex = graph.getVertex(userId)
-//      val vConfig: OrientVertex = graph.getVertex(configId)
-//      graph.addEdge(
-//        "class:" + PropertyKeys.EDGE_HAS_CONFIG,
-//        vUser,
-//        vConfig,
-//        PropertyKeys.EDGE_HAS_CONFIG
-//      )
-//      graph.commit()
-//      Success()
-//    } catch {
-//      case e: ORecordDuplicatedException =>
-//        Logger.error(e.printStackTrace().toString)
-//        graph.rollback()
-//        ODBRecordDuplicated()
-//      case e: ClassCastException =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        ODBClassCastError()
-//      case e: Exception =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        ODBWriteError()
-//    }
-//  }
+
 
   /**
     * @author Gennadi Heimann

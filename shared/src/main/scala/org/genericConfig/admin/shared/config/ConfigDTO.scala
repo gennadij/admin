@@ -12,7 +12,6 @@ case class ConfigDTO (
                   action : String = "",
                   params : Option[ConfigParamsDTO],
                   result : Option[ConfigResultDTO]
-
                 )
 
 object ConfigDTO {

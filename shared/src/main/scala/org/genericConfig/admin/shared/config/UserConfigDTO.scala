@@ -10,7 +10,7 @@ import play.api.libs.json.{Format, JsPath}
  */
 case class UserConfigDTO (
                            configId: Option[String],
-                           configUrl: Option[String]
+                           configUrl: Option[String] = None
                          )
 
 object UserConfigDTO{

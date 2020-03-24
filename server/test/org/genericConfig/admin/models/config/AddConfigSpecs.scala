@@ -7,11 +7,7 @@ import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
-import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.config.status.AddConfigSuccess
-import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
-import org.specs2.runner.JUnitRunner
 import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
 import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
@@ -35,6 +31,8 @@ class AddConfigSpecs extends Specification
   val userPassword = "user3"
 
   val wC: WebClient = WebClient.init
+
+  var configResult :JsValue = null
 
   def beforeAll(): Unit = {
 
@@ -79,28 +77,37 @@ class AddConfigSpecs extends Specification
     Logger.info(userResult.toString())
 
     val configParams = Json.obj(
-      "json" -> JsonNames.ADD_CONFIG
-      , "params" -> Json.obj(
-        "userId" -> (loginSC \ "result" \ "userId").asOpt[String].get,
-        "configUrl" -> "//http://contig1/user3"
+      "action" -> Actions.ADD_CONFIG,
+      "params" -> Json.obj(
+        "userId" -> (userResult \ "result" \ "userId").asOpt[String].get,
+        "configUrl" -> "//http://contig1/user3",
+        "update" -> Json.obj(
+          "dummy" -> "",
+          "dummy2" -> ""
+        )
+      ),
+      "result" -> Json.obj(
+        "userId" -> "",
+        "configs" -> Json.arr(),
+        "errors" -> Json.arr()
       )
     )
-    Logger.info("IN " + configParams)
 
-    val createConfigSC = wC.handleMessage(configParams)
+    Logger.info("-> " + configParams)
 
-    Logger.info("OUT " + createConfigSC)
+    configResult = wC.handleMessage(configParams)
+
+    Logger.info("<- " + configResult)
   }
 
   def afterAll(): Unit = {}
 
   "Der Benutzer fuegt eine neue Konfiguration hinzu" >> {
-    "Login mit AdminUser und fuege Konfig zu dem AdminUser hinzu" >> {
-
-
-
-      (createConfigSC \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigSuccess().status
-      (createConfigSC \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
+    "result.configs(0).configId" >> {
+      (configResult \ "result" ).asOpt[String] === None
+    }
+    "result.errors" >> {
+      (configResult \ "result" \ "errors" ).asOpt[List[ErrorDTO]] === None
     }
   }
 }

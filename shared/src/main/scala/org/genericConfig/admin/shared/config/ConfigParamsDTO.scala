@@ -18,7 +18,7 @@ case class ConfigParamsDTO (
 object ConfigParamsDTO {
   implicit val format : Format[ConfigParamsDTO] = (
     (JsPath \ "userId").format(Format.optionWithNull[String]) and
-    (JsPath \ "configUrl").format(Format.optionWithNull[String])
+    (JsPath \ "configUrl").format(Format.optionWithNull[String]) and
     (JsPath \ "update").format(Format.optionWithNull[ConfigUpdateDTO])
   )(ConfigParamsDTO.apply, unlift(ConfigParamsDTO.unapply))
 }
