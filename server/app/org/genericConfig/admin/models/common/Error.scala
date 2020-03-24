@@ -36,6 +36,18 @@ case class GetUserNotExist() extends Error {
   def code :String = ""
 }
 
+case class AddUserIdHashNotExist() extends Error {
+  def name: String = "ADD_ID_HASH_NOT_EXIST"
+  def message: String = ""
+  def code :String = ""
+}
+
+case class DeleteConfigDefectID() extends Error {
+  def name: String = "DELETE_CONFIG_DEFECT_ID"
+  def message: String = ""
+  def code :String = ""
+}
+
 case class ODBClassCastError() extends Error{
   def name: String = "CLASS_CAST_ERROR"
   def message: String = "Interner Fehler des Configurators"

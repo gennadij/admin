@@ -20,11 +20,7 @@ case class DeleteConfigError() extends StatusDeleteConfig {
   def code :String = ""
 }
 
-case class DeleteConfigDefectID() extends StatusDeleteConfig {
-  def status: String = "DELETE_CONFIG_DEFECT_ID"
-  def message: String = ""
-  def code :String = ""
-}
+
 
 case class DeleteConfigIdHashNotExist() extends StatusDeleteConfig {
   def status: String = "DELETE_CONFIG_ID_HASH_NOT_EXIST"

@@ -1,8 +1,12 @@
 package org.genericConfig.admin.models.logic
 
-import org.genericConfig.admin.models.common.{Error, ODBRecordIdDefect}
+import com.tinkerpop.blueprints.impls.orient.OrientVertex
+import org.genericConfig.admin.models.common.{AddUserIdHashNotExist, Error, ODBRecordIdDefect}
 import org.genericConfig.admin.models.persistence.Persistence
-import org.genericConfig.admin.shared.config.{ConfigDTO, UserConfigDTO}
+import org.genericConfig.admin.models.persistence.orientdb.GraphConfig
+import org.genericConfig.admin.shared.Actions
+import org.genericConfig.admin.shared.common.ErrorDTO
+import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigResultDTO, UserConfigDTO}
 import org.genericConfig.admin.shared.config.bo.{ConfigBO, _}
 import org.genericConfig.admin.shared.config.status._
 import org.genericConfig.admin.shared.configTree.bo.{ComponentForConfigTreeBO, ConfigTreeBO, StepForConfigTreeBO}
@@ -78,51 +82,102 @@ class Config(configDTO: ConfigDTO) {
 
     val configUrl : String = configDTO.params.get.configUrl.get
     val userIdHash : String = configDTO.params.get.userId.get
-
+    //TODO Funftion verkuerzen
     RidToHash.getRId(userIdHash) match {
-      case Some(id) =>
-        val resultConfigDTO: ConfigDTO = Persistence.addConfig(id, configUrl)
-        resultConfigDTO.result.get.errors match {
+      case Some(userId) =>
+        val (vConfig, errorAddConfig): (Option[OrientVertex], Option[Error]) = GraphConfig.addConfig(configUrl)
+        errorAddConfig match {
           case None =>
-            val resultAppendConfigToUser: Option[Error] =
-              Persistence.appendConfigTo(id, resultConfigDTO.result.get.configs.get.head.configId.get)
-            resultAppendConfigToUser match {
+
+            val errorAppendConfig : Option[Error] = GraphConfig.appendConfigTo(userId, vConfig.get.getIdentity.toString())
+
+            errorAppendConfig match {
               case None =>
-                val (_, configIdHash) =
-                  RidToHash.setIdAndHash(resultConfigDTO.result.get.configs.get.head.configId.get)
-
-                val userConfig = UserConfigDTO(
-                  configId = Some(configIdHash),
-                  configUrl = resultConfigDTO.result.get.configs.get.head.configUrl
-                )
-
-                resultConfigDTO.copy(
-                  result = Some(resultConfigDTO.result.get.copy(
-                    configs = Some(List(userConfig)))
-                  )
-                )
-              case _ =>
-
-                val configBODelete: ConfigBO =
-                  Persistence.deleteConfig(resultConfigDTO.result.get.configs.get.head.configId.get, resultConfigDTO.configs.get.head.configUrl.get)
-
-                ConfigBO(
-                  status = Some(StatusConfig(
-                    addConfig = Some(AddConfigError()),
-                    deleteConfig = configBODelete.status.get.deleteConfig,
-                    common = Some(resultAppendConfigToUser)
-                  )
+                ConfigDTO(
+                  action = Actions.ADD_CONFIG,
+                  params = None,
+                  result = Some(ConfigResultDTO(
+                    userId = Some(userId),
+                    configs = Some(List(UserConfigDTO(
+                      configId = Some(RidToHash.setIdAndHash(vConfig.get.getIdentity.toString())_2),
+                      configUrl = Some(configUrl)
+                    ))),
+                    errors = None
                   ))
+                )
+
+              case _ =>
+                val errorDeleteConfig : Option[Error] =
+                  GraphConfig.deleteConfig(vConfig.get.getIdentity.toString(), configUrl)
+
+                errorDeleteConfig match {
+                  case None =>
+                    ConfigDTO(
+                      action = Actions.ADD_CONFIG,
+                      params = None,
+                      result = Some(ConfigResultDTO(
+                        userId = Some(userId),
+                        configs = None,
+                        errors = Some(List(ErrorDTO(
+                          name = errorAppendConfig.get.name,
+                          message = errorAppendConfig.get.message,
+                          code = errorAppendConfig.get.code
+                        )))
+                      ))
+                    )
+                  case _ =>
+                    ConfigDTO(
+                      action = Actions.ADD_CONFIG,
+                      params = None,
+                      result = Some(ConfigResultDTO(
+                        userId = Some(userId),
+                        configs = None,
+                        errors = Some(List(
+                          ErrorDTO(
+                            name = errorAppendConfig.get.name,
+                            message = errorAppendConfig.get.message,
+                            code = errorAppendConfig.get.code
+                          ),
+                          ErrorDTO(
+                            name = errorDeleteConfig.get.name,
+                            message = errorDeleteConfig.get.message,
+                            code = errorDeleteConfig.get.code
+                          )
+                        ))
+                      ))
+                    )
+                }
+
             }
-          case AddConfigAlreadyExist() =>
-            resultConfigDTO
-          case AddConfigError() =>
-            resultConfigDTO
-          case AddConfigIdHashNotExist() => {
-            resultConfigDTO
-          }
+          case _ =>
+            ConfigDTO(
+              action = Actions.ADD_CONFIG,
+              params = None,
+              result = Some(ConfigResultDTO(
+                userId = Some(userId),
+                configs = None,
+                errors = Some(List(ErrorDTO(
+                  name = errorAddConfig.get.name,
+                  message = errorAddConfig.get.message,
+                  code = errorAddConfig.get.code
+                )))
+              ))
+            )
         }
-      case None => ConfigBO(status = Some(StatusConfig(addConfig = Some(AddConfigIdHashNotExist()))))
+      case None =>
+        ConfigDTO(
+          action = Actions.ADD_CONFIG,
+          params = None,
+          result = Some(ConfigResultDTO(
+            userId = None,
+            configs = None,
+            errors = Some(List(ErrorDTO(
+              name = AddUserIdHashNotExist().name,
+              message = AddUserIdHashNotExist().message,
+              code = AddUserIdHashNotExist().code
+            )))
+          ))
+        )
     }
   }
 

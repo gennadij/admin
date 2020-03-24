@@ -2,13 +2,12 @@ package org.genericConfig.admin.models.persistence
 
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.genericConfig.admin.models.common.Error
-import org.genericConfig.admin.models.persistence.orientdb.{Graph, GraphConfig, GraphUser, PropertyKeys}
+import org.genericConfig.admin.models.persistence.orientdb.{GraphUser, PropertyKeys}
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.config.bo.ConfigBO
-import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigResultDTO, UserConfigDTO}
 import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.step.bo._
 import org.genericConfig.admin.shared.step.json.JsonDependencyForAdditionalStepsInOneLevel
@@ -182,59 +181,59 @@ object Persistence {
 //    Graph.getUserId(configId)
   }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param userId : String, configUrl: String
-    * @return ConfigDTO
-    */
-  def addConfig(userId: String, configUrl: String): ConfigDTO = {
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param userId : String, configUrl: String
+//    * @return ConfigDTO
+//    */
+//  def addConfig(userId: String, configUrl: String): ConfigDTO = {
+//
+//    val (vConfig, error): (Option[OrientVertex], Option[Error]) =
+//      GraphConfig.addConfig(configUrl)
+//    error match {
+//      case None =>
+//        ConfigDTO(
+//          action = Actions.ADD_CONFIG,
+//          params = None,
+//          result = Some(ConfigResultDTO(
+//            userId = Some(userId),
+//            configs = Some(List(UserConfigDTO(
+//              configId = Some(vConfig.get.getIdentity.toString())
+//            ))),
+//            errors = None
+//          ))
+//        )
+//      case _ =>
+//        ConfigDTO(
+//          action = Actions.ADD_CONFIG,
+//          params = None,
+//          result = Some(ConfigResultDTO(
+//            userId = Some(userId),
+//            configs = None,
+//            errors = Some(
+//              List(
+//                ErrorDTO(
+//                  name = error.get.name,
+//                  message = error.get.message,
+//                  code = error.get.code
+//                )
+//              )
+//            )
+//          )
+//        ))
+//    }
+//  }
 
-    val (vConfig, error): (Option[OrientVertex], Option[Error]) =
-      GraphConfig.addConfig(configUrl)
-    error match {
-      case None =>
-        ConfigDTO(
-          action = Actions.ADD_CONFIG,
-          params = None,
-          result = Some(ConfigResultDTO(
-            userId = Some(userId),
-            configs = Some(List(UserConfigDTO(
-              configId = Some(vConfig.get.getIdentity.toString())
-            ))),
-            errors = None
-          ))
-        )
-      case _ =>
-        ConfigDTO(
-          action = Actions.ADD_CONFIG,
-          params = None,
-          result = Some(ConfigResultDTO(
-            userId = Some(userId),
-            configs = None,
-            errors = Some(
-              List(
-                ErrorDTO(
-                  name = error.get.name,
-                  message = error.get.message,
-                  code = error.get.code
-                )
-              )
-            )
-          )
-        ))
-    }
-  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param fromUserId : String, configId: String
-    * @return Status
-    */
-  def appendConfigTo(fromUserId: String, toConfigId: String): Option[Error] = {
-    GraphConfig.appendConfigTo(fromUserId, toConfigId)
-  }
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param fromUserId : String, configId: String
+//    * @return Status
+//    */
+//  def appendConfigTo(fromUserId: String, toConfigId: String): Option[Error] = {
+//    GraphConfig.appendConfigTo(fromUserId, toConfigId)
+//  }
 
   /**
     * @author Gennadi Heimann
@@ -271,42 +270,42 @@ object Persistence {
 //    }
   }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param configId : String, configUrl: String
-    * @return ConfigBO
-    */
-  def deleteConfig(configId: String, configUrl: String): ConfigBO = {
-    val (userId, status): (String, Error) = Graph.getUserId(configId)
-    val (statusDeleteConfig, statusCommon): (StatusDeleteConfig, Error) = Graph.deleteConfig(configId, configUrl: String)
-
-    status match {
-      case Success() =>
-        ConfigBO(
-          Some(userId), None,
-          Some(StatusConfig(
-            None, //addConfig: Option[StatusAddConfig],
-            None, //getConfigs: Option[StatusGetConfigs],
-            Some(statusDeleteConfig), //deleteConfig: Option[StatusDeleteConfig],
-            None, //updateConfig: Option[StatusUpdateConfig],
-            Some(statusCommon) //common: Option[Status
-          )
-          ))
-      case _ =>
-        ConfigBO(
-          Some(userId), None,
-          Some(StatusConfig(
-            None, //addConfig: Option[StatusAddConfig],
-            None, //getConfigs: Option[StatusGetConfigs],
-            Some(DeleteConfigError()), //deleteConfig: Option[StatusDeleteConfig],
-            None, //updateConfig: Option[StatusUpdateConfig],
-            Some(status) //common: Option[Status
-          )
-          )
-        )
-    }
-  }
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param configId : String, configUrl: String
+//    * @return ConfigBO
+//    */
+//  def deleteConfig(configId: String, configUrl: String, userId : String): ConfigBO = {
+//    //val (userId, status): (String, Error) = Graph.getUserId(configId)
+//    val (statusDeleteConfig, statusCommon): (StatusDeleteConfig, Error) = Graph.deleteConfig(configId, configUrl: String)
+//
+//    status match {
+//      case Success() =>
+//        ConfigBO(
+//          Some(userId), None,
+//          Some(StatusConfig(
+//            None, //addConfig: Option[StatusAddConfig],
+//            None, //getConfigs: Option[StatusGetConfigs],
+//            Some(statusDeleteConfig), //deleteConfig: Option[StatusDeleteConfig],
+//            None, //updateConfig: Option[StatusUpdateConfig],
+//            Some(statusCommon) //common: Option[Status
+//          )
+//          ))
+//      case _ =>
+//        ConfigBO(
+//          Some(userId), None,
+//          Some(StatusConfig(
+//            None, //addConfig: Option[StatusAddConfig],
+//            None, //getConfigs: Option[StatusGetConfigs],
+//            Some(DeleteConfigError()), //deleteConfig: Option[StatusDeleteConfig],
+//            None, //updateConfig: Option[StatusUpdateConfig],
+//            Some(status) //common: Option[Status
+//          )
+//          )
+//        )
+//    }
+//  }
 
   /**
     * @author Gennadi Heimann

@@ -25,8 +25,3 @@ case class AddConfigError() extends StatusAddConfig {
   def code :String = ""
 }
 
-case class AddConfigIdHashNotExist() extends StatusAddConfig {
-  def status: String = "ADD_ID_HASH_NOT_EXIST"
-  def message: String = ""
-  def code :String = ""
-}
