@@ -10,11 +10,9 @@ import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.status.StatusAddComponent
-import org.genericConfig.admin.shared.config.bo.{ConfigBO, Configuration}
 import org.genericConfig.admin.shared.config.status.StatusAddConfig
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 import org.genericConfig.admin.shared.step.bo.StepBO
-import org.genericConfig.admin.shared.user.json.{JsonUserIn, JsonUserOut, JsonUserParams}
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 
@@ -25,48 +23,48 @@ import play.api.libs.json.{JsValue, Json}
   */
 trait CommonFunction {
 
-  def addUser(username: String): (String, String, String) = {
-
-    val jsonAddUserIn = Json.toJsObject(JsonUserIn(
-      json = JsonNames.ADD_USER,
-      params = JsonUserParams(
-        username = username,
-        password = username
-      )
-
-    ))
-
-    val wC = WebClient.init
-
-    //        Logger.info("IN " + jsonAddUserIn)
-
-    val jsonAddUserOut = wC.handleMessage(jsonAddUserIn)
-
-    val addUserOut = Json.fromJson[JsonUserOut](jsonAddUserOut)
-
-    //        Logger.info("OUT " + jsonAddUserOut)
-
-    (addUserOut.get.result.username.get, addUserOut.get.result.userId.get, addUserOut.get.result.status.addUser.get.status)
-  }
+//  def addUser(username: String): (String, String, String) = {
+//
+//    val jsonAddUserIn = Json.toJsObject(JsonUserIn(
+//      json = JsonNames.ADD_USER,
+//      params = JsonUserParams(
+//        username = username,
+//        password = username
+//      )
+//
+//    ))
+//
+//    val wC = WebClient.init
+//
+//    //        Logger.info("IN " + jsonAddUserIn)
+//
+//    val jsonAddUserOut = wC.handleMessage(jsonAddUserIn)
+//
+//    val addUserOut = Json.fromJson[JsonUserOut](jsonAddUserOut)
+//
+//    //        Logger.info("OUT " + jsonAddUserOut)
+//
+//    (addUserOut.get.result.username.get, addUserOut.get.result.userId.get, addUserOut.get.result.status.addUser.get.status)
+//  }
 
   def deleteAllConfigs(username: String): Int = {
     Graph.deleteAllConfigs(username)
   }
 
   def addConfig(userId: String, configUrl: String): (String, StatusAddConfig) = {
-
-    val configBOIn = ConfigBO(
-      userId = Some(userId),
-      configs = Some(List(Configuration(configUrl = Some(configUrl))))
-    )
-
-    Logger.info("IN " + configBOIn)
-
-    val configBOOut = Config.addConfig(configBOIn)
-
-    Logger.info("OUT " + configBOOut)
-
-    (configBOOut.configs.get.head.configId.get, configBOOut.status.get.addConfig.get)
+    ???
+//    val configBOIn = ConfigBO(
+//      userId = Some(userId),
+//      configs = Some(List(Configuration(configUrl = Some(configUrl))))
+//    )
+//
+//    Logger.info("IN " + configBOIn)
+//
+//    val configBOOut = Config.addConfig(configBOIn)
+//
+//    Logger.info("OUT " + configBOOut)
+//
+//    (configBOOut.configs.get.head.configId.get, configBOOut.status.get.addConfig.get)
   }
 
 

@@ -5,7 +5,6 @@ import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
 import com.tinkerpop.blueprints.impls.orient.{OrientGraph, OrientVertex}
 import org.genericConfig.admin.models.common.{DeleteConfigDefectID, Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBWriteError}
 import org.genericConfig.admin.models.persistence.Database
-import org.genericConfig.admin.shared.config.status.{DeleteConfigDefectID, DeleteConfigError, DeleteConfigSuccess, StatusDeleteConfig}
 import play.api.Logger
 
 /**
@@ -20,11 +19,11 @@ object GraphConfig {
    * @param configUrl : String
    * @return (Option[OrientVertex], Option[Error])
    */
-  def addConfig(configUrl: String): (Option[OrientVertex], Option[Error]) = {
+  def addConfig(configUrl: String, configurationsCourse: String): (Option[OrientVertex], Option[Error]) = {
     (Database.getFactory(): @unchecked) match {
       case (Some(dbFactory), None) =>
         val graph: OrientGraph = dbFactory.getTx
-        new GraphConfig(graph).addConfig(configUrl)
+        new GraphConfig(graph).addConfig(configUrl, configurationsCourse)
       case (None, Some(ODBConnectionFail())) =>
         (None, Some(ODBConnectionFail()))
     }
@@ -41,7 +40,7 @@ object GraphConfig {
       case (Some(dbFactory), None) =>
         val graph: OrientGraph = dbFactory.getTx
         new GraphConfig(graph).appendConfigTo(fromUserId, toConfigId)
-      case (None, Some*ODBConnectionFail()) =>
+      case (None, Some(ODBConnectionFail())) =>
         Some(ODBConnectionFail())
     }
   }
@@ -70,11 +69,12 @@ class GraphConfig(graph: OrientGraph) {
    * @param configUrl : String
    * @return (Option[OrientVertex], StatusAddConfig, Status)
    */
-  private def addConfig(configUrl: String): (Option[OrientVertex], Option[Error]) = {
+  private def addConfig(configUrl: String, configurationCourse: String): (Option[OrientVertex], Option[Error]) = {
     try {
       val vConfig: OrientVertex = graph.addVertex(
         "class:" + PropertyKeys.VERTEX_CONFIG,
-        PropertyKeys.CONFIG_URL, configUrl)
+        PropertyKeys.CONFIG_URL, configUrl,
+        PropertyKeys.CONFIGURATION_COURSE, configurationCourse)
       graph.commit()
       (Some(vConfig), None)
     } catch {

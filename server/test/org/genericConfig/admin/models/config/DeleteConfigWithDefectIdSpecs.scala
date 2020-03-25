@@ -29,10 +29,10 @@ class DeleteConfigWithDefectIdSpecs extends Specification
   val username = "user_v016_5"
   
   def beforeAll(): Unit = {
-    val (username, userId, _): (String, String, _) = addUser(this.username)
-    this.userId = userId
-    Logger.info("username : " + username)
-    Logger.info("userId : " + userId)
+//    val (username, userId, _): (String, String, _) = addUser(this.username)
+//    this.userId = userId
+//    Logger.info("username : " + username)
+//    Logger.info("userId : " + userId)
   }
   
   def afterAll(): Unit = {

@@ -24,7 +24,7 @@ trait AdminWeb {
       case Some(Actions.DELETE_USER) => deleteUser(receivedMessage, admin)
       case Some(Actions.GET_USER) => getUser(receivedMessage, admin)
       case Some(Actions.UPDATE_USER) => updateUser(receivedMessage, admin)
-      case Some(JsonNames.ADD_CONFIG) => addConfig(receivedMessage, admin)
+      case Some(Actions.ADD_CONFIG) => addConfig(receivedMessage, admin)
 //      case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage, admin)
 //      case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage, admin)
 //      case Some(JsonNames.UPDATE_CONFIG) => updateConfig(receivedMessage, admin)

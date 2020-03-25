@@ -43,11 +43,11 @@ class AddConfigWithSameConfigUrlsSpecs extends Specification
 //    val count = deleteAdmin("user14")
 //    require(count == 1, count.toString)
 
-    val (username, userId, statusAddUser) = addUser(usernamePassword)
+//    val (username, userId, statusAddUser) = ??? //addUser(usernamePassword)
 
-    this.userId = userId
-
-    val (configId, statusAddConfig) =  addConfig(userId, this.configUrl)
+//    this.userId = userId
+//
+//    val (configId, statusAddConfig) =  addConfig(userId, this.configUrl)
 
 
   }
