@@ -1,7 +1,11 @@
 package org.genericConfig.admin.models.logic
 
-import org.genericConfig.admin.models.persistence.Persistence
-import org.genericConfig.admin.shared.user.UserDTO
+import com.tinkerpop.blueprints.impls.orient.OrientVertex
+import org.genericConfig.admin.models.common.Error
+import org.genericConfig.admin.models.persistence.orientdb.{GraphUser, PropertyKeys}
+import org.genericConfig.admin.shared.Actions
+import org.genericConfig.admin.shared.common.ErrorDTO
+import org.genericConfig.admin.shared.user.{UserDTO, UserResultDTO}
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -13,15 +17,12 @@ object User {
   
   /**
    * @author Gennadi Heimann
-   * 
    * @version 0.1.6
-   * 
    * @param user: UserDTO
-   * 
    * @return UserDTO
    */
   def addUser(user: UserDTO): UserDTO = {
-    new User(user).addUser
+    new User(user).addUser()
   }
 
   /**
@@ -34,7 +35,7 @@ object User {
    * @return UserDTO
    */
   def deleteUser(user: UserDTO): UserDTO = {
-    new User(user).deleteUser
+    new User(user).deleteUser()
   }
   
   /**
@@ -62,7 +63,7 @@ object User {
     */
 
   def updateUser(userParams: UserDTO): UserDTO = {
-    new User(userParams).updateUser
+    new User(userParams).updateUser()
   }
   
 }
@@ -76,60 +77,112 @@ class User(userParam: UserDTO) {
    *
    * @return UserBO
    */
-  private def addUser: UserDTO = {
-    val userResult: UserDTO = Persistence.addUser(userParam.params.get.username, userParam.params.get.password)
-    userResult.result.get.errors match {
-      case None =>
-        userResult.copy(result = Some(userResult.result.get.copy(userId = Some(RidToHash.setIdAndHash(userResult.result.get.userId.get)._2))))
-      case _ => userResult
-    }
+  private def addUser(): UserDTO = {
+
+    val (vUser: Option[OrientVertex], error : Option[Error]) =
+      GraphUser.addUser(userParam.params.get.username, userParam.params.get.password)
+
+    createUserDTO(
+      action = Actions.ADD_USER,
+      userId = Some(RidToHash.setIdAndHash(vUser.get.getIdentity.toString())._2),
+      username = Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),
+      error = error
+    )
   }
 
   /**
    * @author Gennadi Heimann
-   *
    * @version 0.1.6
-   *
    * @return UserBO
    */
-  private def deleteUser: UserDTO = {
-    Persistence.deleteUser(userParam.params.get.username, userParam.params.get.password)
+  private def deleteUser(): UserDTO = {
+    val (vUser: Option[OrientVertex], error : Option[Error]) =
+      GraphUser.deleteUser(userParam.params.get.username, userParam.params.get.password)
+
+    createUserDTO(
+      action = Actions.DELETE_USER,
+      username = Some(userParam.params.get.username),
+      error = error
+    )
   }
   
   /**
    * @author Gennadi Heimann
-   * 
    * @version 0.1.6
-   * 
    * @return UserBO
    */
   
   private def getUser : UserDTO = {
-    val userResult: UserDTO = Persistence.getUser(userParam.params.get.username, userParam.params.get.password)
-    userResult.result.get.errors match {
-      case None =>
-        userResult.copy(result = Some(userResult.result.get.copy(userId = Some(RidToHash.setIdAndHash(userResult.result.get.userId.get)._2))))
-      case _ => userResult
+    val (vUser: Option[OrientVertex], error: Option[Error]) =
+      GraphUser.getUser(userParam.params.get.username, userParam.params.get.password)
+
+    val userId : Option[String] = vUser match {
+      case None => None
+      case Some(vU) => Some(RidToHash.setIdAndHash(vU.getIdentity.toString)._2)
     }
+    val username : Option[String] = vUser match {
+      case None => None
+      case Some(vU) => Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString)
+    }
+
+    createUserDTO(
+      action = Actions.GET_USER,
+      userId = userId,
+      username = username,
+      error = error
+    )
   }
 
   /**
     * @author Gennadi Heimann
-    *
     * @version 0.1.6
-    *
     * @return UserBO
     */
 
-  private def updateUser : UserDTO = {
+  private def updateUser() : UserDTO = {
     (userParam.params.get.update.get.oldUsername, userParam.params.get.update.get.oldPassword) match {
       case (username, "") =>
-        Persistence.updateUsername(
-          userParam.params.get.update.get.oldUsername,
-          userParam.params.get.update.get.newUsername
+        val (vUser: Option[OrientVertex], error: Option[Error]) =
+          GraphUser.updateUserName(userParam.params.get.update.get.oldUsername, userParam.params.get.update.get.newUsername)
+        createUserDTO(
+          action = Actions.UPDATE_USER,
+          username = Some(vUser.get.getProperty(PropertyKeys.USERNAME)),
+          error = error
         )
       case ("", password) => ???
       case (username, password) => ???
+    }
+  }
+  private def createUserDTO(
+                             action : String,
+                             userId : Option[String] = None,
+                             username: Option[String] = None,
+                             error : Option[Error] = None): UserDTO = {
+    error match {
+      case None =>
+        UserDTO(
+          action = action,
+          params = None,
+          result = Some(UserResultDTO(
+            userId = userId,
+            username = username,
+            errors = None
+          ))
+        )
+      case _ =>
+        UserDTO(
+          action = action,
+          params = None,
+          result = Some(UserResultDTO(
+            userId = None,
+            username = None,
+            errors = Some(List(ErrorDTO(
+              name = error.get.name,
+              message = error.get.message,
+              code = error.get.code
+            )))
+          ))
+        )
     }
 
   }

@@ -6,12 +6,13 @@ import org.genericConfig.admin.models.common.GetUserNotExist
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
 import org.specs2.Specification
+import org.specs2.matcher.MatchResult
 import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
 import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.Json.toJsFieldJsValueWrapper
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsObject, JsValue, Json}
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -35,9 +36,9 @@ class LoginWithNotExistUserSpecs extends Specification with AdminWeb  with Befor
           error name                                                      $e8
     """
   val user = "user"
-  val webClient = WebClient.init
+  val webClient: WebClient = WebClient.init
 
-  val userParams = Json.obj(
+  val userParams: JsObject = Json.obj(
     "action" -> Actions.GET_USER
     ,"params" -> Json.obj(
       "username" -> user,
@@ -61,9 +62,9 @@ class LoginWithNotExistUserSpecs extends Specification with AdminWeb  with Befor
   Logger.info("jsonClientServer: " + userParams)
   Logger.info("jsonServerClient: " + userResult)
 
-  def e2 = (userResult \ "action").asOpt[String].get must_== Actions.GET_USER
-  def e4 = (userResult \ "result" \ "username").asOpt[String] must_== None
-  def e5 = (userResult \ "result" \ "userId").asOpt[String] must_== None
-  def e7 = (userResult \ "result" \ "errors").asOpt[List[ErrorDTO]].get.size must_== 1
-  def e8 = ((userResult \ "result" \ "errors")(0) \ "name" ).asOpt[String].get must_== GetUserNotExist().name
+  def e2: MatchResult[Any] = (userResult \ "action").asOpt[String].get must_== Actions.GET_USER
+  def e4: MatchResult[Option[String]] = (userResult \ "result" \ "username").asOpt[String] === None
+  def e5: MatchResult[Option[String]] = (userResult \ "result" \ "userId").asOpt[String] === None
+  def e7: MatchResult[Any] = (userResult \ "result" \ "errors").asOpt[List[ErrorDTO]].get.size must_== 1
+  def e8: MatchResult[Any] = ((userResult \ "result" \ "errors")(0) \ "name" ).asOpt[String].get must_== GetUserNotExist().name
 }
