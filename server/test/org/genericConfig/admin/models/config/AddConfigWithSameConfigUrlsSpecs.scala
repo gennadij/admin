@@ -1,19 +1,23 @@
 package org.genericConfig.admin.models.config
 
+import com.orientechnologies.orient.core.sql.OCommandSQL
+import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientGraph, OrientVertex}
 import models.preparingConfigs.GeneralFunctionToPrepareConfigs
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
+import org.genericConfig.admin.models.common.ODBRecordDuplicated
+import org.genericConfig.admin.models.logic.User
+import org.genericConfig.admin.models.persistence.Database
+import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.config.json.{JsonAddConfigIn, JsonAddConfigParams}
-import org.genericConfig.admin.shared.config.status.AddConfigAlreadyExist
-import org.junit.runner.RunWith
+import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import org.specs2.mutable.Specification
-import org.specs2.runner.JUnitRunner
 import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
-import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
-import play.api.libs.json.JsValue.jsValueToJsLookup
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsResult, Json}
+
+import scala.collection.JavaConverters._
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -24,7 +28,6 @@ import play.api.libs.json.{JsValue, Json}
   * Username = user14
   */
 
-@RunWith(classOf[JUnitRunner])
 class AddConfigWithSameConfigUrlsSpecs extends Specification
   with BeforeAfterAll
   with GeneralFunctionToPrepareConfigs
@@ -32,56 +35,78 @@ class AddConfigWithSameConfigUrlsSpecs extends Specification
 
 
   val webClient: WebClient = WebClient.init
-
+  var resultUserDTO: JsResult[UserDTO] = null
   val configUrl = "http://config/user13"
-  val usernamePassword = "user13"
+  val user13 = "user13"
+  val user14 = "user14"
 
   var userId = "test"
 
   def beforeAll: Unit = {
-//    new PrepareConfig().prepareTwoSameConfigUrls(webClient)
-//    val count = deleteAdmin("user14")
-//    require(count == 1, count.toString)
-
-//    val (username, userId, statusAddUser) = ??? //addUser(usernamePassword)
-
-//    this.userId = userId
-//
-//    val (configId, statusAddConfig) =  addConfig(userId, this.configUrl)
-
-
+    before()
   }
 
   def afterAll: Unit = {
-    Logger.info("Count of deleted Configs " + deleteAllConfigs(usernamePassword))
+    Logger.info("Count of deleted Configs " + deleteAllConfigs(user13))
   }
 
   "Hier wird die Erzeugung von zwei verschiedenen AdminUser mit gleicher ConfigUrl spezifiziert" >> {
-    "ORecordDuplicatedException" >> {
+    "result.error == ORecordDuplicatedException" >> {
+      resultUserDTO.asOpt.get.result.get.errors.get.head.name === ODBRecordDuplicated().name
+    }
+  }
+  private def before(): Unit = {
+    val userIdForUser13 = createUser(user13)
+    val userIdForUser14 = createUser(user14)
 
-//      registerNewUser("user14", webClient)
+    val count = deleteUser("user14")
+    require(count == 1, count.toString)
 
-//      val user14 = getUserId("user14", webClient)
+    val userIdUser13 = addUser(user13, webClient)
 
+    val configId =  addConfig(userId, this.configUrl)
 
-      val jsonAddConfigIn = Json.toJsObject(JsonAddConfigIn(
-        json = JsonNames.ADD_CONFIG,
-        params = JsonAddConfigParams(
-          userId = this.userId,
-          configUrl = configUrl
-        )
+    val userIdUser14 = addUser("user14", webClient)
+
+    val paramsUserDTO = Json.toJsObject(JsonAddConfigIn(
+      json = JsonNames.ADD_CONFIG,
+      params = JsonAddConfigParams(
+        userId = userIdUser14,
+        configUrl = configUrl
+      )
+    ))
+
+    Logger.info("IN " + paramsUserDTO)
+
+    resultUserDTO = Json.fromJson[UserDTO](webClient.handleMessage(paramsUserDTO))
+
+    Logger.info("OUT " + resultUserDTO)
+  }
+
+  private def createUser(username : String) : String = {
+    val graph: OrientGraph = Database.getFactory()._1.get.getTx
+    val sql: String = s"select count(username) from AdminUser where username like '$username'"
+    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+    val count = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString.toInt).head
+    if(count == 1 ) {
+      val resultUserDTO = User.getUser(UserDTO(
+        action = Actions.GET_USER,
+        params = Some(UserParamsDTO(
+          username = username,
+          password = username,
+          update = None
+        )),
+        result = None
       ))
+      resultUserDTO.result.get.userId.get
+    }else {
+      addUser(username, webClient)
 
-      Logger.info("IN " + jsonAddConfigIn)
+//      val configId_1 = addConfig(userId13, s"http://config/$username")
 
-      val jsonAddConfigOut: JsValue = webClient.handleMessage(jsonAddConfigIn)
+//      println("ConfigId" + configId_1)
 
-      Logger.info("OUT " + jsonAddConfigOut)
-
-      (jsonAddConfigOut \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigAlreadyExist().status
-      (jsonAddConfigOut \ "result" \ "status" \ "common" \ "status").asOpt[String] ===  None
 
     }
   }
-
 }

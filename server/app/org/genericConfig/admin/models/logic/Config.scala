@@ -82,7 +82,6 @@ class Config(configDTO: ConfigDTO) {
     val configUrl : String = configDTO.params.get.configUrl.get
     val userIdHash : String = configDTO.params.get.userId.get
     val configurationCourse : String = configDTO.params.get.configurationCourse.get
-    //TODO Funftion verkuerzen
     RidToHash.getRId(userIdHash) match {
       case Some(userId) =>
         val (vConfig, errorAddConfig): (Option[OrientVertex], Option[Error]) =
@@ -94,90 +93,37 @@ class Config(configDTO: ConfigDTO) {
 
             errorAppendConfig match {
               case None =>
-                ConfigDTO(
-                  action = Actions.ADD_CONFIG,
-                  params = None,
-                  result = Some(ConfigResultDTO(
-                    userId = Some(userIdHash),
-                    configs = Some(List(UserConfigDTO(
-                      configId = Some(RidToHash.setIdAndHash(vConfig.get.getIdentity.toString())_2),
-                      configUrl = Some(configUrl)
-                    ))),
-                    errors = None
-                  ))
+                createConfigDTO(action = Actions.ADD_CONFIG, userId = Some(userIdHash),
+                  configs = Some(List(UserConfigDTO(
+                    configId = Some(RidToHash.setIdAndHash(vConfig.get.getIdentity.toString())_2),
+                    configUrl = Some(configUrl)
+                  ))),
+                  errors = None
                 )
-
               case _ =>
+
                 val errorDeleteConfig : Option[Error] =
                   GraphConfig.deleteConfig(vConfig.get.getIdentity.toString(), configUrl)
 
                 errorDeleteConfig match {
                   case None =>
-                    ConfigDTO(
-                      action = Actions.ADD_CONFIG,
-                      params = None,
-                      result = Some(ConfigResultDTO(
-                        userId = Some(userIdHash),
-                        configs = None,
-                        errors = Some(List(ErrorDTO(
-                          name = errorAppendConfig.get.name,
-                          message = errorAppendConfig.get.message,
-                          code = errorAppendConfig.get.code
-                        )))
-                      ))
+                    createConfigDTO(action = Actions.ADD_CONFIG, userId = Some(userIdHash),
+                      configs = None, errors = Some(List(errorAppendConfig.get))
                     )
                   case _ =>
-                    ConfigDTO(
-                      action = Actions.ADD_CONFIG,
-                      params = None,
-                      result = Some(ConfigResultDTO(
-                        userId = Some(userIdHash),
-                        configs = None,
-                        errors = Some(List(
-                          ErrorDTO(
-                            name = errorAppendConfig.get.name,
-                            message = errorAppendConfig.get.message,
-                            code = errorAppendConfig.get.code
-                          ),
-                          ErrorDTO(
-                            name = errorDeleteConfig.get.name,
-                            message = errorDeleteConfig.get.message,
-                            code = errorDeleteConfig.get.code
-                          )
-                        ))
-                      ))
+                    createConfigDTO(action = Actions.ADD_CONFIG, userId = Some(userIdHash),
+                      configs = None, errors = Some(List(errorAppendConfig.get, errorDeleteConfig.get))
                     )
                 }
-
             }
           case _ =>
-            ConfigDTO(
-              action = Actions.ADD_CONFIG,
-              params = None,
-              result = Some(ConfigResultDTO(
-                userId = Some(userIdHash),
-                configs = None,
-                errors = Some(List(ErrorDTO(
-                  name = errorAddConfig.get.name,
-                  message = errorAddConfig.get.message,
-                  code = errorAddConfig.get.code
-                )))
-              ))
+            createConfigDTO(action = Actions.ADD_CONFIG, userId = Some(userIdHash),
+              configs = None, errors = Some(List(errorAddConfig.get))
             )
         }
       case None =>
-        ConfigDTO(
-          action = Actions.ADD_CONFIG,
-          params = None,
-          result = Some(ConfigResultDTO(
-            userId = None,
-            configs = None,
-            errors = Some(List(ErrorDTO(
-              name = AddUserIdHashNotExist().name,
-              message = AddUserIdHashNotExist().message,
-              code = AddUserIdHashNotExist().code
-            )))
-          ))
+        createConfigDTO(action = Actions.ADD_CONFIG, userId = None, configs = None,
+          errors = Some(List(AddUserIdHashNotExist()))
         )
     }
   }
@@ -322,6 +268,38 @@ class Config(configDTO: ConfigDTO) {
       case Some(nsId) => Some(RidToHash.setIdAndHash(nsId)._2)
       case None => None
     }
+  }
+
+  private def createConfigDTO (
+                              action : String,
+                              userId : Option[String],
+                              configs : Option[List[UserConfigDTO]],
+                              errors : Option[List[Error]]
+                              ) : ConfigDTO = {
+
+    val e =  errors match {
+      case None => None
+      case Some(e) => Some(
+        e.map(error => {
+          ErrorDTO(
+            name = error.name,
+            message = error.message,
+            code = error.code
+          )
+        })
+      )
+    }
+
+    ConfigDTO(
+      action = action,
+      params = None,
+      result = Some(ConfigResultDTO(
+        userId = userId,
+        configs = configs,
+        errors = e
+      ))
+    )
+
   }
 }
 

@@ -146,7 +146,7 @@ class User(userParam: UserDTO) {
           GraphUser.updateUserName(userParam.params.get.update.get.oldUsername, userParam.params.get.update.get.newUsername)
         createUserDTO(
           action = Actions.UPDATE_USER,
-          username = Some(vUser.get.getProperty(PropertyKeys.USERNAME)),
+          username = Some(userParam.params.get.update.get.newUsername),
           error = error
         )
       case ("", password) => ???

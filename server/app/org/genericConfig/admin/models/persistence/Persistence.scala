@@ -1,10 +1,6 @@
 package org.genericConfig.admin.models.persistence
 
-import com.tinkerpop.blueprints.impls.orient.OrientVertex
-import org.genericConfig.admin.models.common.Error
-import org.genericConfig.admin.models.persistence.orientdb.{GraphUser, PropertyKeys}
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
-import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.config.bo.ConfigBO
@@ -12,7 +8,6 @@ import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.step.bo._
 import org.genericConfig.admin.shared.step.json.JsonDependencyForAdditionalStepsInOneLevel
 import org.genericConfig.admin.shared.step.status._
-import org.genericConfig.admin.shared.user.{UserDTO, UserResultDTO}
 
 
 /**
@@ -21,154 +16,6 @@ import org.genericConfig.admin.shared.user.{UserDTO, UserResultDTO}
   * Created by Gennadi Heimann 13.11.2016
   */
 object Persistence {
-
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.6
-//    * @param username : String, password: String
-//    * @return UserBO
-//    */
-//  def addUser(username: String, password: String): UserDTO = {
-//    val (vUser: Option[OrientVertex], error : Option[Error]) =
-//      GraphUser.addUser(username, password)
-//
-//    error match {
-//      case None =>
-//        UserDTO(
-//          action = Actions.ADD_USER,
-//          params = None,
-//          result = Some(UserResultDTO(
-//            userId = Some(vUser.get.getIdentity.toString),
-//            username = Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),
-//            errors = None
-//          ))
-//        )
-//      case _ =>
-//        UserDTO(
-//          action = Actions.ADD_USER,
-//          params = None,
-//          result = Some(UserResultDTO(
-//            userId = None,
-//            username = None,
-//            errors = Some(List(ErrorDTO(
-//              name = error.get.name,
-//              message = error.get.message,
-//              code = error.get.code
-//            )))
-//          ))
-//        )
-//    }
-//  }
-
-//  /**
-//   * @author Gennadi Heimann
-//   * @version 0.1.6
-//   * @param username : String, password: String
-//   * @return UserDTO
-//   */
-//  def deleteUser(username: String, password: String): UserDTO = {
-//    val (vUser: Option[OrientVertex], error : Option[Error]) =
-//      GraphUser.deleteUser(username, password)
-//
-//    error match {
-//      case None =>
-//        UserDTO(
-//          action = Actions.DELETE_USER,
-//          params = None,
-//          result = Some(UserResultDTO(
-//            userId = None,
-//            username = Some(username),
-//            errors = None
-//          ))
-//        )
-//      case _ =>
-//        UserDTO(
-//          action = Actions.DELETE_USER,
-//          params = None,
-//          result = Some(UserResultDTO(
-//            userId = None,
-//            username = None,
-//            errors = Some(List(ErrorDTO(
-//              name = error.get.name,
-//              message = error.get.message,
-//              code = error.get.code
-//            )))
-//          ))
-//        )
-//    }
-//  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.0
-    * @param username : String, password: String
-    * @return UserBO
-    */
-  def getUser(username: String, password: String) : UserDTO = {
-    val (vUser: Option[OrientVertex], error: Option[Error]) =
-      GraphUser.getUser(username, password)
-
-    error match {
-      case None =>
-        UserDTO(
-          action = Actions.GET_USER,
-          params = None,
-          result = Some(UserResultDTO(
-            userId = Some(vUser.get.getIdentity.toString),
-            username = Some(vUser.get.getProperty(PropertyKeys.USERNAME).toString),
-            errors = None
-          ))
-        )
-      case _ =>
-        UserDTO(
-          action = Actions.GET_USER,
-          params = None,
-          result = Some(UserResultDTO(
-            userId = None,
-            username = None,
-            errors = Some(List(ErrorDTO(
-              name = error.get.name,
-              message = error.get.message,
-              code = error.get.code
-            )
-            ))
-          ))
-        )
-    }
-  }
-
-  def updateUsername(oldUsername: String, newUsername: String) : UserDTO = {
-    val (vUser: Option[OrientVertex], error: Option[Error]) =
-      GraphUser.updateUserName(oldUsername, newUsername)
-
-    error match {
-      case None =>
-        UserDTO(
-          action = Actions.UPDATE_USER,
-          params = None,
-          result = Some(UserResultDTO(
-            userId = None,
-            username = Some(newUsername),
-            errors = None
-          ))
-        )
-      case _ =>
-        UserDTO(
-          action = Actions.UPDATE_USER,
-          params = None,
-          result = Some(UserResultDTO(
-            userId = None,
-            username = None,
-            errors = Some(List(ErrorDTO(
-              name = error.get.name,
-              message = error.get.message,
-              code = error.get.code
-            )
-            ))
-          ))
-        )
-    }
-  }
 
   /**
     * @author Gennadi Heimann

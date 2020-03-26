@@ -10,7 +10,7 @@ import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.status.StatusAddComponent
-import org.genericConfig.admin.shared.config.status.StatusAddConfig
+import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 import org.genericConfig.admin.shared.step.bo.StepBO
 import play.api.Logger
@@ -51,20 +51,25 @@ trait CommonFunction {
     Graph.deleteAllConfigs(username)
   }
 
-  def addConfig(userId: String, configUrl: String): (String, StatusAddConfig) = {
-    ???
-//    val configBOIn = ConfigBO(
-//      userId = Some(userId),
-//      configs = Some(List(Configuration(configUrl = Some(configUrl))))
-//    )
-//
-//    Logger.info("IN " + configBOIn)
-//
-//    val configBOOut = Config.addConfig(configBOIn)
-//
-//    Logger.info("OUT " + configBOOut)
-//
-//    (configBOOut.configs.get.head.configId.get, configBOOut.status.get.addConfig.get)
+  def addConfig(userId: String, configUrl: String): String = {
+
+    val configDTOParams = ConfigDTO(
+      action = Actions.ADD_CONFIG,
+      params = Some(ConfigParamsDTO(
+        userId = Some(userId),
+        configUrl = Some(configUrl),
+        configurationCourse = Some("sequence"),
+        update = None
+      )),
+      result = None
+    )
+    Logger.info("IN " + configDTOParams)
+
+    val configDTOResult = Config.addConfig(configDTOParams)
+
+    Logger.info("OUT " + configDTOResult)
+
+    configDTOResult.result.get.configs.get.head.configId.get
   }
 
 
@@ -126,7 +131,7 @@ trait CommonFunction {
     res
   }
 
-  def deleteAdmin(username: String): Int = {
+  def deleteUser(username: String): Int = {
     val graph: OrientGraph = Database.getFactory()._1.orNull.getTx
     val res: Int = graph
       .command(new OCommandSQL(s"DELETE VERTEX AdminUser where username='$username'")).execute()
@@ -134,7 +139,7 @@ trait CommonFunction {
     res
   }
 
-  def addUser(userPassword: String, webClient: WebClient): Unit = {
+  def addUser(userPassword: String, webClient: WebClient): String = {
     val userParams = Json.obj(
       "action" -> Actions.ADD_USER
       , "params" -> Json.obj(
@@ -158,6 +163,8 @@ trait CommonFunction {
     Logger.info("ADD_USER " + userParams)
     Logger.info("ADD_USER " + userResult)
     require((userResult \ "result" \ "username").asOpt[String].get == userPassword, s"Username: $userPassword")
+
+    (userResult \ "result" \ "userId").asOpt[String].get
   }
 
   def getUserId(userPassword: String, webClient: WebClient): String = {

@@ -59,7 +59,7 @@ class AddNewUserSpecs extends Specification
   }
   
   def afterAll() = {
-    val count = deleteAdmin("user1")
+    val count = deleteUser("user1")
     require(count == 1, "Anzahl der geloescten AdminUserVertexes " + count)
   }
   

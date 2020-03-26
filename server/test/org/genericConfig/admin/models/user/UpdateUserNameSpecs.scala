@@ -72,8 +72,7 @@ class UpdateUserNameSpecs extends Specification
   }
 
   def afterAll: Unit = {
-    Logger.info("AfterAll")
-    val count = deleteAdmin(userUpdated)
+    val count = deleteUser(userUpdated)
     require(count == 1, "Anzahl der geloescten AdminUserVertexes " + count)
   }
 
