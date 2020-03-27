@@ -16,7 +16,7 @@ import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import org.specs2.mutable.Specification
 import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
-import play.api.libs.json.{JsResult, Json}
+import play.api.libs.json.{JsResult, JsValue, Json}
 
 import scala.collection.JavaConverters._
 
@@ -36,7 +36,7 @@ class AddConfigWithSameConfigUrlsSpecs extends Specification
 
 
   val webClient: WebClient = WebClient.init
-  var resultUserDTO: JsResult[UserDTO] = null
+  var resultConfigDTO: JsResult[ConfigDTO] = null
   val configUrl = "http://config/user13"
   val user13 = "user13"
   val user14 = "user14"
@@ -46,56 +46,38 @@ class AddConfigWithSameConfigUrlsSpecs extends Specification
 
   def beforeAll: Unit = {
     before()
-    Logger.info("Before")
   }
 
   def afterAll: Unit = {
-
-    val configDTO : ConfigDTO = ConfigDTO(
-      action = Actions.DELETE_CONFIG,
-      params = Some(ConfigParamsDTO(
-        userId = None,
-        configId = Some(configIdUser13),
-        configUrl = None,
-        configurationCourse = None
-      )),
-      result = None
-    )
-
-    Config.deleteConfig(configDTO)
+    deleteConfig()
   }
 
   "Hier wird die Erzeugung von zwei verschiedenen AdminUser mit gleicher ConfigUrl spezifiziert" >> {
     "result.error == ORecordDuplicatedException" >> {
-      Logger.info("TEST")
-      Logger.info("OUT " + resultUserDTO)
-      resultUserDTO.asOpt.get.result.get.errors.get.head.name === ODBRecordDuplicated().name
+      resultConfigDTO.asOpt.get.result.get.errors.get.head.name === ODBRecordDuplicated().name
     }
   }
+
   private def before(): Unit = {
     val userIdForUser13 = createUser(user13)
     val userIdForUser14 = createUser(user14)
 
-//    val count = deleteUser("user14")
-
-//    require(count == 1, count.toString)
-
-//    val userIdUser13 = addUser(user13, webClient)
     //TODO wenn schon exstiert nicht anlegen
     configIdUser13 =  addConfig(userIdForUser13, this.configUrl)
 
-//    val userIdUser14 = addUser("user14", webClient)
-
-    val paramsUserDTO = Json.toJsObject(JsonAddConfigIn(
-      json = JsonNames.ADD_CONFIG,
-      params = JsonAddConfigParams(
-        userId = userIdForUser14,
-        configUrl = configUrl
-      )
+    val paramsConfigDTO : JsValue = Json.toJson(ConfigDTO(
+      action = Actions.ADD_CONFIG,
+      params = Some(ConfigParamsDTO(
+        userId = Some(userIdForUser14),
+        configUrl = Some(configUrl),
+        configurationCourse = Some("sequence")
+      )),
+      result = None
     ))
 
-    Logger.info("IN " + paramsUserDTO)
-    resultUserDTO = Json.fromJson[UserDTO](webClient.handleMessage(paramsUserDTO))
+    Logger.info("IN " + paramsConfigDTO)
+    resultConfigDTO = Json.fromJson[ConfigDTO](webClient.handleMessage(paramsConfigDTO))
+    Logger.info("OUT " + resultConfigDTO)
   }
 
   private def createUser(username : String) : String = {
@@ -116,13 +98,21 @@ class AddConfigWithSameConfigUrlsSpecs extends Specification
       resultUserDTO.result.get.userId.get
     }else {
       addUser(username, webClient)
-
-//      val configId_1 = addConfig(userId13, s"http://config/$username")
-
-//      println("ConfigId" + configId_1)
     }
   }
-  private def deleteConfig(username : String): Unit ={
-    // Specs DeleteConfig vorbereiten
+
+
+  private def deleteConfig(): Unit ={
+    val configDTO : ConfigDTO = ConfigDTO(
+      action = Actions.DELETE_CONFIG,
+      params = Some(ConfigParamsDTO(
+        userId = None,
+        configId = Some(configIdUser13),
+        configUrl = None,
+        configurationCourse = None
+      )),
+      result = None
+    )
+    Config.deleteConfig(configDTO)
   }
 }

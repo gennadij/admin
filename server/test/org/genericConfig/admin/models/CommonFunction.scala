@@ -1,7 +1,7 @@
 package org.genericConfig.admin.models
 
 import com.orientechnologies.orient.core.sql.OCommandSQL
-import com.tinkerpop.blueprints.impls.orient.OrientGraph
+import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientGraph, OrientVertex}
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.logic._
 import org.genericConfig.admin.models.persistence.Database
@@ -13,8 +13,10 @@ import org.genericConfig.admin.shared.component.status.StatusAddComponent
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 import org.genericConfig.admin.shared.step.bo.StepBO
+import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
+import scala.collection.JavaConverters._
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -165,6 +167,27 @@ trait CommonFunction {
     require((userResult \ "result" \ "username").asOpt[String].get == userPassword, s"Username: $userPassword")
 
     (userResult \ "result" \ "userId").asOpt[String].get
+  }
+
+  def createUser(username : String, webClient : WebClient) : String = {
+    val graph: OrientGraph = Database.getFactory()._1.get.getTx
+    val sql: String = s"select count(username) from AdminUser where username like '$username'"
+    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+    val count = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString.toInt).head
+    if(count == 1 ) {
+      val resultUserDTO = User.getUser(UserDTO(
+        action = Actions.GET_USER,
+        params = Some(UserParamsDTO(
+          username = username,
+          password = username,
+          update = None
+        )),
+        result = None
+      ))
+      resultUserDTO.result.get.userId.get
+    }else {
+      addUser(username, webClient)
+    }
   }
 
   def getUserId(userPassword: String, webClient: WebClient): String = {

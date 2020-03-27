@@ -1,100 +1,150 @@
-//package org.genericConfig.admin.models.config
-//
-//import org.genericConfig.admin.controllers.websocket.WebClient
-//import org.genericConfig.admin.shared.common.json.JsonNames
-//import org.genericConfig.admin.shared.common.status.Success
-//import org.genericConfig.admin.shared.config.json.{JsonAddConfigIn, JsonAddConfigParams}
-//import org.genericConfig.admin.shared.config.status.AddConfigSuccess
-//import org.junit.runner.RunWith
-//import org.specs2.mutable.Specification
-//import org.specs2.runner.JUnitRunner
-//import org.specs2.specification.BeforeAfterAll
-//import play.api.Logger
-//import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
-//import play.api.libs.json.JsValue.jsValueToJsLookup
-//import play.api.libs.json.Json
-//import util.CommonFunction
-//
-///**
-//  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
-//  *
-//  * Created by Gennadi Heimann 22.04.2018
-//  */
-//
-//@RunWith(classOf[JUnitRunner])
-//class AddSeveralConfigsSpecs extends Specification
-//  with BeforeAfterAll
-//  with CommonFunction {
-//
-//  val wC: WebClient = WebClient.init
-//  var userId: String = ""
-//  val username = "user_1_v016"
-//  val configUrl_1 = "//http://contig1/user_1_v016_1"
-//  val configUrl_2 = "//http://contig1/user_1_v016_2"
-//  val configUrl_3 = "//http://contig1/user_1_v016_3"
-//
-//  def beforeAll(): Unit = {
-//    val (_, userId, _): (String, String, _) = addUser(this.username)
-//    this.userId = userId
-//  }
-//
-//  def afterAll(): Unit = {
-//    Logger.info("Deleting Configs : " + deleteAllConfigs(this.username))
-//  }
-//
-//
-//  "Diese Spezifikation spezifiziert die Erstellung von mehreren Konfigurationen" >> {
-//    "fuer einen AdminUser" >> {
-//
-//      val jsonAddConfigIn_1 = Json.toJsObject(JsonAddConfigIn(
-//        json = JsonNames.ADD_CONFIG,
-//        params = JsonAddConfigParams(
-//          userId = this.userId,
-//          configUrl = this.configUrl_1
-//        )
-//      ))
-//
-//      Logger.info("IN " + jsonAddConfigIn_1)
-//
-//      val jsonAddConfigOut_1 = wC.handleMessage(jsonAddConfigIn_1)
-//
-//      Logger.info("OUT " + jsonAddConfigOut_1)
-//
-//      (jsonAddConfigOut_1 \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigSuccess().status
-//      (jsonAddConfigOut_1 \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
-//
-//      val jsonAddConfigIn_2 = Json.toJsObject(JsonAddConfigIn(
-//        json = JsonNames.ADD_CONFIG,
-//        params = JsonAddConfigParams(
-//          userId = this.userId,
-//          configUrl = this.configUrl_2
-//        )
-//      ))
-//
-//      Logger.info("IN " + jsonAddConfigIn_2)
-//      val jsonAddConfigOut_2 = wC.handleMessage(jsonAddConfigIn_2)
-//
-//      Logger.info("OUT " + jsonAddConfigOut_2)
-//
-//      (jsonAddConfigOut_2 \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigSuccess().status
-//      (jsonAddConfigOut_2 \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
-//
-//      val jsonAddConfigIn_3 = Json.toJsObject(JsonAddConfigIn(
-//        json = JsonNames.ADD_CONFIG,
-//        params = JsonAddConfigParams(
-//          userId = this.userId,
-//          configUrl = this.configUrl_3
-//        )
-//      ))
-//
-//      Logger.info("IN " + jsonAddConfigIn_3)
-//
-//      val jsonAddConfigOut_3 = wC.handleMessage(jsonAddConfigIn_3)
-//
-//      Logger.info("OUT " + jsonAddConfigOut_3)
-//
-//      (jsonAddConfigOut_3 \ "result" \ "status" \ "addConfig" \ "status").asOpt[String].get === AddConfigSuccess().status
-//      (jsonAddConfigOut_3 \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
-//    }
-//  }
-//}
+package org.genericConfig.admin.models.config
+
+import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.models.CommonFunction
+import org.genericConfig.admin.models.logic.Config
+import org.genericConfig.admin.shared.Actions
+import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
+import org.genericConfig.admin.shared.config.json.{JsonAddConfigIn, JsonAddConfigParams}
+import org.genericConfig.admin.shared.config.status.AddConfigSuccess
+import org.junit.runner.RunWith
+import org.specs2.mutable.Specification
+import org.specs2.runner.JUnitRunner
+import org.specs2.specification.BeforeAfterAll
+import play.api.Logger
+import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
+import play.api.libs.json.JsValue.jsValueToJsLookup
+import play.api.libs.json.{JsResult, Json}
+
+/**
+  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+  *
+  * Created by Gennadi Heimann 22.04.2018
+  */
+
+class AddSeveralConfigsSpecs extends Specification
+  with BeforeAfterAll
+  with CommonFunction {
+
+  var resultConfigDTO_1 : JsResult[ConfigDTO] = _
+  var resultConfigDTO_2 : JsResult[ConfigDTO] = _
+  var resultConfigDTO_3 : JsResult[ConfigDTO] = _
+
+  def beforeAll(): Unit = {
+    before()
+  }
+
+  def afterAll(): Unit = {
+    deleteConfigs()
+  }
+
+
+  "Ein Benutzer erstellt mehrere Configs" >> {
+    "Config 1 action = ADD_CONFIG" >> {resultConfigDTO_1.get.action === Actions.ADD_CONFIG}
+    "Config 1 result.error = None" >> {resultConfigDTO_1.get.result.get.errors === None}
+    "Config 1 result.configs(1).configId < 32" >> {resultConfigDTO_1.get.result.get.configs.get.head.configId.size must be_<=(32) }
+    "Config 2 action = ADD_CONFIG" >> {resultConfigDTO_2.get.action === Actions.ADD_CONFIG}
+    "Config 2 result.error = None" >> {resultConfigDTO_2.get.result.get.errors === None}
+    "Config 2 result.configs(1).configId < 32" >> {resultConfigDTO_2.get.result.get.configs.get.head.configId.size must be_<=(32) }
+    "Config 3 action = ADD_CONFIG" >> {resultConfigDTO_3.get.action === Actions.ADD_CONFIG}
+    "Config 3 result.error = None" >> {resultConfigDTO_3.get.result.get.errors === None}
+    "Config 3 result.configs(1).configId < 32" >> {resultConfigDTO_3.get.result.get.configs.get.head.configId.size must be_<=(32) }
+  }
+
+  private def before(): Unit = {
+    val wC: WebClient = WebClient.init
+    val username = "user_1_v016"
+    val configUrl_1 = "//http://contig1/user_1_v016_1"
+    val configUrl_2 = "//http://contig1/user_1_v016_2"
+    val configUrl_3 = "//http://contig1/user_1_v016_3"
+
+    val userId : String = createUser(username, wC)
+
+    val paramsConfig_1 = Json.toJson(ConfigDTO(
+      action = Actions.ADD_CONFIG,
+      params = Some(ConfigParamsDTO(
+        userId = Some(userId),
+        configUrl = Some(configUrl_1),
+        configurationCourse = Some("sequence")
+      )),
+      result = None
+    ))
+
+    Logger.info("1 <- " + paramsConfig_1)
+
+    resultConfigDTO_1 = Json.fromJson[ConfigDTO](wC.handleMessage(paramsConfig_1))
+
+    Logger.info("1 ->" + resultConfigDTO_1)
+
+    val paramsConfig_2 = Json.toJson(ConfigDTO(
+      action = Actions.ADD_CONFIG,
+      params = Some(ConfigParamsDTO(
+        userId = Some(userId),
+        configUrl = Some(configUrl_2),
+        configurationCourse = Some("sequence")
+      )),
+      result = None
+    ))
+
+    Logger.info("2 <-" + paramsConfig_2)
+
+    resultConfigDTO_2 = Json.fromJson[ConfigDTO](wC.handleMessage(paramsConfig_2))
+
+    Logger.info("2 ->" + resultConfigDTO_2)
+
+    val paramsConfig_3 = Json.toJson(ConfigDTO(
+      action = Actions.ADD_CONFIG,
+      params = Some(ConfigParamsDTO(
+        userId = Some(userId),
+        configUrl = Some(configUrl_3),
+        configurationCourse = Some("sequence")
+      )),
+      result = None
+    ))
+
+    Logger.info("3 <-" + paramsConfig_3)
+
+    resultConfigDTO_3 = Json.fromJson[ConfigDTO](wC.handleMessage(paramsConfig_3))
+
+    Logger.info("3 ->" + resultConfigDTO_3)
+  }
+
+  private def deleteConfigs() = {
+    val configDTO_1 : ConfigDTO = ConfigDTO(
+      action = Actions.DELETE_CONFIG,
+      params = Some(ConfigParamsDTO(
+        userId = None,
+        configId = Some(resultConfigDTO_1.get.result.get.configs.get.head.configId.get),
+        configUrl = None,
+        configurationCourse = None
+      )),
+      result = None
+    )
+    Config.deleteConfig(configDTO_1)
+
+    val configDTO_2 : ConfigDTO = ConfigDTO(
+      action = Actions.DELETE_CONFIG,
+      params = Some(ConfigParamsDTO(
+        userId = None,
+        configId = Some(resultConfigDTO_2.get.result.get.configs.get.head.configId.get),
+        configUrl = None,
+        configurationCourse = None
+      )),
+      result = None
+    )
+    Config.deleteConfig(configDTO_2)
+
+    val configDTO_3 : ConfigDTO = ConfigDTO(
+      action = Actions.DELETE_CONFIG,
+      params = Some(ConfigParamsDTO(
+        userId = None,
+        configId = Some(resultConfigDTO_3.get.result.get.configs.get.head.configId.get),
+        configUrl = None,
+        configurationCourse = None
+      )),
+      result = None
+    )
+    Config.deleteConfig(configDTO_3)
+  }
+}

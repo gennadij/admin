@@ -87,7 +87,10 @@ trait AdminWeb {
   private def addConfig(receivedMessage: JsValue, admin: Admin): JsValue = {
     val addConfigParams: JsResult[ConfigDTO] = Json.fromJson[ConfigDTO](receivedMessage)
     addConfigParams match {
-      case _ : JsSuccess[ConfigDTO] => Json.toJson(admin.addConfig(addConfigParams.get))
+      case _ : JsSuccess[ConfigDTO] =>
+        val configDTO : ConfigDTO = admin.addConfig(addConfigParams.get)
+        val json = Json.toJson(configDTO)
+        json
       case e : JsError => jsonError(Actions.ADD_CONFIG, e)
     }
   }

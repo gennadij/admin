@@ -27,21 +27,19 @@ import scala.collection.JavaConverters._
 
 class AddConfigSpecs extends Specification with BeforeAfterAll {
 
-  var configDTO :JsResult[ConfigDTO] = null
+  var configDTO :JsResult[ConfigDTO] = _
 
   def beforeAll(): Unit = {
 
-    val configResult = new PrepareAddConfig().befor()
+    val configResult : JsValue = new PrepareAddConfig().before()
 
     Logger.info("<- " + configResult)
 
     configDTO = Json.fromJson[ConfigDTO](configResult)
-
-
   }
 
   def afterAll(): Unit = {}
-  //TODO userid wird als RID an Client gesendet
+
   "Der Benutzer fuegt eine neue Konfiguration hinzu" >> {
     "result.userId" >> {
       configDTO.asOpt.get.result.get.userId.get.size must be_<=(32)
@@ -59,7 +57,7 @@ class AddConfigSpecs extends Specification with BeforeAfterAll {
 }
 
 class PrepareAddConfig extends CommonFunction {
-  def befor(): JsValue ={
+  def before(): JsValue ={
     val userPassword = "user3"
 
     val wC: WebClient = WebClient.init
@@ -108,6 +106,7 @@ class PrepareAddConfig extends CommonFunction {
       "action" -> Actions.ADD_CONFIG,
       "params" -> Json.obj(
         "userId" -> (userResult \ "result" \ "userId").asOpt[String].get,
+        "configId" -> "",
         "configUrl" -> "http://contig1/user3",
         "configurationCourse" -> "sequence",
         "update" -> Json.obj(

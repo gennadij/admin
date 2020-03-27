@@ -25,7 +25,7 @@ object Config {
     * @return ConfigDTO
     */
   def addConfig(configDTO: ConfigDTO): ConfigDTO = {
-    new Config(configDTO).addConfig
+    new Config(configDTO).addConfig()
   }
 
   /**
@@ -173,7 +173,7 @@ class Config(configDTO: ConfigDTO) {
     * @version 0.1.6
     * @return ConfigDTO
     */
-  private def deleteConfig: ConfigDTO = {
+  private def deleteConfig(): ConfigDTO = {
     RidToHash.getRId(configDTO.params.get.configId.get) match {
       case Some(configId) =>
         val errorDeleteConfig : Option[Error] = GraphConfig.deleteConfig(configId)
