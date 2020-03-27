@@ -124,7 +124,7 @@ object Persistence {
 //    * @return ConfigBO
 //    */
 //  def deleteConfig(configId: String, configUrl: String, userId : String): ConfigBO = {
-//    //val (userId, status): (String, Error) = Graph.getUserId(configId)
+//    val (userId, status): (String, Error) = Graph.getUserId(configId)
 //    val (statusDeleteConfig, statusCommon): (StatusDeleteConfig, Error) = Graph.deleteConfig(configId, configUrl: String)
 //
 //    status match {

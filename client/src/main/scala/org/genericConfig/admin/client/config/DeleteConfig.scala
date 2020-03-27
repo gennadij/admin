@@ -8,7 +8,7 @@ import play.api.libs.json.Json
 import org.genericConfig.admin.shared.config.json.JsonGetConfigsIn
 import org.genericConfig.admin.shared.config.json.JsonGetConfigsParams
 import scala.scalajs.js.timers._
-import org.genericConfig.admin.shared.config.json.JsonDeleteConfigIn
+import org.genericConfig.admin.shared.config.json.ConfigDTO
 import org.genericConfig.admin.shared.config.json.JsonDeleteConfigParams
 import util.CommonFunction
 import util.HtmlElementIds
@@ -39,7 +39,7 @@ class DeleteConfig(websocket: WebSocket) extends CommonFunction{
   def delete(configId: String, configUrl: String) = {
     println("Delete")
     
-    val jsonDeleteConfig: String = Json.toJson(JsonDeleteConfigIn(
+    val jsonDeleteConfig: String = Json.toJson(ConfigDTO(
         params = JsonDeleteConfigParams(
             configId,
             configUrl

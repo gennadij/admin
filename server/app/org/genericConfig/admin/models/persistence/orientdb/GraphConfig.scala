@@ -51,11 +51,11 @@ object GraphConfig {
    * @param configId : String, configUrl: String
    * @return (StatusDeleteConfig, Error)
    */
-  def deleteConfig(configId: String, configUrl: String): Option[Error] = {
+  def deleteConfig(configId: String): Option[Error] = {
     (Database.getFactory(): @unchecked) match {
       case (Some(dbFactory), None) =>
         val graph: OrientGraph = dbFactory.getTx
-        new GraphConfig(graph).deleteConfig(configId, configUrl)
+        new GraphConfig(graph).deleteConfig(configId)
       case (None, Some(ODBConnectionFail())) =>
         Some(ODBConnectionFail())
     }
@@ -132,9 +132,9 @@ class GraphConfig(graph: OrientGraph) {
    * @param configId : String, configUrl: String
    * @return Option[Error]
    */
-  private def deleteConfig(configId: String, configUrl: String): Option[Error] = {
+  private def deleteConfig(configId: String): Option[Error] = {
     try {
-      val sql: String = s"DELETE VERTEX Config where @rid=$configId and configUrl='$configUrl'"
+      val sql: String = s"DELETE VERTEX Config where @rid=$configId"
       val res: Int = graph.command(new OCommandSQL(sql)).execute()
       graph.commit()
       res match {

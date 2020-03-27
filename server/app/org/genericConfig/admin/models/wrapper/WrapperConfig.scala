@@ -93,7 +93,7 @@ class WrapperConfig {
 //    )
   }
 
-  private[wrapper] def toDeleteConfigBO(jsonDeleteConfigIn: JsonDeleteConfigIn): ConfigBO = {
+  private[wrapper] def toDeleteConfigBO(jsonDeleteConfigIn: ConfigDTO): ConfigBO = {
 
     ConfigBO(
       configs = Some(List(Configuration(

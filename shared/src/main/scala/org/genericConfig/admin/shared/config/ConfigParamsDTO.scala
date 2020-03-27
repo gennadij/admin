@@ -11,14 +11,16 @@ import play.api.libs.functional.syntax._
   */
 case class ConfigParamsDTO (
                              userId: Option[String],
+                             configId : Option[String] = None,
                              configUrl: Option[String],
                              configurationCourse : Option[String],
-                             update : Option[ConfigUpdateDTO]
+                             update : Option[ConfigUpdateDTO] = None
                            )
 
 object ConfigParamsDTO {
   implicit val format : Format[ConfigParamsDTO] = (
     (JsPath \ "userId").format(Format.optionWithNull[String]) and
+    (JsPath \ "configId").format(Format.optionWithNull[String]) and
     (JsPath \ "configUrl").format(Format.optionWithNull[String]) and
     (JsPath \ "configurationCourse").format(Format.optionWithNull[String]) and
     (JsPath \ "update").format(Format.optionWithNull[ConfigUpdateDTO])

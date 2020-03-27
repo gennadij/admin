@@ -48,7 +48,7 @@ class LoginSpecs extends Specification with BeforeAfterAll with CommonFunction {
 
         println("adminId " + adminId)
 
-        val (configId, _) = addConfig(adminId, "http://contig1/user2")
+        val configId : String = addConfig(adminId, "http://contig1/user2")
 
         println("configId " + configId)
     }

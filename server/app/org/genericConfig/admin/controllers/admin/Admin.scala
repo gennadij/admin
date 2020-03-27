@@ -70,6 +70,16 @@ class Admin extends Wrapper {
   }
 
   /**
+   * @author Gennadi Heimann
+   * @version 0.1.6
+   * @param configDTO : ConfigDTO
+   * @return ConfigDTO
+   */
+  def deleteConfig(configDTO: ConfigDTO): ConfigDTO = {
+      Config.deleteConfig(configDTO)
+  }
+
+  /**
     * @author Gennadi Heimann
     * @version 0.1.6
     * @param jsonGetConfigsIn : JsonGetConfigsIn
@@ -79,17 +89,7 @@ class Admin extends Wrapper {
     toJsonGetConfigsOut(Config.getConfigs(toGetConfigsBO(jsonGetConfigsIn)))
   }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param jsonDeleteConfigIn : JsonDeleteConfigIn
-    * @return JsonDeleteConfigOut
-    */
-  def deleteConfig(jsonDeleteConfigIn: JsonDeleteConfigIn): JsonDeleteConfigOut = {
-    toJsonDeleteConfigOut(
-      Config.deleteConfig(toDeleteConfigBO(jsonDeleteConfigIn))
-    )
-  }
+
 
   /**
     * @author Gennadi Heimann

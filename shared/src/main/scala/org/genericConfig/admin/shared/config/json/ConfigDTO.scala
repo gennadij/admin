@@ -8,11 +8,11 @@ import org.genericConfig.admin.shared.common.json.JsonNames
  * 
  * Created by Gennadi Heimann 20.04.2018
  */
-case class JsonDeleteConfigIn (
+case class ConfigDTO(
     json: String = JsonNames.DELET_CONFIG, 
     params: JsonDeleteConfigParams
 )
 
-object JsonDeleteConfigIn {
-  implicit val format = Json.format[JsonDeleteConfigIn]
+object ConfigDTO {
+  implicit val format = Json.format[ConfigDTO]
 }

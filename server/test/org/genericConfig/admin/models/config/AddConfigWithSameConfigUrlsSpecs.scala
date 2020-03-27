@@ -6,10 +6,11 @@ import models.preparingConfigs.GeneralFunctionToPrepareConfigs
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.models.common.ODBRecordDuplicated
-import org.genericConfig.admin.models.logic.User
+import org.genericConfig.admin.models.logic.{Config, User}
 import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
 import org.genericConfig.admin.shared.config.json.{JsonAddConfigIn, JsonAddConfigParams}
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import org.specs2.mutable.Specification
@@ -39,19 +40,35 @@ class AddConfigWithSameConfigUrlsSpecs extends Specification
   val configUrl = "http://config/user13"
   val user13 = "user13"
   val user14 = "user14"
+  var configIdUser13 : String = ""
 
   var userId = "test"
 
   def beforeAll: Unit = {
     before()
+    Logger.info("Before")
   }
 
   def afterAll: Unit = {
-    Logger.info("Count of deleted Configs " + deleteAllConfigs(user13))
+
+    val configDTO : ConfigDTO = ConfigDTO(
+      action = Actions.DELETE_CONFIG,
+      params = Some(ConfigParamsDTO(
+        userId = None,
+        configId = Some(configIdUser13),
+        configUrl = None,
+        configurationCourse = None
+      )),
+      result = None
+    )
+
+    Config.deleteConfig(configDTO)
   }
 
   "Hier wird die Erzeugung von zwei verschiedenen AdminUser mit gleicher ConfigUrl spezifiziert" >> {
     "result.error == ORecordDuplicatedException" >> {
+      Logger.info("TEST")
+      Logger.info("OUT " + resultUserDTO)
       resultUserDTO.asOpt.get.result.get.errors.get.head.name === ODBRecordDuplicated().name
     }
   }
@@ -59,28 +76,26 @@ class AddConfigWithSameConfigUrlsSpecs extends Specification
     val userIdForUser13 = createUser(user13)
     val userIdForUser14 = createUser(user14)
 
-    val count = deleteUser("user14")
-    require(count == 1, count.toString)
+//    val count = deleteUser("user14")
 
-    val userIdUser13 = addUser(user13, webClient)
+//    require(count == 1, count.toString)
 
-    val configId =  addConfig(userId, this.configUrl)
+//    val userIdUser13 = addUser(user13, webClient)
+    //TODO wenn schon exstiert nicht anlegen
+    configIdUser13 =  addConfig(userIdForUser13, this.configUrl)
 
-    val userIdUser14 = addUser("user14", webClient)
+//    val userIdUser14 = addUser("user14", webClient)
 
     val paramsUserDTO = Json.toJsObject(JsonAddConfigIn(
       json = JsonNames.ADD_CONFIG,
       params = JsonAddConfigParams(
-        userId = userIdUser14,
+        userId = userIdForUser14,
         configUrl = configUrl
       )
     ))
 
     Logger.info("IN " + paramsUserDTO)
-
     resultUserDTO = Json.fromJson[UserDTO](webClient.handleMessage(paramsUserDTO))
-
-    Logger.info("OUT " + resultUserDTO)
   }
 
   private def createUser(username : String) : String = {
@@ -105,8 +120,9 @@ class AddConfigWithSameConfigUrlsSpecs extends Specification
 //      val configId_1 = addConfig(userId13, s"http://config/$username")
 
 //      println("ConfigId" + configId_1)
-
-
     }
+  }
+  private def deleteConfig(username : String): Unit ={
+    // Specs DeleteConfig vorbereiten
   }
 }

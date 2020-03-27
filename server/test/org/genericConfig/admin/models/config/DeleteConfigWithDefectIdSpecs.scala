@@ -3,7 +3,7 @@ package org.genericConfig.admin.models.config
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.config.json.{JsonDeleteConfigIn, JsonDeleteConfigParams}
+import org.genericConfig.admin.shared.config.json.{ConfigDTO, JsonDeleteConfigParams}
 import org.genericConfig.admin.shared.config.status.DeleteConfigIdHashNotExist
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
@@ -49,7 +49,7 @@ class DeleteConfigWithDefectIdSpecs extends Specification
 //      Logger.info(configId)
 
       val jsonDeleteConfigIn = Json.toJsObject(
-        JsonDeleteConfigIn(
+        ConfigDTO(
           json = JsonNames.DELET_CONFIG,
           params = JsonDeleteConfigParams(
             configId = "1111",

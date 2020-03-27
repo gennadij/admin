@@ -29,6 +29,16 @@ object Config {
   }
 
   /**
+   * @author Gennadi Heimann
+   * @version 0.1.6
+   * @param configDTO : ConfigDTO
+   * @return ConfigDTO
+   */
+  def deleteConfig(configDTO: ConfigDTO): ConfigDTO = {
+    new Config(configDTO).deleteConfig
+  }
+
+  /**
     * @author Gennadi Heimann
     * @version 0.1.6
     * @param configBO : ConfigBO
@@ -38,15 +48,7 @@ object Config {
     ??? //new Config(Some(configBO)).getConfigs
   }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param configBO : ConfigBO
-    * @return ConfigBO
-    */
-  def deleteConfig(configBO: ConfigBO): ConfigBO = {
-    ??? //new Config(Some(configBO)).deleteConfig
-  }
+
 
   /**
     * @author Gennadi Heimann
@@ -103,7 +105,7 @@ class Config(configDTO: ConfigDTO) {
               case _ =>
 
                 val errorDeleteConfig : Option[Error] =
-                  GraphConfig.deleteConfig(vConfig.get.getIdentity.toString(), configUrl)
+                  GraphConfig.deleteConfig(vConfig.get.getIdentity.toString())
 
                 errorDeleteConfig match {
                   case None =>
@@ -169,28 +171,18 @@ class Config(configDTO: ConfigDTO) {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @return ConfigBO
+    * @return ConfigDTO
     */
-  private def deleteConfig: ConfigBO = {
-    ???
-//    RidToHash.getRId(configBO.get.configs.get.head.configId.get) match {
-//      case Some(rId) =>
-//        val configBOOut: ConfigBO = Persistence.deleteConfig(
-//          rId,
-//          configBO.get.configs.get.head.configUrl.get
-//        )
-//
-//        val userIdHash: Option[String] = RidToHash.getHash(configBOOut.userId.get) match {
-//          case Some(idHash) => Some(idHash)
-//          case None => Some("")
-//        }
-//
-//        configBOOut.copy(userId = userIdHash)
-//      case None => ConfigBO(
-//        userId = Some(""),
-//        status = Some(StatusConfig(deleteConfig = Some(DeleteConfigIdHashNotExist()), common = Some(ODBRecordIdDefect())))
-//      )
-//    }
+  private def deleteConfig: ConfigDTO = {
+    RidToHash.getRId(configDTO.params.get.configId.get) match {
+      case Some(configId) =>
+        val errorDeleteConfig : Option[Error] = GraphConfig.deleteConfig(configId)
+
+        errorDeleteConfig match {
+          case None => createConfigDTO(Actions.DELETE_CONFIG, None, None, None)
+          case _ => createConfigDTO(Actions.DELETE_CONFIG, None, None, Some(List(errorDeleteConfig.get)))
+        }
+    }
   }
 
   private def updateConfig: ConfigBO = {

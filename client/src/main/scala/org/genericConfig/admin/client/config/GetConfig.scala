@@ -5,7 +5,7 @@ import org.scalajs.dom.raw.WebSocket
 import org.scalajs.jquery.jQuery
 import org.genericConfig.admin.shared.config.json.JsonGetConfigsOut
 import org.genericConfig.admin.shared.common.json.JsonStatus
-import org.genericConfig.admin.shared.config.json.JsonDeleteConfigIn
+import org.genericConfig.admin.shared.config.json.ConfigDTO
 import org.genericConfig.admin.shared.config.json.JsonDeleteConfigParams
 import play.api.libs.json.Json
 import util.CommonFunction

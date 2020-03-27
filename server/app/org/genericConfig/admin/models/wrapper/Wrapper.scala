@@ -138,7 +138,7 @@ trait Wrapper{
    * 
    * @return ConfigBO
    */
-  def toDeleteConfigBO(jsonDeleteConfigIn: JsonDeleteConfigIn): ConfigBO = {
+  def toDeleteConfigBO(jsonDeleteConfigIn: ConfigDTO): ConfigBO = {
     new WrapperConfig().toDeleteConfigBO(jsonDeleteConfigIn)
   }
   
