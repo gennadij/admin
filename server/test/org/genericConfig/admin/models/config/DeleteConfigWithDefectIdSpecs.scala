@@ -2,7 +2,7 @@ package org.genericConfig.admin.models.config
 
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
-import org.genericConfig.admin.models.common.DeleteConfigIdHashNotExist
+import org.genericConfig.admin.models.common.ConfigIdHashNotExist
 import org.genericConfig.admin.shared.{Actions, config}
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
@@ -40,7 +40,7 @@ class DeleteConfigWithDefectIdSpecs extends Specification
       deleteConfigResult.get.action === Actions.DELETE_CONFIG
     }
     "result.errors = " >> {
-      deleteConfigResult.get.result.get.errors.get.head.name === DeleteConfigIdHashNotExist().name
+      deleteConfigResult.get.result.get.errors.get.head.name === ConfigIdHashNotExist().name
     }
   }
 

@@ -82,11 +82,11 @@ class Admin extends Wrapper {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param jsonGetConfigsIn : JsonGetConfigsIn
-    * @return JsonGetConfigsOut
+    * @param configDTO : ConfigDTO
+    * @return ConfigDTO
     */
-  def getConfigs(jsonGetConfigsIn: JsonGetConfigsIn): JsonGetConfigsOut = {
-    toJsonGetConfigsOut(Config.getConfigs(toGetConfigsBO(jsonGetConfigsIn)))
+  def getConfigs(configDTO: ConfigDTO): ConfigDTO = {
+    Config.getConfigs(configDTO)
   }
 
 

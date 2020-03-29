@@ -82,41 +82,6 @@ object Persistence {
 //    GraphConfig.appendConfigTo(fromUserId, toConfigId)
 //  }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param userId : String
-    * @return ConfigBO
-    */
-  def getConfigs(userId: String): ConfigBO = {
-    ???
-//    val (vConfigs, statusGetConfig, statusCommon): (Option[List[OrientVertex]], StatusGetConfigs, Error) =
-//      Graph.getConfigs(userId)
-//    statusGetConfig match {
-//      case GetConfigsSuccess() =>
-//        ConfigBO(
-//          Some(userId),
-//          Some(vConfigs.get map (vConfig => {
-//            Configuration(
-//              Some(vConfig.getIdentity.toString),
-//              Some(vConfig.getProperty(PropertyKey.CONFIG_URL)))
-//          })),
-//          Some(StatusConfig(
-//            None, //addConfig
-//            Some(GetConfigsSuccess()), //getConfigs
-//            None, //deleteConfig
-//            None, //updateConfig
-//            Some(Success())
-//          )
-//          ))
-//      case GetConfigsEmpty() => ConfigBO(
-//        Some(userId), None,
-//        Some(StatusConfig(None, Some(GetConfigsEmpty()), None, None, Some(Success()))))
-//      case GetConfigsError() =>
-//        ConfigBO(Some(userId), None, Some(StatusConfig(None, Some(GetConfigsError()), None, None, Some(statusCommon))))
-//    }
-  }
-
 //  /**
 //    * @author Gennadi Heimann
 //    * @version 0.1.6

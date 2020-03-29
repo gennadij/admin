@@ -2,10 +2,13 @@ package org.genericConfig.admin.models.persistence.orientdb
 
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
-import com.tinkerpop.blueprints.impls.orient.{OrientGraph, OrientVertex}
-import org.genericConfig.admin.models.common.{DeleteConfigDefectID, Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBWriteError}
+import com.tinkerpop.blueprints.Direction
+import com.tinkerpop.blueprints.impls.orient.{OrientEdge, OrientGraph, OrientVertex}
+import org.genericConfig.admin.models.common.{DeleteConfigDefectID, Error, ODBClassCastError, ODBConnectionFail, ODBReadError, ODBRecordDuplicated, ODBWriteError}
 import org.genericConfig.admin.models.persistence.Database
 import play.api.Logger
+
+import scala.collection.JavaConverters._
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -58,6 +61,22 @@ object GraphConfig {
         new GraphConfig(graph).deleteConfig(configId)
       case (None, Some(ODBConnectionFail())) =>
         Some(ODBConnectionFail())
+    }
+  }
+
+  /**
+    * @author Gennadi Heimann
+    * @version 0.1.6
+    * @param userId : String
+    * @return (Option[List[OrientVertex\]\], StatusGetConfigs, Status)
+    */
+  def getConfigs(userId: String): (Option[List[OrientVertex]], Option[Error]) = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), None) =>
+        val graph: OrientGraph = dbFactory.getTx
+        new GraphConfig(graph).getConfigs(userId)
+      case (None, Some(ODBConnectionFail())) =>
+        (None, Some(ODBConnectionFail()))
     }
   }
 }
@@ -156,4 +175,32 @@ class GraphConfig(graph: OrientGraph) {
         Some(ODBWriteError())
     }
   }
+
+  /**
+    * @author Gennadi Heimann
+    * @version 0.1.6
+    * @param userId : String
+    * @return (Option[List[OrientVertex\]\], Option[Error])
+    */
+    private def getConfigs(userId: String): (Option[List[OrientVertex]], Option[Error]) = {
+      try {
+        val vConfigs: List[OrientVertex] =
+          graph.getVertex(userId).getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_CONFIG).asScala.toList map (
+            _.asInstanceOf[OrientEdge].getVertex(Direction.IN))
+        (Some(vConfigs), None)
+      } catch {
+        case e: ORecordDuplicatedException =>
+          Logger.error(e.printStackTrace().toString)
+          graph.rollback()
+          (None, Some(ODBRecordDuplicated()))
+        case e: ClassCastException =>
+          graph.rollback()
+          Logger.error(e.printStackTrace().toString)
+          (None, Some(ODBClassCastError()))
+        case e: Exception =>
+          graph.rollback()
+          Logger.error(e.printStackTrace().toString)
+          (None, Some(ODBReadError()))
+      }
+    }
 }

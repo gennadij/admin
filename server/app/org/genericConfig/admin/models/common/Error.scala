@@ -32,7 +32,7 @@ case class GetUserNotExist() extends Error {
   def code :String = ""
 }
 
-case class AddUserIdHashNotExist() extends Error {
+case class UserIdHashNotExist() extends Error {
   def name: String = "ADD_ID_HASH_NOT_EXIST"
   def message: String = ""
   def code :String = ""
@@ -44,8 +44,8 @@ case class DeleteConfigDefectID() extends Error {
   def code :String = ""
 }
 
-case class DeleteConfigIdHashNotExist() extends Error {
-  def name: String = "DELETE_CONFIG_ID_HASH_NOT_EXIST"
+case class ConfigIdHashNotExist() extends Error {
+  def name: String = "CONFIG_ID_HASH_NOT_EXIST"
   def message: String = ""
   def code :String = ""
 }

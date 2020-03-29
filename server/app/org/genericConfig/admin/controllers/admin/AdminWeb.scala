@@ -26,7 +26,7 @@ trait AdminWeb {
       case Some(Actions.UPDATE_USER) => updateUser(receivedMessage, admin)
       case Some(Actions.ADD_CONFIG) => addConfig(receivedMessage, admin)
       case Some(Actions.DELETE_CONFIG) => deleteConfig(receivedMessage, admin)
-//      case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage, admin)
+      case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage, admin)
 //      case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage, admin)
 //      case Some(JsonNames.UPDATE_CONFIG) => updateConfig(receivedMessage, admin)
 //
@@ -103,14 +103,14 @@ trait AdminWeb {
     }
    }
 
-  //  private def getConfigs(receivedMessage: JsValue, admin: Admin): JsValue = {
-  //    val getConfigsIn: JsResult[JsonGetConfigsIn] = Json.fromJson[JsonGetConfigsIn](receivedMessage)
-  //    getConfigsIn match {
-  //      case _: JsSuccess[JsonGetConfigsIn] => Json.toJson(admin.getConfigs(getConfigsIn.get))
-  //      case e: JsError => jsonError(JsonNames.GET_CONFIGS, e)
-  //    }
-  //   }
-  //
+    private def getConfigs(receivedMessage: JsValue, admin: Admin): JsValue = {
+      val getConfigsParams: JsResult[ConfigDTO] = Json.fromJson[ConfigDTO](receivedMessage)
+      getConfigsParams match {
+        case _: JsSuccess[ConfigDTO] => Json.toJson(admin.getConfigs(getConfigsParams.get))
+        case e: JsError => jsonError(JsonNames.GET_CONFIGS, e)
+      }
+     }
+
 
   //
   //  private def updateConfig(receivedMessage: JsValue, admin: Admin): JsValue = {

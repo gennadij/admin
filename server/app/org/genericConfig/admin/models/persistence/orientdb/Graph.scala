@@ -330,36 +330,7 @@ class Graph(graph: OrientGraph) {
 
 
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param userId : String
-    * @return (Option[List[OrientVertex\]\], StatusGetConfigs, Status)
-    */
-//  private def getConfigs(userId: String): (Option[List[OrientVertex]], StatusGetConfigs, Error) = {
-//    try {
-//      val vConfigs: List[OrientVertex] =
-//        graph.getVertex(userId).getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_CONFIG).asScala.toList map (
-//          _.asInstanceOf[OrientEdge].getVertex(Direction.IN))
-//      vConfigs match {
-//        case List() => (Some(vConfigs), GetConfigsEmpty(), Success())
-//        case _ => (Some(vConfigs), GetConfigsSuccess(), Success())
-//      }
-//    } catch {
-//      case e: ORecordDuplicatedException =>
-//        Logger.error(e.printStackTrace().toString)
-//        graph.rollback()
-//        (None, GetConfigsError(), ODBRecordDuplicated())
-//      case e: ClassCastException =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (None, GetConfigsError(), ODBClassCastError())
-//      case e: Exception =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (None, GetConfigsError(), ODBReadError())
-//    }
-//  }
+
 
   /**
     * @author Gennadi Heimann

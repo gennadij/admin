@@ -1,9 +1,12 @@
 package org.genericConfig.admin.models.logic
 
+import java.beans.DesignMode
+
+import com.tinkerpop.blueprints.Vertex
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
-import org.genericConfig.admin.models.common.{AddUserIdHashNotExist, DeleteConfigIdHashNotExist, Error}
+import org.genericConfig.admin.models.common.{UserIdHashNotExist, ConfigIdHashNotExist, Error}
 import org.genericConfig.admin.models.persistence.Persistence
-import org.genericConfig.admin.models.persistence.orientdb.GraphConfig
+import org.genericConfig.admin.models.persistence.orientdb.{GraphConfig, PropertyKeys}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.config.bo.ConfigBO
@@ -41,11 +44,11 @@ object Config {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param configBO : ConfigBO
-    * @return ConfigBO
+    * @param configDTO : ConfigDTO
+    * @return ConfigDTO
     */
-  def getConfigs(configBO: ConfigBO): ConfigBO = {
-    ??? //new Config(Some(configBO)).getConfigs
+  def getConfigs(configDTO: ConfigDTO): ConfigDTO = {
+    new Config(Some(configDTO).getConfigs
   }
 
 
@@ -125,7 +128,7 @@ class Config(configDTO: ConfigDTO) {
         }
       case None =>
         createConfigDTO(action = Actions.ADD_CONFIG, userId = None, configs = None,
-          errors = Some(List(AddUserIdHashNotExist()))
+          errors = Some(List(UserIdHashNotExist()))
         )
     }
   }
@@ -135,37 +138,26 @@ class Config(configDTO: ConfigDTO) {
     * @version 0.1.6
     * @return ConfigBO
     */
-  private def getConfigs: ConfigBO = {
-  ???
-//    RidToHash.getRId(this.configBO.get.userId.get) match {
-//      case Some(rId) =>
-//        val configBOOut = Persistence.getConfigs(rId)
-//
-//        val userIdHash: Option[String] = RidToHash.getHash(configBOOut.userId.get)
-//
-//
-//        val configurations: List[Configuration] = configBOOut.configs match {
-//          case Some(configs) =>
-//            configs.map(config => {
-//              val configIdHash: String = RidToHash.getHash(config.configId.get) match {
-//                case Some(idHash) => idHash
-//                case None => RidToHash.setIdAndHash(config.configId.get)._2
-//              }
-//              Configuration(
-//                Some(configIdHash),
-//                config.configUrl
-//              )
-//            })
-//          case None => List()
-//        }
-//
-//        configBOOut.copy(userId = userIdHash, configs = Some(configurations))
-//
-//      case None => ConfigBO(
-//        status = Some(StatusConfig(getConfigs = Some(GetConfigsIdHashNotExist())))
-//      )
-//    }
+  private def getConfigs: ConfigDTO = {
 
+    RidToHash.getRId(this.configDTO.params.get.userId.get) match {
+      case Some(userRid) =>
+        val (vConfigs : Option[List[OrientVertex]], error: Option[Error]) = GraphConfig.getConfigs(userRid)
+
+        error match {
+          case None =>
+            val configs = Some(vConfigs.get.map(vConfig => {
+              UserConfigDTO(
+                configId = Some(RidToHash.setIdAndHash(vConfig.getIdentity.toString())._2),
+                configUrl = Some(vConfig.getProperty(PropertyKeys.CONFIG_URL))
+              )
+            }))
+            createConfigDTO(action = Actions.GET_CONFIGS, userId = this.configDTO.params.get.userId, configs, None)
+          case _ =>
+            createConfigDTO(action = Actions.GET_CONFIGS, None, None, Some(List(error.get)))
+        }
+      case None => createConfigDTO(action = Actions.GET_CONFIGS, None, None, Some(List(UserIdHashNotExist())))
+    }
   }
 
   /**
@@ -182,7 +174,7 @@ class Config(configDTO: ConfigDTO) {
           case None => createConfigDTO(Actions.DELETE_CONFIG, None, None, None)
           case _ => createConfigDTO(Actions.DELETE_CONFIG, None, None, Some(List(errorDeleteConfig.get)))
         }
-      case None => createConfigDTO(Actions.DELETE_CONFIG, None, None, Some(List(DeleteConfigIdHashNotExist())))
+      case None => createConfigDTO(Actions.DELETE_CONFIG, None, None, Some(List(ConfigIdHashNotExist())))
     }
   }
 
