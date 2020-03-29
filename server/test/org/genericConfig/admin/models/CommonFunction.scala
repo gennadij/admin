@@ -1,5 +1,6 @@
 package org.genericConfig.admin.models
 
+import com.orientechnologies.orient.core.record.impl.ODocument
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientGraph, OrientVertex}
 import org.genericConfig.admin.controllers.websocket.WebClient
@@ -16,6 +17,7 @@ import org.genericConfig.admin.shared.step.bo.StepBO
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
+
 import scala.collection.JavaConverters._
 
 /**
@@ -24,6 +26,102 @@ import scala.collection.JavaConverters._
   * Created by Gennadi Heimann 22.04.2018
   */
 trait CommonFunction {
+
+  def addUser(userPassword: String, webClient: WebClient): String = {
+    val userParams = Json.obj(
+      "action" -> Actions.ADD_USER
+      , "params" -> Json.obj(
+        "username" -> userPassword,
+        "password" -> userPassword,
+        "update" -> Json.obj(
+          "newUsername" -> "",
+          "oldUsername" -> "",
+          "newPassword" -> "",
+          "oldPassword" -> ""
+        )
+      ),
+      "result" -> Json.obj(
+        "userId" -> "",
+        "username" -> "",
+        "errors" -> Json.arr()
+      )
+    )
+    val userResult = webClient.handleMessage(userParams)
+
+    Logger.info("ADD_USER " + userParams)
+    Logger.info("ADD_USER " + userResult)
+    require((userResult \ "result" \ "username").asOpt[String].get == userPassword, s"Username: $userPassword")
+
+    (userResult \ "result" \ "userId").asOpt[String].get
+  }
+
+  def createUser(username : String, webClient : WebClient) : String = {
+    val graph: OrientGraph = Database.getFactory()._1.get.getTx
+    val sql: String = s"select count(username) from AdminUser where username like '$username'"
+    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+    val count = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString.toInt).head
+    if(count == 1 ) {
+      val resultUserDTO = User.getUser(UserDTO(
+        action = Actions.GET_USER,
+        params = Some(UserParamsDTO(
+          username = username,
+          password = username,
+          update = None
+        )),
+        result = None
+      ))
+      resultUserDTO.result.get.userId.get
+    }else {
+      addUser(username, webClient)
+    }
+  }
+
+  def createConfig(userId: String, configUrl: String) : String = {
+    val graph: OrientGraph = Database.getFactory()._1.get.getTx
+    val sql: String = s"select count(configUrl) from Config where configUrl like '$configUrl'"
+    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+    val count = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString.toInt).head
+    if(count == 1 ) {
+      val sql: String = s"select * from Config where configUrl like '$configUrl'"
+      val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+      val rid = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getIdentity.toString())
+//      val resultUserDTO = User.getUser(UserDTO(
+//        action = Actions.GET_USER,
+//        params = Some(UserParamsDTO(
+//          username = username,
+//          password = username,
+//          update = None
+//        )),
+//        result = None
+//      ))
+//      resultUserDTO.result.get.userId.get
+      val idHash = RidToHash.setIdAndHash(rid.head)._2
+      idHash
+    }else {
+      addConfig(userId, configUrl)
+    }
+  }
+
+  def addConfig(userId: String, configUrl: String): String = {
+
+    val configDTOParams = ConfigDTO(
+      action = Actions.ADD_CONFIG,
+      params = Some(ConfigParamsDTO(
+        userId = Some(userId),
+        configUrl = Some(configUrl),
+        configurationCourse = Some("sequence"),
+        update = None
+      )),
+      result = None
+    )
+    Logger.info("IN " + configDTOParams)
+
+    val configDTOResult = Config.addConfig(configDTOParams)
+
+    Logger.info("OUT " + configDTOResult)
+
+    configDTOResult.result.get.configs.get.head.configId.get
+  }
 
 //  def addUser(username: String): (String, String, String) = {
 //
@@ -53,26 +151,7 @@ trait CommonFunction {
     Graph.deleteAllConfigs(username)
   }
 
-  def addConfig(userId: String, configUrl: String): String = {
 
-    val configDTOParams = ConfigDTO(
-      action = Actions.ADD_CONFIG,
-      params = Some(ConfigParamsDTO(
-        userId = Some(userId),
-        configUrl = Some(configUrl),
-        configurationCourse = Some("sequence"),
-        update = None
-      )),
-      result = None
-    )
-    Logger.info("IN " + configDTOParams)
-
-    val configDTOResult = Config.addConfig(configDTOParams)
-
-    Logger.info("OUT " + configDTOResult)
-
-    configDTOResult.result.get.configs.get.head.configId.get
-  }
 
 
   def deleteStepAppendedToConfig(configId: String): Int = {
@@ -141,54 +220,7 @@ trait CommonFunction {
     res
   }
 
-  def addUser(userPassword: String, webClient: WebClient): String = {
-    val userParams = Json.obj(
-      "action" -> Actions.ADD_USER
-      , "params" -> Json.obj(
-        "username" -> userPassword,
-        "password" -> userPassword,
-        "update" -> Json.obj(
-          "newUsername" -> "",
-          "oldUsername" -> "",
-          "newPassword" -> "",
-          "oldPassword" -> ""
-        )
-      ),
-      "result" -> Json.obj(
-        "userId" -> "",
-        "username" -> "",
-        "errors" -> Json.arr()
-      )
-    )
-    val userResult = webClient.handleMessage(userParams)
 
-    Logger.info("ADD_USER " + userParams)
-    Logger.info("ADD_USER " + userResult)
-    require((userResult \ "result" \ "username").asOpt[String].get == userPassword, s"Username: $userPassword")
-
-    (userResult \ "result" \ "userId").asOpt[String].get
-  }
-
-  def createUser(username : String, webClient : WebClient) : String = {
-    val graph: OrientGraph = Database.getFactory()._1.get.getTx
-    val sql: String = s"select count(username) from AdminUser where username like '$username'"
-    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
-    val count = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString.toInt).head
-    if(count == 1 ) {
-      val resultUserDTO = User.getUser(UserDTO(
-        action = Actions.GET_USER,
-        params = Some(UserParamsDTO(
-          username = username,
-          password = username,
-          update = None
-        )),
-        result = None
-      ))
-      resultUserDTO.result.get.userId.get
-    }else {
-      addUser(username, webClient)
-    }
-  }
 
   def getUserId(userPassword: String, webClient: WebClient): String = {
 ""

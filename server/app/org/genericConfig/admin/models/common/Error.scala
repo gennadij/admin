@@ -1,5 +1,7 @@
 package org.genericConfig.admin.models.common
 
+import org.genericConfig.admin.shared.config.status.StatusDeleteConfig
+
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
@@ -11,12 +13,6 @@ abstract class Error  {
   def message: String
   def code : String
 }
-
-//case class Success() extends Error {
-//  def status: String = "SUCCESS"
-//  def message: String = "Die Aktion ist erfolgreich"
-//  def code : String = ""
-//}
 
 case class UnknownError() extends Error {
   def name: String = "UNKNOWN_ERROR"
@@ -44,6 +40,12 @@ case class AddUserIdHashNotExist() extends Error {
 
 case class DeleteConfigDefectID() extends Error {
   def name: String = "DELETE_CONFIG_DEFECT_ID"
+  def message: String = ""
+  def code :String = ""
+}
+
+case class DeleteConfigIdHashNotExist() extends Error {
+  def name: String = "DELETE_CONFIG_ID_HASH_NOT_EXIST"
   def message: String = ""
   def code :String = ""
 }

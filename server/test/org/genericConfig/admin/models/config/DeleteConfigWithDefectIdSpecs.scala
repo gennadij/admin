@@ -2,75 +2,71 @@ package org.genericConfig.admin.models.config
 
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
+import org.genericConfig.admin.models.common.DeleteConfigIdHashNotExist
+import org.genericConfig.admin.shared.{Actions, config}
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.config.json.{ConfigDTO, JsonDeleteConfigParams}
-import org.genericConfig.admin.shared.config.status.DeleteConfigIdHashNotExist
-import org.junit.runner.RunWith
+import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
 import org.specs2.mutable.Specification
-import org.specs2.runner.JUnitRunner
 import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
 import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
 import play.api.libs.json.JsValue.jsValueToJsLookup
-import play.api.libs.json.Json
+import play.api.libs.json.{JsResult, Json}
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 02.05.2018
  */
-@RunWith(classOf[JUnitRunner])
+//@RunWith(classOf[JUnitRunner])
 class DeleteConfigWithDefectIdSpecs extends Specification
                            with BeforeAfterAll
                            with CommonFunction{
   
   val wC: WebClient = WebClient.init
-  var userId: String = ""
   val username = "user_v016_5"
+  var deleteConfigResult : JsResult[ConfigDTO] = _
   
   def beforeAll(): Unit = {
-//    val (username, userId, _): (String, String, _) = addUser(this.username)
-//    this.userId = userId
-//    Logger.info("username : " + username)
-//    Logger.info("userId : " + userId)
+    before()
   }
   
   def afterAll(): Unit = {
 //    Logger.info("Deleting Configs : " + deleteAllConfigs(this.username))
   }
   
-  "Diese Spezifikation spezifiziert die Entfernng einer defekten Konfigurationen" >> {
-    "AdminUser=user_v016_5" >> {
-      
-//      val createConfigOut = createConfig(userId, "//http://contig1/user_v016_5", wC)
-//
-//      val configId = createConfigOut.result.configId.get
-//
-//      Logger.info(configId)
-
-      val jsonDeleteConfigIn = Json.toJsObject(
-        ConfigDTO(
-          json = JsonNames.DELET_CONFIG,
-          params = JsonDeleteConfigParams(
-            configId = "1111",
-            configUrl = "//http://contig1/user_v016_5"
-          )
-
-        )
-      )
-
-      Logger.info("<- " + jsonDeleteConfigIn)
-
-      val jsonDeleteConfigOut = wC.handleMessage(jsonDeleteConfigIn)
-
-      Logger.info("-> " + jsonDeleteConfigOut)
-      
-      (jsonDeleteConfigOut \ "json").asOpt[String].get === JsonNames.DELET_CONFIG
-      (jsonDeleteConfigOut \ "result" \ "status" \ "addConfig").asOpt[String] === None
-      (jsonDeleteConfigOut \ "result" \ "status" \ "getConfigs" \ "status").asOpt[String] === None
-      (jsonDeleteConfigOut \ "result" \ "status" \ "updateConfig").asOpt[String] === None
-      (jsonDeleteConfigOut \ "result" \ "status" \ "deleteConfig" \ "status").asOpt[String].get === DeleteConfigIdHashNotExist().status
-      (jsonDeleteConfigOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === ""//ODBRecordIdDefect().status
+  "Der Binutzer versucht die Konfiguration mit defkten Id zu loeschen" >> {
+    "action = DELETE_CONFIG" >> {
+      deleteConfigResult.get.action === Actions.DELETE_CONFIG
     }
+    "result.errors = " >> {
+      deleteConfigResult.get.result.get.errors.get.head.name === DeleteConfigIdHashNotExist().name
+    }
+  }
+
+  private def before(): Unit = {
+
+    val userId : String = createUser(username, wC)
+    Logger.info(userId)
+    val configId : String = createConfig(userId,"//http://contig1/user_v016_5")
+
+    val deleteConfigParams = Json.toJson(
+      ConfigDTO(
+        action = Actions.DELETE_CONFIG,
+        params = Some(ConfigParamsDTO(
+          userId = None,
+          configId = Some("1111"),
+          configUrl = None,
+          configurationCourse = None,
+          update = None
+        )),
+        result = None
+      )
+    )
+    Logger.info("<- " + deleteConfigParams)
+
+    deleteConfigResult = Json.fromJson[ConfigDTO](wC.handleMessage(deleteConfigParams))
+
+    Logger.info("-> " + deleteConfigResult)
   }
 }

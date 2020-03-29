@@ -1,7 +1,7 @@
 package org.genericConfig.admin.models.logic
 
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
-import org.genericConfig.admin.models.common.{AddUserIdHashNotExist, Error}
+import org.genericConfig.admin.models.common.{AddUserIdHashNotExist, DeleteConfigIdHashNotExist, Error}
 import org.genericConfig.admin.models.persistence.Persistence
 import org.genericConfig.admin.models.persistence.orientdb.GraphConfig
 import org.genericConfig.admin.shared.Actions
@@ -182,6 +182,7 @@ class Config(configDTO: ConfigDTO) {
           case None => createConfigDTO(Actions.DELETE_CONFIG, None, None, None)
           case _ => createConfigDTO(Actions.DELETE_CONFIG, None, None, Some(List(errorDeleteConfig.get)))
         }
+      case None => createConfigDTO(Actions.DELETE_CONFIG, None, None, Some(List(DeleteConfigIdHashNotExist())))
     }
   }
 
