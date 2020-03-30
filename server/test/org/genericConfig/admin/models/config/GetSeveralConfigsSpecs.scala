@@ -1,81 +1,87 @@
-//package org.genericConfig.admin.models.config
-//
-//import org.specs2.mutable.Specification
-//import org.specs2.specification.BeforeAfterAll
-//import org.junit.runner.RunWith
-//import org.specs2.runner.JUnitRunner
-//import org.genericConfig.admin.controllers.websocket.WebClient
-//import util.CommonFunction
-//import play.api.Logger
-//import play.api.libs.json.Json
-//import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
-//import play.api.libs.json.JsValue.jsValueToJsLookup
-//import play.api.libs.json.Json.toJsFieldJsValueWrapper
-//import play.api.libs.json.JsValue
-//import org.genericConfig.admin.shared.common.json.JsonNames
-//import org.genericConfig.admin.shared.config.status.GetConfigsSuccess
-//import org.genericConfig.admin.shared.common.status.Success
-//
-///**
-// * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
-// *
-// * Created by Gennadi Heimann 24.04.2018
-// */
-//
-//@RunWith(classOf[JUnitRunner])
-//class GetSeveralConfigsSpecs extends Specification
-//                           with BeforeAfterAll
-//                           with CommonFunction{
-//
-//  val wC: WebClient = WebClient.init
-//  var userId: String = ""
-//  val username = "user_v016_2"
-////  user_v016_1_client
-//
-//  def beforeAll(): Unit = {
-//    val (username, userId, _): (String, String, _) = addUser(this.username)
-//    this.userId = userId
-//    Logger.info("username : " + username)
-//    Logger.info("userId : " + userId)
-//
-//    addConfig(userId, "//http://contig1/user_1_v016_1")
-//
-//    addConfig(userId, "//http://contig1/user_1_v016_2")
-//
-//    addConfig(userId, "//http://contig1/user_1_v016_3")
-//
-//  }
-//
-//  def afterAll(): Unit = {
-//    Logger.info("Deleting Configs : " + deleteAllConfigs(this.username))
-//  }
-//
-//
-//
-//  "Diese Spezifikation spezifiziert das Holen von allen Konfigurationen" >> {
-//    "fuer einen AdminUser" >> {
-//
-//      val getConfigsIn = Json.obj(
-//          "json" -> JsonNames.GET_CONFIGS
-//          , "params" -> Json.obj(
-//              "userId" -> this.userId
-//          )
-//      )
-//      val getConfigsOut = wC.handleMessage(getConfigsIn)
-//
-////      Logger.info("getConfigsIn " + getConfigsIn)
-////      Logger.info("getConfigsOut " + getConfigsOut)
-//
-//      (getConfigsOut \ "json").asOpt[String].get === JsonNames.GET_CONFIGS
-//      (getConfigsOut \ "result" \ "configs").asOpt[Set[JsValue]].get.size === 3
-//      ((getConfigsOut \ "result" \ "configs")(0) \ "configUrl").asOpt[String].get === "//http://contig1/user_1_v016_1"
-//      ((getConfigsOut \ "result" \ "configs")(1) \ "configUrl").asOpt[String].get === "//http://contig1/user_1_v016_2"
-//      ((getConfigsOut \ "result" \ "configs")(2) \ "configUrl").asOpt[String].get === "//http://contig1/user_1_v016_3"
-//      (getConfigsOut \ "result" \ "status" \ "addConfig").asOpt[String] === None
-//      (getConfigsOut \ "result" \ "status" \ "getConfigs" \ "status").asOpt[String].get === GetConfigsSuccess().status
-//      (getConfigsOut \ "result" \ "status" \ "deleteConfig").asOpt[String] === None
-//      (getConfigsOut \ "result" \ "status" \ "updateConfig").asOpt[String] === None
-//      (getConfigsOut \ "result" \ "status" \ "common" \ "status").asOpt[String].get === Success().status
-//    }
-//  }
-//}
+package org.genericConfig.admin.models.config
+
+import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.models.CommonFunction
+import org.genericConfig.admin.shared.Actions
+import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
+import org.junit.runner.RunWith
+import org.specs2.mutable.Specification
+import org.specs2.runner.JUnitRunner
+import org.specs2.specification.BeforeAfterAll
+import play.api.Logger
+import play.api.libs.json.{JsResult, Json}
+
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ *
+ * Created by Gennadi Heimann 24.04.2018
+ */
+
+@RunWith(classOf[JUnitRunner])
+class GetSeveralConfigsSpecs extends Specification
+                           with BeforeAfterAll
+                           with CommonFunction{
+
+  val wC: WebClient = WebClient.init
+  val username = "user_v016_2"
+  var getConfigsResult : JsResult[ConfigDTO] = _
+  val configUrl_1 = "//http://contig1/user_1_v016_1"
+  val configUrl_2 = "//http://contig1/user_1_v016_2"
+  val configUrl_3 = "//http://contig1/user_1_v016_3"
+  var configId_1 : String = _
+  var configId_2 : String = _
+  var configId_3 : String = _
+
+  def beforeAll(): Unit = {
+    before()
+  }
+
+  def afterAll(): Unit = {
+    Logger.info("Deleting Configs : " + deleteAllConfigs(this.username))
+  }
+
+
+
+  "Der Benutzer ruft die Konfiguration auf " >> {
+    "fuer einen AdminUser" >> {
+      "action = GET_CONFIGS" >> {getConfigsResult.asOpt.get.action === Actions.GET_CONFIGS}
+      "result.configs(0).configUrl = //http://contig1/user_1_v016_1" >> {
+        getConfigsResult.asOpt.get.result.get.configs.get.head.configId.get === configId_1
+        getConfigsResult.asOpt.get.result.get.configs.get.head.configUrl.get === configUrl_1
+      }
+      "result.configs(0).configUrl = //http://contig1/user_1_v016_2" >> {
+        getConfigsResult.asOpt.get.result.get.configs.get(1).configId.get === configId_2
+        getConfigsResult.asOpt.get.result.get.configs.get(1).configUrl.get === configUrl_2
+      }
+      "result.configs(0).configUrl = //http://contig1/user_1_v016_3" >> {
+        getConfigsResult.asOpt.get.result.get.configs.get(2).configId.get === configId_3
+        getConfigsResult.asOpt.get.result.get.configs.get(2).configUrl.get === configUrl_3
+      }
+      "result.errors = None" >> {getConfigsResult.asOpt.get.result.get.errors must beNone}
+    }
+  }
+
+  private def before(): Unit = {
+    val userId: String = createUser(this.username, wC)
+
+    configId_1 = createConfig(userId, configUrl_1)
+
+    configId_2 = createConfig(userId, configUrl_2)
+
+    configId_3 = createConfig(userId, configUrl_3)
+
+    val getConfigParams = Json.toJson(ConfigDTO(
+      action = Actions.GET_CONFIGS,
+      params = Some(ConfigParamsDTO(
+        userId = Some(userId)
+      )),
+      result = None
+    ))
+
+    Logger.info("getConfigParams " + getConfigParams)
+
+    getConfigsResult = Json.fromJson[ConfigDTO](wC.handleMessage(getConfigParams))
+
+    Logger.info("getConfigsOut " + getConfigsResult)
+  }
+}

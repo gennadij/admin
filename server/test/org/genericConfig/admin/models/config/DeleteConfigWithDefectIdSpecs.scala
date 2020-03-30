@@ -3,14 +3,11 @@ package org.genericConfig.admin.models.config
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.models.common.ConfigIdHashNotExist
-import org.genericConfig.admin.shared.{Actions, config}
-import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
 import org.specs2.mutable.Specification
 import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
-import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
-import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.{JsResult, Json}
 
 /**
@@ -39,7 +36,7 @@ class DeleteConfigWithDefectIdSpecs extends Specification
     "action = DELETE_CONFIG" >> {
       deleteConfigResult.get.action === Actions.DELETE_CONFIG
     }
-    "result.errors = " >> {
+    "result.errors = ConfigIdHashNotExist" >> {
       deleteConfigResult.get.result.get.errors.get.head.name === ConfigIdHashNotExist().name
     }
   }

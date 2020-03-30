@@ -1,13 +1,10 @@
 package org.genericConfig.admin.models.common
 
-import org.genericConfig.admin.shared.config.status.StatusDeleteConfig
-
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 11.04.2018
  */
-//TODO status gegen Name ersetzen
 abstract class Error  {
   def name: String
   def message: String

@@ -1,10 +1,7 @@
 package org.genericConfig.admin.models.logic
 
-import java.beans.DesignMode
-
-import com.tinkerpop.blueprints.Vertex
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
-import org.genericConfig.admin.models.common.{UserIdHashNotExist, ConfigIdHashNotExist, Error}
+import org.genericConfig.admin.models.common.{ConfigIdHashNotExist, Error, UserIdHashNotExist}
 import org.genericConfig.admin.models.persistence.Persistence
 import org.genericConfig.admin.models.persistence.orientdb.{GraphConfig, PropertyKeys}
 import org.genericConfig.admin.shared.Actions
@@ -48,7 +45,7 @@ object Config {
     * @return ConfigDTO
     */
   def getConfigs(configDTO: ConfigDTO): ConfigDTO = {
-    new Config(Some(configDTO).getConfigs
+    new Config(configDTO).getConfigs
   }
 
 

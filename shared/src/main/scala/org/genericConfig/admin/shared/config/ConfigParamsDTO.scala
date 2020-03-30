@@ -12,8 +12,8 @@ import play.api.libs.functional.syntax._
 case class ConfigParamsDTO (
                              userId: Option[String],
                              configId : Option[String] = None,
-                             configUrl: Option[String],
-                             configurationCourse : Option[String],
+                             configUrl: Option[String] = None,
+                             configurationCourse : Option[String] = None,
                              update : Option[ConfigUpdateDTO] = None
                            )
 

@@ -9,9 +9,7 @@ import org.genericConfig.admin.models.common.ODBRecordDuplicated
 import org.genericConfig.admin.models.logic.{Config, User}
 import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
-import org.genericConfig.admin.shared.config.json.{JsonAddConfigIn, JsonAddConfigParams}
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import org.specs2.mutable.Specification
 import org.specs2.specification.BeforeAfterAll
@@ -62,8 +60,7 @@ class AddConfigWithSameConfigUrlsSpecs extends Specification
     val userIdForUser13 = createUser(user13)
     val userIdForUser14 = createUser(user14)
 
-    //TODO wenn schon exstiert nicht anlegen
-    configIdUser13 =  addConfig(userIdForUser13, this.configUrl)
+    configIdUser13 =  createConfig(userIdForUser13, this.configUrl)
 
     val paramsConfigDTO : JsValue = Json.toJson(ConfigDTO(
       action = Actions.ADD_CONFIG,
