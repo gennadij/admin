@@ -80,22 +80,7 @@ object Graph {
 //    }
   }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param configId : String, configUrl: String
-    * @return (Option[OrientVertex], StatusUpdateConfig, Status)
-    */
-  def updateConfig(configId: String, configUrl: String): (Option[OrientVertex], StatusUpdateConfig, Error) = {
-    ???
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), Success()) =>
-//        val graph: OrientGraph = dbFactory.getTx
-//        new Graph(graph).updateConfig(configId, configUrl)
-//      case (None, ODBConnectionFail()) =>
-//        (None, UpdateConfigError(), ODBConnectionFail())
-//    }
-  }
+
 
   /**
     * @author Gennadi Heimann
@@ -376,36 +361,7 @@ class Graph(graph: OrientGraph) {
 //    res
 //  }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param configId : String, configUrl: String
-    * @return (Option[OrientVertex], StatusUpdateConfig, Status)
-    */
-//  private def updateConfig(configId: String, configUrl: String): (Option[OrientVertex], StatusUpdateConfig, Error) = {
-//    try {
-//      graph.getVertex(configId).setProperty(PropertyKeys.CONFIG_URL, configUrl)
-//
-//      graph.commit()
-//
-//      val vUpdatedConfig = graph.getVertex(configId)
-//
-//      (Some(vUpdatedConfig), UpdateConfigUpdated(), Success())
-//    } catch {
-//      case e: ORecordDuplicatedException =>
-//        Logger.error(e.printStackTrace().toString)
-//        graph.rollback()
-//        (None, UpdateConfigError(), ODBRecordDuplicated())
-//      case e: ClassCastException =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (None, UpdateConfigError(), ODBClassCastError())
-//      case e: Exception =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (None, UpdateConfigError(), ODBWriteError())
-//    }
-//  }
+
 
   /**
     * Converting of the rid to hash from steps and components is here

@@ -1,5 +1,7 @@
 package org.genericConfig.admin.models.persistence
 
+import com.tinkerpop.blueprints.impls.orient.OrientVertex
+import org.genericConfig.admin.models.persistence.orientdb.GraphConfig
 import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.component.bo.ComponentBO
@@ -125,39 +127,37 @@ object Persistence {
     * @param configId : String, configUrl: String
     * @return ConfigBO
     */
-  def updateConfig(configId: String, configUrl: String): ConfigBO = {
-    ???
+  def updateConfig(configId: String, configUrl: String, configurationCourse : String): ConfigBO = {
 //    val (userId, status): (String, Error) = Graph.getUserId(configId)
-//    val (vUpdatedConfig, statusUpdateConfig, statusCommon): (Option[OrientVertex], StatusUpdateConfig, Error) =
-//      Graph.updateConfig(configId: String, configUrl: String)
-//    status match {
-//      case Success() =>
-//        ConfigBO(
-//          Some(userId),
-//          Some(List(Configuration(
-//            configId = Some(vUpdatedConfig.get.getIdentity.toString),
-//            configUrl = Some(vUpdatedConfig.get.getProperty(PropertyKey.CONFIG_URL))
-//          ))),
-//          Some(StatusConfig(
-//            None, //addConfig: Option[StatusAddConfig],
-//            None, //getConfigs: Option[StatusGetConfigs],
-//            None, //deleteConfig: Option[StatusDeleteConfig],
-//            Some(statusUpdateConfig), //updateConfig: Option[StatusUpdateConfig],
-//            Some(statusCommon) //common: Option[Status
-//          )
-//          ))
-//      case _ =>
-//        ConfigBO(
-//          Some(userId), None, Some(StatusConfig(
-//            None, //addConfig: Option[StatusAddConfig],
-//            None, //getConfigs: Option[StatusGetConfigs],
-//            None, //deleteConfig: Option[StatusDeleteConfig],
-//            Some(UpdateConfigError()), //updateConfig: Option[StatusUpdateConfig],
-//            Some(status) //common: Option[Status
-//          )
-//          )
-//        )
-//    }
+
+    status match {
+      case Success() =>
+        ConfigBO(
+          Some(userId),
+          Some(List(Configuration(
+            configId = Some(vUpdatedConfig.get.getIdentity.toString),
+            configUrl = Some(vUpdatedConfig.get.getProperty(PropertyKey.CONFIG_URL))
+          ))),
+          Some(StatusConfig(
+            None, //addConfig: Option[StatusAddConfig],
+            None, //getConfigs: Option[StatusGetConfigs],
+            None, //deleteConfig: Option[StatusDeleteConfig],
+            Some(statusUpdateConfig), //updateConfig: Option[StatusUpdateConfig],
+            Some(statusCommon) //common: Option[Status
+          )
+          ))
+      case _ =>
+        ConfigBO(
+          Some(userId), None, Some(StatusConfig(
+            None, //addConfig: Option[StatusAddConfig],
+            None, //getConfigs: Option[StatusGetConfigs],
+            None, //deleteConfig: Option[StatusDeleteConfig],
+            Some(UpdateConfigError()), //updateConfig: Option[StatusUpdateConfig],
+            Some(status) //common: Option[Status
+          )
+          )
+        )
+    }
   }
 
   /**

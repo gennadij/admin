@@ -6,7 +6,6 @@ import org.genericConfig.admin.models.persistence.Persistence
 import org.genericConfig.admin.models.persistence.orientdb.{GraphConfig, PropertyKeys}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
-import org.genericConfig.admin.shared.config.bo.ConfigBO
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigResultDTO, UserConfigDTO}
 import org.genericConfig.admin.shared.configTree.bo.{ComponentForConfigTreeBO, ConfigTreeBO, StepForConfigTreeBO}
 
@@ -63,11 +62,11 @@ object Config {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param configBO : ConfigBO
-    * @return ConfigBO
+    * @param configDTO : ConfigDTO
+    * @return ConfigDTO
     */
-  def updateConfig(configBO: ConfigBO): ConfigBO = {
-   ??? // new Config(Some(configBO)).updateConfig
+  def updateConfig(configDTO: ConfigDTO): ConfigDTO = {
+   new Config(configDTO).updateConfig
   }
 
 }
@@ -175,29 +174,32 @@ class Config(configDTO: ConfigDTO) {
     }
   }
 
-  private def updateConfig: ConfigBO = {
-    ???
-//    RidToHash.getRId(configBO.get.configs.get.head.configId.get) match {
-//      case Some(rId) =>
-//        val configBOOut: ConfigBO = Persistence.updateConfig(
-//          rId,
-//          configBO.get.configs.get.head.configUrl.get
-//        )
-//        val userIdHash: Option[String] = RidToHash.getHash(configBOOut.userId.get)
-//
-//
-//        val configuration: Option[List[Configuration]] = configBOOut.configs match {
-//          case Some(configs) => Some(List(Configuration(
-//            RidToHash.getHash(configs.head.configId.get),
-//            configs.head.configUrl
-//          )))
-//          case None => None
-//        }
-//        configBOOut.copy(userId = userIdHash, configs = configuration)
-//      case None => ConfigBO(
-//        status = Some(StatusConfig(updateConfig = Some(UpdateConfigIdHashNotExist())))
-//      )
-//    }
+  private def updateConfig: ConfigDTO = {
+    RidToHash.getRId(configDTO.params.get.configId.get) match {
+      case Some(configRid) =>
+
+        val (vUpdatedConfig, error): (Option[OrientVertex],  Option[Error]) =
+          GraphConfig.updateConfig(
+            configRid,
+            configDTO.params.get.update.get.configUrl,
+            configDTO.params.get.update.get.configurationCourse
+          )
+
+        val userIdHash: Option[String] = RidToHash.getHash(configBOOut.userId.get)
+
+
+        val configuration: Option[List[Configuration]] = configBOOut.configs match {
+          case Some(configs) => Some(List(Configuration(
+            RidToHash.getHash(configs.head.configId.get),
+            configs.head.configUrl
+          )))
+          case None => None
+        }
+        configBOOut.copy(userId = userIdHash, configs = configuration)
+      case None => ConfigBO(
+        status = Some(StatusConfig(updateConfig = Some(UpdateConfigIdHashNotExist())))
+      )
+    }
   }
 
   /**

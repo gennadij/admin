@@ -10,13 +10,13 @@ import play.api.libs.functional.syntax._
  * Created by Gennadi Heimann 23.03.2020
  */
 case class ConfigUpdateDTO (
-                           dummy : Option[String],
-                           dummy2 : Option[String]
+                           configUrl : Option[String],
+                           configurationCourse : Option[String]
                            )
 
 object ConfigUpdateDTO {
   implicit val format : Format[ConfigUpdateDTO] = (
-    (JsPath \ "dummy").format(Format.optionWithNull[String]) and
-    (JsPath \ "dummy2").format(Format.optionWithNull[String])
+    (JsPath \ "configUrl").format(Format.optionWithNull[String]) and
+    (JsPath \ "configurationCourse").format(Format.optionWithNull[String])
     )(ConfigUpdateDTO.apply, unlift(ConfigUpdateDTO.unapply))
 }

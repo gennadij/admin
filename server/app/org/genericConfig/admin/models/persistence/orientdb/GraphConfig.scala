@@ -4,7 +4,7 @@ import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
 import com.tinkerpop.blueprints.Direction
 import com.tinkerpop.blueprints.impls.orient.{OrientEdge, OrientGraph, OrientVertex}
-import org.genericConfig.admin.models.common.{DeleteConfigDefectID, Error, ODBClassCastError, ODBConnectionFail, ODBReadError, ODBRecordDuplicated, ODBWriteError}
+import org.genericConfig.admin.models.common.{DeleteConfigDefectID, Error, ODBClassCastError, ODBConnectionFail, ODBReadError, ODBRecordDuplicated, ODBWriteError, UnknownError}
 import org.genericConfig.admin.models.persistence.Database
 import play.api.Logger
 
@@ -75,6 +75,24 @@ object GraphConfig {
       case (Some(dbFactory), None) =>
         val graph: OrientGraph = dbFactory.getTx
         new GraphConfig(graph).getConfigs(userId)
+      case (None, Some(ODBConnectionFail())) =>
+        (None, Some(ODBConnectionFail()))
+    }
+  }
+
+  /**
+   * @author Gennadi Heimann
+   * @version 0.1.6
+   * @param configId : String, configUrl: String
+   * @return (Option[OrientVertex], StatusUpdateConfig, Status)
+   */
+  def updateConfig(
+                    configId: String, configUrl: Option[String], configurationCourse : Option[String]
+                  ): (Option[OrientVertex], Option[Error]) = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), None) =>
+        val graph: OrientGraph = dbFactory.getTx
+        new GraphConfig(graph).updateConfig(configId, configUrl, configurationCourse)
       case (None, Some(ODBConnectionFail())) =>
         (None, Some(ODBConnectionFail()))
     }
@@ -203,4 +221,52 @@ class GraphConfig(graph: OrientGraph) {
           (None, Some(ODBReadError()))
       }
     }
+
+  /**
+   * @author Gennadi Heimann
+   * @version 0.1.6
+   * @param configId : String, configUrl: String
+   * @return (Option[OrientVertex], StatusUpdateConfig, Status)
+   */
+  private def updateConfig(
+                            configId: String, configUrl: Option[String], configurationCourse : Option[String]
+                          ): (Option[OrientVertex], Option[Error]) = {
+    try {
+
+      (configUrl, configurationCourse) match {
+        case (Some(configUrl), None) =>
+          graph.getVertex(configId).setProperties(PropertyKeys.CONFIG_URL, configUrl)
+        case (None, Some(configurationCourse)) =>
+          graph.getVertex(configId).setProperties(
+            PropertyKeys.CONFIGURATION_COURSE, configurationCourse
+          )
+        case (Some(configUrl), Some(configurationCourse)) =>
+          graph.getVertex(configId).setProperties(
+            PropertyKeys.CONFIG_URL, configUrl,
+            PropertyKeys.CONFIGURATION_COURSE, configurationCourse
+          )
+          //TODO richtigen Fehler spezifizieren
+        case (None, None) => (None, UnknownError())
+      }
+
+      graph.commit()
+
+      val vUpdatedConfig = graph.getVertex(configId)
+
+      (Some(vUpdatedConfig), None)
+    } catch {
+      case e: ORecordDuplicatedException =>
+        Logger.error(e.printStackTrace().toString)
+        graph.rollback()
+        (None,  Some(ODBRecordDuplicated()))
+      case e: ClassCastException =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (None, Some(ODBClassCastError()))
+      case e: Exception =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (None, Some(ODBWriteError()))
+    }
+  }
 }

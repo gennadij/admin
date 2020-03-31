@@ -13,4 +13,5 @@ object Actions {
   val ADD_CONFIG : String = "ADD_CONFIG"
   val DELETE_CONFIG : String = "DELETE_CONFIG"
   val GET_CONFIGS : String = "GET_CONFIGS"
+  val UPDATE_CONFIG : String = "UPDATE_CONFIG"
 }

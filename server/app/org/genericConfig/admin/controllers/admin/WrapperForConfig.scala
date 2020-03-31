@@ -3,7 +3,7 @@ package org.genericConfig.admin.controllers.admin
 import org.genericConfig.admin.models.logic.Config
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.ConfigDTO
-import play.api.libs.json.{JsError, JsResult, JsSuccess, JsValue, Json}
+import play.api.libs.json._
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -36,17 +36,10 @@ trait WrapperForConfig extends WrapperCommon {
   }
 
   def updateConfig(receivedMessage: JsValue): JsValue = {
-    ???
-
-    //    val editConfigIn: JsResult[JsonUpdateConfigIn] = Json.fromJson[JsonUpdateConfigIn](receivedMessage)
-    //    editConfigIn match {
-    //      case s: JsSuccess[JsonUpdateConfigIn] => s.get
-    //      case e: JsError => Logger.error("Errors -> EDIT_CONFIG: " + JsError.toJson(e).toString())
-    //    }
-    //
-    //    val editConfigOut: JsonUpdateConfigOut  = admin.updateConfig(editConfigIn.get)
-    //    Json.toJson(editConfigOut)
-    //   }
-
+    val updateConfigParams: JsResult[ConfigDTO] = Json.fromJson[ConfigDTO](receivedMessage)
+    updateConfigParams match {
+      case s: JsSuccess[ConfigDTO] => Json.toJson(Config.updateConfig(updateConfigParams.get))
+      case e: JsError => jsonError(Actions.UPDATE_CONFIG, e)
+    }
   }
 }
