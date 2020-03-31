@@ -12,33 +12,29 @@ import play.api.libs.json._
  */
 trait WrapperForConfig extends WrapperCommon {
   def addConfig(receivedMessage: JsValue): JsValue = {
-    val addConfigParams: JsResult[ConfigDTO] = Json.fromJson[ConfigDTO](receivedMessage)
-    addConfigParams match {
-      case _: JsSuccess[ConfigDTO] => Json.toJson(Config.addConfig(addConfigParams.get))
+    Json.fromJson[ConfigDTO](receivedMessage) match {
+      case addConfigParams : JsSuccess[ConfigDTO] => Json.toJson(Config.addConfig(addConfigParams.value))
       case e: JsError => jsonError(Actions.ADD_CONFIG, e)
     }
   }
 
   def deleteConfig(receivedMessage: JsValue): JsValue = {
-    val deleteConfigParams: JsResult[ConfigDTO] = Json.fromJson[ConfigDTO](receivedMessage)
-    deleteConfigParams match {
-      case _: JsSuccess[ConfigDTO] => Json.toJson(Config.deleteConfig(deleteConfigParams.get))
+    Json.fromJson[ConfigDTO](receivedMessage) match {
+      case deleteConfigParams : JsSuccess[ConfigDTO] => Json.toJson(Config.deleteConfig(deleteConfigParams.value))
       case e: JsError => jsonError(Actions.DELETE_CONFIG, e)
     }
   }
 
   def getConfigs(receivedMessage: JsValue): JsValue = {
-    val getConfigsParams: JsResult[ConfigDTO] = Json.fromJson[ConfigDTO](receivedMessage)
-    getConfigsParams match {
-      case _: JsSuccess[ConfigDTO] => Json.toJson(Config.getConfigs(getConfigsParams.get))
+    Json.fromJson[ConfigDTO](receivedMessage) match {
+      case getConfigsParams : JsSuccess[ConfigDTO] => Json.toJson(Config.getConfigs(getConfigsParams.value))
       case e: JsError => jsonError(Actions.GET_CONFIGS, e)
     }
   }
 
   def updateConfig(receivedMessage: JsValue): JsValue = {
-    val updateConfigParams: JsResult[ConfigDTO] = Json.fromJson[ConfigDTO](receivedMessage)
-    updateConfigParams match {
-      case s: JsSuccess[ConfigDTO] => Json.toJson(Config.updateConfig(updateConfigParams.get))
+    Json.fromJson[ConfigDTO](receivedMessage) match {
+      case updateConfigParams : JsSuccess[ConfigDTO] => Json.toJson(Config.updateConfig(updateConfigParams.value))
       case e: JsError => jsonError(Actions.UPDATE_CONFIG, e)
     }
   }

@@ -66,7 +66,7 @@ object Config {
     * @return ConfigDTO
     */
   def updateConfig(configDTO: ConfigDTO): ConfigDTO = {
-   new Config(configDTO).updateConfig
+   new Config(configDTO).updateConfig()
   }
 
 }
@@ -174,31 +174,21 @@ class Config(configDTO: ConfigDTO) {
     }
   }
 
-  private def updateConfig: ConfigDTO = {
+  private def updateConfig(): ConfigDTO = {
     RidToHash.getRId(configDTO.params.get.configId.get) match {
       case Some(configRid) =>
 
-        val (vUpdatedConfig, error): (Option[OrientVertex],  Option[Error]) =
-          GraphConfig.updateConfig(
+        val (vUpdatedConfig, error): (Option[OrientVertex],  Option[Error]) = GraphConfig.updateConfig(
             configRid,
             configDTO.params.get.update.get.configUrl,
             configDTO.params.get.update.get.configurationCourse
-          )
+        )
 
-        val userIdHash: Option[String] = RidToHash.getHash(configBOOut.userId.get)
-
-
-        val configuration: Option[List[Configuration]] = configBOOut.configs match {
-          case Some(configs) => Some(List(Configuration(
-            RidToHash.getHash(configs.head.configId.get),
-            configs.head.configUrl
-          )))
-          case None => None
+        error match {
+          case None => createConfigDTO(action = Actions.UPDATE_CONFIG, None, None, None)
+          case _ => createConfigDTO(action = Actions.UPDATE_CONFIG, None, None, Some(List(error.get)))
         }
-        configBOOut.copy(userId = userIdHash, configs = configuration)
-      case None => ConfigBO(
-        status = Some(StatusConfig(updateConfig = Some(UpdateConfigIdHashNotExist())))
-      )
+      case None => createConfigDTO(action = Actions.UPDATE_CONFIG, None, None, Some(List(ConfigIdHashNotExist())))
     }
   }
 

@@ -6,7 +6,7 @@ import play.api.libs.json.{Format, JsPath}
 
 case class ConfigResultDTO(
                             userId: Option[String] = None,
-                            configs : Option[List[UserConfigDTO]],
+                            configs : Option[List[UserConfigDTO]] = None,
                             errors : Option[List[ErrorDTO]]
                           )
 
