@@ -2,7 +2,7 @@ package models.preparingConfigs
 
 import scala.collection.JavaConverters._
 
-import org.genericConfig.admin.controllers.admin.AdminWeb
+import org.genericConfig.admin.controllers.admin.MessageHandler
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import org.genericConfig.admin.models.persistence.OrientDB
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
@@ -17,7 +17,7 @@ import org.genericConfig.admin.controllers.websocket.WebClient
 	* Created by Gennadi Heimann 29.07.2017
 	*/
 
-object PrepareConfigsForSpecsv015 extends AdminWeb with GeneralFunctionToPrepareConfigs{
+object PrepareConfigsForSpecsv015 extends MessageHandler with GeneralFunctionToPrepareConfigs{
 
   val userConfigurationForWebClient = "user20_v015"
   val userConfigurationForCollisionWith2Steps = "user21_v015"

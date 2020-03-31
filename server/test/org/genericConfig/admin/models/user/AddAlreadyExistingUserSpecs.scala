@@ -2,7 +2,7 @@ package org.genericConfig.admin.models.user
 
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientGraph, OrientVertex}
-import org.genericConfig.admin.controllers.admin.AdminWeb
+import org.genericConfig.admin.controllers.admin.MessageHandler
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.models.common.AddUserAlreadyExist
@@ -23,7 +23,7 @@ import scala.collection.JavaConverters._
  */
 class AddAlreadyExistingUserSpecs
   extends Specification
-    with AdminWeb
+    with MessageHandler
     with BeforeAfterAll
     with CommonFunction {
 

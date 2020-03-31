@@ -5,21 +5,19 @@ package org.genericConfig.admin.controllers.websocket
  * 
  * Created by Gennadi Heimann on 24.10.2017
  */
+import org.genericConfig.admin.controllers.admin.MessageHandler
 import play.api.libs.json.JsValue
-import org.genericConfig.admin.controllers.admin.AdminWeb
-import org.genericConfig.admin.controllers.admin.Admin
 
 object WebClient {
   def init: WebClient = {
-    new WebClient
+    new WebClient()
   }
 }
 
 
-class WebClient extends AdminWeb{
-  val admin = new Admin()
+class WebClient extends MessageHandler{
   
   def handleMessage(receivedMessage: JsValue): JsValue = {
-    handleMessage(receivedMessage, admin)
+    hMessage(receivedMessage)
   }
 }

@@ -2,7 +2,7 @@ package models.preparingConfigs
 
 import scala.collection.JavaConverters._
 
-import org.genericConfig.admin.controllers.admin.AdminWeb
+import org.genericConfig.admin.controllers.admin.MessageHandler
 import org.genericConfig.admin.controllers.websocket.WebClient
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
@@ -17,7 +17,7 @@ import play.api.Logger
 	* Created by Gennadi Heimann 20.10.2017
 	*/
 
-object PrepareConfigsForSpecsv016 extends AdminWeb with GeneralFunctionToPrepareConfigs{
+object PrepareConfigsForSpecsv016 extends MessageHandler with GeneralFunctionToPrepareConfigs{
   
   def configurationForWebClient(wC: WebClient) = {
 //

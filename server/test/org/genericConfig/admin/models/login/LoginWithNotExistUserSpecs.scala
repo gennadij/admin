@@ -1,6 +1,6 @@
 package org.genericConfig.admin.models.login
 
-import org.genericConfig.admin.controllers.admin.AdminWeb
+import org.genericConfig.admin.controllers.admin.MessageHandler
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.common.GetUserNotExist
 import org.genericConfig.admin.shared.Actions
@@ -20,7 +20,7 @@ import play.api.libs.json.{JsObject, JsValue, Json}
  * Created by Gennadi Heimann 13.01.2017
  */
 
-class LoginWithNotExistUserSpecs extends Specification with AdminWeb  with BeforeAfterAll {
+class LoginWithNotExistUserSpecs extends Specification with MessageHandler  with BeforeAfterAll {
 
   def afterAll(): Unit = {}
   def beforeAll(): Unit = {}

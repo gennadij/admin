@@ -2,10 +2,6 @@ package org.genericConfig.admin.controllers.admin
 
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.config.ConfigDTO
-import org.genericConfig.admin.shared.error.json._
-import org.genericConfig.admin.shared.user.UserDTO
-import play.api.Logger
 import play.api.libs.json._
 
 /**
@@ -14,21 +10,20 @@ import play.api.libs.json._
  * Created by Gennadi Heimann 28.11.2016
  */
 
-trait AdminWeb {
+trait MessageHandler
+  extends WrapperForUser
+    with WrapperForConfig {
 
-
-
-  def handleMessage(receivedMessage: JsValue, admin: Admin): JsValue = {
+  def hMessage(receivedMessage: JsValue): JsValue = {
     (receivedMessage \ "action").asOpt[String] match {
-      case Some(Actions.ADD_USER) => addUser(receivedMessage, admin)
-      case Some(Actions.DELETE_USER) => deleteUser(receivedMessage, admin)
-      case Some(Actions.GET_USER) => getUser(receivedMessage, admin)
-      case Some(Actions.UPDATE_USER) => updateUser(receivedMessage, admin)
-      case Some(Actions.ADD_CONFIG) => addConfig(receivedMessage, admin)
-      case Some(Actions.DELETE_CONFIG) => deleteConfig(receivedMessage, admin)
-      case Some(Actions.GET_CONFIGS) => getConfigs(receivedMessage, admin)
-//      case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage, admin)
-//      case Some(JsonNames.UPDATE_CONFIG) => updateConfig(receivedMessage, admin)
+      case Some(Actions.ADD_USER) => addUser(receivedMessage)
+      case Some(Actions.DELETE_USER) => deleteUser(receivedMessage)
+      case Some(Actions.GET_USER) => getUser(receivedMessage)
+      case Some(Actions.UPDATE_USER) => updateUser(receivedMessage)
+      case Some(Actions.ADD_CONFIG) => addConfig(receivedMessage)
+      case Some(Actions.DELETE_CONFIG) => deleteConfig(receivedMessage)
+      case Some(Actions.GET_CONFIGS) => getConfigs(receivedMessage)
+      case Some(JsonNames.UPDATE_CONFIG) => updateConfig(receivedMessage)
 //
 //      case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage, admin)
 //
@@ -52,77 +47,78 @@ trait AdminWeb {
     }
   }
 
-  private def addUser(receivedMessage: JsValue, admin: Admin): JsValue = {
-    val addUser: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
-    addUser match {
-      case s : JsSuccess[UserDTO] => Json.toJson(admin.addUser(s.value))
-      case e : JsError => jsonError(Actions.ADD_USER, e)
-    }
-  }
+//  private def addUser(receivedMessage: JsValue, admin: Admin): JsValue = {
+//    val addUser: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
+//    addUser match {
+//      case s : JsSuccess[UserDTO] => Json.toJson(admin.addUser(s.value))
+//      case e : JsError => jsonError(Actions.ADD_USER, e)
+//    }
+//  }
 
-  private def deleteUser(receivedMessage: JsValue, admin: Admin): JsValue = {
-    val deleteUser: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
-    deleteUser match {
-      case _: JsSuccess[UserDTO] => Json.toJson(admin.deleteUser(deleteUser.get))
-      case e : JsError => jsonError(Actions.GET_USER, e)
-    }
-  }
+//  private def deleteUser(receivedMessage: JsValue, admin: Admin): JsValue = {
+//    val deleteUser: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
+//    deleteUser match {
+//      case _: JsSuccess[UserDTO] => Json.toJson(admin.deleteUser(deleteUser.get))
+//      case e : JsError => jsonError(Actions.GET_USER, e)
+//    }
+//  }
+//
+//  private def getUser(receivedMessage: JsValue, admin: Admin): JsValue = {
+//    val getUser: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
+//    getUser match {
+//      case _: JsSuccess[UserDTO] => Json.toJson(admin.getUser(getUser.get))
+//      case e : JsError => jsonError(Actions.GET_USER, e)
+//    }
+//  }
+//
+//  private def updateUser(receivedMessage: JsValue, admin: Admin): JsValue = {
+//    val updateUser: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
+//    updateUser match {
+//      case _: JsSuccess[UserDTO] => Json.toJson(admin.updateUser(updateUser.get))
+//      case e : JsError => jsonError(Actions.GET_USER, e)
+//    }
+//  }
+//
+//  private def addConfig(receivedMessage: JsValue, admin: Admin): JsValue = {
+//    val addConfigParams: JsResult[ConfigDTO] = Json.fromJson[ConfigDTO](receivedMessage)
+//    addConfigParams match {
+//      case _ : JsSuccess[ConfigDTO] =>
+//        val configDTO : ConfigDTO = admin.addConfig(addConfigParams.get)
+//        val json = Json.toJson(configDTO)
+//        json
+//      case e : JsError => jsonError(Actions.ADD_CONFIG, e)
+//    }
+//  }
+//
+//  private def deleteConfig(receivedMessage: JsValue, admin: Admin): JsValue = {
+//    val deleteConfigParams: JsResult[ConfigDTO] = Json.fromJson[ConfigDTO](receivedMessage)
+//    deleteConfigParams match {
+//      case _: JsSuccess[ConfigDTO] => Json.toJson(admin.deleteConfig(deleteConfigParams.get))
+//      case e: JsError => jsonError(Actions.DELETE_CONFIG, e)
+//    }
+//   }
+//
+//    private def getConfigs(receivedMessage: JsValue, admin: Admin): JsValue = {
+//      val getConfigsParams: JsResult[ConfigDTO] = Json.fromJson[ConfigDTO](receivedMessage)
+//      getConfigsParams match {
+//        case _: JsSuccess[ConfigDTO] => Json.toJson(admin.getConfigs(getConfigsParams.get))
+//        case e: JsError => jsonError(JsonNames.GET_CONFIGS, e)
+//      }
+//     }
+//
+//    private def updateConfig(receivedMessage: JsValue, admin: Admin): JsValue = {
+//      val editConfigIn: JsResult[JsonUpdateConfigIn] = Json.fromJson[JsonUpdateConfigIn](receivedMessage)
+//      editConfigIn match {
+//        case s: JsSuccess[JsonUpdateConfigIn] => s.get
+//        case e: JsError => Logger.error("Errors -> EDIT_CONFIG: " + JsError.toJson(e).toString())
+//      }
+//
+//      val editConfigOut: JsonUpdateConfigOut  = admin.updateConfig(editConfigIn.get)
+//      Json.toJson(editConfigOut)
+//     }
 
-  private def getUser(receivedMessage: JsValue, admin: Admin): JsValue = {
-    val getUser: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
-    getUser match {
-      case _: JsSuccess[UserDTO] => Json.toJson(admin.getUser(getUser.get))
-      case e : JsError => jsonError(Actions.GET_USER, e)
-    }
-  }
-
-  private def updateUser(receivedMessage: JsValue, admin: Admin): JsValue = {
-    val updateUser: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
-    updateUser match {
-      case _: JsSuccess[UserDTO] => Json.toJson(admin.updateUser(updateUser.get))
-      case e : JsError => jsonError(Actions.GET_USER, e)
-    }
-  }
-  
-  private def addConfig(receivedMessage: JsValue, admin: Admin): JsValue = {
-    val addConfigParams: JsResult[ConfigDTO] = Json.fromJson[ConfigDTO](receivedMessage)
-    addConfigParams match {
-      case _ : JsSuccess[ConfigDTO] =>
-        val configDTO : ConfigDTO = admin.addConfig(addConfigParams.get)
-        val json = Json.toJson(configDTO)
-        json
-      case e : JsError => jsonError(Actions.ADD_CONFIG, e)
-    }
-  }
-
-  private def deleteConfig(receivedMessage: JsValue, admin: Admin): JsValue = {
-    val deleteConfigParams: JsResult[ConfigDTO] = Json.fromJson[ConfigDTO](receivedMessage)
-    deleteConfigParams match {
-      case _: JsSuccess[ConfigDTO] => Json.toJson(admin.deleteConfig(deleteConfigParams.get))
-      case e: JsError => jsonError(Actions.DELETE_CONFIG, e)
-    }
-   }
-
-    private def getConfigs(receivedMessage: JsValue, admin: Admin): JsValue = {
-      val getConfigsParams: JsResult[ConfigDTO] = Json.fromJson[ConfigDTO](receivedMessage)
-      getConfigsParams match {
-        case _: JsSuccess[ConfigDTO] => Json.toJson(admin.getConfigs(getConfigsParams.get))
-        case e: JsError => jsonError(JsonNames.GET_CONFIGS, e)
-      }
-     }
 
 
-  //
-  //  private def updateConfig(receivedMessage: JsValue, admin: Admin): JsValue = {
-  //    val editConfigIn: JsResult[JsonUpdateConfigIn] = Json.fromJson[JsonUpdateConfigIn](receivedMessage)
-  //    editConfigIn match {
-  //      case s: JsSuccess[JsonUpdateConfigIn] => s.get
-  //      case e: JsError => Logger.error("Errors -> EDIT_CONFIG: " + JsError.toJson(e).toString())
-  //    }
-  //
-  //    val editConfigOut: JsonUpdateConfigOut  = admin.updateConfig(editConfigIn.get)
-  //    Json.toJson(editConfigOut)
-  //   }
 
 //  private def deleteStep(receivedMessage: JsValue, admin: Admin): JsValue = {
 //    val deleteFirstStepIn: JsResult[JsonStepIn] = Json.fromJson[JsonStepIn](receivedMessage)
@@ -223,14 +219,14 @@ trait AdminWeb {
 //    }
 //  }
 
-  private def jsonError(errorText: String, e: JsError): JsValue = {
-    val error = JsonErrorIn(
-        JsonNames.ERROR,
-        JsonErrorParams(
-            "Errors -> " + errorText + " : " + JsError.toJson(e).toString()
-        )
-    )
-    Logger.error(error.toString)
-    Json.toJson(error)
-  }
+//  private def jsonError(errorText: String, e: JsError): JsValue = {
+//    val error = JsonErrorIn(
+//        JsonNames.ERROR,
+//        JsonErrorParams(
+//            "Errors -> " + errorText + " : " + JsError.toJson(e).toString()
+//        )
+//    )
+//    Logger.error(error.toString)
+//    Json.toJson(error)
+//  }
 }

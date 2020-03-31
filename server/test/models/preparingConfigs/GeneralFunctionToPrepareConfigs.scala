@@ -2,7 +2,7 @@ package models.preparingConfigs
 
 import play.api.libs.json.Json
 import play.api.libs.json.JsValue
-import org.genericConfig.admin.controllers.admin.AdminWeb
+import org.genericConfig.admin.controllers.admin.MessageHandler
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import org.genericConfig.admin.models.persistence.OrientDB
 import com.orientechnologies.orient.core.sql.OCommandSQL
@@ -22,7 +22,7 @@ import org.genericConfig.admin.shared.common.json.JsonNames
 	* Created by Gennadi Heimann 12.06.2017
 	*/
 
-trait GeneralFunctionToPrepareConfigs extends AdminWeb {
+trait GeneralFunctionToPrepareConfigs extends MessageHandler {
   
   def getComponentsFromFirstStep(stepId: String): List[String] = {
     val graph: OrientGraph = OrientDB.getFactory().getTx

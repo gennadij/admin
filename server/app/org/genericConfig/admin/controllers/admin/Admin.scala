@@ -4,11 +4,8 @@ import org.genericConfig.admin.models.json.dependency.{JsonDependencyIn, JsonDep
 import org.genericConfig.admin.models.logic._
 import org.genericConfig.admin.models.wrapper.Wrapper
 import org.genericConfig.admin.shared.component.json.{JsonComponentIn, JsonComponentOut}
-import org.genericConfig.admin.shared.config.ConfigDTO
-import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.shared.configTree.json.{JsonConfigTreeIn, JsonConfigTreeOut}
 import org.genericConfig.admin.shared.step.json._
-import org.genericConfig.admin.shared.user.UserDTO
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -19,89 +16,89 @@ import org.genericConfig.admin.shared.user.UserDTO
 
 class Admin extends Wrapper {
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param user : UserDTO
-    * @return UserDTO
-    */
-  def addUser(user: UserDTO): UserDTO = {
-    User.addUser(user)
-  }
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param user : UserDTO
+//    * @return UserDTO
+//    */
+//  def addUser(user: UserDTO): UserDTO = {
+//    User.addUser(user)
+//  }
 
-  /**
-   * @author Gennadi Heimann
-   * @version 0.1.6
-   * @param userParams : UserDTO
-   * @return UserDTO
-   */
-  def deleteUser(userParams: UserDTO): UserDTO = {
-    User.deleteUser(userParams)
-  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param userParams : JsonUserIn
-    * @return JsonUserOut
-    */
-  def getUser(userParams: UserDTO): UserDTO = {
-    User.getUser(userParams)
-  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param userParams : JsonUserIn
-    * @return JsonUserOut
-    */
-  def updateUser(userParams: UserDTO): UserDTO = {
-    User.updateUser(userParams)
-  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param configDTO : ConfigDTO
-    * @return ConfigDTO
-    */
-  def addConfig(configDTO: ConfigDTO): ConfigDTO = {
-      Config.addConfig(configDTO)
-  }
-
-  /**
-   * @author Gennadi Heimann
-   * @version 0.1.6
-   * @param configDTO : ConfigDTO
-   * @return ConfigDTO
-   */
-  def deleteConfig(configDTO: ConfigDTO): ConfigDTO = {
-      Config.deleteConfig(configDTO)
-  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param configDTO : ConfigDTO
-    * @return ConfigDTO
-    */
-  def getConfigs(configDTO: ConfigDTO): ConfigDTO = {
-    Config.getConfigs(configDTO)
-  }
-
-
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param jsonUpdateConfigIn : JsonUpdateConfigIn
-    * @return JsonUpdateConfigOut
-    */
-  def updateConfig(jsonUpdateConfigIn: JsonUpdateConfigIn): JsonUpdateConfigOut = {
-    toJsonUpdateConfigOut(
-      Config.updateConfig(toUpdateConfigBO(jsonUpdateConfigIn))
-    )
-  }
+//  /**
+//   * @author Gennadi Heimann
+//   * @version 0.1.6
+//   * @param userParams : UserDTO
+//   * @return UserDTO
+//   */
+//  def deleteUser(userParams: UserDTO): UserDTO = {
+//    User.deleteUser(userParams)
+//  }
+//
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param userParams : JsonUserIn
+//    * @return JsonUserOut
+//    */
+//  def getUser(userParams: UserDTO): UserDTO = {
+//    User.getUser(userParams)
+//  }
+//
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param userParams : JsonUserIn
+//    * @return JsonUserOut
+//    */
+//  def updateUser(userParams: UserDTO): UserDTO = {
+//    User.updateUser(userParams)
+//  }
+//
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param configDTO : ConfigDTO
+//    * @return ConfigDTO
+//    */
+//  def addConfig(configDTO: ConfigDTO): ConfigDTO = {
+//      Config.addConfig(configDTO)
+//  }
+//
+//  /**
+//   * @author Gennadi Heimann
+//   * @version 0.1.6
+//   * @param configDTO : ConfigDTO
+//   * @return ConfigDTO
+//   */
+//  def deleteConfig(configDTO: ConfigDTO): ConfigDTO = {
+//      Config.deleteConfig(configDTO)
+//  }
+//
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param configDTO : ConfigDTO
+//    * @return ConfigDTO
+//    */
+//  def getConfigs(configDTO: ConfigDTO): ConfigDTO = {
+//    Config.getConfigs(configDTO)
+//  }
+//
+//
+//
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param jsonUpdateConfigIn : JsonUpdateConfigIn
+//    * @return JsonUpdateConfigOut
+//    */
+//  def updateConfig(jsonUpdateConfigIn: JsonUpdateConfigIn): JsonUpdateConfigOut = {
+//    toJsonUpdateConfigOut(
+//      Config.updateConfig(toUpdateConfigBO(jsonUpdateConfigIn))
+//    )
+//  }
 
   /**
     * @author Gennadi Heimann

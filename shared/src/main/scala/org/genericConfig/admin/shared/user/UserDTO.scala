@@ -11,8 +11,8 @@ import play.api.libs.functional.syntax._
  */
 case class UserDTO(
                     action : String = "",
-                    params : Option[UserParamsDTO],
-                    result : Option[UserResultDTO]
+                    params : Option[UserParamsDTO] = None,
+                    result : Option[UserResultDTO] = None
 )
 
 object UserDTO {

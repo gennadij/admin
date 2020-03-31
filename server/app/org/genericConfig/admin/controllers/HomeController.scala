@@ -1,15 +1,12 @@
 package org.genericConfig.admin.controllers
 
-import javax.inject._
-import play.api._
-import play.api.mvc._
 import akka.actor.ActorSystem
-import akka.actor.Props
+import akka.stream.Materializer
+import javax.inject._
+import org.genericConfig.admin.controllers.websocket.{ClientActor, WebClientsMgr}
 import play.api.libs.json.JsValue
 import play.api.libs.streams.ActorFlow
-import akka.stream.Materializer
-import org.genericConfig.admin.controllers.websocket.ClientActor
-import org.genericConfig.admin.controllers.websocket.WebClientsMgr
+import play.api.mvc._
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -31,7 +28,7 @@ class HomeController @Inject()(cc: ControllerComponents) (implicit actorSystem: 
   
   val webClientsMgr = actorSystem.actorOf(WebClientsMgr.props(), "WebClientsMgr")
   
-  def websocket = WebSocket.accept[JsValue, JsValue] { request =>
+  def websocket: WebSocket = WebSocket.accept[JsValue, JsValue] { request =>
     ActorFlow.actorRef { out => 
       ClientActor.props(out, webClientsMgr)
     }
