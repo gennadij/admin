@@ -10,7 +10,7 @@ import play.api.libs.functional.syntax._
   * Created by Gennadi Heimann 23.03.2020
   */
 case class ConfigParamsDTO (
-                             userId: Option[String],
+                             userId: Option[String] = None,
                              configId : Option[String] = None,
                              configUrl: Option[String] = None,
                              configurationCourse : Option[String] = None,

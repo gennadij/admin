@@ -10,12 +10,14 @@ import play.api.libs.json.{Format, JsPath}
  */
 case class UserConfigDTO (
                            configId: Option[String],
-                           configUrl: Option[String] = None
+                           configUrl: Option[String] = None,
+                           configurationCourse : Option[String] = None
                          )
 
 object UserConfigDTO{
   implicit val format: Format[UserConfigDTO] = (
     (JsPath \ "configId").format(Format.optionWithNull[String]) and
-      (JsPath \ "configUrl").format(Format.optionWithNull[String])
+    (JsPath \ "configUrl").format(Format.optionWithNull[String]) and
+    (JsPath \ "configurationCourse").format(Format.optionWithNull[String])
     )(UserConfigDTO.apply, unlift(UserConfigDTO.unapply))
 }
