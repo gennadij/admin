@@ -17,6 +17,8 @@ object PropertyKeys {
   val CONFIG_URL : String = "configUrl"
   val VERTEX_CONFIG : String = "Config"
   val CONFIGURATION_COURSE : String = "configurationCourse"
+  val CONFIGURATION_COURSE_SEQUENCE : String = "sequence"
+  val CONFIGURATION_COURSE_SUBSTITUTE : String = "substitute"
 
   val EDGE_HAS_COMPONENT = "hasComponent"
   val EDGE_HAS_STEP = "hasStep"
