@@ -2,7 +2,8 @@ package org.genericConfig.admin.models.config
 
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
-import org.genericConfig.admin.models.persistence.orientdb.PropertyKeys
+import org.genericConfig.admin.models.logic.RidToHash
+import org.genericConfig.admin.models.persistence.orientdb.{GraphConfig, PropertyKeys}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO, ConfigUpdateDTO}
 import org.specs2.mutable.Specification
@@ -35,9 +36,11 @@ class UpdateConfigSpecs extends Specification
   val configUrlOnlyConfigUrlUpdated = "//http://contig1/user_v016_6_updated_only_confgUrl"
 
   def beforeAll(): Unit = {
+    before()
   }
 
   def afterAll(): Unit = {
+    after()
   }
 
   "Der Benutzer aendert die Parameter der Konfiguration" >> {
@@ -46,46 +49,75 @@ class UpdateConfigSpecs extends Specification
         val action = updateConfigResultOnlyConfigUrl.asOpt.get.action
         action === Actions.UPDATE_CONFIG
       }
-      "result.configs(0).configId = " >> {
-        val configId = updateConfigResultOnlyConfigUrl.asOpt.get.result.get.configs.get(0).configId.get
+      "result.configs(0).configId = " + configIdForOnlyConfigUrl >> {
+        val configId = updateConfigResultOnlyConfigUrl.asOpt.get.result.get.configs.get.head.configId.get
         configId === configIdForOnlyConfigUrl
       }
-      "result.configs(0).configUrl = " >> {
-        updateConfigResultOnlyConfigUrl.asOpt.get.result.get.configs.get(0).configUrl.get === configUrlOnlyConfigUrlUpdated
+      "result.configs(0).configUrl = " + configUrlOnlyConfigUrlUpdated >> {
+        updateConfigResultOnlyConfigUrl.asOpt.get.result.get.configs.get.head.configUrl.get === configUrlOnlyConfigUrlUpdated
       }
-      "result.configs(0).configurationCourse = " >> {
-        updateConfigResultOnlyConfigUrl.asOpt.get.result.get.configs.get(0).configurationCourse.get === PropertyKeys.CONFIGURATION_COURSE_SEQUENCE
+      "result.configs(0).configurationCourse = " + PropertyKeys.CONFIGURATION_COURSE_SEQUENCE>> {
+        updateConfigResultOnlyConfigUrl.asOpt.get.result.get.configs.get.head.configurationCourse.get ===
+          PropertyKeys.CONFIGURATION_COURSE_SEQUENCE
       }
-      "result.errors = " >> {updateConfigResultOnlyConfigUrl.asOpt.get.result.get.errors === None}
+      "result.errors = None" >> {updateConfigResultOnlyConfigUrl.asOpt.get.result.get.errors === None}
     }
     "Der Benutzer aendert nur configurationCourse" >> {
-      "action = UPDATE_CONFIG" >> {"" === ""}
-      "result.configs(0).configId = " >> {"" === ""}
-      "result.configs(0).configUrl = " >> {"" === ""}
-      "result.configs(0).configurationCourse = " >> {"" === ""}
-      "result.errors = " >> {"" === ""}
+      "action = UPDATE_CONFIG" >> {
+        updateConfigResultOnlyConfigurationCourse.asOpt.get.action === Actions.UPDATE_CONFIG
+      }
+      "result.configs(0).configId = " + configIdForOnlyConfigurationsCourse >> {
+        val configId = updateConfigResultOnlyConfigurationCourse.asOpt.get.result.get.configs.get.head.configId.get
+        configId === configIdForOnlyConfigurationsCourse
+      }
+      "result.configs(0).configUrl = //http://contig1/user_v016_6_update_only_configurationCourse" >> {
+        val configUrl = updateConfigResultOnlyConfigurationCourse.asOpt.get.result.get.configs.get.head.configUrl.get
+        configUrl === "//http://contig1/user_v016_6_update_only_configurationCourse"}
+      "result.configs(0).configurationCourse = " + PropertyKeys.CONFIGURATION_COURSE_SUBSTITUTE >> {
+        val configurationCourse =
+          updateConfigResultOnlyConfigurationCourse.asOpt.get.result.get.configs.get.head.configurationCourse.get
+        configurationCourse === PropertyKeys.CONFIGURATION_COURSE_SUBSTITUTE}
+      "result.errors = None" >> {
+        updateConfigResultOnlyConfigurationCourse.asOpt.get.result.get.errors === None}
     }
     "Der Benutzer aendert sowohl configUrl als auch configurationCourse" >> {
-      "action = UPDATE_CONFIG" >> {"" === ""}
-      "result.configs(0).configId = " >> {"" === ""}
-      "result.configs(0).configUrl = " >> {"" === ""}
-      "result.configs(0).configurationCourse = " >> {"" === ""}
-      "result.errors = " >> {"" === ""}
+      "action = UPDATE_CONFIG" >> {
+        updateConfigResultBoth.asOpt.get.action === Actions.UPDATE_CONFIG
+      }
+      "result.configs(0).configId = " + configIdForBoth >> {
+        val configId = updateConfigResultBoth.asOpt.get.result.get.configs.get.head.configId.get
+        configId === configIdForBoth}
+      "result.configs(0).configUrl = //http://contig1/user_v016_6_updated_both" >> {
+        val configUrl = updateConfigResultBoth.asOpt.get.result.get.configs.get.head.configUrl.get
+        configUrl === "//http://contig1/user_v016_6_updated_both"}
+      "result.configs(0).configurationCourse = " + PropertyKeys.CONFIGURATION_COURSE_SUBSTITUTE >> {
+        val configurationCourse =
+          updateConfigResultBoth.asOpt.get.result.get.configs.get.head.configurationCourse.get
+        configurationCourse === PropertyKeys.CONFIGURATION_COURSE_SUBSTITUTE}
+      "result.errors = " >> {updateConfigResultBoth.asOpt.get.result.get.errors === None}
     }
     "Der Benutzer aendert nichts" >> {
-      "action = UPDATE_CONFIG" >> {"" === ""}
-      "result.configs(0).configId = " >> {"" === ""}
-      "result.configs(0).configUrl = " >> {"" === ""}
-      "result.configs(0).configurationCourse = " >> {"" === ""}
-      "result.errors = " >> {"" === ""}
+      "action = UPDATE_CONFIG" >> {updateConfigResultNothing.asOpt.get.action ==== Actions.UPDATE_CONFIG}
+      "result.configs(0).configId = " + configIdForNothing >> {
+        val configId = updateConfigResultNothing.asOpt.get.result.get.configs.get.head.configId.get
+        configId === configIdForNothing}
+      "result.configs(0).configUrl = " >> {
+        val configUrl = updateConfigResultNothing.asOpt.get.result.get.configs.get.head.configUrl
+        configUrl === None
+      }
+      "result.configs(0).configurationCourse = " >> {
+        val configurationCourse = updateConfigResultNothing.asOpt.get.result.get.configs.get.head.configurationCourse
+        configurationCourse === None
+      }
+      "result.errors = " >> {updateConfigResultNothing.asOpt.get.result.get.errors === None}
     }
     "Der Benutzer sendet UPDATE_CONFIG mit defekten ID" >> {
-      "action = UPDATE_CONFIG" >> {"" === ""}
-      "result.errors = " >> {"" === ""}
+      "action = UPDATE_CONFIG" >> {updateConfigResultDefectId.asOpt.get.action === Actions.UPDATE_CONFIG}
+      "result.errors = " >> {updateConfigResultDefectId.asOpt.get.result.get.errors.get.head.name === None}
     }
   }
 
-  private def before() = {
+  private def before(): Unit = {
     val userId: String = createUser(this.username, wC)
 
     configIdForOnlyConfigUrl =
@@ -166,5 +198,13 @@ class UpdateConfigSpecs extends Specification
     updateConfigResultDefectId = Json.fromJson[ConfigDTO](wC.handleMessage(updateConfigParamsDefectId))
 
     Logger.info("-> " + updateConfigResultOnlyConfigUrl)
+  }
+
+  private def after() = {
+    Logger.info("Alle erstellte Configs werden geloescht")
+    GraphConfig.deleteConfig(RidToHash.getRId(configIdForOnlyConfigUrl).get)
+    GraphConfig.deleteConfig(RidToHash.getRId(configIdForOnlyConfigurationsCourse).get)
+    GraphConfig.deleteConfig(RidToHash.getRId(configIdForBoth).get)
+    GraphConfig.deleteConfig(RidToHash.getRId(configIdForNothing).get)
   }
 }

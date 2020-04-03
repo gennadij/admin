@@ -183,7 +183,6 @@ class Config(configDTO: ConfigDTO) {
             configDTO.params.get.update.get.configUrl,
             configDTO.params.get.update.get.configurationCourse
         )
-
         error match {
           case None => createConfigDTO(action = Actions.UPDATE_CONFIG, None, None, None)
           case _ => createConfigDTO(action = Actions.UPDATE_CONFIG, None, None, Some(List(error.get)))

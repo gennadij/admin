@@ -31,8 +31,6 @@ object RidToHash {
       case Some(i) => Some(i._1)
       case None => None
     }
-
-
   }
   
   def getHash(id: String): Option[String] = {

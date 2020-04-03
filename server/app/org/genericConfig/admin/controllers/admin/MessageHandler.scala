@@ -1,7 +1,6 @@
 package org.genericConfig.admin.controllers.admin
 
 import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.common.json.JsonNames
 import play.api.libs.json._
 
 /**
@@ -23,7 +22,7 @@ trait MessageHandler
       case Some(Actions.ADD_CONFIG) => addConfig(receivedMessage)
       case Some(Actions.DELETE_CONFIG) => deleteConfig(receivedMessage)
       case Some(Actions.GET_CONFIGS) => getConfigs(receivedMessage)
-      case Some(JsonNames.UPDATE_CONFIG) => updateConfig(receivedMessage)
+      case Some(Actions.UPDATE_CONFIG) => updateConfig(receivedMessage)
 //
 //      case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage, admin)
 //

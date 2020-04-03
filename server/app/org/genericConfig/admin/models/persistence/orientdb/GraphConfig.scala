@@ -232,13 +232,18 @@ class GraphConfig(graph: OrientGraph) {
                             configId: String, configUrl: Option[String], configurationCourse : Option[String]
                           ): (Option[OrientVertex], Option[Error]) = {
     try {
-
+      //TODO die ConfigurationsCourse beim Update soll immmer gesetzt werden
       (configUrl, configurationCourse) match {
         case (Some(configUrl), None) =>
-          graph.getVertex(configId).setProperties(PropertyKeys.CONFIG_URL, configUrl)
-        case (None, Some(configurationCourse)) =>
           graph.getVertex(configId).setProperties(
-            PropertyKeys.CONFIGURATION_COURSE, configurationCourse
+            PropertyKeys.CONFIG_URL, configUrl,
+            PropertyKeys.CONFIGURATION_COURSE, PropertyKeys.CONFIGURATION_COURSE_SEQUENCE
+          )
+//          graph.getVertex(configId).setProperty(PropertyKeys.CONFIG_URL, configUrl)
+        case (None, Some(configurationCourse)) =>
+          Logger.info(configurationCourse)
+          graph.getVertex(configId).setProperty(
+              PropertyKeys.CONFIGURATION_COURSE, configurationCourse
           )
         case (Some(configUrl), Some(configurationCourse)) =>
           graph.getVertex(configId).setProperties(
