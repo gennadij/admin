@@ -2,6 +2,7 @@ package org.genericConfig.admin.models.config
 
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
+import org.genericConfig.admin.models.common.{ConfigIdHashNotExist, ConfigNothingToUpdate}
 import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.models.persistence.orientdb.{GraphConfig, PropertyKeys}
 import org.genericConfig.admin.shared.Actions
@@ -98,22 +99,12 @@ class UpdateConfigSpecs extends Specification
     }
     "Der Benutzer aendert nichts" >> {
       "action = UPDATE_CONFIG" >> {updateConfigResultNothing.asOpt.get.action ==== Actions.UPDATE_CONFIG}
-      "result.configs(0).configId = " + configIdForNothing >> {
-        val configId = updateConfigResultNothing.asOpt.get.result.get.configs.get.head.configId.get
-        configId === configIdForNothing}
-      "result.configs(0).configUrl = " >> {
-        val configUrl = updateConfigResultNothing.asOpt.get.result.get.configs.get.head.configUrl
-        configUrl === None
-      }
-      "result.configs(0).configurationCourse = " >> {
-        val configurationCourse = updateConfigResultNothing.asOpt.get.result.get.configs.get.head.configurationCourse
-        configurationCourse === None
-      }
-      "result.errors = " >> {updateConfigResultNothing.asOpt.get.result.get.errors === None}
+      "result.configs = None" >> {updateConfigResultNothing.asOpt.get.result.get.configs === None}
+      "result.errors = " >> {updateConfigResultNothing.asOpt.get.result.get.errors.get.head.name === ConfigNothingToUpdate().name}
     }
     "Der Benutzer sendet UPDATE_CONFIG mit defekten ID" >> {
       "action = UPDATE_CONFIG" >> {updateConfigResultDefectId.asOpt.get.action === Actions.UPDATE_CONFIG}
-      "result.errors = " >> {updateConfigResultDefectId.asOpt.get.result.get.errors.get.head.name === None}
+      "result.errors = " >> {updateConfigResultDefectId.asOpt.get.result.get.errors.get.head.name === ConfigIdHashNotExist().name}
     }
   }
 
@@ -190,6 +181,10 @@ class UpdateConfigSpecs extends Specification
     ))
 
     Logger.info("<- " + updateConfigParamsOnlyConfigUrl)
+    Logger.info("<- " + updateConfigParamsOnlyConfigurationCourse)
+    Logger.info("<- " + updateConfigParamsBoth)
+    Logger.info("<- " + updateConfigParamsNothing)
+    Logger.info("<- " + updateConfigParamsDefectId)
 
     updateConfigResultOnlyConfigUrl = Json.fromJson[ConfigDTO](wC.handleMessage(updateConfigParamsOnlyConfigUrl))
     updateConfigResultOnlyConfigurationCourse = Json.fromJson[ConfigDTO](wC.handleMessage(updateConfigParamsOnlyConfigurationCourse))
@@ -198,6 +193,10 @@ class UpdateConfigSpecs extends Specification
     updateConfigResultDefectId = Json.fromJson[ConfigDTO](wC.handleMessage(updateConfigParamsDefectId))
 
     Logger.info("-> " + updateConfigResultOnlyConfigUrl)
+    Logger.info("-> " + updateConfigResultOnlyConfigurationCourse)
+    Logger.info("-> " + updateConfigResultBoth)
+    Logger.info("-> " + updateConfigResultNothing)
+    Logger.info("-> " + updateConfigResultDefectId)
   }
 
   private def after() = {

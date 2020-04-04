@@ -47,6 +47,12 @@ case class ConfigIdHashNotExist() extends Error {
   def code :String = ""
 }
 
+case class ConfigNothingToUpdate() extends Error {
+  def name: String = "CONFIG_NOTHING_TO_UPDATE"
+  def message: String = ""
+  def code :String = ""
+}
+
 case class ODBClassCastError() extends Error{
   def name: String = "CLASS_CAST_ERROR"
   def message: String = "Interner Fehler des Configurators"

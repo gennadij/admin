@@ -1,10 +1,11 @@
 package org.genericConfig.admin.models.persistence.orientdb
 
+import com.orientechnologies.orient.core.exception.OValidationException
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
 import com.tinkerpop.blueprints.Direction
-import com.tinkerpop.blueprints.impls.orient.{OrientEdge, OrientGraph, OrientVertex}
-import org.genericConfig.admin.models.common.{DeleteConfigDefectID, Error, ODBClassCastError, ODBConnectionFail, ODBReadError, ODBRecordDuplicated, ODBWriteError, UnknownError}
+import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientEdge, OrientGraph, OrientVertex}
+import org.genericConfig.admin.models.common.{ConfigNothingToUpdate, DeleteConfigDefectID, Error, ODBClassCastError, ODBConnectionFail, ODBReadError, ODBRecordDuplicated, ODBValidationException, ODBWriteError, UnknownError}
 import org.genericConfig.admin.models.persistence.Database
 import play.api.Logger
 
@@ -232,33 +233,31 @@ class GraphConfig(graph: OrientGraph) {
                             configId: String, configUrl: Option[String], configurationCourse : Option[String]
                           ): (Option[OrientVertex], Option[Error]) = {
     try {
-      //TODO die ConfigurationsCourse beim Update soll immmer gesetzt werden
       (configUrl, configurationCourse) match {
-        case (Some(configUrl), None) =>
-          graph.getVertex(configId).setProperties(
-            PropertyKeys.CONFIG_URL, configUrl,
-            PropertyKeys.CONFIGURATION_COURSE, PropertyKeys.CONFIGURATION_COURSE_SEQUENCE
-          )
-//          graph.getVertex(configId).setProperty(PropertyKeys.CONFIG_URL, configUrl)
-        case (None, Some(configurationCourse)) =>
-          Logger.info(configurationCourse)
-          graph.getVertex(configId).setProperty(
-              PropertyKeys.CONFIGURATION_COURSE, configurationCourse
-          )
-        case (Some(configUrl), Some(configurationCourse)) =>
-          graph.getVertex(configId).setProperties(
-            PropertyKeys.CONFIG_URL, configUrl,
-            PropertyKeys.CONFIGURATION_COURSE, configurationCourse
-          )
+        case (Some(cU), None) =>
+          val sql: String = s"update Config set ${PropertyKeys.CONFIG_URL}='$cU' return after where @rid=$configId"
+          val dbRes: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+          val vUpdatedConfig : OrientVertex = dbRes.asScala.toList.map(_.asInstanceOf[OrientVertex]).head
+          graph.commit()
+          (Some(vUpdatedConfig), None)
+        case (None, Some(cC)) =>
+          val sql: String = s"update Config set ${PropertyKeys.CONFIGURATION_COURSE}='$cC' return after where @rid=$configId"
+          val dbRes: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+          val vUpdatedConfig : OrientVertex = dbRes.asScala.toList.map(_.asInstanceOf[OrientVertex]).head
+          graph.commit()
+          (Some(vUpdatedConfig), None)
+        case (Some(cU), Some(cC)) =>
+          val sql: String = s"update Config set " +
+            s"${PropertyKeys.CONFIG_URL}='$cU', " +
+            s"${PropertyKeys.CONFIGURATION_COURSE}='$cC' " +
+            s"return after where @rid=$configId"
+          val dbRes: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+          val vUpdatedConfig : OrientVertex = dbRes.asScala.toList.map(_.asInstanceOf[OrientVertex]).head
+          graph.commit()
+          (Some(vUpdatedConfig), None)
           //TODO richtigen Fehler spezifizieren
-        case (None, None) => (None, UnknownError())
+        case (None, None) => (None, Some(ConfigNothingToUpdate()))
       }
-
-      graph.commit()
-
-      val vUpdatedConfig = graph.getVertex(configId)
-
-      (Some(vUpdatedConfig), None)
     } catch {
       case e: ORecordDuplicatedException =>
         Logger.error(e.printStackTrace().toString)
@@ -268,6 +267,10 @@ class GraphConfig(graph: OrientGraph) {
         graph.rollback()
         Logger.error(e.printStackTrace().toString)
         (None, Some(ODBClassCastError()))
+      case e: OValidationException =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (None, Some(ODBValidationException()))
       case e: Exception =>
         graph.rollback()
         Logger.error(e.printStackTrace().toString)

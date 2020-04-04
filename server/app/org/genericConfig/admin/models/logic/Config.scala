@@ -1,7 +1,7 @@
 package org.genericConfig.admin.models.logic
 
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
-import org.genericConfig.admin.models.common.{ConfigIdHashNotExist, Error, UserIdHashNotExist}
+import org.genericConfig.admin.models.common.{ConfigIdHashNotExist, ConfigNothingToUpdate, Error, UserIdHashNotExist}
 import org.genericConfig.admin.models.persistence.Persistence
 import org.genericConfig.admin.models.persistence.orientdb.{GraphConfig, PropertyKeys}
 import org.genericConfig.admin.shared.Actions
@@ -184,7 +184,15 @@ class Config(configDTO: ConfigDTO) {
             configDTO.params.get.update.get.configurationCourse
         )
         error match {
-          case None => createConfigDTO(action = Actions.UPDATE_CONFIG, None, None, None)
+          case None =>
+            val configs : Option[List[UserConfigDTO]] = Some(List(UserConfigDTO(
+              configId = Some(RidToHash.setIdAndHash(vUpdatedConfig.get.getIdentity.toString())._2),
+              configUrl = Some(vUpdatedConfig.get.getProperty(PropertyKeys.CONFIG_URL)),
+              configurationCourse = Some(vUpdatedConfig.get.getProperty(PropertyKeys.CONFIGURATION_COURSE))
+            )))
+            createConfigDTO(action = Actions.UPDATE_CONFIG, None, configs, None)
+          case Some(ConfigNothingToUpdate()) =>
+            createConfigDTO(action = Actions.UPDATE_CONFIG, None, None, Some(List(ConfigNothingToUpdate())))
           case _ => createConfigDTO(action = Actions.UPDATE_CONFIG, None, None, Some(List(error.get)))
         }
       case None => createConfigDTO(action = Actions.UPDATE_CONFIG, None, None, Some(List(ConfigIdHashNotExist())))
@@ -227,27 +235,11 @@ class Config(configDTO: ConfigDTO) {
     })
   }
 
-  private def setHashForNextSteps(nextSteps: Set[StepForConfigTreeBO]): Set[StepForConfigTreeBO] = {
-    nextSteps map { nSs =>
-      nSs.copy(
-        stepId = RidToHash.setIdAndHash(nSs.stepId)._2,
-        nextSteps = setHashForNextSteps(nSs.nextSteps),
-        components = setHashForComponents(nSs.components))
-    }
-  }
-
-  private def getHashForNextStepId(nextStepId: Option[String]): Option[String] = {
-    nextStepId match {
-      case Some(nsId) => Some(RidToHash.setIdAndHash(nsId)._2)
-      case None => None
-    }
-  }
-
   private def createConfigDTO (
-                              action : String,
-                              userId : Option[String],
-                              configs : Option[List[UserConfigDTO]],
-                              errors : Option[List[Error]]
+                                action : String,
+                                userId : Option[String],
+                                configs : Option[List[UserConfigDTO]],
+                                errors : Option[List[Error]]
                               ) : ConfigDTO = {
 
     val e =  errors match {
@@ -273,6 +265,22 @@ class Config(configDTO: ConfigDTO) {
       ))
     )
 
+  }
+
+  private def setHashForNextSteps(nextSteps: Set[StepForConfigTreeBO]): Set[StepForConfigTreeBO] = {
+    nextSteps map { nSs =>
+      nSs.copy(
+        stepId = RidToHash.setIdAndHash(nSs.stepId)._2,
+        nextSteps = setHashForNextSteps(nSs.nextSteps),
+        components = setHashForComponents(nSs.components))
+    }
+  }
+
+  private def getHashForNextStepId(nextStepId: Option[String]): Option[String] = {
+    nextStepId match {
+      case Some(nsId) => Some(RidToHash.setIdAndHash(nsId)._2)
+      case None => None
+    }
   }
 }
 
