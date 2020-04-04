@@ -37,7 +37,7 @@ class AdminClientWeb(websocket: WebSocket) {
       case Some(Actions.ADD_USER) => addUser(receivedMessage)
       case Some(Actions.GET_USER) => getUser(receivedMessage)
 //      case Some(JsonNames.ADD_CONFIG) => addConfig(receivedMessage)
-//      case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage)
+      case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage)
 //      case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage)
 //      case Some(JsonNames.UPDATE_CONFIG) => updateConfig(receivedMessage)
 //      case Some(JsonNames.ADD_STEP) => addStep(receivedMessage)

@@ -24,6 +24,11 @@ object HtmlElementIds {
   
   def section =              "section"
   
+  val inputFieldUpdateUsernameHtml : String = "inputFieldUpdateUsername"
+  val inputFieldUpdateUsernameJQuery : String = "#inputFieldUpdateUsername"
+  val buttonActionUpdateUsernameHtml : String = "buttonActionUpdateUsername"
+  val buttonActionUpdateUsernameJQuery : String = "#buttonActionUpdateUsername"
+  
   def addConfigHtml =        "addConfig"
   def addConfigJQuery =      "#addConfig"
   
