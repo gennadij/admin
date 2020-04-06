@@ -41,7 +41,11 @@ object HtmlElementIds {
   def getConfigsHtml =       "getConfigs"
   def getConfigsJQuery =     "#getConfigs"
   
-  def inputGonfigUrlHtml =   "inputConfigUrl"
+  val inputConfigUrlHtml : String =   "inputConfigUrl"
+  val inputConfigUrlJQuery : String =   "#inputConfigUrl"
+
+  val inputConfigurationCourseHtml : String = "configurationCourse"
+  val inputConfigurationCourseJQuery : String = "#configurationCourse"
   
   def addStepHtml =          "addStep"
   def addStepJQuery =        "#addStep"

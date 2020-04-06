@@ -1,28 +1,21 @@
 package org.genericConfig.admin.client
 
 import org.genericConfig.admin.client.component.Component
-import play.api.libs.json.JsValue
-import play.api.libs.json.Json
-import play.api.libs.json.JsResult
-import play.api.libs.json.JsSuccess
-import play.api.libs.json.JsError
-import org.scalajs.dom.raw.WebSocket
-import org.genericConfig.admin.client.config.GetConfig
-import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.config.json._
-import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
-import org.genericConfig.admin.client.config.CreateConfig
-import org.genericConfig.admin.client.config.DeleteConfig
-import org.genericConfig.admin.client.config.EditConfig
+import org.genericConfig.admin.client.config.{CreateConfig, DeleteConfig, EditConfig, GetConfig}
 import org.genericConfig.admin.client.configTree.ConfigTree
 import org.genericConfig.admin.client.registration.RegistrationPage
-import org.genericConfig.admin.shared.step.json.JsonStepOut
 import org.genericConfig.admin.client.step.AddStep
 import org.genericConfig.admin.client.user.GetUser
 import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.component.json.{JsonComponentIn, JsonComponentOut}
-import org.genericConfig.admin.shared.error.json.{JsonErrorIn, JsonErrorParams}
+import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.component.json.JsonComponentOut
+import org.genericConfig.admin.shared.config.ConfigDTO
+import org.genericConfig.admin.shared.config.json.{JsonDeleteConfigOut, JsonUpdateConfigOut}
+import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
+import org.genericConfig.admin.shared.step.json.JsonStepOut
 import org.genericConfig.admin.shared.user.UserDTO
+import org.scalajs.dom.raw.WebSocket
+import play.api.libs.json._
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -36,8 +29,8 @@ class AdminClientWeb(websocket: WebSocket) {
     (receivedMessage \ "action").asOpt[String] match {
       case Some(Actions.ADD_USER) => addUser(receivedMessage)
       case Some(Actions.GET_USER) => getUser(receivedMessage)
-//      case Some(JsonNames.ADD_CONFIG) => addConfig(receivedMessage)
-      case Some(JsonNames.GET_CONFIGS) => getConfigs(receivedMessage)
+      case Some(Actions.ADD_CONFIG) => addConfig(receivedMessage)
+      case Some(Actions.GET_CONFIGS) => getConfigs(receivedMessage)
 //      case Some(JsonNames.DELET_CONFIG) => deleteConfig(receivedMessage)
 //      case Some(JsonNames.UPDATE_CONFIG) => updateConfig(receivedMessage)
 //      case Some(JsonNames.ADD_STEP) => addStep(receivedMessage)
@@ -76,10 +69,10 @@ class AdminClientWeb(websocket: WebSocket) {
   }
 
   private def getConfigs(receivedMessage: JsValue): Unit = {
-    val getConfigsIn: JsResult[JsonGetConfigsOut] = Json.fromJson[JsonGetConfigsOut](receivedMessage)
-    getConfigsIn match {
-      case s: JsSuccess[JsonGetConfigsOut] => new GetConfig(websocket).drawAllConfigs(getConfigsIn.get)
-      case e: JsError => println("Error -> : " + JsonNames.GET_CONFIGS + " -> " + JsError.toJson(e).toString())
+    val getConfigsParams: JsResult[ConfigDTO] = Json.fromJson[ConfigDTO](receivedMessage)
+    getConfigsParams match {
+      case s: JsSuccess[ConfigDTO] => new GetConfig(websocket).drawAllConfigs(getConfigsParams.get)
+      case e: JsError => println("Error -> : " + Actions.GET_CONFIGS + " -> " + JsError.toJson(e).toString())
     }
   }
   
@@ -93,12 +86,12 @@ class AdminClientWeb(websocket: WebSocket) {
   }
   
   private def addConfig(receivedMessage: JsValue) = {
-    val createConfigOut: JsResult[JsonAddConfigOut] = Json.fromJson[JsonAddConfigOut](receivedMessage)
-    createConfigOut match {
-      case s: JsSuccess[JsonAddConfigOut] => s.get
+    val addConfigResult: JsResult[ConfigDTO] = Json.fromJson[ConfigDTO](receivedMessage)
+    addConfigResult match {
+      case s: JsSuccess[ConfigDTO] => new CreateConfig(websocket, "").updateStatus(s.get) //TODO GET_CONFIGS ausführen und visualisieren
       case e: JsError => println("Errors -> ADD_CONFIG: " + JsError.toJson(e).toString())
     }
-    new CreateConfig(websocket, "").updateStatus(createConfigOut.get)
+
    }
   
   private def deleteConfig(receivedMessage: JsValue) = {

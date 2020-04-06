@@ -5,7 +5,7 @@ import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
 import com.tinkerpop.blueprints.Direction
 import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientEdge, OrientGraph, OrientVertex}
-import org.genericConfig.admin.models.common.{ConfigNothingToUpdate, DeleteConfigDefectID, Error, ODBClassCastError, ODBConnectionFail, ODBReadError, ODBRecordDuplicated, ODBValidationException, ODBWriteError, UnknownError}
+import org.genericConfig.admin.models.common.{ConfigNothingToUpdate, DeleteConfigDefectID, Error, ODBClassCastError, ODBConnectionFail, ODBReadError, ODBRecordDuplicated, ODBValidationException, ODBWriteError}
 import org.genericConfig.admin.models.persistence.Database
 import play.api.Logger
 
@@ -255,7 +255,6 @@ class GraphConfig(graph: OrientGraph) {
           val vUpdatedConfig : OrientVertex = dbRes.asScala.toList.map(_.asInstanceOf[OrientVertex]).head
           graph.commit()
           (Some(vUpdatedConfig), None)
-          //TODO richtigen Fehler spezifizieren
         case (None, None) => (None, Some(ConfigNothingToUpdate()))
       }
     } catch {
