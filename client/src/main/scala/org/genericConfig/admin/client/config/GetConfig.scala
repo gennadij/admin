@@ -1,11 +1,10 @@
 package org.genericConfig.admin.client.config
 
 import org.genericConfig.admin.client.start.StartPage
-import org.genericConfig.admin.shared.config.ConfigDTO
-import org.genericConfig.admin.shared.config.json.JsonGetConfigsOut
-import org.genericConfig.admin.shared.configTree.json.{JsonConfigTreeIn, JsonConfigTreeParams}
+import org.genericConfig.admin.shared.Actions
+import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO, UserConfigDTO}
 import org.scalajs.dom.raw.WebSocket
-import org.scalajs.jquery.jQuery
+import org.scalajs.jquery.{JQuery, jQuery}
 import play.api.libs.json.Json
 import util.{CommonFunction, HtmlElementIds}
 
@@ -16,89 +15,76 @@ import util.{CommonFunction, HtmlElementIds}
  */
 class GetConfig(webSocket: WebSocket) extends CommonFunction{
 
-
+  def update(addConfigResult: ConfigDTO): Unit = {
+    getConfigs(addConfigResult.result.get.userId.get)
+  }
 
   def drawAllConfigs(getConfigsResult: ConfigDTO): Unit = {
 
     cleanPage
 
-//    val status: String = getConfigsParams.result.status.getConfigs.get.status + " , " +
-//        getConfigsParams.result.status.common.get.status
-//
-//    drawNewStatus(status)
-//
-    val configurationen : String = getConfigsResult.result.get.configs.get.map(config => {
+    val configurations : String = getConfigsResult.result.get.configs.get.map(config => {
       " " + drawButton(config.configId.get, config.configUrl.get) + " "
-    }).toString()
-    println(configurationen)
+    }).mkString(" ")
+
     val htmlMain =
     "<dev id='main' class='main'>" +
       "<p>Konfigurationen</p>" +
       drawButton(HtmlElementIds.addConfigHtml, "New Config") +
-      drawButton(HtmlElementIds.startPageHtml, "startPage") +
+      drawButton(HtmlElementIds.startPageHtml, "startPage") + "</br>" + "</br>" +
+      configurations +
     "</dev>"
 
     drawNewMain(htmlMain)
-
+    getConfigsResult.result.get.configs.get.map(config => {
+      jQuery(s"#${config.configId.get}").on("click", () => drawConfig(config))
+    })
     jQuery(HtmlElementIds.addConfigJQuery).on("click", () => createConfig(getConfigsResult.result.get.userId.get))
     jQuery(HtmlElementIds.startPageJQuery).on("click", () => startPage)
-
-//    drawConfigs(getConfigsParams)
   }
 
-  private def drawConfigs(getConfigsOut: JsonGetConfigsOut) = {
-    getConfigsOut.result.configs foreach { config =>
+  private def drawConfig(config : UserConfigDTO): JQuery = {
+    cleanPage
 
-      val htmlConfig =
-        "<dev id='" + config.configId + "' class='config'> " +
-          "<div id='text_for_config'>" + config.configId + " || " + config.configUrl + "</dev>" +
-          drawButton(HtmlElementIds.getConfigsHtml + config.configId, "Show") +
-          drawButton(HtmlElementIds.updateConfigHtml + config.configId, "Edit") +
-          drawButton(HtmlElementIds.deleteConfigHtml + config.configId, "Delete") +
-        "</dev> "
+    val htmlMain =
+      "<dev id='main' class='main'>" +
+        "<p>Konfiguration</p>" +
+        drawInputField("configurationUrl", "configurationUrl", defaultText = config.configUrl.get)  + "</br> </br>" +
+ //        drawInputField("configurationCourse", "configurationCourse", defaultText = config.configurationCourse.get) +
+        drawButton("updateConfig", "updateConfig") +
+        drawButton("deleteConfig", "deleteConfig") +
+        drawButton("addStep", "addStep") +
+        drawButton(HtmlElementIds.startPageHtml, "startPage") +
+      "</dev>"
 
-      jQuery(htmlConfig).appendTo(jQuery(HtmlElementIds.mainJQuery))
+    drawNewMain(htmlMain)
 
-      jQuery(HtmlElementIds.getConfigsJQuery + config.configId).on("click", () => showConfig(config.configId))
-
-      jQuery(HtmlElementIds.updateConfigJQuery + config.configId).on("click", () =>
-        editConfig(config.configId, config.configUrl, getConfigsOut.result.userId))
-
-      jQuery(HtmlElementIds.deleteConfigJQuery + config.configId).on("click", () =>
-        deleteConfig(config.configId, config.configUrl, getConfigsOut.result.userId))
-    }
+    jQuery(HtmlElementIds.startPageJQuery).on("click", () => startPage)
   }
 
-  private def showConfig(configId: String) = {
-
-    val jsonConfigTree: String = Json.toJson(
-        JsonConfigTreeIn(
-            params = JsonConfigTreeParams(
-                configId
-            )
-        )
-    ).toString
-
-    println("IN " + jsonConfigTree)
-    webSocket.send(jsonConfigTree)
-    jQuery("#main").remove()
-  }
-
-  private def startPage = {
+  private def startPage: JQuery = {
     new StartPage(webSocket).drawStartPage()
   }
 
-  private def createConfig(userId: String) = {
+  private def createConfig(userId: String): JQuery = {
     new CreateConfig(webSocket, userId).createConfig
   }
 
-  private def editConfig(configId: String, configUrl: String, userId: String) = {
-    println("edit Config")
-    new EditConfig(webSocket).editConfig(configId, configUrl, userId)
+  def deleteConfig(configId: String, configUrl: String, userId: String): Unit = {
+    println("delete config")
+//    new DeleteConfig(webSocket).deleteConfig(configId, configUrl, userId)
   }
 
-  def deleteConfig(configId: String, configUrl: String, userId: String) = {
-    println("delete config")
-    new DeleteConfig(webSocket).deleteConfig(configId, configUrl, userId)
+  private def getConfigs(userId: String): Unit = {
+    println("Get Configs")
+    val getConfigParams = Json.toJson(ConfigDTO(
+      action = Actions.GET_CONFIGS,
+      params = Some(ConfigParamsDTO(
+        userId = Some(userId)
+      )),
+      result = None
+    )).toString
+    println("OUT -> " + getConfigParams)
+    webSocket.send(getConfigParams)
   }
 }

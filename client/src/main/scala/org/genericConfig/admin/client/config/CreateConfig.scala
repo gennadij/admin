@@ -3,7 +3,7 @@ package org.genericConfig.admin.client.config
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
 import org.scalajs.dom.raw.WebSocket
-import org.scalajs.jquery.jQuery
+import org.scalajs.jquery.{JQuery, jQuery}
 import play.api.libs.json.Json
 import util.{CommonFunction, HtmlElementIds}
 
@@ -14,7 +14,7 @@ import util.{CommonFunction, HtmlElementIds}
  */
 class CreateConfig(webSocket: WebSocket, userId: String) extends CommonFunction {
 
-  def createConfig = {
+  def createConfig: JQuery = {
 
     cleanPage
 
@@ -39,12 +39,13 @@ class CreateConfig(webSocket: WebSocket, userId: String) extends CommonFunction 
     val addConfig: String = Json.toJson(ConfigDTO(
         action = Actions.ADD_CONFIG,
         params = Some(ConfigParamsDTO(
-          Some(userId),
-          Some(configUrl),
+          userId = Some(userId),
+          configUrl = Some(configUrl),
           configurationCourse = Some("sequence")
         )),
       result = None
     )).toString
+    println("OUT -> " + addConfig)
     webSocket.send(addConfig)
   }
 

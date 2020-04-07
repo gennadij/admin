@@ -1,12 +1,9 @@
 package org.genericConfig.admin.client.user
 
-import org.genericConfig.admin.client.config.CreateConfig
-import org.genericConfig.admin.client.login.LoginPage
 import org.genericConfig.admin.client.start.StartPage
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
-import org.genericConfig.admin.shared.config.json.{JsonGetConfigsIn, JsonGetConfigsParams}
-import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO, UserUpdateDTO}
+import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import org.scalajs.dom.raw.WebSocket
 import org.scalajs.jquery.jQuery
 import play.api.libs.json.Json
@@ -17,9 +14,9 @@ import util.{CommonFunction, HtmlElementIds}
   *
   * Created by Gennadi Heimann 04.06.2018
   */
-class GetUser(webSocket: WebSocket) extends CommonFunction{
+class UserPage(webSocket: WebSocket) extends CommonFunction{
 
-  def drawUser(userDTO: UserDTO): Unit = {
+  def drawUserPage(userDTO: UserDTO): Unit = {
 
     cleanPage
 
@@ -44,8 +41,7 @@ class GetUser(webSocket: WebSocket) extends CommonFunction{
         jQuery(HtmlElementIds.updateConfigJQuery).on("click", () => updateUser(userDTO))
         jQuery(HtmlElementIds.startPageJQuery).on("click", () => startPage)
       case _ =>
-        drawNewStatus(userDTO.result.get.errors.get.head.name)
-        new LoginPage().drawLoginPage(webSocket, userDTO.result.get.errors)
+        new StartPage(webSocket).drawStartPage(userDTO.result.get.errors)
     }
 
 
@@ -85,7 +81,7 @@ class GetUser(webSocket: WebSocket) extends CommonFunction{
   }
   
   private def updateUser(userDTO: UserDTO): Unit = {
-    new UpdateUser(webSocket).drawUpdateUser(userDTO)
+    new UpdateUserPage(webSocket).drawUpdateUser(userDTO)
   }
 
 }

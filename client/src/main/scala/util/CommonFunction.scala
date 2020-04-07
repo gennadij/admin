@@ -2,8 +2,6 @@ package util
 
 import org.scalajs.jquery.{JQuery, jQuery}
 
-import scala.util.matching.Regex
-
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
@@ -38,8 +36,8 @@ trait CommonFunction {
     "<div id='" + id + "' class='button'> " + text + " </div>"
   }
   
-  def drawInputField(id: String, label: String, typeofInput: String = "text"): String = {
-    label + " <input id='" + id + "' type='" + typeofInput + "'>"
+  def drawInputField(id: String, label: String, typeofInput: String = "text", defaultText : String = ""): String = {
+    label + " <input id='" + id + "' type='" + typeofInput + "' value='" + defaultText + "'>"
   }
   
 }

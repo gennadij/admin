@@ -17,9 +17,9 @@ import scala.scalajs.js.Any.fromFunction0
  * Created by Gennadi Heimann 12.04.2018
  */
 
-class RegistrationPage extends CommonFunction {
+class RegistrationPage(webSocket: WebSocket) extends CommonFunction {
 
-  def drawRegistrationPage(webSocket: WebSocket, errors: Option[List[ErrorDTO]]): JQuery = {
+  def drawRegistrationPage(errors: Option[List[ErrorDTO]]): JQuery = {
 
     cleanPage
 
@@ -28,7 +28,6 @@ class RegistrationPage extends CommonFunction {
       case None =>
         drawNewStatus("Kein Fehler")
     }
-
 
     val html =
       "<dev id='main' class='main'>" +

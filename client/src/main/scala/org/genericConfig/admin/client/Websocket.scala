@@ -1,21 +1,8 @@
 package org.genericConfig.admin.client
 
 import org.genericConfig.admin.client.start.StartPage
-import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import org.scalajs.dom
-import org.scalajs.jquery.jQuery
-
-import scala.scalajs.js.JSON
-import scala.scalajs.js.Dynamic
-import scala.scalajs._
-import play.api.libs.json.JsValue
-import play.api.libs.json.Json
-import play.api.libs.json.JsResult
-import play.api.libs.json.JsSuccess
-import play.api.libs.json.JsError
-import play.api.libs._
+import play.api.libs.json.{JsValue, Json}
 
 import scala.util.matching.Regex
 
@@ -30,22 +17,20 @@ object Websocket {
   def main(args: Array[String]): Unit = {
     
     println("main")
-    socket.onmessage = {
-      (e: dom.MessageEvent) => {
+    socket.onmessage = { e: dom.MessageEvent => {
         println("IN -> " + e.data.toString)
         val jsValue: JsValue = Json.parse(e.data.toString)
         new AdminClientWeb(socket).handleMessage(jsValue)
       }
     }
     
-    socket.onopen = { (e: dom.Event) => {
-      println("Websocket open")
+    socket.onopen = { e: dom.Event => {
+      println("WebSocket open")
       new StartPage(webSocket = socket).drawStartPage()
       }
     }
     
-    socket.onerror = {
-      (e: dom.Event) => {
+    socket.onerror = { e: dom.Event => {
         println("Websocket error")
       }
     }

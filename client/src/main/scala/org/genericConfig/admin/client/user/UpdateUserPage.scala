@@ -8,7 +8,7 @@ import org.scalajs.jquery.jQuery
 import play.api.libs.json.Json
 import util.{CommonFunction, HtmlElementIds}
 
-class UpdateUser(webSocket: WebSocket) extends CommonFunction{
+class UpdateUserPage(webSocket: WebSocket) extends CommonFunction{
   def drawUpdateUser(userDTO: UserDTO) = {
     cleanPage
     val htmlMain : String =
