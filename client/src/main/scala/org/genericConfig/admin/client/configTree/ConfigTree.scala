@@ -11,8 +11,8 @@ import org.genericConfig.admin.shared.config.json.JsonGetConfigsIn
 import org.genericConfig.admin.shared.config.json.JsonGetConfigsParams
 import play.api.libs.json.Json
 import org.genericConfig.admin.client.step.AddStep
+import org.genericConfig.admin.client.views.html.HtmlElementIds
 import util.CommonFunction
-import util.HtmlElementIds
 
 import scala.collection.mutable
 

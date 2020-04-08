@@ -1,12 +1,13 @@
 package org.genericConfig.admin.client.component
 
+import org.genericConfig.admin.client.views.html.HtmlElementIds
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.component.json.{JsonComponentIn, JsonComponentOut, JsonComponentParams}
 import org.genericConfig.admin.shared.config.json.{JsonGetConfigsIn, JsonGetConfigsParams}
 import org.scalajs.dom.raw.WebSocket
 import org.scalajs.jquery.jQuery
 import play.api.libs.json.Json
-import util.{CommonFunction, HtmlElementIds}
+import util.CommonFunction
 
 class Component(websocket: WebSocket) extends CommonFunction {
 

@@ -1,12 +1,13 @@
 package org.genericConfig.admin.client.config
 
-import org.genericConfig.admin.client.start.StartPage
+import org.genericConfig.admin.client.views.StartPage
+import org.genericConfig.admin.client.views.html.HtmlElementIds
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO, UserConfigDTO}
 import org.scalajs.dom.raw.WebSocket
 import org.scalajs.jquery.{JQuery, jQuery}
 import play.api.libs.json.Json
-import util.{CommonFunction, HtmlElementIds}
+import util.CommonFunction
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

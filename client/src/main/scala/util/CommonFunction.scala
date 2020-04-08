@@ -1,5 +1,6 @@
 package util
 
+import org.genericConfig.admin.client.views.html.HtmlElementIds
 import org.scalajs.jquery.{JQuery, jQuery}
 
 /**

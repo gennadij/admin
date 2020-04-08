@@ -1,5 +1,6 @@
 package org.genericConfig.admin.client.config
 
+import org.genericConfig.admin.client.views.html.HtmlElementIds
 import org.scalajs.jquery.jQuery
 import org.genericConfig.admin.shared.config.json.JsonDeleteConfigOut
 import org.genericConfig.admin.shared.common.json.JsonStatus
@@ -7,11 +8,11 @@ import org.scalajs.dom.raw.WebSocket
 import play.api.libs.json.Json
 import org.genericConfig.admin.shared.config.json.JsonGetConfigsIn
 import org.genericConfig.admin.shared.config.json.JsonGetConfigsParams
+
 import scala.scalajs.js.timers._
 import org.genericConfig.admin.shared.config.json.ConfigDTO
 import org.genericConfig.admin.shared.config.json.JsonDeleteConfigParams
 import util.CommonFunction
-import util.HtmlElementIds
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

@@ -1,6 +1,6 @@
 package org.genericConfig.admin.client.registration
 
-import org.genericConfig.admin.client.start.StartPage
+import org.genericConfig.admin.client.views.StartPage
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}

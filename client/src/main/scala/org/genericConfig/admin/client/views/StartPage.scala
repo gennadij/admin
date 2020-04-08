@@ -1,6 +1,7 @@
-package org.genericConfig.admin.client.start
+package org.genericConfig.admin.client.views
 
 import org.genericConfig.admin.client.registration.RegistrationPage
+import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
@@ -23,17 +24,18 @@ class StartPage(webSocket: WebSocket) extends CommonFunction{
         drawNewStatus("Kein Fehler")
     }
 
+    val main : JQuery = HtmlElementText.mainPage("Administrator für generischer Konfigurator")
+    val jQueryInputFieldUsername : JQuery = HtmlElementText.drawInputField("username", "Benutzername")
+    val jQueryInputFieldPassword : JQuery= HtmlElementText.drawInputField("password", "Password", typeofInput = "password")
+    val jQueryButtonLogin : JQuery = HtmlElementText.drawButton("login", "Anmelden")
+    val jQueryButtonRegister : JQuery = HtmlElementText.drawButton("registration", "Registrieren")
 
+    main.appendTo(jQuery(HtmlElementIds.section))
 
-    val html =
-      "<dev id='main' class='main'>" +
-        "<p>Start Seite</p> </br>"  +
-        drawInputField("username", "Benutzername") + "</br>" + "</br>" +
-        drawInputField("password", "Passwort") + "</br>" + "</br>" +
-        drawButton("login", "Anmelden") +
-        drawButton("registration", "Registrieren") +
-      "</dev>"
-    drawNewMain(html)
+    jQueryInputFieldUsername.appendTo(main)
+    jQueryInputFieldPassword.appendTo(main)
+    jQueryButtonLogin.appendTo(main)
+    jQueryButtonRegister.appendTo(main)
 
     jQuery("#login").on("click", () => login)
     jQuery("#registration").on("click", () => registration)

@@ -1,5 +1,6 @@
 package org.genericConfig.admin.client.step
 
+import org.genericConfig.admin.client.views.html.HtmlElementIds
 import org.scalajs.dom.raw.WebSocket
 import org.scalajs.jquery.jQuery
 import org.genericConfig.admin.shared.step.json.JsonStepIn
@@ -10,7 +11,6 @@ import play.api.libs.json.Json
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
 import org.genericConfig.admin.shared.step.json.JsonStepOut
 import util.CommonFunction
-import util.HtmlElementIds
 import org.genericConfig.admin.shared.config.json.JsonGetConfigsIn
 import org.genericConfig.admin.shared.config.json.JsonGetConfigsParams
 
