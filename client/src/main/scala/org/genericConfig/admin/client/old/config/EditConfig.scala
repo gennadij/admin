@@ -1,4 +1,4 @@
-package org.genericConfig.admin.client.config
+package org.genericConfig.admin.client.old.config
 
 import org.scalajs.jquery.jQuery
 import play.api.libs.json.Json

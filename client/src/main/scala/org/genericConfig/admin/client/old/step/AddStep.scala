@@ -1,4 +1,4 @@
-package org.genericConfig.admin.client.step
+package org.genericConfig.admin.client.old.step
 
 import org.genericConfig.admin.client.views.html.HtmlElementIds
 import org.scalajs.dom.raw.WebSocket

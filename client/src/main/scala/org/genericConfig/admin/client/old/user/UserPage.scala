@@ -1,4 +1,4 @@
-package org.genericConfig.admin.client.user
+package org.genericConfig.admin.client.old.user
 
 import org.genericConfig.admin.client.views.StartPage
 import org.genericConfig.admin.client.views.html.HtmlElementIds
@@ -42,14 +42,14 @@ class UserPage(webSocket: WebSocket) extends CommonFunction{
         jQuery(HtmlElementIds.updateConfigJQuery).on("click", () => updateUser(userDTO))
         jQuery(HtmlElementIds.startPageJQuery).on("click", () => startPage)
       case _ =>
-        new StartPage(webSocket).drawStartPage(userDTO.result.get.errors)
+        new StartPage().drawStartPage(userDTO.result.get.errors)
     }
 
 
   }
 
   private def startPage = {
-    new StartPage(webSocket).drawStartPage()
+    new StartPage().drawStartPage()
   }
   private def getConfigs(userId: String): Unit = {
     println("Get Configs")
@@ -78,7 +78,7 @@ class UserPage(webSocket: WebSocket) extends CommonFunction{
     ).toString
     println("OUT -> " + deleteUsername)
     webSocket.send(deleteUsername)
-    new StartPage(webSocket).drawStartPage()
+    new StartPage().drawStartPage()
   }
   
   private def updateUser(userDTO: UserDTO): Unit = {

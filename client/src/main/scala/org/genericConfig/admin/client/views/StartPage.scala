@@ -1,19 +1,16 @@
 package org.genericConfig.admin.client.views
 
-import org.genericConfig.admin.client.registration.RegistrationPage
+import org.genericConfig.admin.client.controllers.listner.Mouse
 import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
-import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
-import org.scalajs.dom.WebSocket
 import org.scalajs.jquery.{JQuery, jQuery}
-import play.api.libs.json.Json
 import util.CommonFunction
 
-class StartPage(webSocket: WebSocket) extends CommonFunction{
+class StartPage() extends CommonFunction{
 
 
-  def drawStartPage(errors : Option[List[ErrorDTO]] = None) : JQuery = {
+  def drawStartPage(errors : Option[List[ErrorDTO]] = None) : Unit = {
 
     cleanPage
 
@@ -37,27 +34,7 @@ class StartPage(webSocket: WebSocket) extends CommonFunction{
     jQueryButtonLogin.appendTo(main)
     jQueryButtonRegister.appendTo(main)
 
-    jQuery("#login").on("click", () => login)
-    jQuery("#registration").on("click", () => registration)
+    new Mouse().mouseClick(jQueryButtonLogin, Actions.GET_USER)
+    new Mouse().mouseClick(jQueryButtonRegister, Actions.ADD_USER)
   }
-
-  def login() : Unit = {
-    val getUser = Json.toJson(UserDTO(
-      action = Actions.GET_USER,
-      params = Some(UserParamsDTO(
-        username = jQuery("#username").value().toString,
-        password = jQuery("#password").value().toString,
-        update = None,
-
-      )),
-      result = None
-    )).toString
-    println("OUT -> " + getUser)
-    webSocket.send(getUser)
-  }
-
-  def registration() : Unit = {
-    new RegistrationPage(webSocket).drawRegistrationPage(None)
-  }
-
 }

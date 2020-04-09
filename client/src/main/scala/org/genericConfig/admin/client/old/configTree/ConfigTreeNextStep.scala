@@ -1,4 +1,4 @@
-package org.genericConfig.admin.client.configTree
+package org.genericConfig.admin.client.old.configTree
 
 import org.scalajs.jquery.jQuery
 import org.scalajs.dom.raw.WebSocket

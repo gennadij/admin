@@ -1,4 +1,4 @@
-package org.genericConfig.admin.client.config
+package org.genericConfig.admin.client.old.config
 
 import org.genericConfig.admin.client.views.StartPage
 import org.genericConfig.admin.client.views.html.HtmlElementIds
@@ -63,8 +63,8 @@ class GetConfig(webSocket: WebSocket) extends CommonFunction{
     jQuery(HtmlElementIds.startPageJQuery).on("click", () => startPage)
   }
 
-  private def startPage: JQuery = {
-    new StartPage(webSocket).drawStartPage()
+  private def startPage: Unit = {
+    new StartPage().drawStartPage()
   }
 
   private def createConfig(userId: String): JQuery = {

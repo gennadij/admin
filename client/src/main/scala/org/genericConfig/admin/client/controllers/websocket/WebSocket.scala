@@ -1,6 +1,6 @@
 package org.genericConfig.admin.client.controllers.websocket
 
-import org.genericConfig.admin.client.controllers.action.Start
+import org.genericConfig.admin.client.views.StartPage
 import org.scalajs.dom
 import org.scalajs.dom.WebSocket
 import play.api.libs.json.{JsValue, Json}
@@ -28,7 +28,8 @@ object WebSocket {
 
     webSocket.onopen = { e: dom.Event => {
       println("WebSocket open")
-        Start.start(webSocket)
+      new StartPage().drawStartPage()
+//        Start.start(webSocket)
       }
     }
 

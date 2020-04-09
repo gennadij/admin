@@ -1,10 +1,10 @@
-package org.genericConfig.admin.client.registration
+package org.genericConfig.admin.client.old.registration
 
+import org.genericConfig.admin.client.controllers.websocket.WebSocket
 import org.genericConfig.admin.client.views.StartPage
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
-import org.scalajs.dom.WebSocket
 import org.scalajs.jquery.{JQuery, jQuery}
 import play.api.libs.json.Json
 import util.CommonFunction
@@ -17,7 +17,7 @@ import scala.scalajs.js.Any.fromFunction0
  * Created by Gennadi Heimann 12.04.2018
  */
 
-class RegistrationPage(webSocket: WebSocket) extends CommonFunction {
+class RegistrationPage() extends CommonFunction {
 
   def drawRegistrationPage(errors: Option[List[ErrorDTO]]): JQuery = {
 
@@ -40,16 +40,16 @@ class RegistrationPage(webSocket: WebSocket) extends CommonFunction {
 
     drawNewMain(html)
 
-    jQuery("#startPage").on("click", () => startPage(webSocket))
+    jQuery("#startPage").on("click", () => startPage())
 
-    jQuery("#registration").on("click", () => registration(webSocket))
+    jQuery("#registration").on("click", () => registration())
   }
 
-  def startPage(webSocket: WebSocket) : Unit = {
-    new StartPage(webSocket).drawStartPage()
+  def startPage() : Unit = {
+    new StartPage().drawStartPage()
   }
 
-  def registration(webSocket: WebSocket): Unit = {
+  def registration(): Unit = {
     val addUser = Json.toJson(
       UserDTO(
         action = Actions.ADD_USER,
@@ -62,6 +62,6 @@ class RegistrationPage(webSocket: WebSocket) extends CommonFunction {
       )
     ).toString
     println("OUT -> " + addUser)
-    webSocket.send(addUser)
+   WebSocket.webSocket.send(addUser)
   }
 }

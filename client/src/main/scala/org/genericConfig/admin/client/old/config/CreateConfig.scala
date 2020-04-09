@@ -1,4 +1,4 @@
-package org.genericConfig.admin.client.config
+package org.genericConfig.admin.client.old.config
 
 import org.genericConfig.admin.client.views.html.HtmlElementIds
 import org.genericConfig.admin.shared.Actions

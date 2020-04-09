@@ -1,4 +1,4 @@
-package org.genericConfig.admin.client.user
+package org.genericConfig.admin.client.old.user
 
 import org.genericConfig.admin.client.views.StartPage
 import org.genericConfig.admin.client.views.html.HtmlElementIds
@@ -28,7 +28,7 @@ class UpdateUserPage(webSocket: WebSocket) extends CommonFunction{
   }
 
   private def startPage = {
-    new StartPage(webSocket).drawStartPage()
+    new StartPage().drawStartPage()
   }
 
   private def updateUsername(userDTO: UserDTO): Unit = {
@@ -50,7 +50,7 @@ class UpdateUserPage(webSocket: WebSocket) extends CommonFunction{
     ).toString
     println("OUT -> " + updateUsername)
     webSocket.send(updateUsername)
-    new StartPage(webSocket).drawStartPage()
+    new StartPage().drawStartPage()
 
   }
 }

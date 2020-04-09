@@ -1,6 +1,6 @@
 package org.genericConfig.admin.client.controllers.websocket
 
-import org.genericConfig.admin.client.config.GetConfig
+import org.genericConfig.admin.client.old.config.GetConfig
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.ConfigDTO
 import org.scalajs.dom.raw.WebSocket

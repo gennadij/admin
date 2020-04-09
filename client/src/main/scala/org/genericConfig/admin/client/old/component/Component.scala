@@ -1,4 +1,4 @@
-package org.genericConfig.admin.client.component
+package org.genericConfig.admin.client.old.component
 
 import org.genericConfig.admin.client.views.html.HtmlElementIds
 import org.genericConfig.admin.shared.common.json.JsonNames

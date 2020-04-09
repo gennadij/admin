@@ -1,7 +1,7 @@
 package org.genericConfig.admin.client.controllers.websocket
 
-import org.genericConfig.admin.client.registration.RegistrationPage
-import org.genericConfig.admin.client.user.UserPage
+import org.genericConfig.admin.client.old.registration.RegistrationPage
+import org.genericConfig.admin.client.old.user.UserPage
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.user.UserDTO
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
@@ -35,7 +35,7 @@ class ConverterFromJsonForUser(webSocket : WebSocket) {
   private def addUser(receivedMessage: JsValue): Unit = {
     Json.fromJson[UserDTO](receivedMessage) match {
       case addUserResult: JsSuccess[UserDTO] =>
-        new RegistrationPage(webSocket).drawRegistrationPage(addUserResult.get.result.get.errors)
+        new RegistrationPage().drawRegistrationPage(addUserResult.get.result.get.errors)
       case e: JsError => println("Errors -> " + Actions.ADD_USER + ": " + JsError.toJson(e).toString())
     }
   }

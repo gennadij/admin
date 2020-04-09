@@ -1,6 +1,6 @@
-package org.genericConfig.admin.client.configTree
+package org.genericConfig.admin.client.old.configTree
 
-import org.genericConfig.admin.client.component.Component
+import org.genericConfig.admin.client.old.component.Component
 import org.scalajs.jquery.{JQuery, jQuery}
 import org.scalajs.dom.raw.WebSocket
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
@@ -10,7 +10,7 @@ import org.genericConfig.admin.shared.configTree.status._
 import org.genericConfig.admin.shared.config.json.JsonGetConfigsIn
 import org.genericConfig.admin.shared.config.json.JsonGetConfigsParams
 import play.api.libs.json.Json
-import org.genericConfig.admin.client.step.AddStep
+import org.genericConfig.admin.client.old.step.AddStep
 import org.genericConfig.admin.client.views.html.HtmlElementIds
 import util.CommonFunction
 
