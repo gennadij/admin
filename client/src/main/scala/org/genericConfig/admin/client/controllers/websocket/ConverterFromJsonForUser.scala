@@ -1,7 +1,7 @@
 package org.genericConfig.admin.client.controllers.websocket
 
-import org.genericConfig.admin.client.old.registration.RegistrationPage
-import org.genericConfig.admin.client.old.user.UserPage
+import org.genericConfig.admin.client.models.User
+import org.genericConfig.admin.client.views.{RegistrationPage, UserPage}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.user.UserDTO
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
@@ -14,24 +14,24 @@ import org.scalajs.dom.WebSocket
  */
 
 object ConverterFromJsonForUser {
-  def addUser(receivedMessage: JsValue, webSocket: WebSocket): Unit = {
-    new ConverterFromJsonForUser(webSocket).addUser(receivedMessage)
+  def addUser(receivedMessage: JsValue): Unit = {
+    new ConverterFromJsonForUser().addUser(receivedMessage)
   }
-  def getUser(receivedMessage: JsValue, webSocket: WebSocket): Unit = {
-    new ConverterFromJsonForUser(webSocket).getUser(receivedMessage)
+  def getUser(receivedMessage: JsValue): Unit = {
+    new ConverterFromJsonForUser().getUser(receivedMessage)
   }
 
-  def deleteUser(receivedMessage: JsValue, webSocket: WebSocket): Unit = {
+  def deleteUser(receivedMessage: JsValue): Unit = {
     ???
   }
 
-  def updateUser(receivedMessage: JsValue, webSocket: WebSocket): Unit = {
-    ???
+  def updateUser(receivedMessage: JsValue): Unit = {
+    new ConverterFromJsonForUser().updateUser(receivedMessage)
   }
 }
 
 
-class ConverterFromJsonForUser(webSocket : WebSocket) {
+class ConverterFromJsonForUser() {
   private def addUser(receivedMessage: JsValue): Unit = {
     Json.fromJson[UserDTO](receivedMessage) match {
       case addUserResult: JsSuccess[UserDTO] =>
@@ -42,21 +42,21 @@ class ConverterFromJsonForUser(webSocket : WebSocket) {
 
   private def getUser(receivedMessage: JsValue): Unit = {
     Json.fromJson[UserDTO](receivedMessage) match {
-      case getUserResult: JsSuccess[UserDTO] => new UserPage(webSocket).drawUserPage(getUserResult.get)
+      case getUserResult: JsSuccess[UserDTO] => new User().showUser(Some(getUserResult.value))
       case e: JsError => println("Errors -> " + Actions.GET_USER + ": " + JsError.toJson(e).toString())
     }
   }
 
   private def deleteUser(receivedMessage: JsValue): Unit = {
     Json.fromJson[UserDTO](receivedMessage) match {
-      case deleteUserResult: JsSuccess[UserDTO] => ???
+      case deleteUserResult: JsSuccess[UserDTO] => (println("delete user"))
       case e: JsError => println("Errors -> " + Actions.DELETE_USER + ": " + JsError.toJson(e).toString())
     }
   }
 
   private def updateUser(receivedMessage: JsValue): Unit = {
     Json.fromJson[UserDTO](receivedMessage) match {
-      case updateUserResult: JsSuccess[UserDTO] => ???
+      case updateUserResult: JsSuccess[UserDTO] => new User().showUser(Some(updateUserResult.value))
       case e: JsError => println("Errors -> " + Actions.DELETE_USER + ": " + JsError.toJson(e).toString())
     }
   }

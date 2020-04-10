@@ -25,7 +25,7 @@ class StartPage() extends CommonFunction{
     val jQueryInputFieldUsername : JQuery = HtmlElementText.drawInputField("username", "Benutzername")
     val jQueryInputFieldPassword : JQuery= HtmlElementText.drawInputField("password", "Password", typeofInput = "password")
     val jQueryButtonLogin : JQuery = HtmlElementText.drawButton("login", "Anmelden")
-    val jQueryButtonRegister : JQuery = HtmlElementText.drawButton("registration", "Registrieren")
+    val jQueryButtonRegister : JQuery = HtmlElementText.drawButton("register", "Neuer Benutzer hinzufügen")
 
     main.appendTo(jQuery(HtmlElementIds.section))
 
@@ -35,6 +35,6 @@ class StartPage() extends CommonFunction{
     jQueryButtonRegister.appendTo(main)
 
     new Mouse().mouseClick(jQueryButtonLogin, Actions.GET_USER)
-    new Mouse().mouseClick(jQueryButtonRegister, Actions.ADD_USER)
+    new Mouse().mouseClick(jQueryButtonRegister, Actions.REGISTER_PAGE)
   }
 }

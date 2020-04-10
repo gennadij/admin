@@ -1,6 +1,7 @@
 package org.genericConfig.admin.client.models
 
 import org.genericConfig.admin.client.controllers.websocket.WebSocket
+import org.genericConfig.admin.client.views.{StartPage, UserPage}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import org.scalajs.jquery.jQuery
@@ -13,7 +14,11 @@ import play.api.libs.json.Json
  */
 class Start {
 
-  def actionGetUser() = {
+  def start(): Unit = {
+    new StartPage().drawStartPage(None)
+  }
+
+  def actionGetUser(): Unit = {
     val getUser = Json.toJson(UserDTO(
       action = Actions.GET_USER,
       params = Some(UserParamsDTO(
@@ -26,5 +31,9 @@ class Start {
     )).toString
     println("OUT -> " + getUser)
     WebSocket.webSocket.send(getUser)
+  }
+
+  def showUserPage(param : Option[Any]): Unit = {
+    new UserPage().drawUserPage(param.get.asInstanceOf[UserDTO])
   }
 }
