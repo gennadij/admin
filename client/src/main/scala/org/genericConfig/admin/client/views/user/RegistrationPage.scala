@@ -1,16 +1,11 @@
-package org.genericConfig.admin.client.views
+package org.genericConfig.admin.client.views.user
 
 import org.genericConfig.admin.client.controllers.listner.Mouse
-import org.genericConfig.admin.client.controllers.websocket.WebSocket
 import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
-import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import org.scalajs.jquery.{JQuery, jQuery}
-import play.api.libs.json.Json
 import util.CommonFunction
-
-import scala.scalajs.js.Any.fromFunction0
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com

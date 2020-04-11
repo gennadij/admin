@@ -1,14 +1,11 @@
-package org.genericConfig.admin.client.views
+package org.genericConfig.admin.client.views.user
 
 import org.genericConfig.admin.client.controllers.listner.Mouse
-import org.genericConfig.admin.client.controllers.websocket
-import org.genericConfig.admin.client.controllers.websocket.WebSocket
+import org.genericConfig.admin.client.views.StartPage
 import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
 import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
-import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
+import org.genericConfig.admin.shared.user.UserDTO
 import org.scalajs.jquery.{JQuery, jQuery}
-import play.api.libs.json.Json
 import util.CommonFunction
 
 /**
@@ -31,6 +28,8 @@ class UserPage() extends CommonFunction{
         val jQueryButtonUpdateUser : JQuery = HtmlElementText.drawButton("updateUser", "Benutzer bearbeiten")
         val jQueryButtonDeleteUser : JQuery = HtmlElementText.drawButton("deleteUser", "Benutzer löschen")
         val jQueryButtonLogout : JQuery = HtmlElementText.drawButton("start", "Auslogen")
+//        val jQueryBr : JQuery = jQuery("</br> </br> </br>")
+//        val jQueryMainConfigs : JQuery = jQuery("<center> <h3>Konfiguratoren</h3> </center>")
 
         main.appendTo(jQuery(HtmlElementIds.section))
 
@@ -38,10 +37,13 @@ class UserPage() extends CommonFunction{
         jQueryButtonUpdateUser.appendTo(main)
         jQueryButtonDeleteUser.appendTo(main)
         jQueryButtonLogout.appendTo(main)
+//        jQueryBr.appendTo(main)
+//        jQueryMainConfigs.appendTo(main)
+
 
         new Mouse().mouseClick(jQueryButtonGetConfigs, Actions.GET_CONFIGS, Some(userDTO))
         new Mouse().mouseClick(jQueryButtonUpdateUser, Actions.UPDATE_USER_PAGE, Some(userDTO))
-        new Mouse().mouseClick(jQueryButtonDeleteUser, Actions.DELETE_USER_PAGE)
+        new Mouse().mouseClick(jQueryButtonDeleteUser, Actions.DELETE_USER, Some(userDTO))
         new Mouse().mouseClick(jQueryButtonLogout, Actions.START_PAGE)
       case _ =>
         new StartPage().drawStartPage(userDTO.result.get.errors)
@@ -50,10 +52,6 @@ class UserPage() extends CommonFunction{
 
   }
 
-
-  
-
-  
 //  private def updateUser(userDTO: UserDTO): Unit = {
 //    new UpdateUserPage(WebSocket.webSocket).drawUpdateUserPage(userDTO)
 //  }

@@ -1,7 +1,7 @@
 package org.genericConfig.admin.client.controllers.websocket
 
-import org.genericConfig.admin.client.models.User
-import org.genericConfig.admin.client.views.{RegistrationPage, UserPage}
+import org.genericConfig.admin.client.models.{Start, User}
+import org.genericConfig.admin.client.views.user.RegistrationPage
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.user.UserDTO
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
@@ -22,7 +22,7 @@ object ConverterFromJsonForUser {
   }
 
   def deleteUser(receivedMessage: JsValue): Unit = {
-    ???
+    new ConverterFromJsonForUser().deleteUser(receivedMessage)
   }
 
   def updateUser(receivedMessage: JsValue): Unit = {
@@ -49,7 +49,7 @@ class ConverterFromJsonForUser() {
 
   private def deleteUser(receivedMessage: JsValue): Unit = {
     Json.fromJson[UserDTO](receivedMessage) match {
-      case deleteUserResult: JsSuccess[UserDTO] => (println("delete user"))
+      case deleteUserResult: JsSuccess[UserDTO] => new Start().start()
       case e: JsError => println("Errors -> " + Actions.DELETE_USER + ": " + JsError.toJson(e).toString())
     }
   }

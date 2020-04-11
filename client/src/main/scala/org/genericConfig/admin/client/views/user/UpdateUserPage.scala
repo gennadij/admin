@@ -1,13 +1,10 @@
-package org.genericConfig.admin.client.views
+package org.genericConfig.admin.client.views.user
 
 import org.genericConfig.admin.client.controllers.listner.Mouse
-import org.genericConfig.admin.client.controllers.websocket
-import org.genericConfig.admin.client.controllers.websocket.WebSocket
 import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
 import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO, UserUpdateDTO}
+import org.genericConfig.admin.shared.user.UserDTO
 import org.scalajs.jquery.{JQuery, jQuery}
-import play.api.libs.json.Json
 import util.CommonFunction
 
 class UpdateUserPage() extends CommonFunction{

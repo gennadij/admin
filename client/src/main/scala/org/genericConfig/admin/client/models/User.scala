@@ -2,7 +2,7 @@ package org.genericConfig.admin.client.models
 
 import org.genericConfig.admin.client.controllers.websocket.WebSocket
 import org.genericConfig.admin.client.views.html.HtmlElementIds
-import org.genericConfig.admin.client.views.{StartPage, UpdateUserPage, UserPage}
+import org.genericConfig.admin.client.views.user.{UpdateUserPage, UserPage}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO, UserUpdateDTO}
@@ -24,19 +24,6 @@ class User {
     new UpdateUserPage().drawUpdateUserPage(param.get.asInstanceOf[UserDTO])
   }
 
-  def getConfigs(param: Option[Any]): Unit = {
-    val userDTO : UserDTO = param.get.asInstanceOf[UserDTO]
-    println("Get Configs")
-    val getConfigParams = Json.toJson(ConfigDTO(
-      action = Actions.GET_CONFIGS,
-      params = Some(ConfigParamsDTO(
-        userId = userDTO.result.get.userId
-      )),
-      result = None
-    )).toString
-    println("OUT -> " + getConfigParams)
-    WebSocket.webSocket.send(getConfigParams)
-  }
 
   def updateUsername(param : Option[Any]): Unit = {
     val updateUsername = Json.toJson(
@@ -59,12 +46,12 @@ class User {
     WebSocket.webSocket.send(updateUsername)
   }
 
-  def deleteUser(userDTO: UserDTO): Unit = {
+  def deleteUser(param : Option[Any]): Unit = {
     val deleteUsername = Json.toJson(
       UserDTO(
         action = Actions.DELETE_USER,
         params = Some(UserParamsDTO(
-          username = userDTO.result.get.username.get,
+          username = param.get.asInstanceOf[UserDTO].result.get.username.get,
           password = "",
           update = None,
         )),
@@ -73,6 +60,5 @@ class User {
     ).toString
     println("OUT -> " + deleteUsername)
     WebSocket.webSocket.send(deleteUsername)
-    new StartPage().drawStartPage()
   }
 }

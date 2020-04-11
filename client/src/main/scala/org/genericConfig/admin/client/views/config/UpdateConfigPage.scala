@@ -1,17 +1,17 @@
-package org.genericConfig.admin.client.old.config
+package org.genericConfig.admin.client.views.config
 
+import org.genericConfig.admin.client.controllers.websocket.WebSocket
+import org.genericConfig.admin.shared.common.json.JsonStatus
+import org.genericConfig.admin.shared.config.json._
 import org.scalajs.jquery.jQuery
 import play.api.libs.json.Json
-import org.genericConfig.admin.shared.config.json._
-import org.scalajs.dom.raw.WebSocket
-import org.genericConfig.admin.shared.common.json.JsonStatus
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  * 
  * Created by Gennadi Heimann 15.05.2018
  */
-class EditConfig(websocket: WebSocket) {
+class UpdateConfigPage() {
    def editConfig(configId: String, configUrl: String, userId: String) = {
     jQuery("#main").remove()
     jQuery("#status").remove()
@@ -40,7 +40,7 @@ class EditConfig(websocket: WebSocket) {
         )
     )).toString()
     
-    websocket.send(jsonUpdateConfig)
+    WebSocket.webSocket.send(jsonUpdateConfig)
   }
   
   def showConfigs(userId: String) = {
@@ -51,7 +51,7 @@ class EditConfig(websocket: WebSocket) {
     )).toString
     
     println("OUT -> " + jsonGetConfigs)
-    websocket.send(jsonGetConfigs)
+    WebSocket.webSocket.send(jsonGetConfigs)
   }
   
   def updateStatus(updateConfigOut: JsonUpdateConfigOut) = {

@@ -1,7 +1,8 @@
 package org.genericConfig.admin.client.models
 
 import org.genericConfig.admin.client.controllers.websocket.WebSocket
-import org.genericConfig.admin.client.views.{StartPage, UserPage}
+import org.genericConfig.admin.client.views.StartPage
+import org.genericConfig.admin.client.views.user.UserPage
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import org.scalajs.jquery.jQuery
