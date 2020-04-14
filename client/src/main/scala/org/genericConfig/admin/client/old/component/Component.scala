@@ -3,7 +3,6 @@ package org.genericConfig.admin.client.old.component
 import org.genericConfig.admin.client.views.html.HtmlElementIds
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.component.json.{JsonComponentIn, JsonComponentOut, JsonComponentParams}
-import org.genericConfig.admin.shared.config.json.{JsonGetConfigsIn, JsonGetConfigsParams}
 import org.scalajs.dom.raw.WebSocket
 import org.scalajs.jquery.jQuery
 import play.api.libs.json.Json
@@ -48,11 +47,12 @@ class Component(websocket: WebSocket) extends CommonFunction {
   }
 
   private def getConfigs(userId: String) = {
-    val jsonGetConfigs: String  = Json.toJson(JsonGetConfigsIn(
-      params = JsonGetConfigsParams(
-        userId
-      )
-    )).toString
+    val jsonGetConfigs: String  = ""
+//    Json.toJson(JsonGetConfigsIn(
+//      params = JsonGetConfigsParams(
+//        userId
+//      )
+//    )).toString
     websocket.send(jsonGetConfigs)
   }
 

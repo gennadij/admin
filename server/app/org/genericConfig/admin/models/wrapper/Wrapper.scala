@@ -2,13 +2,10 @@ package org.genericConfig.admin.models.wrapper
 
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.json.{JsonComponentIn, JsonComponentOut}
-import org.genericConfig.admin.shared.config.bo._
-import org.genericConfig.admin.shared.config.json._
 import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.configTree.json._
 import org.genericConfig.admin.shared.step.bo._
 import org.genericConfig.admin.shared.step.json._
-import org.genericConfig.admin.shared.user.UserDTO
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -25,7 +22,7 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param jsonUserIn: JsonUserIn
+   * @param
    * 
    * @return UserBO
    */
@@ -39,7 +36,7 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param userBO: UserBO
+   * @param
    * 
    * @return JsonUserOut
    */
@@ -53,7 +50,7 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param jsonUserIn: JsonUserIn
+   * @param
    * 
    * @return UserBO
    */
@@ -67,7 +64,7 @@ trait Wrapper{
    * 
    * @version 0.1.6
    * 
-   * @param userBO: UserBO
+   * @param
    * 
    * @return JsonUserOut
    */
@@ -75,111 +72,6 @@ trait Wrapper{
 //    ???
     ///new WrapperUser().toJsonGetUserOut(userBO)
 //  }
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.6
-   * 
-   * @param jsonAddconfigIn: JsonAddConfigIn
-   * 
-   * @return ConfigBO
-   */
-  def toAddConfigBO(jsonAddconfigIn: JsonAddConfigIn): ConfigBO = {
-    new WrapperConfig().toAddConfigBO(jsonAddconfigIn)
-  }
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.6
-   * 
-   * @param configBO: ConfigBO
-   * 
-   * @return JsonAddConfigOut
-   */
-  def toJsonAddConfigOut(configBO: ConfigBO): JsonAddConfigOut = {
-    new WrapperConfig().toJsonAddConfigOut(configBO)
-  }
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.6
-   * 
-   * @param jsonAddconfigIn: JsonAddConfigIn
-   * 
-   * @return ConfigBO
-   */
-  def toGetConfigsBO(jsonAddconfigIn: JsonGetConfigsIn): ConfigBO = {
-    new WrapperConfig().toGetConfigsBO(jsonAddconfigIn)
-  }
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.5
-   * 
-   * @param configBO: ConfigBO
-   * 
-   * @return JsonGetConfigsOut
-   */
-  
-  def toJsonGetConfigsOut(configBO:ConfigBO): JsonGetConfigsOut = {
-    new WrapperConfig().toJsonGetConfigsOut(configBO)
-  }
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.6
-   * 
-   * @param jsonDeleteConfigIn: JsonDeleteConfigIn
-   * 
-   * @return ConfigBO
-   */
-  def toDeleteConfigBO(jsonDeleteConfigIn: ConfigDTO): ConfigBO = {
-    new WrapperConfig().toDeleteConfigBO(jsonDeleteConfigIn)
-  }
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.5
-   * 
-   * @param configBO: ConfigBO
-   * 
-   * @return JsonDeleteConfigOut
-   */
-  def toJsonDeleteConfigOut(configBO: ConfigBO): JsonDeleteConfigOut = {
-    new WrapperConfig().toJsonDeleteConfigOut(configBO)
-  }
-
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.6
-   * 
-   * @param jsonUpdateConfigIn: JsonDeleteConfigIn
-   * 
-   * @return ConfigBO
-   */
-  def toUpdateConfigBO(jsonUpdateConfigIn: JsonUpdateConfigIn): ConfigBO = {
-    new WrapperConfig().toUpdateConfigBO(jsonUpdateConfigIn)
-  }
-  
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.6
-   * 
-   * @param configBO: ConfigBO
-   * 
-   * @return JsonUpdateConfigOut
-   */
-  def toJsonUpdateConfigOut(configBO: ConfigBO): JsonUpdateConfigOut = {
-    new WrapperConfig().toJsonUpdateConfigOut(configBO)
-  }
   
   /**
    * @author Gennadi Heimann
@@ -263,7 +155,7 @@ trait Wrapper{
    * 
    * @version 0.1.5
    * 
-   * @param JsonConnectionComponentToStepCS
+   * @param
    * 
    * @return ConnectionComponentToStepCS
    */
@@ -280,7 +172,7 @@ trait Wrapper{
    * 
    * @version 0.1.5
    * 
-   * @param ConnectionComponentToStepSC
+   * @param
    * 
    * @return JsonConnectionComponentToStepSC
    */
@@ -299,7 +191,7 @@ trait Wrapper{
    * 
    * @version 0.1.5
    * 
-   * @param DependencyOut
+   * @param
    * 
    * @return JsonDependencyOut
    */
@@ -324,7 +216,7 @@ trait Wrapper{
    * 
    * @version 0.1.5
    * 
-   * @param JsonDependencyIn
+   * @param
    * 
    * @return DependencyIn
    */
@@ -343,7 +235,7 @@ trait Wrapper{
    * 
    * @version 0.1.5
    * 
-   * @param JsonDependencyIn
+   * @param
    * 
    * @return DependencyIn
    */

@@ -8,7 +8,6 @@ import org.genericConfig.admin.models.common.{AddUserAlreadyExist, Error, GetUse
 import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.status._
-import org.genericConfig.admin.shared.config.status._
 import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.configTree.status._
 import org.genericConfig.admin.shared.step.bo.StepBO
@@ -47,11 +46,10 @@ object Graph {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param userId : String
+    * @param
     * @return (Option[List[OrientVertex\]\], StatusGetConfigs, Status)
     */
-  def getConfigs(userId: String): (Option[List[OrientVertex]], StatusGetConfigs, Error) = {
-    ???
+//  def getConfigs(userId: String): (Option[List[OrientVertex]], StatusGetConfigs, Error) = {
 //    (Database.getFactory(): @unchecked) match {
 //      case (Some(dbFactory), Success()) =>
 //        val graph: OrientGraph = dbFactory.getTx
@@ -59,7 +57,7 @@ object Graph {
 //      case (None, ODBConnectionFail()) =>
 //        (None, GetConfigsError(), ODBConnectionFail())
 //    }
-  }
+//  }
 
 
 
@@ -277,7 +275,7 @@ class Graph(graph: OrientGraph) {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param configId : String
+    * @param
     * @return (String, Status)
     */
 //  private def getUserId(configId: String): (String, Error) = {
@@ -351,7 +349,7 @@ class Graph(graph: OrientGraph) {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param username : String
+    * @param
     * @return Int
     */
 //  private def deleteAllConfigs(username: String): Int = {
@@ -368,7 +366,7 @@ class Graph(graph: OrientGraph) {
     *
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param configId : String
+    * @param
     * @return (Option[StepForConfigTreeBO], StatusGetConfigTree, Status)
     */
 //  private def getConfigTree(configId: String): (Option[StepForConfigTreeBO], StatusGetConfigTree, Error) = {
@@ -582,7 +580,7 @@ class Graph(graph: OrientGraph) {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param id : String, stepId: String
+    * @param
     * @return (StatusAppendStep, Status)
     */
 //  private def appendStepTo(id: String, stepId: String): (StatusAppendStep, Error) = {
@@ -645,7 +643,7 @@ class Graph(graph: OrientGraph) {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param configId : String
+    * @param
     * @return Int count of deleted Vertexes
     */
 //  private def deleteStepAppendedToConfig(configId: String): Int = {
@@ -658,7 +656,7 @@ class Graph(graph: OrientGraph) {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param componentId: String
+    * @param
     * @return Int count of deleted Vertexes
     */
 //  private def deleteStepAppendedToComponent(componentId: String): Int = {
@@ -671,7 +669,7 @@ class Graph(graph: OrientGraph) {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param stepBO : StepBO
+    * @param
     * @return StatusUpdateStep, Status
     */
 //  private def updateStep(stepBO: StepBO): (StatusUpdateStep, Error) = {
@@ -733,7 +731,7 @@ class Graph(graph: OrientGraph) {
   /**
     * @author Gennadi Heimann
     * @version 0.1.0
-    * @param componentBO : ComponentBO
+    * @param
     * @return OrientEdge
     */
 //  private def appendComponentTo(componentBO: ComponentBO): (StatusAppendComponent, Error) = {

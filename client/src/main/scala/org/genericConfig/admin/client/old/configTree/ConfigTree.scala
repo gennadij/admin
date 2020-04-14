@@ -7,9 +7,6 @@ import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeComponent
 import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeStep
 import org.genericConfig.admin.shared.configTree.status._
-import org.genericConfig.admin.shared.config.json.JsonGetConfigsIn
-import org.genericConfig.admin.shared.config.json.JsonGetConfigsParams
-import play.api.libs.json.Json
 import org.genericConfig.admin.client.old.step.AddStep
 import org.genericConfig.admin.client.views.html.HtmlElementIds
 import util.CommonFunction
@@ -195,11 +192,12 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction {
   }
 
   private def getConfigs(userId: String): Unit = {
-    val jsonGetConfigs: String = Json.toJson(JsonGetConfigsIn(
-      params = JsonGetConfigsParams(
-        userId
-      )
-    )).toString
+    val jsonGetConfigs: String = ""
+//    Json.toJson(JsonGetConfigsIn(
+//      params = JsonGetConfigsParams(
+//        userId
+//      )
+//    )).toString
 
     println("OUT -> " + jsonGetConfigs)
     websocket.send(jsonGetConfigs)
