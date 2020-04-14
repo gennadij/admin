@@ -14,10 +14,10 @@ class MessageHandler(webSocket: WebSocket) {
 
   def handleMessage(receivedMessage: JsValue): Any = {
     (receivedMessage \ "action").asOpt[String] match {
-      case Some(Actions.ADD_USER) => ConverterFromJsonForUser.addUser(receivedMessage, webSocket)
-      case Some(Actions.GET_USER) => ConverterFromJsonForUser.getUser(receivedMessage, webSocket)
-      case Some(Actions.DELETE_USER) => ???
-      case Some(Actions.UPDATE_USER) => ???
+      case Some(Actions.ADD_USER) => ConverterFromJsonForUser.addUser(receivedMessage)
+      case Some(Actions.GET_USER) => ConverterFromJsonForUser.getUser(receivedMessage)
+      case Some(Actions.DELETE_USER) => ConverterFromJsonForUser.deleteUser(receivedMessage)
+      case Some(Actions.UPDATE_USER) => ConverterFromJsonForUser.updateUser(receivedMessage)
       case Some(Actions.ADD_CONFIG) => ConverterFromJsonForConfig.addConfig(receivedMessage, webSocket)
       case Some(Actions.GET_CONFIGS) => ConverterFromJsonForConfig.getConfigs(receivedMessage, webSocket)
       case Some(Actions.DELETE_CONFIG) => ConverterFromJsonForConfig.deleteConfig(receivedMessage, webSocket)

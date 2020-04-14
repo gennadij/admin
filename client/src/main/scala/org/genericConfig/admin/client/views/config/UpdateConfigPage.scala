@@ -8,7 +8,7 @@ import org.scalajs.jquery.jQuery
  * 
  * Created by Gennadi Heimann 15.05.2018
  */
-class EditConfig(websocket: WebSocket) {
+class UpdateConfigPage() {
    def editConfig(configId: String, configUrl: String, userId: String) = {
     jQuery("#main").remove()
     jQuery("#status").remove()

@@ -6,6 +6,7 @@ package org.genericConfig.admin.shared
  * Created by Gennadi Heimann ${date}
  */
 object Actions {
+
   val ADD_USER : String = "ADD_USER"
   val DELETE_USER : String = "DELETE_USER"
   val GET_USER : String = "GET_USER"
@@ -14,4 +15,11 @@ object Actions {
   val DELETE_CONFIG : String = "DELETE_CONFIG"
   val GET_CONFIGS : String = "GET_CONFIGS"
   val UPDATE_CONFIG : String = "UPDATE_CONFIG"
+  //only Web client
+  val START_PAGE : String = "START_PAGE"
+  val REGISTER_PAGE : String = "REGISTER_PAGE"
+  val USER_PAGE : String = "USER_PAGE"
+  val UPDATE_USER_PAGE : String = "UPDATE_USER_PAGE"
+  val CONFIG_PAGE : String = "CONFIG_PAGE"
+  val ADD_CONFIG_PAGE : String = "ADD_CONFIG_PAGE"
 }

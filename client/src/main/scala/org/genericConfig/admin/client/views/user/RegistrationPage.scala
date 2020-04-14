@@ -1,4 +1,4 @@
-package org.genericConfig.admin.client.views
+package org.genericConfig.admin.client.views.user
 
 import org.genericConfig.admin.client.controllers.listner.Mouse
 import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
@@ -7,34 +7,38 @@ import org.genericConfig.admin.shared.common.ErrorDTO
 import org.scalajs.jquery.{JQuery, jQuery}
 import util.CommonFunction
 
-class StartPage() extends CommonFunction{
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ * 
+ * Created by Gennadi Heimann 12.04.2018
+ */
 
+class RegistrationPage() extends CommonFunction {
 
-  def drawStartPage(errors : Option[List[ErrorDTO]] = None) : Unit = {
+  def drawRegistrationPage(errors: Option[List[ErrorDTO]]): Unit = {
 
     cleanPage
 
     errors match {
-      case Some(errors) =>
-        drawNewStatus(errors.head.name)
+      case Some(errors) => drawNewStatus(errors.head.name)
       case None =>
         drawNewStatus("Kein Fehler")
     }
 
-    val main : JQuery = HtmlElementText.mainPage("Administrator für generischer Konfigurator")
+    val main : JQuery = HtmlElementText.mainPage("Registrierung")
     val jQueryInputFieldUsername : JQuery = HtmlElementText.drawInputField("username", "Benutzername")
     val jQueryInputFieldPassword : JQuery= HtmlElementText.drawInputField("password", "Password", typeofInput = "password")
-    val jQueryButtonLogin : JQuery = HtmlElementText.drawButton("login", "Anmelden")
-    val jQueryButtonRegister : JQuery = HtmlElementText.drawButton("register", "Neuer Benutzer hinzufügen")
+    val jQueryButtonRegister : JQuery = HtmlElementText.drawButton("register", "Benutzer hinzufügen")
+    val jQueryButtonStart : JQuery = HtmlElementText.drawButton("start", "Startseite")
 
     main.appendTo(jQuery(HtmlElementIds.section))
 
     jQueryInputFieldUsername.appendTo(main)
     jQueryInputFieldPassword.appendTo(main)
-    jQueryButtonLogin.appendTo(main)
     jQueryButtonRegister.appendTo(main)
+    jQueryButtonStart.appendTo(main)
 
-    new Mouse().mouseClick(jQueryButtonLogin, Actions.GET_USER)
-    new Mouse().mouseClick(jQueryButtonRegister, Actions.REGISTER_PAGE)
+    new Mouse().mouseClick(jQueryButtonRegister, Actions.ADD_USER)
+    new Mouse().mouseClick(jQueryButtonStart, Actions.START_PAGE)
   }
 }
