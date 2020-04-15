@@ -11,11 +11,16 @@ object Actions {
   val DELETE_USER : String = "DELETE_USER"
   val GET_USER : String = "GET_USER"
   val UPDATE_USER : String = "UPDATE_USER"
+
   val ADD_CONFIG : String = "ADD_CONFIG"
   val DELETE_CONFIG : String = "DELETE_CONFIG"
   val GET_CONFIGS : String = "GET_CONFIGS"
   val UPDATE_CONFIG : String = "UPDATE_CONFIG"
+
+  val ADD_STEP : String = "ADD_STEP"
+
   //only Web client
+
   val START_PAGE : String = "START_PAGE"
   val REGISTER_PAGE : String = "REGISTER_PAGE"
   val USER_PAGE : String = "USER_PAGE"

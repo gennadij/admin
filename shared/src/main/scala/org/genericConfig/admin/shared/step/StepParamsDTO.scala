@@ -12,7 +12,7 @@ import play.api.libs.functional.syntax._
 case class StepParamsDTO(
                           nameToShow: Option[String] = None,
                           stepId: Option[String] = None,
-                          fromId: Option[String] = None,
+                          outId: Option[String] = None,
                           kind: Option[String] = None,
                           selectionCriterion: Option[SelectionCriterionDTO] = None
                         )

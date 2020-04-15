@@ -1,6 +1,6 @@
 package org.genericConfig.admin.models.login
 
-import org.genericConfig.admin.controllers.admin.MessageHandler
+import org.genericConfig.admin.controllers.converter.MessageHandler
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.common.GetUserNotExist
 import org.genericConfig.admin.shared.Actions

@@ -2,7 +2,7 @@ package models.preparingConfigs
 
 import scala.collection.JavaConverters._
 
-import org.genericConfig.admin.controllers.admin.MessageHandler
+import org.genericConfig.admin.controllers.converter.MessageHandler
 import org.genericConfig.admin.controllers.websocket.WebClient
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable

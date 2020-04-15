@@ -47,20 +47,6 @@ class MessageHandler() {
 //    }
 //    new ConfigTree(webSocket).drawConfigTree(configTreeOut.get)
 //  }
-//  private def updateConfig(receivedMessage: JsValue) = {
-//    val updateConfigOut: JsResult[JsonUpdateConfigOut] = Json.fromJson[JsonUpdateConfigOut](receivedMessage)
-//    updateConfigOut match {
-//      case s: JsSuccess[JsonUpdateConfigOut] => s.get
-//      case e: JsError => println("Errors -> CREATE_CONFIG: " + JsError.toJson(e).toString())
-//    }
-//    new EditConfig(webSocket).updateStatus(updateConfigOut.get)
-//  }
-//  private def addStep(receivedMessage: JsValue) = {
-//    val addFirstStepOut: JsResult[JsonStepOut] = Json.fromJson[JsonStepOut](receivedMessage)
-//    addFirstStepOut match {
-//      case s: JsSuccess[JsonStepOut] => s.get
-//      case e: JsError => println("Errors -> ADD_FIRST_STEP: " + JsError.toJson(e).toString())
-//    }
-//    new AddStep(webSocket).updateStatus(addFirstStepOut.get)
-//  }
+
+
 }

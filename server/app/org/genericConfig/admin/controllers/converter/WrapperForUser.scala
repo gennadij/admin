@@ -1,4 +1,4 @@
-package org.genericConfig.admin.controllers.admin
+package org.genericConfig.admin.controllers.converter
 
 import org.genericConfig.admin.models.logic.User
 import org.genericConfig.admin.shared.Actions
@@ -12,7 +12,7 @@ import play.api.libs.json._
  */
 
 trait WrapperForUser extends WrapperCommon {
-  def addUser(receivedMessage: JsValue): JsValue = {
+  private[converter]def addUser(receivedMessage: JsValue): JsValue = {
     val addUser: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
     addUser match {
       case s : JsSuccess[UserDTO] => Json.toJson(User.addUser(s.value))
@@ -20,7 +20,7 @@ trait WrapperForUser extends WrapperCommon {
     }
   }
 
-  def deleteUser(receivedMessage: JsValue): JsValue = {
+  private[converter] def deleteUser(receivedMessage: JsValue): JsValue = {
     val deleteUser: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
     deleteUser match {
       case _: JsSuccess[UserDTO] => Json.toJson(User.deleteUser(deleteUser.get))
@@ -28,7 +28,7 @@ trait WrapperForUser extends WrapperCommon {
     }
   }
 
-  def getUser(receivedMessage: JsValue): JsValue = {
+  private[converter] def getUser(receivedMessage: JsValue): JsValue = {
     val getUser: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
     getUser match {
       case _: JsSuccess[UserDTO] => Json.toJson(User.getUser(getUser.get))
@@ -36,7 +36,7 @@ trait WrapperForUser extends WrapperCommon {
     }
   }
 
-  def updateUser(receivedMessage: JsValue): JsValue = {
+    private[converter] def updateUser(receivedMessage: JsValue): JsValue = {
     val updateUser: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
     updateUser match {
       case _: JsSuccess[UserDTO] => Json.toJson(User.updateUser(updateUser.get))

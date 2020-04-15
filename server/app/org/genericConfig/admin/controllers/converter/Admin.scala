@@ -1,4 +1,4 @@
-package org.genericConfig.admin.controllers.admin
+package org.genericConfig.admin.controllers.converter
 
 import org.genericConfig.admin.models.json.dependency.{JsonDependencyIn, JsonDependencyOut}
 import org.genericConfig.admin.models.logic._
@@ -112,15 +112,15 @@ class Admin extends Wrapper {
   }
 
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param jsonFirstStepIn : JsonStepIn
-    * @return JsonStepOut
-    */
-  def addStep(jsonFirstStepIn: JsonStepIn): JsonStepOut = {
-    toJsonStepOut(Step.addStep(toStepBO(jsonFirstStepIn)))
-  }
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param jsonFirstStepIn : JsonStepIn
+//    * @return JsonStepOut
+//    */
+//  def addStep(jsonFirstStepIn: JsonStepIn): JsonStepOut = {
+//    toJsonStepOut(Step.addStep(toStepBO(jsonFirstStepIn)))
+//  }
 
   /**
     * @author Gennadi Heimann

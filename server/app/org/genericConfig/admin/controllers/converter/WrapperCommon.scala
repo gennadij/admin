@@ -1,4 +1,4 @@
-package org.genericConfig.admin.controllers.admin
+package org.genericConfig.admin.controllers.converter
 
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.error.json.{JsonErrorIn, JsonErrorParams}

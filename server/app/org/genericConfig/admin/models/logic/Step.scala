@@ -1,7 +1,12 @@
 package org.genericConfig.admin.models.logic
 
+import com.tinkerpop.blueprints.impls.orient.OrientVertex
+import org.genericConfig.admin.models.common.ODBRecordIdDefect
 import org.genericConfig.admin.models.persistence.Persistence
+import org.genericConfig.admin.shared.Actions
+import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.step.{StepDTO, StepResultDTO}
 import org.genericConfig.admin.shared.step.bo.StepBO
 import org.genericConfig.admin.shared.step.status._
 
@@ -15,11 +20,11 @@ object Step {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param stepBO : StepBO
-    * @return StepBO
+    * @param stepDTO : StepDTO
+    * @return StepDTO
     */
-  def addStep(stepBO: StepBO): StepBO = {
-    new Step().addStep(stepBO)
+  def addStep(stepDTO: StepDTO): StepDTO = {
+    new Step().addStep(stepDTO)
   }
 
   /**
@@ -58,22 +63,24 @@ class Step {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param stepBO : StepBO
-    * @return StepBO
+    * @param stepDTO : StepDTO
+    * @return StepDTO
     */
-  private def addStep(stepBO: StepBO): StepBO = {
+  private def addStep(stepDTO: StepDTO): StepDTO = {
 
-    RidToHash.getRId(stepBO.appendToId.get) match {
-      case Some(appendToRid) =>
-        val stepBOOut: StepBO = Persistence.addStep(stepBO.copy(appendToId= Some(appendToRid)))
+    RidToHash.getRId(stepDTO.params.get.outId.get) match {
+      case Some(outRid) =>
+        val (vStep : OrientVertex , error : Option[ErrorDTO]) = ???
+//        val stepBOOut: StepBO =
+//          Persistence.addStep(stepBO.copy(appendToId= Some(outRid)))
         stepBOOut.status.get.addStep match {
           case Some(AddStepSuccess()) =>
-            val (appendStepStatus: StatusAppendStep, _) = Persistence.appendStepTo(appendToRid, stepBOOut.stepId.get)
+            val (appendStepStatus: StatusAppendStep, _) = Persistence.appendStepTo(outRid, stepBOOut.stepId.get)
             appendStepStatus match {
               case AppendStepSuccess() =>
                 val s = stepBOOut.copy(
                   json = Some(JsonNames.ADD_STEP),
-                  appendToId = RidToHash.getHash(appendToRid),
+                  appendToId = RidToHash.getHash(outRid),
                   stepId = Some(RidToHash.setIdAndHash(stepBOOut.stepId.get)._2),
                   status = Some(StatusStep(
                     addStep = Some(AddStepSuccess()),
@@ -92,11 +99,91 @@ class Step {
             }
           case _ => stepBOOut.copy(json = Some(JsonNames.ADD_STEP))
         }
-      case None => StepBO(
-        json = Some(JsonNames.ADD_STEP),
-        status = Some(StatusStep(addStep = Some(AddStepIdHashNotExist()))))
-    }
+      case None =>
+        StepDTO(
+          action = Actions.ADD_STEP,
+          result = Some(StepResultDTO(
+            errors = Some(List(ErrorDTO(
+              name = ODBRecordIdDefect().name,
+              message = ODBRecordIdDefect().message,
+              code = ODBRecordIdDefect().code)))
+          ))
+        )
   }
+
+  /**
+   * @author Gennadi Heimann
+   * @version 0.1.6
+   * @param stepBO : StepBO
+   * @return StepBO
+   */
+  def addStep(stepBO: StepBO): StepBO = {
+    ???
+    val (vStep: Option[OrientVertex], addStepStatus: StatusAddStep, commonStatus: Error) =
+      Graph.addStep(stepBO)
+    //
+    //    addStepStatus match {
+    //      case AddStepSuccess() =>
+    //        StepBO(
+    //          appendToId = stepBO.appendToId,
+    //          stepId = Some(vStep.get.getIdentity.toString),
+    //          status = Some(StatusStep(
+    //            addStep = Some(AddStepSuccess()),
+    //            common = Some(Success())
+    //          ))
+    //        )
+    //      case AddStepError() =>
+    //        StepBO(
+    //          stepId = None,
+    //          status = Some(StatusStep(
+    //            addStep = Some(AddStepError()),
+    //            common = Some(commonStatus)
+    //          ))
+    //        )
+    //      case AddStepAlreadyExist() =>
+    //        StepBO(
+    //          stepId = None,
+    //          status = Some(StatusStep(
+    //            addStep = Some(AddStepAlreadyExist()),
+    //            common = Some(commonStatus)
+    //          ))
+    //        )
+    //      case AddStepDefectComponentOrConfigId() =>
+    //        StepBO(
+    //          stepId = None,
+    //          status = Some(StatusStep(
+    //            addStep = Some(AddStepDefectComponentOrConfigId()),
+    //            common = Some(commonStatus)
+    //          ))
+    //        )
+    //    }
+  }
+
+  /**
+   * @author Gennadi Heimann
+   * @version 0.1.6
+   * @param id : String, stepId: String
+   * @return (StatusAppendStep, Status)
+   */
+  def appendStepTo(id: String, stepId: String): (StatusAppendStep, ErrorDTO) = {
+    ???
+    //    Graph.appendStepTo(id, stepId)
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   /**
     * @author Gennadi Heimann

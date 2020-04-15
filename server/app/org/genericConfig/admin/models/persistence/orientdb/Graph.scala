@@ -97,39 +97,7 @@ object Graph {
 //    }
   }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param stepBO : StepBO
-    * @return (Option[OrientVertex], StatusAddStep, Status)
-    */
-  def addStep(stepBO: StepBO): (Option[OrientVertex], StatusAddStep, Error) = {
-    ???
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), Success()) =>
-//        val graph: OrientGraph = dbFactory.getTx
-//        new Graph(graph).addStep(stepBO)
-//      case (None, ODBConnectionFail()) =>
-//        (None, AddStepError(), ODBConnectionFail())
-//    }
-  }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param id : String, stepId: String
-    * @return (StatusAppendStep, Status)
-    */
-  def appendStepTo(id: String, stepId: String): (StatusAppendStep, Error) = {
-    ???
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), Success()) =>
-//        val graph: OrientGraph = dbFactory.getTx
-//        new Graph(graph).appendStepTo(id, stepId)
-//      case (None, ODBConnectionFail()) =>
-//        (AppendStepError(), ODBConnectionFail())
-//    }
-  }
 
   /**
     * @author Gennadi Heimann
@@ -520,94 +488,7 @@ class Graph(graph: OrientGraph) {
 //    componentsForConfigTreeBO.toSet
 //  }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param stepBO : StepBO
-    * @return (Option[OrientVertex], StatusAddStep, Status)
-    */
-//  private def addStep(stepBO: StepBO): (Option[OrientVertex], StatusAddStep, Error) = {
-//    try {
-//      stepBO.appendToId match {
-//        case Some(appendToId) =>
-//          addStepTo(stepBO = stepBO, rId = appendToId)
-//        case None => (None, AddStepDefectComponentOrConfigId(), ODBRecordIdDefect())
-//      }
-//    } catch {
-//      case e: ORecordDuplicatedException =>
-//        Logger.error(e.printStackTrace().toString)
-//        graph.rollback()
-//        (None, AddStepError(), ODBRecordDuplicated())
-//      case e: ClassCastException =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (None, AddStepError(), ODBClassCastError())
-//      case e: Exception =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (None, AddStepError(), ODBWriteError())
-//    }
-//  }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param stepBO : StepBO, rId: String
-    * @return (Option[OrientVertex], StatusAddStep, Status)
-    */
-//  private def addStepTo(stepBO: StepBO, rId: String): (Option[OrientVertex], StatusAddStep, Error) = {
-//    val v: OrientVertex = graph.getVertex(rId)
-//    v match {
-//      case null => (None, AddStepDefectComponentOrConfigId(), ODBRecordIdDefect())
-//      case _ =>
-//        val countOfSteps: Int = v.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList.size
-//        countOfSteps match {
-//          case count if count > 0 => (None, AddStepAlreadyExist(), Error())
-//          case _ =>
-//            val vStep: OrientVertex = graph.addVertex(
-//              PropertyKeys.CLASS + PropertyKeys.VERTEX_STEP,
-//              PropertyKeys.NAME_TO_SHOW, stepBO.nameToShow.get,
-//              PropertyKeys.KIND, stepBO.kind.get,
-//              PropertyKeys.SELECTION_CRITERIUM_MIN, stepBO.selectionCriteriumMin.get.toString,
-//              PropertyKeys.SELECTION_CRITERIUM_MAX, stepBO.selectionCriteriumMax.get.toString
-//            )
-//            graph.commit()
-//            (Some(vStep), AddStepSuccess(), Success())
-//        }
-//    }
-//  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param
-    * @return (StatusAppendStep, Status)
-    */
-//  private def appendStepTo(id: String, stepId: String): (StatusAppendStep, Error) = {
-//    try {
-//      val v: OrientVertex = graph.getVertex(id)
-//      val vStep: OrientVertex = graph.getVertex(stepId)
-//      graph.addEdge(
-//        PropertyKeys.CLASS + PropertyKeys.EDGE_HAS_STEP, v, vStep,
-//        PropertyKeys.EDGE_HAS_STEP
-//      )
-//      graph.commit()
-//      (AppendStepSuccess(), Success())
-//    } catch {
-//      case e: ORecordDuplicatedException =>
-//        Logger.error(e.printStackTrace().toString)
-//        graph.rollback()
-//        (AppendStepError(), ODBRecordDuplicated())
-//      case e: ClassCastException =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (AppendStepError(), ODBClassCastError())
-//      case e: Exception =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (AppendStepError(), ODBWriteError())
-//    }
-//  }
 
   /**
     * @author Gennadi Heimann

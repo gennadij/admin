@@ -1,6 +1,6 @@
 package org.genericConfig.admin.models.user
 
-import org.genericConfig.admin.controllers.admin.MessageHandler
+import org.genericConfig.admin.controllers.converter.MessageHandler
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.models.wrapper.Wrapper

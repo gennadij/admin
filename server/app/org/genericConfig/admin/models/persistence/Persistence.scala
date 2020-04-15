@@ -190,64 +190,7 @@ object Persistence {
 //    }
   }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param stepBO : StepBO
-    * @return StepBO
-    */
-  def addStep(stepBO: StepBO): StepBO = {
-    ???
-//    val (vStep: Option[OrientVertex], addStepStatus: StatusAddStep, commonStatus: Error) =
-//      Graph.addStep(stepBO)
-//
-//    addStepStatus match {
-//      case AddStepSuccess() =>
-//        StepBO(
-//          appendToId = stepBO.appendToId,
-//          stepId = Some(vStep.get.getIdentity.toString),
-//          status = Some(StatusStep(
-//            addStep = Some(AddStepSuccess()),
-//            common = Some(Success())
-//          ))
-//        )
-//      case AddStepError() =>
-//        StepBO(
-//          stepId = None,
-//          status = Some(StatusStep(
-//            addStep = Some(AddStepError()),
-//            common = Some(commonStatus)
-//          ))
-//        )
-//      case AddStepAlreadyExist() =>
-//        StepBO(
-//          stepId = None,
-//          status = Some(StatusStep(
-//            addStep = Some(AddStepAlreadyExist()),
-//            common = Some(commonStatus)
-//          ))
-//        )
-//      case AddStepDefectComponentOrConfigId() =>
-//        StepBO(
-//          stepId = None,
-//          status = Some(StatusStep(
-//            addStep = Some(AddStepDefectComponentOrConfigId()),
-//            common = Some(commonStatus)
-//          ))
-//        )
-//    }
-  }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param id : String, stepId: String
-    * @return (StatusAppendStep, Status)
-    */
-  def appendStepTo(id: String, stepId: String): (StatusAppendStep, ErrorDTO) = {
-  ???
-    //    Graph.appendStepTo(id, stepId)
-  }
 
   /**
     * @author Gennadi Heimann

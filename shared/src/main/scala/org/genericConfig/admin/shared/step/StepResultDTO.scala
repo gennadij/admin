@@ -12,12 +12,12 @@ import play.api.libs.functional.syntax._
  */
 case class StepResultDTO(
                           stepId: Option[String] = None,
-                          errors: Option[ErrorDTO] = None
+                          errors: Option[List[ErrorDTO]]
                         )
 
 object StepResultDTO{
   implicit val format: Format[StepResultDTO] = (
     (JsPath \ "stepId").format(Format.optionWithNull[String]) and
-      (JsPath \ "errors").format(Format.optionWithNull[ErrorDTO])
+      (JsPath \ "errors").format(Format.optionWithNull[List[ErrorDTO]])
     )(StepResultDTO.apply, unlift(StepResultDTO.unapply))
 }

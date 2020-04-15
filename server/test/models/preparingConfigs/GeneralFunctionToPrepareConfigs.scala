@@ -2,7 +2,7 @@ package models.preparingConfigs
 
 import play.api.libs.json.Json
 import play.api.libs.json.JsValue
-import org.genericConfig.admin.controllers.admin.MessageHandler
+import org.genericConfig.admin.controllers.converter.MessageHandler
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import org.genericConfig.admin.models.persistence.OrientDB
 import com.orientechnologies.orient.core.sql.OCommandSQL

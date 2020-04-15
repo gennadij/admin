@@ -5,7 +5,7 @@ package org.genericConfig.admin.controllers.websocket
  * 
  * Created by Gennadi Heimann on 24.10.2017
  */
-import org.genericConfig.admin.controllers.admin.MessageHandler
+import org.genericConfig.admin.controllers.converter.MessageHandler
 import play.api.libs.json.JsValue
 
 object WebClient {
