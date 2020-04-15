@@ -1,7 +1,6 @@
 package org.genericConfig.admin.client.controllers.websocket
 
 import org.genericConfig.admin.shared.Actions
-import org.scalajs.dom.WebSocket
 import play.api.libs.json._
 
 /**
@@ -9,7 +8,7 @@ import play.api.libs.json._
  * 
  * Created by Gennadi Heimann 25.04.2018
  */
-class MessageHandler(webSocket: WebSocket) {
+class MessageHandler() {
 
 
   def handleMessage(receivedMessage: JsValue): Any = {
@@ -18,9 +17,9 @@ class MessageHandler(webSocket: WebSocket) {
       case Some(Actions.GET_USER) => ConverterFromJsonForUser.getUser(receivedMessage)
       case Some(Actions.DELETE_USER) => ConverterFromJsonForUser.deleteUser(receivedMessage)
       case Some(Actions.UPDATE_USER) => ConverterFromJsonForUser.updateUser(receivedMessage)
-      case Some(Actions.ADD_CONFIG) => ConverterFromJsonForConfig.addConfig(receivedMessage, webSocket)
-      case Some(Actions.GET_CONFIGS) => ConverterFromJsonForConfig.getConfigs(receivedMessage, webSocket)
-      case Some(Actions.DELETE_CONFIG) => ConverterFromJsonForConfig.deleteConfig(receivedMessage, webSocket)
+      case Some(Actions.ADD_CONFIG) => ConverterFromJsonForConfig.addConfig(receivedMessage)
+      case Some(Actions.GET_CONFIGS) => ConverterFromJsonForConfig.getConfigs(receivedMessage)
+      case Some(Actions.DELETE_CONFIG) => ConverterFromJsonForConfig.deleteConfig(receivedMessage)
       case Some(Actions.UPDATE_CONFIG) => ???
 //      case Some(JsonNames.ADD_STEP) => addStep(receivedMessage)
 //      case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage)

@@ -12,7 +12,7 @@ import scala.util.matching.Regex
  *
  * Created by Gennadi Heimann 
  */
-object WebSocket {
+object WebSocketListner {
   val url = "ws://localhost:9000/admin"
 	val webSocket : WebSocket = new dom.WebSocket(url)
   val numPattern: Regex = "[0-9]+".r
@@ -22,7 +22,7 @@ object WebSocket {
     webSocket.onmessage = { e: dom.MessageEvent => {
         println("IN -> " + e.data.toString)
         val jsValue: JsValue = Json.parse(e.data.toString)
-        new MessageHandler(webSocket).handleMessage(jsValue)
+        new MessageHandler().handleMessage(jsValue)
       }
     }
 

@@ -4,7 +4,6 @@ import org.genericConfig.admin.client.models.Config
 import org.genericConfig.admin.client.views.config.ConfigPage
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.ConfigDTO
-import org.scalajs.dom.raw.WebSocket
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 
 /**
@@ -14,24 +13,24 @@ import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
  */
 
 object ConverterFromJsonForConfig{
-  def addConfig(receivedMessage: JsValue, webSocket: WebSocket) = {
-    new ConverterFromJsonForConfig(webSocket).addConfig(receivedMessage)
+  def addConfig(receivedMessage: JsValue) = {
+    new ConverterFromJsonForConfig().addConfig(receivedMessage)
   }
 
-  def getConfigs(receivedMessage: JsValue, webSocket: WebSocket) = {
-    new ConverterFromJsonForConfig(webSocket).getConfigs(receivedMessage)
+  def getConfigs(receivedMessage: JsValue) = {
+    new ConverterFromJsonForConfig().getConfigs(receivedMessage)
   }
 
-  def deleteConfig(receivedMessage: JsValue, webSocket: WebSocket) = {
-    new ConverterFromJsonForConfig(webSocket).deleteConfig(receivedMessage)
+  def deleteConfig(receivedMessage: JsValue) = {
+    new ConverterFromJsonForConfig().deleteConfig(receivedMessage)
   }
 
-  def updateConfig(receivedMessage: JsValue, webSocket: WebSocket) = {
-    new ConverterFromJsonForConfig(webSocket).deleteConfig(receivedMessage)
+  def updateConfig(receivedMessage: JsValue) = {
+    new ConverterFromJsonForConfig().deleteConfig(receivedMessage)
   }
 }
 
-class ConverterFromJsonForConfig(webSocket: WebSocket) {
+class ConverterFromJsonForConfig() {
   private def addConfig(receivedMessage: JsValue) = {
     Json.fromJson[ConfigDTO](receivedMessage) match {
       case addConfigResult : JsSuccess[ConfigDTO] => new Config().getConfigs(Some(addConfigResult.value))

@@ -1,13 +1,13 @@
 package org.genericConfig.admin.client.models
 
-import org.genericConfig.admin.client.controllers.websocket.WebSocket
-import org.genericConfig.admin.client.views.html.HtmlElementIds
+import org.genericConfig.admin.client.controllers.websocket.WebSocketListner
 import org.genericConfig.admin.client.views.config.{AddConfigPage, ConfigPage}
+import org.genericConfig.admin.client.views.html.HtmlElementIds
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO, UserConfigDTO}
 import org.genericConfig.admin.shared.user.UserDTO
+import org.scalajs.jquery.jQuery
 import play.api.libs.json.Json
-import org.scalajs.jquery.{JQuery, jQuery}
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -50,7 +50,7 @@ class Config {
           result = None
         )).toString
         println("OUT -> " + addConfig)
-        WebSocket.webSocket.send(addConfig)
+        WebSocketListner.webSocket.send(addConfig)
   }
 
   def getConfigs(param: Option[Any]): Unit = {
@@ -66,7 +66,7 @@ class Config {
       result = None
     )).toString
     println("OUT -> " + getConfigParams)
-    WebSocket.webSocket.send(getConfigParams)
+    WebSocketListner.webSocket.send(getConfigParams)
   }
 
   def showConfigPage(param: Option[Any]) : Unit = {

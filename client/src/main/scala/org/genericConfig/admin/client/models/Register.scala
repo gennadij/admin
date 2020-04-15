@@ -1,6 +1,6 @@
 package org.genericConfig.admin.client.models
 
-import org.genericConfig.admin.client.controllers.websocket.WebSocket
+import org.genericConfig.admin.client.controllers.websocket.WebSocketListner
 import org.genericConfig.admin.client.views.user.RegistrationPage
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
@@ -31,6 +31,6 @@ class Register {
       )
     ).toString
     println("OUT -> " + addUser)
-    WebSocket.webSocket.send(addUser)
+    WebSocketListner.webSocket.send(addUser)
   }
 }

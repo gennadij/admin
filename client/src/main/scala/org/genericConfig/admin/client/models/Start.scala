@@ -1,6 +1,6 @@
 package org.genericConfig.admin.client.models
 
-import org.genericConfig.admin.client.controllers.websocket.WebSocket
+import org.genericConfig.admin.client.controllers.websocket.WebSocketListner
 import org.genericConfig.admin.client.views.StartPage
 import org.genericConfig.admin.client.views.user.UserPage
 import org.genericConfig.admin.shared.Actions
@@ -31,7 +31,7 @@ class Start {
       result = None
     )).toString
     println("OUT -> " + getUser)
-    WebSocket.webSocket.send(getUser)
+    WebSocketListner.webSocket.send(getUser)
   }
 
   def showUserPage(param : Option[Any]): Unit = {

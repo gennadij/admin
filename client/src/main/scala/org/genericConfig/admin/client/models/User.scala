@@ -1,6 +1,6 @@
 package org.genericConfig.admin.client.models
 
-import org.genericConfig.admin.client.controllers.websocket.WebSocket
+import org.genericConfig.admin.client.controllers.websocket.WebSocketListner
 import org.genericConfig.admin.client.views.html.HtmlElementIds
 import org.genericConfig.admin.client.views.user.{UpdateUserPage, UserPage}
 import org.genericConfig.admin.shared.Actions
@@ -43,7 +43,7 @@ class User {
       )
     ).toString
     println("OUT -> " + updateUsername)
-    WebSocket.webSocket.send(updateUsername)
+    WebSocketListner.webSocket.send(updateUsername)
   }
 
   def deleteUser(param : Option[Any]): Unit = {
@@ -59,6 +59,6 @@ class User {
       )
     ).toString
     println("OUT -> " + deleteUsername)
-    WebSocket.webSocket.send(deleteUsername)
+    WebSocketListner.webSocket.send(deleteUsername)
   }
 }
