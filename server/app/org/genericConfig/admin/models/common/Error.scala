@@ -53,6 +53,12 @@ case class ConfigNothingToUpdate() extends Error {
   def code :String = ""
 }
 
+case class AddStepAlreadyExist() extends Error {
+  def name: String = "ADD_STEP_ALREADY_EXIST"
+  def message: String = ""
+  def code :String = ""
+}
+
 case class ODBClassCastError() extends Error{
   def name: String = "CLASS_CAST_ERROR"
   def message: String = "Interner Fehler des Configurators"

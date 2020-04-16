@@ -28,8 +28,9 @@ object PropertyKeys {
   val COMPONENT_ID = "componentId"
   val KIND = "kind"
   val STEP_ID = "stepId"
-  val SELECTION_CRITERIUM_MIN = "selectionCriteriumMin"
-  val SELECTION_CRITERIUM_MAX = "selectionCriteriumMax"
+  //TODO im DB Criterium zu Criterion umbenennen
+  val SELECTION_CRITERION_MIN = "selectionCriteriumMin"
+  val SELECTION_CRITERION_MAX = "selectionCriteriumMax"
 
   val NAME_TO_SHOW: String = "nameToShow"
   val DEPENDENCY_TYPE: String = "dependencyType"

@@ -21,12 +21,6 @@ case class AddStepError() extends StatusAddStep {
   def code :String = ""
 }
 
-case class AddStepAlreadyExist() extends StatusAddStep {
-  def status: String = "ADD_STEP_ALREADY_EXIST"
-  def message: String = ""
-  def code :String = ""
-}
-
 case class AddStepDefectComponentOrConfigId() extends StatusAddStep {
   def status: String = "ADD_STEP_DEFECT_COMPONENT_OR_CONFIG_ID"
   def message: String = ""

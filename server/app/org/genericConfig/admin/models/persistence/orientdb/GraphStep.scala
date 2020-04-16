@@ -2,13 +2,14 @@ package org.genericConfig.admin.models.persistence.orientdb
 
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
 import com.tinkerpop.blueprints.impls.orient.{OrientGraph, OrientVertex}
-import org.genericConfig.admin.models.common.{Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBWriteError}
+import com.tinkerpop.blueprints.{Direction, Edge}
+import org.genericConfig.admin.models.common.{AddStepAlreadyExist, Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBWriteError}
 import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.shared.step.StepDTO
-import org.genericConfig.admin.shared.step.bo.StepBO
-import org.genericConfig.admin.shared.step.status.{StatusAddStep, StatusAppendStep}
+import org.genericConfig.admin.shared.step.status.StatusAppendStep
 import play.api.Logger
 
+import scala.collection.JavaConverters._
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  *
@@ -30,6 +31,22 @@ object GraphStep {
         new GraphStep(graph).addStep(stepDTO)
       case (None, Some(ODBConnectionFail())) =>
         (None, Some(ODBConnectionFail()))
+    }
+  }
+
+  /**
+   * @author Gennadi Heimann
+   * @version 0.1.6
+   * @param rId : String
+   * @return Option[Error]
+   */
+  def isStepAlone(rId : String): Option[Error] = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), None) =>
+        val graph: OrientGraph = dbFactory.getTx
+        new GraphStep(graph).isStepAlone(rId)
+      case (None, Some(ODBConnectionFail())) =>
+        Some(ODBConnectionFail())
     }
   }
 
@@ -60,16 +77,55 @@ class GraphStep(graph : OrientGraph) {
   /**
    * @author Gennadi Heimann
    * @version 0.1.6
+   * @param rId : String
+   * @return Option[Error]
+   */
+  private def isStepAlone(rId : String) : Option[Error] = {
+    try {
+
+      val eHasSteps : List[Edge] =
+        graph.getVertex(rId).getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList
+      graph.commit()
+
+      eHasSteps.size match {
+        case size if size > 0 => Some(AddStepAlreadyExist())
+        case _ => None
+      }
+
+    } catch {
+      case e: ORecordDuplicatedException =>
+        Logger.error(e.printStackTrace().toString)
+        graph.rollback()
+        Some(ODBRecordDuplicated())
+      case e: ClassCastException =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        Some(ODBClassCastError())
+      case e: Exception =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        Some(ODBWriteError())
+    }
+
+  }
+
+  /**
+   * @author Gennadi Heimann
+   * @version 0.1.6
    * @param stepDTO : StepDTO
    * @return (Option[OrientVertex], Option[Error])
    */
     private def addStep(stepDTO: StepDTO): (Option[OrientVertex], Option[Error]) = {
       try {
-        stepDTO.appendToId match {
-          case Some(appendToId) =>
-            addStepTo(stepBO = stepBO, rId = appendToId)
-          case None => (None, AddStepDefectComponentOrConfigId(), ODBRecordIdDefect())
-        }
+        val vStep: OrientVertex = graph.addVertex(
+          PropertyKeys.CLASS + PropertyKeys.VERTEX_STEP,
+          PropertyKeys.NAME_TO_SHOW, stepDTO.params.get.nameToShow.get,
+          PropertyKeys.KIND, stepDTO.params.get.kind.get,
+          PropertyKeys.SELECTION_CRITERION_MIN, stepDTO.params.get.selectionCriterion.get.min.toString,
+          PropertyKeys.SELECTION_CRITERION_MAX, stepDTO.params.get.selectionCriterion.get.max.toString
+        )
+        graph.commit()
+        (Some(vStep), None)
       } catch {
         case e: ORecordDuplicatedException =>
           Logger.error(e.printStackTrace().toString)
@@ -85,34 +141,6 @@ class GraphStep(graph : OrientGraph) {
           (None, Some(ODBWriteError()))
       }
     }
-
-  /**
-   * @author Gennadi Heimann
-   * @version 0.1.6
-   * @param stepBO : StepBO, rId: String
-   * @return (Option[OrientVertex], StatusAddStep, Status)
-   */
-  //  private def addStepTo(stepBO: StepBO, rId: String): (Option[OrientVertex], StatusAddStep, Error) = {
-  //    val v: OrientVertex = graph.getVertex(rId)
-  //    v match {
-  //      case null => (None, AddStepDefectComponentOrConfigId(), ODBRecordIdDefect())
-  //      case _ =>
-  //        val countOfSteps: Int = v.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList.size
-  //        countOfSteps match {
-  //          case count if count > 0 => (None, AddStepAlreadyExist(), Error())
-  //          case _ =>
-  //            val vStep: OrientVertex = graph.addVertex(
-  //              PropertyKeys.CLASS + PropertyKeys.VERTEX_STEP,
-  //              PropertyKeys.NAME_TO_SHOW, stepBO.nameToShow.get,
-  //              PropertyKeys.KIND, stepBO.kind.get,
-  //              PropertyKeys.SELECTION_CRITERIUM_MIN, stepBO.selectionCriteriumMin.get.toString,
-  //              PropertyKeys.SELECTION_CRITERIUM_MAX, stepBO.selectionCriteriumMax.get.toString
-  //            )
-  //            graph.commit()
-  //            (Some(vStep), AddStepSuccess(), Success())
-  //        }
-  //    }
-  //  }
 
 
   /**
