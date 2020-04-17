@@ -1,10 +1,8 @@
 package org.genericConfig.admin.models.persistence.orientdb
 
-import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
-import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientEdge, OrientGraph, OrientVertex}
-import com.tinkerpop.blueprints.Vertex
-import org.genericConfig.admin.models.common.{AddUserAlreadyExist, Error, GetUserNotExist, ODBClassCastError, ODBConnectionFail, ODBReadError, ODBRecordDuplicated, ODBWriteError, UnknownError}
+import com.tinkerpop.blueprints.impls.orient.{OrientGraph, OrientVertex}
+import org.genericConfig.admin.models.common.{Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBWriteError}
 import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.status._
@@ -14,15 +12,43 @@ import org.genericConfig.admin.shared.step.bo.StepBO
 import org.genericConfig.admin.shared.step.status._
 import play.api.Logger
 
-import scala.collection.JavaConverters._
-
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
   *
   * Created by Gennadi Heimann 10.04.2018
   */
-object Graph {
+object GraphCommon {
+
+  /**
+   * @author Gennadi Heimann
+   * @version 0.1.6
+   * @param outRid : String, inId: String
+   * @return Option[Error)
+   */
+  def appendTo(outRid: String, inRid: String, label : String): Option[Error] = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), None) =>
+        val graph: OrientGraph = dbFactory.getTx
+        new GraphCommon(graph).appendTo(outRid, inRid, label)
+      case (None, Some(ODBConnectionFail())) =>
+        Some(ODBConnectionFail())
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   /**
     * @author Gennadi Heimann
@@ -124,13 +150,7 @@ object Graph {
     */
   def deleteStepAppendedToConfig(configId: String): Int = {
     ???
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), Success()) =>
-//        val graph: OrientGraph = dbFactory.getTx
-//        new Graph(graph).deleteStepAppendedToConfig(configId)
-//      case (None, ODBConnectionFail()) =>
-//        0
-//    }
+
   }
 
   /**
@@ -237,7 +257,44 @@ object Graph {
 }
 
 
-class Graph(graph: OrientGraph) {
+class GraphCommon(graph: OrientGraph) {
+
+  /**
+   * @author Gennadi Heimann
+   * @version 0.1.6
+   * @param
+   * @return (StatusAppendStep, Status)
+   */
+  private def appendTo(outRid: String, inRid: String, label : String) : Option[Error] = {
+    try {
+      val vOut : OrientVertex = graph.getVertex(outRid)
+      val vIn : OrientVertex = graph.getVertex(inRid)
+      graph.addEdge(PropertyKeys.CLASS + label, vOut, vIn, label)
+      graph.commit()
+      None
+    } catch {
+      case e: ORecordDuplicatedException =>
+        Logger.error(e.printStackTrace().toString)
+        graph.rollback()
+        Some(ODBRecordDuplicated())
+      case e: ClassCastException =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        Some(ODBClassCastError())
+      case e: Exception =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        Some(ODBWriteError())
+    }
+  }
+
+
+
+
+
+
+
+
 
 
   /**
@@ -283,12 +340,12 @@ class Graph(graph: OrientGraph) {
 
 
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param configId : String, configUrl: String
-    * @return (StatusDeleteConfig, Status)
-    */
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param configId : String, configUrl: String
+//    * @return (StatusDeleteConfig, Status)
+//    */
 //  private def deleteConfig(configId: String, configUrl: String): (StatusDeleteConfig, Error) = {
 //    try {
 //      val sql: String = s"DELETE VERTEX Config where @rid=$configId and configUrl='$configUrl'"
@@ -373,13 +430,13 @@ class Graph(graph: OrientGraph) {
 //    }
 //  }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param step : Option[OrientVertex]
-    * @return Set[Option[ComponentForConfigTreeBO\]\]
-    */
-//  private def getComponents(step: OrientVertex): Set[ComponentForConfigTreeBO] = {
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param step : Option[OrientVertex]
+//    * @return Set[Option[ComponentForConfigTreeBO\]\]
+//    */
+////  private def getComponents(step: OrientVertex): Set[ComponentForConfigTreeBO] = {
 //    val componentForConfigTreeBOs: List[ComponentForConfigTreeBO] =
 //      step.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT).asScala.toList map {
 //        eHasComponent =>
@@ -490,12 +547,12 @@ class Graph(graph: OrientGraph) {
 
 
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param stepId : String
-    * @return (StatusDeleteStep, Status)
-    */
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param stepId : String
+//    * @return (StatusDeleteStep, Status)
+//    */
 //  private def deleteStep(stepId: String): (StatusDeleteStep, Error) = {
 //    try {
 //      val sql: String = s"DELETE VERTEX Step where @rid=$stepId"
@@ -527,12 +584,7 @@ class Graph(graph: OrientGraph) {
     * @param
     * @return Int count of deleted Vertexes
     */
-//  private def deleteStepAppendedToConfig(configId: String): Int = {
-//    val res: Int = graph
-//      .command(new OCommandSQL(s"DELETE VERTEX Step where @rid IN (SELECT out() from Config where @rid='$configId')")).execute()
-//    graph.commit()
-//    res
-//  }
+
 
   /**
     * @author Gennadi Heimann
@@ -578,12 +630,12 @@ class Graph(graph: OrientGraph) {
 //    }
 //  }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.0
-    * @param componentBO : ComponentBO
-    * @return (Option[OrientVertex], StatusAddComponent, Status)
-    */
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.0
+//    * @param componentBO : ComponentBO
+//    * @return (Option[OrientVertex], StatusAddComponent, Status)
+//    */
 //  private def addComponent(componentBO: ComponentBO): (Option[OrientVertex], StatusAddComponent, Error) = {
 //    try {
 //      val vComponent: OrientVertex = graph.addVertex(
@@ -650,12 +702,12 @@ class Graph(graph: OrientGraph) {
 //    }
 //  }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.0
-    * @param componentBO : ComponentBO
-    * @return OrientEdge
-    */
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.0
+//    * @param componentBO : ComponentBO
+//    * @return OrientEdge
+//    */
 //  private def deleteComponent(componentBO: ComponentBO): (StatusDeleteComponent, Error) = {
 //    try {
 //      val sql: String = s"DELETE VERTEX Component where @rid=${componentBO.componentId.get}"
@@ -681,12 +733,12 @@ class Graph(graph: OrientGraph) {
 //    }
 //  }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.0
-    * @param componentBO : ComponentBO
-    * @return (Option[OrientVertex], StatusUpdateComponent, Status)
-    */
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.0
+//    * @param componentBO : ComponentBO
+//    * @return (Option[OrientVertex], StatusUpdateComponent, Status)
+//    */
 //  private def updateComponent(componentBO: ComponentBO): (Option[OrientVertex], StatusUpdateComponent, Error) = {
 //    try {
 //      val vComponent: OrientVertex = graph.getVertex(componentBO.componentId.get)
@@ -739,14 +791,14 @@ class Graph(graph: OrientGraph) {
   //  }
 
 
-  /**
-    * Loescht alle Steps und Components die zu der Config gehoeren
-    *
-    * @author Gennadi Heimann
-    * @version 0.1.0
-    * @param configId : String
-    * @return Count of deleted Vertexes
-    */
+//  /**
+//    * Loescht alle Steps und Components die zu der Config gehoeren
+//    *
+//    * @author Gennadi Heimann
+//    * @version 0.1.0
+//    * @param configId : String
+//    * @return Count of deleted Vertexes
+//    */
 
 //  private def deleteAllStepsAndComponent(configId: String): Int = {
 //    val sql: String = s"DELETE VERTEX V where @rid IN (traverse out() from (select out('hasFirstStep') " +

@@ -1,19 +1,17 @@
 package org.genericConfig.admin.models
 
-import com.orientechnologies.orient.core.record.impl.ODocument
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientGraph, OrientVertex}
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.logic._
 import org.genericConfig.admin.models.persistence.Database
-import org.genericConfig.admin.models.persistence.orientdb.Graph
+import org.genericConfig.admin.models.persistence.orientdb.GraphCommon
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.status.StatusAddComponent
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
-import org.genericConfig.admin.shared.step.bo.StepBO
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
@@ -85,16 +83,6 @@ trait CommonFunction {
       val sql: String = s"select * from Config where configUrl like '$configUrl'"
       val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
       val rid = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getIdentity.toString())
-//      val resultUserDTO = User.getUser(UserDTO(
-//        action = Actions.GET_USER,
-//        params = Some(UserParamsDTO(
-//          username = username,
-//          password = username,
-//          update = None
-//        )),
-//        result = None
-//      ))
-//      resultUserDTO.result.get.userId.get
       val idHash = RidToHash.setIdAndHash(rid.head)._2
       idHash
     }else {
@@ -123,43 +111,23 @@ trait CommonFunction {
     configDTOResult.result.get.configs.get.head.configId.get
   }
 
-//  def addUser(username: String): (String, String, String) = {
-//
-//    val jsonAddUserIn = Json.toJsObject(JsonUserIn(
-//      json = JsonNames.ADD_USER,
-//      params = JsonUserParams(
-//        username = username,
-//        password = username
-//      )
-//
-//    ))
-//
-//    val wC = WebClient.init
-//
-//    //        Logger.info("IN " + jsonAddUserIn)
-//
-//    val jsonAddUserOut = wC.handleMessage(jsonAddUserIn)
-//
-//    val addUserOut = Json.fromJson[JsonUserOut](jsonAddUserOut)
-//
-//    //        Logger.info("OUT " + jsonAddUserOut)
-//
-//    (addUserOut.get.result.username.get, addUserOut.get.result.userId.get, addUserOut.get.result.status.addUser.get.status)
-//  }
-
   def deleteAllConfigs(username: String): Int = {
-    Graph.deleteAllConfigs(username)
+    GraphCommon.deleteAllConfigs(username)
   }
 
-
-
-
   def deleteStepAppendedToConfig(configId: String): Int = {
-    Graph.deleteStepAppendedToConfig(configId)
+    val graph: OrientGraph = Database.getFactory()._1.get.getTx
+    val res: Int = graph.command(
+      new OCommandSQL(
+        s"DELETE VERTEX Step where @rid IN (SELECT out() from Config where @rid='$configId')"
+      )
+    ).execute()
+    graph.commit()
+    res
   }
 
   def deleteStepAppendToComponent(componentId: String): Int = {
-    Graph.deleteStepAppendedToComponent(componentId)
+    GraphCommon.deleteStepAppendedToComponent(componentId)
   }
 
   def getConfigs(userId: String, wC: WebClient): Set[String] = {
@@ -179,21 +147,21 @@ trait CommonFunction {
     jsConfigsIds map (jsCId => (jsCId \ "configId").asOpt[String].get)
   }
 
-  def addStep(appendToId: Option[String] = None,
-              nameToShow: Option[String] = Some("Step"),
-              kind: Option[String] = Some("default")): Option[String] = {
-
-    val addstepBOIn = StepBO(
-      json = Some(JsonNames.ADD_STEP),
-      appendToId = appendToId,
-      nameToShow = nameToShow,
-      kind = kind,
-      selectionCriteriumMax = Some(1),
-      selectionCriteriumMin = Some(1)
-    )
-    val addStepBOOut = Step.addStep(addstepBOIn)
-    addStepBOOut.stepId
-  }
+//  def addStep(appendToId: Option[String] = None,
+//              nameToShow: Option[String] = Some("Step"),
+//              kind: Option[String] = Some("default")): Option[String] = {
+//
+//    val addstepBOIn = StepBO(
+//      json = Some(JsonNames.ADD_STEP),
+//      appendToId = appendToId,
+//      nameToShow = nameToShow,
+//      kind = kind,
+//      selectionCriteriumMax = Some(1),
+//      selectionCriteriumMin = Some(1)
+//    )
+//    val addStepBOOut = Step.addStep(addstepBOIn)
+//    addStepBOOut.stepId
+//  }
 
   def getConfigTree(configId: String): ConfigTreeBO = {
     val getCondifTreeBOIn = ConfigTreeBO(

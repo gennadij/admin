@@ -53,8 +53,26 @@ case class ConfigNothingToUpdate() extends Error {
   def code :String = ""
 }
 
-case class AddStepAlreadyExist() extends Error {
-  def name: String = "ADD_STEP_ALREADY_EXIST"
+case class StepAlreadyExistError() extends Error {
+  def name: String = "STEP_ALREADY_EXIST_ERROR"
+  def message: String = ""
+  def code :String = ""
+}
+
+case class IdHashNotExistError() extends Error{
+  def name: String = "ID_HASH_NOT_EXIST"
+  def message: String = ""
+  def code :String = ""
+}
+
+case class AddStepError() extends Error {
+  def name: String = "ADD_STEP_ERROR"
+  def message: String = ""
+  def code :String = ""
+}
+
+case class AppendToError() extends Error {
+  def name: String = "APPEND_TO_ERROR"
   def message: String = ""
   def code :String = ""
 }

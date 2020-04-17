@@ -13,7 +13,7 @@ import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 trait ConverterJsonDTOForStep extends WrapperCommon {
   private[converter] def addStep(receivedMessage: JsValue): JsValue = {
     Json.fromJson[StepDTO](receivedMessage) match {
-      case addStepResult: JsSuccess[StepDTO] => Json.toJson[StepDTO](Step.addStep(addStepResult.value))
+      case addStepParams: JsSuccess[StepDTO] => Json.toJson[StepDTO](Step.addStep(addStepParams.value))
       case e: JsError => jsonError(Actions.ADD_STEP, e)
     }
   }

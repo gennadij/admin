@@ -1,11 +1,9 @@
 package org.genericConfig.admin.models.logic
 
-import com.tinkerpop.blueprints.impls.orient.OrientVertex
-import org.genericConfig.admin.models.common.Error
-import org.genericConfig.admin.models.common.ODBRecordIdDefect
-import org.genericConfig.admin.models.persistence.Persistence
-import org.genericConfig.admin.models.persistence.orientdb.GraphStep
+import org.genericConfig.admin.models.common.{AddStepError, AppendToError, Error, IdHashNotExistError, StepAlreadyExistError}
+import org.genericConfig.admin.models.persistence.orientdb.{GraphCommon, GraphStep, PropertyKeys}
 import org.genericConfig.admin.shared.Actions
+import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.step.{StepDTO, StepResultDTO}
 
 /**
@@ -69,14 +67,51 @@ class Step {
     RidToHash.getRId(stepDTO.params.get.outId.get) match {
       case Some(outRid) =>
         GraphStep.isStepAlone(outRid) match {
-          case None => GraphStep.addStep(stepDTO) match {
-            case (Some(vStep), None) => ???
-            case (None, Some(error)) => ???
+          case None => (GraphStep.addStep(stepDTO) : @unchecked) match {
+            case (Some(vStep), None) => GraphCommon.appendTo(
+              outRid, vStep.getIdentity().toString(), PropertyKeys.EDGE_HAS_STEP
+            ) match {
+              case None => createStepDTO(
+                Actions.ADD_STEP,
+                Some(RidToHash.setIdAndHash(vStep.getIdentity.toString)_2),
+                None
+              )
+              case Some(appendToError) =>
+                createStepDTO(Actions.ADD_STEP, None, Some(List(AppendToError(), appendToError)))
+            }
+            case (None, Some(addStepError)) =>
+              createStepDTO(Actions.ADD_STEP, None, Some(List(AddStepError(), addStepError)))
           }
-          case Some(error) => ???
+          case Some(stepNotAloneError) =>
+            createStepDTO(Actions.ADD_STEP, None, Some(List(StepAlreadyExistError(), stepNotAloneError)))
         }
+      case None => createStepDTO(Actions.ADD_STEP, None, Some(List(IdHashNotExistError())))
+    }
+  }
+
+  private def createStepDTO(action : String, stepId : Option[String], errors : Option[List[Error]]) = {
+
+    val e =  errors match {
+      case None => None
+      case Some(e) => Some(
+        e.map(error => {
+          ErrorDTO(
+            name = error.name,
+            message = error.message,
+            code = error.code
+          )
+        })
+      )
     }
 
+    StepDTO(
+      action = action,
+      result = Some(StepResultDTO(
+        stepId = stepId,
+        errors = e
+      ))
+    )
+  }
 //        val stepBOOut: StepBO =
 //          Persistence.addStep(stepBO.copy(appendToId= Some(outRid)))
 //        stepBOOut.status.get.addStep match {
@@ -115,7 +150,7 @@ class Step {
 //              code = ODBRecordIdDefect().code)))
 //          ))
 //        )
-  }
+//  }
 
 //  /**
 //   * @author Gennadi Heimann
@@ -233,15 +268,15 @@ class Step {
 //    Persistence.updateStep(stepBO.copy(stepId = stepRId))
 //  }
 
-  /**
-    * @author Gennadi Heimann
-    *
-    * @version 0.1.0
-    *
-    * @param stepBO: StepBO
-    *
-    * @return ComponentBO
-    */
+//  /**
+//    * @author Gennadi Heimann
+//    *
+//    * @version 0.1.0
+//    *
+//    * @param stepBO: StepBO
+//    *
+//    * @return ComponentBO
+//    */
 //  def connectComponentToStep(stepBO: StepBO): StepBO = {
 //  }
 //    val componentRid = RidToHash.getRId(stepBO.appendToId.get)

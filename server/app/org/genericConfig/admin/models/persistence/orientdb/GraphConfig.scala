@@ -141,7 +141,7 @@ class GraphConfig(graph: OrientGraph) {
       val vUser: OrientVertex = graph.getVertex(fromUserId)
       val vConfig: OrientVertex = graph.getVertex(toConfigId)
       graph.addEdge(
-        "class:" + PropertyKeys.EDGE_HAS_CONFIG,
+        PropertyKeys.CLASS + PropertyKeys.EDGE_HAS_CONFIG,
         vUser,
         vConfig,
         PropertyKeys.EDGE_HAS_CONFIG

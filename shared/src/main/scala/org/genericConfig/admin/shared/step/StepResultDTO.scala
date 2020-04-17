@@ -12,7 +12,7 @@ import play.api.libs.functional.syntax._
  */
 case class StepResultDTO(
                           stepId: Option[String] = None,
-                          errors: Option[List[ErrorDTO]]
+                          errors: Option[List[ErrorDTO]] = None
                         )
 
 object StepResultDTO{

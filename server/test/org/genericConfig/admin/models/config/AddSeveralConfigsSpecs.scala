@@ -4,17 +4,10 @@ import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.models.logic.Config
 import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
-import org.genericConfig.admin.shared.config.json.{JsonAddConfigIn, JsonAddConfigParams}
-import org.genericConfig.admin.shared.config.status.AddConfigSuccess
-import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
-import org.specs2.runner.JUnitRunner
 import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
-import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
-import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.{JsResult, Json}
 
 /**
