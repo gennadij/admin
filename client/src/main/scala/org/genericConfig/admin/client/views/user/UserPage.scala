@@ -28,8 +28,8 @@ class UserPage() extends CommonFunction{
         val jQueryButtonUpdateUser : JQuery = HtmlElementText.drawButton("updateUser", "Benutzer bearbeiten")
         val jQueryButtonDeleteUser : JQuery = HtmlElementText.drawButton("deleteUser", "Benutzer löschen")
         val jQueryButtonLogout : JQuery = HtmlElementText.drawButton("start", "Auslogen")
-//        val jQueryBr : JQuery = jQuery("</br> </br> </br>")
-//        val jQueryMainConfigs : JQuery = jQuery("<center> <h3>Konfiguratoren</h3> </center>")
+        val jQueryBr : JQuery = jQuery("</br> </br> </br>")
+        val jQueryMainConfigs : JQuery = jQuery("<center> <h3>Konfiguratoren</h3> </center>")
 
         main.appendTo(jQuery(HtmlElementIds.section))
 
@@ -37,8 +37,8 @@ class UserPage() extends CommonFunction{
         jQueryButtonUpdateUser.appendTo(main)
         jQueryButtonDeleteUser.appendTo(main)
         jQueryButtonLogout.appendTo(main)
-//        jQueryBr.appendTo(main)
-//        jQueryMainConfigs.appendTo(main)
+        jQueryBr.appendTo(main)
+        jQueryMainConfigs.appendTo(main)
 
 
         new Mouse().mouseClick(jQueryButtonGetConfigs, Actions.GET_CONFIGS, Some(userDTO))
@@ -51,9 +51,5 @@ class UserPage() extends CommonFunction{
 
 
   }
-
-//  private def updateUser(userDTO: UserDTO): Unit = {
-//    new UpdateUserPage(WebSocket.webSocket).drawUpdateUserPage(userDTO)
-//  }
 
 }
