@@ -41,6 +41,12 @@ case class DeleteConfigDefectID() extends Error {
   def code :String = ""
 }
 
+case class DefectRIdError() extends Error {
+  def name: String = "DEFECT_RID_ERROR"
+  def message: String = ""
+  def code :String = ""
+}
+
 case class ConfigIdHashNotExist() extends Error {
   def name: String = "CONFIG_ID_HASH_NOT_EXIST"
   def message: String = ""

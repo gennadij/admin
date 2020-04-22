@@ -49,21 +49,21 @@ object GraphConfig {
     }
   }
 
-  /**
-   * @author Gennadi Heimann
-   * @version 0.1.6
-   * @param configId : String, configUrl: String
-   * @return (StatusDeleteConfig, Error)
-   */
-  def deleteConfig(configId: String): Option[Error] = {
-    (Database.getFactory(): @unchecked) match {
-      case (Some(dbFactory), None) =>
-        val graph: OrientGraph = dbFactory.getTx
-        new GraphConfig(graph).deleteConfig(configId)
-      case (None, Some(ODBConnectionFail())) =>
-        Some(ODBConnectionFail())
-    }
-  }
+//  /**
+//   * @author Gennadi Heimann
+//   * @version 0.1.6
+//   * @param configId : String, configUrl: String
+//   * @return (StatusDeleteConfig, Error)
+//   */
+//  def deleteConfig(configId: String): Option[Error] = {
+//    (Database.getFactory(): @unchecked) match {
+//      case (Some(dbFactory), None) =>
+//        val graph: OrientGraph = dbFactory.getTx
+//        new GraphConfig(graph).deleteConfig(configId)
+//      case (None, Some(ODBConnectionFail())) =>
+//        Some(ODBConnectionFail())
+//    }
+//  }
 
   /**
     * @author Gennadi Heimann
@@ -164,36 +164,36 @@ class GraphConfig(graph: OrientGraph) {
     }
   }
 
-  /**
-   * @author Gennadi Heimann
-   * @version 0.1.6
-   * @param configId : String, configUrl: String
-   * @return Option[Error]
-   */
-  private def deleteConfig(configId: String): Option[Error] = {
-    try {
-      val sql: String = s"DELETE VERTEX Config where @rid=$configId"
-      val res: Int = graph.command(new OCommandSQL(sql)).execute()
-      graph.commit()
-      res match {
-        case 1 => None
-        case _ => Some(DeleteConfigDefectID())
-      }
-    } catch {
-      case e: ORecordDuplicatedException =>
-        Logger.error(e.printStackTrace().toString)
-        graph.rollback()
-        Some(ODBRecordDuplicated())
-      case e: ClassCastException =>
-        graph.rollback()
-        Logger.error(e.printStackTrace().toString)
-        Some(ODBClassCastError())
-      case e: Exception =>
-        graph.rollback()
-        Logger.error(e.printStackTrace().toString)
-        Some(ODBWriteError())
-    }
-  }
+//  /**
+//   * @author Gennadi Heimann
+//   * @version 0.1.6
+//   * @param configId : String, configUrl: String
+//   * @return Option[Error]
+//   */
+//  private def deleteConfig(configId: String): Option[Error] = {
+//    try {
+//      val sql: String = s"DELETE VERTEX Config where @rid=$configId"
+//      val res: Int = graph.command(new OCommandSQL(sql)).execute()
+//      graph.commit()
+//      res match {
+//        case 1 => None
+//        case _ => Some(DeleteConfigDefectID())
+//      }
+//    } catch {
+//      case e: ORecordDuplicatedException =>
+//        Logger.error(e.printStackTrace().toString)
+//        graph.rollback()
+//        Some(ODBRecordDuplicated())
+//      case e: ClassCastException =>
+//        graph.rollback()
+//        Logger.error(e.printStackTrace().toString)
+//        Some(ODBClassCastError())
+//      case e: Exception =>
+//        graph.rollback()
+//        Logger.error(e.printStackTrace().toString)
+//        Some(ODBWriteError())
+//    }
+//  }
 
   /**
     * @author Gennadi Heimann

@@ -1,8 +1,9 @@
 package org.genericConfig.admin.models.persistence.orientdb
 
+import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
 import com.tinkerpop.blueprints.impls.orient.{OrientGraph, OrientVertex}
-import org.genericConfig.admin.models.common.{Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBWriteError}
+import org.genericConfig.admin.models.common.{DefectRIdError, DeleteConfigDefectID, Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBWriteError}
 import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.status._
@@ -31,6 +32,22 @@ object GraphCommon {
       case (Some(dbFactory), None) =>
         val graph: OrientGraph = dbFactory.getTx
         new GraphCommon(graph).appendTo(outRid, inRid, label)
+      case (None, Some(ODBConnectionFail())) =>
+        Some(ODBConnectionFail())
+    }
+  }
+
+  /**
+    * @author Gennadi Heimann
+    * @version 0.1.6
+    * @param rId : String
+    * @return Option[Error)
+    */
+  def deleteVertex(rId: String, clazz : String): Option[Error] = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), None) =>
+        val graph: OrientGraph = dbFactory.getTx
+        new GraphCommon(graph).deleteVertex(rId, clazz)
       case (None, Some(ODBConnectionFail())) =>
         Some(ODBConnectionFail())
     }
@@ -288,9 +305,30 @@ class GraphCommon(graph: OrientGraph) {
     }
   }
 
-
-
-
+ private def deleteVertex(rId : String, clazz : String) : Option[Error]  = {
+   try {
+     val sql: String = s"DELETE VERTEX $clazz where @rid=$rId"
+     val res: Int = graph.command(new OCommandSQL(sql)).execute()
+     graph.commit()
+     res match {
+       case 1 => None
+       case _ => Some(DefectRIdError())
+     }
+   } catch {
+     case e: ORecordDuplicatedException =>
+       Logger.error(e.printStackTrace().toString)
+       graph.rollback()
+       Some(ODBRecordDuplicated())
+     case e: ClassCastException =>
+       graph.rollback()
+       Logger.error(e.printStackTrace().toString)
+       Some(ODBClassCastError())
+     case e: Exception =>
+       graph.rollback()
+       Logger.error(e.printStackTrace().toString)
+       Some(ODBWriteError())
+   }
+ }
 
 
 
@@ -331,43 +369,6 @@ class GraphCommon(graph: OrientGraph) {
 //        graph.rollback()
 //        Logger.error(e.printStackTrace().toString)
 //        ("", ODBWriteError())
-//    }
-//  }
-
-
-
-
-
-
-
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.6
-//    * @param configId : String, configUrl: String
-//    * @return (StatusDeleteConfig, Status)
-//    */
-//  private def deleteConfig(configId: String, configUrl: String): (StatusDeleteConfig, Error) = {
-//    try {
-//      val sql: String = s"DELETE VERTEX Config where @rid=$configId and configUrl='$configUrl'"
-//      val res: Int = graph.command(new OCommandSQL(sql)).execute()
-//      graph.commit()
-//      res match {
-//        case 1 => (DeleteConfigSuccess(), Success())
-//        case _ => (DeleteConfigDefectID(), Error())
-//      }
-//    } catch {
-//      case e: ORecordDuplicatedException =>
-//        Logger.error(e.printStackTrace().toString)
-//        graph.rollback()
-//        (DeleteConfigError(), ODBRecordDuplicated())
-//      case e: ClassCastException =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (DeleteConfigError(), ODBClassCastError())
-//      case e: Exception =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (DeleteConfigError(), ODBWriteError())
 //    }
 //  }
 
@@ -545,38 +546,6 @@ class GraphCommon(graph: OrientGraph) {
 //    componentsForConfigTreeBO.toSet
 //  }
 
-
-
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.6
-//    * @param stepId : String
-//    * @return (StatusDeleteStep, Status)
-//    */
-//  private def deleteStep(stepId: String): (StatusDeleteStep, Error) = {
-//    try {
-//      val sql: String = s"DELETE VERTEX Step where @rid=$stepId"
-//      val res: Int = graph.command(new OCommandSQL(sql)).execute()
-//      graph.commit()
-//      res match {
-//        case 1 => (DeleteStepSuccess(), Success())
-//        case _ => (DeleteStepDefectID(), Error())
-//      }
-//    } catch {
-//      case e: ORecordDuplicatedException =>
-//        Logger.error(e.printStackTrace().toString)
-//        graph.rollback()
-//        (DeleteStepError(), ODBRecordDuplicated())
-//      case e: ClassCastException =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (DeleteStepError(), ODBClassCastError())
-//      case e: Exception =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (DeleteStepError(), ODBWriteError())
-//    }
-//  }
 
   /**
     * @author Gennadi Heimann

@@ -12,6 +12,7 @@ import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.status.StatusAddComponent
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
+import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepDTO, StepParamsDTO}
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
@@ -126,6 +127,40 @@ trait CommonFunction {
     res
   }
 
+  def addStep(
+               nameToShow : Option[String],
+               configId : Option[String],
+               kind : Option[String],
+               min : Int,
+               max : Int,
+               wC : WebClient
+             ) : Option[String] = {
+
+    Json.fromJson[StepDTO](wC.handleMessage(Json.toJson(StepDTO(
+      action = Actions.ADD_STEP,
+      params = Some(StepParamsDTO(
+        nameToShow = nameToShow,
+        outId = configId,
+        kind = kind,
+        selectionCriterion = Some(SelectionCriterionDTO(
+          min = min,
+          max = max
+        ))
+      )),
+      result = None
+    )))).get.result.get.stepId
+  }
+
+  def deleteConfigVertex(username: String): Int = {
+    val sql: String = s"DELETE VERTEX Config where @rid IN (SELECT OUT('hasConfig') FROM AdminUser WHERE username='$username')"
+    val graph: OrientGraph = Database.getFactory()._1.orNull.getTx
+    val res: Int = graph
+      .command(new OCommandSQL(sql)).execute()
+    graph.commit()
+    Logger.info("Deleting count: " + res)
+    res
+  }
+
   def deleteStepAppendToComponent(componentId: String): Int = {
     GraphCommon.deleteStepAppendedToComponent(componentId)
   }
@@ -147,37 +182,11 @@ trait CommonFunction {
     jsConfigsIds map (jsCId => (jsCId \ "configId").asOpt[String].get)
   }
 
-//  def addStep(appendToId: Option[String] = None,
-//              nameToShow: Option[String] = Some("Step"),
-//              kind: Option[String] = Some("default")): Option[String] = {
-//
-//    val addstepBOIn = StepBO(
-//      json = Some(JsonNames.ADD_STEP),
-//      appendToId = appendToId,
-//      nameToShow = nameToShow,
-//      kind = kind,
-//      selectionCriteriumMax = Some(1),
-//      selectionCriteriumMin = Some(1)
-//    )
-//    val addStepBOOut = Step.addStep(addstepBOIn)
-//    addStepBOOut.stepId
-//  }
-
   def getConfigTree(configId: String): ConfigTreeBO = {
     val getCondifTreeBOIn = ConfigTreeBO(
       configId = Some(configId)
     )
     Config.getConfigTree(getCondifTreeBOIn)
-  }
-
-  def deleteConfigVertex(username: String): Int = {
-    val sql: String = s"DELETE VERTEX Config where @rid IN (SELECT OUT('hasConfig') FROM AdminUser WHERE username='$username')"
-    val graph: OrientGraph = Database.getFactory()._1.orNull.getTx
-    val res: Int = graph
-      .command(new OCommandSQL(sql)).execute()
-    graph.commit()
-    Logger.info("Deleting count: " + res)
-    res
   }
 
   def deleteUser(username: String): Int = {
@@ -186,53 +195,6 @@ trait CommonFunction {
       .command(new OCommandSQL(s"DELETE VERTEX AdminUser where username='$username'")).execute()
     graph.commit()
     res
-  }
-
-
-
-  def getUserId(userPassword: String, webClient: WebClient): String = {
-""
-//    val userBO = UserBO(
-//      username = Some(userPassword),
-//      password = Some(userPassword)
-//    )
-//
-//    val userBOOut = User.getUser(userBO)
-//
-//    userBOOut.userId.get
-  }
-
-
-  def getConfigId(usernamePassword: String, configUrl: String = ""): String = {
-""
-//    val userBOIn = UserBO(
-//      username = Some(usernamePassword),
-//      password = Some(usernamePassword)
-//    )
-//
-//    val userBOOut = User.getUser(userBOIn)
-//
-//    val configBOIn = ConfigBO(
-//      userId = Some(userBOOut.userId.get)
-//    )
-//
-//    val configBOOut = Config.getConfigs(configBOIn)
-//    configBOOut.status.get.getConfigs.get match {
-//      case GetConfigsSuccess() =>
-//        configBOOut.configs.get.head.configId.get
-//      case GetConfigsEmpty() =>
-//        val addConfigBOIn = ConfigBO(
-//          userId = Some(userBOOut.userId.get),
-//          configs = Some(List(Configuration(configUrl = Some(configUrl))))
-//        )
-//
-//        val addConfigBOOut = Config.addConfig(addConfigBOIn)
-//
-//        addConfigBOOut.configs.get.head.configId.get
-//      case GetConfigsError() => {
-//        configBOOut.status.get.getConfigs.get.status
-//      }
-//    }
   }
 
   /**
@@ -249,7 +211,7 @@ trait CommonFunction {
       stepRId.get
     }')"
     val res: Int = graph.command(new OCommandSQL(sql)).execute()
-    graph.commit
+    graph.commit()
     res
   }
 
@@ -265,16 +227,5 @@ trait CommonFunction {
     val componentBOOut = Component.addComponent(componentBOIn)
 
     (componentBOOut.componentId.get, componentBOOut.status.get.addComponent.get)
-  }
-
-  def connectComponentToStep(stepId: String, componentId: String) = {
-//    val connectCToSIn = StepBO(
-//      appendToId = Some(componentId),
-//      stepId = Some(stepId)
-//    )
-//
-//    val connectCToSOut = Step.connectComponentToStep(connectCToSIn)
-//
-//    connectCToSOut.status.get.common.get
   }
 }

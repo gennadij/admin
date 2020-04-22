@@ -4,7 +4,7 @@ import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.models.common.{ConfigIdHashNotExist, ConfigNothingToUpdate}
 import org.genericConfig.admin.models.logic.RidToHash
-import org.genericConfig.admin.models.persistence.orientdb.{GraphConfig, PropertyKeys}
+import org.genericConfig.admin.models.persistence.orientdb.{GraphCommon, GraphConfig, PropertyKeys}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO, ConfigUpdateDTO}
 import org.specs2.mutable.Specification
@@ -201,9 +201,9 @@ class UpdateConfigSpecs extends Specification
 
   private def after() = {
     Logger.info("Alle erstellte Configs werden geloescht")
-    GraphConfig.deleteConfig(RidToHash.getRId(configIdForOnlyConfigUrl).get)
-    GraphConfig.deleteConfig(RidToHash.getRId(configIdForOnlyConfigurationsCourse).get)
-    GraphConfig.deleteConfig(RidToHash.getRId(configIdForBoth).get)
-    GraphConfig.deleteConfig(RidToHash.getRId(configIdForNothing).get)
+    GraphCommon.deleteVertex(RidToHash.getRId(configIdForOnlyConfigUrl).get, PropertyKeys.VERTEX_CONFIG)
+    GraphCommon.deleteVertex(RidToHash.getRId(configIdForOnlyConfigurationsCourse).get, PropertyKeys.VERTEX_CONFIG)
+    GraphCommon.deleteVertex(RidToHash.getRId(configIdForBoth).get, PropertyKeys.VERTEX_CONFIG)
+    GraphCommon.deleteVertex(RidToHash.getRId(configIdForNothing).get, PropertyKeys.VERTEX_CONFIG)
   }
 }

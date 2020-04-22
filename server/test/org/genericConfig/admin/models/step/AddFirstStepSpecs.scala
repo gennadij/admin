@@ -2,6 +2,7 @@ package org.genericConfig.admin.models.step
 
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
+import org.genericConfig.admin.models.common.{IdHashNotExistError, StepAlreadyExistError}
 import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepDTO, StepParamsDTO}
@@ -51,12 +52,12 @@ class AddFirstStepSpecs extends Specification
     "Zeiter Schritt in der selben Konfiguration" >> {
       "action = ADD_STEP" >> {addFirstStep2Result.asOpt.get.action === Actions.ADD_STEP}
       "result.stepId = " >> {addFirstStep2Result.asOpt.get.result.get.stepId must beNone}
-      "result.errors = " >> {addFirstStep2Result.asOpt.get.result.get.errors must beNone}
+      "result.errors = " >> {addFirstStep2Result.asOpt.get.result.get.errors.get.head.name === StepAlreadyExistError().name}
     }
     "Dritter Schritt mit defekten ID für Konfiguration" >> {
       "action = ADD_STEP" >> {addFirstStep3Result.asOpt.get.action === Actions.ADD_STEP}
       "result.stepId = " >> {addFirstStep3Result.asOpt.get.result.get.stepId must beNone}
-      "result.errors = " >> {addFirstStep3Result.asOpt.get.result.get.errors must beNone}
+      "result.errors = " >> {addFirstStep3Result.asOpt.get.result.get.errors.get.head.name === IdHashNotExistError().name}
     }
   }
 

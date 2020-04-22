@@ -29,7 +29,7 @@ trait MessageHandler
 //      case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage, admin)
 
       case Some(Actions.ADD_STEP) => addStep(receivedMessage)
-//      case Some(JsonNames.DELETE_STEP) => deleteStep(receivedMessage, admin)
+      case Some(Actions.DELETE_STEP) => deleteStep(receivedMessage)
 //      case Some(JsonNames.UPDATE_STEP) => updateStep(receivedMessage, admin)
 //      case Some(JsonNames.CONNECT_COMPONENT_TO_STEP) => connectComponentToStep(receivedMessage, admin)
 //

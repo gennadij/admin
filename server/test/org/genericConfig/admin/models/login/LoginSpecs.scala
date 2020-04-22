@@ -44,7 +44,7 @@ class LoginSpecs extends Specification with BeforeAfterAll with CommonFunction {
       }else{
         addUser(userLogin, wC)
 
-        val adminId: String = getUserId(userLogin, wC)
+        val adminId: String = createUser(userLogin, wC)
 
         println("adminId " + adminId)
 
