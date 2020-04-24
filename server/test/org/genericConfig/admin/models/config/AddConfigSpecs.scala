@@ -1,21 +1,13 @@
 package org.genericConfig.admin.models.config
 
-import com.orientechnologies.orient.core.sql.OCommandSQL
-import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientGraph, OrientVertex}
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
-import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.common.ErrorDTO
-import org.genericConfig.admin.shared.config.ConfigDTO
+import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
 import org.specs2.mutable.Specification
 import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
-import play.api.libs.json.JsLookupResult.jsLookupResultToJsLookup
-import play.api.libs.json.JsValue.jsValueToJsLookup
 import play.api.libs.json.{JsResult, JsValue, Json}
-
-import scala.collection.JavaConverters._
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -25,20 +17,24 @@ import scala.collection.JavaConverters._
   * Username = user3
   */
 
-class AddConfigSpecs extends Specification with BeforeAfterAll {
+class AddConfigSpecs extends Specification with BeforeAfterAll with CommonFunction {
 
   var configDTO :JsResult[ConfigDTO] = _
 
+  val username = "user3"
+
   def beforeAll(): Unit = {
 
-    val configResult : JsValue = new PrepareAddConfig().before()
+    val configResult : JsValue = before()
 
     Logger.info("<- " + configResult)
 
     configDTO = Json.fromJson[ConfigDTO](configResult)
   }
 
-  def afterAll(): Unit = {}
+  def afterAll(): Unit = {
+    deleteConfigVertex(username)
+  }
 
   "Der Benutzer fuegt eine neue Konfiguration hinzu" >> {
     "result.userId" >> {
@@ -54,74 +50,23 @@ class AddConfigSpecs extends Specification with BeforeAfterAll {
       configDTO.asOpt.get.result.get.errors === None
     }
   }
-}
 
-class PrepareAddConfig extends CommonFunction {
-  def before(): JsValue ={
-    val userPassword = "user3"
+  def before(): JsValue = {
 
     val wC: WebClient = WebClient.init
 
-    val graph: OrientGraph = Database.getFactory._1.get.getTx
-    val sql: String = s"select count(username) from AdminUser where username like '$userPassword'"
-    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
-    graph.commit
-    val countUsers: Int = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString().toInt).head
-    if(countUsers == 1 ) {
-      Logger.info(s"Der User $userPassword ist schon erstellt worden")
-    }else{
-      addUser(userPassword, wC)
+    val userId: String = createUser(username, wC)
 
-      getUserId(userPassword, wC)
-    }
-
-    val countDeletingConfigs: Int = deleteConfigVertex(userPassword)
-//    require(countDeletingConfigs == 1, "Anzahl der geloeschten ConfigVertexes " + countDeletingConfigs)
-
-    val userParams = Json.obj(
-      "action" -> Actions.GET_USER
-      ,"params" -> Json.obj(
-        "username" -> userPassword,
-        "password"-> userPassword,
-        "update" -> Json.obj(
-          "newUsername" -> "",
-          "oldUsername" -> "",
-          "newPassword" -> "",
-          "oldPassword" -> ""
-        ),
-      ),
-      "result" -> Json.obj(
-        "userId" -> "",
-        "username" -> "",
-        "errors" -> Json.arr()
+    val configParams = Json.toJson[ConfigDTO](ConfigDTO (
+      action = Actions.ADD_CONFIG,
+      params = Some (ConfigParamsDTO (
+        userId = Some (userId),
+        configUrl = Some ("http://contig1/user3"),
+        configurationCourse = Some ("sequence")
       ))
+    ))
 
-    val userResult = wC.handleMessage(userParams)
-
-    require((userResult \ "result" \  "errors" ).asOpt[List[ErrorDTO]] == None, "Erwarte None")
-
-    Logger.info(userResult.toString())
-
-    val configParams = Json.obj(
-      "action" -> Actions.ADD_CONFIG,
-      "params" -> Json.obj(
-        "userId" -> (userResult \ "result" \ "userId").asOpt[String].get,
-        "configId" -> "",
-        "configUrl" -> "http://contig1/user3",
-        "configurationCourse" -> "sequence",
-        "update" -> Json.obj(
-          "dummy" -> "",
-          "dummy2" -> ""
-        )
-      ),
-      "result" -> Json.obj(
-        "userId" -> "",
-        "configs" -> Json.arr(),
-        "errors" -> Json.arr()
-      )
-    )
-
-    Logger.info("-> " + configParams)
+    Logger.info ("-> " + configParams)
 
     wC.handleMessage(configParams)
   }

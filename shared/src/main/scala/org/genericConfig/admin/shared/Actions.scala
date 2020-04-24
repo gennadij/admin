@@ -18,6 +18,7 @@ object Actions {
   val UPDATE_CONFIG : String = "UPDATE_CONFIG"
 
   val ADD_STEP : String = "ADD_STEP"
+  val DELETE_STEP : String = "DELETE_STEP"
 
   //only Web client
 

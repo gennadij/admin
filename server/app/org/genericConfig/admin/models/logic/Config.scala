@@ -3,7 +3,7 @@ package org.genericConfig.admin.models.logic
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.genericConfig.admin.models.common.{ConfigIdHashNotExist, ConfigNothingToUpdate, Error, UserIdHashNotExist}
 import org.genericConfig.admin.models.persistence.Persistence
-import org.genericConfig.admin.models.persistence.orientdb.{GraphConfig, PropertyKeys}
+import org.genericConfig.admin.models.persistence.orientdb.{GraphCommon, GraphConfig, PropertyKeys}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigResultDTO, UserConfigDTO}
@@ -105,7 +105,7 @@ class Config(configDTO: ConfigDTO) {
               case _ =>
 
                 val errorDeleteConfig : Option[Error] =
-                  GraphConfig.deleteConfig(vConfig.get.getIdentity.toString())
+                  GraphCommon.deleteVertex(vConfig.get.getIdentity.toString(), PropertyKeys.VERTEX_CONFIG)
 
                 errorDeleteConfig match {
                   case None =>
@@ -165,7 +165,7 @@ class Config(configDTO: ConfigDTO) {
   private def deleteConfig(): ConfigDTO = {
     RidToHash.getRId(configDTO.params.get.configId.get) match {
       case Some(configId) =>
-        val errorDeleteConfig : Option[Error] = GraphConfig.deleteConfig(configId)
+        val errorDeleteConfig : Option[Error] = GraphCommon.deleteVertex(configId, PropertyKeys.VERTEX_CONFIG)
 
         errorDeleteConfig match {
           case None => createConfigDTO(Actions.DELETE_CONFIG, None, None, None)

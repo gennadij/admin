@@ -10,8 +10,8 @@ import play.api.libs.json.{Format, JsPath}
   */
 case class ConfigDTO (
                   action : String = "",
-                  params : Option[ConfigParamsDTO],
-                  result : Option[ConfigResultDTO]
+                  params : Option[ConfigParamsDTO] = None,
+                  result : Option[ConfigResultDTO] = None
                 )
 
 object ConfigDTO {

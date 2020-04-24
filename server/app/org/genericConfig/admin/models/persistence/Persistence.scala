@@ -71,53 +71,6 @@ object Persistence {
 //    }
 //  }
 
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.6
-//    * @param fromUserId : String, configId: String
-//    * @return Status
-//    */
-//  def appendConfigTo(fromUserId: String, toConfigId: String): Option[Error] = {
-//    GraphConfig.appendConfigTo(fromUserId, toConfigId)
-//  }
-
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.6
-//    * @param configId : String, configUrl: String
-//    * @return ConfigBO
-//    */
-//  def deleteConfig(configId: String, configUrl: String, userId : String): ConfigBO = {
-//    val (userId, status): (String, Error) = Graph.getUserId(configId)
-//    val (statusDeleteConfig, statusCommon): (StatusDeleteConfig, Error) = Graph.deleteConfig(configId, configUrl: String)
-//
-//    status match {
-//      case Success() =>
-//        ConfigBO(
-//          Some(userId), None,
-//          Some(StatusConfig(
-//            None, //addConfig: Option[StatusAddConfig],
-//            None, //getConfigs: Option[StatusGetConfigs],
-//            Some(statusDeleteConfig), //deleteConfig: Option[StatusDeleteConfig],
-//            None, //updateConfig: Option[StatusUpdateConfig],
-//            Some(statusCommon) //common: Option[Status
-//          )
-//          ))
-//      case _ =>
-//        ConfigBO(
-//          Some(userId), None,
-//          Some(StatusConfig(
-//            None, //addConfig: Option[StatusAddConfig],
-//            None, //getConfigs: Option[StatusGetConfigs],
-//            Some(DeleteConfigError()), //deleteConfig: Option[StatusDeleteConfig],
-//            None, //updateConfig: Option[StatusUpdateConfig],
-//            Some(status) //common: Option[Status
-//          )
-//          )
-//        )
-//    }
-//  }
-
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
@@ -188,19 +141,6 @@ object Persistence {
 //        )
 //        ))
 //    }
-  }
-
-
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param stepId : String
-    * @return (StatusDeleteStep, Status)
-    */
-  def deleteStep(stepId: String): (StatusDeleteStep, ErrorDTO) = {
-    ???
-//    Graph.deleteStep(stepId)
   }
 
   /**

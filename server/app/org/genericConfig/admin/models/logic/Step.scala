@@ -26,11 +26,11 @@ object Step {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param stepBO : StepBO
-    * @return StepBO
+    * @param stepDTO : StepDTO
+    * @return StepDTO
     */
-  def deleteFirstStep(stepBO: AnyRef): Unit = {
-//    new Step().deleteStep(stepBO)
+  def deleteStep(stepDTO: StepDTO): StepDTO = {
+    new Step().deleteStep(stepDTO)
   }
 
   /**
@@ -69,7 +69,7 @@ class Step {
         GraphStep.isStepAlone(outRid) match {
           case None => (GraphStep.addStep(stepDTO) : @unchecked) match {
             case (Some(vStep), None) => GraphCommon.appendTo(
-              outRid, vStep.getIdentity().toString(), PropertyKeys.EDGE_HAS_STEP
+              outRid, vStep.getIdentity.toString(), PropertyKeys.EDGE_HAS_STEP
             ) match {
               case None => createStepDTO(
                 Actions.ADD_STEP,
@@ -88,6 +88,21 @@ class Step {
       case None => createStepDTO(Actions.ADD_STEP, None, Some(List(IdHashNotExistError())))
     }
   }
+
+    /**
+      * @author Gennadi Heimann
+      * @version 0.1.6
+      * @param stepDTO : StepDTO
+      * @return StepDTO
+      */
+    private def deleteStep(stepDTO: StepDTO): StepDTO = {
+      val stepRId = RidToHash.getRId(stepDTO.result.get.stepId.get)
+      val deleteError : Option[Error] = GraphCommon.deleteVertex(stepRId.get, PropertyKeys.VERTEX_STEP)
+      deleteError match {
+        case None =>  createStepDTO(Actions.DELETE_STEP, None, None)
+        case Some(e) => createStepDTO(Actions.DELETE_STEP, None, Some(List(e)))
+      }
+    }
 
   private def createStepDTO(action : String, stepId : Option[String], errors : Option[List[Error]]) = {
 
@@ -112,104 +127,6 @@ class Step {
       ))
     )
   }
-//        val stepBOOut: StepBO =
-//          Persistence.addStep(stepBO.copy(appendToId= Some(outRid)))
-//        stepBOOut.status.get.addStep match {
-//          case Some(AddStepSuccess()) =>
-//            val (appendStepStatus: StatusAppendStep, _) = Persistence.appendStepTo(outRid, stepBOOut.stepId.get)
-//            appendStepStatus match {
-//              case AppendStepSuccess() =>
-//                val s = stepBOOut.copy(
-//                  json = Some(JsonNames.ADD_STEP),
-//                  appendToId = RidToHash.getHash(outRid),
-//                  stepId = Some(RidToHash.setIdAndHash(stepBOOut.stepId.get)._2),
-//                  status = Some(StatusStep(
-//                    addStep = Some(AddStepSuccess()),
-//                    appendStep = Some(AppendStepSuccess()),
-//                    common = stepBOOut.status.get.common)))
-//                s
-//              case AppendStepError() =>
-//                val (statusDeleteStep: StatusDeleteStep, _) = Persistence.deleteStep(stepBOOut.stepId.get)
-//
-//                stepBOOut.copy(json = Some(JsonNames.ADD_STEP),
-//                  status = Some(StatusStep(
-//                    addStep = Some(AddStepDefectComponentOrConfigId()),
-//                    deleteStep = Some(statusDeleteStep),
-//                    appendStep = Some(AppendStepError()),
-//                    common = stepBOOut.status.get.common)))
-//            }
-//          case _ => stepBOOut.copy(json = Some(JsonNames.ADD_STEP))
-//        }
-//      case None =>
-//        StepDTO(
-//          action = Actions.ADD_STEP,
-//          result = Some(StepResultDTO(
-//            errors = Some(List(ErrorDTO(
-//              name = ODBRecordIdDefect().name,
-//              message = ODBRecordIdDefect().message,
-//              code = ODBRecordIdDefect().code)))
-//          ))
-//        )
-//  }
-
-//  /**
-//   * @author Gennadi Heimann
-//   * @version 0.1.6
-//   * @param stepBO : StepBO
-//   * @return StepBO
-//   */
-//  def addStep(stepBO: StepBO): StepBO = {
-//    ???
-//    val (vStep: Option[OrientVertex], addStepStatus: StatusAddStep, commonStatus: Error) =
-//      Graph.addStep(stepBO)
-    //
-    //    addStepStatus match {
-    //      case AddStepSuccess() =>
-    //        StepBO(
-    //          appendToId = stepBO.appendToId,
-    //          stepId = Some(vStep.get.getIdentity.toString),
-    //          status = Some(StatusStep(
-    //            addStep = Some(AddStepSuccess()),
-    //            common = Some(Success())
-    //          ))
-    //        )
-    //      case AddStepError() =>
-    //        StepBO(
-    //          stepId = None,
-    //          status = Some(StatusStep(
-    //            addStep = Some(AddStepError()),
-    //            common = Some(commonStatus)
-    //          ))
-    //        )
-    //      case AddStepAlreadyExist() =>
-    //        StepBO(
-    //          stepId = None,
-    //          status = Some(StatusStep(
-    //            addStep = Some(AddStepAlreadyExist()),
-    //            common = Some(commonStatus)
-    //          ))
-    //        )
-    //      case AddStepDefectComponentOrConfigId() =>
-    //        StepBO(
-    //          stepId = None,
-    //          status = Some(StatusStep(
-    //            addStep = Some(AddStepDefectComponentOrConfigId()),
-    //            common = Some(commonStatus)
-    //          ))
-    //        )
-    //    }
-//  }
-
-//  /**
-//   * @author Gennadi Heimann
-//   * @version 0.1.6
-//   * @param id : String, stepId: String
-//   * @return (StatusAppendStep, Status)
-//   */
-//  def appendStepTo(id: String, stepId: String): (StatusAppendStep, ErrorDTO) = {
-//    ???
-//    //    Graph.appendStepTo(id, stepId)
-//  }
 
 
 
@@ -226,35 +143,7 @@ class Step {
 
 
 
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.6
-//    * @param stepBO : StepBO
-//    * @return StepBO
-//    */
-//  private def deleteStep(stepBO: StepBO): StepBO = {
-//    val stepBOIn = stepBO.copy(stepId = RidToHash.getRId(stepBO.stepId.get))
-//
-//    val (deleteStepStatus: StatusDeleteStep, commonStatus: Error) = Persistence.deleteStep(stepBOIn.stepId.get)
-//
-//    deleteStepStatus match {
-//      case DeleteStepSuccess() =>
-//        StepBO(
-//          json = Some(JsonNames.DELETE_STEP),
-//          status = Some(StatusStep(deleteStep = Some(DeleteStepSuccess()), common = Some(Success())))
-//        )
-//      case DeleteStepError() =>
-//        StepBO(
-//          json = Some(JsonNames.DELETE_STEP),
-//          status = Some(StatusStep(deleteStep = Some(DeleteStepError()), common = Some(commonStatus)))
-//        )
-//      case DeleteStepDefectID() =>
-//        StepBO(
-//          json = Some(JsonNames.DELETE_STEP),
-//          status = Some(StatusStep(deleteStep = Some(DeleteStepDefectID()), common = Some(commonStatus)))
-//        )
-//    }
-//  }
+
 
 //  /**
 //    * @author Gennadi Heimann

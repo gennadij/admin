@@ -124,39 +124,4 @@ class GraphStep(graph : OrientGraph) {
           (None, Some(ODBWriteError()))
       }
     }
-
-
-//  /**
-//   * @author Gennadi Heimann
-//   * @version 0.1.6
-//   * @param
-//   * @return (StatusAppendStep, Status)
-//   */
-//    private def appendStepTo(outRid: String, inRid: String) : Option[Error] = {
-//      try {
-//        val vOut : OrientVertex = graph.getVertex(outRid)
-//        val vIn : OrientVertex = graph.getVertex(inRid)
-//        graph.addEdge(
-//          PropertyKeys.CLASS + PropertyKeys.EDGE_HAS_STEP, vOut, vIn,
-//          PropertyKeys.EDGE_HAS_STEP
-//        )
-//        graph.commit()
-//        None
-//      } catch {
-//        case e: ORecordDuplicatedException =>
-//          Logger.error(e.printStackTrace().toString)
-//          graph.rollback()
-//          (AppendStepError(), ODBRecordDuplicated())
-//        case e: ClassCastException =>
-//          graph.rollback()
-//          Logger.error(e.printStackTrace().toString)
-//          (AppendStepError(), ODBClassCastError())
-//        case e: Exception =>
-//          graph.rollback()
-//          Logger.error(e.printStackTrace().toString)
-//          (AppendStepError(), ODBWriteError())
-//      }
-//    }
-
-
 }
