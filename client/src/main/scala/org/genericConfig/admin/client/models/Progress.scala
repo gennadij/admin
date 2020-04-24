@@ -10,19 +10,32 @@ import org.genericConfig.admin.shared.user.UserDTO
  * Created by Gennadi Heimann ${date}
  */
 object Progress {
-  val container : List[Container]
+  var states : List[State] = _
 
-  def getContainer : List[Container] = {
+  def addState(state : State) = {
+    states.size match {
+      case size if size > 10 => ??? //Lösche alle Einträge außer letzte 10
+      case _ => this.states = this.states.::(state)
+    }
+  }
 
+  def getStates(state: State) : Option[List[State]] = {
+    states match {
+      case List() => None
+      case _ => Some(this.states)
+    }
+  }
+
+  def getLastStates(state: State) : Option[State] = {
+    states match {
+      case List() => None
+      case _ => Some(this.states.head)
+    }
   }
 }
 
-class Progress() {
-
-}
-
-case class Container(
-                      userDTO : Option[UserDTO],
-                      configDTO: Option[ConfigDTO],
-                      stepDTO: Option[StepDTO]
+case class State(
+                      userDTO : Option[UserDTO] = None,
+                      configDTO: Option[ConfigDTO] = None,
+                      stepDTO: Option[StepDTO] = None
                     )

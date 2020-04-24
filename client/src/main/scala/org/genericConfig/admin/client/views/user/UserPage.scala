@@ -1,6 +1,7 @@
 package org.genericConfig.admin.client.views.user
 
 import org.genericConfig.admin.client.controllers.listner.Mouse
+import org.genericConfig.admin.client.models.{Progress, State}
 import org.genericConfig.admin.client.views.StartPage
 import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
 import org.genericConfig.admin.shared.Actions
@@ -18,6 +19,8 @@ class UserPage() extends CommonFunction{
   def drawUserPage(userDTO: UserDTO): Unit = {
 
     cleanPage
+
+    Progress.addState(State(userDTO = Some(userDTO)))
 
     userDTO.result.get.errors match {
       case None =>
