@@ -70,6 +70,6 @@ class Config {
   }
 
   def showConfigPage(param: Option[Any]) : Unit = {
-    new ConfigPage().drawConfigPage(param.asInstanceOf[UserConfigDTO])
+    new ConfigPage().drawConfigPage(param.get.asInstanceOf[UserConfigDTO])
   }
 }

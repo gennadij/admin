@@ -2,6 +2,7 @@ package org.genericConfig.admin.client.controllers.websocket
 
 import org.genericConfig.admin.client.models.Config
 import org.genericConfig.admin.client.views.config.ConfigPage
+import org.genericConfig.admin.client.views.user.UserPage
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.ConfigDTO
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
@@ -13,19 +14,19 @@ import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
  */
 
 object ConverterFromJsonForConfig{
-  def addConfig(receivedMessage: JsValue) = {
+  def addConfig(receivedMessage: JsValue): Unit = {
     new ConverterFromJsonForConfig().addConfig(receivedMessage)
   }
 
-  def getConfigs(receivedMessage: JsValue) = {
+  def getConfigs(receivedMessage: JsValue): Unit = {
     new ConverterFromJsonForConfig().getConfigs(receivedMessage)
   }
 
-  def deleteConfig(receivedMessage: JsValue) = {
+  def deleteConfig(receivedMessage: JsValue): Unit = {
     new ConverterFromJsonForConfig().deleteConfig(receivedMessage)
   }
 
-  def updateConfig(receivedMessage: JsValue) = {
+  def updateConfig(receivedMessage: JsValue): Unit = {
     new ConverterFromJsonForConfig().deleteConfig(receivedMessage)
   }
 }
@@ -40,7 +41,7 @@ class ConverterFromJsonForConfig() {
 
   private def getConfigs(receivedMessage: JsValue): Unit = {
     Json.fromJson[ConfigDTO](receivedMessage) match {
-      case getConfigsResult: JsSuccess[ConfigDTO] => new ConfigPage().drawAllConfigs(getConfigsResult.get)
+      case getConfigsResult: JsSuccess[ConfigDTO] => new UserPage().drawUserWithConfigPage(configDTO = Some(getConfigsResult.value))//new ConfigPage().drawAllConfigs(getConfigsResult.get)
       case e: JsError => println("Error -> : " + Actions.GET_CONFIGS + " -> " + JsError.toJson(e).toString())
     }
   }

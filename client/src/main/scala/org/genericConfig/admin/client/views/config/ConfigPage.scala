@@ -18,8 +18,8 @@ class ConfigPage() extends CommonFunction{
 //    getConfigs(addConfigResult.result.get.userId.get)
   }
 
-  def drawConfigPage(userConfigDTO: UserConfigDTO) = {
-    ???
+  def drawConfigPage(userConfigDTO: UserConfigDTO): Unit = {
+    println("drawConfigPage")
   }
 
   def drawAllConfigs(getConfigsResult: ConfigDTO): Unit = {
