@@ -7,26 +7,26 @@ import org.genericConfig.admin.shared.user.UserDTO
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  *
- * Created by Gennadi Heimann ${date}
+ * Created by Gennadi Heimann 26.04.2020
  */
 object Progress {
-  var states : List[State] = _
+  var states : List[State] = List()
 
-  def addState(state : State) = {
+  def addState(state : State): Unit = {
     states.size match {
-      case size if size > 10 => ??? //Lösche alle Einträge außer letzte 10
-      case _ => this.states = this.states.::(state)
+      case size if size > 10 => println("Lösche alle Einträge außer letzte 10")
+      case _ => this.states = state ::this.states
     }
   }
 
-  def getStates(state: State) : Option[List[State]] = {
+  def getStates : Option[List[State]] = {
     states match {
       case List() => None
       case _ => Some(this.states)
     }
   }
 
-  def getLastStates(state: State) : Option[State] = {
+  def getLastStates : Option[State] = {
     states match {
       case List() => None
       case _ => Some(this.states.head)

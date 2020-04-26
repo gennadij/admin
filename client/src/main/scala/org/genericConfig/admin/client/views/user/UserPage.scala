@@ -23,7 +23,7 @@ class UserPage() extends CommonFunction{
 
     cleanPage
 
-//    Progress.addState(State(userDTO = Some(userDTO)))
+    Progress.addState(State(userDTO = Some(userDTO)))
 
     userDTO.result.get.errors match {
       case None =>
@@ -35,15 +35,12 @@ class UserPage() extends CommonFunction{
         val jQueryButtonDeleteUser : JQuery = HtmlElementText.drawButton("deleteUser", "Benutzer löschen")
         val jQueryButtonLogout : JQuery = HtmlElementText.drawButton("start", "Auslogen")
 
-
         main.appendTo(jQuery(HtmlElementIds.section))
 
         jQueryButtonGetConfigs.appendTo(main)
         jQueryButtonUpdateUser.appendTo(main)
         jQueryButtonDeleteUser.appendTo(main)
         jQueryButtonLogout.appendTo(main)
-
-
 
         new Mouse().mouseClick(jQueryButtonGetConfigs, Actions.GET_CONFIGS, Some(userDTO))
         new Mouse().mouseClick(jQueryButtonUpdateUser, Actions.UPDATE_USER_PAGE, Some(userDTO))
