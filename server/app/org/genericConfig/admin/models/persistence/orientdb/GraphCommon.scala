@@ -545,16 +545,6 @@ class GraphCommon(graph: OrientGraph) {
 //    //TODO findDuplicate implement in logik
 //    componentsForConfigTreeBO.toSet
 //  }
-
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param
-    * @return Int count of deleted Vertexes
-    */
-
-
   /**
     * @author Gennadi Heimann
     * @version 0.1.6

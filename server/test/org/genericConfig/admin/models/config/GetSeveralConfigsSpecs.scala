@@ -2,6 +2,7 @@ package org.genericConfig.admin.models.config
 
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
+import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
 import org.junit.runner.RunWith
@@ -37,10 +38,10 @@ class GetSeveralConfigsSpecs extends Specification
   }
 
   def afterAll(): Unit = {
-    Logger.info("Deleting Configs : " + deleteAllConfigs(this.username))
+    val configRId_1 = RidToHash.getRId(configId_1)
+    val configRId_2 = RidToHash.getRId(configId_2)
+    val configRId_3 = RidToHash.getRId(configId_3)
   }
-
-
 
   "Der Benutzer ruft die Konfiguration auf " >> {
     "fuer einen AdminUser" >> {

@@ -112,8 +112,12 @@ trait CommonFunction {
     configDTOResult.result.get.configs.get.head.configId.get
   }
 
-  def deleteAllConfigs(username: String): Int = {
-    GraphCommon.deleteAllConfigs(username)
+//  def deleteAllConfigs(username: String): Int = {
+//    GraphCommon.deleteAllConfigs(username)
+//  }
+
+  def deleteVertex(rId : String, clazz : String): Option[common.Error] = {
+    GraphCommon.deleteVertex(rId, clazz)
   }
 
   def deleteStepAppendedToConfig(configId: String): Int = {
