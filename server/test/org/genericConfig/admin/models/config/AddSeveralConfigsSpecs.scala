@@ -46,6 +46,7 @@ class AddSeveralConfigsSpecs extends Specification
   }
 
   private def before(): Unit = {
+    //diese Exception fangen com.orientechnologies.orient.core.storage.ORecordDuplicatedException
     val wC: WebClient = WebClient.init
     val username = "user_1_v016"
     val configUrl_1 = "//http://contig1/user_1_v016_1"
