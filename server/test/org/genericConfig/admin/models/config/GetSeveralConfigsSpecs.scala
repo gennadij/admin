@@ -26,9 +26,9 @@ class GetSeveralConfigsSpecs extends Specification
   val wC: WebClient = WebClient.init
   val username = "user_v016_2"
   var getConfigsResult : JsResult[ConfigDTO] = _
-  val configUrl_1 = "//http://contig1/user_1_v016_1"
-  val configUrl_2 = "//http://contig1/user_1_v016_2"
-  val configUrl_3 = "//http://contig1/user_1_v016_3"
+  val configUrl_1 = "http://contig1/user_v016_2"
+  val configUrl_2 = "http://contig2/user_v016_2"
+  val configUrl_3 = "http://contig3/user_v016_2"
   var configId_1 : String = _
   var configId_2 : String = _
   var configId_3 : String = _

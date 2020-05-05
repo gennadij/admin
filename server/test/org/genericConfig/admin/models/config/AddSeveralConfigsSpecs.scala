@@ -15,7 +15,6 @@ import play.api.libs.json.{JsResult, Json}
   *
   * Created by Gennadi Heimann 22.04.2018
   */
-
 class AddSeveralConfigsSpecs extends Specification
   with BeforeAfterAll
   with CommonFunction {
@@ -49,9 +48,9 @@ class AddSeveralConfigsSpecs extends Specification
     //diese Exception fangen com.orientechnologies.orient.core.storage.ORecordDuplicatedException
     val wC: WebClient = WebClient.init
     val username = "user_1_v016"
-    val configUrl_1 = "//http://contig1/user_1_v016_1"
-    val configUrl_2 = "//http://contig1/user_1_v016_2"
-    val configUrl_3 = "//http://contig1/user_1_v016_3"
+    val configUrl_1 = "http://contig1/user_1_v016"
+    val configUrl_2 = "http://contig2/user_1_v016"
+    val configUrl_3 = "http://contig3/user_1_v016"
 
     val userId : String = createUser(username, wC)
 
@@ -115,7 +114,8 @@ class AddSeveralConfigsSpecs extends Specification
       )),
       result = None
     )
-    Config.deleteConfig(configDTO_1)
+    val configDTO_1_ = Config.deleteConfig(configDTO_1)
+    Logger.info(" ConfigDTO 1 deleted : " + configDTO_1_)
 
     val configDTO_2 : ConfigDTO = ConfigDTO(
       action = Actions.DELETE_CONFIG,
@@ -127,7 +127,8 @@ class AddSeveralConfigsSpecs extends Specification
       )),
       result = None
     )
-    Config.deleteConfig(configDTO_2)
+    val configDTO_2_ = Config.deleteConfig(configDTO_2)
+    Logger.info(" ConfigDTO 2 deleted : " + configDTO_2_)
 
     val configDTO_3 : ConfigDTO = ConfigDTO(
       action = Actions.DELETE_CONFIG,
@@ -139,6 +140,7 @@ class AddSeveralConfigsSpecs extends Specification
       )),
       result = None
     )
-    Config.deleteConfig(configDTO_3)
+    val configDTO_3_ = Config.deleteConfig(configDTO_3)
+    Logger.info(" ConfigDTO 3 deleted : " + configDTO_3_)
   }
 }
