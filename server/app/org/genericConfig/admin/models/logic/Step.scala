@@ -96,7 +96,7 @@ class Step {
       * @return StepDTO
       */
     private def deleteStep(stepDTO: StepDTO): StepDTO = {
-      val stepRId = RidToHash.getRId(stepDTO.result.get.stepId.get)
+      val stepRId = RidToHash.getRId(stepDTO.params.get.stepId.get)
       val deleteError : Option[Error] = GraphCommon.deleteVertex(stepRId.get, PropertyKeys.VERTEX_STEP)
       deleteError match {
         case None =>  createStepDTO(Actions.DELETE_STEP, None, None)

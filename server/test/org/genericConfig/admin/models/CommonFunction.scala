@@ -15,7 +15,7 @@ import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepDTO, StepParamsDTO}
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import play.api.Logger
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsResult, JsValue, Json}
 
 import scala.collection.JavaConverters._
 
@@ -140,7 +140,7 @@ trait CommonFunction {
                wC : WebClient
              ) : Option[String] = {
 
-    Json.fromJson[StepDTO](wC.handleMessage(Json.toJson(StepDTO(
+    val stepDTO : JsResult[StepDTO] = Json.fromJson[StepDTO](wC.handleMessage(Json.toJson(StepDTO(
       action = Actions.ADD_STEP,
       params = Some(StepParamsDTO(
         nameToShow = nameToShow,
@@ -152,7 +152,9 @@ trait CommonFunction {
         ))
       )),
       result = None
-    )))).get.result.get.stepId
+    ))))
+    Logger.info("ADD_STEP -> " + stepDTO)
+    stepDTO.asOpt.get.result.get.stepId
   }
 
   def deleteConfigVertex(username: String): Int = {

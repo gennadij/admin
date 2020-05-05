@@ -83,7 +83,6 @@ class Config(configDTO: ConfigDTO) {
     val configUrl : String = configDTO.params.get.configUrl.get
     val userIdHash : String = configDTO.params.get.userId.get
     val configurationCourse : String = configDTO.params.get.configurationCourse.get
-    //TODO userId auf None pruefen
     RidToHash.getRId(userIdHash) match {
       case Some(userId) =>
         val (vConfig, errorAddConfig): (Option[OrientVertex], Option[Error]) =

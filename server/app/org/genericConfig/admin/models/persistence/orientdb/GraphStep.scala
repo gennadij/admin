@@ -1,9 +1,10 @@
 package org.genericConfig.admin.models.persistence.orientdb
 
+import com.orientechnologies.orient.core.exception.OValidationException
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
 import com.tinkerpop.blueprints.impls.orient.{OrientGraph, OrientVertex}
 import com.tinkerpop.blueprints.{Direction, Edge}
-import org.genericConfig.admin.models.common.{Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBWriteError, StepAlreadyExistError}
+import org.genericConfig.admin.models.common.{Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBValidationException, ODBWriteError, StepAlreadyExistError}
 import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.shared.step.StepDTO
 import play.api.Logger
@@ -110,6 +111,10 @@ class GraphStep(graph : OrientGraph) {
         graph.commit()
         (Some(vStep), None)
       } catch {
+        case e: OValidationException =>
+          Logger.error(e.printStackTrace().toString)
+          graph.rollback()
+          (None, Some(ODBValidationException()))
         case e: ORecordDuplicatedException =>
           Logger.error(e.printStackTrace().toString)
           graph.rollback()

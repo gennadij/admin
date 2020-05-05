@@ -41,7 +41,7 @@ class DeleteStepSpecs extends Specification
     val stepId = addStep(Some("FirstStep"), Some(configId), Some("first"), 1, 1, wC)
 
     val deleteFirstStep1Params: JsValue = Json.toJson(StepDTO(
-      action = Actions.ADD_STEP,
+      action = Actions.DELETE_STEP,
       params = Some(StepParamsDTO(
         stepId = stepId
       )),
