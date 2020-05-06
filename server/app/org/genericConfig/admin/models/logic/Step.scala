@@ -1,5 +1,6 @@
 package org.genericConfig.admin.models.logic
 
+import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.genericConfig.admin.models.common.{AddStepError, AppendToError, Error, IdHashNotExistError, StepAlreadyExistError}
 import org.genericConfig.admin.models.persistence.orientdb.{GraphCommon, GraphStep, PropertyKeys}
 import org.genericConfig.admin.shared.Actions
@@ -36,11 +37,11 @@ object Step {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param stepBO : StepBO
-    * @return StepBO
+    * @param stepDTO : StepDTO
+    * @return StepDTO
     */
-  def updateStep(stepBO: AnyRef): Unit = {
-//    new Step().updateStep(stepBO)
+  def updateStep(stepDTO: StepDTO): StepDTO = {
+    new Step().updateStep(stepDTO)
   }
 
   /**
@@ -56,12 +57,7 @@ object Step {
 }
 
 class Step {
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param stepDTO : StepDTO
-    * @return StepDTO
-    */
+
   private def addStep(stepDTO: StepDTO): StepDTO = {
 
     RidToHash.getRId(stepDTO.params.get.outId.get) match {
@@ -89,20 +85,23 @@ class Step {
     }
   }
 
-    /**
-      * @author Gennadi Heimann
-      * @version 0.1.6
-      * @param stepDTO : StepDTO
-      * @return StepDTO
-      */
-    private def deleteStep(stepDTO: StepDTO): StepDTO = {
-      val stepRId = RidToHash.getRId(stepDTO.params.get.stepId.get)
+  private def deleteStep(stepDTO: StepDTO): StepDTO = {
+      val stepRId : Option[String] = RidToHash.getRId(stepDTO.params.get.stepId.get)
       val deleteError : Option[Error] = GraphCommon.deleteVertex(stepRId.get, PropertyKeys.VERTEX_STEP)
       deleteError match {
         case None =>  createStepDTO(Actions.DELETE_STEP, None, None)
         case Some(e) => createStepDTO(Actions.DELETE_STEP, None, Some(List(e)))
       }
     }
+
+  private def updateStep(stepDTO: StepDTO) : StepDTO = {
+
+    val stepRId : Option[String] = RidToHash.getRId(stepDTO.params.get.stepId.get)
+
+    val updateError : (Option[OrientVertex], Option[Error]) = GraphStep.updateStep(stepRId.get, stepDTO)
+
+    createStepDTO(action = Actions.UPDATE_STEP, Some(""), None)
+  }
 
   private def createStepDTO(action : String, stepId : Option[String], errors : Option[List[Error]]) = {
 

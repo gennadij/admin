@@ -24,4 +24,11 @@ trait ConverterJsonDTOForStep extends WrapperCommon {
       case e: JsError => jsonError(Actions.ADD_STEP, e)
     }
   }
+
+  private[converter] def updateStep(receivedMessage: JsValue): JsValue = {
+    Json.fromJson[StepDTO](receivedMessage) match {
+      case updateStepParams: JsSuccess[StepDTO] => Json.toJson[StepDTO](Step.updateStep(updateStepParams.value))
+      case e: JsError => jsonError(Actions.ADD_STEP, e)
+    }
+  }
 }
