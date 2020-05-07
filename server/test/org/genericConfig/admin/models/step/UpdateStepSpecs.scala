@@ -2,6 +2,7 @@ package org.genericConfig.admin.models.step
 
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
+import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.models.persistence.orientdb.PropertyKeys
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepDTO, StepParamsDTO}
@@ -32,7 +33,7 @@ class UpdateStepSpecs extends Specification
   }
 
   def afterAll(): Unit = {
-    val error = deleteVertex(stepId.get, PropertyKeys.VERTEX_STEP)
+    val error = deleteVertex(RidToHash.getRId(stepId.get).get, PropertyKeys.VERTEX_STEP)
     Logger("Deleted Step error : " + error)
   }
 
@@ -60,15 +61,15 @@ class UpdateStepSpecs extends Specification
         stepId = stepId,
         nameToShow = Some("FirstStepUpdated"),
         selectionCriterion = Some(SelectionCriterionDTO(
-          min = 2,
-          max = 2
+          min = Some(2),
+          max = Some(2)
         ))
 
       ))
     ))
-    Logger.info("DELETE_STEP -> " + updateFirstStepParams)
+    Logger.info("UPDATE_STEP -> " + updateFirstStepParams)
     updateFirstStepResult = Json.fromJson[StepDTO](wC.handleMessage(updateFirstStepParams))
-    Logger.info("DELETE_STEP <- " + updateFirstStepResult)
+    Logger.info("UPDATE_STEP <- " + updateFirstStepResult)
 
   }
 }

@@ -46,7 +46,7 @@ class AddFirstStepSpecs extends Specification
   "Der Benutzer erstellt einen ersten neuen Schritt" >> {
     "Erster Schritt " >> {
       "action = ADD_STEP" >> {addFirstStep1Result.asOpt.get.action === Actions.ADD_STEP}
-      "result.stepId < 32 " >> {addFirstStep1Result.asOpt.get.result.get.stepId.get.size must be_<=(32)}
+      "result.stepId < 32 " >> {addFirstStep1Result.asOpt.get.result.get.stepId.get.length must be_<=(32)}
       "result.errors = " >> {addFirstStep1Result.asOpt.get.result.get.errors must beNone}
     }
     "Zeiter Schritt in der selben Konfiguration" >> {
@@ -76,8 +76,8 @@ class AddFirstStepSpecs extends Specification
         outId = Some(configId),
         kind = kind,
         selectionCriterion = Some(SelectionCriterionDTO(
-          min = 1,
-          max = 1
+          min = Some(1),
+          max = Some(1)
         ))
       )),
       result = None
@@ -93,8 +93,8 @@ class AddFirstStepSpecs extends Specification
         outId = Some(configId),
         kind = kind,
         selectionCriterion = Some(SelectionCriterionDTO(
-          min = 1,
-          max = 1
+          min = Some(1),
+          max = Some(1)
         ))
       )),
       result = None
@@ -110,8 +110,8 @@ class AddFirstStepSpecs extends Specification
         outId = Some("#1:1"),
         kind = kind,
         selectionCriterion = Some(SelectionCriterionDTO(
-          min = 1,
-          max = 1
+          min = Some(1),
+          max = Some(1)
         ))
       )),
       result = None

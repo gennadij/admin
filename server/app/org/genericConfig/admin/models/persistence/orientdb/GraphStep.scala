@@ -1,8 +1,9 @@
 package org.genericConfig.admin.models.persistence.orientdb
 
 import com.orientechnologies.orient.core.exception.OValidationException
+import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
-import com.tinkerpop.blueprints.impls.orient.{OrientGraph, OrientVertex}
+import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientGraph, OrientVertex}
 import com.tinkerpop.blueprints.{Direction, Edge}
 import org.genericConfig.admin.models.common.{Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBValidationException, ODBWriteError, StepAlreadyExistError}
 import org.genericConfig.admin.models.persistence.Database
@@ -101,8 +102,8 @@ class GraphStep(graph : OrientGraph) {
         PropertyKeys.CLASS + PropertyKeys.VERTEX_STEP,
         PropertyKeys.NAME_TO_SHOW, stepDTO.params.get.nameToShow.get,
         PropertyKeys.KIND, stepDTO.params.get.kind.get,
-        PropertyKeys.SELECTION_CRITERION_MIN, stepDTO.params.get.selectionCriterion.get.min.toString,
-        PropertyKeys.SELECTION_CRITERION_MAX, stepDTO.params.get.selectionCriterion.get.max.toString
+        PropertyKeys.SELECTION_CRITERION_MIN, stepDTO.params.get.selectionCriterion.get.min.get.toString,
+        PropertyKeys.SELECTION_CRITERION_MAX, stepDTO.params.get.selectionCriterion.get.max.get.toString
       )
       graph.commit()
       (Some(vStep), None)
@@ -129,45 +130,20 @@ class GraphStep(graph : OrientGraph) {
   def updateStep(stepRId : String, stepDTO: StepDTO): (Option[OrientVertex], Option[Error]) = {
     try {
 
-      val sCMin : Option[String] = stepDTO.params.get.selectionCriterion.get.min match {
-        case Some(min) => Some(min.toString)
-        case None => None
-      }
-
-      val sCMax : Option[String] = stepDTO.params.get.selectionCriterion.get.max match {
-        case Some(max) => Some(max.toString)
-        case None => None
-      }
-
       val updateParams : List[(String, Option[String])] = List(
         (PropertyKeys.NAME_TO_SHOW, stepDTO.params.get.nameToShow),
-        (PropertyKeys.SELECTION_CRITERION_MIN, sCMin),
-        (PropertyKeys.SELECTION_CRITERION_MAX, sCMax)
+        (PropertyKeys.SELECTION_CRITERION_MIN, convertSCToString(stepDTO.params.get.selectionCriterion.get.min)),
+        (PropertyKeys.SELECTION_CRITERION_MAX, convertSCToString(stepDTO.params.get.selectionCriterion.get.max))
       )
 
-      val sql: String = s"update Step set " +
-        assembleSQLForUpdateStep(updateParams) +
-        s"return after where @rid=${stepRId}"
+      val sql: String = s"update Step set ${assemblePropForUpdateStep(updateParams)} return after where @rid=${stepRId}"
 
-      //      val sql: String = s"update Config set " +
-//        s"${PropertyKeys.CONFIG_URL}='$cU', " +
-//        s"${PropertyKeys.CONFIGURATION_COURSE}='$cC' " +
-//        s"return after where @rid=$configId"
-//      val dbRes: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
-//      val vUpdatedConfig : OrientVertex = dbRes.asScala.toList.map(_.asInstanceOf[OrientVertex]).head
-//      graph.commit()
-//      (Some(vUpdatedConfig), None)
-
-//      val vStep: OrientVertex = graph.addVertex(
-//        PropertyKeys.CLASS + PropertyKeys.VERTEX_STEP,
-//        PropertyKeys.NAME_TO_SHOW, stepDTO.params.get.nameToShow.get,
-//        PropertyKeys.KIND, stepDTO.params.get.kind.get,
-//        PropertyKeys.SELECTION_CRITERION_MIN, stepDTO.params.get.selectionCriterion.get.min.toString,
-//        PropertyKeys.SELECTION_CRITERION_MAX, stepDTO.params.get.selectionCriterion.get.max.toString
-//      )
+      val dbRes: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+      val vUpdatedStep : OrientVertex = dbRes.asScala.toList.map(_.asInstanceOf[OrientVertex]).head
 
       graph.commit()
-      (Some(graph.getVertex(stepDTO.params.get.stepId.get)), None)
+
+      (Some(vUpdatedStep), None)
     } catch {
       case e: OValidationException =>
         Logger.error(e.printStackTrace().toString)
@@ -188,11 +164,23 @@ class GraphStep(graph : OrientGraph) {
     }
   }
 
-  def assembleSQLForUpdateStep(params : List[(String, Option[String])]) : String = params match {
+  def convertSCToString(sC : Option[Int]) : Option[String] = sC match {
+    case Some(sC) => Some(sC.toString)
+    case None => None
+  }
+
+  def assemblePropForUpdateStep(params : List[(String, Option[String])]) : String = params match {
     case param :: rest => param._2 match {
-      case Some(p) => s"${param._1}=${p}" + assembleSQLForUpdateStep(rest)
-      case None => "" + assembleSQLForUpdateStep(rest)
+      case Some(p) =>
+        s"${param._1}=${p}${detectComa(rest)} ${assemblePropForUpdateStep(rest)}"
+      case None => assemblePropForUpdateStep(rest)
     }
     case Nil => ""
   }
+
+  def detectComa(rest : List[(String, Option[String])]) : String = rest match {
+    case Nil => ""
+    case _ => ","
+  }
+
 }

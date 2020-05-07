@@ -147,14 +147,27 @@ trait CommonFunction {
         outId = configId,
         kind = kind,
         selectionCriterion = Some(SelectionCriterionDTO(
-          min = min,
-          max = max
+          min = Some(min),
+          max = Some(max)
         ))
       )),
       result = None
     ))))
     Logger.info("ADD_STEP -> " + stepDTO)
-    stepDTO.asOpt.get.result.get.stepId
+
+    stepDTO.get.result.get.errors match {
+      case Some(error) =>
+        //select @rid from Step where nameToShow like "FirstStepToUpdate"
+        val graph: OrientGraph = Database.getFactory()._1.get.getTx
+        val sql: String = s"select * from Step where nameToShow like '${nameToShow.get}'"
+        val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+        val stepId = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getIdentity.toString()).head
+        Some(RidToHash.setIdAndHash(stepId)._2)
+      case None => stepDTO.asOpt.get.result.get.stepId
+      case _ => None
+    }
+
+
   }
 
   def deleteConfigVertex(username: String): Int = {
