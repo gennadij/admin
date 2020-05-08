@@ -5,7 +5,7 @@ import org.genericConfig.admin.models.common.{AddStepError, AppendToError, Error
 import org.genericConfig.admin.models.persistence.orientdb.{GraphCommon, GraphStep, PropertyKeys}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
-import org.genericConfig.admin.shared.step.{StepDTO, StepResultDTO}
+import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepDTO, StepPropertiesDTO, StepResultDTO}
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -43,17 +43,6 @@ object Step {
   def updateStep(stepDTO: StepDTO): StepDTO = {
     new Step().updateStep(stepDTO)
   }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param stepBO : StepBO
-    * @return StepBO
-    */
-  def connectComponentToStep(stepBO: AnyRef): Unit = {
-//    new Step().connectComponentToStep(stepBO)
-  }
-
 }
 
 class Step {
@@ -69,7 +58,7 @@ class Step {
             ) match {
               case None => createStepDTO(
                 Actions.ADD_STEP,
-                Some(RidToHash.setIdAndHash(vStep.getIdentity.toString)_2),
+                Some(vStep),
                 None
               )
               case Some(appendToError) =>
@@ -98,12 +87,23 @@ class Step {
 
     val stepRId : Option[String] = RidToHash.getRId(stepDTO.params.get.stepId.get)
 
-    val updateError : (Option[OrientVertex], Option[Error]) = GraphStep.updateStep(stepRId.get, stepDTO)
-
-    createStepDTO(action = Actions.UPDATE_STEP, Some(""), None)
+    GraphStep.updateStep(stepRId.get, stepDTO) match {
+      case (None, Some(error)) => createStepDTO(
+        action = Actions.UPDATE_STEP,
+        None,
+        Some(List(error))
+      )
+      case (Some(vStep), None) => createStepDTO(
+        action = Actions.UPDATE_STEP,
+        vStep = Some(vStep),
+        errors = None)
+    }
   }
 
-  private def createStepDTO(action : String, stepId : Option[String], errors : Option[List[Error]]) = {
+  private def createStepDTO(
+                             action : String,
+                             vStep : Option[OrientVertex],
+                             errors : Option[List[Error]]) = {
 
     val e =  errors match {
       case None => None
@@ -118,9 +118,25 @@ class Step {
       )
     }
 
+    val properties : Option[StepPropertiesDTO] = errors match {
+      case None => Some(StepPropertiesDTO(
+        nameToShow = Some(vStep.get.getProperty(PropertyKeys.NAME_TO_SHOW).toString),
+        selectionCriterion = Some(SelectionCriterionDTO(
+          min = Some(vStep.get.getProperty(PropertyKeys.SELECTION_CRITERION_MIN).toString.toInt),
+          max = Some(vStep.get.getProperty(PropertyKeys.SELECTION_CRITERION_MAX).toString.toInt)
+        ))))
+      case Some(_) => None
+    }
+
+    val stepId : Option[String] = errors match {
+      case None => Some(vStep.get.getIdentity.toString)
+      case Some(_) => None
+    }
+
     StepDTO(
       action = action,
       result = Some(StepResultDTO(
+        properties = properties,
         stepId = stepId,
         errors = e
       ))
@@ -142,19 +158,6 @@ class Step {
 
 
 
-
-
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.6
-//    * @param stepBO : StepBO
-//    * @return StepBO
-//    */
-//  private def updateStep(stepBO: StepBO): StepBO = {
-//    val stepRId = RidToHash.getRId(stepBO.stepId.get)
-//
-//    Persistence.updateStep(stepBO.copy(stepId = stepRId))
-//  }
 
 //  /**
 //    * @author Gennadi Heimann
