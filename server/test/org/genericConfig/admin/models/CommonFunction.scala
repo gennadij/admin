@@ -166,8 +166,6 @@ trait CommonFunction {
       case None => stepDTO.asOpt.get.result.get.stepId
       case _ => None
     }
-
-
   }
 
   def deleteConfigVertex(username: String): Int = {

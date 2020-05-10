@@ -5,9 +5,7 @@ import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
-import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
-import org.specs2.runner.JUnitRunner
 import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
 import play.api.libs.json.{JsResult, Json}
@@ -18,7 +16,6 @@ import play.api.libs.json.{JsResult, Json}
  * Created by Gennadi Heimann 24.04.2018
  */
 
-@RunWith(classOf[JUnitRunner])
 class GetSeveralConfigsSpecs extends Specification
                            with BeforeAfterAll
                            with CommonFunction{
@@ -46,15 +43,15 @@ class GetSeveralConfigsSpecs extends Specification
   "Der Benutzer ruft die Konfiguration auf " >> {
     "fuer einen AdminUser" >> {
       "action = GET_CONFIGS" >> {getConfigsResult.asOpt.get.action === Actions.GET_CONFIGS}
-      "result.configs(0).configUrl = //http://contig1/user_1_v016_1" >> {
+      "result.configs(0).configUrl = //http://contig1/user_v016_1" >> {
         getConfigsResult.asOpt.get.result.get.configs.get.head.configId.get === configId_1
         getConfigsResult.asOpt.get.result.get.configs.get.head.configUrl.get === configUrl_1
       }
-      "result.configs(0).configUrl = //http://contig1/user_1_v016_2" >> {
+      "result.configs(0).configUrl = //http://contig1/user_v016_2" >> {
         getConfigsResult.asOpt.get.result.get.configs.get(1).configId.get === configId_2
         getConfigsResult.asOpt.get.result.get.configs.get(1).configUrl.get === configUrl_2
       }
-      "result.configs(0).configUrl = //http://contig1/user_1_v016_3" >> {
+      "result.configs(0).configUrl = //http://contig1/user_v016_3" >> {
         getConfigsResult.asOpt.get.result.get.configs.get(2).configId.get === configId_3
         getConfigsResult.asOpt.get.result.get.configs.get(2).configUrl.get === configUrl_3
       }

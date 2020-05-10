@@ -46,7 +46,7 @@ class AddFirstStepSpecs extends Specification
   "Der Benutzer erstellt einen ersten neuen Schritt" >> {
     "Erster Schritt " >> {
       "action = ADD_STEP" >> {addFirstStep1Result.asOpt.get.action === Actions.ADD_STEP}
-      "result.stepId < 32 " >> {addFirstStep1Result.asOpt.get.result.get.stepId.get.length must be_<=(32)}
+      "result.stepId < 32 " >> {addFirstStep1Result.asOpt.get.result.get.stepId.get.length must (be_<=(32) and be_>(10))}
       "result.errors = " >> {addFirstStep1Result.asOpt.get.result.get.errors must beNone}
     }
     "Zeiter Schritt in der selben Konfiguration" >> {

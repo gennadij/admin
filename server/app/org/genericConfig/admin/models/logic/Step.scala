@@ -118,19 +118,21 @@ class Step {
       )
     }
 
-    val properties : Option[StepPropertiesDTO] = errors match {
-      case None => Some(StepPropertiesDTO(
-        nameToShow = Some(vStep.get.getProperty(PropertyKeys.NAME_TO_SHOW).toString),
+    val properties : Option[StepPropertiesDTO] = (errors, vStep) match {
+      case (None, Some(vS)) => Some(StepPropertiesDTO(
+        nameToShow = Some(vS.getProperty(PropertyKeys.NAME_TO_SHOW).toString),
         selectionCriterion = Some(SelectionCriterionDTO(
-          min = Some(vStep.get.getProperty(PropertyKeys.SELECTION_CRITERION_MIN).toString.toInt),
-          max = Some(vStep.get.getProperty(PropertyKeys.SELECTION_CRITERION_MAX).toString.toInt)
+          min = Some(vS.getProperty(PropertyKeys.SELECTION_CRITERION_MIN).toString.toInt),
+          max = Some(vS.getProperty(PropertyKeys.SELECTION_CRITERION_MAX).toString.toInt)
         ))))
-      case Some(_) => None
+      case (Some(_), None) => None
+      case _ => None
     }
 
-    val stepId : Option[String] = errors match {
-      case None => Some(vStep.get.getIdentity.toString)
-      case Some(_) => None
+    val stepId : Option[String] = (errors, vStep) match {
+      case (None, Some(vS)) => Some(vS.getIdentity.toString)
+      case (Some(_), None) => None
+      case _ => None
     }
 
     StepDTO(
