@@ -172,7 +172,7 @@ class GraphStep(graph : OrientGraph) {
   def assemblePropForUpdateStep(params : List[(String, Option[String])]) : String = params match {
     case param :: rest => param._2 match {
       case Some(p) =>
-        s"${param._1}=${p}${detectComa(rest)} ${assemblePropForUpdateStep(rest)}"
+        s"${param._1}='${p}'${detectComa(rest)} ${assemblePropForUpdateStep(rest)}"
       case None => assemblePropForUpdateStep(rest)
     }
     case Nil => ""

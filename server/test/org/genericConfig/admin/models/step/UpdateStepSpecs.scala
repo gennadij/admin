@@ -38,7 +38,7 @@ class UpdateStepSpecs extends Specification
   "Der User aendert den Name und Auswahlkriterium bei dem Schritt" >> {
     "User aendert Name und Auswahlkriterium" >> {
       "action = UPDATE_STEP" >> {updateStepAllResult.get.action === Actions.UPDATE_STEP}
-      "stepId < 32" >> {updateStepAllResult.get.result.get.stepId.get.length must be_<(32)}
+      "stepId < 32" >> {updateStepAllResult.get.result.get.stepId.get.length must be_<=(32) and be_>(10)}
       "Name = FirstStepUpdated" >> {updateStepAllResult.get.result.get.properties.get.nameToShow.get === "FirstStepUpdated"}
       "MIN = 2" >> {updateStepAllResult.get.result.get.properties.get.selectionCriterion.get.min.get === 2}
       "MAX = 2" >> {updateStepAllResult.get.result.get.properties.get.selectionCriterion.get.max.get === 2}

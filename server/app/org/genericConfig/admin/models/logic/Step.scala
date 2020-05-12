@@ -130,7 +130,8 @@ class Step {
     }
 
     val stepId : Option[String] = (errors, vStep) match {
-      case (None, Some(vS)) => Some(vS.getIdentity.toString)
+      case (None, Some(vS)) =>
+        Some(RidToHash.setIdAndHash(vS.getIdentity.toString)._2)
       case (Some(_), None) => None
       case _ => None
     }

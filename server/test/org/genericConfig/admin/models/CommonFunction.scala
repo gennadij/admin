@@ -160,6 +160,8 @@ trait CommonFunction {
         //select @rid from Step where nameToShow like "FirstStepToUpdate"
         val graph: OrientGraph = Database.getFactory()._1.get.getTx
         val sql: String = s"select * from Step where nameToShow like '${nameToShow.get}'"
+        Logger.info(sql)
+        Logger.info("ConfigId : " + RidToHash.getRId(configId.get).get)
         val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
         val stepId = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getIdentity.toString()).head
         Some(RidToHash.setIdAndHash(stepId)._2)
