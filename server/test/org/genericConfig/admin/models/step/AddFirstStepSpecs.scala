@@ -5,7 +5,7 @@ import org.genericConfig.admin.models.CommonFunction
 import org.genericConfig.admin.models.common.{IdHashNotExistError, StepAlreadyExistError}
 import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepDTO, StepParamsDTO}
+import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepDTO, StepParamsDTO, StepPropertiesDTO}
 import org.specs2.mutable.Specification
 import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
@@ -72,12 +72,14 @@ class AddFirstStepSpecs extends Specification
     val addFirstStep1Params: JsValue = Json.toJson(StepDTO(
       action = Actions.ADD_STEP,
       params = Some(StepParamsDTO(
-        nameToShow = nameToShow,
         outId = Some(configId),
         kind = kind,
-        selectionCriterion = Some(SelectionCriterionDTO(
-          min = Some(1),
-          max = Some(1)
+          properties = Some(StepPropertiesDTO(
+          nameToShow = nameToShow,
+          selectionCriterion = Some(SelectionCriterionDTO(
+            min = Some(1),
+            max = Some(1)
+          ))
         ))
       )),
       result = None
@@ -89,12 +91,14 @@ class AddFirstStepSpecs extends Specification
     val addFirstStep2Params: JsValue = Json.toJson(StepDTO(
       action = Actions.ADD_STEP,
       params = Some(StepParamsDTO(
-        nameToShow = nameToShow,
         outId = Some(configId),
         kind = kind,
-        selectionCriterion = Some(SelectionCriterionDTO(
-          min = Some(1),
-          max = Some(1)
+          properties = Some(StepPropertiesDTO(
+          nameToShow = nameToShow,
+          selectionCriterion = Some(SelectionCriterionDTO(
+            min = Some(1),
+            max = Some(1)
+          ))
         ))
       )),
       result = None
@@ -106,12 +110,14 @@ class AddFirstStepSpecs extends Specification
     val addFirstStep3Params: JsValue = Json.toJson(StepDTO(
       action = Actions.ADD_STEP,
       params = Some(StepParamsDTO(
-        nameToShow = nameToShow,
         outId = Some("#1:1"),
         kind = kind,
-        selectionCriterion = Some(SelectionCriterionDTO(
-          min = Some(1),
-          max = Some(1)
+          properties = Some(StepPropertiesDTO(
+          nameToShow = nameToShow,
+          selectionCriterion = Some(SelectionCriterionDTO(
+            min = Some(1),
+            max = Some(1)
+          ))
         ))
       )),
       result = None

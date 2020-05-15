@@ -12,7 +12,7 @@ import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.status.StatusAddComponent
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
-import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepDTO, StepParamsDTO}
+import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepDTO, StepParamsDTO, StepPropertiesDTO}
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import play.api.Logger
 import play.api.libs.json.{JsResult, JsValue, Json}
@@ -143,12 +143,14 @@ trait CommonFunction {
     val stepDTO : JsResult[StepDTO] = Json.fromJson[StepDTO](wC.handleMessage(Json.toJson(StepDTO(
       action = Actions.ADD_STEP,
       params = Some(StepParamsDTO(
-        nameToShow = nameToShow,
         outId = configId,
         kind = kind,
-        selectionCriterion = Some(SelectionCriterionDTO(
-          min = Some(min),
-          max = Some(max)
+        properties = Some(StepPropertiesDTO(
+          nameToShow = nameToShow,
+          selectionCriterion = Some(SelectionCriterionDTO(
+            min = Some(min),
+            max = Some(max)
+          ))
         ))
       )),
       result = None

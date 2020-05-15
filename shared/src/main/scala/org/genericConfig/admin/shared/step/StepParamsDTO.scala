@@ -10,19 +10,17 @@ import play.api.libs.functional.syntax._
  * Created by Gennadi Heimann 14.04.2020
  */
 case class StepParamsDTO(
-                          nameToShow: Option[String] = None,
                           stepId: Option[String] = None,
                           outId: Option[String] = None, //configId or componentId
                           kind: Option[String] = None,
-                          selectionCriterion: Option[SelectionCriterionDTO] = None
+                          properties : Option[StepPropertiesDTO] = None
                         )
 
 object StepParamsDTO{
   implicit val format: Format[StepParamsDTO] = (
-    (JsPath \ "nameToShow").format(Format.optionWithNull[String]) and
       (JsPath \ "stepId").format(Format.optionWithNull[String]) and
       (JsPath \ "fromId").format(Format.optionWithNull[String]) and
       (JsPath \ "kind").format(Format.optionWithNull[String]) and
-      (JsPath \ "selectionCriterion").format(Format.optionWithNull[SelectionCriterionDTO])
+      (JsPath \ "properties").format(Format.optionWithNull[StepPropertiesDTO])
     )(StepParamsDTO.apply, unlift(StepParamsDTO.unapply))
 }

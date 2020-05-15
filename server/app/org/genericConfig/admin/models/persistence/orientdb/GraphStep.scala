@@ -100,10 +100,10 @@ class GraphStep(graph : OrientGraph) {
     try {
       val vStep: OrientVertex = graph.addVertex(
         PropertyKeys.CLASS + PropertyKeys.VERTEX_STEP,
-        PropertyKeys.NAME_TO_SHOW, stepDTO.params.get.nameToShow.get,
+        PropertyKeys.NAME_TO_SHOW, stepDTO.params.get.properties.get.nameToShow.get,
         PropertyKeys.KIND, stepDTO.params.get.kind.get,
-        PropertyKeys.SELECTION_CRITERION_MIN, stepDTO.params.get.selectionCriterion.get.min.get.toString,
-        PropertyKeys.SELECTION_CRITERION_MAX, stepDTO.params.get.selectionCriterion.get.max.get.toString
+        PropertyKeys.SELECTION_CRITERION_MIN, stepDTO.params.get.properties.get.selectionCriterion.get.min.get.toString,
+        PropertyKeys.SELECTION_CRITERION_MAX, stepDTO.params.get.properties.get.selectionCriterion.get.max.get.toString
       )
       graph.commit()
       (Some(vStep), None)
@@ -129,11 +129,26 @@ class GraphStep(graph : OrientGraph) {
 
   def updateStep(stepRId : String, stepDTO: StepDTO): (Option[OrientVertex], Option[Error]) = {
     try {
+      //TODO Logik in Step.scala auslagern
+      val (sCMin, sCMax) : (Option[String], Option[String]) = stepDTO.params.get.properties.get.selectionCriterion match {
+        case Some(sC) =>
+          (
+            sC.min match {
+              case Some(min) => Some(min.toString)
+              case None => None
+            },
+            sC.max match {
+              case Some(max) => Some(max.toString)
+              case None => None
+            }
+          )
+        case None => (None, None)
+      }
 
       val updateParams : List[(String, Option[String])] = List(
-        (PropertyKeys.NAME_TO_SHOW, stepDTO.params.get.nameToShow),
-        (PropertyKeys.SELECTION_CRITERION_MIN, convertSCToString(stepDTO.params.get.selectionCriterion.get.min)),
-        (PropertyKeys.SELECTION_CRITERION_MAX, convertSCToString(stepDTO.params.get.selectionCriterion.get.max))
+        (PropertyKeys.NAME_TO_SHOW, stepDTO.params.get.properties.get.nameToShow),
+        (PropertyKeys.SELECTION_CRITERION_MIN, sCMin),
+        (PropertyKeys.SELECTION_CRITERION_MAX, sCMax)
       )
 
       val sql: String = s"update Step set ${assemblePropForUpdateStep(updateParams)} return after where @rid=${stepRId}"
@@ -180,7 +195,10 @@ class GraphStep(graph : OrientGraph) {
 
   def detectComa(rest : List[(String, Option[String])]) : String = rest match {
     case Nil => ""
-    case _ => ","
+    case param :: rest  =>  param._2 match {
+      case Some(p) => ","
+      case None => ""
+    }
   }
 
 }

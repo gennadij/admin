@@ -1,7 +1,7 @@
 package org.genericConfig.admin.models.logic
 
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
-import org.genericConfig.admin.models.common.{AddStepError, AppendToError, Error, IdHashNotExistError, StepAlreadyExistError}
+import org.genericConfig.admin.models.common.{AddStepError, AppendToError, Error, IdHashNotExistError, StepAlreadyExistError, UnknownError}
 import org.genericConfig.admin.models.persistence.orientdb.{GraphCommon, GraphStep, PropertyKeys}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
@@ -96,7 +96,13 @@ class Step {
       case (Some(vStep), None) => createStepDTO(
         action = Actions.UPDATE_STEP,
         vStep = Some(vStep),
-        errors = None)
+        errors = None
+      )
+      case _ => createStepDTO(
+        action = Actions.UPDATE_STEP,
+        vStep = None,
+        errors = Some(List(UnknownError()))
+      )
     }
   }
 
