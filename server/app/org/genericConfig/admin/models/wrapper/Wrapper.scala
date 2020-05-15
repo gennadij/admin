@@ -4,8 +4,6 @@ import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.json.{JsonComponentIn, JsonComponentOut}
 import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.configTree.json._
-import org.genericConfig.admin.shared.step.bo._
-import org.genericConfig.admin.shared.step.json._
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -99,30 +97,30 @@ trait Wrapper{
     new WrapperConfigTree().toConfigTreeBO(jsonConfigTreeIn)
   }
   
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.5
-   * 
-   * @param jsonStepIn: JsonStepCS
-   * 
-   * @return StepCS
-   */
-  def toStepBO(jsonStepIn: JsonStepIn): StepBO = {
-    new WrapperStep().toStepBO(jsonStepIn)
-  }
-  /**
-   * @author Gennadi Heimann
-   * 
-   * @version 0.1.5
-   * 
-   * @param stepBO: StepBO
-   * 
-   * @return JsonStepSC
-   */
-  def toJsonStepOut(stepBO: StepBO): JsonStepOut = {
-    new WrapperStep().toJsonStepOut(stepBO)
-  }
+//  /**
+//   * @author Gennadi Heimann
+//   *
+//   * @version 0.1.5
+//   *
+//   * @param jsonStepIn: JsonStepCS
+//   *
+//   * @return StepCS
+//   */
+//  def toStepBO(jsonStepIn: JsonStepIn): StepBO = {
+//    new WrapperStep().toStepBO(jsonStepIn)
+//  }
+//  /**
+//   * @author Gennadi Heimann
+//   *
+//   * @version 0.1.5
+//   *
+//   * @param stepBO: StepBO
+//   *
+//   * @return JsonStepSC
+//   */
+//  def toJsonStepOut(stepBO: StepBO): JsonStepOut = {
+//    new WrapperStep().toJsonStepOut(stepBO)
+//  }
 
   /**
    * @author Gennadi Heimann

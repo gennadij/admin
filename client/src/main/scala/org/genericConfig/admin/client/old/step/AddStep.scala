@@ -1,11 +1,8 @@
 package org.genericConfig.admin.client.old.step
 
 import org.genericConfig.admin.client.views.html.HtmlElementIds
-import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.step.json.{JsonSelectionCriterium, JsonStepIn, JsonStepOut, JsonStepParams}
 import org.scalajs.dom.raw.WebSocket
 import org.scalajs.jquery.jQuery
-import play.api.libs.json.Json
 import util.CommonFunction
 
 
@@ -41,22 +38,22 @@ class AddStep(websocket: WebSocket) extends CommonFunction {
     val scMin: Dynamic = jQuery(HtmlElementIds.inputSelectionCriteriumMinJQuery).value()
     val scMax: Dynamic = jQuery(HtmlElementIds.inputSelectionCriteriumMaxJQuery).value()
     
-    val jsonStepIn = Json.toJson(JsonStepIn(
-        JsonNames.ADD_STEP,
-        JsonStepParams(
-            appendToId = idToAppend,
-            stepId = "",
-            nameToShow = nameToShow.toString,
-            kind = "first",
-            Some(JsonSelectionCriterium(
-                min = scMin.toString.toInt,
-                max = scMax.toString.toInt
-            ))
-        )
-    )).toString
+//    val jsonStepIn = Json.toJson(JsonStepIn(
+//        JsonNames.ADD_STEP,
+//        JsonStepParams(
+//            appendToId = idToAppend,
+//            stepId = "",
+//            nameToShow = nameToShow.toString,
+//            kind = "first",
+//            Some(JsonSelectionCriterium(
+//                min = scMin.toString.toInt,
+//                max = scMax.toString.toInt
+//            ))
+//        )
+//    )).toString
     
-    println("OUT -> " + jsonStepIn)
-    websocket.send(jsonStepIn)
+//    println("OUT -> " + jsonStepIn)
+//    websocket.send(jsonStepIn)
   }
   
   private def getConfigs(userId: String) = {
@@ -71,17 +68,17 @@ class AddStep(websocket: WebSocket) extends CommonFunction {
     websocket.send(jsonGetConfigs)
   }
   
-  def updateStatus(addStep: JsonStepOut) = {
-    println(addStep)
-    val htmlHeader = 
-      s"<dev id='status' class='status'>" + 
-        addStep.result.status.addStep.get.status + 
-        " , " + 
-        addStep.result.status.appendStep.get.status + 
-        " ," + 
-        addStep.result.status.common.get.status +
-      "</dev>"
-    jQuery("#status").remove()
-    jQuery(htmlHeader).appendTo(jQuery("header"))
-  }
+//  def updateStatus(addStep: JsonStepOut) = {
+//    println(addStep)
+//    val htmlHeader =
+//      s"<dev id='status' class='status'>" +
+//        addStep.result.status.addStep.get.status +
+//        " , " +
+//        addStep.result.status.appendStep.get.status +
+//        " ," +
+//        addStep.result.status.common.get.status +
+//      "</dev>"
+//    jQuery("#status").remove()
+//    jQuery(htmlHeader).appendTo(jQuery("header"))
+//  }
 }

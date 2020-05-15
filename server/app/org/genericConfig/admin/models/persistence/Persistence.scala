@@ -1,12 +1,8 @@
 package org.genericConfig.admin.models.persistence
 
-import org.genericConfig.admin.models.wrapper.step.VisualProposalForAdditionalStepsInOneLevelIn
 import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.configTree.bo._
-import org.genericConfig.admin.shared.step.bo._
-import org.genericConfig.admin.shared.step.json.JsonDependencyForAdditionalStepsInOneLevel
-import org.genericConfig.admin.shared.step.status._
 
 
 /**
@@ -140,38 +136,6 @@ object Persistence {
 //          commonStatus
 //        )
 //        ))
-//    }
-  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param stepBO : StepBO
-    * @return StepBO
-    */
-  def updateStep(stepBO: StepBO): StepBO = {
-    ???
-//    val (updateStepStatus: StatusUpdateStep, commonStatus: Error) = Graph.updateStep(stepBO)
-//
-//    updateStepStatus match {
-//      case UpdateStepSuccess() =>
-//        StepBO(
-//          json = Some(JsonNames.UPDATE_STEP),
-//          status = Some(StatusStep(
-//            updateStep = Some(UpdateStepSuccess()),
-//            common = Some(Success())
-//          )
-//          ))
-//      case UpdateStepError() =>
-//
-//        StepBO(
-//          json = Some(JsonNames.UPDATE_STEP),
-//          status = Some(StatusStep(
-//            updateStep = Some(UpdateStepError()),
-//            common = Some(commonStatus)
-//          )
-//          )
-//        )
 //    }
   }
 
@@ -469,10 +433,10 @@ object Persistence {
   //    * @param
   //    * @return
   //    */
-  def createDependenciesForAdditionalStepInLevelCS(
-                                                    stepCS: Option[Any],
-                                                    visualProposalForAdditionalStepsInOneLevelIn: VisualProposalForAdditionalStepsInOneLevelIn
-                                                  ): Set[JsonDependencyForAdditionalStepsInOneLevel] = {
+//  def createDependenciesForAdditionalStepInLevelCS(
+//                                                    stepCS: Option[Any],
+//                                                    visualProposalForAdditionalStepsInOneLevelIn: VisualProposalForAdditionalStepsInOneLevelIn
+//                                                  ): Set[JsonDependencyForAdditionalStepsInOneLevel] = {
 
     //    val targetComponentId = stepCS.get.componentId
     //    val siblingComponents: Option[List[OrientVertex]] = ComponentVertex.getAllSiblings(targetComponentId)
@@ -517,5 +481,5 @@ object Persistence {
     //
     //  }
     ???
-  }
+//  }
 }

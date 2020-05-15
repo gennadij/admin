@@ -3,14 +3,12 @@ package org.genericConfig.admin.models.persistence.orientdb
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
 import com.tinkerpop.blueprints.impls.orient.{OrientGraph, OrientVertex}
-import org.genericConfig.admin.models.common.{DefectRIdError, DeleteConfigDefectID, Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBWriteError}
+import org.genericConfig.admin.models.common.{DefectRIdError, Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBWriteError}
 import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.component.status._
 import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.configTree.status._
-import org.genericConfig.admin.shared.step.bo.StepBO
-import org.genericConfig.admin.shared.step.status._
 import play.api.Logger
 
 
@@ -89,24 +87,6 @@ object GraphCommon {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param
-    * @return (Option[List[OrientVertex\]\], StatusGetConfigs, Status)
-    */
-//  def getConfigs(userId: String): (Option[List[OrientVertex]], StatusGetConfigs, Error) = {
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), Success()) =>
-//        val graph: OrientGraph = dbFactory.getTx
-//        new Graph(graph).getConfigs(userId)
-//      case (None, ODBConnectionFail()) =>
-//        (None, GetConfigsError(), ODBConnectionFail())
-//    }
-//  }
-
-
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
     * @param username : String
     * @return Int
     */
@@ -140,36 +120,6 @@ object GraphCommon {
 //    }
   }
 
-
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param stepId : String
-    * @return (StatusDeleteStep, Status)
-    */
-  def deleteStep(stepId: String): (StatusDeleteStep, Error) = {
-    ???
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), Success()) =>
-//        val graph: OrientGraph = dbFactory.getTx
-//        new Graph(graph).deleteStep(stepId)
-//      case (None, ODBConnectionFail()) =>
-//        (DeleteStepError(), ODBConnectionFail())
-//    }
-  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param configId : String
-    * @return Int
-    */
-  def deleteStepAppendedToConfig(configId: String): Int = {
-    ???
-
-  }
-
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
@@ -184,23 +134,6 @@ object GraphCommon {
 //        new Graph(graph).deleteStepAppendedToComponent(componentId)
 //      case (None, ODBConnectionFail()) =>
 //        0
-//    }
-  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param stepBO : StepBO
-    * @return (StatusUpdateStep, Status)
-    */
-  def updateStep(stepBO: StepBO): (StatusUpdateStep, Error) = {
-    ???
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), Success()) =>
-//        val graph: OrientGraph = dbFactory.getTx
-//        new Graph(graph).updateStep(stepBO)
-//      case (None, ODBConnectionFail()) =>
-//        (UpdateStepError(), ODBConnectionFail())
 //    }
   }
 
@@ -556,37 +489,6 @@ class GraphCommon(graph: OrientGraph) {
 //      .command(new OCommandSQL(s"DELETE VERTEX Step where @rid IN (SELECT out() from Component where @rid='$componentId')")).execute()
 //    graph.commit()
 //    res
-//  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param
-    * @return StatusUpdateStep, Status
-    */
-//  private def updateStep(stepBO: StepBO): (StatusUpdateStep, Error) = {
-//    try {
-//      val vStep: OrientVertex = graph.getVertex(stepBO.stepId.get)
-//      vStep.setProperty(PropertyKeys.NAME_TO_SHOW, stepBO.nameToShow.get)
-//      vStep.setProperty(PropertyKeys.KIND, stepBO.kind.get)
-//      vStep.setProperty(PropertyKeys.SELECTION_CRITERIUM_MIN, stepBO.selectionCriteriumMin.get.toString)
-//      vStep.setProperty(PropertyKeys.SELECTION_CRITERIUM_MAX, stepBO.selectionCriteriumMax.get.toString)
-//      graph.commit()
-//      (UpdateStepSuccess(), Success())
-//    } catch {
-//      case e: ORecordDuplicatedException =>
-//        Logger.error(e.printStackTrace().toString)
-//        graph.rollback()
-//        (UpdateStepError(), ODBRecordDuplicated())
-//      case e: ClassCastException =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (UpdateStepError(), ODBClassCastError())
-//      case e: Exception =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (UpdateStepError(), ODBWriteError())
-//    }
 //  }
 
 //  /**
