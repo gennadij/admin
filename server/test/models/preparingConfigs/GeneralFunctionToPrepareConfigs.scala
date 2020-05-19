@@ -8,12 +8,13 @@ import org.genericConfig.admin.models.persistence.OrientDB
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
+
 import scala.collection.JavaConverters._
 import com.tinkerpop.blueprints.Edge
 import com.tinkerpop.blueprints.Vertex
 import com.tinkerpop.blueprints.Direction
-import org.genericConfig.admin.models.persistence.db.orientdb.PropertyKey
 import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.models.persistence.orientdb.PropertyKeys
 import org.genericConfig.admin.shared.common.json.JsonNames
 
 /**
@@ -29,7 +30,7 @@ trait GeneralFunctionToPrepareConfigs extends MessageHandler {
     
     val vStep: OrientVertex = graph.getVertex(stepId)
     
-    val eHasComponents: List[Edge] = vStep.getEdges(Direction.OUT, PropertyKey.EDGE_HAS_COMPONENT).asScala.toList
+    val eHasComponents: List[Edge] = vStep.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT).asScala.toList
     
     val vComponents: List[Vertex] = eHasComponents map {_.getVertex(Direction.IN)}
     

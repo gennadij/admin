@@ -245,8 +245,8 @@ trait CommonFunction {
       kind = Some(kind)
     )
 
-    val componentBOOut = Component.addComponent(componentBOIn)
-
-    (componentBOOut.componentId.get, componentBOOut.status.get.addComponent.get)
+    val componentBOOut = ??? ///Component.addComponent(componentBOIn)
+    ???
+    //(componentBOOut.componentId.get, componentBOOut.status.get.addComponent.get)
   }
 }

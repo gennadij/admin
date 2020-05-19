@@ -42,9 +42,11 @@ object Component {
             Some(stepRid),
             Some(vComponent.get.getProperty(PropertyKeys.NAME_TO_SHOW)),
             None)
-          case Some(errorAppendComponent) => ???
+          case Some(errorAppendComponent) =>
+            GraphCommon.deleteVertex(vComponent.get.getIdentity.toString, PropertyKeys.VERTEX_COMPONENT)
+            createComponentDTO(None, None, None, Some(List(errorAppendComponent)))
         }
-      case Some(errorAddComponent) => ???
+      case Some(errorAddComponent) => createComponentDTO(None, None, None, Some(List(errorAddComponent)))
     }
   }
 
