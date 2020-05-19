@@ -114,36 +114,6 @@ class Admin extends Wrapper {
 //  /**
 //    * @author Gennadi Heimann
 //    * @version 0.1.6
-//    * @param jsonFirstStepIn : JsonStepIn
-//    * @return JsonStepOut
-//    */
-//  def addStep(jsonFirstStepIn: JsonStepIn): JsonStepOut = {
-//    toJsonStepOut(Step.addStep(toStepBO(jsonFirstStepIn)))
-//  }
-
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.6
-//    * @param jsonFirstStepIn : JsonStepIn
-//    * @return JsonStepOut
-//    */
-//  def deleteFirstStep(jsonFirstStepIn: JsonStepIn): JsonStepOut = {
-//    toJsonStepOut(Step.deleteFirstStep(toStepBO(jsonFirstStepIn)))
-//  }
-
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.6
-//    * @param jsonStepIn : JsonStepIn
-//    * @return JsonStepOut
-//    */
-//  def updateStep(jsonStepIn: JsonStepIn): JsonStepOut = {
-//    toJsonStepOut(Step.updateStep(toStepBO(jsonStepIn)))
-//  }
-
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.6
 //    * @param jsonStepIn: JsonstepIn
 //    * @return JsonStepOut
 //    */
@@ -151,15 +121,15 @@ class Admin extends Wrapper {
 //    toJsonStepOut(Step.connectComponentToStep(toStepBO(jsonStepIn = jsonStepIn)))
 //  }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.0
-    * @param jsonComponentIn : JsonComponentIn
-    * @return JsonComponentOut
-    */
-  def addComponent(jsonComponentIn: JsonComponentIn): JsonComponentOut = {
-    toJsonComponentOut(Component.addComponent(toComponentBO(jsonComponentIn)))
-  }
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.0
+//    * @param jsonComponentIn : JsonComponentIn
+//    * @return JsonComponentOut
+//    */
+//  def addComponent(jsonComponentIn: JsonComponentIn): JsonComponentOut = {
+//    toJsonComponentOut(Component.addComponent(toComponentBO(jsonComponentIn)))
+//  }
 
   /**
     * @author Gennadi Heimann

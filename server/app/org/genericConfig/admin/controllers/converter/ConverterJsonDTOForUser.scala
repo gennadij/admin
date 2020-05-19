@@ -11,7 +11,7 @@ import play.api.libs.json._
  * Created by Gennadi Heimann 31.03.2020
  */
 
-trait WrapperForUser extends WrapperCommon {
+trait ConverterJsonDTOForUser extends ConverterJsonDTOForCommon {
   private[converter]def addUser(receivedMessage: JsValue): JsValue = {
     val addUser: JsResult[UserDTO] = Json.fromJson[UserDTO](receivedMessage)
     addUser match {

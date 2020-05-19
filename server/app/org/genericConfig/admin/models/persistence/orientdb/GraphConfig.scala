@@ -5,7 +5,7 @@ import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
 import com.tinkerpop.blueprints.Direction
 import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientEdge, OrientGraph, OrientVertex}
-import org.genericConfig.admin.models.common.{ConfigNothingToUpdate, DeleteConfigDefectID, Error, ODBClassCastError, ODBConnectionFail, ODBReadError, ODBRecordDuplicated, ODBValidationException, ODBWriteError}
+import org.genericConfig.admin.models.common.{ConfigNothingToUpdate, Error, ODBClassCastError, ODBConnectionFail, ODBReadError, ODBRecordDuplicated, ODBValidationException, ODBWriteError}
 import org.genericConfig.admin.models.persistence.Database
 import play.api.Logger
 
@@ -163,37 +163,6 @@ class GraphConfig(graph: OrientGraph) {
         Some(ODBWriteError())
     }
   }
-
-//  /**
-//   * @author Gennadi Heimann
-//   * @version 0.1.6
-//   * @param configId : String, configUrl: String
-//   * @return Option[Error]
-//   */
-//  private def deleteConfig(configId: String): Option[Error] = {
-//    try {
-//      val sql: String = s"DELETE VERTEX Config where @rid=$configId"
-//      val res: Int = graph.command(new OCommandSQL(sql)).execute()
-//      graph.commit()
-//      res match {
-//        case 1 => None
-//        case _ => Some(DeleteConfigDefectID())
-//      }
-//    } catch {
-//      case e: ORecordDuplicatedException =>
-//        Logger.error(e.printStackTrace().toString)
-//        graph.rollback()
-//        Some(ODBRecordDuplicated())
-//      case e: ClassCastException =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        Some(ODBClassCastError())
-//      case e: Exception =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        Some(ODBWriteError())
-//    }
-//  }
 
   /**
     * @author Gennadi Heimann

@@ -491,36 +491,7 @@ class GraphCommon(graph: OrientGraph) {
 //    res
 //  }
 
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.0
-//    * @param componentBO : ComponentBO
-//    * @return (Option[OrientVertex], StatusAddComponent, Status)
-//    */
-//  private def addComponent(componentBO: ComponentBO): (Option[OrientVertex], StatusAddComponent, Error) = {
-//    try {
-//      val vComponent: OrientVertex = graph.addVertex(
-//        "class:" + PropertyKeys.VERTEX_COMPONENT,
-//        PropertyKeys.NAME_TO_SHOW, componentBO.nameToShow.get,
-//        PropertyKeys.KIND, componentBO.kind.get
-//      )
-//      graph.commit()
-//      (Some(vComponent), AddComponentSuccess(), Success())
-//    } catch {
-//      case e: ORecordDuplicatedException =>
-//        Logger.error(e.printStackTrace().toString)
-//        graph.rollback()
-//        (None, AddComponentError(), ODBRecordDuplicated())
-//      case e: ClassCastException =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (None, AddComponentError(), ODBClassCastError())
-//      case e: Exception =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (None, AddComponentError(), ODBWriteError())
-//    }
-//  }
+
 
   /**
     * @author Gennadi Heimann

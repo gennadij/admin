@@ -1,4 +1,4 @@
-package org.genericConfig.admin.shared.error.json
+package org.genericConfig.admin.shared.error
 
 import play.api.libs.json.Json
 
@@ -7,10 +7,10 @@ import play.api.libs.json.Json
  * 
  * Created by Gennadi Heimann 14.05.2018
  */
-case class JsonErrorParams (
+case class ErrorParamsDTO(
     message: String
 )
 
-object JsonErrorParams {
-  implicit val format = Json.format[JsonErrorParams]
+object ErrorParamsDTO {
+  implicit val format = Json.format[ErrorParamsDTO]
 }

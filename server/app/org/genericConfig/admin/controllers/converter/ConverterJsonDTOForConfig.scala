@@ -10,7 +10,7 @@ import play.api.libs.json._
  *
  * Created by Gennadi Heimann ${date}
  */
-trait WrapperForConfig extends WrapperCommon {
+trait ConverterJsonDTOForConfig extends ConverterJsonDTOForCommon {
   private[converter] def addConfig(receivedMessage: JsValue): JsValue = {
     Json.fromJson[ConfigDTO](receivedMessage) match {
       case addConfigParams : JsSuccess[ConfigDTO] => Json.toJson(Config.addConfig(addConfigParams.value))
@@ -38,4 +38,11 @@ trait WrapperForConfig extends WrapperCommon {
       case e: JsError => jsonError(Actions.UPDATE_CONFIG, e)
     }
   }
+
+  //  private def configTree(receivedMessage: JsValue, admin: Admin): JsValue = {
+  //    Json.fromJson[JsonConfigTreeIn](receivedMessage) match {
+  //      case configTreeIn: JsSuccess[JsonConfigTreeIn] => Json.toJson(admin.getConfigTree(configTreeIn.get))
+  //      case e : JsError => jsonError(JsonNames.CONFIG_TREE, e)
+  //    }
+  //  }
 }

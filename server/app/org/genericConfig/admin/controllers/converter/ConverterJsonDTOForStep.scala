@@ -10,7 +10,7 @@ import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
  *
  * Created by Gennadi Heimann 15.04.2020
  */
-trait ConverterJsonDTOForStep extends WrapperCommon {
+trait ConverterJsonDTOForStep extends ConverterJsonDTOForCommon {
   private[converter] def addStep(receivedMessage: JsValue): JsValue = {
     Json.fromJson[StepDTO](receivedMessage) match {
       case addStepParams: JsSuccess[StepDTO] => Json.toJson[StepDTO](Step.addStep(addStepParams.value))

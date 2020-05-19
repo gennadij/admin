@@ -147,46 +147,7 @@ object Persistence {
     */
   def addComponent(componentBO: ComponentBO): ComponentBO = {
     ???
-//    val (vComponent, statusAddComponnet, statusCommon): (Option[OrientVertex], StatusAddComponent, Error) =
-//      Graph.addComponent(componentBO)
-//
-//    statusAddComponnet match {
-//      case AddComponentSuccess() =>
-//        val componentBOForAppend =
-//          ComponentBO(stepId = componentBO.stepId, componentId = Some(vComponent.get.getIdentity.toString))
-//        val (statusAppendComponent, statusCommon): (StatusAppendComponent, Error) =
-//          Graph.appendComponentToStep(componentBOForAppend)
-//        statusAppendComponent match {
-//          case AppendComponentSuccess() =>
-//            ComponentBO(
-//              stepId = componentBO.stepId,
-//              componentId = Some(vComponent.get.getIdentity.toString),
-//              nameToShow = Some(vComponent.get.getProperty(PropertyKeys.NAME_TO_SHOW)),
-//              kind = Some(vComponent.get.getProperty(PropertyKeys.KIND)),
-//              status = Some(StatusComponent(
-//                addComponent = Some(AddComponentSuccess()),
-//                appendComponent = Some(AppendComponentSuccess()),
-//                common = Some(statusCommon)
-//              ))
-//            )
-//          case AppendComponentError() =>
-//            ComponentBO(
-//              status = Some(StatusComponent(
-//                addComponent = Some(AddComponentError()),
-//                appendComponent = Some(AppendComponentError()),
-//                common = Some(statusCommon)
-//              ))
-//            )
-//        }
-//      case AddComponentError() =>
-//        ComponentBO(
-//          status = Some(StatusComponent(
-//            addComponent = Some(AddComponentError()),
-//            appendComponent = Some(AppendComponentError()),
-//            common = Some(statusCommon)
-//          ))
-//        )
-//    }
+
   }
 
   /**
