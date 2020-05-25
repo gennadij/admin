@@ -119,7 +119,8 @@ object Component {
         )),
         userProperties = Some(ComponentUserPropertiesDTO(
           nameToShow = nameToShow
-        ))
+        )),
+        errors = e
       ))
     )
   }
