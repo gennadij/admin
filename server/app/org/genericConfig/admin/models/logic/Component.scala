@@ -19,62 +19,28 @@ object Component {
 
   /**
     * @author Gennadi Heimann
-    *
     * @version 0.1.0
-    *
     * @param componentDTO: ComponentDTO
-    *
     * @return ComponentDTO
     */
-  def addComponent(componentDTO: ComponentDTO): ComponentDTO = {
-    val stepRid : String = RidToHash.getRId(componentDTO.params.get.configProperties.get.stepId.get).get
-
-    val (vComponent, errorAddComponent) : (Option[OrientVertex], Option[Error]) =
-      GraphComponent.addComponent(componentDTO.params.get.userProperties.get)
-
-    errorAddComponent match {
-      case None =>
-        val inRid: String = vComponent.get.getIdentity.toString
-        val label: String = PropertyKeys.EDGE_HAS_COMPONENT
-        GraphCommon.appendTo(stepRid, inRid, label) match {
-          case None => createComponentDTO(
-            Some(vComponent.get.getIdentity.toString),
-            Some(stepRid),
-            Some(vComponent.get.getProperty(PropertyKeys.NAME_TO_SHOW)),
-            None)
-          case Some(errorAppendComponent) =>
-            GraphCommon.deleteVertex(vComponent.get.getIdentity.toString, PropertyKeys.VERTEX_COMPONENT)
-            createComponentDTO(None, None, None, Some(List(errorAppendComponent)))
-        }
-      case Some(errorAddComponent) => createComponentDTO(None, None, None, Some(List(errorAddComponent)))
-    }
+  def addComponent(componentDTO : ComponentDTO) : ComponentDTO = {
+    new Component().addComponent(componentDTO = componentDTO)
   }
 
   /**
     * @author Gennadi Heimann
-    *
     * @version 0.1.0
-    *
-    * @param componentBO: ComponentBO
-    *
-    * @return ComponentBO
+    * @param componentDTO: ComponentDTO
+    * @return ComponentDTO
     */
-  def deleteComponent(componentBO: ComponentBO): ComponentBO = {
-    val componentBOIn = componentBO.copy(componentId = RidToHash.getRId(componentBO.componentId.get))
-    val componentBOOut: ComponentBO = Persistence.deleteComponent(componentBOIn)
-
-    componentBOOut.copy(
-      json = Some(JsonNames.DELETE_COMPONENT)
-    )
+  def deleteComponent(componentDTO: ComponentDTO) : ComponentDTO = {
+    new Component().deleteComponent(componentDTO = componentDTO)
   }
 
   /**
     * @author Gennadi Heimann
-    *
     * @version 0.1.0
-    *
     * @param componentBO: ComponentBO
-    *
     * @return ComponentBO
     */
   def updateComponent(componentBO: ComponentBO): ComponentBO = {
@@ -89,11 +55,51 @@ object Component {
     )
   }
 
-  def createComponentDTO(
+
+}
+
+class Component {
+  private def addComponent(componentDTO: ComponentDTO): ComponentDTO = {
+    val stepRid : String = RidToHash.getRId(componentDTO.params.get.configProperties.get.stepId.get).get
+
+    val (vComponent, errorAddComponent) : (Option[OrientVertex], Option[Error]) =
+      GraphComponent.addComponent(componentDTO.params.get.userProperties.get)
+
+    errorAddComponent match {
+      case None =>
+        val inRid: String = vComponent.get.getIdentity.toString
+        val label: String = PropertyKeys.EDGE_HAS_COMPONENT
+        GraphCommon.appendTo(stepRid, inRid, label) match {
+          case None => createComponentDTO(
+            Actions.ADD_COMPONENT,
+            Some(vComponent.get.getIdentity.toString),
+            Some(stepRid),
+            Some(vComponent.get.getProperty(PropertyKeys.NAME_TO_SHOW)),
+            None)
+          case Some(errorAppendComponent) =>
+            GraphCommon.deleteVertex(vComponent.get.getIdentity.toString, PropertyKeys.VERTEX_COMPONENT)
+            createComponentDTO(Actions.ADD_COMPONENT, None, None, None, Some(List(errorAppendComponent)))
+        }
+      case Some(errorAddComponent) => createComponentDTO(Actions.ADD_COMPONENT, None, None, None, Some(List(errorAddComponent)))
+    }
+  }
+
+  private def deleteComponent(componentDTO: ComponentDTO): ComponentDTO = {
+    val componentRId = RidToHash.getRId(componentDTO.params.get.configProperties.get.componentId.get)
+    val error : Option[Error] = GraphCommon.deleteVertex(componentRId.get, PropertyKeys.VERTEX_COMPONENT)
+
+    error match {
+      case Some(e) => createComponentDTO(Actions.DELETE_COMPONENT, None, None, None, Some(List(e)))
+      case None => createComponentDTO(Actions.DELETE_COMPONENT, None, None, None, None)
+    }
+  }
+
+  private def createComponentDTO(
+                          action : String,
                           componentRid : Option[String],
                           stepRid : Option[String],
                           nameToShow : Option[String],
-                          errors : Option[List[Error]]) = {
+                          errors : Option[List[Error]]): ComponentDTO = {
     val e =  errors match {
       case None => None
       case Some(e) => Some(
@@ -107,11 +113,17 @@ object Component {
       )
     }
 
-    val stepId : Option[String] = Some(RidToHash.setIdAndHash(stepRid.get)._2)
-    val componentId : Option[String] = Some(RidToHash.setIdAndHash(componentRid.get)._2)
+    val stepId : Option[String] = stepRid match {
+      case Some(stepRId) => Some(RidToHash.setIdAndHash(stepRId)._2)
+      case None => None
+    }
+    val componentId : Option[String] = componentRid match {
+      case Some(componentRid) => Some(RidToHash.setIdAndHash(componentRid)._2)
+      case None => None
+    }
 
     ComponentDTO(
-      action = Actions.ADD_COMPONENT,
+      action = action,
       result = Some(ComponentResultDTO(
         configProperties = Some(ComponentConfigPropertiesDTO(
           componentId = componentId,

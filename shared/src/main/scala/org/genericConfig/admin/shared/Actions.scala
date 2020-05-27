@@ -22,7 +22,7 @@ object Actions {
   val UPDATE_STEP : String = "UPDATE_STEP"
 
   val ADD_COMPONENT : String = "ADD_COMPONENT"
-
+  val DELETE_COMPONENT : String = "DELETE_COMPONENT"
   //only Web client
 
   val START_PAGE : String = "START_PAGE"

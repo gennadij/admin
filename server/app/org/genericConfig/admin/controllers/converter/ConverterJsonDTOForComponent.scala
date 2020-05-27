@@ -18,6 +18,13 @@ trait ConverterJsonDTOForComponent extends ConverterJsonDTOForCommon{
         case e : JsError => jsonError(Actions.ADD_COMPONENT, e)
       }
     }
+
+    private[converter] def deleteComponent(receivedMessage: JsValue): JsValue = {
+      Json.fromJson[ComponentDTO](receivedMessage) match {
+        case s: JsSuccess[ComponentDTO] => Json.toJson(Component.deleteComponent(s.get))
+        case e: JsError => jsonError(Actions.DELETE_COMPONENT, e)
+      }
+    }
   //  private def connectComponentToStep(receivedMessage: JsValue, admin: Admin): JsValue = {
   //    Json.fromJson[JsonStepIn](receivedMessage) match {
   //      case stepIn : JsSuccess[JsonStepIn] => Json.toJson(admin.connectComponentToStep(stepIn.get))
@@ -37,13 +44,7 @@ trait ConverterJsonDTOForComponent extends ConverterJsonDTOForCommon{
   ////    Json.toJson(connectionComponentToStepOut)
   ////  }
 
-  //  private def deleteComponent(receivedMessage: JsValue, admin: Admin): JsValue = {
-  //    val deleteComponentIn: JsResult[JsonComponentIn] = Json.fromJson[JsonComponentIn](receivedMessage)
-  //    deleteComponentIn match {
-  //      case s: JsSuccess[JsonComponentIn] => Json.toJson(admin.deleteComponent(s.get))
-  //      case e: JsError => jsonError(JsonNames.DELETE_COMPONENT, e)
-  //    }
-  //  }
+
   //
   //  private def updateComponent(receivedMessage: JsValue, admin: Admin): JsValue = {
   //    val updateComponentIn: JsResult[JsonComponentIn] = Json.fromJson[JsonComponentIn](receivedMessage)

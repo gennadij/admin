@@ -8,8 +8,6 @@ import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.models.persistence.orientdb.GraphCommon
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.json.JsonNames
-import org.genericConfig.admin.shared.component.bo.ComponentBO
-import org.genericConfig.admin.shared.component.status.StatusAddComponent
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepDTO, StepParamsDTO, StepPropertiesDTO}
@@ -111,10 +109,6 @@ trait CommonFunction {
 
     configDTOResult.result.get.configs.get.head.configId.get
   }
-
-//  def deleteAllConfigs(username: String): Int = {
-//    GraphCommon.deleteAllConfigs(username)
-//  }
 
   def deleteVertex(rId : String, clazz : String): Option[common.Error] = {
     GraphCommon.deleteVertex(rId, clazz)
@@ -234,19 +228,5 @@ trait CommonFunction {
     val res: Int = graph.command(new OCommandSQL(sql)).execute()
     graph.commit()
     res
-  }
-
-  def addComponentToStep(stepId: String, nameToShow: String, kind: String): (String, StatusAddComponent) = {
-
-    val componentBOIn = ComponentBO(
-      json = Some(JsonNames.ADD_COMPONENT),
-      stepId = Some(stepId),
-      nameToShow = Some(nameToShow),
-      kind = Some(kind)
-    )
-
-    val componentBOOut = ??? ///Component.addComponent(componentBOIn)
-    ???
-    //(componentBOOut.componentId.get, componentBOOut.status.get.addComponent.get)
   }
 }

@@ -32,7 +32,7 @@ trait MessageHandler
       case Some(Actions.UPDATE_STEP) => updateStep(receivedMessage)
 
       case Some(Actions.ADD_COMPONENT) => addComponent(receivedMessage)
-//      case Some(JsonNames.DELETE_COMPONENT) => deleteComponent(receivedMessage, admin)
+      case Some(Actions.DELETE_COMPONENT) => deleteComponent(receivedMessage)
 //      case Some(JsonNames.UPDATE_COMPONENT) => updateComponent(receivedMessage, admin)
 
       //      case Some(JsonNames.CONNECT_COMPONENT_TO_STEP) => connectComponentToStep(receivedMessage, admin)
