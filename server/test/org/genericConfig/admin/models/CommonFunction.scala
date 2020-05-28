@@ -8,6 +8,7 @@ import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.models.persistence.orientdb.GraphCommon
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.json.JsonNames
+import org.genericConfig.admin.shared.component.{ComponentConfigPropertiesDTO, ComponentDTO, ComponentParamsDTO, ComponentUserPropertiesDTO}
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepDTO, StepParamsDTO, StepPropertiesDTO}
@@ -165,6 +166,42 @@ trait CommonFunction {
       case _ => None
     }
   }
+
+  def createComponent(wC : WebClient, stepId : Option[String], nameToShow : Option[String]) : Option[String] = {
+    val addComponentResult : JsResult[ComponentDTO] = Json.fromJson[ComponentDTO](
+      wC.handleMessage(Json.toJson(ComponentDTO(
+        action = Actions.ADD_COMPONENT,
+        params = Some(ComponentParamsDTO(
+          configProperties = Some(ComponentConfigPropertiesDTO(
+            stepId = stepId
+          )),
+          userProperties = Some(ComponentUserPropertiesDTO(
+            nameToShow = Some("Component_1_1")
+          ))
+        ))
+      ))
+    ))
+    Logger.info("ADD_COMPONENT <- " + addComponentResult)
+    addComponentResult.get.result.get.errors match {
+      case Some(errors) =>
+//        val graph: OrientGraph = Database.getFactory()._1.get.getTx
+//        val sql: String = s"select * from Component where nameToShow like '${nameToShow.get}'"
+//        val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+//        val stepId = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getIdentity.toString()).head
+//        Some(RidToHash.setIdAndHash(stepId)._2)
+        None
+      case None => addComponentResult.get.result.get.configProperties.get.componentId
+    }
+  }
+
+
+
+//==================================================================================================
+
+
+
+
+
 
   def deleteConfigVertex(username: String): Int = {
     val sql: String = s"DELETE VERTEX Config where @rid IN (SELECT OUT('hasConfig') FROM AdminUser WHERE username='$username')"

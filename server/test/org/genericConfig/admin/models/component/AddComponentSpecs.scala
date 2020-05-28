@@ -15,8 +15,6 @@ import play.api.libs.json.{JsResult, JsValue, Json}
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  *
  * Created by Gennadi Heimann 16.01.2017
- *
- * Username = user5
  */
 
 class AddComponentSpecs extends Specification
@@ -46,7 +44,7 @@ class AddComponentSpecs extends Specification
 
   def before(): Unit = {
     val wC: WebClient = WebClient.init
-    val username = "userAddStep"
+    val username = "userAddComponent"
     val userId = createUser(username, wC)
     val configId = createConfig(userId, s"http://contig/$username")
     val nameToShow: Option[String] = Some(s"FirstStep$username")

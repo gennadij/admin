@@ -131,15 +131,15 @@ class Admin extends Wrapper {
 //    toJsonComponentOut(Component.addComponent(toComponentBO(jsonComponentIn)))
 //  }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.0
-    * @param jsonComponentIn : JsonComponentIn
-    * @return JsonComponentOut
-    */
-  def deleteComponent(jsonComponentIn: JsonComponentIn): JsonComponentOut = {
-    toJsonComponentOut(Component.deleteComponent(toComponentBO(jsonComponentIn)))
-  }
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.0
+//    * @param jsonComponentIn : JsonComponentIn
+//    * @return JsonComponentOut
+//    */
+//  def deleteComponent(jsonComponentIn: JsonComponentIn): JsonComponentOut = {
+//    toJsonComponentOut(Component.deleteComponent(toComponentBO(jsonComponentIn)))
+//  }
 
   /**
     * @author Gennadi Heimann
