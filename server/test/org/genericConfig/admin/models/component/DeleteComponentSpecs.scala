@@ -59,7 +59,7 @@ class DeleteComponentSpecs extends Specification
 
     Logger.info("DELETE_COMPONENT -> " + deleteComponent)
     val resultJsValue : JsValue = wC.handleMessage(deleteComponent)
-    Logger.info("ADD_COMPONENT <- " + resultJsValue)
+    Logger.info("DELETE_COMPONENT <- " + resultJsValue)
     deleteCR = Json.fromJson[ComponentDTO](resultJsValue)
   }
 }
