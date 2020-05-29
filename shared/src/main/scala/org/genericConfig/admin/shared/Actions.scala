@@ -3,7 +3,7 @@ package org.genericConfig.admin.shared
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  *
- * Created by Gennadi Heimann ${date}
+ * Created by Gennadi Heimann 29.05.2020
  */
 object Actions {
 
@@ -24,6 +24,8 @@ object Actions {
   val ADD_COMPONENT : String = "ADD_COMPONENT"
   val DELETE_COMPONENT : String = "DELETE_COMPONENT"
   val UPDATE_COMPONENT : String = "UPDATE_COMPONENT"
+
+  val ERROR : String = "ERROR"
   //only Web client
 
   val START_PAGE : String = "START_PAGE"

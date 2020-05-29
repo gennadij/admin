@@ -33,19 +33,13 @@ trait MessageHandler
 
       case Some(Actions.ADD_COMPONENT) => addComponent(receivedMessage)
       case Some(Actions.DELETE_COMPONENT) => deleteComponent(receivedMessage)
-//      case Some(JsonNames.UPDATE_COMPONENT) => updateComponent(receivedMessage, admin)
+      case Some(Actions.UPDATE_COMPONENT) => updateComponent(receivedMessage)
 
       //      case Some(JsonNames.CONNECT_COMPONENT_TO_STEP) => connectComponentToStep(receivedMessage, admin)
-
       //      case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage, admin)
-
-
-
-      
-//      case Some(JsonNames.CREATE_DEPENDENCY) => createDependency(receivedMessage, admin)
-//
-//      case Some(JsonNames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL) =>
-//        visualProposalForAdditionalStepsInOneLevel(receivedMessage, admin)
+      //      case Some(JsonNames.CREATE_DEPENDENCY) => createDependency(receivedMessage, admin)
+      //      case Some(JsonNames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL) =>
+      //        visualProposalForAdditionalStepsInOneLevel(receivedMessage, admin)
       case _ => Json.obj("error" -> "keinen Treffer")
     }
   }

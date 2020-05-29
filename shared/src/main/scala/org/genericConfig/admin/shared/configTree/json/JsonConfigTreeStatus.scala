@@ -1,7 +1,7 @@
 package org.genericConfig.admin.shared.configTree.json
 
+import org.genericConfig.admin.shared.component.ComponentDTO
 import play.api.libs.functional.syntax._
-import org.genericConfig.admin.shared.common.json.JsonStatus
 import play.api.libs.json.Format
 import play.api.libs.json.JsPath
 
@@ -11,13 +11,13 @@ import play.api.libs.json.JsPath
  * Created by Gennadi Heimann 27.04.2018
  */
 case class JsonConfigTreeStatus (
-    getConfigTree: Option[JsonStatus], 
-    common: Option[JsonStatus]
+    getConfigTree: Option[ComponentDTO],
+    common: Option[ComponentDTO]
 )
 
 object JsonConfigTreeStatus {
   implicit val writerJsonConfigTreeStatus: Format[JsonConfigTreeStatus] = (
-    (JsPath \ "getConfigTree").format(Format.optionWithNull[JsonStatus]) and
-    (JsPath \ "common").format(Format.optionWithNull[JsonStatus])
+    (JsPath \ "getConfigTree").format(Format.optionWithNull[ComponentDTO]) and
+    (JsPath \ "common").format(Format.optionWithNull[ComponentDTO])
   )(JsonConfigTreeStatus.apply, unlift(JsonConfigTreeStatus.unapply))
 }

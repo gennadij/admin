@@ -1,7 +1,5 @@
 package org.genericConfig.admin.models.persistence
 
-import org.genericConfig.admin.shared.common.ErrorDTO
-import org.genericConfig.admin.shared.component.bo.ComponentBO
 import org.genericConfig.admin.shared.configTree.bo._
 
 
@@ -11,61 +9,6 @@ import org.genericConfig.admin.shared.configTree.bo._
   * Created by Gennadi Heimann 13.11.2016
   */
 object Persistence {
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param configId : String
-    * @return String, Status
-    */
-  def getUserId(configId: String): (String, ErrorDTO) = {
-    ???
-//    Graph.getUserId(configId)
-  }
-
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.6
-//    * @param userId : String, configUrl: String
-//    * @return ConfigDTO
-//    */
-//  def addConfig(userId: String, configUrl: String): ConfigDTO = {
-//
-//    val (vConfig, error): (Option[OrientVertex], Option[Error]) =
-//      GraphConfig.addConfig(configUrl)
-//    error match {
-//      case None =>
-//        ConfigDTO(
-//          action = Actions.ADD_CONFIG,
-//          params = None,
-//          result = Some(ConfigResultDTO(
-//            userId = Some(userId),
-//            configs = Some(List(UserConfigDTO(
-//              configId = Some(vConfig.get.getIdentity.toString())
-//            ))),
-//            errors = None
-//          ))
-//        )
-//      case _ =>
-//        ConfigDTO(
-//          action = Actions.ADD_CONFIG,
-//          params = None,
-//          result = Some(ConfigResultDTO(
-//            userId = Some(userId),
-//            configs = None,
-//            errors = Some(
-//              List(
-//                ErrorDTO(
-//                  name = error.get.name,
-//                  message = error.get.message,
-//                  code = error.get.code
-//                )
-//              )
-//            )
-//          )
-//        ))
-//    }
-//  }
 
   /**
     * @author Gennadi Heimann
@@ -139,64 +82,8 @@ object Persistence {
 //    }
   }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.0
-    * @param componentBO : ComponentBO
-    * @return ComponentBO
-    */
-  def addComponent(componentBO: ComponentBO): ComponentBO = {
-    ???
 
-  }
 
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.0
-    * @param componentBO : ComponentBO
-    * @return ComponentBO
-    */
-  def deleteComponent(componentBO: ComponentBO): ComponentBO = {
-    ???
-//    val (statusDeleteComponent, statusCommon): (StatusDeleteComponent, Error) = Graph.deleteComponent(componentBO)
-//    ComponentBO(status = Some(StatusComponent(
-//      deleteComponent = Some(statusDeleteComponent), common = Some(statusCommon)
-//    )))
-  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.0
-    * @param componentBO : ComponentBO
-    * @return ComponentBO
-    */
-  def updateComponent(componentBO: ComponentBO): ComponentBO = {
-    ???
-//    val (vComponent, statusUpdateComponnet, statusCommon): (Option[OrientVertex], StatusUpdateComponent, Error) =
-//      Graph.updateComponent(componentBO)
-//
-//    statusUpdateComponnet match {
-//      case UpdateComponentSuccess() =>
-//        ComponentBO(
-//          json = Some(JsonNames.UPDATE_COMPONENT),
-//          componentId = componentBO.componentId,
-//          nameToShow = componentBO.nameToShow,
-//          kind = componentBO.kind,
-//          status = Some(StatusComponent(
-//            updateComponent = Some(UpdateComponentSuccess()),
-//            common = Some(Success())
-//          )
-//          ))
-//      case UpdateComponentError() =>
-//        ComponentBO(
-//          json = Some(JsonNames.UPDATE_COMPONENT),
-//          status = Some(StatusComponent(
-//            updateComponent = Some(UpdateComponentError()),
-//            common = Some(statusCommon)
-//          ))
-//        )
-//    }
-  }
 
 
   //  /**

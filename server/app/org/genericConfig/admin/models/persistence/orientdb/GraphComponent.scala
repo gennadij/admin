@@ -1,11 +1,14 @@
 package org.genericConfig.admin.models.persistence.orientdb
 
+import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
-import com.tinkerpop.blueprints.impls.orient.{OrientGraph, OrientVertex}
+import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientGraph, OrientVertex}
 import org.genericConfig.admin.models.common.{Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBWriteError}
+import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.models.persistence.Database
-import org.genericConfig.admin.shared.component.ComponentUserPropertiesDTO
+import org.genericConfig.admin.shared.component.{ComponentConfigPropertiesDTO, ComponentUserPropertiesDTO}
 import play.api.Logger
+import scala.collection.JavaConverters._
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -18,7 +21,7 @@ object GraphComponent{
     * @author Gennadi Heimann
     * @version 0.1.0
     * @param userProperties : ComponentUserPropertiesDTO
-    * @return (Option[OrientVertex], StatusAddComponent, Status)
+    * @return (Option[OrientVertex], Option[Error])
     */
   def addComponent(userProperties : ComponentUserPropertiesDTO) : (Option[OrientVertex], Option[Error]) = {
     (Database.getFactory(): @unchecked) match {
@@ -30,6 +33,23 @@ object GraphComponent{
     }
   }
 
+  /**
+   * @author Gennadi Heimann
+   * @version 0.1.0
+   * @param userProp : ComponentUserPropertiesDTO
+   * @return (Option[OrientVertex], Option[Error])
+   */
+  def updateComponent(
+                       userProp : ComponentUserPropertiesDTO,
+                       configProp : ComponentConfigPropertiesDTO) : (Option[OrientVertex], Option[Error]) = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), None) =>
+        val graph: OrientGraph = dbFactory.getTx
+        new GraphComponent(graph).updateComponent(userProp, configProp)
+      case (None, Some(ODBConnectionFail())) =>
+        (None, Some(ODBConnectionFail()))
+    }
+  }
 }
 
 class GraphComponent(graph: OrientGraph) {
@@ -59,4 +79,37 @@ class GraphComponent(graph: OrientGraph) {
           (None, Some(ODBWriteError()))
       }
     }
+
+  private def updateComponent(
+                               userProp: ComponentUserPropertiesDTO,
+                               configProp : ComponentConfigPropertiesDTO
+                             ): (Option[OrientVertex], Option[Error]) = {
+    try {
+      //TODO leere String nicht erlauben -> Fehlermeldung
+      val nameToShow : String = userProp.nameToShow.get
+      val componentRId : String = RidToHash.getRId(configProp.componentId.get).get
+
+      val sql: String = s"update ${PropertyKeys.VERTEX_COMPONENT} set $nameToShow return after where @rid=$componentRId"
+
+      val dbRes: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+      val vUpdatedComponent : OrientVertex = dbRes.asScala.toList.map(_.asInstanceOf[OrientVertex]).head
+
+      graph.commit()
+
+      (Some(vUpdatedComponent), None)
+    } catch {
+      case e: ORecordDuplicatedException =>
+        Logger.error(e.printStackTrace().toString)
+        graph.rollback()
+        (None, Some(ODBRecordDuplicated()))
+      case e: ClassCastException =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (None, Some(ODBClassCastError()))
+      case e: Exception =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (None, Some(ODBWriteError()))
+    }
+  }
 }

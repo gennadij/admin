@@ -25,6 +25,13 @@ trait ConverterJsonDTOForComponent extends ConverterJsonDTOForCommon{
         case e: JsError => jsonError(Actions.DELETE_COMPONENT, e)
       }
     }
+
+    private[converter] def updateComponent(receivedMessage: JsValue): JsValue = {
+      Json.fromJson[ComponentDTO](receivedMessage) match {
+        case s: JsSuccess[ComponentDTO] => Json.toJson(Component.updateComponent(s.get))
+        case e: JsError => jsonError(Actions.UPDATE_COMPONENT, e)
+      }
+    }
   //  private def connectComponentToStep(receivedMessage: JsValue, admin: Admin): JsValue = {
   //    Json.fromJson[JsonStepIn](receivedMessage) match {
   //      case stepIn : JsSuccess[JsonStepIn] => Json.toJson(admin.connectComponentToStep(stepIn.get))
@@ -46,11 +53,5 @@ trait ConverterJsonDTOForComponent extends ConverterJsonDTOForCommon{
 
 
   //
-  //  private def updateComponent(receivedMessage: JsValue, admin: Admin): JsValue = {
-  //    val updateComponentIn: JsResult[JsonComponentIn] = Json.fromJson[JsonComponentIn](receivedMessage)
-  //    updateComponentIn match {
-  //      case s: JsSuccess[JsonComponentIn] => Json.toJson(admin.updateComponent(s.get))
-  //      case e: JsError => jsonError(JsonNames.UPDATE_COMPONENT, e)
-  //    }
-  //  }
+
 }

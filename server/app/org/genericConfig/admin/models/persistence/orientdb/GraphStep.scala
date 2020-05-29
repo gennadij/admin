@@ -9,7 +9,6 @@ import org.genericConfig.admin.models.common.{Error, ODBClassCastError, ODBConne
 import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.shared.step.StepDTO
 import play.api.Logger
-
 import scala.collection.JavaConverters._
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -151,7 +150,7 @@ class GraphStep(graph : OrientGraph) {
         (PropertyKeys.SELECTION_CRITERION_MAX, sCMax)
       )
 
-      val sql: String = s"update Step set ${assemblePropForUpdateStep(updateParams)} return after where @rid=${stepRId}"
+      val sql: String = s"update ${PropertyKeys.VERTEX_STEP} set ${assemblePropForUpdateStep(updateParams)} return after where @rid=$stepRId"
 
       val dbRes: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
       val vUpdatedStep : OrientVertex = dbRes.asScala.toList.map(_.asInstanceOf[OrientVertex]).head
@@ -178,7 +177,7 @@ class GraphStep(graph : OrientGraph) {
         (None, Some(ODBWriteError()))
     }
   }
-
+  //SC = SelectionCriterion
   def convertSCToString(sC : Option[Int]) : Option[String] = sC match {
     case Some(sC) => Some(sC.toString)
     case None => None
@@ -187,7 +186,7 @@ class GraphStep(graph : OrientGraph) {
   def assemblePropForUpdateStep(params : List[(String, Option[String])]) : String = params match {
     case param :: rest => param._2 match {
       case Some(p) =>
-        s"${param._1}='${p}'${detectComa(rest)} ${assemblePropForUpdateStep(rest)}"
+        s"${param._1}='$p'${detectComa(rest)} ${assemblePropForUpdateStep(rest)}"
       case None => assemblePropForUpdateStep(rest)
     }
     case Nil => ""

@@ -5,8 +5,6 @@ import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
 import com.tinkerpop.blueprints.impls.orient.{OrientGraph, OrientVertex}
 import org.genericConfig.admin.models.common.{DefectRIdError, Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBWriteError}
 import org.genericConfig.admin.models.persistence.Database
-import org.genericConfig.admin.shared.component.bo.ComponentBO
-import org.genericConfig.admin.shared.component.status._
 import org.genericConfig.admin.shared.configTree.bo._
 import org.genericConfig.admin.shared.configTree.status._
 import play.api.Logger
@@ -51,47 +49,6 @@ object GraphCommon {
     }
   }
 
-
-
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param configId : String
-    * @return (String, Status)
-    */
-  def getUserId(configId: String): (String, Error) = {
-  ???
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), Success()) =>
-//        val graph: OrientGraph = dbFactory.getTx
-//        new Graph(graph).getUserId(configId)
-//      case (None, ODBConnectionFail()) =>
-//        ("", ODBConnectionFail())
-//    }
-  }
-
-
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param username : String
-    * @return Int
-    */
-  def deleteAllConfigs(username: String): Int = {
-    ???
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), Success()) =>
-//        val graph: OrientGraph = dbFactory.getTx
-//        new Graph(graph).deleteAllConfigs(username)
-//      case (None, ODBConnectionFail()) =>
-//        0
-//    }
-  }
-
-
-
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
@@ -108,91 +65,6 @@ object GraphCommon {
 //        (None, GetConfigTreeError(), ODBConnectionFail())
 //    }
   }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param componentId: String
-    * @return Int
-    */
-  def deleteStepAppendedToComponent(componentId: String): Int = {
-    ???
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), Success()) =>
-//        val graph: OrientGraph = dbFactory.getTx
-//        new Graph(graph).deleteStepAppendedToComponent(componentId)
-//      case (None, ODBConnectionFail()) =>
-//        0
-//    }
-  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param componentBO : ComponentBO
-    * @return (Option[OrientVertex], StatusAddComponent, Status)
-    */
-  def addComponent(componentBO: ComponentBO): (Option[OrientVertex], StatusAddComponent, Error) = {
-    ???
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), Success()) =>
-//        val graph: OrientGraph = dbFactory.getTx
-//        new Graph(graph).addComponent(componentBO)
-//      case (None, ODBConnectionFail()) =>
-//        (None, AddComponentError(), ODBConnectionFail())
-//    }
-  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param componentBO : ComponentBO
-    * @return (StatusAppendComponent, Status)
-    */
-  def appendComponentToStep(componentBO: ComponentBO): (StatusAppendComponent, Error) = {
-    ???
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), Success()) =>
-//        val graph: OrientGraph = dbFactory.getTx
-//        new Graph(graph).appendComponentTo(componentBO)
-//      case (None, ODBConnectionFail()) =>
-//        (AppendComponentError(), ODBConnectionFail())
-//    }
-  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param componentBO : ComponentBO
-    * @return (StatusDeleteComponent, Status)
-    */
-  def deleteComponent(componentBO: ComponentBO): (StatusDeleteComponent, Error) = {
-    ???
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), Success()) =>
-//        val graph: OrientGraph = dbFactory.getTx
-//        new Graph(graph).deleteComponent(componentBO)
-//      case (None, ODBConnectionFail()) =>
-//        (DeleteComponentError(), ODBConnectionFail())
-//    }
-  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param componentBO : ComponentBO
-    * @return (Option[OrientVertex], StatusAddComponent, Status)
-    */
-  def updateComponent(componentBO: ComponentBO): (Option[OrientVertex], StatusUpdateComponent, Error) = {
-    ???
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), Success()) =>
-//        val graph: OrientGraph = dbFactory.getTx
-//        new Graph(graph).updateComponent(componentBO)
-//      case (None, ODBConnectionFail()) =>
-//        (None, UpdateComponentError(), ODBConnectionFail())
-//    }
-  }
 }
 
 
@@ -201,8 +73,8 @@ class GraphCommon(graph: OrientGraph) {
   /**
    * @author Gennadi Heimann
    * @version 0.1.6
-   * @param
-   * @return (StatusAppendStep, Status)
+   * @param outRid: String, inRid: String, label : String
+   * @return Option[Error]
    */
   private def appendTo(outRid: String, inRid: String, label : String) : Option[Error] = {
     try {
@@ -252,71 +124,14 @@ class GraphCommon(graph: OrientGraph) {
    }
  }
 
-
-
-
-
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param
-    * @return (String, Status)
-    */
-//  private def getUserId(configId: String): (String, Error) = {
-//    try {
-//      val userId: List[String] =
-//        graph.getVertex(configId)
-//          .getEdges(Direction.IN, PropertyKeys.EDGE_HAS_CONFIG).asScala.toList map (eHasConfig => {
-//          eHasConfig.getVertex(Direction.OUT).asInstanceOf[OrientVertex].getIdentity.toString()
-//        })
-//      userId.size match {
-//        case size if size == 1 => (userId.head, Success())
-//        case _ => ("", Error())
-//      }
-//    } catch {
-//      case e: ORecordDuplicatedException =>
-//        Logger.error(e.printStackTrace().toString)
-//        graph.rollback()
-//        ("", ODBRecordDuplicated())
-//      case e: ClassCastException =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        ("", ODBClassCastError())
-//      case e: NullPointerException =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        ("", ODBNullPointer())
-//      case e: Exception =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        ("", ODBWriteError())
-//    }
-//  }
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param
-    * @return Int
-    */
-//  private def deleteAllConfigs(username: String): Int = {
-//    val sql: String = s"delete vertex Config where @rid in (traverse out('hasConfig') from (select out() from AdminUser where username='$username'))"
-//    val res: Int = graph.command(new OCommandSQL(sql)).execute()
-//    graph.commit()
-//    res
-//  }
-
-
-
-  /**
-    * Converting of the rid to hash from steps and components is here
-    *
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param
-    * @return (Option[StepForConfigTreeBO], StatusGetConfigTree, Status)
-    */
+//  /**
+//    * Converting of the rid to hash from steps and components is here
+//    *
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param
+//    * @return (Option[StepForConfigTreeBO], StatusGetConfigTree, Status)
+//    */
 //  private def getConfigTree(configId: String): (Option[StepForConfigTreeBO], StatusGetConfigTree, Error) = {
 //    try {
 //      val vFirstStep: List[OrientVertex] =
@@ -467,120 +282,17 @@ class GraphCommon(graph: OrientGraph) {
 //    //TODO findDuplicate implement in logik
 //    componentsForConfigTreeBO.toSet
 //  }
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.6
-    * @param
-    * @return Int count of deleted Vertexes
-    */
+//  /**
+//    * @author Gennadi Heimann
+//    * @version 0.1.6
+//    * @param
+//    * @return Int count of deleted Vertexes
+//    */
 //  private def deleteStepAppendedToComponent(componentId: String): Int = {
 //    val res: Int = graph
 //      .command(new OCommandSQL(s"DELETE VERTEX Step where @rid IN (SELECT out() from Component where @rid='$componentId')")).execute()
 //    graph.commit()
 //    res
-//  }
-
-
-
-  /**
-    * @author Gennadi Heimann
-    * @version 0.1.0
-    * @param
-    * @return OrientEdge
-    */
-//  private def appendComponentTo(componentBO: ComponentBO): (StatusAppendComponent, Error) = {
-//    try {
-//      graph.addEdge(
-//        "class:" + PropertyKeys.EDGE_HAS_COMPONENT,
-//        graph.getVertex(componentBO.stepId.get),
-//        graph.getVertex(componentBO.componentId.get),
-//        PropertyKeys.EDGE_HAS_COMPONENT
-//      )
-//      graph.commit()
-//
-//      (AppendComponentSuccess(), Success())
-//    } catch {
-//      case e: ORecordDuplicatedException =>
-//        Logger.error(e.printStackTrace().toString)
-//        graph.rollback()
-//        (AppendComponentError(), ODBRecordDuplicated())
-//      case e: ClassCastException =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (AppendComponentError(), ODBClassCastError())
-//      case e: NullPointerException =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (AppendComponentError(), ODBNullPointer())
-//      case e: OValidationException =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (AppendComponentError(), ODBValidationException())
-//      case e: Exception =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (AppendComponentError(), ODBWriteError())
-//    }
-//  }
-
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.0
-//    * @param componentBO : ComponentBO
-//    * @return OrientEdge
-//    */
-//  private def deleteComponent(componentBO: ComponentBO): (StatusDeleteComponent, Error) = {
-//    try {
-//      val sql: String = s"DELETE VERTEX Component where @rid=${componentBO.componentId.get}"
-//      val res: Int = graph.command(new OCommandSQL(sql)).execute()
-//      graph.commit()
-//      res match {
-//        case 1 => (DeleteComponentSuccess(), Success())
-//        case _ => (DeleteComponentDefectID(), Error())
-//      }
-//    } catch {
-//      case e: ORecordDuplicatedException =>
-//        Logger.error(e.printStackTrace().toString)
-//        graph.rollback()
-//        (DeleteComponentError(), ODBRecordDuplicated())
-//      case e: ClassCastException =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (DeleteComponentError(), ODBClassCastError())
-//      case e: Exception =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (DeleteComponentError(), ODBWriteError())
-//    }
-//  }
-
-//  /**
-//    * @author Gennadi Heimann
-//    * @version 0.1.0
-//    * @param componentBO : ComponentBO
-//    * @return (Option[OrientVertex], StatusUpdateComponent, Status)
-//    */
-//  private def updateComponent(componentBO: ComponentBO): (Option[OrientVertex], StatusUpdateComponent, Error) = {
-//    try {
-//      val vComponent: OrientVertex = graph.getVertex(componentBO.componentId.get)
-//      vComponent.setProperty(PropertyKeys.NAME_TO_SHOW, componentBO.nameToShow.get)
-//      vComponent.setProperty(PropertyKeys.KIND, componentBO.kind.get)
-//      graph.commit()
-//      (Some(vComponent), UpdateComponentSuccess(), Success())
-//    } catch {
-//      case e: ORecordDuplicatedException =>
-//        Logger.error(e.printStackTrace().toString)
-//        graph.rollback()
-//        (None, UpdateComponentError(), ODBRecordDuplicated())
-//      case e: ClassCastException =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (None, UpdateComponentError(), ODBClassCastError())
-//      case e: Exception =>
-//        graph.rollback()
-//        Logger.error(e.printStackTrace().toString)
-//        (None, UpdateComponentError(), ODBWriteError())
-//    }
 //  }
 
   //  /**

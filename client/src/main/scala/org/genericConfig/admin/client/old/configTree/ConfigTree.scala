@@ -1,14 +1,11 @@
 package org.genericConfig.admin.client.old.configTree
 
 import org.genericConfig.admin.client.old.component.Component
-import org.scalajs.jquery.{JQuery, jQuery}
-import org.scalajs.dom.raw.WebSocket
-import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeOut
-import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeComponent
-import org.genericConfig.admin.shared.configTree.json.JsonConfigTreeStep
-import org.genericConfig.admin.shared.configTree.status._
 import org.genericConfig.admin.client.old.step.AddStep
 import org.genericConfig.admin.client.views.html.HtmlElementIds
+import org.genericConfig.admin.shared.configTree.json.{JsonConfigTreeComponent, JsonConfigTreeOut, JsonConfigTreeStep}
+import org.scalajs.dom.raw.WebSocket
+import org.scalajs.jquery.{JQuery, jQuery}
 import util.CommonFunction
 
 import scala.collection.mutable
@@ -27,21 +24,21 @@ class ConfigTree(websocket: WebSocket) extends CommonFunction {
 
   cleanPage
 
-  def drawConfigTree(configTree: JsonConfigTreeOut): Unit = {
-
-    configTree.result.status.getConfigTree.get.status match {
-      case status if status == GetConfigTreeSuccess().status =>
-        cleanPage
-        drawNewStatus(status + " | " + configTree.result.status.common.get.status)
-        drawConfigTreeNotEmpty(configTree)
-      case status if status == GetConfigTreeEmpty().status =>
-        cleanPage
-        drawNewStatus(status + " | " + configTree.result.status.common.get.status)
-        drawConfigTreeEmpty(configTree)
-      case status if status == GetConfigTreeError().status =>
-        drawNewStatus(status + " | " + configTree.result.status.common.get.status)
-    }
-  }
+//  def drawConfigTree(configTree: JsonConfigTreeOut): Unit = {
+//
+//    configTree.result.status.getConfigTree.get.status match {
+//      case status if status == GetConfigTreeSuccess().status =>
+//        cleanPage
+//        drawNewStatus(status + " | " + configTree.result.status.common.get.status)
+//        drawConfigTreeNotEmpty(configTree)
+//      case status if status == GetConfigTreeEmpty().status =>
+//        cleanPage
+//        drawNewStatus(status + " | " + configTree.result.status.common.get.status)
+//        drawConfigTreeEmpty(configTree)
+//      case status if status == GetConfigTreeError().status =>
+//        drawNewStatus(status + " | " + configTree.result.status.common.get.status)
+//    }
+//  }
 
   private def drawConfigTreeNotEmpty(configTree: JsonConfigTreeOut): Unit = {
 

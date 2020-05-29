@@ -1,7 +1,6 @@
 package org.genericConfig.admin.shared.configTree.json
 
 import play.api.libs.json.Json
-import org.genericConfig.admin.shared.common.json.JsonNames
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -11,7 +10,6 @@ import org.genericConfig.admin.shared.common.json.JsonNames
  */
 
 case class JsonConfigTreeOut (
-    json: String = JsonNames.CONFIG_TREE,
     result: JsonConfigTreeResult
 )
 
