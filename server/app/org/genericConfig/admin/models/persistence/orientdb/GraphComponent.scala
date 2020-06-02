@@ -89,7 +89,11 @@ class GraphComponent(graph: OrientGraph) {
       val nameToShow : String = userProp.nameToShow.get
       val componentRId : String = RidToHash.getRId(configProp.componentId.get).get
 
-      val sql: String = s"update ${PropertyKeys.VERTEX_COMPONENT} set $nameToShow return after where @rid=$componentRId"
+      val updateParams : List[(String, Option[String])] = List(
+        (PropertyKeys.NAME_TO_SHOW, Some(nameToShow))
+      )
+
+      val sql: String = s"update ${PropertyKeys.VERTEX_COMPONENT} set ${assembleProp(updateParams)} return after where @rid=$componentRId"
 
       val dbRes: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
       val vUpdatedComponent : OrientVertex = dbRes.asScala.toList.map(_.asInstanceOf[OrientVertex]).head
@@ -110,6 +114,23 @@ class GraphComponent(graph: OrientGraph) {
         graph.rollback()
         Logger.error(e.printStackTrace().toString)
         (None, Some(ODBWriteError()))
+    }
+  }
+  //TODO Function verallgemeinern
+  def assembleProp(params : List[(String, Option[String])]) : String = params match {
+    case param :: rest => param._2 match {
+      case Some(p) =>
+        s"${param._1}='$p'${detectComa(rest)} ${assembleProp(rest)}"
+      case None => assembleProp(rest)
+    }
+    case Nil => ""
+  }
+  //TODO Function verallgemeinern
+  def detectComa(rest : List[(String, Option[String])]) : String = rest match {
+    case Nil => ""
+    case param :: rest  =>  param._2 match {
+      case Some(p) => ","
+      case None => ""
     }
   }
 }

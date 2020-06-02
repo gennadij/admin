@@ -7,14 +7,13 @@ import org.genericConfig.admin.models.logic._
 import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.models.persistence.orientdb.GraphCommon
 import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.common.json.JsonNames
 import org.genericConfig.admin.shared.component.{ComponentConfigPropertiesDTO, ComponentDTO, ComponentParamsDTO, ComponentUserPropertiesDTO}
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
 import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepDTO, StepParamsDTO, StepPropertiesDTO}
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import play.api.Logger
-import play.api.libs.json.{JsResult, JsValue, Json}
+import play.api.libs.json.{JsResult, Json}
 
 import scala.collection.JavaConverters._
 
@@ -213,26 +212,26 @@ trait CommonFunction {
     res
   }
 
-  def deleteStepAppendToComponent(componentId: String): Int = {
-    GraphCommon.deleteStepAppendedToComponent(componentId)
-  }
+//  def deleteStepAppendToComponent(componentId: String): Int = {
+//    GraphCommon.deleteStepAppendedToComponent(componentId)
+//  }
 
-  def getConfigs(userId: String, wC: WebClient): Set[String] = {
-    val getConfigsIn = Json.obj(
-      "json" -> JsonNames.GET_CONFIGS
-      , "params" -> Json.obj(
-        "userId" -> userId
-      )
-    )
-    val getConfigsOut = wC.handleMessage(getConfigsIn)
-
-    Logger.info("getConfigsIn " + getConfigsIn)
-    Logger.info("getConfigsOut " + getConfigsOut)
-
-    val jsConfigsIds: Set[JsValue] = (getConfigsOut \ "result" \ "configs").asOpt[Set[JsValue]].get
-
-    jsConfigsIds map (jsCId => (jsCId \ "configId").asOpt[String].get)
-  }
+//  def getConfigs(userId: String, wC: WebClient): Set[String] = {
+//    val getConfigsIn = Json.obj(
+//      "json" -> JsonNames.GET_CONFIGS
+//      , "params" -> Json.obj(
+//        "userId" -> userId
+//      )
+//    )
+//    val getConfigsOut = wC.handleMessage(getConfigsIn)
+//
+//    Logger.info("getConfigsIn " + getConfigsIn)
+//    Logger.info("getConfigsOut " + getConfigsOut)
+//
+//    val jsConfigsIds: Set[JsValue] = (getConfigsOut \ "result" \ "configs").asOpt[Set[JsValue]].get
+//
+//    jsConfigsIds map (jsCId => (jsCId \ "configId").asOpt[String].get)
+//  }
 
   def getConfigTree(configId: String): ConfigTreeBO = {
     val getCondifTreeBOIn = ConfigTreeBO(

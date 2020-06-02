@@ -1,6 +1,7 @@
 package org.genericConfig.admin.client.views.user
 
 import org.genericConfig.admin.client.controllers.listner.Mouse
+import org.genericConfig.admin.client.controllers.websocket.ActionsForClient
 import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
@@ -39,6 +40,6 @@ class RegistrationPage() extends CommonFunction {
     jQueryButtonStart.appendTo(main)
 
     new Mouse().mouseClick(jQueryButtonRegister, Actions.ADD_USER)
-    new Mouse().mouseClick(jQueryButtonStart, Actions.START_PAGE)
+    new Mouse().mouseClick(jQueryButtonStart, ActionsForClient.START_PAGE)
   }
 }

@@ -26,12 +26,4 @@ object Actions {
   val UPDATE_COMPONENT : String = "UPDATE_COMPONENT"
 
   val ERROR : String = "ERROR"
-  //only Web client
-
-  val START_PAGE : String = "START_PAGE"
-  val REGISTER_PAGE : String = "REGISTER_PAGE"
-  val USER_PAGE : String = "USER_PAGE"
-  val UPDATE_USER_PAGE : String = "UPDATE_USER_PAGE"
-  val CONFIG_PAGE : String = "CONFIG_PAGE"
-  val ADD_CONFIG_PAGE : String = "ADD_CONFIG_PAGE"
 }

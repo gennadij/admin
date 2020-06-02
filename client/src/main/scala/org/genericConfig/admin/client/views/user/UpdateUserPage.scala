@@ -1,6 +1,7 @@
 package org.genericConfig.admin.client.views.user
 
 import org.genericConfig.admin.client.controllers.listner.Mouse
+import org.genericConfig.admin.client.controllers.websocket.ActionsForClient
 import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.user.UserDTO
@@ -30,6 +31,6 @@ class UpdateUserPage() extends CommonFunction{
     jQueryButtonCancel.appendTo(main)
 
     new Mouse().mouseClick(jQueryButtonUpdateUserSave, Actions.UPDATE_USER, Some(userDTO))
-    new Mouse().mouseClick(jQueryButtonCancel, Actions.USER_PAGE, Some(userDTO))
+    new Mouse().mouseClick(jQueryButtonCancel, ActionsForClient.USER_PAGE, Some(userDTO))
   }
 }

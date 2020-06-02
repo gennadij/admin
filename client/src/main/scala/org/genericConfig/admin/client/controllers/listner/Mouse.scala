@@ -1,7 +1,7 @@
 package org.genericConfig.admin.client.controllers.listner
 
+import org.genericConfig.admin.client.controllers.websocket.ActionsForClient
 import org.genericConfig.admin.client.models.{Config, Register, Start, User}
-import org.genericConfig.admin.client.views.config.AddConfigPage
 import org.genericConfig.admin.shared.Actions
 import org.scalajs.jquery.JQuery
 
@@ -23,12 +23,12 @@ class Mouse {
       case Actions.DELETE_USER => jQueryElem.on("click", () => new User().deleteUser(param))
       case Actions.ADD_CONFIG => jQueryElem.on("click", () => new Config().addConfig(param))
         //Actions internal
-      case Actions.REGISTER_PAGE => jQueryElem.on("click", () => new Register().register())
-      case Actions.START_PAGE => jQueryElem.on("click", () => new Start().start())
-      case Actions.USER_PAGE => jQueryElem.on("click", () => new User().showUser(param))
-      case Actions.UPDATE_USER_PAGE => jQueryElem.on("click", () => new User().showUpdateUserPage(param))
-      case Actions.ADD_CONFIG_PAGE => jQueryElem.on("click", () => new Config().showAddConfigPage(param))
-      case Actions.CONFIG_PAGE => jQueryElem.on("click", () => new Config().showConfigPage(param))
+      case ActionsForClient.REGISTER_PAGE => jQueryElem.on("click", () => new Register().register())
+      case ActionsForClient.START_PAGE => jQueryElem.on("click", () => new Start().start())
+      case ActionsForClient.USER_PAGE => jQueryElem.on("click", () => new User().showUser(param))
+      case ActionsForClient.UPDATE_USER_PAGE => jQueryElem.on("click", () => new User().showUpdateUserPage(param))
+      case ActionsForClient.ADD_CONFIG_PAGE => jQueryElem.on("click", () => new Config().showAddConfigPage(param))
+      case ActionsForClient.CONFIG_PAGE => jQueryElem.on("click", () => new Config().showConfigPage(param))
       case _ => jQueryElem.on("click", () => new Start().actionGetUser()) //TODO eine Fehlerpage erstellen
     }
   }

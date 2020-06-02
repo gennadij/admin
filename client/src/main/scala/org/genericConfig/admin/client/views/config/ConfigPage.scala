@@ -1,8 +1,8 @@
 package org.genericConfig.admin.client.views.config
 
 import org.genericConfig.admin.client.controllers.listner.Mouse
+import org.genericConfig.admin.client.controllers.websocket.ActionsForClient
 import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
-import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.{ConfigDTO, UserConfigDTO}
 import org.scalajs.jquery.{JQuery, jQuery}
 import util.CommonFunction
@@ -47,9 +47,9 @@ class ConfigPage() extends CommonFunction{
     jQueryButtonAddConfig.appendTo(main)
     jQueryButtonLogout.appendTo(main)
 
-    configurationsJQuery.foreach(configJQuery => new Mouse().mouseClick(configJQuery._1, Actions.CONFIG_PAGE, Some(configJQuery._2)))
-    new Mouse().mouseClick(jQueryButtonAddConfig, Actions.ADD_CONFIG_PAGE, Some(getConfigsResult))
-    new Mouse().mouseClick(jQueryButtonLogout, Actions.START_PAGE)
+    configurationsJQuery.foreach(configJQuery => new Mouse().mouseClick(configJQuery._1, ActionsForClient.CONFIG_PAGE, Some(configJQuery._2)))
+    new Mouse().mouseClick(jQueryButtonAddConfig, ActionsForClient.ADD_CONFIG_PAGE, Some(getConfigsResult))
+    new Mouse().mouseClick(jQueryButtonLogout, ActionsForClient.START_PAGE)
   }
 
   private def drawConfig(config : UserConfigDTO): JQuery = {

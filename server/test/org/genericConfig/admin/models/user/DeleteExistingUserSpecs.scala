@@ -24,8 +24,7 @@ import scala.collection.JavaConverters._
 class DeleteExistingUserSpecs extends Specification
   with MessageHandler
   with BeforeAfterAll
-  with CommonFunction
-  with Wrapper{
+  with CommonFunction {
 
   val wC: WebClient = WebClient.init
   val userToDelete = "userToDelete"

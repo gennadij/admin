@@ -1,7 +1,7 @@
 package org.genericConfig.admin.client.views.user
 
 import org.genericConfig.admin.client.controllers.listner.Mouse
-import org.genericConfig.admin.client.controllers.websocket.WebSocketListner
+import org.genericConfig.admin.client.controllers.websocket.{ActionsForClient, WebSocketListner}
 import org.genericConfig.admin.client.models.{Progress, State}
 import org.genericConfig.admin.client.views.StartPage
 import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
@@ -43,9 +43,9 @@ class UserPage() extends CommonFunction{
         jQueryButtonLogout.appendTo(main)
 
         new Mouse().mouseClick(jQueryButtonGetConfigs, Actions.GET_CONFIGS, Some(userDTO))
-        new Mouse().mouseClick(jQueryButtonUpdateUser, Actions.UPDATE_USER_PAGE, Some(userDTO))
+        new Mouse().mouseClick(jQueryButtonUpdateUser, ActionsForClient.UPDATE_USER_PAGE, Some(userDTO))
         new Mouse().mouseClick(jQueryButtonDeleteUser, Actions.DELETE_USER, Some(userDTO))
-        new Mouse().mouseClick(jQueryButtonLogout, Actions.START_PAGE)
+        new Mouse().mouseClick(jQueryButtonLogout, ActionsForClient.START_PAGE)
       case _ =>
         new StartPage().drawStartPage(userDTO.result.get.errors)
     }
@@ -53,7 +53,7 @@ class UserPage() extends CommonFunction{
 
   def drawUserWithConfigPage(userDTO: Option[UserDTO] = None, configDTO: Option[ConfigDTO] = None) : Unit = {
     (userDTO, configDTO) match {
-      case (Some(userDTO), Some(configDTO)) => println("Beide") //Wenn sowohl User alsauch Config DTO gegeben wird
+      case (Some(userDTO), Some(configDTO)) => println("Beide") //Wenn sowohl User als auch Config DTO gegeben wird
       case (Some(userDTO), None) =>
         drawUserPage(userDTO)
         //sende getConfigs
@@ -90,9 +90,9 @@ class UserPage() extends CommonFunction{
         jQueryButtonAddConfig.appendTo(main)
         jQueryButtonLogout.appendTo(main)
 
-        configurationsJQuery.foreach(configJQuery => new Mouse().mouseClick(jQueryElem = configJQuery._1, action = Actions.CONFIG_PAGE, param = Some(configJQuery._2)))
-        new Mouse().mouseClick(jQueryButtonAddConfig, Actions.ADD_CONFIG_PAGE, Some(configDTO))
-        new Mouse().mouseClick(jQueryButtonLogout, Actions.START_PAGE)
+        configurationsJQuery.foreach(configJQuery => new Mouse().mouseClick(jQueryElem = configJQuery._1, action = ActionsForClient.CONFIG_PAGE, param = Some(configJQuery._2)))
+        new Mouse().mouseClick(jQueryButtonAddConfig, ActionsForClient.ADD_CONFIG_PAGE, Some(configDTO))
+        new Mouse().mouseClick(jQueryButtonLogout, ActionsForClient.START_PAGE)
 
       case (None, None) => println("keine")
     }

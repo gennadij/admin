@@ -177,12 +177,12 @@ class GraphStep(graph : OrientGraph) {
         (None, Some(ODBWriteError()))
     }
   }
-  //SC = SelectionCriterion
+  //sC = SelectionCriterion
   def convertSCToString(sC : Option[Int]) : Option[String] = sC match {
     case Some(sC) => Some(sC.toString)
     case None => None
   }
-
+  //TODO Function verallgemeinern
   def assemblePropForUpdateStep(params : List[(String, Option[String])]) : String = params match {
     case param :: rest => param._2 match {
       case Some(p) =>
@@ -191,7 +191,7 @@ class GraphStep(graph : OrientGraph) {
     }
     case Nil => ""
   }
-
+  //TODO Function verallgemeinern
   def detectComa(rest : List[(String, Option[String])]) : String = rest match {
     case Nil => ""
     case param :: rest  =>  param._2 match {

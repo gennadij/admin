@@ -23,8 +23,7 @@ import scala.collection.JavaConverters._
 class UpdateUserNameSpecs extends Specification
   with MessageHandler
   with BeforeAfterAll
-  with CommonFunction
-  with Wrapper{
+  with CommonFunction {
 
   val wC: WebClient = WebClient.init
   val userToUpdate = "userToUpdate"

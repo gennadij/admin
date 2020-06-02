@@ -1,7 +1,7 @@
 package org.genericConfig.admin.models.component
 
 import org.genericConfig.admin.controllers.websocket.WebClient
-import org.genericConfig.admin.models.CommonFunction
+import org.genericConfig.admin.models.{CommonFunction, common}
 import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.models.persistence.orientdb.PropertyKeys
 import org.genericConfig.admin.shared.Actions
@@ -28,18 +28,20 @@ class UpdateComponentSpecs extends Specification
   }
 
   def afterAll(): Unit = {
-    deleteVertex(RidToHash.getRId(
+    val error : Option[common.Error] = deleteVertex(RidToHash.getRId(
       updateCROnlyNameToShow.get.result.get.configProperties.get.componentId.get).get,
       PropertyKeys.VERTEX_COMPONENT
     )
+
+    require(error == None, "Beim Loeschen des Components ein Fehler aufgetretten")
   }
 
   "Der Benutzer veraendert die Komponente" >> {
     "Es wird nur der Name geaendert" >> {
-      "action = ADD_COMPONENT" >> {updateCROnlyNameToShow.get.action === Actions.ADD_COMPONENT}
+      "action = ADD_COMPONENT" >> {updateCROnlyNameToShow.get.action === Actions.UPDATE_COMPONENT}
       "componentId < 32 && > 10" >> {updateCROnlyNameToShow.get.result.get.configProperties.get.componentId.get.length must (be_<=(32) and be_>(10))}
-      "stepId < 32 && > 10" >> { updateCROnlyNameToShow.get.result.get.configProperties.get.stepId.get.length must (be_<=(32) and be_>(10))}
-      "nameToShow = Component_1_1" >> {updateCROnlyNameToShow.get.result.get.userProperties.get.nameToShow.get === "Component_1_1"}
+      "stepId = None" >> { updateCROnlyNameToShow.get.result.get.configProperties.get.stepId === None}
+      "nameToShow = ComponentUpdated" >> {updateCROnlyNameToShow.get.result.get.userProperties.get.nameToShow.get === "ComponentUpdated"}
       "errors = None" >> {updateCROnlyNameToShow.get.result.get.errors === None}
     }
   }

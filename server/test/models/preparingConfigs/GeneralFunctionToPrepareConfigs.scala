@@ -1,21 +1,14 @@
 package models.preparingConfigs
 
-import play.api.libs.json.Json
-import play.api.libs.json.JsValue
-import org.genericConfig.admin.controllers.converter.MessageHandler
-import com.tinkerpop.blueprints.impls.orient.OrientGraph
-import org.genericConfig.admin.models.persistence.OrientDB
 import com.orientechnologies.orient.core.sql.OCommandSQL
-import com.tinkerpop.blueprints.impls.orient.OrientVertex
-import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
+import com.tinkerpop.blueprints.{Direction, Edge, Vertex}
+import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientGraph, OrientVertex}
+import org.genericConfig.admin.controllers.converter.MessageHandler
+import org.genericConfig.admin.controllers.websocket.WebClient
+import org.genericConfig.admin.models.persistence.OrientDB
+import org.genericConfig.admin.models.persistence.orientdb.PropertyKeys
 
 import scala.collection.JavaConverters._
-import com.tinkerpop.blueprints.Edge
-import com.tinkerpop.blueprints.Vertex
-import com.tinkerpop.blueprints.Direction
-import org.genericConfig.admin.controllers.websocket.WebClient
-import org.genericConfig.admin.models.persistence.orientdb.PropertyKeys
-import org.genericConfig.admin.shared.common.json.JsonNames
 
 /**
 	* Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -79,18 +72,18 @@ trait GeneralFunctionToPrepareConfigs extends MessageHandler {
 //    (loginSC \ "result" \ "adminId").asOpt[String].get
 //  }
   
-	def loginForConfigId(user: String, webClient: WebClient): String = {
-		val jsonClientServer = Json.obj(
-			"json" -> JsonNames.GET_USER
-			,"params" -> Json.obj(
-				"username" -> user,
-				"password"-> user
-			)
-		)
-		val jsonServerClient: JsValue = webClient.handleMessage(jsonClientServer)
-		val configId = ((jsonServerClient \ "result" \ "configs")(0) \ "configId").asOpt[String].get
-		configId
-	}
+//	def loginForConfigId(user: String, webClient: WebClient): String = {
+//		val jsonClientServer = Json.obj(
+//			"json" -> JsonNames.GET_USER
+//			,"params" -> Json.obj(
+//				"username" -> user,
+//				"password"-> user
+//			)
+//		)
+//		val jsonServerClient: JsValue = webClient.handleMessage(jsonClientServer)
+//		val configId = ((jsonServerClient \ "result" \ "configs")(0) \ "configId").asOpt[String].get
+//		configId
+//	}
   
 
   
@@ -113,19 +106,19 @@ trait GeneralFunctionToPrepareConfigs extends MessageHandler {
 		???
   }
   
-  def addComponentToStep(stepId: String, nameToShow: String = "Component", wC: WebClient): String = {
-    val componentCS = Json.obj(
-        "json" -> JsonNames.ADD_COMPONENT
-        ,"params" -> Json.obj(
-            "stepId" -> stepId,
-            "nameToShow" -> nameToShow,
-            "kind" -> "immutable"
-        )
-    )
-    val componentSC: JsValue = wC.handleMessage(componentCS)
-
-    (componentSC \ "result" \ "componentId").asOpt[String].get
-  }
+//  def addComponentToStep(stepId: String, nameToShow: String = "Component", wC: WebClient): String = {
+//    val componentCS = Json.obj(
+//        "json" -> JsonNames.ADD_COMPONENT
+//        ,"params" -> Json.obj(
+//            "stepId" -> stepId,
+//            "nameToShow" -> nameToShow,
+//            "kind" -> "immutable"
+//        )
+//    )
+//    val componentSC: JsValue = wC.handleMessage(componentCS)
+//
+//    (componentSC \ "result" \ "componentId").asOpt[String].get
+//  }
 
 //	def addStep(componentId: String, kind: String, min: Int, max: Int, nameToShow: String, webClient: WebClient): String = {
 //
@@ -146,17 +139,17 @@ trait GeneralFunctionToPrepareConfigs extends MessageHandler {
 //		(stepSC \ "result" \ "stepId").asOpt[String].get
 //	}
 	
-	def visualProposal(visualProposal: String, wC: WebClient): String = {
-	  val visualProposal = Json.obj(
-				  "json" -> JsonNames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL,
-				  "params" -> Json.obj(
-				          "selectedVisualProposal" -> "remove"
-				  )
-			)
-		val stepSCWithDependencies = wC.handleMessage(visualProposal)
-		
-		(stepSCWithDependencies \ "result" \ "stepId").asOpt[String].get
-	}
+//	def visualProposal(visualProposal: String, wC: WebClient): String = {
+//	  val visualProposal = Json.obj(
+//				  "json" -> JsonNames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL,
+//				  "params" -> Json.obj(
+//				          "selectedVisualProposal" -> "remove"
+//				  )
+//			)
+//		val stepSCWithDependencies = wC.handleMessage(visualProposal)
+//
+//		(stepSCWithDependencies \ "result" \ "stepId").asOpt[String].get
+//	}
 
 //	def connectComponentToStep(stepId: String, componentId: String, wC: WebClient): Unit = {
 //		val connectionComponentToStepCS = Json.obj(
