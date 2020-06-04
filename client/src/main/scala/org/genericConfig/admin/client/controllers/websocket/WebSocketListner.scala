@@ -1,10 +1,14 @@
 package org.genericConfig.admin.client.controllers.websocket
 
+import com.fasterxml.jackson.databind.annotation.JacksonStdImpl
 import org.genericConfig.admin.client.views.StartPage
 import org.scalajs.dom
 import org.scalajs.dom.WebSocket
 import play.api.libs.json.{JsValue, Json}
 
+import scala.scalajs.js
+import scala.scalajs.js
+import scala.scalajs.js.annotation.JSImport
 import scala.util.matching.Regex
 
 /**
@@ -28,6 +32,7 @@ object WebSocketListner {
 
     webSocket.onopen = { e: dom.Event => {
       println("WebSocket open")
+      RunJSinScalaJS.runJSFunction()
       new StartPage().drawStartPage()
 //        Start.start(webSocket)
       }
