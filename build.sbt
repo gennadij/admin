@@ -27,13 +27,15 @@ lazy val client = (project in file("client")).settings(commonSettings).settings(
   scalaJSUseMainModuleInitializer := true,
   libraryDependencies ++= Seq(
     "org.scala-js" %%% "scalajs-dom" % "0.9.5",
-	"be.doeraene" %%% "scalajs-jquery" % "0.9.1",
-	"com.typesafe.play" %%% "play-json" % "2.6.9"
+    "be.doeraene" %%% "scalajs-jquery" % "0.9.1",
+    "com.typesafe.play" %%% "play-json" % "2.6.9",
+    "org.singlespaced" %%% "scalajs-d3" % "0.3.4"
   ),
   skip in packageJSDependencies := false,
   jsDependencies ++= Seq(
     "org.webjars" % "jquery" % "2.1.4" / "2.1.4/jquery.js",
-	"org.webjars" % "jquery-ui" % "1.11.4" / "jquery-ui.js" dependsOn "jquery.js"
+    "org.webjars" % "jquery-ui" % "1.11.4" / "jquery-ui.js" dependsOn "jquery.js",
+    //ProvidedJS / "./public/js/function.js"
   )
 ).enablePlugins(ScalaJSPlugin, ScalaJSWeb).
   dependsOn(sharedJs)

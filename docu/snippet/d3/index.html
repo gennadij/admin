@@ -13,33 +13,62 @@
   <body>
     <script>
       var data = {
-   nodes: [{
-     name: "A",
-     x: 600,
-     y: 100
-   }, {
-     name: "B",
-     x: 300,
-     y: 300
-   }, {
-     name: "C",
-     x: 600,
-     y: 300
-   }, {
-     name: "D",
-     x: 900,
-     y: 300
-   }],
-   links: [{
-     source: 0,
-     target: 1
-   }, {
-     source: 0,
-     target: 2
-   }, {
-     source: 0,
-     target: 3
-   }, ]
+        nodes: [{
+          id : 1,
+          name: "A",
+          x: 600,
+          y: 100
+        }, {
+          id : 2,
+          name: "B",
+          x: 300,
+          y: 300
+        }, {
+          id : 3,
+          name: "C",
+          x: 600,
+          y: 300
+        }, {
+          id : 4,
+          name: "D",
+          x: 900,
+          y: 300
+        }],
+        links: [{
+            source: {
+              id : 1,
+              x: 650,
+              y: 200
+            },
+            target: {
+              id : 2,
+              x: 350,
+              y: 300
+            }
+        }, {
+          source: {
+              id : 1,
+              x: 650,
+              y: 200
+            },
+            target: {
+              id : 3,
+              x: 650,
+              y: 300
+            }
+        }, {
+          source: {
+              id : 1,
+              x: 650,
+              y: 200
+            },
+          target: {
+              id : 4,
+              x: 950,
+              y: 300
+            }
+          }, 
+        ]
  };
 
  var c10 = d3.scale.category10();
@@ -67,20 +96,23 @@
    .enter()
    .append("line")
    .attr("class", "link")
-   .attr("x1", function(l) {
-     var sourceNode = data.nodes.filter(function(d, i) {
-       return i == l.source
-     })[0];
-     d3.select(this).attr("y1", sourceNode.y);
-     return sourceNode.x
-   })
-   .attr("x2", function(l) {
-     var targetNode = data.nodes.filter(function(d, i) {
-       return i == l.target
-     })[0];
-     d3.select(this).attr("y2", targetNode.y);
-     return targetNode.x
-   })
+   .attr("x1", function(d) {return d.source.x})
+    .attr("y1", function(d){return d.source.y})
+     //var sourceNode = data.nodes.filter(function(d, i) {
+     //  return d.id == l.source
+     //})[0];
+     //d3.select(this).attr("y1", sourceNode.y);
+     //return sourceNode.x
+   //})
+   //.attr("x2", function(l) {
+   //  var targetNode = data.nodes.filter(function(d, i) {
+   //    return i == l.target
+   //  })[0];
+   //  d3.select(this).attr("y2", targetNode.y);
+   //  return targetNode.x
+   //})
+   .attr("x2", function(d){return d.target.x})
+   .attr("y2", function(d){return d.target.y})
    .attr("fill", "none")
    .attr("stroke", "black");
 
