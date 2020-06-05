@@ -1,4 +1,3 @@
-function runFromScalaJS() {
-    console.log("test")
-    alert("test")
+function runFromScalaJS(arg) {
+    console.log("runFromScalaJS" + arg)
 }
