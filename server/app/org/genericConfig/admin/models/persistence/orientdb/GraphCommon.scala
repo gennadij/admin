@@ -55,15 +55,13 @@ object GraphCommon {
     * @param configId : String
     * @return (Option[StepForConfigTreeBO], StatusGetConfigTree, Status)
     */
-  def getConfigTree(configId: String): (Option[StepForConfigTreeBO], StatusGetConfigTree, Error) = {
-    ???
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), Success()) =>
-//        val graph: OrientGraph = dbFactory.getTx
-//        new Graph(graph).getConfigTree(configId)
-//      case (None, ODBConnectionFail()) =>
-//        (None, GetConfigTreeError(), ODBConnectionFail())
-//    }
+  def configGraph(configId: String): (Option[OrientVertex], Option[Error]) = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), None) =>
+        new GraphCommon(dbFactory.getTx).configGraph(configId)
+      case (None, Some(ODBConnectionFail())) =>
+        (None, Some(ODBConnectionFail())
+    }
   }
 }
 

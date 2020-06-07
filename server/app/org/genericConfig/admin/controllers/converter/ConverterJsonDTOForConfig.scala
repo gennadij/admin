@@ -39,10 +39,11 @@ trait ConverterJsonDTOForConfig extends ConverterJsonDTOForCommon {
     }
   }
 
-  //  private def configTree(receivedMessage: JsValue, admin: Admin): JsValue = {
-  //    Json.fromJson[JsonConfigTreeIn](receivedMessage) match {
-  //      case configTreeIn: JsSuccess[JsonConfigTreeIn] => Json.toJson(admin.getConfigTree(configTreeIn.get))
-  //      case e : JsError => jsonError(JsonNames.CONFIG_TREE, e)
-  //    }
-  //  }
+    private[converter] def configGraph(receivedMessage: JsValue): JsValue = {
+//      Json.fromJson[JsonConfigTreeIn](receivedMessage) match {
+//        case configTreeIn: JsSuccess[JsonConfigTreeIn] => Json.toJson(admin.getConfigTree(configTreeIn.get))
+//        case e : JsError => jsonError(JsonNames.CONFIG_TREE, e)
+//      }
+      ???
+    }
 }

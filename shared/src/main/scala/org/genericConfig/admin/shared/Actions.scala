@@ -16,6 +16,7 @@ object Actions {
   val DELETE_CONFIG : String = "DELETE_CONFIG"
   val GET_CONFIGS : String = "GET_CONFIGS"
   val UPDATE_CONFIG : String = "UPDATE_CONFIG"
+  val CONFIG_GRAPH : String = "CONFIG_GRAPH"
 
   val ADD_STEP : String = "ADD_STEP"
   val DELETE_STEP : String = "DELETE_STEP"
