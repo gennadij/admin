@@ -7,6 +7,7 @@ import org.genericConfig.admin.models.persistence.orientdb.{GraphCommon, GraphCo
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigResultDTO, UserConfigDTO}
+import org.genericConfig.admin.shared.configGraph.ConfigGraphDTO
 import org.genericConfig.admin.shared.configTree.bo.{ComponentForConfigTreeBO, ConfigTreeBO, StepForConfigTreeBO}
 
 /**
@@ -52,10 +53,25 @@ object Config {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param configTreeBO: ConfigTreeBOs
-    * @return ConfigTreeBO
+    * @param configGraphDTO : ConfigGraphDTO
+    * @return ConfigGraphDTO
     */
-  def getConfigTree(configTreeBO: ConfigTreeBO): ConfigTreeBO = {
+  /*
+  TODO
+  - hole erste Schritt
+  - berechne die Position
+  - fuege diesees Schritt zu der stepps hinzu
+  - hole alle Komponente des Schrittes
+  - berechne die Position
+  - fuege alle Komponente zu der components hinzu
+  - füge ids des Schrittes und Komponenten zu der edges hinzu
+    - laufe ueber alle Komponente und hole der Schritt der Komponente
+    - fuege den Schritt zu steps (Set anwenden)
+  - unabhängig von existenz des Schrittes in steps Edge Komponent <-> Step zu edges hinzufuegen.
+
+  */
+  def ConfigGraph(configGraphDTO: ConfigGraphDTO): ConfigGraphDTO = {
+    //getFirstStep(configId)
     ??? //new Config().getConfigTree(configTreeBO)
   }
 

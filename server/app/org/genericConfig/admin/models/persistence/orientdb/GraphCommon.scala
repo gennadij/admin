@@ -20,7 +20,7 @@ object GraphCommon {
   /**
    * @author Gennadi Heimann
    * @version 0.1.6
-   * @param outRid : String, inId: String
+   * @param outRid : String, inRid: String. label : String
    * @return Option[Error)
    */
   def appendTo(outRid: String, inRid: String, label : String): Option[Error] = {
@@ -36,7 +36,7 @@ object GraphCommon {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param rId : String
+    * @param rId : String, clazz : String
     * @return Option[Error)
     */
   def deleteVertex(rId: String, clazz : String): Option[Error] = {
@@ -56,12 +56,13 @@ object GraphCommon {
     * @return (Option[StepForConfigTreeBO], StatusGetConfigTree, Status)
     */
   def configGraph(configId: String): (Option[OrientVertex], Option[Error]) = {
-    (Database.getFactory(): @unchecked) match {
-      case (Some(dbFactory), None) =>
-        new GraphCommon(dbFactory.getTx).configGraph(configId)
-      case (None, Some(ODBConnectionFail())) =>
-        (None, Some(ODBConnectionFail())
-    }
+    ???
+//    (Database.getFactory(): @unchecked) match {
+//      case (Some(dbFactory), None) =>
+//        new GraphCommon(dbFactory.getTx).configGraph(configId)
+//      case (None, Some(ODBConnectionFail())) =>
+//        (None, Some(ODBConnectionFail())
+//    }
   }
 }
 
