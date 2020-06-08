@@ -1,7 +1,8 @@
 package org.genericConfig.admin.models.logic
 
 import com.orientechnologies.orient.core.sql.OCommandSQL
-import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientEdge, OrientGraph, OrientVertex}
+import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientEdge, OrientElement, OrientGraph, OrientVertex}
+import com.typesafe.config.impl.ConfigNodeComment
 import org.genericConfig.admin.models.common.Error
 import org.genericConfig.admin.models.persistence.Database
 import org.genericConfig.admin.models.persistence.orientdb.GraphCommon
@@ -29,38 +30,48 @@ object ConfigGraph {
 class ConfigGraph() {
 
   def configGraph(configGraphDTO: ConfigGraphDTO) : ConfigGraphDTO = {
-    //firstStep
-    val configRid = RidToHash.getRId(configGraphDTO.params.get.configId).get
-    val (vFirstStep, errorFirstStep) : (Option[OrientVertex], Option[Error]) = GraphCommon.getVertex(configRid)
 
-    errorFirstStep match {
-      case None => getLevel(vFirstStep.get.getIdentity.toString)
+    val configRid : String = RidToHash.getRId(configGraphDTO.params.get.configId).get
+    val (orientElems, error) : (Option[List[OrientElement]], Option[Error]) = GraphCommon.traverse(configRid)
+
+    error match {
+      case None =>
+        val steps : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == "Step")
+        val components : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == "Component")
+        val hasStep : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == "hasStep")
+        val hasComponent : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == "hasComponent")
+
+
+
+
+        ???
       case Some(error) => ???
     }
 
-    import scala.collection.JavaConverters._
-    val graph: OrientGraph = Database.getFactory()._1.get.getTx
-    //traverse * from (select @rid from AdminUser where username like "userUpdateComponent")
-    val sql: String = s"traverse * from (select @rid from AdminUser where username like 'userUpdateComponent')"
-    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
-    val elementIterable = res.asScala.toList
-    val vertex = elementIterable.filter(_.isInstanceOf[OrientVertex])
-    val edges = elementIterable.filter(_.isInstanceOf[OrientEdge])
-    val vAdminUser = vertex.filter(_.asInstanceOf[OrientVertex].getRecord().getClassName == "AdminUser")
-    val vStep = vertex.filter(_.asInstanceOf[OrientVertex].getRecord().getClassName == "Step")
-    val vConfig = vertex.filter(_.asInstanceOf[OrientVertex].getRecord().getClassName == "Config")
-    val vComponent = vertex.filter(_.asInstanceOf[OrientVertex].getRecord().getClassName == "Component")
-    val eHasStep = edges.filter(_.asInstanceOf[OrientEdge].getRecord.getClassName == "hasStep")
-    val eHasComponent = edges.filter(_.asInstanceOf[OrientEdge].getRecord.getClassName == "hasComponent")
 
-    edges.foreach(elem => {println(elem.asInstanceOf[OrientEdge].getRecord.getClassName)})
-
-    vAdminUser.foreach(elem => {println(elem)})
-    vStep.foreach(elem => {println(elem)})
-    vConfig.foreach(elem => {println(elem)})
-    vComponent.foreach(elem => {println(elem)})
-    eHasComponent.foreach(elem => {println(elem)})
-    eHasStep.foreach(elem => {println(elem.asInstanceOf[OrientEdge].getOutVertex.getIdentity)})
+    //import scala.collection.JavaConverters._
+    //val graph: OrientGraph = Database.getFactory()._1.get.getTx
+    ////traverse * from (select @rid from AdminUser where username like "userUpdateComponent")
+    //val sql: String = s"traverse * from (select @rid from AdminUser where username like 'userUpdateComponent')"
+    //val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+    //val elementIterable = res.asScala.toList
+    //val vertex = elementIterable.filter(_.isInstanceOf[OrientVertex])
+    //val edges = elementIterable.filter(_.isInstanceOf[OrientEdge])
+    //val vAdminUser = vertex.filter(_.asInstanceOf[OrientVertex].getRecord().getClassName == "AdminUser")
+    //val vStep = vertex.filter(_.asInstanceOf[OrientVertex].getRecord().getClassName == "Step")
+    //val vConfig = vertex.filter(_.asInstanceOf[OrientVertex].getRecord().getClassName == "Config")
+    //val vComponent = vertex.filter(_.asInstanceOf[OrientVertex].getRecord().getClassName == "Component")
+    //val eHasStep = edges.filter(_.asInstanceOf[OrientEdge].getRecord.getClassName == "hasStep")
+    //val eHasComponent = edges.filter(_.asInstanceOf[OrientEdge].getRecord.getClassName == "hasComponent")
+    //
+    //edges.foreach(elem => {println(elem.asInstanceOf[OrientEdge].getRecord.getClassName)})
+    //
+    //vAdminUser.foreach(elem => {println(elem)})
+    //vStep.foreach(elem => {println(elem)})
+    //vConfig.foreach(elem => {println(elem)})
+    //vComponent.foreach(elem => {println(elem)})
+    //eHasComponent.foreach(elem => {println(elem)})
+    //eHasStep.foreach(elem => {println(elem.asInstanceOf[OrientEdge].getOutVertex.getIdentity)})
 
 
 

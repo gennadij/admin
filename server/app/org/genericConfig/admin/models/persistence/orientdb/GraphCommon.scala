@@ -2,7 +2,7 @@ package org.genericConfig.admin.models.persistence.orientdb
 
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
-import com.tinkerpop.blueprints.impls.orient.{OrientEdge, OrientGraph, OrientVertex}
+import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientEdge, OrientElement, OrientGraph, OrientVertex}
 import org.genericConfig.admin.models.common.{DefectRIdError, Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBWriteError}
 import org.genericConfig.admin.models.persistence.Database
 import play.api.Logger
@@ -16,12 +16,12 @@ import play.api.Logger
 object GraphCommon {
 
   /**
-   * @author Gennadi Heimann
-   * @version 0.1.6
-   * @param outRid : String, inRid: String. label : String
-   * @return Option[Error)
-   */
-  def appendTo(outRid: String, inRid: String, label : String): Option[Error] = {
+    * @author Gennadi Heimann
+    * @version 0.1.6
+    * @param outRid : String, inRid: String. label : String
+    * @return Option[Error)
+    */
+  def appendTo(outRid: String, inRid: String, label: String): Option[Error] = {
     (Database.getFactory(): @unchecked) match {
       case (Some(dbFactory), None) =>
         val graph: OrientGraph = dbFactory.getTx
@@ -37,7 +37,7 @@ object GraphCommon {
     * @param rId : String, clazz : String
     * @return Option[Error)
     */
-  def deleteVertex(rId: String, clazz : String): Option[Error] = {
+  def deleteVertex(rId: String, clazz: String): Option[Error] = {
     (Database.getFactory(): @unchecked) match {
       case (Some(dbFactory), None) =>
         val graph: OrientGraph = dbFactory.getTx
@@ -55,24 +55,22 @@ object GraphCommon {
     */
   def configGraph(configId: String): (Option[OrientVertex], Option[Error]) = {
     ???
-//    (Database.getFactory(): @unchecked) match {
-//      case (Some(dbFactory), None) =>
-//        new GraphCommon(dbFactory.getTx).configGraph(configId)
-//      case (None, Some(ODBConnectionFail())) =>
-//        (None, Some(ODBConnectionFail())
-//    }
+    //    (Database.getFactory(): @unchecked) match {
+    //      case (Some(dbFactory), None) =>
+    //        new GraphCommon(dbFactory.getTx).configGraph(configId)
+    //      case (None, Some(ODBConnectionFail())) =>
+    //        (None, Some(ODBConnectionFail())
+    //    }
   }
 
-  def getVertex(rId : String) : (Option[OrientVertex], Option[Error]) = {
+  def traverse(rId: String) : (Option[List[OrientElement]], Option[Error]) = {
     (Database.getFactory(): @unchecked) match {
-      case (Some(dbFactory), None) => ???
-//        new GraphCommon(dbFactory.getTx)
-      case (None, Some(ODBConnectionFail())) =>
-        (None, Some(ODBConnectionFail()))
+      case (Some(dbFactory), None) => new GraphCommon(dbFactory.getTx).traverse(rId)
+      case (None, Some(ODBConnectionFail())) => (None, Some(ODBConnectionFail()))
     }
   }
 
-  def getEdgesOut(rId : String) : (Option[List[OrientEdge]], Option[Error]) = {
+  def getVertex(rId: String): (Option[OrientVertex], Option[Error]) = {
     (Database.getFactory(): @unchecked) match {
       case (Some(dbFactory), None) => ???
       //        new GraphCommon(dbFactory.getTx)
@@ -81,7 +79,16 @@ object GraphCommon {
     }
   }
 
-  def getEdgesIn(rId : String)  : (Option[OrientEdge], Option[Error]) = {
+  def getEdgesOut(rId: String): (Option[List[OrientEdge]], Option[Error]) = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), None) => ???
+      //        new GraphCommon(dbFactory.getTx)
+      case (None, Some(ODBConnectionFail())) =>
+        (None, Some(ODBConnectionFail()))
+    }
+  }
+
+  def getEdgesIn(rId: String): (Option[OrientEdge], Option[Error]) = {
     (Database.getFactory(): @unchecked) match {
       case (Some(dbFactory), None) => ???
       //        new GraphCommon(dbFactory.getTx)
@@ -90,7 +97,6 @@ object GraphCommon {
     }
   }
 }
-
 
 class GraphCommon(graph: OrientGraph) {
 
@@ -141,6 +147,28 @@ class GraphCommon(graph: OrientGraph) {
        Some(ODBWriteError())
    }
  }
+
+  private def traverse(rId: String): (Option[List[OrientElement]], Option[Error]) = {
+    try {
+      import scala.collection.JavaConverters._
+      val sql : String = s"traverse * from $rId"
+      val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+      (Some(res.asScala.toList.map(_.asInstanceOf[OrientElement])), None)
+    } catch {
+      case e: ORecordDuplicatedException =>
+        Logger.error(e.printStackTrace().toString)
+        graph.rollback()
+        (None, Some(ODBRecordDuplicated()))
+      case e: ClassCastException =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (None, Some(ODBClassCastError()))
+      case e: Exception =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (None, Some(ODBWriteError()))
+    }
+  }
 
 //  /**
 //    * Converting of the rid to hash from steps and components is here

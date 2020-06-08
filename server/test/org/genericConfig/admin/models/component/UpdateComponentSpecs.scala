@@ -76,5 +76,4 @@ class UpdateComponentSpecs extends Specification
     Logger.info("UPDATE_COMPONENT <- " + resultJsValue)
     updateCROnlyNameToShow = Json.fromJson[ComponentDTO](resultJsValue)
   }
-
 }
