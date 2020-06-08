@@ -2,11 +2,9 @@ package org.genericConfig.admin.models.persistence.orientdb
 
 import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
-import com.tinkerpop.blueprints.impls.orient.{OrientGraph, OrientVertex}
+import com.tinkerpop.blueprints.impls.orient.{OrientEdge, OrientGraph, OrientVertex}
 import org.genericConfig.admin.models.common.{DefectRIdError, Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBWriteError}
 import org.genericConfig.admin.models.persistence.Database
-import org.genericConfig.admin.shared.configTree.bo._
-import org.genericConfig.admin.shared.configTree.status._
 import play.api.Logger
 
 
@@ -56,11 +54,39 @@ object GraphCommon {
     * @return (Option[StepForConfigTreeBO], StatusGetConfigTree, Status)
     */
   def configGraph(configId: String): (Option[OrientVertex], Option[Error]) = {
+    ???
+//    (Database.getFactory(): @unchecked) match {
+//      case (Some(dbFactory), None) =>
+//        new GraphCommon(dbFactory.getTx).configGraph(configId)
+//      case (None, Some(ODBConnectionFail())) =>
+//        (None, Some(ODBConnectionFail())
+//    }
+  }
+
+  def getVertex(rId : String) : (Option[OrientVertex], Option[Error]) = {
     (Database.getFactory(): @unchecked) match {
-      case (Some(dbFactory), None) =>
-        new GraphCommon(dbFactory.getTx).configGraph(configId)
+      case (Some(dbFactory), None) => ???
+//        new GraphCommon(dbFactory.getTx)
       case (None, Some(ODBConnectionFail())) =>
-        (None, Some(ODBConnectionFail())
+        (None, Some(ODBConnectionFail()))
+    }
+  }
+
+  def getEdgesOut(rId : String) : (Option[List[OrientEdge]], Option[Error]) = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), None) => ???
+      //        new GraphCommon(dbFactory.getTx)
+      case (None, Some(ODBConnectionFail())) =>
+        (None, Some(ODBConnectionFail()))
+    }
+  }
+
+  def getEdgesIn(rId : String)  : (Option[OrientEdge], Option[Error]) = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), None) => ???
+      //        new GraphCommon(dbFactory.getTx)
+      case (None, Some(ODBConnectionFail())) =>
+        (None, Some(ODBConnectionFail()))
     }
   }
 }
@@ -68,12 +94,6 @@ object GraphCommon {
 
 class GraphCommon(graph: OrientGraph) {
 
-  /**
-   * @author Gennadi Heimann
-   * @version 0.1.6
-   * @param outRid: String, inRid: String, label : String
-   * @return Option[Error]
-   */
   private def appendTo(outRid: String, inRid: String, label : String) : Option[Error] = {
     try {
       val vOut : OrientVertex = graph.getVertex(outRid)
