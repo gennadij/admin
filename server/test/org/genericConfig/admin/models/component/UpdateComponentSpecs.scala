@@ -1,15 +1,16 @@
 package org.genericConfig.admin.models.component
 
 import org.genericConfig.admin.controllers.websocket.WebClient
-import org.genericConfig.admin.models.{CommonFunction, common}
 import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.models.persistence.orientdb.PropertyKeys
+import org.genericConfig.admin.models.{CommonFunction, common}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.component.{ComponentConfigPropertiesDTO, ComponentDTO, ComponentParamsDTO, ComponentUserPropertiesDTO}
 import org.specs2.mutable.Specification
 import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
 import play.api.libs.json.{JsResult, JsValue, Json}
+
 
 /**
   * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -47,6 +48,7 @@ class UpdateComponentSpecs extends Specification
   }
 
   def before(): Unit = {
+
     val wC: WebClient = WebClient.init
     val username = "userUpdateComponent"
     val userId = createUser(username, wC)
@@ -56,7 +58,7 @@ class UpdateComponentSpecs extends Specification
     val stepId = addStep(nameToShow, Some(configId), kind, 1, 1, wC)
     val componentId : Option[String] = createComponent(wC, stepId, Some("ComponentToUpdate"))
 
-    val deleteComponent: JsValue = Json.toJson(ComponentDTO(
+    val updateComponent: JsValue = Json.toJson(ComponentDTO(
       action = Actions.UPDATE_COMPONENT,
       params = Some(ComponentParamsDTO(
         configProperties = Some(ComponentConfigPropertiesDTO(
@@ -69,8 +71,8 @@ class UpdateComponentSpecs extends Specification
       ))
     ))
 
-    Logger.info("UPDATE_COMPONENT -> " + deleteComponent)
-    val resultJsValue : JsValue = wC.handleMessage(deleteComponent)
+    Logger.info("UPDATE_COMPONENT -> " + updateComponent)
+    val resultJsValue : JsValue = wC.handleMessage(updateComponent)
     Logger.info("UPDATE_COMPONENT <- " + resultJsValue)
     updateCROnlyNameToShow = Json.fromJson[ComponentDTO](resultJsValue)
   }
