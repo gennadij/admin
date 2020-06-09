@@ -1,13 +1,11 @@
 package org.genericConfig.admin.models.logic
 
-import com.orientechnologies.orient.core.sql.OCommandSQL
-import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientEdge, OrientElement, OrientGraph, OrientVertex}
-import com.typesafe.config.impl.ConfigNodeComment
+import com.tinkerpop.blueprints.Direction
+import com.tinkerpop.blueprints.impls.orient.{OrientElement, OrientVertex}
 import org.genericConfig.admin.models.common.Error
-import org.genericConfig.admin.models.persistence.Database
-import org.genericConfig.admin.models.persistence.orientdb.GraphCommon
+import org.genericConfig.admin.models.persistence.orientdb.{GraphCommon, PropertyKeys}
 import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.configGraph.{ConfigGraphComponentDTO, ConfigGraphDTO, ConfigGraphEdgeDTO, ConfigGraphStepDTO}
+import org.genericConfig.admin.shared.configGraph.{ConfigGraphComponentDTO, ConfigGraphDTO, ConfigGraphStepDTO}
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -41,6 +39,9 @@ class ConfigGraph() {
         val hasStep : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == "hasStep")
         val hasComponent : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == "hasComponent")
 
+        steps.map(step => {
+          step.asInstanceOf[OrientVertex].getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT)
+        })
 
 
 
@@ -80,22 +81,46 @@ class ConfigGraph() {
     )
   }
 
-  def getLevel(stepRId: String) : (Set[ConfigGraphStepDTO], Set[ConfigGraphComponentDTO], List[ConfigGraphEdgeDTO]) = {
-    val (eHasComponents, errorEdges) : (Option[List[OrientEdge]], Option[Error]) = GraphCommon.getEdgesOut(stepRId)
-
-//    val (vComponents, errorComponents) : (Option[List[OrientVertex]], Option[Error]) = eHasComponents.get.map(_.getInVertex)
-//
-    ???
-  }
-
   def calcPosition(
                     countOfElem : Int,
-                    steps : Option[List[ConfigGraphStepDTO]] = None,
-                    components : Option[List[ConfigGraphComponentDTO]] = None) = {
+                    steps : Option[List[OrientElement]] = None,
+                    components : Option[List[OrientElement]] = None
+                  ): (List[ConfigGraphComponentDTO], List[ConfigGraphStepDTO]) = {
     val height : Int = 1000
     val width : Int = 1000
+    var level : Int = 1
+    val levelWidth : Int = width / steps.get.length
+
+    val configGraphStepDTO : List[ConfigGraphStepDTO] = steps.get.map(step => {
+      val y = height / 2
+      val x = level * levelWidth
+      level += 1
+      ConfigGraphStepDTO(
+        id = step.getIdentity.toString,
+        x = x,
+        y = y
+      )
+    })
+
+    level = 2
+
+    val configGraphComponentDTO : List[ConfigGraphComponentDTO] = components.get.map(component => {
+
+      ConfigGraphComponentDTO(
+        id = component.getIdentity.toString,
+        x = 0,
+        y = 0
+      )
+    })
+
+    (configGraphComponentDTO, configGraphStepDTO)
+
     //alle Elem auf einmal berechnet werden.
     //zugehörige Level definieren
+  }
+
+  def calcXPos() = {
+
   }
 
 //  def getComponents(stepRid : String) : (Option[OrientVertex], Option[Error]) = {
