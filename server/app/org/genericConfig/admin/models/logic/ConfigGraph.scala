@@ -1,11 +1,12 @@
 package org.genericConfig.admin.models.logic
 
-import com.tinkerpop.blueprints.Direction
 import com.tinkerpop.blueprints.impls.orient.{OrientElement, OrientVertex}
+import com.tinkerpop.blueprints.{Direction, Edge}
 import org.genericConfig.admin.models.common.Error
 import org.genericConfig.admin.models.persistence.orientdb.{GraphCommon, PropertyKeys}
 import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.configGraph.{ConfigGraphComponentDTO, ConfigGraphDTO, ConfigGraphStepDTO}
+import org.genericConfig.admin.shared.common.ErrorDTO
+import org.genericConfig.admin.shared.configGraph.{ConfigGraphComponentDTO, ConfigGraphDTO, ConfigGraphEdgeDTO, ConfigGraphResultDTO, ConfigGraphStepDTO}
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -38,51 +39,33 @@ class ConfigGraph() {
         val components : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == "Component")
         val hasStep : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == "hasStep")
         val hasComponent : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == "hasComponent")
+        val (configGraphComponentDTO : List[ConfigGraphComponentDTO], configGraphStepDTO : List[ConfigGraphStepDTO]) = calcPosition(
+          Some(steps), Some(components)
+        )
 
-        steps.map(step => {
-          step.asInstanceOf[OrientVertex].getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT)
-        })
+        val edgesHasStep : List[ConfigGraphEdgeDTO] = hasStep.map(hasStep => {
+          ???
+      })
 
-
-
-        ???
-      case Some(error) => ???
+        ConfigGraphDTO(
+          action = Actions.CONFIG_GRAPH,
+          result = Some(ConfigGraphResultDTO(
+            steps = Some(configGraphStepDTO),
+            components = Some(configGraphComponentDTO),
+            edges = Some(List()),
+            errors = None
+          )
+        ))
+      case Some(error) => ConfigGraphDTO(
+        action = Actions.CONFIG_GRAPH,
+        result = Some(ConfigGraphResultDTO(
+          errors = Some(List(ErrorDTO(message = error.message, name = error.name, code = error.code)))
+        )
+      ))
     }
-
-
-    //import scala.collection.JavaConverters._
-    //val graph: OrientGraph = Database.getFactory()._1.get.getTx
-    ////traverse * from (select @rid from AdminUser where username like "userUpdateComponent")
-    //val sql: String = s"traverse * from (select @rid from AdminUser where username like 'userUpdateComponent')"
-    //val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
-    //val elementIterable = res.asScala.toList
-    //val vertex = elementIterable.filter(_.isInstanceOf[OrientVertex])
-    //val edges = elementIterable.filter(_.isInstanceOf[OrientEdge])
-    //val vAdminUser = vertex.filter(_.asInstanceOf[OrientVertex].getRecord().getClassName == "AdminUser")
-    //val vStep = vertex.filter(_.asInstanceOf[OrientVertex].getRecord().getClassName == "Step")
-    //val vConfig = vertex.filter(_.asInstanceOf[OrientVertex].getRecord().getClassName == "Config")
-    //val vComponent = vertex.filter(_.asInstanceOf[OrientVertex].getRecord().getClassName == "Component")
-    //val eHasStep = edges.filter(_.asInstanceOf[OrientEdge].getRecord.getClassName == "hasStep")
-    //val eHasComponent = edges.filter(_.asInstanceOf[OrientEdge].getRecord.getClassName == "hasComponent")
-    //
-    //edges.foreach(elem => {println(elem.asInstanceOf[OrientEdge].getRecord.getClassName)})
-    //
-    //vAdminUser.foreach(elem => {println(elem)})
-    //vStep.foreach(elem => {println(elem)})
-    //vConfig.foreach(elem => {println(elem)})
-    //vComponent.foreach(elem => {println(elem)})
-    //eHasComponent.foreach(elem => {println(elem)})
-    //eHasStep.foreach(elem => {println(elem.asInstanceOf[OrientEdge].getOutVertex.getIdentity)})
-
-
-
-    ConfigGraphDTO(
-      action = Actions.CONFIG_GRAPH
-    )
   }
 
-  def calcPosition(
-                    countOfElem : Int,
+  private def calcPosition(
                     steps : Option[List[OrientElement]] = None,
                     components : Option[List[OrientElement]] = None
                   ): (List[ConfigGraphComponentDTO], List[ConfigGraphStepDTO]) = {
@@ -94,36 +77,34 @@ class ConfigGraph() {
     val configGraphStepDTO : List[ConfigGraphStepDTO] = steps.get.map(step => {
       val y = height / 2
       val x = level * levelWidth
-      level += 1
+      level += 2
       ConfigGraphStepDTO(
         id = step.getIdentity.toString,
         x = x,
         y = y
       )
     })
+    import scala.collection.JavaConverters._
+
+    val componentsPerLevel : List[Int] = steps.get.map(step => {
+      val edges : java.lang.Iterable[Edge] = step.asInstanceOf[OrientVertex].getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT)
+      edges.asScala.toList.length
+    })
 
     level = 2
-
+    var count : Int = 0
     val configGraphComponentDTO : List[ConfigGraphComponentDTO] = components.get.map(component => {
-
+      val x = level * levelWidth
+      val y = height / componentsPerLevel(count)
+      level += 2
+      count += 1
       ConfigGraphComponentDTO(
         id = component.getIdentity.toString,
-        x = 0,
-        y = 0
+        x = x,
+        y = y
       )
     })
 
     (configGraphComponentDTO, configGraphStepDTO)
-
-    //alle Elem auf einmal berechnet werden.
-    //zugehörige Level definieren
   }
-
-  def calcXPos() = {
-
-  }
-
-//  def getComponents(stepRid : String) : (Option[OrientVertex], Option[Error]) = {
-//    val (eHasComponent, error) : (Option[OrientEdge], Option[Error]) = GraphCommon.getEdgesOut(stepRid)
-//  }
 }
