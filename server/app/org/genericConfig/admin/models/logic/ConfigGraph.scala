@@ -1,6 +1,6 @@
 package org.genericConfig.admin.models.logic
 
-import com.tinkerpop.blueprints.impls.orient.{OrientElement, OrientVertex}
+import com.tinkerpop.blueprints.impls.orient.{OrientEdge, OrientElement, OrientVertex}
 import com.tinkerpop.blueprints.{Direction, Edge}
 import org.genericConfig.admin.models.common.Error
 import org.genericConfig.admin.models.persistence.orientdb.{GraphCommon, PropertyKeys}
@@ -22,7 +22,7 @@ object ConfigGraph {
    */
 
   def configGraph(configGraphDTO: ConfigGraphDTO) : ConfigGraphDTO = {
-    ???
+    new ConfigGraph().configGraph(configGraphDTO)
   }
 }
 
@@ -35,24 +35,40 @@ class ConfigGraph() {
 
     error match {
       case None =>
-        val steps : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == "Step")
-        val components : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == "Component")
-        val hasStep : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == "hasStep")
-        val hasComponent : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == "hasComponent")
+        val steps : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.VERTEX_STEP)
+        val components : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.VERTEX_COMPONENT)
+        val hasSteps : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_STEP)
+        val hasComponents : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_COMPONENT)
         val (configGraphComponentDTO : List[ConfigGraphComponentDTO], configGraphStepDTO : List[ConfigGraphStepDTO]) = calcPosition(
           Some(steps), Some(components)
         )
 
-        val edgesHasStep : List[ConfigGraphEdgeDTO] = hasStep.map(hasStep => {
-          ???
-      })
+        val edgesHasSteps : List[ConfigGraphEdgeDTO] = hasSteps.map(hasStep => {
+          val target : String = hasStep.asInstanceOf[OrientEdge].getInVertex.getIdentity.toString
+          val source : String = hasStep.asInstanceOf[OrientEdge].getOutVertex.getIdentity.toString
+          ConfigGraphEdgeDTO(
+            source = source,
+            target = target
+          )
+        })
+
+        val edgesHasComponents : List[ConfigGraphEdgeDTO] = hasComponents.map(hasComponent => {
+          val target : String = hasComponent.asInstanceOf[OrientEdge].getInVertex.getIdentity.toString
+          val source : String = hasComponent.asInstanceOf[OrientEdge].getOutVertex.getIdentity.toString
+          ConfigGraphEdgeDTO(
+            source = source,
+            target = target
+          )
+        })
+
+        val edges : List[ConfigGraphEdgeDTO] = edgesHasSteps ::: edgesHasComponents
 
         ConfigGraphDTO(
           action = Actions.CONFIG_GRAPH,
           result = Some(ConfigGraphResultDTO(
             steps = Some(configGraphStepDTO),
             components = Some(configGraphComponentDTO),
-            edges = Some(List()),
+            edges = Some(edges),
             errors = None
           )
         ))

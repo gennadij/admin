@@ -8,7 +8,7 @@ import play.api.libs.json._
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  *
- * Created by Gennadi Heimann ${date}
+ * Created by Gennadi Heimann 10.06.2020
  */
 trait ConverterJsonDTOForConfig extends ConverterJsonDTOForCommon {
   private[converter] def addConfig(receivedMessage: JsValue): JsValue = {
@@ -38,12 +38,4 @@ trait ConverterJsonDTOForConfig extends ConverterJsonDTOForCommon {
       case e: JsError => jsonError(Actions.UPDATE_CONFIG, e)
     }
   }
-
-    private[converter] def configGraph(receivedMessage: JsValue): JsValue = {
-//      Json.fromJson[JsonConfigTreeIn](receivedMessage) match {
-//        case configTreeIn: JsSuccess[JsonConfigTreeIn] => Json.toJson(admin.getConfigTree(configTreeIn.get))
-//        case e : JsError => jsonError(JsonNames.CONFIG_TREE, e)
-//      }
-      ???
-    }
 }
