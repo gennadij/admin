@@ -32,12 +32,12 @@ trait ConverterJsonDTOForComponent extends ConverterJsonDTOForCommon{
         case e: JsError => jsonError(Actions.UPDATE_COMPONENT, e)
       }
     }
-  //  private def connectComponentToStep(receivedMessage: JsValue, admin: Admin): JsValue = {
-  //    Json.fromJson[JsonStepIn](receivedMessage) match {
-  //      case stepIn : JsSuccess[JsonStepIn] => Json.toJson(admin.connectComponentToStep(stepIn.get))
-  //      case e : JsError => jsonError(JsonNames.CONNECT_COMPONENT_TO_STEP, e)
-  //    }
-  //  }
+    private[converter] def connectComponentToStep(receivedMessage: JsValue): JsValue = {
+      Json.fromJson[ComponentDTO](receivedMessage) match {
+        case s : JsSuccess[ComponentDTO] => Json.toJson(Component.connectComponentToStep(s.get))
+        case e : JsError => jsonError(Actions.CONNECT_COMPONENT_TO_STEP, e)
+      }
+    }
   //
   ////  private def connectComponentToStep(receivedMessage: JsValue, admin: Admin): JsValue = {
   ////    val connectionComponentToStepIn: JsResult[JsonConnectionComponentToStepIn] =

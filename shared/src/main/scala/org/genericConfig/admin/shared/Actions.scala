@@ -25,6 +25,7 @@ object Actions {
   val ADD_COMPONENT : String = "ADD_COMPONENT"
   val DELETE_COMPONENT : String = "DELETE_COMPONENT"
   val UPDATE_COMPONENT : String = "UPDATE_COMPONENT"
+  val CONNECT_COMPONENT_TO_STEP : String = "CONNECT_COMPONENT_TO_STEP"
 
   val ERROR : String = "ERROR"
 }

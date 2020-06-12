@@ -38,7 +38,7 @@ trait MessageHandler
 
       case Some(Actions.CONFIG_GRAPH) => configGraph(receivedMessage)
 
-      //      case Some(JsonNames.CONNECT_COMPONENT_TO_STEP) => connectComponentToStep(receivedMessage, admin)
+      case Some(Actions.CONNECT_COMPONENT_TO_STEP) => connectComponentToStep(receivedMessage)
 
       //      case Some(JsonNames.CREATE_DEPENDENCY) => createDependency(receivedMessage, admin)
       //      case Some(JsonNames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL) =>

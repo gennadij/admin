@@ -1,6 +1,6 @@
 package org.genericConfig.admin.models.logic
 
-import com.tinkerpop.blueprints.impls.orient.OrientVertex
+import com.tinkerpop.blueprints.impls.orient.{OrientEdge, OrientVertex}
 import org.genericConfig.admin.models.common.Error
 import org.genericConfig.admin.models.persistence.orientdb.{GraphCommon, GraphComponent, PropertyKeys}
 import org.genericConfig.admin.shared.Actions
@@ -42,6 +42,16 @@ object Component {
     */
   def updateComponent(componentDTO: ComponentDTO): ComponentDTO = {
     new Component().updateComponent(componentDTO = componentDTO)
+  }
+
+  /**
+    * @author Gennadi Heimann
+    * @version 0.1.0
+    * @param componentDTO: ComponentDTO
+    * @return ComponentDTO
+    */
+  def connectComponentToStep(componentDTO: ComponentDTO) : ComponentDTO = {
+    new Component().connectComponentToStep(componentDTO)
   }
 }
 
@@ -99,11 +109,32 @@ class Component {
     }
   }
 
+  def connectComponentToStep(componentDTO: ComponentDTO) : ComponentDTO = {
+    val stepRid : String = RidToHash.getRId(componentDTO.params.get.configProperties.get.stepId.get).get
+    val componentRid : String = RidToHash.getRId(componentDTO.params.get.configProperties.get.componentId.get).get
+
+    val error : Option[Error] = GraphCommon.appendTo(componentRid, stepRid, PropertyKeys.EDGE_HAS_STEP)
+
+    error match {
+      case None => createComponentDTO(
+        action = Actions.CONNECT_COMPONENT_TO_STEP,
+        componentRid = Some(componentRid),
+        stepRid = Some(stepRid),
+        nameToShow = None,
+        errors = None
+      )
+      case Some(e) => createComponentDTO(
+        action = Actions.CONNECT_COMPONENT_TO_STEP,
+        errors = Some(List(e))
+      )
+    }
+  }
+
   private def createComponentDTO(
                           action : String,
-                          componentRid : Option[String],
-                          stepRid : Option[String],
-                          nameToShow : Option[String],
+                          componentRid : Option[String] = None,
+                          stepRid : Option[String] = None,
+                          nameToShow : Option[String] = None,
                           errors : Option[List[Error]]): ComponentDTO = {
     val e =  errors match {
       case None => None

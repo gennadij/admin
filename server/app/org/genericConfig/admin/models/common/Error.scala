@@ -131,3 +131,9 @@ case class ODBConnectionFail() extends Error {
   def message: String = "Beim Laden hat einen Fehler in Datenbank aufgetreten"
   def code : String = ""
 }
+
+case class ODBCommandSQLParsingException() extends Error {
+  def name: String = "ODB_COMMAND_SQL_PARSING"
+  def message: String = "Beim Laden hat einen Fehler in Datenbank aufgetreten"
+  def code : String = ""
+}

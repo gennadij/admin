@@ -15,14 +15,14 @@ object RidToHash {
   var idHash: mutable.Map[String, String] = scala.collection.mutable.Map[String, String]()
   
   
-  def setIdAndHash(id: String): (String, String) = if (idHash.exists(_._1 == id)) {
-//    idHash.foreach(item => Logger.info("Item" + item.toString))
-    (id, calculateHash(id))
-  } else {
-    val hash = calculateHash(id)
-    idHash += (id -> hash)
-//    idHash.foreach(item => Logger.info("Item" + item.toString))
-    (id, hash)
+  def setIdAndHash(id: String): (String, String) = {
+    if (idHash.exists(_._1 == id)) {
+      (id, calculateHash(id))
+    } else {
+      val hash = calculateHash(id)
+      idHash += (id -> hash)
+      (id, hash)
+    }
   }
   
   def getRId(hash: String): Option[String] = {

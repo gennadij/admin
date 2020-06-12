@@ -128,7 +128,7 @@ trait CommonFunction {
   def addStep(
                nameToShow : Option[String],
                configId : Option[String],
-               kind : Option[String],
+               kind : Option[String] = Some("undefined"),
                min : Int,
                max : Int,
                wC : WebClient
@@ -175,7 +175,7 @@ trait CommonFunction {
             stepId = stepId
           )),
           userProperties = Some(ComponentUserPropertiesDTO(
-            nameToShow = Some("Component_1_1")
+            nameToShow = nameToShow
           ))
         ))
       ))
@@ -233,12 +233,12 @@ trait CommonFunction {
 //    jsConfigsIds map (jsCId => (jsCId \ "configId").asOpt[String].get)
 //  }
 
-  def getConfigTree(configId: String): ConfigTreeBO = {
-    val getCondifTreeBOIn = ConfigTreeBO(
-      configId = Some(configId)
-    )
-    Config.getConfigTree(getCondifTreeBOIn)
-  }
+//  def getConfigTree(configId: String): ConfigTreeBO = {
+//    val getCondifTreeBOIn = ConfigTreeBO(
+//      configId = Some(configId)
+//    )
+//    Config.getConfigTree(getCondifTreeBOIn)
+//  }
 
   def deleteUser(username: String): Int = {
     val graph: OrientGraph = Database.getFactory()._1.orNull.getTx

@@ -1,6 +1,6 @@
 package org.genericConfig.admin.models.persistence.orientdb
 
-import com.orientechnologies.orient.core.sql.OCommandSQL
+import com.orientechnologies.orient.core.sql.{OCommandSQL, OCommandSQLParsingException}
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
 import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientEdge, OrientElement, OrientGraph, OrientVertex}
 import org.genericConfig.admin.models.common.{DefectRIdError, Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBWriteError}
@@ -50,19 +50,9 @@ object GraphCommon {
   /**
     * @author Gennadi Heimann
     * @version 0.1.6
-    * @param configId : String
-    * @return (Option[StepForConfigTreeBO], StatusGetConfigTree, Status)
+    * @param rId : String
+    * @return Option[List[OrientElement]], Option[Error]
     */
-  def configGraph(configId: String): (Option[OrientVertex], Option[Error]) = {
-    ???
-    //    (Database.getFactory(): @unchecked) match {
-    //      case (Some(dbFactory), None) =>
-    //        new GraphCommon(dbFactory.getTx).configGraph(configId)
-    //      case (None, Some(ODBConnectionFail())) =>
-    //        (None, Some(ODBConnectionFail())
-    //    }
-  }
-
   def traverse(rId: String) : (Option[List[OrientElement]], Option[Error]) = {
     (Database.getFactory(): @unchecked) match {
       case (Some(dbFactory), None) => new GraphCommon(dbFactory.getTx).traverse(rId)
@@ -79,23 +69,13 @@ object GraphCommon {
     }
   }
 
-  def getEdgesOut(rId: String): (Option[List[OrientEdge]], Option[Error]) = {
-    (Database.getFactory(): @unchecked) match {
-      case (Some(dbFactory), None) => ???
-      //        new GraphCommon(dbFactory.getTx)
-      case (None, Some(ODBConnectionFail())) =>
-        (None, Some(ODBConnectionFail()))
-    }
-  }
-
-  def getEdgesIn(rId: String): (Option[OrientEdge], Option[Error]) = {
-    (Database.getFactory(): @unchecked) match {
-      case (Some(dbFactory), None) => ???
-      //        new GraphCommon(dbFactory.getTx)
-      case (None, Some(ODBConnectionFail())) =>
-        (None, Some(ODBConnectionFail()))
-    }
-  }
+//  def addEdge(outRid : String, inRid : String, edgeLabel : String) : (Option[OrientEdge], Option[Error]) = {
+//    (Database.getFactory(): @unchecked) match {
+//      case (Some(dbFactory), None) => new GraphCommon(dbFactory.getTx).addEdge(outRid, inRid, edgeLabel)
+//      case (None, Some(ODBConnectionFail())) =>
+//        (None, Some(ODBConnectionFail()))
+//    }
+//  }
 }
 
 class GraphCommon(graph: OrientGraph) {
@@ -133,6 +113,10 @@ class GraphCommon(graph: OrientGraph) {
        case _ => Some(DefectRIdError())
      }
    } catch {
+     case e : OCommandSQLParsingException =>
+       Logger.error(e.printStackTrace().toString)
+       graph.rollback()
+       Some(ODBRecordDuplicated())
      case e: ORecordDuplicatedException =>
        Logger.error(e.printStackTrace().toString)
        graph.rollback()
@@ -169,7 +153,28 @@ class GraphCommon(graph: OrientGraph) {
         (None, Some(ODBWriteError()))
     }
   }
-
+//  def addEdge(outRid : String, inRid : String, edgeLabel : String) : (Option[OrientEdge], Option[Error]) = {
+//
+//    try {
+//      val outVertex : OrientVertex = graph.getVertex(outRid)
+//      val inVertex : OrientVertex = graph.getVertex(inRid)
+//      val edge : OrientEdge = outVertex.addEdge(edgeLabel, inVertex).asInstanceOf[OrientEdge]
+//      (Some(edge), None)
+//    } catch {
+//      case e: ORecordDuplicatedException =>
+//        Logger.error(e.printStackTrace().toString)
+//        graph.rollback()
+//        (None, Some(ODBRecordDuplicated()))
+//      case e: ClassCastException =>
+//        graph.rollback()
+//        Logger.error(e.printStackTrace().toString)
+//        (None, Some(ODBClassCastError()))
+//      case e: Exception =>
+//        graph.rollback()
+//        Logger.error(e.printStackTrace().toString)
+//        (None, Some(ODBWriteError()))
+//    }
+//  }
 //  /**
 //    * Converting of the rid to hash from steps and components is here
 //    *
