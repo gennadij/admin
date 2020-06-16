@@ -1,11 +1,11 @@
 package org.genericConfig.admin.models.component
 
 import org.genericConfig.admin.controllers.websocket.WebClient
-import org.genericConfig.admin.models.{CommonFunction, common}
 import org.genericConfig.admin.models.logic.RidToHash
 import org.genericConfig.admin.models.persistence.orientdb.PropertyKeys
+import org.genericConfig.admin.models.{CommonFunction, common}
 import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.component.{ComponentConfigPropertiesDTO, ComponentDTO, ComponentParamsDTO, ComponentUserPropertiesDTO}
+import org.genericConfig.admin.shared.component.{ComponentConfigPropertiesDTO, ComponentDTO, ComponentParamsDTO}
 import org.specs2.mutable.Specification
 import org.specs2.specification.BeforeAfterAll
 import play.api.Logger
@@ -72,10 +72,10 @@ class ConnectComponentToStep extends Specification
     val username = "connectComponentToStep"
     val userId = createUser(username, wC)
     val configId = createConfig(userId, s"http://contig/$username")
-    stepId_S1 = addStep(nameToShow = Some(s"S1_$username"), configId = Some(configId), min = 1, max = 1, wC = wC)
+    stepId_S1 = addStep(nameToShow = Some(s"S1_$username"), outId = Some(configId), min = 1, max = 1, wC = wC)
     componentId_C1 = createComponent(wC, stepId_S1, Some(s"C1_$username"))
     componentId_C2 = createComponent(wC, stepId_S1, Some(s"C2_$username"))
-    stepId_S2 = addStep(nameToShow = Some(s"S2_$username"), configId = componentId_C1, min = 1, max = 1, wC = wC)
+    stepId_S2 = addStep(nameToShow = Some(s"S2_$username"), outId = componentId_C1, min = 1, max = 1, wC = wC)
 
     val connectComponent: JsValue = Json.toJson(ComponentDTO(
       action = Actions.CONNECT_COMPONENT_TO_STEP,
@@ -83,9 +83,6 @@ class ConnectComponentToStep extends Specification
         configProperties = Some(ComponentConfigPropertiesDTO(
           stepId = stepId_S2,
           componentId = componentId_C2
-        )),
-        userProperties = Some(ComponentUserPropertiesDTO(
-          nameToShow = Some("ComponentUpdated")
         ))
       ))
     ))

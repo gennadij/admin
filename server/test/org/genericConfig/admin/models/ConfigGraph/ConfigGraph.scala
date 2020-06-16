@@ -2,10 +2,12 @@ package org.genericConfig.admin.models.ConfigGraph
 
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction
-import org.genericConfig.admin.shared.component.ComponentDTO
+import org.genericConfig.admin.shared.Actions
+import org.genericConfig.admin.shared.configGraph.{ConfigGraphDTO, ConfigGraphParamsDTO}
 import org.specs2.mutable.Specification
 import org.specs2.specification.BeforeAfterAll
-import play.api.libs.json.JsResult
+import play.api.Logger
+import play.api.libs.json.{JsResult, JsValue, Json}
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -15,41 +17,66 @@ import play.api.libs.json.JsResult
 class ConfigGraph extends Specification
                     with BeforeAfterAll
                     with CommonFunction{
-  //#33:60 http://config/client_013  user_v016_4_client
+
   val wC: WebClient = WebClient.init
-  var updateCROnlyNameToShow : JsResult[ComponentDTO] = _
+  var resConfigGraph : JsResult[ConfigGraphDTO] = _
 
   def beforeAll() : Unit = {
+    before()
   }
 
   def afterAll(): Unit = {
   }
 
-  "Der Benutzer veraendert die Komponente" >> {
-    "Es wird nur der Name geaendert" >> {
-      "action = ADD_COMPONENT" >> {"" === ""}
-      "componentId < 32 && > 10" >> {"" === ""}
-      "stepId = None" >> {"" === ""}
-      "nameToShow = ComponentUpdated" >> {"" === ""}
-      "errors = None" >> {"" === ""}
-    }
+  "Der Benutzer ruft der gesamten Konfigurationsgraph auf" >> {
+    "action = CONFIG_GRAPH" >> {resConfigGraph.get.action === Actions.CONFIG_GRAPH}
+    "Anzahl der Schritte = 3" >> {resConfigGraph.get.result.get.steps.get.length === 3}
+    "Anzahl der Komponenten = 9" >> {resConfigGraph.get.result.get.components.get.length === 9}
+    "Anzahl der Kanten = 12" >> {resConfigGraph.get.result.get.edges.get.length === 12}
+    "errors = None" >> {resConfigGraph.get.result.get.errors === None}
+
+    "componentId < 32 && > 10" >> {"" === ""}
+    "stepId = None" >> {"" === ""}
+    "nameToShow = ComponentUpdated" >> {"" === ""}
+    "errors = None" >> {"" === ""}
   }
 
-  def before() = {
+  def before(): Unit = {
     val wC: WebClient = WebClient.init
-    val username = "configGraph"
+    val username = "configGraph_V0.1"
     val userId = createUser(username, wC)
     val configId = createConfig(userId, s"http://contig/$username")
-    val nameToShow: Option[String] = Some(s"S1")
-    val kind : Option[String] = Some("undefined")
 
-    val stepIdS1 : Option[String] = addStep(nameToShow, Some(configId), kind, 1, 1, wC)
-    val componentIdS1C1 : Option[String] = createComponent(wC, stepIdS1, Some("S1_C1"))
-    val componentIdS1C2 : Option[String] = createComponent(wC, stepIdS1, Some("S1_C2"))
-    val componentIdS1C3 : Option[String] = createComponent(wC, stepIdS1, Some("S1_C3"))
+    val stepIdS1 : Option[String] = addStep(nameToShow = Some(s"S1_$username"), outId = Some(configId), min = 1, max = 1, wC = wC)
+    val componentIdS1C1 : Option[String] = createComponent(wC, stepIdS1, Some(s"S1_C1_$username"))
+    val componentIdS1C2 : Option[String] = createComponent(wC, stepIdS1, Some(s"S1_C2_$username"))
+    val componentIdS1C3 : Option[String] = createComponent(wC, stepIdS1, Some(s"S1_C3_$username"))
 
-    val stepIdS2 = addStep(Some(s"S2"), componentIdS1C1, kind, 1, 1, wC)
-    val componentIdS2C1 : Option[String] = createComponent(wC, stepIdS2, Some("C1"))
-    val componentIdS2C2 : Option[String] = createComponent(wC, stepIdS2, Some("C2"))
+    val stepIdS2 = addStep(nameToShow = Some(s"S2_$username"), outId = componentIdS1C1, min = 1, max = 1, wC = wC)
+    val errorS1_C2_S2 = connectComponentToStep(outId = componentIdS1C2.get, inId = stepIdS2.get, wC)
+
+    val componentIdS2C1 : Option[String] = createComponent(wC, stepIdS2, Some(s"S2_C1_$username"))
+    val componentIdS2C2 : Option[String] = createComponent(wC, stepIdS2, Some(s"S2_C2_$username"))
+
+    val stepIdS3 = addStep(nameToShow = Some(s"S3_$username"), outId = componentIdS1C3, min = 1, max = 1, wC = wC)
+
+    val componentIdS3C1 : Option[String] = createComponent(wC, stepIdS3, Some(s"S3_C1_$username"))
+    val componentIdS3C2 : Option[String] = createComponent(wC, stepIdS3, Some(s"S3_C2_$username"))
+    val componentIdS3C3 : Option[String] = createComponent(wC, stepIdS3, Some(s"S3_C3_$username"))
+    val componentIdS3C4 : Option[String] = createComponent(wC, stepIdS3, Some(s"S3_C4_$username"))
+
+    val configGraph: JsValue = Json.toJson(
+      ConfigGraphDTO(
+        action = Actions.CONFIG_GRAPH,
+        params = Some(ConfigGraphParamsDTO(
+          configId = configId
+        ))
+      )
+    )
+
+    Logger.info("CONFIG_GRAPH -> " + configGraph)
+    val resultJsValue : JsValue = wC.handleMessage(configGraph)
+    Logger.info("CONFIG_GRAPH <- " + resultJsValue)
+    resConfigGraph = Json.fromJson[ConfigGraphDTO](resultJsValue)
   }
 }

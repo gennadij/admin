@@ -1,15 +1,16 @@
 package org.genericConfig.admin.models
 
 import com.orientechnologies.orient.core.sql.OCommandSQL
+import com.tinkerpop.blueprints.Direction
 import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientGraph, OrientVertex}
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.logic._
 import org.genericConfig.admin.models.persistence.Database
-import org.genericConfig.admin.models.persistence.orientdb.GraphCommon
+import org.genericConfig.admin.models.persistence.orientdb.{GraphCommon, PropertyKeys}
 import org.genericConfig.admin.shared.Actions
+import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.component.{ComponentConfigPropertiesDTO, ComponentDTO, ComponentParamsDTO, ComponentUserPropertiesDTO}
 import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
-import org.genericConfig.admin.shared.configTree.bo.ConfigTreeBO
 import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepDTO, StepParamsDTO, StepPropertiesDTO}
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import play.api.Logger
@@ -127,73 +128,125 @@ trait CommonFunction {
 
   def addStep(
                nameToShow : Option[String],
-               configId : Option[String],
+               outId : Option[String],
                kind : Option[String] = Some("undefined"),
                min : Int,
                max : Int,
                wC : WebClient
              ) : Option[String] = {
-
-    val stepDTO : JsResult[StepDTO] = Json.fromJson[StepDTO](wC.handleMessage(Json.toJson(StepDTO(
-      action = Actions.ADD_STEP,
-      params = Some(StepParamsDTO(
-        outId = configId,
-        kind = kind,
-        properties = Some(StepPropertiesDTO(
-          nameToShow = nameToShow,
-          selectionCriterion = Some(SelectionCriterionDTO(
-            min = Some(min),
-            max = Some(max)
+    Logger.info("Erstelle neuen Step " + nameToShow)
+    val graph: OrientGraph = Database.getFactory()._1.get.getTx
+    val sql: String = s"select count(*) from Step where nameToShow like '${nameToShow.get}'"
+    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+    val count : Int = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString()).head.toInt
+    if(count < 1 ) {
+      val stepDTO : JsResult[StepDTO] = Json.fromJson[StepDTO](wC.handleMessage(Json.toJson(StepDTO(
+        action = Actions.ADD_STEP,
+        params = Some(StepParamsDTO(
+          outId = outId,
+          kind = kind,
+          properties = Some(StepPropertiesDTO(
+            nameToShow = nameToShow,
+            selectionCriterion = Some(SelectionCriterionDTO(
+              min = Some(min),
+              max = Some(max)
+            ))
           ))
-        ))
-      )),
-      result = None
-    ))))
-    Logger.info("ADD_STEP -> " + stepDTO)
-
-    stepDTO.get.result.get.errors match {
-      case Some(error) =>
-        //select @rid from Step where nameToShow like "FirstStepToUpdate"
-        val graph: OrientGraph = Database.getFactory()._1.get.getTx
-        val sql: String = s"select * from Step where nameToShow like '${nameToShow.get}'"
-        Logger.info(sql)
-        Logger.info("ConfigId : " + RidToHash.getRId(configId.get).get)
-        val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
-        val stepId = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getIdentity.toString()).head
-        Some(RidToHash.setIdAndHash(stepId)._2)
-      case None => stepDTO.asOpt.get.result.get.stepId
-      case _ => None
+        )),
+        result = None
+      ))))
+      Logger.info("ADD_STEP -> " + stepDTO)
+      stepDTO.get.result.get.errors match {
+        case Some(error) =>
+          Logger.info("Beim erstellen von Step ein Fehler aufgetretten")
+          Logger.info("Fehler -> " + error)
+          None
+        case None =>
+          Logger.info("Der neue Step erstellt wurde")
+          stepDTO.asOpt.get.result.get.stepId
+      }
+    }else {
+      val graph: OrientGraph = Database.getFactory()._1.get.getTx
+      val sql: String = s"select * from Step where nameToShow like '${nameToShow.get}'"
+      val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+      val stepId = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getIdentity.toString()).head
+      Logger.info("Der Step existiert bereits")
+      Some(RidToHash.setIdAndHash(stepId)._2)
     }
   }
 
   def createComponent(wC : WebClient, stepId : Option[String], nameToShow : Option[String]) : Option[String] = {
-    val addComponentResult : JsResult[ComponentDTO] = Json.fromJson[ComponentDTO](
-      wC.handleMessage(Json.toJson(ComponentDTO(
-        action = Actions.ADD_COMPONENT,
-        params = Some(ComponentParamsDTO(
-          configProperties = Some(ComponentConfigPropertiesDTO(
-            stepId = stepId
-          )),
-          userProperties = Some(ComponentUserPropertiesDTO(
-            nameToShow = nameToShow
+    Logger.info("Erstelle neu Komponente " + nameToShow)
+    val graph: OrientGraph = Database.getFactory()._1.get.getTx
+    val sql: String = s"select count(*) from Component where nameToShow like '${nameToShow.get}'"
+    val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+    val count : Int = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getProperty("count").toString()).head.toInt
+    if(count < 1) {
+      val addComponentResult : JsResult[ComponentDTO] = Json.fromJson[ComponentDTO](
+        wC.handleMessage(Json.toJson(ComponentDTO(
+          action = Actions.ADD_COMPONENT,
+          params = Some(ComponentParamsDTO(
+            configProperties = Some(ComponentConfigPropertiesDTO(
+              stepId = stepId
+            )),
+            userProperties = Some(ComponentUserPropertiesDTO(
+              nameToShow = nameToShow
+            ))
           ))
         ))
-      ))
-    ))
-    Logger.info("ADD_COMPONENT <- " + addComponentResult)
-    addComponentResult.get.result.get.errors match {
-      case Some(errors) =>
-//        val graph: OrientGraph = Database.getFactory()._1.get.getTx
-//        val sql: String = s"select * from Component where nameToShow like '${nameToShow.get}'"
-//        val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
-//        val stepId = res.asScala.toList.map(_.asInstanceOf[OrientVertex].getIdentity.toString()).head
-//        Some(RidToHash.setIdAndHash(stepId)._2)
-        None
-      case None => addComponentResult.get.result.get.configProperties.get.componentId
+        ))
+      Logger.info("ADD_COMPONENT <- " + addComponentResult)
+      addComponentResult.get.result.get.errors match {
+        case Some(errors) =>
+          Logger.info("Beim erstellen der Komponente ein Fehler aufgetretten")
+          Logger.info("Fehler -> " + errors)
+          None
+        case None =>
+          Logger.info("Der neue Komponente erstellt wurde")
+          addComponentResult.get.result.get.configProperties.get.componentId
+      }
+    }else {
+      val graph: OrientGraph = Database.getFactory()._1.get.getTx
+      val sql: String = s"select * from Component where nameToShow like '${nameToShow.get}'"
+      val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+      Logger.info("Die Komponente existiert bereits")
+      Some(RidToHash.setIdAndHash(res.asScala.toList.map(_.asInstanceOf[OrientVertex].getIdentity.toString()).head)._2)
     }
   }
 
+  def connectComponentToStep(outId : String, inId : String, wC : WebClient) : Option[List[ErrorDTO]] = {
+    Logger.info("Erstelle Edge HAS_COMPONENT")
+    val graph: OrientGraph = Database.getFactory()._1.get.getTx
 
+    val vIn : OrientVertex = graph.getVertex(RidToHash.getRId(inId).get)
+
+    val res = vIn.getEdges(Direction.IN, PropertyKeys.EDGE_HAS_COMPONENT)
+
+    if(res.asScala.toList.length < 1) {
+      Logger.info("Edge wird erstellt")
+      val connectComponentToStepResult : JsResult[ComponentDTO] = Json.fromJson[ComponentDTO](
+        wC.handleMessage(Json.toJson(ComponentDTO(
+          action = Actions.CONNECT_COMPONENT_TO_STEP,
+          params = Some(ComponentParamsDTO(
+            configProperties = Some(ComponentConfigPropertiesDTO(
+              stepId = Some(inId),
+              componentId = Some(outId)
+            )),
+            userProperties = Some(ComponentUserPropertiesDTO(
+              nameToShow = Some("ComponentUpdated")
+            ))
+          ))
+        )))
+      )
+      connectComponentToStepResult.get.result.get.errors match {
+        case Some(errors) => Some(errors)
+        case None => None
+      }
+    }else {
+      Logger.info("Edge existiert bereits")
+      None
+    }
+  }
 
 //==================================================================================================
 
