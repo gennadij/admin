@@ -39,9 +39,22 @@ class ConfigGraph() {
         val components : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.VERTEX_COMPONENT)
         val hasSteps : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_STEP)
         val hasComponents : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_COMPONENT)
-        val (configGraphComponentDTO : List[ConfigGraphComponentDTO], configGraphStepDTO : List[ConfigGraphStepDTO]) = calcPosition(
-          Some(steps), Some(components)
-        )
+
+        val configGraphSteps : List[ConfigGraphStepDTO] = steps.map(step => {
+          ConfigGraphStepDTO(
+            id = step.getIdentity.toString,
+            x = 0,
+            y = 0
+          )
+        })
+
+        val configGraphComponents : List[ConfigGraphComponentDTO] = components.map(c => {
+          ConfigGraphComponentDTO(
+            id = c.getIdentity.toString,
+            x = 0,
+            y = 0
+          )
+        })
 
         val edgesHasSteps : List[ConfigGraphEdgeDTO] = hasSteps.map(hasStep => {
           val target : String = hasStep.asInstanceOf[OrientEdge].getInVertex.getIdentity.toString
@@ -66,8 +79,8 @@ class ConfigGraph() {
         ConfigGraphDTO(
           action = Actions.CONFIG_GRAPH,
           result = Some(ConfigGraphResultDTO(
-            steps = Some(configGraphStepDTO),
-            components = Some(configGraphComponentDTO),
+            steps = Some(configGraphSteps),
+            components = Some(configGraphComponents),
             edges = Some(edges),
             errors = None
           )
