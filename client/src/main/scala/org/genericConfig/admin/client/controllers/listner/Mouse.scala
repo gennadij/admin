@@ -1,7 +1,7 @@
 package org.genericConfig.admin.client.controllers.listner
 
 import org.genericConfig.admin.client.controllers.websocket.ActionsForClient
-import org.genericConfig.admin.client.models.{Config, Register, Start, User}
+import org.genericConfig.admin.client.models.{Config, ConfigGraph, Register, Start, User}
 import org.genericConfig.admin.shared.Actions
 import org.scalajs.jquery.JQuery
 
@@ -29,6 +29,7 @@ class Mouse {
       case ActionsForClient.UPDATE_USER_PAGE => jQueryElem.on("click", () => new User().showUpdateUserPage(param))
       case ActionsForClient.ADD_CONFIG_PAGE => jQueryElem.on("click", () => new Config().showAddConfigPage(param))
       case ActionsForClient.CONFIG_PAGE => jQueryElem.on("click", () => new Config().showConfigPage(param))
+      case ActionsForClient.CONFIG_GRAPH => jQueryElem.on("click", () => new ConfigGraph().showConfigGraph(param))
       case _ => jQueryElem.on("click", () => new Start().actionGetUser()) //TODO eine Fehlerpage erstellen
     }
   }

@@ -19,7 +19,19 @@ class ConfigPage() extends CommonFunction{
   }
 
   def drawConfigPage(userConfigDTO: UserConfigDTO): Unit = {
-    println("drawConfigPage")
+
+    cleanPage
+
+    val main : JQuery = HtmlElementText.mainPage(s"Konfigurator" )
+
+    val jQueryButtonShowConfigGraph : JQuery = HtmlElementText.drawButton("configGraph", "Graph")
+
+    main.appendTo(jQuery(HtmlElementIds.section))
+
+    jQueryButtonShowConfigGraph.appendTo(main)
+
+    new Mouse().mouseClick(jQueryButtonShowConfigGraph, ActionsForClient.CONFIG_GRAPH, Some(userConfigDTO))
+
   }
 
   def drawAllConfigs(getConfigsResult: ConfigDTO): Unit = {

@@ -12,4 +12,5 @@ object ActionsForClient {
   val UPDATE_USER_PAGE : String = "UPDATE_USER_PAGE"
   val CONFIG_PAGE : String = "CONFIG_PAGE"
   val ADD_CONFIG_PAGE : String = "ADD_CONFIG_PAGE"
+  val CONFIG_GRAPH : String = "CONFIG_GRAPH"
 }
