@@ -122,7 +122,7 @@ class ConfigGraph() {
 
     level = 2
     var count : Int = 0
-    //TODO componentsPerLevel = 3 components = 9
+    //TODO componentsPerLevel = 3 components = 9 funktioneirt nicht (Statische Graph wird spaeter gemacht)
     val configGraphComponentDTO : List[ConfigGraphComponentDTO] = components.get.map(component => {
       val x = level * levelWidth
       val y = height / componentsPerLevel(count)

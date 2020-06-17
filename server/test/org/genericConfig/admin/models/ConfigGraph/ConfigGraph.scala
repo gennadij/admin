@@ -30,15 +30,10 @@ class ConfigGraph extends Specification
 
   "Der Benutzer ruft der gesamten Konfigurationsgraph auf" >> {
     "action = CONFIG_GRAPH" >> {resConfigGraph.get.action === Actions.CONFIG_GRAPH}
-    "Anzahl der Schritte = 3" >> {resConfigGraph.get.result.get.steps.get.length === 3}
-    "Anzahl der Komponenten = 9" >> {resConfigGraph.get.result.get.components.get.length === 9}
-    "Anzahl der Kanten = 12" >> {resConfigGraph.get.result.get.edges.get.length === 12}
+    "Anzahl der Schritte = 3" >> {resConfigGraph.get.result.get.steps.get must have length 3}
+    "Anzahl der Komponenten = 9" >> {resConfigGraph.get.result.get.components.get must have length 9}
+    "Anzahl der Kanten = 12" >> {resConfigGraph.get.result.get.edges.get must have length 12}
     "errors = None" >> {resConfigGraph.get.result.get.errors === None}
-
-    "componentId < 32 && > 10" >> {"" === ""}
-    "stepId = None" >> {"" === ""}
-    "nameToShow = ComponentUpdated" >> {"" === ""}
-    "errors = None" >> {"" === ""}
   }
 
   def before(): Unit = {
