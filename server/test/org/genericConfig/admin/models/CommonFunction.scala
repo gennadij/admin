@@ -220,7 +220,7 @@ trait CommonFunction {
 
     val vIn : OrientVertex = graph.getVertex(RidToHash.getRId(inId).get)
 
-    val res = vIn.getEdges(Direction.IN, PropertyKeys.EDGE_HAS_COMPONENT)
+    val res = vIn.getEdges(Direction.IN, PropertyKeys.EDGE_HAS_STEP)
 
     if(res.asScala.toList.length < 1) {
       Logger.info("Edge wird erstellt")

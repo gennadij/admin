@@ -42,7 +42,7 @@ class ConfigGraph() {
 
         val configGraphSteps : List[ConfigGraphStepDTO] = steps.map(step => {
           ConfigGraphStepDTO(
-            id = step.getIdentity.toString,
+            id = RidToHash.setIdAndHash(step.getIdentity.toString)._2,
             x = 0,
             y = 0
           )
@@ -50,15 +50,19 @@ class ConfigGraph() {
 
         val configGraphComponents : List[ConfigGraphComponentDTO] = components.map(c => {
           ConfigGraphComponentDTO(
-            id = c.getIdentity.toString,
+            id = RidToHash.setIdAndHash(c.getIdentity.toString)._2,
             x = 0,
             y = 0
           )
         })
 
         val edgesHasSteps : List[ConfigGraphEdgeDTO] = hasSteps.map(hasStep => {
-          val target : String = hasStep.asInstanceOf[OrientEdge].getInVertex.getIdentity.toString
-          val source : String = hasStep.asInstanceOf[OrientEdge].getOutVertex.getIdentity.toString
+          val target : String = RidToHash.setIdAndHash(
+            hasStep.asInstanceOf[OrientEdge].getInVertex.getIdentity.toString
+          )._2
+          val source : String = RidToHash.setIdAndHash(
+            hasStep.asInstanceOf[OrientEdge].getOutVertex.getIdentity.toString
+          )._2
           ConfigGraphEdgeDTO(
             source = source,
             target = target
@@ -66,8 +70,12 @@ class ConfigGraph() {
         })
 
         val edgesHasComponents : List[ConfigGraphEdgeDTO] = hasComponents.map(hasComponent => {
-          val target : String = hasComponent.asInstanceOf[OrientEdge].getInVertex.getIdentity.toString
-          val source : String = hasComponent.asInstanceOf[OrientEdge].getOutVertex.getIdentity.toString
+          val target : String = RidToHash.setIdAndHash(
+            hasComponent.asInstanceOf[OrientEdge].getInVertex.getIdentity.toString
+          )._2
+          val source : String = RidToHash.setIdAndHash(
+            hasComponent.asInstanceOf[OrientEdge].getOutVertex.getIdentity.toString
+          )._2
           ConfigGraphEdgeDTO(
             source = source,
             target = target

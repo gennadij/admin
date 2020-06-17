@@ -31,8 +31,12 @@ class ConfigGraph extends Specification
   "Der Benutzer ruft der gesamten Konfigurationsgraph auf" >> {
     "action = CONFIG_GRAPH" >> {resConfigGraph.get.action === Actions.CONFIG_GRAPH}
     "Anzahl der Schritte = 3" >> {resConfigGraph.get.result.get.steps.get must have length 3}
+    "Id Laenge des Schrittes Id < 32 && > 10" >> {resConfigGraph.get.result.get.steps.get(0).id.length must be_<=(32) and be_>(10)}
     "Anzahl der Komponenten = 9" >> {resConfigGraph.get.result.get.components.get must have length 9}
-    "Anzahl der Kanten = 12" >> {resConfigGraph.get.result.get.edges.get must have length 12}
+    "Id Laenge der Komponente  < 32 && > 10" >> {resConfigGraph.get.result.get.components.get(0).id.length must be_<=(32) and be_>(10)}
+    "Anzahl der Kanten = 13" >> {resConfigGraph.get.result.get.edges.get must have length 13}
+    "Länge der sourceId < 32 && > 10" >> {resConfigGraph.get.result.get.edges.get(0).source.length must be_<=(32) and be_>(10)}
+    "Länge der targetId < 32 && > 10" >> {resConfigGraph.get.result.get.edges.get(0).target.length must be_<=(32) and be_>(10)}
     "errors = None" >> {resConfigGraph.get.result.get.errors === None}
   }
 
