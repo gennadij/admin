@@ -28,9 +28,7 @@ object WebSocketListner {
 
     webSocket.onopen = { e: dom.Event => {
       println("WebSocket open")
-      RunJSinScalaJS.runD3()
       new StartPage().drawStartPage()
-//        Start.start(webSocket)
       }
     }
 

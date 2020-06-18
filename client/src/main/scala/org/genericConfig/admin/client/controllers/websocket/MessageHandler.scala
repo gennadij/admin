@@ -21,8 +21,8 @@ class MessageHandler() {
       case Some(Actions.GET_CONFIGS) => ConverterFromJsonForConfig.getConfigs(receivedMessage)
       case Some(Actions.DELETE_CONFIG) => ConverterFromJsonForConfig.deleteConfig(receivedMessage)
       case Some(Actions.UPDATE_CONFIG) => ???
+      case Some(Actions.CONFIG_GRAPH) => ConverterJsonDTOForConfigGraph.configGraph(receivedMessage)
 //      case Some(JsonNames.ADD_STEP) => addStep(receivedMessage)
-//      case Some(JsonNames.CONFIG_TREE) => configTree(receivedMessage)
 //      case Some(JsonNames.ADD_COMPONENT) => addComponent(receivedMessage)
 //      case Some(JsonNames.CONNECT_COMPONENT_TO_STEP) => ??? //connectComponentToStep(receivedMessage, admin)
 //      case Some(JsonNames.CREATE_DEPENDENCY) => ??? //createDependency(receivedMessage, admin)
@@ -39,14 +39,4 @@ class MessageHandler() {
 //      case e: JsError => println("Errors -> " + JsonNames.ADD_COMPONENT + ": " + JsError.toJson(e).toString())
 //    }
 //  }
-//  private def configTree(receivedMessage: JsValue) = {
-//    val configTreeOut: JsResult[JsonConfigTreeOut] = Json.fromJson[JsonConfigTreeOut](receivedMessage)
-//    configTreeOut match {
-//      case s: JsSuccess[JsonConfigTreeOut] => s.get
-//      case e: JsError => println("Errors -> CREATE_DEPENDENCY: " + JsError.toJson(e).toString())
-//    }
-//    new ConfigTree(webSocket).drawConfigTree(configTreeOut.get)
-//  }
-
-
 }

@@ -1,9 +1,14 @@
-package org.genericConfig.admin.client.controllers.websocket
+package org.genericConfig.admin.client.views.configGraph
 
 import org.singlespaced.d3js.d3
 
 import scala.scalajs.js.Dynamic.{global => g}
 
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ *
+ * Created by Gennadi Heimann 
+ */
 object RunJSinScalaJS {
 
   def runD3(): Unit = {

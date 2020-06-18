@@ -151,7 +151,7 @@ class Config(configDTO: ConfigDTO) {
     * @return ConfigBO
     */
   private def getConfigs: ConfigDTO = {
-
+    //
     RidToHash.getRId(this.configDTO.params.get.userId.get) match {
       case Some(userRid) =>
         val (vConfigs : Option[List[OrientVertex]], error: Option[Error]) = GraphConfig.getConfigs(userRid)

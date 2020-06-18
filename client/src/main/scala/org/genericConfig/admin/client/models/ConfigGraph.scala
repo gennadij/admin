@@ -1,6 +1,11 @@
 package org.genericConfig.admin.client.models
 
+import org.genericConfig.admin.client.controllers.websocket.WebSocketListner
+import org.genericConfig.admin.client.views.configGraph.ConfigGraphPage
+import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.UserConfigDTO
+import org.genericConfig.admin.shared.configGraph.{ConfigGraphDTO, ConfigGraphParamsDTO}
+import play.api.libs.json.Json
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -8,8 +13,21 @@ import org.genericConfig.admin.shared.config.UserConfigDTO
  * Created by Gennadi Heimann 17.06.2020
  */
 class ConfigGraph {
-  def showConfigGraph(param: Option[Any]) = {
-    println("showConfigGraph")
-    param.get.asInstanceOf[UserConfigDTO]
+  def requestConfigGraph(param: Option[Any]) = {
+    val configId : String = param.get.asInstanceOf[UserConfigDTO].configId.get
+    val configGraphRequest = Json.toJson(
+        ConfigGraphDTO(
+          action = Actions.CONFIG_GRAPH,
+          params = Some(ConfigGraphParamsDTO(
+            configId = configId
+        ))
+    )
+    ).toString
+    println("OUT -> " + configGraphRequest)
+    WebSocketListner.webSocket.send(configGraphRequest)
+  }
+
+  def showConfigGraph(configGraphDTO: ConfigGraphDTO): Unit = {
+    new ConfigGraphPage().drawConfigGraph(configGraphDTO.result.get)
   }
 }

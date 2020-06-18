@@ -29,7 +29,7 @@ class Mouse {
       case ActionsForClient.UPDATE_USER_PAGE => jQueryElem.on("click", () => new User().showUpdateUserPage(param))
       case ActionsForClient.ADD_CONFIG_PAGE => jQueryElem.on("click", () => new Config().showAddConfigPage(param))
       case ActionsForClient.CONFIG_PAGE => jQueryElem.on("click", () => new Config().showConfigPage(param))
-      case ActionsForClient.CONFIG_GRAPH => jQueryElem.on("click", () => new ConfigGraph().showConfigGraph(param))
+      case ActionsForClient.CONFIG_GRAPH => jQueryElem.on("click", () => new ConfigGraph().requestConfigGraph(param))
       case _ => jQueryElem.on("click", () => new Start().actionGetUser()) //TODO eine Fehlerpage erstellen
     }
   }
