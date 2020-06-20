@@ -2,7 +2,11 @@ package org.genericConfig.admin.shared.configGraph
 
 import play.api.libs.functional.syntax.{unlift, _}
 import play.api.libs.json.{Format, JsPath}
-
+/**
+ * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
+ *
+ * Created by Gennadi Heimann 06.06.2020
+ */
 case class ConfigGraphComponentDTO (
                                    id : String,
                                    x : Int,

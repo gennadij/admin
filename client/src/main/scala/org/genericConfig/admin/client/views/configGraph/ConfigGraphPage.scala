@@ -1,7 +1,9 @@
 package org.genericConfig.admin.client.views.configGraph
 
-import org.genericConfig.admin.shared.configGraph.ConfigGraphResultDTO
+import org.genericConfig.admin.shared.configGraph.{ConfigGraphComponentDTO, ConfigGraphEdgeDTO, ConfigGraphResultDTO}
+import play.api.libs.json.{JsObject, JsValue, Json}
 
+import scala.scalajs.js.Dynamic.{global => g}
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  *
@@ -9,7 +11,8 @@ import org.genericConfig.admin.shared.configGraph.ConfigGraphResultDTO
  */
 class ConfigGraphPage {
   def drawConfigGraph(configGraphResultDTO: ConfigGraphResultDTO): Unit = {
-    println(configGraphResultDTO)
-    RunJSinScalaJS.runD3()
+    val links : List[ConfigGraphEdgeDTO] = configGraphResultDTO.edges.get
+    val jsonData : String = Json.toJson(configGraphResultDTO)
+    g.runGraphD3(jsonData)
   }
 }
