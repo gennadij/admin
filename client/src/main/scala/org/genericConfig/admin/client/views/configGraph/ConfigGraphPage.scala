@@ -11,8 +11,7 @@ import scala.scalajs.js.Dynamic.{global => g}
  */
 class ConfigGraphPage {
   def drawConfigGraph(configGraphResultDTO: ConfigGraphResultDTO): Unit = {
-    val links : List[ConfigGraphEdgeDTO] = configGraphResultDTO.edges.get
-    val jsonData : String = Json.toJson(configGraphResultDTO)
+    val jsonData : String = Json.toJson(configGraphResultDTO.d3Data.get).toString()
     g.runGraphD3(jsonData)
   }
 }

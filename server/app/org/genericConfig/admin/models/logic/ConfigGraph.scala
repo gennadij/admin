@@ -6,7 +6,7 @@ import org.genericConfig.admin.models.common.Error
 import org.genericConfig.admin.models.persistence.orientdb.{GraphCommon, PropertyKeys}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
-import org.genericConfig.admin.shared.configGraph.{ConfigGraphComponentDTO, ConfigGraphD3LinkDTO, ConfigGraphD3NodeDTO, ConfigGraphDTO, ConfigGraphEdgeDTO, ConfigGraphResultDTO, ConfigGraphStepDTO}
+import org.genericConfig.admin.shared.configGraph.{ConfigGraphComponentDTO, ConfigGraphD3DTO, ConfigGraphD3LinkDTO, ConfigGraphD3NodeDTO, ConfigGraphDTO, ConfigGraphEdgeDTO, ConfigGraphResultDTO, ConfigGraphStepDTO}
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -55,10 +55,12 @@ class ConfigGraph() {
             y = 0
           )
         })
+        val edgesHasStepsWithoutConfig =
+          eHasSteps.filterNot(_.asInstanceOf[OrientEdge].getOutVertex.getIdentity.toString().equals(configRid))
 
-        val edgesHasSteps : List[ConfigGraphEdgeDTO] = eHasSteps.map(hasStep => {
+        val edgesHasSteps : List[ConfigGraphEdgeDTO] = edgesHasStepsWithoutConfig.map(hasStep => {
           val target : String = RidToHash.setIdAndHash(
-            hasStep.asInstanceOf[OrientEdge].getInVertex.getIdentity.toString
+              hasStep.asInstanceOf[OrientEdge].getInVertex.getIdentity.toString
           )._2
           val source : String = RidToHash.setIdAndHash(
             hasStep.asInstanceOf[OrientEdge].getOutVertex.getIdentity.toString
@@ -94,7 +96,21 @@ class ConfigGraph() {
           )
         })
 
-        val configGraphD3LinkDTO : List[ConfigGraphD3LinkDTO] = ???
+//        val configGraphD3LinksDTO : List[ConfigGraphD3LinkDTO] = edges.map(e => {
+//          val source : Option[ConfigGraphD3NodeDTO] = configGraphD3NodesDTO.find(_.id == e.source)
+//          val target : Option[ConfigGraphD3NodeDTO] = configGraphD3NodesDTO.find(_.id == e.target)
+//          ConfigGraphD3LinkDTO(
+//            source = source.get,
+//            target = target.get
+//          )
+//        })
+
+        val configGraphD3LinksDTO : List[ConfigGraphD3LinkDTO] = edges.map(e => {
+          ConfigGraphD3LinkDTO(
+            source = e.source,
+            target = e.target
+          )
+        })
 
         ConfigGraphDTO(
           action = Actions.CONFIG_GRAPH,
@@ -102,7 +118,10 @@ class ConfigGraph() {
             steps = Some(configGraphSteps),
             components = Some(configGraphComponents),
             edges = Some(edges),
-
+            d3Data = Some(ConfigGraphD3DTO(
+              nodes = configGraphD3NodesDTO,
+              links = configGraphD3LinksDTO
+            )),
             errors = None
           )
         ))

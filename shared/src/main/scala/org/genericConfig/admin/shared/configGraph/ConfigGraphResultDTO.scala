@@ -10,10 +10,11 @@ import play.api.libs.json.{Format, JsPath}
   * Created by Gennadi Heimann 06.06.2020
   */
 case class ConfigGraphResultDTO (
-                                steps : Option[List[ConfigGraphStepDTO]] = None,
-                                components : Option[List[ConfigGraphComponentDTO]] = None,
-                                edges : Option[List[ConfigGraphEdgeDTO]] = None,
-                                errors : Option[List[ErrorDTO]] = None
+                                  steps : Option[List[ConfigGraphStepDTO]] = None,
+                                  components : Option[List[ConfigGraphComponentDTO]] = None,
+                                  edges : Option[List[ConfigGraphEdgeDTO]] = None,
+                                  d3Data: Option[ConfigGraphD3DTO] = None,
+                                  errors : Option[List[ErrorDTO]] = None
                                 )
 
 object ConfigGraphResultDTO {
@@ -21,6 +22,7 @@ object ConfigGraphResultDTO {
     (JsPath \ "steps").format(Format.optionWithNull[List[ConfigGraphStepDTO]]) and
     (JsPath \ "components").format(Format.optionWithNull[List[ConfigGraphComponentDTO]]) and
     (JsPath \ "edges").format(Format.optionWithNull[List[ConfigGraphEdgeDTO]]) and
+    (JsPath \ "d3Data").format(Format.optionWithNull[ConfigGraphD3DTO]) and
     (JsPath \ "errors").format(Format.optionWithNull[List[ErrorDTO]])
   )(ConfigGraphResultDTO.apply, unlift(ConfigGraphResultDTO.unapply))
 }

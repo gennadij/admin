@@ -8,14 +8,14 @@ import play.api.libs.json.{Format, JsPath}
  *
  * Created by Gennadi Heimann 20.06.2020
  */
-case class ConfigGraphD3GraphDTO (
+case class ConfigGraphD3DTO(
                                  nodes : List[ConfigGraphD3NodeDTO],
                                  links : List[ConfigGraphD3LinkDTO]
                                  )
 
-object ConfigGraphD3GraphDTO {
-  implicit val format: Format[ConfigGraphD3GraphDTO] = (
+object ConfigGraphD3DTO {
+  implicit val format: Format[ConfigGraphD3DTO] = (
     (JsPath \ "nodes").format(Format.of[List[ConfigGraphD3NodeDTO]]) and
     (JsPath \ "links").format(Format.of[List[ConfigGraphD3LinkDTO]])
-  (ConfigGraphD3GraphDTO.apply, unlift(ConfigGraphD3GraphDTO.unapply))
+  )(ConfigGraphD3DTO.apply, unlift(ConfigGraphD3DTO.unapply))
 }

@@ -9,13 +9,13 @@ import play.api.libs.json.{Format, JsPath}
  * Created by Gennadi Heimann 20.06.2020
  */
 case class ConfigGraphD3LinkDTO (
-                                source : ConfigGraphD3NodeDTO,
-                                target : ConfigGraphD3NodeDTO
+                                source : String,
+                                target : String
                                 )
 
 object ConfigGraphD3LinkDTO {
   implicit val format: Format[ConfigGraphD3LinkDTO] = (
-    (JsPath \ "source").format(Format.of[ConfigGraphD3NodeDTO]) and
-    (JsPath \ "target").format(Format.of[ConfigGraphD3NodeDTO])
+    (JsPath \ "source").format(Format.of[String]) and
+    (JsPath \ "target").format(Format.of[String])
   )(ConfigGraphD3LinkDTO.apply, unlift(ConfigGraphD3LinkDTO.unapply))
 }
