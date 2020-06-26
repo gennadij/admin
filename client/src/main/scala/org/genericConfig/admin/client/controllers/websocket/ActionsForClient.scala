@@ -13,4 +13,6 @@ object ActionsForClient {
   val CONFIG_PAGE : String = "CONFIG_PAGE"
   val ADD_CONFIG_PAGE : String = "ADD_CONFIG_PAGE"
   val CONFIG_GRAPH : String = "CONFIG_GRAPH"
+  val STEP_PAGE : String = "STEP_PAGE"
+  val COMPONENT_PAGE: String = "COMPONENT_PAGE"
 }

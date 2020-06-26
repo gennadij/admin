@@ -5,7 +5,6 @@ import org.genericConfig.admin.client.views.StartPage
 import org.genericConfig.admin.client.views.user.UserPage
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
-import org.scalajs.jquery.jQuery
 import play.api.libs.json.Json
 
 /**
@@ -23,8 +22,8 @@ class Start {
     val getUser = Json.toJson(UserDTO(
       action = Actions.GET_USER,
       params = Some(UserParamsDTO(
-        username = jQuery("#username").value().toString,
-        password = jQuery("#password").value().toString,
+        username = "configGraph_V0.1", //jQuery("#username").value().toString,
+        password = "configGraph_V0.1", //jQuery("#password").value().toString,
         update = None,
 
       )),

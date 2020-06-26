@@ -60,8 +60,8 @@ function runGraphD3(arg){
           .attr("class", "node")
           .attr("id", function(d) {return d.id})
           .attr("r", 12)
-          .on("dblclick", dblclick)
-          .on("click", click)
+          //.on("dblclick", dblclick)
+          //.on("click", click)
           .call(drag);
 
     function tick() {
@@ -74,18 +74,18 @@ function runGraphD3(arg){
           .attr("cy", function(d) { return d.y; });
     }
 
-    function dblclick(d) {
-      console.log("dblclick")
-      d3.select(this).classed("fixed", d.fixed = false);
-    }
+//    function dblclick(d) {
+//      console.log("dblclick")
+//      d3.select(this).classed("fixed", d.fixed = false);
+//    }
 
     function dragstart(d) {
       d3.select(this).classed("fixed", d.fixed = true);
     }
 
-    function click(d) {
-        console.log("click")
-        console.log(d)
-    }
+//    function click(d) {
+//        console.log("click")
+//        console.log(d)
+//    }
 
 }

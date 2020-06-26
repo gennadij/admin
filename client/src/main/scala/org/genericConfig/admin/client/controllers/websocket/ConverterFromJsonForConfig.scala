@@ -1,7 +1,6 @@
 package org.genericConfig.admin.client.controllers.websocket
 
 import org.genericConfig.admin.client.models.Config
-import org.genericConfig.admin.client.views.config.ConfigPage
 import org.genericConfig.admin.client.views.user.UserPage
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.ConfigDTO
@@ -32,7 +31,7 @@ object ConverterFromJsonForConfig{
 }
 
 class ConverterFromJsonForConfig() {
-  private def addConfig(receivedMessage: JsValue) = {
+  private def addConfig(receivedMessage: JsValue): Unit = {
     Json.fromJson[ConfigDTO](receivedMessage) match {
       case addConfigResult : JsSuccess[ConfigDTO] => new Config().getConfigs(Some(addConfigResult.value))
       case e: JsError => println("Errors -> : " + Actions.ADD_CONFIG + JsError.toJson(e).toString())
