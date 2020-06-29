@@ -14,6 +14,10 @@ object HtmlElementText {
     jQuery(s"<div id='main' class='main'><center> <h3> $title</h3> </center> </div>")
   }
 
+  def configGraphElemPage(title : String) : JQuery = {
+    jQuery(s"<div id='configGraphElem'><center> <h3> $title</h3> </center> </div>")
+  }
+
   def devInputFields(inputFields : List[String]) : String = {
     inputFields.mkString(" </br> ")
   }

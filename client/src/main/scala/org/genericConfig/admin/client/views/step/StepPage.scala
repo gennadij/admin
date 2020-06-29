@@ -1,5 +1,6 @@
 package org.genericConfig.admin.client.views.step
 
+import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
 import org.genericConfig.admin.shared.configGraph.ConfigGraphStepDTO
 import org.scalajs.jquery.jQuery
 
@@ -10,6 +11,8 @@ import org.scalajs.jquery.jQuery
  */
 class StepPage {
   def drawStepPage(configGraphStepDTO: ConfigGraphStepDTO): Unit = {
+    val configGraphElemPage = HtmlElementText.configGraphElemPage("Step")
+    configGraphElemPage.appendTo(jQuery(HtmlElementIds.section))
     jQuery(s"#${configGraphStepDTO.id}").css("fill", "#15e751")
   }
 }

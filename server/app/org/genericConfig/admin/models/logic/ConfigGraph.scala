@@ -7,6 +7,7 @@ import org.genericConfig.admin.models.persistence.orientdb.{GraphCommon, Propert
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.configGraph.{ConfigGraphComponentDTO, ConfigGraphD3DTO, ConfigGraphD3LinkDTO, ConfigGraphD3NodeDTO, ConfigGraphDTO, ConfigGraphEdgeDTO, ConfigGraphResultDTO, ConfigGraphStepDTO}
+import play.api.Logger
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -39,6 +40,12 @@ class ConfigGraph() {
         val eComponents : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.VERTEX_COMPONENT)
         val eHasSteps : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_STEP)
         val eHasComponents : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_COMPONENT)
+
+        Logger.info("Steps: " + eSteps)
+        Logger.info("Components: " + eComponents)
+        Logger.info("EDGE_HAS_STEP: " + eHasSteps)
+        Logger.info("EDGE_HAS_COMPONENT: " + eHasComponents)
+
 
         val configGraphSteps : List[ConfigGraphStepDTO] = eSteps.map(step => {
           ConfigGraphStepDTO(
@@ -88,6 +95,7 @@ class ConfigGraph() {
 
         //D3
         val eStepsAndComponents : List[OrientElement] = eSteps ::: eComponents
+
         val configGraphD3NodesDTO : List[ConfigGraphD3NodeDTO] = eStepsAndComponents.map(e => {
           ConfigGraphD3NodeDTO(
             id = RidToHash.setIdAndHash(e.getIdentity.toString)._2,
@@ -111,13 +119,16 @@ class ConfigGraph() {
             target = e.target
           )
         })
-
+        // TODO
+        // edges wird zurzeit nicht mehr gebraucht
+        // ConfigGraphStepDTO benoetigt nameToShow, selectionCriterion
+        // ConfigGraphComponentDTO benoetigt nameToShow
         ConfigGraphDTO(
           action = Actions.CONFIG_GRAPH,
           result = Some(ConfigGraphResultDTO(
             steps = Some(configGraphSteps),
             components = Some(configGraphComponents),
-            edges = Some(edges),
+            edges = Some(List()),
             d3Data = Some(ConfigGraphD3DTO(
               nodes = configGraphD3NodesDTO,
               links = configGraphD3LinksDTO
@@ -132,6 +143,24 @@ class ConfigGraph() {
         )
       ))
     }
+  }
+
+  private def calcPosition2(
+                             eSteps : List[OrientElement],
+                             eComponents : List[OrientElement],
+                             eHasSteps : List[OrientElement],
+                             eHasComponents : List[OrientElement]
+                           ): Unit = {
+    //getVertex (configRid)
+    //getEdge (EDGE_HAS_STEP)
+    //getVertex (first Step)
+    //calc Position
+    //getEdges (HAS_COMPONENT)
+    //getVertex (from every HAS_COMPONENT
+    //calc Position
+    //fuege die Steps und COmponents zu der Liste
+    // recursiv auf getVertex (firstStep)
+
   }
 
   private def calcPosition(

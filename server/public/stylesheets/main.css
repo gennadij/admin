@@ -1,6 +1,7 @@
 @charset "ISO-8859-1";
 
-
+/*########################################*/
+/*Config Graph*/
 .link {
   stroke: #000;
   stroke-width: 1.5px;
@@ -16,6 +17,64 @@
 .node.fixed {
   #fill: #f00;
 }
+
+/*########################################*/
+
+#main {
+    overflow-x: auto;
+    overflow-y: auto;
+    background-color: #F7F8E0;
+    position:absolute;
+    top : 10%;
+    bottom : 1%;
+    left : 1%;
+    right : 1%;
+    z-index:-10;
+    border-color : #282828 ;
+    border-style : solid;
+    border-width : medium;
+    border-radius : 10px;
+}
+
+#configGraphElem {
+    overflow-x: auto;
+    overflow-y: auto;
+    background-color: #F7F8E0;
+    position:absolute;
+    top : 10%;
+    bottom : 1%;
+    left : 70%;
+    right : 1%;
+    z-index:-10;
+    border-color : #282828 ;
+    border-style : solid;
+    border-width : medium;
+    border-radius : 10px;
+}
+
+.button{
+    float: left;
+    background-color: #E0ECF8;
+    text-align:left;
+    padding : 3px;
+    margin : 3px;
+    border-color : grey;
+    border-style : solid;
+    border-width : medium;
+    border-radius : 10px;
+    width: 200px;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -38,21 +97,7 @@ section {
     border-radius : 10px;
     padding : 10px;
 }
-#main {
-    overflow-x: auto;
-    overflow-y: auto;
-	background-color: #F7F8E0; 
-	position:absolute;
-    top : 10%;
-    bottom : 1%;
-    left : 1%;
-    right : 1%;
-    z-index:-10;
-    border-color : #282828 ;
-    border-style : solid;
-    border-width : medium;
-    border-radius : 10px;
-}
+
 
 #text_for_config {
     background-color: #F8E0F7;
@@ -122,15 +167,3 @@ clear: both;
     width: 20%;
 }
 
-.button{
-    float: left;
-    background-color: #E0ECF8;
-    text-align:left;
-    padding : 3px;
-    margin : 3px;
-    border-color : grey;
-    border-style : solid;
-    border-width : medium;
-    border-radius : 10px;
-    width: 200px;
-}
