@@ -2,7 +2,7 @@ package org.genericConfig.admin.models.persistence.orientdb
 
 import com.orientechnologies.orient.core.sql.{OCommandSQL, OCommandSQLParsingException}
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
-import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientEdge, OrientElement, OrientGraph, OrientVertex}
+import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientElement, OrientGraph, OrientVertex}
 import org.genericConfig.admin.models.common.{DefectRIdError, Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBWriteError}
 import org.genericConfig.admin.models.persistence.Database
 import play.api.Logger
@@ -62,8 +62,7 @@ object GraphCommon {
 
   def getVertex(rId: String): (Option[OrientVertex], Option[Error]) = {
     (Database.getFactory(): @unchecked) match {
-      case (Some(dbFactory), None) => ???
-      //        new GraphCommon(dbFactory.getTx)
+      case (Some(dbFactory), None) => new GraphCommon(dbFactory.getTx).getVertex(rId)
       case (None, Some(ODBConnectionFail())) =>
         (None, Some(ODBConnectionFail()))
     }
@@ -153,6 +152,31 @@ class GraphCommon(graph: OrientGraph) {
         (None, Some(ODBWriteError()))
     }
   }
+
+  private def getVertex(rId : String) : (Option[OrientVertex], Option[Error]) = {
+    try {
+      val v : OrientVertex = graph.getVertex(rId)
+      (Some(v), None)
+    } catch {
+      case e : OCommandSQLParsingException =>
+        Logger.error(e.printStackTrace().toString)
+        graph.rollback()
+        (None, Some(ODBRecordDuplicated()))
+      case e: ORecordDuplicatedException =>
+        Logger.error(e.printStackTrace().toString)
+        graph.rollback()
+        (None, Some(ODBRecordDuplicated()))
+      case e: ClassCastException =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (None, Some(ODBClassCastError()))
+      case e: Exception =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        (None, Some(ODBWriteError()))
+    }
+  }
+
 //  def addEdge(outRid : String, inRid : String, edgeLabel : String) : (Option[OrientEdge], Option[Error]) = {
 //
 //    try {
