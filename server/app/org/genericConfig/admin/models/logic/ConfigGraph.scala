@@ -122,7 +122,7 @@ class ConfigGraph() {
           )
         })
 
-        calcPosition2(eSteps, eComponents, eHasSteps, eHasComponents, configRid)
+        calcPosition2(configRid)
         // TODO
         // edges wird zurzeit nicht mehr gebraucht
         // ConfigGraphStepDTO benoetigt nameToShow, selectionCriterion
@@ -149,13 +149,7 @@ class ConfigGraph() {
     }
   }
 
-  private def calcPosition2(
-                             eSteps : List[OrientElement],
-                             eComponents : List[OrientElement],
-                             eHasSteps : List[OrientElement],
-                             eHasComponents : List[OrientElement],
-                             configRid : String
-                           ): Unit = {
+  private def calcPosition2(configRid : String): Unit = {
 
     val height : Int = 1000
     val width : Int = 1000
@@ -167,87 +161,58 @@ class ConfigGraph() {
 
     val vFirstStep : OrientVertex = eHasStep.head.getVertex(Direction.IN)
 
-    val yStep: Int = height / 2
+    val vComponentsOfFirstStep: List[OrientVertex] = getComponents(vFirstStep)
 
-    val eHasComponents: List[OrientEdge] =
-      vFirstStep.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT).asScala.toList.map(_.asInstanceOf[OrientEdge])
+    val vNextSteps: Set[OrientVertex] = getNextStep(vComponentsOfFirstStep)
 
-    val vComponents: List[OrientVertex] = eHasComponents.map(_.getVertex(Direction.IN))
-
-    val eNextHasSteps: List[List[OrientEdge]] =
-      vComponents.map(vC => {
-        vC.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList.map(
-          _.asInstanceOf[OrientEdge]
-        )
-      })
-
-    val vNextSteps: Set[OrientVertex] = eNextHasSteps.flatten.map(_.getVertex(Direction.IN)).toSet
-
-    val length = vComponents.length
-
-//    val yComponent: IndexedSeq[Double] = for (teiler <- 1 to length) yield height.toDouble * (teiler.toDouble / (length + 1).toDouble)
-
-    val componentsNode = for(c <- vComponents) yield {
-      var counter = 1
-      val y = height.toDouble * (counter.toDouble / (length + 1).toDouble)
-      counter = counter + 1
-      ConfigGraphD3NodeDTO(
-        id = c.getIdentity.toString,
-        x = 0,
-        y = y.toInt
-      )
-    }
-
-    val step = ConfigGraphD3NodeDTO(
-      id = vFirstStep.getIdentity.toString(),
-      x = 0,
-      y = yStep
-    )
-
-//    val components: List[ConfigGraphD3NodeDTO] = yComponent.map(yC => {
-//      ConfigGraphD3NodeDTO(
-//        id = "",
-//        x = 0,
-//        y = yC.toInt
-//      )
-//    }).toList
-
-    val currentNodes = step :: componentsNode
+    val currentNodes = getConfigGraphD3Nodes(vComponentsOfFirstStep, vFirstStep, height)
 
     val cN: Set[List[ConfigGraphD3NodeDTO]] = for (i <- vNextSteps) yield calcPositionRecursive(currentNodes, i, height, width)
 
-//    val calcedNodes = calcPositionRecursive(Nil, vFirstStep, height, width)
-
     val res = cN.flatten.toList
+
     Logger.info("Position y : " + res.length)
 
-    res.foreach(println(_))
   }
 
   private def calcPositionRecursive(n : List[ConfigGraphD3NodeDTO], v : OrientVertex, height : Int, width : Int): List[ConfigGraphD3NodeDTO] = {
     Logger.info("calcPositionRecursive")
 
-    val yStep: Int = height / 2
+    val vComponents: List[OrientVertex] = getComponents(v)
 
-    val eHasComponents: List[OrientEdge] =
-      v.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT).asScala.toList.map(_.asInstanceOf[OrientEdge])
+    val vNextSteps : Set[OrientVertex] = getNextStep(vComponents)
 
-    val vComponents: List[OrientVertex] = eHasComponents.map(_.getVertex(Direction.IN))
+    val componentsNode = getConfigGraphD3Nodes(vComponents, v, height)
 
-    val eNextHasSteps: List[List[OrientEdge]] =
-      vComponents.map(vC => {
-        vC.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList.map(
-          _.asInstanceOf[OrientEdge]
-        )
-      })
+    val currentNodes = componentsNode ::: n
 
-    val vNextSteps: Set[OrientVertex] = eNextHasSteps.flatten.map(_.getVertex(Direction.IN)).toSet
+    Logger.info("Before -> n = " + n.length + " | currentNodes = " + currentNodes.length)
+
+    val cN: Set[List[ConfigGraphD3NodeDTO]] = for (i <- vNextSteps) yield calcPositionRecursive(currentNodes, i, height, width)
+
+    Logger.info("After -> n = " + n.length + " | currentNodes = " + currentNodes.length + " | cN = " + cN.flatten.toList.length)
+
+    currentNodes
+  }
+
+  private def getComponents(step : OrientVertex) : List[OrientVertex] = {
+    val eHasComponentsFromFirstStep: List[OrientEdge] =
+      step.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT).asScala.toList.map(_.asInstanceOf[OrientEdge])
+
+    eHasComponentsFromFirstStep.map(_.getVertex(Direction.IN))
+  }
+
+  private def getConfigGraphD3Nodes(vComponents : List[OrientVertex], vStep : OrientVertex, height : Int) : List[ConfigGraphD3NodeDTO] = {
+
+    val step = ConfigGraphD3NodeDTO(
+      id = vStep.getIdentity.toString(),
+      x = 0,
+      y = height / 2
+    )
 
     val length = vComponents.length
 
-//    val yComponent: IndexedSeq[Double] = for (teiler <- 1 to length) yield height.toDouble * (teiler.toDouble / (length + 1).toDouble)
-
-    val componentsNode = for(c <- vComponents) yield {
+    val components = for(c <- vComponents) yield {
       var counter = 1
       val y = height.toDouble * (counter.toDouble / (length + 1).toDouble)
       counter = counter + 1
@@ -257,32 +222,18 @@ class ConfigGraph() {
         y = y.toInt
       )
     }
-    val step = ConfigGraphD3NodeDTO(
-      id = v.getIdentity.toString(),
-      x = 0,
-      y = yStep
-    )
+    step :: components
+  }
 
-//    val components: List[ConfigGraphD3NodeDTO] = yComponent.map(yC => {
-//      ConfigGraphD3NodeDTO(
-//        id = "",
-//        x = 0,
-//        y = yC.toInt
-//      )
-//    }).toList
+  private def getNextStep(components : List[OrientVertex]) : Set[OrientVertex] = {
+    val eNextHasSteps: List[List[OrientEdge]] =
+      components.map(vC => {
+        vC.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList.map(
+          _.asInstanceOf[OrientEdge]
+        )
+      })
 
-
-    val currentNodes = step :: componentsNode ::: n
-    Logger.info("Before -> n = " + n.length + " | currentNodes = " + currentNodes.length)
-    val cN: Set[List[ConfigGraphD3NodeDTO]] = for (i <- vNextSteps) yield calcPositionRecursive(currentNodes, i, height, width)
-
-    //    val recNodes : Set[List[ConfigGraphD3NodeDTO]] = vNextSteps.map(vNS => {
-    //      calcPositionRecursive(currentNodes, vNS, height, width)
-    //    })
-
-    Logger.info("After -> n = " + n.length + " | currentNodes = " + currentNodes.length + " | cN = " + cN.flatten.toList.length)
-
-    currentNodes
+    eNextHasSteps.flatten.map(_.getVertex(Direction.IN)).toSet
   }
 
   private def calcPosition(
