@@ -31,6 +31,14 @@ object ConfigGraph {
 
 class ConfigGraph() {
 
+  case class D3Node(
+                     id : String,
+                     level : Int,
+                     orderNumber : Int,
+                     x : Double,
+                     y : Double
+                   )
+
   def configGraph(configGraphDTO: ConfigGraphDTO) : ConfigGraphDTO = {
 
     val configRid : String = RidToHash.getRId(configGraphDTO.params.get.configId).get
@@ -165,30 +173,38 @@ class ConfigGraph() {
 
     val vNextSteps: Set[OrientVertex] = getNextStep(vComponentsOfFirstStep)
 
-    val currentNodes = getConfigGraphD3Nodes(vComponentsOfFirstStep, vFirstStep, height)
-
-    val cN: Set[List[ConfigGraphD3NodeDTO]] = for (i <- vNextSteps) yield calcPositionRecursive(currentNodes, i, height, width)
+    val currentNodes = getConfigGraphD3Nodes(vComponentsOfFirstStep, vFirstStep, height, 1, 0)
+    var level = 2
+    val cN: Set[List[D3Node]] = for (i <- vNextSteps) yield {
+      level = level + 1
+      calcPositionRecursive(currentNodes, i, height, width, level)
+    }
 
     val res = cN.flatten.toList
 
-    Logger.info("Position y : " + res.length)
+    res.foreach(r => {
+      Logger.info("ID : " + r.id  + " | level : " + r.level + " | OrderNumber:  " + r.orderNumber)
+    })
 
   }
 
-  private def calcPositionRecursive(n : List[ConfigGraphD3NodeDTO], v : OrientVertex, height : Int, width : Int): List[ConfigGraphD3NodeDTO] = {
-    Logger.info("calcPositionRecursive")
-
+  private def calcPositionRecursive(n : List[D3Node], v : OrientVertex, height : Int, width : Int, level : Int): List[D3Node] = {
+    Logger.info("calcPositionRecursive " + level)
     val vComponents: List[OrientVertex] = getComponents(v)
 
     val vNextSteps : Set[OrientVertex] = getNextStep(vComponents)
 
-    val componentsNode = getConfigGraphD3Nodes(vComponents, v, height)
+    val componentsNode : List[D3Node] = getConfigGraphD3Nodes(vComponents, v, height, level, 0)
 
     val currentNodes = componentsNode ::: n
 
     Logger.info("Before -> n = " + n.length + " | currentNodes = " + currentNodes.length)
 
-    val cN: Set[List[ConfigGraphD3NodeDTO]] = for (i <- vNextSteps) yield calcPositionRecursive(currentNodes, i, height, width)
+    var l = level
+    val cN: Set[List[D3Node]] = for (i <- vNextSteps) yield {
+      l = l + 1
+      calcPositionRecursive(currentNodes, i, height, width, l)
+    }
 
     Logger.info("After -> n = " + n.length + " | currentNodes = " + currentNodes.length + " | cN = " + cN.flatten.toList.length)
 
@@ -202,25 +218,40 @@ class ConfigGraph() {
     eHasComponentsFromFirstStep.map(_.getVertex(Direction.IN))
   }
 
-  private def getConfigGraphD3Nodes(vComponents : List[OrientVertex], vStep : OrientVertex, height : Int) : List[ConfigGraphD3NodeDTO] = {
+  private def getConfigGraphD3Nodes(
+                                     vComponents : List[OrientVertex],
+                                     vStep : OrientVertex,
+                                     height : Int,
+                                     level : Int,
+                                     orderNumber : Int
+                                   ) : List[D3Node] = {
 
-    val step = ConfigGraphD3NodeDTO(
+    val step = D3Node(
       id = vStep.getIdentity.toString(),
+      level = level,
+      orderNumber = 1,
       x = 0,
       y = height / 2
     )
 
     val length = vComponents.length
+    var counter = 1
+    val l = level + 1
+    val components : List[D3Node] = for(c <- vComponents) yield {
 
-    val components = for(c <- vComponents) yield {
-      var counter = 1
       val y = height.toDouble * (counter.toDouble / (length + 1).toDouble)
-      counter = counter + 1
-      ConfigGraphD3NodeDTO(
+
+      val node : D3Node = D3Node(
         id = c.getIdentity.toString,
+        level = l,
+        orderNumber = counter,
         x = 0,
         y = y.toInt
       )
+
+      counter = counter + 1
+
+      node
     }
     step :: components
   }
