@@ -33,6 +33,7 @@ class ConfigGraph() {
 
   case class D3Node(
                      id : String,
+                     nameToShow : String = "",
                      level : Int,
                      orderNumber : Int,
                      x : Double,
@@ -157,6 +158,22 @@ class ConfigGraph() {
     }
   }
 
+  /*
+  ID : #43:78  | level : 1 | OrderNumber:  1 -> S1
+  ID : #52:94  | level : 2 | OrderNumber:  1 -> S1_C1
+  ID : #49:106 | level : 2 | OrderNumber:  2 -> S1_C2
+  ID : #50:105 | level : 2 | OrderNumber:  3 -> S1_C3
+  ID : #44:71  | level : 3 | OrderNumber:  1 -> S2
+  ID : #51:101 | level : 4 | OrderNumber:  1 -> S2_C1
+  ID : #52:95  | level : 4 | OrderNumber:  2 -> S2_C2
+  ID : #41:93  | level : 4 | OrderNumber:  1 -> S3
+  ID : #49:107 | level : 5 | OrderNumber:  1 -> S3_C1
+  ID : #50:106 | level : 5 | OrderNumber:  2 -> S3_C2
+  ID : #51:102 | level : 5 | OrderNumber:  3 -> S3_C3
+  ID : #52:96  | level : 5 | OrderNumber:  4 -> S3_C4
+
+   */
+
   private def calcPosition2(configRid : String): Unit = {
 
     val height : Int = 1000
@@ -174,10 +191,12 @@ class ConfigGraph() {
     val vNextSteps: Set[OrientVertex] = getNextStep(vComponentsOfFirstStep)
 
     val currentNodes = getConfigGraphD3Nodes(vComponentsOfFirstStep, vFirstStep, height, 1, 0)
-    var level = 2
+    var level = 3
     val cN: Set[List[D3Node]] = for (i <- vNextSteps) yield {
-      level = level + 1
-      calcPositionRecursive(currentNodes, i, height, width, level)
+//      level = level + 1
+      val res  = calcPositionRecursive(currentNodes, i, height, width, level)
+      level = level + 2
+      res
     }
 
     val res = cN.flatten.toList
