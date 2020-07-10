@@ -199,7 +199,7 @@ class ConfigGraph() {
 
   private def calcPosition(configRid : String): List[D3Node] = {
 
-    val height : Int = 1000
+    val height : Int = 600
 
 
     val (vConfig, error) : (Option[OrientVertex], Option[Error]) = GraphCommon.getVertex(rId = configRid)
