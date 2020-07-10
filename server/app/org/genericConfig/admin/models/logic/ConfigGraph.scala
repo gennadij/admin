@@ -9,6 +9,7 @@ import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.configGraph.{ConfigGraphComponentDTO, ConfigGraphD3DTO, ConfigGraphD3LinkDTO, ConfigGraphD3NodeDTO, ConfigGraphDTO, ConfigGraphEdgeDTO, ConfigGraphResultDTO, ConfigGraphStepDTO}
 import play.api.Logger
 
+import scala.annotation.tailrec
 import scala.collection.JavaConverters._
 
 /**
@@ -187,7 +188,6 @@ class ConfigGraph() {
     })
 
   }
-
   private def calcPositionRecursive(n : List[D3Node], v : OrientVertex, height : Int, width : Int, level : Int): List[D3Node] = {
     Logger.info("calcPositionRecursive " + level)
     val vComponents: List[OrientVertex] = getComponents(v)
