@@ -17,7 +17,6 @@ class ConfigGraphPage extends CommonFunction {
   def drawConfigGraph(configGraphResultDTO: ConfigGraphResultDTO): Unit = {
     cleanPage
     val jsonData : String = Json.toJson(configGraphResultDTO.d3Data.get).toString()
-//    g.runGraphD3(jsonData)
     g.runGraphD3_2(jsonData)
     val steps : List[(JQuery, ConfigGraphStepDTO)]  =
       configGraphResultDTO.steps.get.map(configGraphStepDTO => {

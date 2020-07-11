@@ -9,7 +9,9 @@ import play.api.libs.json.{Format, JsPath, Json}
   * Created by Gennadi Heimann 06.06.2020
   */
 case class ConfigGraphParamsDTO (
-                                  configId : String
+                                  configId : String,
+                                  screenWidth : Int,
+                                  screenHeight : Int
                                 )
 
 object ConfigGraphParamsDTO {

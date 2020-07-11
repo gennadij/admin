@@ -6,6 +6,7 @@ import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.UserConfigDTO
 import org.genericConfig.admin.shared.configGraph.{ConfigGraphDTO, ConfigGraphParamsDTO}
 import play.api.libs.json.Json
+import org.scalajs.dom.window.screen
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -15,11 +16,17 @@ import play.api.libs.json.Json
 class ConfigGraph {
   def requestConfigGraph(param: Option[Any]) = {
     val configId : String = param.get.asInstanceOf[UserConfigDTO].configId.get
+
+    val height = screen.height
+    val width = screen.width
+
     val configGraphRequest = Json.toJson(
         ConfigGraphDTO(
           action = Actions.CONFIG_GRAPH,
           params = Some(ConfigGraphParamsDTO(
-            configId = configId
+            configId = configId,
+            screenWidth = width.toInt,
+            screenHeight = height.toInt
         ))
     )
     ).toString
