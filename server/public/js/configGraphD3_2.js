@@ -8,19 +8,20 @@ function runGraphD3_2(arg){
     .attr("width", data.properties.svgWidth)
     .attr("height", data.properties.svgHeight);
 
-  var drag = d3.behavior.drag()
-    .on("drag", function(d, i) {
-      d.x += d3.event.dx
-      d.y += d3.event.dy
-      d3.select(this).attr("cx", d.x).attr("cy", d.y);
-      links.each(function(l, li) {
-        if (l.source == d.id) {
-          d3.select(this).attr("x1", d.x).attr("y1", d.y);
-        } else if (l.target == d.id) {
-          d3.select(this).attr("x2", d.x).attr("y2", d.y);
-        }
-      });
-    });
+//  var drag = d3.behavior.drag()
+//    .on("drag", function(d, i) {
+//      console.log(this)
+//      d.x += d3.event.dx
+//      d.y += d3.event.dy
+//      d3.select(this).attr("cx", d.x).attr("cy", d.y);
+//      links.each(function(l, li) {
+//        if (l.source == d.id) {
+//          d3.select(this).attr("x1", d.x).attr("y1", d.y);
+//        } else if (l.target == d.id) {
+//          d3.select(this).attr("x2", d.x).attr("y2", d.y);
+//        }
+//      });
+//    });
 
   var links = svg.selectAll("link")
     .data(data.links)
@@ -49,18 +50,19 @@ function runGraphD3_2(arg){
     .enter()
     .append("g");
 
-  var circle = nodes.append("circle")
+  var circle = nodes.append("ellipse")
 		.attr("class", "node")
     .attr("cx", function(d) {return d.x})
     .attr("cy", function(d) {return d.y})
-    .attr("r", 40)
+    .attr("rx", 80)
+    .attr("ry", 40)
     .attr("fill", function(d, i) {return c10(i);})
-    .attr("id", function(d) {return d.id})
-    .call(drag);
+    .attr("id", function(d) {return d.id});
+//    .call(drag);
 
 
   var label = nodes.append("text")
-    .attr("dx", function(d){return d.x - 20})
-    .attr("dy", function(d){return d.y + 10})
-    .text(function(d){return d.nameToShow});
+    .attr("dx", function(d){return d.x - 60})
+    .attr("dy", function(d){return d.y})
+    .text(function(d){return d.nameToShow.substring(0, 10)});
 }

@@ -11,12 +11,14 @@ import play.api.libs.functional.syntax._
  */
 case class StepPropertiesDTO (
                              nameToShow : Option[String] = None,
+                             nickName : Option[String] = None,
                              selectionCriterion: Option[SelectionCriterionDTO] = None
                              )
 
 object StepPropertiesDTO {
   implicit val format: Format[StepPropertiesDTO] = (
     (JsPath \ "nameToShow").format(Format.optionWithNull[String]) and
-      (JsPath \ "selectionCriterion").format(Format.optionWithNull[SelectionCriterionDTO])
-    ) (StepPropertiesDTO.apply, unlift(StepPropertiesDTO.unapply))
+    (JsPath \ "nickName").format(Format.optionWithNull[String]) and
+    (JsPath \ "selectionCriterion").format(Format.optionWithNull[SelectionCriterionDTO])
+  )(StepPropertiesDTO.apply, unlift(StepPropertiesDTO.unapply))
 }

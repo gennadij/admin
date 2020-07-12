@@ -13,9 +13,10 @@ import util.CommonFunction
 class StepPage extends CommonFunction{
   def drawStepPage(configGraphStepDTO: ConfigGraphStepDTO): Unit = {
 
+    //TODO delete bevor andere erstellt wird
     val configGraphElemPage = HtmlElementText.configGraphElemPage(configGraphStepDTO.properties.nameToShow.get)
-    val jQueryInputFieldSelectionCriterionMin = HtmlElementText.drawInputField(s"${configGraphStepDTO.stepId}_MIN", "SelectionCreterionMIN")
-    val jQueryInputFieldSelectionCriterionMax = HtmlElementText.drawInputField(s"${configGraphStepDTO.stepId}_MAX", "SelectionCreterionMAX")
+    val jQueryInputFieldSelectionCriterionMin = HtmlElementText.drawInputField(id = s"${configGraphStepDTO.stepId}_MIN", label = "SelectionCriterionMIN")
+    val jQueryInputFieldSelectionCriterionMax = HtmlElementText.drawInputField(s"${configGraphStepDTO.stepId}_MAX", "SelectionCriterionMAX")
     jQueryInputFieldSelectionCriterionMin.appendTo(configGraphElemPage)
     jQueryInputFieldSelectionCriterionMax.appendTo(configGraphElemPage)
     configGraphElemPage.appendTo(jQuery(HtmlElementIds.section))
