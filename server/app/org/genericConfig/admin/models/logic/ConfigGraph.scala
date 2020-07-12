@@ -71,7 +71,7 @@ class ConfigGraph() {
         val configGraphD3LinksDTO : List[ConfigGraphD3LinkDTO] = getConfigGraphD3LinksDTO(edges)
 
         val configGraphD3NodesDTO : List[ConfigGraphD3NodeDTO] = getConfigGraphD3NodesDTO(configRid, screenHeight, screenWidth)
-        
+
         ConfigGraphDTO(
           action = Actions.CONFIG_GRAPH,
           result = Some(ConfigGraphResultDTO(
