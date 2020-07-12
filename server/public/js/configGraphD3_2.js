@@ -1,72 +1,66 @@
 function runGraphD3_2(arg){
 
-var data = JSON.parse(arg)
-
-  var c10 = d3.scale.category10();
-  var svg = d3.select("body")
+	var data = JSON.parse(arg)
+	console.log(data.properties)
+	var c10 = d3.scale.category10();
+	var svg = d3.select("body")
     .append("svg")
-    .attr("width", 1000)
-    .attr("height", 1000);
+    .attr("width", data.properties.svgWidth)
+    .attr("height", data.properties.svgHeight);
 
- var drag = d3.behavior.drag()
-   .on("drag", function(d, i) {
-     d.x += d3.event.dx
-     d.y += d3.event.dy
-     d3.select(this).attr("cx", d.x).attr("cy", d.y);
-     links.each(function(l, li) {
-       if (l.source == d.id) {
-         d3.select(this).attr("x1", d.x).attr("y1", d.y);
-       } else if (l.target == d.id) {
-         d3.select(this).attr("x2", d.x).attr("y2", d.y);
-       }
-     });
-   });
+  var drag = d3.behavior.drag()
+    .on("drag", function(d, i) {
+      d.x += d3.event.dx
+      d.y += d3.event.dy
+      d3.select(this).attr("cx", d.x).attr("cy", d.y);
+      links.each(function(l, li) {
+        if (l.source == d.id) {
+          d3.select(this).attr("x1", d.x).attr("y1", d.y);
+        } else if (l.target == d.id) {
+          d3.select(this).attr("x2", d.x).attr("y2", d.y);
+        }
+      });
+    });
 
- var links = svg.selectAll("link")
-   .data(data.links)
-   .enter()
-   .append("line")
-   .attr("class", "link")
-   .attr("x1", function(l) {
-     var sourceNode = data.nodes.filter(function(d, i) {
-       return d.id == l.source
-     })[0];
-     d3.select(this).attr("y1", sourceNode.y);
-     return sourceNode.x
-   })
-   .attr("x2", function(l) {
-     var targetNode = data.nodes.filter(function(d, i) {
-       return d.id == l.target
-     })[0];
-     d3.select(this).attr("y2", targetNode.y);
-     return targetNode.x
-   })
-   .attr("fill", "none")
-   .attr("stroke", "white");
+  var links = svg.selectAll("link")
+    .data(data.links)
+    .enter()
+    .append("line")
+    .attr("class", "link")
+    .attr("x1", function(l) {
+      var sourceNode = data.nodes.filter(function(d, i) {
+        return d.id == l.source
+      })[0];
+      d3.select(this).attr("y1", sourceNode.y);
+      return sourceNode.x
+    })
+    .attr("x2", function(l) {
+      var targetNode = data.nodes.filter(function(d, i) {
+        return d.id == l.target
+      })[0];
+      d3.select(this).attr("y2", targetNode.y);
+      return targetNode.x
+    })
+    .attr("fill", "none")
+    .attr("stroke", "white");
 
- var nodes = svg.selectAll("g")
-   .data(data.nodes)
-   .enter()
-   .append("g");
+  var nodes = svg.selectAll("g")
+    .data(data.nodes)
+    .enter()
+    .append("g");
 
-    var circle = nodes.append("circle")
-             .attr("class", "node")
-             .attr("cx", function(d) {
-               return d.x
-             })
-             .attr("cy", function(d) {
-               return d.y
-             })
-             .attr("r", 40)
-             .attr("fill", function(d, i) {
-               return c10(i);
-             })
-             .attr("id", function(d) {return d.id})
-             .call(drag);
+  var circle = nodes.append("circle")
+		.attr("class", "node")
+    .attr("cx", function(d) {return d.x})
+    .attr("cy", function(d) {return d.y})
+    .attr("r", 40)
+    .attr("fill", function(d, i) {return c10(i);})
+    .attr("id", function(d) {return d.id})
+    .call(drag);
 
 
-   var label = nodes.append("text")
-   .attr("dx", function(d){return d.x})
-   .attr("dy", function(d){return d.y})
-   .text(function(d){return d.id});
+  var label = nodes.append("text")
+    .attr("dx", function(d){return d.x - 20})
+    .attr("dy", function(d){return d.y + 10})
+    .text(function(d){return d.nameToShow});
 }

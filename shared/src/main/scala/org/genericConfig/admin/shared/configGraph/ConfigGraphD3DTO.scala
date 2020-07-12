@@ -10,12 +10,14 @@ import play.api.libs.json.{Format, JsPath}
  */
 case class ConfigGraphD3DTO(
                                  nodes : List[ConfigGraphD3NodeDTO],
-                                 links : List[ConfigGraphD3LinkDTO]
+                                 links : List[ConfigGraphD3LinkDTO],
+                                 properties : ConfigGraphD3PropertiesDTO
                                  )
 
 object ConfigGraphD3DTO {
   implicit val format: Format[ConfigGraphD3DTO] = (
     (JsPath \ "nodes").format(Format.of[List[ConfigGraphD3NodeDTO]]) and
-    (JsPath \ "links").format(Format.of[List[ConfigGraphD3LinkDTO]])
+    (JsPath \ "links").format(Format.of[List[ConfigGraphD3LinkDTO]]) and
+    (JsPath \ "properties").format(Format.of[ConfigGraphD3PropertiesDTO])
   )(ConfigGraphD3DTO.apply, unlift(ConfigGraphD3DTO.unapply))
 }

@@ -17,15 +17,17 @@ class ConfigGraphPage extends CommonFunction {
   def drawConfigGraph(configGraphResultDTO: ConfigGraphResultDTO): Unit = {
     cleanPage
     val jsonData : String = Json.toJson(configGraphResultDTO.d3Data.get).toString()
+
     g.runGraphD3_2(jsonData)
+
     val steps : List[(JQuery, ConfigGraphStepDTO)]  =
       configGraphResultDTO.steps.get.map(configGraphStepDTO => {
-      (jQuery(s"#${configGraphStepDTO.id}"), configGraphStepDTO)
+      (jQuery(s"#${configGraphStepDTO.stepId}"), configGraphStepDTO)
     })
 
     val components : List[(JQuery, ConfigGraphComponentDTO)] =
       configGraphResultDTO.components.get.map(configGraphComponentDTO => {
-        ((jQuery(s"#${configGraphComponentDTO.id}")), configGraphComponentDTO)
+        (jQuery(s"#${configGraphComponentDTO.componentId}"), configGraphComponentDTO)
       })
 
     steps.foreach(jQS => {

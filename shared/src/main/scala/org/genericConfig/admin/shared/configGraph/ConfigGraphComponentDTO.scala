@@ -1,5 +1,6 @@
 package org.genericConfig.admin.shared.configGraph
 
+import org.genericConfig.admin.shared.component.ComponentUserPropertiesDTO
 import play.api.libs.functional.syntax.{unlift, _}
 import play.api.libs.json.{Format, JsPath}
 /**
@@ -8,15 +9,13 @@ import play.api.libs.json.{Format, JsPath}
  * Created by Gennadi Heimann 06.06.2020
  */
 case class ConfigGraphComponentDTO (
-                                   id : String,
-                                   x : Int,
-                                   y : Int
+                                   componentId : String,
+                                   properties : ComponentUserPropertiesDTO
                                    )
 
 object ConfigGraphComponentDTO {
   implicit val format: Format[ConfigGraphComponentDTO] = (
     (JsPath \ "id").format(Format.of[String]) and
-    (JsPath \ "x").format(Format.of[Int]) and
-    (JsPath \ "y").format(Format.of[Int])
+    (JsPath \ "nameToShow").format(Format.of[ComponentUserPropertiesDTO])
   )(ConfigGraphComponentDTO.apply, unlift(ConfigGraphComponentDTO.unapply))
 }

@@ -10,6 +10,7 @@ import play.api.libs.json.{Format, JsPath}
  */
 case class ConfigGraphD3NodeDTO (
                                   id : String,
+                                  nameToShow : String,
                                   x : Int,
                                   y : Int
                                 )
@@ -17,7 +18,8 @@ case class ConfigGraphD3NodeDTO (
 object ConfigGraphD3NodeDTO {
   implicit val format: Format[ConfigGraphD3NodeDTO] = (
     (JsPath \ "id").format(Format.of[String]) and
+    (JsPath \ "nameToShow").format(Format.of[String]) and
     (JsPath \ "x").format(Format.of[Int]) and
     (JsPath \ "y").format(Format.of[Int])
-    )(ConfigGraphD3NodeDTO.apply, unlift(ConfigGraphD3NodeDTO.unapply))
+  )(ConfigGraphD3NodeDTO.apply, unlift(ConfigGraphD3NodeDTO.unapply))
 }

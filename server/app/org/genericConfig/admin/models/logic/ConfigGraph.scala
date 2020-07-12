@@ -6,7 +6,9 @@ import org.genericConfig.admin.models.common.Error
 import org.genericConfig.admin.models.persistence.orientdb.{GraphCommon, PropertyKeys}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
-import org.genericConfig.admin.shared.configGraph.{ConfigGraphComponentDTO, ConfigGraphD3DTO, ConfigGraphD3LinkDTO, ConfigGraphD3NodeDTO, ConfigGraphDTO, ConfigGraphEdgeDTO, ConfigGraphResultDTO, ConfigGraphStepDTO}
+import org.genericConfig.admin.shared.component.ComponentUserPropertiesDTO
+import org.genericConfig.admin.shared.configGraph.{ConfigGraphComponentDTO, ConfigGraphD3DTO, ConfigGraphD3LinkDTO, ConfigGraphD3NodeDTO, ConfigGraphD3PropertiesDTO, ConfigGraphDTO, ConfigGraphEdgeDTO, ConfigGraphResultDTO, ConfigGraphStepDTO}
+import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepPropertiesDTO}
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
@@ -48,8 +50,9 @@ class ConfigGraph() {
   def configGraph(configGraphDTO: ConfigGraphDTO) : ConfigGraphDTO = {
 
     val configRid : String = RidToHash.getRId(configGraphDTO.params.get.configId).get
-    val screenHeight : Int = configGraphDTO.params.get.screenHeight
-    val screenWidth : Int  = configGraphDTO.params.get.screenWidth
+    val screenHeight : Int = (configGraphDTO.params.get.screenHeight.toDouble * 0.66).toInt
+    //TODO Den Faktor globalisieren
+    val screenWidth : Int  = (configGraphDTO.params.get.screenWidth.toDouble * 0.69).toInt
     val (orientElems, error) : (Option[List[OrientElement]], Option[Error]) = GraphCommon.traverse(configRid)
 
     error match {
@@ -68,11 +71,7 @@ class ConfigGraph() {
         val configGraphD3LinksDTO : List[ConfigGraphD3LinkDTO] = getConfigGraphD3LinksDTO(edges)
 
         val configGraphD3NodesDTO : List[ConfigGraphD3NodeDTO] = getConfigGraphD3NodesDTO(configRid, screenHeight, screenWidth)
-
-        // TODO
-        // edges wird zurzeit nicht mehr gebraucht
-        // ConfigGraphStepDTO benoetigt nameToShow, selectionCriterion
-        // ConfigGraphComponentDTO benoetigt nameToShow
+        
         ConfigGraphDTO(
           action = Actions.CONFIG_GRAPH,
           result = Some(ConfigGraphResultDTO(
@@ -80,7 +79,11 @@ class ConfigGraph() {
             components = Some(configGraphComponents),
             d3Data = Some(ConfigGraphD3DTO(
               nodes = configGraphD3NodesDTO,
-              links = configGraphD3LinksDTO
+              links = configGraphD3LinksDTO,
+              properties = ConfigGraphD3PropertiesDTO(
+                svgHeight = screenHeight,
+                svgWidth = screenWidth
+              )
             )),
             errors = None
           )
@@ -109,6 +112,7 @@ class ConfigGraph() {
     nodesWithY.map(e => {
       ConfigGraphD3NodeDTO(
         id = RidToHash.setIdAndHash(e.id)._2,
+        nameToShow = e.nameToShow,
         x = e.x.toInt,
         y = e.y.toInt
       )
@@ -173,6 +177,7 @@ class ConfigGraph() {
 
     val step = D3Node(
       id = vStep.getIdentity.toString(),
+      nameToShow = vStep.getProperty(PropertyKeys.NAME_TO_SHOW),
       level = level.value,
       orderNumber = 1,
       x = 0,
@@ -185,6 +190,7 @@ class ConfigGraph() {
 
       val node : D3Node = D3Node(
         id = c.getIdentity.toString,
+        nameToShow = c.getProperty(PropertyKeys.NAME_TO_SHOW),
         level = level.value,
         orderNumber = xPosNumber,
         x = 0,
@@ -217,9 +223,14 @@ class ConfigGraph() {
   private def getConfigGraphStepsDTO(eSteps : List[OrientElement]) : List[ConfigGraphStepDTO] = {
     eSteps.map(step => {
       ConfigGraphStepDTO(
-        id = RidToHash.setIdAndHash(step.getIdentity.toString)._2,
-        x = 0,
-        y = 0
+        stepId = RidToHash.setIdAndHash(step.getIdentity.toString)._2,
+        properties = StepPropertiesDTO(
+          nameToShow = Some(step.getProperty(PropertyKeys.NAME_TO_SHOW).toString),
+          selectionCriterion = Some(SelectionCriterionDTO(
+            min = Some(step.getProperty(PropertyKeys.SELECTION_CRITERION_MIN).toString.toInt),
+            max = Some(step.getProperty(PropertyKeys.SELECTION_CRITERION_MAX).toString.toInt)
+          ))
+        )
       )
     })
   }
@@ -227,9 +238,10 @@ class ConfigGraph() {
   private def getConfigGraphComponentsDTO(eComponents : List[OrientElement]) : List[ConfigGraphComponentDTO] = {
     eComponents.map(c => {
       ConfigGraphComponentDTO(
-        id = RidToHash.setIdAndHash(c.getIdentity.toString)._2,
-        x = 0,
-        y = 0
+        componentId = RidToHash.setIdAndHash(c.getIdentity.toString)._2,
+        properties = ComponentUserPropertiesDTO(
+          nameToShow = Some(c.getProperty(PropertyKeys.NAME_TO_SHOW).toString),
+        )
       )
     })
   }

@@ -10,7 +10,7 @@ import org.scalajs.jquery.jQuery
  */
 class ComponentPage() {
   def drawComponentPage(configGraphComponentDTO: ConfigGraphComponentDTO): Unit = {
-    jQuery(s"#${configGraphComponentDTO.id}").css("fill", "#163183")
+    jQuery(s"#${configGraphComponentDTO.componentId}").css("fill", "#163183")
   }
 
 }
