@@ -1,6 +1,5 @@
 package org.genericConfig.admin.client.old.config
 
-import org.scalajs.dom.raw.WebSocket
 import org.scalajs.jquery.jQuery
 
 /**
@@ -49,21 +48,5 @@ class UpdateConfigPage() {
 //
 //    println("OUT -> " + jsonGetConfigs)
 //    websocket.send(jsonGetConfigs)
-  }
-  
-  def updateStatus(/*updateConfigOut: JsonUpdateConfigOut*/) = {
-    
-//    val addConfig: Option[JsonStatus] = deleteConfigOut.result.status.addConfig
-//    val getConfigs: Option[JsonStatus] = deleteConfigOut.result.status.getConfigs
-//    val deleteConfig: Option[JsonStatus] = deleteConfigOut.result.status.deleteConfig
-//    val updateConfig: Option[JsonStatus] = updateConfigOut.result.status.updateConfig
-//    val common: Option[JsonStatus] = updateConfigOut.result.status.common
-    
-//    val htmlHeader =
-//      s"<dev id='status' class='status'>" +
-//        updateConfig.get.status + " , " + common.get.status +
-//      "</dev>"
-//    jQuery("#status").remove()
-//    jQuery(htmlHeader).appendTo(jQuery("header"))
   }
 }

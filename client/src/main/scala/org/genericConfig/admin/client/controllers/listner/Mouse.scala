@@ -22,6 +22,7 @@ class Mouse {
       case Actions.UPDATE_USER => jQueryElem.on("click", () => new User().updateUsername(param))
       case Actions.DELETE_USER => jQueryElem.on("click", () => new User().deleteUser(param))
       case Actions.ADD_CONFIG => jQueryElem.on("click", () => new Config().addConfig(param))
+      case Actions.UPDATE_STEP => jQueryElem.on("click" , () => new Step().updateStep(param))
         //Actions internal
       case ActionsForClient.REGISTER_PAGE => jQueryElem.on("click", () => new Register().register())
       case ActionsForClient.START_PAGE => jQueryElem.on("click", () => new Start().start())
