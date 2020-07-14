@@ -1,6 +1,6 @@
 package org.genericConfig.admin.models.logic
 
-import com.tinkerpop.blueprints.impls.orient.{OrientEdge, OrientVertex}
+import com.tinkerpop.blueprints.impls.orient.OrientVertex
 import org.genericConfig.admin.models.common.Error
 import org.genericConfig.admin.models.persistence.orientdb.{GraphCommon, GraphComponent, PropertyKeys}
 import org.genericConfig.admin.shared.Actions

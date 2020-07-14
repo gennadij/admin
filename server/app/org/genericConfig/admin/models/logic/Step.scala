@@ -151,56 +151,5 @@ class Step {
       ))
     )
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//  /**
-//    * @author Gennadi Heimann
-//    *
-//    * @version 0.1.0
-//    *
-//    * @param stepBO: StepBO
-//    *
-//    * @return ComponentBO
-//    */
-//  def connectComponentToStep(stepBO: StepBO): StepBO = {
-//  }
-//    val componentRid = RidToHash.getRId(stepBO.appendToId.get)
-//    val stepRid = RidToHash.getRId(stepBO.stepId.get)
-//
-//    val (statusAppendStep, statusCommon): (StatusAppendStep, Error) =
-//      Persistence.appendStepTo(id = componentRid.get, stepId = stepRid.get)
-//
-//    statusAppendStep match {
-//      case AppendStepSuccess() => StepBO(
-//        json = Some(JsonNames.CONNECT_COMPONENT_TO_STEP),
-//        status = Some(StatusStep(
-//          appendStep = Some(AppendStepSuccess()),
-//          common = Some(statusCommon)
-//        ))
-//      )
-//      case AppendStepError() => StepBO(
-//        json = Some(JsonNames.CONNECT_COMPONENT_TO_STEP),
-//        status = Some(StatusStep(
-//          appendStep = Some(AppendStepError()),
-//          common = Some(statusCommon)
-//        ))
-//      )
-//    }
-//  }
 }
 

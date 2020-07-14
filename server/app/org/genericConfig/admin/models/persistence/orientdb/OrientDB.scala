@@ -1,10 +1,8 @@
-package org.genericConfig.admin.models.persistence
+package org.genericConfig.admin.models.persistence.orientdb
 
-import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory
-import com.tinkerpop.blueprints.impls.orient.OrientGraph
-import com.tinkerpop.blueprints.impls.orient.OrientDynaElementIterable
 import com.orientechnologies.orient.core.sql.OCommandSQL
-import play.api.Logger
+import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientGraph, OrientGraphFactory}
+import org.genericConfig.admin.models.persistence.TestDB
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -85,11 +83,3 @@ class OrientDB {
   }
   
 }
-
-
-
-//case class TestDB() {
-//    def dbName: String = "testDB"
-//    def username: String = "root"
-//    def password: String = "root"
-//}

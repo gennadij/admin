@@ -1,6 +1,6 @@
 package org.genericConfig.admin.models.db
 
-import org.genericConfig.admin.models.persistence.{Database, OrientDB}
+import org.genericConfig.admin.models.persistence.Database
 import org.junit.runner.RunWith
 import org.specs2.Specification
 import org.specs2.runner.JUnitRunner

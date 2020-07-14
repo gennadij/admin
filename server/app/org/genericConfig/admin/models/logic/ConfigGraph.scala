@@ -121,7 +121,6 @@ class ConfigGraph() {
 
   private def calcPosition(configRid : String, screenHeight: Int): List[D3Node] = {
 
-    //TODO check error
     val (vConfig, error) : (Option[OrientVertex], Option[Error]) = GraphCommon.getVertex(rId = configRid)
 
     val eHasStep : List[OrientEdge] =

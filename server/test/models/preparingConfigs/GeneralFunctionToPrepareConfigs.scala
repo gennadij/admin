@@ -5,8 +5,7 @@ import com.tinkerpop.blueprints.{Direction, Edge, Vertex}
 import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientGraph, OrientVertex}
 import org.genericConfig.admin.controllers.converter.MessageHandler
 import org.genericConfig.admin.controllers.websocket.WebClient
-import org.genericConfig.admin.models.persistence.OrientDB
-import org.genericConfig.admin.models.persistence.orientdb.PropertyKeys
+import org.genericConfig.admin.models.persistence.orientdb.{OrientDB, PropertyKeys}
 
 import scala.collection.JavaConverters._
 
