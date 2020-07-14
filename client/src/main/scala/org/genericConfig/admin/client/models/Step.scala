@@ -1,7 +1,12 @@
 package org.genericConfig.admin.client.models
 
+import org.genericConfig.admin.client.controllers.websocket.WebSocketListner
 import org.genericConfig.admin.client.views.configGraph.NodeEditStepPage
+import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.configGraph.ConfigGraphStepDTO
+import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepDTO, StepParamsDTO, StepPropertiesDTO}
+import org.scalajs.jquery.jQuery
+import play.api.libs.json.Json
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -11,7 +16,24 @@ import org.genericConfig.admin.shared.configGraph.ConfigGraphStepDTO
 class Step {
   def updateStep(param: Option[Any]): Unit = {
     val stepDTO: ConfigGraphStepDTO = param.get.asInstanceOf[ConfigGraphStepDTO]
-    println("UPDATE_STEP " + stepDTO.properties.nameToShow)
+    val inputFieldNameToShow : String = jQuery(s"#${stepDTO.stepId}_nameToShow").value().toString
+    val inputFieldSelectionCriterionMin : String = jQuery(s"#${stepDTO.stepId}_MIN").value().toString
+    val inputFieldSelectionCriterionMax : String = jQuery(s"#${stepDTO.stepId}_MAX").value().toString
+    val updateStep : String = Json.toJson(StepDTO(
+      action = Actions.UPDATE_STEP,
+      params = Some(StepParamsDTO(
+        stepId = Some(stepDTO.stepId),
+        properties = Some(StepPropertiesDTO(
+          nameToShow = Some(inputFieldNameToShow),
+          selectionCriterion = Some(SelectionCriterionDTO(
+            min = Some(inputFieldSelectionCriterionMin.toInt),
+            max = Some(inputFieldSelectionCriterionMax.toInt)
+          ))
+        ))
+      ))
+    )).toString
+    println("OUT -> " + updateStep)
+    WebSocketListner.webSocket.send(updateStep)
   }
 
   def addComponent(param : Option[Any]) : Unit = {

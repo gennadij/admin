@@ -38,7 +38,7 @@ class NodeEditStepPage extends CommonFunction{
     )
 
     val jQueryButtonSave = HtmlElementText.drawButton(id = s"${configGraphStepDTO.stepId}_save", "Speichern")
-    val jQueryButtonAddComponent = HtmlElementText.drawButton(id = s"${configGraphStepDTO.stepId}_save", "Komponente hinzufuegen")
+    val jQueryButtonAddComponent = HtmlElementText.drawButton(id = s"${configGraphStepDTO.stepId}_update_step", "Komponente hinzufuegen")
 
     editGroup.appendTo(configGraphNodePage)
     jQueryInputFieldNameToShow.appendTo(editGroup)
