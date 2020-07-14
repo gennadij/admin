@@ -10,6 +10,12 @@ object HtmlElementIds {
   def mainHtml =             "main"
   def mainJQuery =           "#main"
 
+  def htmlConfigGraphNodeEdit =  "configGraphNodeEdit"
+  def jQueryConfigGraphNodeEdit =  "#configGraphNodeEdit"
+
+  def htmlEditGroupNodePage = "editGroupNodePage"
+  def jQueryEditGroupNodePage = "#editGroupNodePage"
+
   def statusHtml =           "status"
   def statusJQuery =         "#status"
 

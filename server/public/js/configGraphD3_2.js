@@ -54,15 +54,15 @@ function runGraphD3_2(arg){
 		.attr("class", "node")
     .attr("cx", function(d) {return d.x})
     .attr("cy", function(d) {return d.y})
-    .attr("rx", 80)
-    .attr("ry", 40)
+    .attr("rx", 60)
+    .attr("ry", 30)
     .attr("fill", function(d, i) {return c10(i);})
     .attr("id", function(d) {return d.id});
 //    .call(drag);
 
 
   var label = nodes.append("text")
-    .attr("dx", function(d){return d.x - 60})
+    .attr("dx", function(d){return d.x - 50})
     .attr("dy", function(d){return d.y})
     .text(function(d){return d.nameToShow.substring(0, 10)});
 }

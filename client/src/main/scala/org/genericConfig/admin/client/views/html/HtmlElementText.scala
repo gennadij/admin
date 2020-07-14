@@ -15,7 +15,7 @@ object HtmlElementText {
   }
 
   def configGraphNodePage(title : String) : JQuery = {
-    jQuery(s"<div id='configGraphElem'><center> <h3> $title</h3> </center> </div>")
+    jQuery(s"<div id='${HtmlElementIds.htmlConfigGraphNodeEdit}'><center> <h3> $title</h3> </center> </div>")
   }
 
   def devInputFields(inputFields : List[String]) : String = {
@@ -27,10 +27,14 @@ object HtmlElementText {
   }
 
   def drawInputField(id: String, label: String, typeofInput: String = "text", defaultText : String = ""): JQuery = {
-    jQuery(s"<div>$label <input id='$id' type='$typeofInput' value='$defaultText'></div>")
+    jQuery(s"<div class='inputField'>$label <input id='$id' type='$typeofInput' value='$defaultText'></div>")
   }
 
   def drawButton(id: String, text: String): JQuery = {
     jQuery(s"<div id='$id' class='button'>$text</div>")
+  }
+
+  def drawDiv(id : String): JQuery = {
+    jQuery(s"<div id='$id'></div>")
   }
 }

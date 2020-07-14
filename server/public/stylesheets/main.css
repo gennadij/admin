@@ -36,7 +36,7 @@
     border-radius : 10px;
 }
 
-#configGraphElem {
+#configGraphNodeEdit {
     overflow-x: auto;
     overflow-y: auto;
     background-color: #F7F8E0;
@@ -50,6 +50,10 @@
     border-style : solid;
     border-width : medium;
     border-radius : 10px;
+}
+
+.inputField {
+    padding: 5px 5px 5px 5px;
 }
 
 .button{
