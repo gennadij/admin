@@ -30,19 +30,19 @@ class UserPage() extends CommonFunction{
         drawNewStatus("Kein Fehler")
 
         val main : JQuery = HtmlElementText.mainPage(s"Benutzer : ${userDTO.result.get.username.get}" )
-        val jQueryButtonGetConfigs : JQuery = HtmlElementText.drawButton("getConfigs", "Konfiguratoren")
+//        val jQueryButtonGetConfigs : JQuery = HtmlElementText.drawButton("getConfigs", "Konfiguratoren")
         val jQueryButtonUpdateUser : JQuery = HtmlElementText.drawButton("updateUser", "Benutzer bearbeiten")
         val jQueryButtonDeleteUser : JQuery = HtmlElementText.drawButton("deleteUser", "Benutzer löschen")
         val jQueryButtonLogout : JQuery = HtmlElementText.drawButton("start", "Auslogen")
 
         main.appendTo(jQuery(HtmlElementIds.section))
 
-        jQueryButtonGetConfigs.appendTo(main)
+//        jQueryButtonGetConfigs.appendTo(main)
         jQueryButtonUpdateUser.appendTo(main)
         jQueryButtonDeleteUser.appendTo(main)
         jQueryButtonLogout.appendTo(main)
 
-        new Mouse().mouseClick(jQueryButtonGetConfigs, Actions.GET_CONFIGS, Some(userDTO))
+//        new Mouse().mouseClick(jQueryButtonGetConfigs, Actions.GET_CONFIGS, Some(userDTO))
         new Mouse().mouseClick(jQueryButtonUpdateUser, ActionsForClient.UPDATE_USER_PAGE, Some(userDTO))
         new Mouse().mouseClick(jQueryButtonDeleteUser, Actions.DELETE_USER, Some(userDTO))
         new Mouse().mouseClick(jQueryButtonLogout, ActionsForClient.START_PAGE)
@@ -90,7 +90,9 @@ class UserPage() extends CommonFunction{
         jQueryButtonAddConfig.appendTo(main)
         jQueryButtonLogout.appendTo(main)
 
-        configurationsJQuery.foreach(configJQuery => new Mouse().mouseClick(jQueryElem = configJQuery._1, action = ActionsForClient.CONFIG_PAGE, param = Some(configJQuery._2)))
+        configurationsJQuery.foreach(configJQuery => {
+          new Mouse().mouseClick(jQueryElem = configJQuery._1, action = ActionsForClient.CONFIG_PAGE, param = Some(configJQuery._2))
+        })
         new Mouse().mouseClick(jQueryButtonAddConfig, ActionsForClient.ADD_CONFIG_PAGE, Some(configDTO))
         new Mouse().mouseClick(jQueryButtonLogout, ActionsForClient.START_PAGE)
 

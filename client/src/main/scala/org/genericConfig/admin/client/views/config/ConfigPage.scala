@@ -25,10 +25,15 @@ class ConfigPage() extends CommonFunction{
     val main : JQuery = HtmlElementText.mainPage(s"Konfigurator" )
 
     val jQueryButtonShowConfigGraph : JQuery = HtmlElementText.drawButton("configGraph", "Graph")
+    val jQueryButtonUpdateConfig : JQuery = HtmlElementText.drawButton(HtmlElementIds.updateConfigHtml, "Konfigurator Bearbeiten")
+    val jQueryButtonDeleteConfig : JQuery = HtmlElementText.drawButton(HtmlElementIds.deleteConfigHtml, "Konfigurator loeschen")
+
 
     main.appendTo(jQuery(HtmlElementIds.section))
 
     jQueryButtonShowConfigGraph.appendTo(main)
+    jQueryButtonUpdateConfig.appendTo(main)
+    jQueryButtonDeleteConfig.appendTo(main)
 
     new Mouse().mouseClick(jQueryButtonShowConfigGraph, ActionsForClient.CONFIG_GRAPH, Some(userConfigDTO))
 

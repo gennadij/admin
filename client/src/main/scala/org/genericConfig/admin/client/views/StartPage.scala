@@ -15,13 +15,6 @@ class StartPage() extends CommonFunction{
 
     cleanPage
 
-    errors match {
-      case Some(errors) =>
-        drawNewStatus(errors.head.name)
-      case None =>
-        drawNewStatus("Kein Fehler")
-    }
-
     val main : JQuery = HtmlElementText.mainPage("Administrator für generischer Konfigurator")
     val jQueryInputFieldUsername : JQuery = HtmlElementText.drawInputField("username", "Benutzername")
     val jQueryInputFieldPassword : JQuery= HtmlElementText.drawInputField("password", "Password", typeofInput = "password")
