@@ -44,7 +44,7 @@ class UserPage() extends CommonFunction{
 
 //        new Mouse().mouseClick(jQueryButtonGetConfigs, Actions.GET_CONFIGS, Some(userDTO))
         new Mouse().mouseClick(jQueryButtonUpdateUser, ActionsForClient.UPDATE_USER_PAGE, Some(userDTO))
-        new Mouse().mouseClick(jQueryButtonDeleteUser, Actions.DELETE_USER, Some(userDTO))
+//        new Mouse().mouseClick(jQueryButtonDeleteUser, Actions.DELETE_USER, Some(userDTO))
         new Mouse().mouseClick(jQueryButtonLogout, ActionsForClient.START_PAGE)
       case _ =>
         new StartPage().drawStartPage(userDTO.result.get.errors)

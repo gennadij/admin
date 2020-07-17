@@ -7,7 +7,7 @@ import play.api.libs.json.{Format, JsPath}
 
 case class UserResultDTO(
                      userId: Option[String],
-                     username : Option[String],
+                     username : Option[String] = None,
                      errors : Option[List[ErrorDTO]]
                      )
 

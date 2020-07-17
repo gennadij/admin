@@ -4,6 +4,7 @@ import org.genericConfig.admin.client.controllers.listner.Mouse
 import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.config.ConfigDTO
+import org.genericConfig.admin.shared.user.{UserDTO, UserResultDTO}
 import org.scalajs.jquery.{JQuery, jQuery}
 import util.CommonFunction
 
@@ -31,8 +32,15 @@ class AddConfigPage() extends CommonFunction {
     jQueryButtonAddConfig.appendTo(main)
     jQueryButtonCancel.appendTo(main)
 
+    println(configDTO.result.get.userId.get)
+
+    val userDTO = UserDTO(
+      action = Actions.GET_USER,
+      result = Some(UserResultDTO(userId = configDTO.result.get.userId, errors = None))
+    )
+
     new Mouse().mouseClick(jQueryButtonAddConfig, Actions.ADD_CONFIG, Some(configDTO))
-    new Mouse().mouseClick(jQueryButtonCancel, Actions.GET_CONFIGS, Some(configDTO))
+    new Mouse().mouseClick(jQueryButtonCancel, Actions.GET_USER, Some(userDTO))
   }
 }
 
