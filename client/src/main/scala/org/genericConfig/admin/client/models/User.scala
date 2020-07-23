@@ -4,7 +4,6 @@ import org.genericConfig.admin.client.controllers.websocket.WebSocketListner
 import org.genericConfig.admin.client.views.html.HtmlElementIds
 import org.genericConfig.admin.client.views.user.{UpdateUserPage, UserPage}
 import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO}
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO, UserUpdateDTO}
 import org.scalajs.jquery.jQuery
 import play.api.libs.json.Json
@@ -17,14 +16,12 @@ import play.api.libs.json.Json
 
 class User {
   def showUser(param: Option[Any]): Unit = {
-//    new UserPage().drawUserPage(param.get.asInstanceOf[UserDTO])
-    new UserPage().drawUserWithConfigPage(userDTO = Some(param.get.asInstanceOf[UserDTO]))
+    new UserPage().drawUserPageWithConfigPage(userDTO = Some(param.get.asInstanceOf[UserDTO]))
   }
 
   def showUpdateUserPage(param : Option[Any]) : Unit = {
     new UpdateUserPage().drawUpdateUserPage(param.get.asInstanceOf[UserDTO])
   }
-
 
   def updateUsername(param : Option[Any]): Unit = {
     val updateUsername = Json.toJson(

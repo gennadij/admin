@@ -89,4 +89,35 @@ class ConfigPage() extends CommonFunction{
 
 //    jQuery(HtmlElementIds.startPageJQuery).on("click", () => startPage)
   }
+
+  def drawAllConfigsInUserPage(configDTO: Option[ConfigDTO]):Unit = {
+    val main : JQuery = jQuery(HtmlElementIds.mainJQuery)
+    val jQueryBr : JQuery = jQuery("</br> </br> </br>")
+    val jQueryMainConfigs : JQuery = jQuery("<center> <h3>Konfiguratoren</h3> </center>")
+
+    val configurationsJQuery : List[(JQuery, UserConfigDTO)] = configDTO.get.result.get.configs.get.map(config => {
+      (HtmlElementText.drawButton(config.configId.get, config.configUrl.get), config)
+    })
+
+    val jQueryButtonAddConfig : JQuery = HtmlElementText.drawButton(HtmlElementIds.addConfigHtml, "Konfigurator hinzufügen")
+    val jQueryButtonLogout : JQuery = HtmlElementText.drawButton("start", "Auslogen")
+
+    jQueryBr.appendTo(main)
+    jQueryMainConfigs.appendTo(main)
+    val configDiv = jQuery("<div id='configs'></div>")
+
+    configurationsJQuery.foreach(config => {
+      config._1.appendTo(configDiv)
+    })
+    configDiv.appendTo(main)
+    jQuery("</br> </br> </br>").appendTo(main)
+    jQueryButtonAddConfig.appendTo(main)
+    jQueryButtonLogout.appendTo(main)
+
+    configurationsJQuery.foreach(configJQuery => {
+      new Mouse().mouseClick(jQueryElem = configJQuery._1, action = ActionsForClient.CONFIG_PAGE, param = Some(configJQuery._2))
+    })
+    new Mouse().mouseClick(jQueryButtonAddConfig, ActionsForClient.ADD_CONFIG_PAGE, configDTO)
+    new Mouse().mouseClick(jQueryButtonLogout, ActionsForClient.START_PAGE)
+  }
 }

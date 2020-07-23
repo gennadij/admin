@@ -69,6 +69,10 @@ class Config {
     WebSocketListner.webSocket.send(getConfigParams)
   }
 
+  def showAllConfigsInUserPage(param: Option[Any]) : Unit = {
+    new ConfigPage().drawAllConfigsInUserPage(Some(param.get.asInstanceOf[ConfigDTO]))
+  }
+
   def showConfigPage(param: Option[Any]) : Unit = {
     new ConfigPage().drawConfigPage(param.get.asInstanceOf[UserConfigDTO])
   }

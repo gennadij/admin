@@ -40,7 +40,7 @@ class ConverterFromJsonForConfig() {
 
   private def getConfigs(receivedMessage: JsValue): Unit = {
     Json.fromJson[ConfigDTO](receivedMessage) match {
-      case getConfigsResult: JsSuccess[ConfigDTO] => new UserPage().drawUserWithConfigPage(configDTO = Some(getConfigsResult.value))//new ConfigPage().drawAllConfigs(getConfigsResult.get)
+      case getConfigsResult: JsSuccess[ConfigDTO] => new UserPage().drawUserPageWithConfigPage(configDTO = Some(getConfigsResult.value))//new ConfigPage().drawAllConfigs(getConfigsResult.get)
       case e: JsError => println("Error -> : " + Actions.GET_CONFIGS + " -> " + JsError.toJson(e).toString())
     }
   }
