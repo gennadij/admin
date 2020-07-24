@@ -215,29 +215,33 @@ trait CommonFunction {
   }
 
   def connectComponentToStep(outId : String, inId : String, wC : WebClient) : Option[List[ErrorDTO]] = {
-    Logger.info("Erstelle Edge HAS_COMPONENT")
+    Logger.info("Erstelle Edge HAS_STEP")
     val graph: OrientGraph = Database.getFactory()._1.get.getTx
 
-    val vIn : OrientVertex = graph.getVertex(RidToHash.getRId(inId).get)
+    val vOut: OrientVertex = graph.getVertex(RidToHash.getRId(outId).get)
 
-    val res = vIn.getEdges(Direction.IN, PropertyKeys.EDGE_HAS_STEP)
+    val res = vOut.getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP)
 
     if(res.asScala.toList.length < 1) {
       Logger.info("Edge wird erstellt")
-      val connectComponentToStepResult : JsResult[ComponentDTO] = Json.fromJson[ComponentDTO](
-        wC.handleMessage(Json.toJson(ComponentDTO(
-          action = Actions.CONNECT_COMPONENT_TO_STEP,
-          params = Some(ComponentParamsDTO(
-            configProperties = Some(ComponentConfigPropertiesDTO(
-              stepId = Some(inId),
-              componentId = Some(outId)
-            )),
-            userProperties = Some(ComponentUserPropertiesDTO(
-              nameToShow = Some("ComponentUpdated")
-            ))
+
+      val connectComponentToStepParam = Json.toJson(ComponentDTO(
+        action = Actions.CONNECT_COMPONENT_TO_STEP,
+        params = Some(ComponentParamsDTO(
+          configProperties = Some(ComponentConfigPropertiesDTO(
+            stepId = Some(inId),
+            componentId = Some(outId)
+          )),
+          userProperties = Some(ComponentUserPropertiesDTO(
+            nameToShow = Some("ComponentUpdated")
           ))
-        )))
-      )
+        ))
+      ))
+
+      val jsValueConnectComponentToStepResult = wC.handleMessage(connectComponentToStepParam)
+
+      val connectComponentToStepResult : JsResult[ComponentDTO] = Json.fromJson[ComponentDTO](jsValueConnectComponentToStepResult)
+
       connectComponentToStepResult.get.result.get.errors match {
         case Some(errors) => Some(errors)
         case None => None

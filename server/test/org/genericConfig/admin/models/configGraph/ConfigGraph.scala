@@ -50,7 +50,7 @@ class ConfigGraph extends Specification
 
     val stepIdS2 = addStep(nameToShow = Some(s"S2_$username"), outId = componentIdS1C1, min = 1, max = 1, wC = wC)
     val errorS1_C2_S2 = connectComponentToStep(outId = componentIdS1C2.get, inId = stepIdS2.get, wC)
-
+    Logger.info("Error S1_C2 -> S2" + errorS1_C2_S2)
     val componentIdS2C1 : Option[String] = createComponent(wC, stepIdS2, Some(s"S2_C1_$username"))
     val componentIdS2C2 : Option[String] = createComponent(wC, stepIdS2, Some(s"S2_C2_$username"))
 
