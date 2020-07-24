@@ -1,6 +1,7 @@
 package org.genericConfig.admin.client.views.configGraph
 
 import org.genericConfig.admin.client.controllers.listner.Mouse
+import org.genericConfig.admin.client.controllers.websocket.ActionsForClient
 import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.configGraph.ConfigGraphStepDTO
@@ -37,8 +38,9 @@ class NodeEditStepPage extends CommonFunction{
       defaultText = configGraphStepDTO.properties.selectionCriterion.get.max.get.toString
     )
 
+
     val jQueryButtonSave = HtmlElementText.drawButton(id = s"${configGraphStepDTO.stepId}_save", "Speichern")
-    val jQueryButtonAddComponent = HtmlElementText.drawButton(id = s"${configGraphStepDTO.stepId}_update_step", "Komponente hinzufuegen")
+    val jQueryButtonAddComponent = HtmlElementText.drawButton(id = s"${configGraphStepDTO.stepId}_addComponent", "Neu Komponente hinyufuegen")
 
     editGroup.appendTo(configGraphNodePage)
     jQueryInputFieldNameToShow.appendTo(editGroup)
@@ -50,6 +52,6 @@ class NodeEditStepPage extends CommonFunction{
     jQuery(s"#${configGraphStepDTO.stepId}").css("fill", "#15e751")
 
     new Mouse().mouseClick(jQueryButtonSave, Actions.UPDATE_STEP, Some(configGraphStepDTO))
-    new Mouse().mouseClick(jQueryButtonAddComponent, Actions.ADD_COMPONENT, Some(configGraphStepDTO))
+    new Mouse().mouseClick(jQueryButtonAddComponent, ActionsForClient.ADD_COMPONENT_PAGE, Some(configGraphStepDTO))
   }
 }

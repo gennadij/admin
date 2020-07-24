@@ -36,11 +36,6 @@ class Step {
     WebSocketListner.webSocket.send(updateStep)
   }
 
-  def addComponent(param : Option[Any]) : Unit = {
-    val stepDTO: ConfigGraphStepDTO = param.get.asInstanceOf[ConfigGraphStepDTO]
-    println("ADD_Component " + stepDTO.properties.nameToShow)
-  }
-
   def showStep(param: Option[Any]): Unit = {
     val stepDTO: ConfigGraphStepDTO = param.get.asInstanceOf[ConfigGraphStepDTO]
     new NodeEditStepPage().drawStepPage(stepDTO)

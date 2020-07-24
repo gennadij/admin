@@ -2,8 +2,10 @@ package org.genericConfig.admin.client.views.config
 
 import org.genericConfig.admin.client.controllers.listner.Mouse
 import org.genericConfig.admin.client.controllers.websocket.ActionsForClient
+import org.genericConfig.admin.client.models.{Progress, State}
 import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
-import org.genericConfig.admin.shared.config.{ConfigDTO, UserConfigDTO}
+import org.genericConfig.admin.shared.Actions
+import org.genericConfig.admin.shared.config.{ConfigDTO, ConfigParamsDTO, UserConfigDTO}
 import org.scalajs.jquery.{JQuery, jQuery}
 import util.CommonFunction
 
@@ -37,8 +39,15 @@ class ConfigPage() extends CommonFunction{
     jQueryButtonDeleteConfig.appendTo(main)
     jQueryButtonStartPage.appendTo(main)
 
-    new Mouse().mouseClick(jQueryButtonShowConfigGraph, ActionsForClient.CONFIG_GRAPH, Some(userConfigDTO))
+    Progress.addState(State(
+      configDTO = Some(ConfigDTO(
+        params = Some(ConfigParamsDTO(
+          configId = Some(userConfigDTO.configId.get)
+        ))
+      ))
+    ))
 
+    new Mouse().mouseClick(jQueryButtonShowConfigGraph, Actions.CONFIG_GRAPH, Some(userConfigDTO))
   }
 
   def drawAllConfigs(getConfigsResult: ConfigDTO): Unit = {
@@ -70,25 +79,25 @@ class ConfigPage() extends CommonFunction{
     new Mouse().mouseClick(jQueryButtonAddConfig, ActionsForClient.ADD_CONFIG_PAGE, Some(getConfigsResult))
     new Mouse().mouseClick(jQueryButtonLogout, ActionsForClient.START_PAGE)
   }
-
-  private def drawConfig(config : UserConfigDTO): JQuery = {
-    cleanPage
-
-    val htmlMain =
-      "<dev id='main' class='main'>" +
-        "<p>Konfiguration</p>" +
-        drawInputField("configurationUrl", "configurationUrl", defaultText = config.configUrl.get)  + "</br> </br>" +
- //        drawInputField("configurationCourse", "configurationCourse", defaultText = config.configurationCourse.get) +
-        drawButton("updateConfig", "updateConfig") +
-        drawButton("deleteConfig", "deleteConfig") +
-        drawButton("addStep", "addStep") +
-        drawButton(HtmlElementIds.startPageHtml, "startPage") +
-      "</dev>"
-
-    drawNewMain(htmlMain)
-
-//    jQuery(HtmlElementIds.startPageJQuery).on("click", () => startPage)
-  }
+// TODO Nuetzlicjkeit prüfen
+//  private def drawConfig(config : UserConfigDTO): JQuery = {
+//    cleanPage
+//
+//    val htmlMain =
+//      "<dev id='main' class='main'>" +
+//        "<p>Konfiguration</p>" +
+//        drawInputField("configurationUrl", "configurationUrl", defaultText = config.configUrl.get)  + "</br> </br>" +
+// //        drawInputField("configurationCourse", "configurationCourse", defaultText = config.configurationCourse.get) +
+//        drawButton("updateConfig", "updateConfig") +
+//        drawButton("deleteConfig", "deleteConfig") +
+//        drawButton("addStep", "addStep") +
+//        drawButton(HtmlElementIds.startPageHtml, "startPage") +
+//      "</dev>"
+//
+//    drawNewMain(htmlMain)
+//
+////    jQuery(HtmlElementIds.startPageJQuery).on("click", () => startPage)
+//  }
 
   def drawAllConfigsInUserPage(configDTO: Option[ConfigDTO]):Unit = {
     val main : JQuery = jQuery(HtmlElementIds.mainJQuery)

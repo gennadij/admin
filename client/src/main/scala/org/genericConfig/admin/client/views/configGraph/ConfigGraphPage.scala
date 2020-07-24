@@ -16,6 +16,9 @@ import scala.scalajs.js.Dynamic.{global => g}
 class ConfigGraphPage extends CommonFunction {
   def drawConfigGraph(configGraphResultDTO: ConfigGraphResultDTO): Unit = {
     cleanPage
+
+    jQuery("svg").remove()
+
     val jsonData : String = Json.toJson(configGraphResultDTO.d3Data.get).toString()
 
     g.runGraphD3_2(jsonData)

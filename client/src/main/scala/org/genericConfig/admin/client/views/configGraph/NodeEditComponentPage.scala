@@ -27,15 +27,18 @@ class NodeEditComponentPage() {
 
     val jQueryButtonSave = HtmlElementText.drawButton(id = s"${configGraphComponentDTO.componentId}_save", "Speichern")
     val jQueryButtonAddComponent = HtmlElementText.drawButton(id = s"${configGraphComponentDTO.componentId}_update_component", "Schritt hinzufuegen")
+    val jQueryButtonDeleteComponent = HtmlElementText.drawButton(id = s"${configGraphComponentDTO.componentId}_deleteComponent", "Component entfernen")
 
     editGroup.appendTo(configGraphNodePage)
     jQueryInputFieldNameToShow.appendTo(editGroup)
     jQueryButtonSave.appendTo(editGroup)
     jQueryButtonAddComponent.appendTo(editGroup)
+    jQueryButtonDeleteComponent.appendTo((editGroup))
     configGraphNodePage.appendTo(jQuery(HtmlElementIds.section))
 
     new Mouse().mouseClick(jQueryButtonSave, Actions.UPDATE_COMPONENT, Some(configGraphComponentDTO))
     new Mouse().mouseClick(jQueryButtonAddComponent, Actions.ADD_STEP, Some(configGraphComponentDTO))
+    new Mouse().mouseClick(jQueryButtonDeleteComponent, Actions.DELETE_COMPONENT, Some(configGraphComponentDTO))
 
 
     jQuery(s"#${configGraphComponentDTO.componentId}").css("fill", "#163183")

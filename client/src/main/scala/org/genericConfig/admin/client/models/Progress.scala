@@ -26,7 +26,7 @@ object Progress {
     }
   }
 
-  def getLastStates : Option[State] = {
+  def getLastState : Option[State] = {
     states match {
       case List() => None
       case _ => Some(this.states.head)

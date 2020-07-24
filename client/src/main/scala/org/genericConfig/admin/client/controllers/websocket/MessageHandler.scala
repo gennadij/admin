@@ -22,6 +22,8 @@ class MessageHandler() {
       case Some(Actions.DELETE_CONFIG) => ConverterFromJsonForConfig.deleteConfig(receivedMessage)
       case Some(Actions.UPDATE_CONFIG) => ???
       case Some(Actions.CONFIG_GRAPH) => ConverterJsonDTOForConfigGraph.configGraph(receivedMessage)
+      case Some(Actions.ADD_COMPONENT) => ConverterFromJsonForComponent.addComponent(receivedMessage)
+      case Some(Actions.DELETE_COMPONENT) => ConverterFromJsonForComponent.deleteComponent(receivedMessage)
 //      case Some(JsonNames.ADD_STEP) => addStep(receivedMessage)
 //      case Some(JsonNames.ADD_COMPONENT) => addComponent(receivedMessage)
 //      case Some(JsonNames.CONNECT_COMPONENT_TO_STEP) => ??? //connectComponentToStep(receivedMessage, admin)

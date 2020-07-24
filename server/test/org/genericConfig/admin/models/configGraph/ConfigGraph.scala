@@ -1,4 +1,4 @@
-package org.genericConfig.admin.models.ConfigGraph
+package org.genericConfig.admin.models.configGraph
 
 import org.genericConfig.admin.controllers.websocket.WebClient
 import org.genericConfig.admin.models.CommonFunction

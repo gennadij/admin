@@ -17,7 +17,7 @@ import util.CommonFunction
   */
 class UserPage() extends CommonFunction{
 
-  def drawUserPage(userDTO: UserDTO): Unit = {
+  private def drawUserPage(userDTO: UserDTO): Unit = {
 
     cleanPage
 
