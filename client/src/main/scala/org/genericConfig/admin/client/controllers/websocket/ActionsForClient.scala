@@ -15,4 +15,6 @@ object ActionsForClient {
   val STEP_PAGE : String = "STEP_PAGE"
   val COMPONENT_PAGE: String = "COMPONENT_PAGE"
   val ADD_COMPONENT_PAGE : String = "ADD_COMPONENT_PAGE"
+  val ADD_STEP_PAGE : String = "ADD_STEP_PAGE"
+
 }

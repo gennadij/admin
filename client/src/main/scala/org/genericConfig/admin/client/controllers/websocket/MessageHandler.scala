@@ -24,8 +24,7 @@ class MessageHandler() {
       case Some(Actions.CONFIG_GRAPH) => ConverterJsonDTOForConfigGraph.configGraph(receivedMessage)
       case Some(Actions.ADD_COMPONENT) => ConverterFromJsonForComponent.addComponent(receivedMessage)
       case Some(Actions.DELETE_COMPONENT) => ConverterFromJsonForComponent.deleteComponent(receivedMessage)
-//      case Some(JsonNames.ADD_STEP) => addStep(receivedMessage)
-//      case Some(JsonNames.ADD_COMPONENT) => addComponent(receivedMessage)
+      case Some(Actions.ADD_STEP) => ConverterFromJsonForStep.addStep(receivedMessage)
 //      case Some(JsonNames.CONNECT_COMPONENT_TO_STEP) => ??? //connectComponentToStep(receivedMessage, admin)
 //      case Some(JsonNames.CREATE_DEPENDENCY) => ??? //createDependency(receivedMessage, admin)
 //      case Some(JsonNames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL) => ???

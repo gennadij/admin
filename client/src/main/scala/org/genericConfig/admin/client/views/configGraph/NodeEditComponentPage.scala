@@ -1,6 +1,7 @@
 package org.genericConfig.admin.client.views.configGraph
 
 import org.genericConfig.admin.client.controllers.listner.Mouse
+import org.genericConfig.admin.client.controllers.websocket.ActionsForClient
 import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.configGraph.ConfigGraphComponentDTO
@@ -37,7 +38,7 @@ class NodeEditComponentPage() {
     configGraphNodePage.appendTo(jQuery(HtmlElementIds.section))
 
     new Mouse().mouseClick(jQueryButtonSave, Actions.UPDATE_COMPONENT, Some(configGraphComponentDTO))
-    new Mouse().mouseClick(jQueryButtonAddComponent, Actions.ADD_STEP, Some(configGraphComponentDTO))
+    new Mouse().mouseClick(jQueryButtonAddComponent, ActionsForClient.ADD_STEP_PAGE, Some(configGraphComponentDTO))
     new Mouse().mouseClick(jQueryButtonDeleteComponent, Actions.DELETE_COMPONENT, Some(configGraphComponentDTO))
 
 

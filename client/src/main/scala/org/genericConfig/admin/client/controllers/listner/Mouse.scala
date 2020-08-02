@@ -25,7 +25,7 @@ class Mouse {
       case Actions.CONFIG_GRAPH => jQueryElem.on("click", () => new ConfigGraph().configGraph(param))
       case Actions.UPDATE_STEP => jQueryElem.on("click" , () => new Step().updateStep(param))
       case Actions.ADD_COMPONENT => jQueryElem.on("click", () => new Component().addComponentRequest(param))
-      case Actions.ADD_STEP => jQueryElem.on("click", () => new Component().addStep(param))
+      case Actions.ADD_STEP => jQueryElem.on("click", () => new Step().addStepRequest(param))
       case Actions.UPDATE_COMPONENT => jQueryElem.on("click", () => new Component().updateComponent(param))
       case Actions.DELETE_COMPONENT => jQueryElem.on("click", () => new Component().deleteComponentRequest(param))
         //Actions internal
@@ -38,6 +38,7 @@ class Mouse {
       case ActionsForClient.STEP_PAGE => jQueryElem.on("click", () => new Step().showStep(param))
       case ActionsForClient.COMPONENT_PAGE => jQueryElem.on("click", () => new Component().showComponentPage(param))
       case ActionsForClient.ADD_COMPONENT_PAGE => jQueryElem.on("click", () => new Component().showAddComponentPage(param))
+      case ActionsForClient.ADD_STEP_PAGE => jQueryElem.on("click", () => new Step().showAddStepPage(param))
       case _ => jQueryElem.on("click", () => new Start().actionGetUser()) //TODO eine Fehlerpage erstellen
     }
   }

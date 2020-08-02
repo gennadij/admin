@@ -1,9 +1,10 @@
 package org.genericConfig.admin.client.models
 
 import org.genericConfig.admin.client.controllers.websocket.WebSocketListner
-import org.genericConfig.admin.client.views.configGraph.NodeEditStepPage
+import org.genericConfig.admin.client.views.configGraph.{NodeAddStepPage, NodeEditStepPage}
 import org.genericConfig.admin.shared.Actions
-import org.genericConfig.admin.shared.configGraph.ConfigGraphStepDTO
+import org.genericConfig.admin.shared.config.UserConfigDTO
+import org.genericConfig.admin.shared.configGraph.{ConfigGraphComponentDTO, ConfigGraphStepDTO}
 import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepDTO, StepParamsDTO, StepPropertiesDTO}
 import org.scalajs.jquery.jQuery
 import play.api.libs.json.Json
@@ -14,6 +15,7 @@ import play.api.libs.json.Json
  * Created by Gennadi Heimann 26.06.2020
  */
 class Step {
+
   def updateStep(param: Option[Any]): Unit = {
     val stepDTO: ConfigGraphStepDTO = param.get.asInstanceOf[ConfigGraphStepDTO]
     val inputFieldNameToShow : String = jQuery(s"#${stepDTO.stepId}_nameToShow").value().toString
@@ -39,5 +41,51 @@ class Step {
   def showStep(param: Option[Any]): Unit = {
     val stepDTO: ConfigGraphStepDTO = param.get.asInstanceOf[ConfigGraphStepDTO]
     new NodeEditStepPage().drawStepPage(stepDTO)
+  }
+
+  def showAddStepPage(param: Option[Any]) = {
+    val componentDTO: ConfigGraphComponentDTO = param.get.asInstanceOf[ConfigGraphComponentDTO]
+    new NodeAddStepPage().drawAddStepPage(componentDTO)
+  }
+
+  def addStepRequest(param: Option[Any]) = {
+    val componentDTO: ConfigGraphComponentDTO = param.get.asInstanceOf[ConfigGraphComponentDTO]
+
+    val inputFieldNameToShow : String = jQuery(s"#${componentDTO.componentId}_addStepNameToShow").value().toString
+    val inputFieldSelectionCriterionMin : String = jQuery(s"#${componentDTO.componentId}_MIN").value().toString
+    val inputFieldSelectionCriterionMax : String = jQuery(s"#${componentDTO.componentId}_MAX").value().toString
+
+    println("ADD_STEP " + componentDTO.properties.nameToShow)
+    println("ADD_STEP " + inputFieldNameToShow)
+    println("ADD_STEP " + inputFieldSelectionCriterionMax)
+    println("ADD_STEP " + inputFieldSelectionCriterionMin)
+    val addStep: String = Json.toJson(StepDTO(
+      action = Actions.ADD_STEP,
+      params = Some(StepParamsDTO(
+        outId = Some(componentDTO.componentId),
+        kind = Some(""),
+        properties = Some(StepPropertiesDTO(
+          nameToShow = Some(inputFieldNameToShow),
+          selectionCriterion = Some(SelectionCriterionDTO(
+            min = Some(inputFieldSelectionCriterionMin.toInt),
+            max = Some(inputFieldSelectionCriterionMax.toInt)
+          ))
+        ))
+      )),
+      result = None
+    )).toString()
+
+    println("OUT -> " + addStep)
+    WebSocketListner.webSocket.send(addStep)
+  }
+
+  def addStepResponse(stepDTO : Option[StepDTO]): Unit = {
+    val state : State = Progress.getLastState.get
+
+    val userConfigDTO = UserConfigDTO(
+      configId = state.configDTO.get.params.get.configId
+    )
+
+    new ConfigGraph().configGraph(Some(userConfigDTO))
   }
 }

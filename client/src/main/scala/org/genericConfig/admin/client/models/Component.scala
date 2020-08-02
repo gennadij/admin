@@ -82,11 +82,6 @@ class Component() {
     println("UPDATE_COMPONENT " + componentDTO.properties.nameToShow)
   }
 
-  def addStep(param: Option[Any]) = {
-    val componentDTO: ConfigGraphComponentDTO = param.get.asInstanceOf[ConfigGraphComponentDTO]
-    println("ADD_STEP " + componentDTO.properties.nameToShow)
-  }
-
   def showComponentPage(param: Option[Any]): Unit = {
     new NodeEditComponentPage().drawComponentPage(param.get.asInstanceOf[ConfigGraphComponentDTO])
   }
