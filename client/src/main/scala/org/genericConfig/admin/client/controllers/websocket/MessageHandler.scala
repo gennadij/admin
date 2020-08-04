@@ -25,6 +25,8 @@ class MessageHandler() {
       case Some(Actions.ADD_COMPONENT) => ConverterFromJsonForComponent.addComponent(receivedMessage)
       case Some(Actions.DELETE_COMPONENT) => ConverterFromJsonForComponent.deleteComponent(receivedMessage)
       case Some(Actions.ADD_STEP) => ConverterFromJsonForStep.addStep(receivedMessage)
+      case Some(Actions.DELETE_STEP) => ConverterFromJsonForStep.deleteStep(receivedMessage)
+      case Some(Actions.UPDATE_STEP) => ConverterFromJsonForStep.updateStep(receivedMessage)
 //      case Some(JsonNames.CONNECT_COMPONENT_TO_STEP) => ??? //connectComponentToStep(receivedMessage, admin)
 //      case Some(JsonNames.CREATE_DEPENDENCY) => ??? //createDependency(receivedMessage, admin)
 //      case Some(JsonNames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL) => ???
@@ -32,12 +34,4 @@ class MessageHandler() {
       case _ => Json.obj("error" -> "keinen Treffer")
     }
   }
-
-//  private def addComponent(receivedMessage: JsValue): Unit = {
-//    val jsonComponentOut: JsResult[JsonComponentOut] = Json.fromJson[JsonComponentOut](receivedMessage)
-//    jsonComponentOut match {
-//      case jCOut: JsSuccess[JsonComponentOut] => new Component(webSocket).updateStatus(jCOut.value)
-//      case e: JsError => println("Errors -> " + JsonNames.ADD_COMPONENT + ": " + JsError.toJson(e).toString())
-//    }
-//  }
 }

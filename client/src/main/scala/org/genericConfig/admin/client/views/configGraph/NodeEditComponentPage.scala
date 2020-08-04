@@ -18,7 +18,7 @@ class NodeEditComponentPage() {
 
     jQuery(HtmlElementIds.jQueryEditGroupNodePage).remove
 
-    val editGroup : JQuery = HtmlElementText.drawDiv(HtmlElementIds.htmlEditGroupNodePage)
+    val editGroup : JQuery = HtmlElementText.drawDiv(HtmlElementIds.htmlEditGroupNodePage, "Komponente")
 
     val jQueryInputFieldNameToShow = HtmlElementText.drawInputField(
       id = s"${configGraphComponentDTO.componentId}_nameToShow",

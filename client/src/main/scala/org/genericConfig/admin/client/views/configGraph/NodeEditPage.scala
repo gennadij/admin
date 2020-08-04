@@ -11,7 +11,7 @@ import org.scalajs.jquery.jQuery
 class NodeEditPage {
   def showNodeEditPage() : Unit = {
     jQuery(HtmlElementIds.jQueryConfigGraphNodeEdit).remove()
-    val configGraphNodePage = HtmlElementText.configGraphNodePage("")
+    val configGraphNodePage = HtmlElementText.configGraphNodePage("Konfigurationsgraph")
     configGraphNodePage.appendTo(jQuery(HtmlElementIds.section))
   }
 }

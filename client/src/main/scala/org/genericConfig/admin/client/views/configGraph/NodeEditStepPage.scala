@@ -20,7 +20,7 @@ class NodeEditStepPage extends CommonFunction{
 
     jQuery(HtmlElementIds.jQueryEditGroupNodePage).remove
 
-    val editGroup : JQuery = HtmlElementText.drawDiv(HtmlElementIds.htmlEditGroupNodePage)
+    val editGroup : JQuery = HtmlElementText.drawDiv(HtmlElementIds.htmlEditGroupNodePage, "Schritt")
 
     val jQueryInputFieldNameToShow = HtmlElementText.drawInputField(
       id = s"${configGraphStepDTO.stepId}_nameToShow",
@@ -39,19 +39,22 @@ class NodeEditStepPage extends CommonFunction{
     )
 
 
-    val jQueryButtonSave = HtmlElementText.drawButton(id = s"${configGraphStepDTO.stepId}_save", "Speichern")
+    val jQueryButtonUpdateStep = HtmlElementText.drawButton(id = s"${configGraphStepDTO.stepId}_updateStep", "Schritt aendern")
     val jQueryButtonAddComponent = HtmlElementText.drawButton(id = s"${configGraphStepDTO.stepId}_addComponent", "Neu Komponente hinzufuegen")
+    val jQueryButtonDeleteStep = HtmlElementText.drawButton(id = s"${configGraphStepDTO.stepId}_deleteStep", "Schritt entfernen")
 
     editGroup.appendTo(configGraphNodePage)
     jQueryInputFieldNameToShow.appendTo(editGroup)
     jQueryInputFieldSelectionCriterionMin.appendTo(editGroup)
     jQueryInputFieldSelectionCriterionMax.appendTo(editGroup)
-    jQueryButtonSave.appendTo(editGroup)
+    jQueryButtonUpdateStep.appendTo(editGroup)
     jQueryButtonAddComponent.appendTo(editGroup)
+    jQueryButtonDeleteStep.appendTo((editGroup))
     configGraphNodePage.appendTo(jQuery(HtmlElementIds.section))
     jQuery(s"#${configGraphStepDTO.stepId}").css("fill", "#15e751")
 
-    new Mouse().mouseClick(jQueryButtonSave, Actions.UPDATE_STEP, Some(configGraphStepDTO))
+    new Mouse().mouseClick(jQueryButtonUpdateStep, Actions.UPDATE_STEP, Some(configGraphStepDTO))
     new Mouse().mouseClick(jQueryButtonAddComponent, ActionsForClient.ADD_COMPONENT_PAGE, Some(configGraphStepDTO))
+    new Mouse().mouseClick(jQueryButtonDeleteStep, Actions.DELETE_STEP, Some(configGraphStepDTO))
   }
 }

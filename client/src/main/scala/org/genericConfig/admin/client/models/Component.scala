@@ -16,42 +16,6 @@ import play.api.libs.json.Json
  */
 class Component() {
 
-  def deleteComponentRequest(param: Option[Any]) = {
-    val configGraphComponentDTO = param.get.asInstanceOf[ConfigGraphComponentDTO]
-
-    val deleteComponent: String = Json.toJson(ComponentDTO(
-      action = Actions.DELETE_COMPONENT,
-      params = Some(ComponentParamsDTO(
-        configProperties = Some(ComponentConfigPropertiesDTO(
-          componentId = Some(configGraphComponentDTO.componentId)
-        ))
-      ))
-    )).toString()
-
-    println("OUT -> " + deleteComponent)
-    WebSocketListner.webSocket.send(deleteComponent)
-  }
-
-  def deleteComponentResponse(componentDTO: Option[ComponentDTO]) : Unit = {
-    val state : State = Progress.getLastState.get
-
-    val userConfigDTO = UserConfigDTO(
-      configId = state.configDTO.get.params.get.configId
-    )
-
-    new ConfigGraph().configGraph(Some(userConfigDTO))
-  }
-
-  def addComponentResponse(componentDTO : Option[ComponentDTO]): Unit = {
-    val state : State = Progress.getLastState.get
-
-    val userConfigDTO = UserConfigDTO(
-      configId = state.configDTO.get.params.get.configId
-    )
-
-    new ConfigGraph().configGraph(Some(userConfigDTO))
-  }
-
   def addComponentRequest(param : Option[Any]) : Unit = {
     val stepDTO: ConfigGraphStepDTO = param.get.asInstanceOf[ConfigGraphStepDTO]
     println("ADD_Component " + stepDTO.properties.nameToShow)
@@ -72,14 +36,40 @@ class Component() {
     WebSocketListner.webSocket.send(addComponent)
   }
 
+  def deleteComponentRequest(param: Option[Any]) = {
+    val configGraphComponentDTO = param.get.asInstanceOf[ConfigGraphComponentDTO]
+
+    val deleteComponent: String = Json.toJson(ComponentDTO(
+      action = Actions.DELETE_COMPONENT,
+      params = Some(ComponentParamsDTO(
+        configProperties = Some(ComponentConfigPropertiesDTO(
+          componentId = Some(configGraphComponentDTO.componentId)
+        ))
+      ))
+    )).toString()
+
+    println("OUT -> " + deleteComponent)
+    WebSocketListner.webSocket.send(deleteComponent)
+  }
+
+  def updateComponentRequest(param: Option[Any]) = {
+    val componentDTO: ConfigGraphComponentDTO = param.get.asInstanceOf[ConfigGraphComponentDTO]
+    println("UPDATE_COMPONENT " + componentDTO.properties.nameToShow)
+  }
+
+  def updateGraphResponse(componentDTO: Option[ComponentDTO]) : Unit = {
+    val state : State = Progress.getLastState.get
+
+    val userConfigDTO = UserConfigDTO(
+      configId = state.configDTO.get.params.get.configId
+    )
+
+    new ConfigGraph().configGraph(Some(userConfigDTO))
+  }
+
   def showAddComponentPage(param: Option[Any]) : Unit = {
     val configGraphStepDTO: ConfigGraphStepDTO = param.get.asInstanceOf[ConfigGraphStepDTO]
     new NodeAddComponentPage().drawAddComponentPage(configGraphStepDTO)
-  }
-
-  def updateComponent(param: Option[Any]) = {
-    val componentDTO: ConfigGraphComponentDTO = param.get.asInstanceOf[ConfigGraphComponentDTO]
-    println("UPDATE_COMPONENT " + componentDTO.properties.nameToShow)
   }
 
   def showComponentPage(param: Option[Any]): Unit = {
