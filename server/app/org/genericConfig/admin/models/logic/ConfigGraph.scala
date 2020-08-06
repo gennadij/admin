@@ -9,6 +9,7 @@ import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.component.ComponentUserPropertiesDTO
 import org.genericConfig.admin.shared.configGraph.{ConfigGraphComponentDTO, ConfigGraphD3DTO, ConfigGraphD3LinkDTO, ConfigGraphD3NodeDTO, ConfigGraphD3PropertiesDTO, ConfigGraphDTO, ConfigGraphEdgeDTO, ConfigGraphResultDTO, ConfigGraphStepDTO}
 import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepPropertiesDTO}
+import play.api.Logger
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
@@ -53,7 +54,7 @@ class ConfigGraph() {
     val screenHeight : Int = (configGraphDTO.params.get.screenHeight.toDouble * 0.66).toInt
     //TODO Den Faktor globalisieren
     val screenWidth : Int  = (configGraphDTO.params.get.screenWidth.toDouble * 0.69).toInt
-    val (orientElems, error) : (Option[List[OrientElement]], Option[Error]) = GraphCommon.traverse(configRid)
+    val (orientElems, error) : (Option[List[OrientElement]], Option[Error]) = GraphCommon.traverseOut(configRid)
 
     error match {
       case None =>
@@ -69,10 +70,13 @@ class ConfigGraph() {
         val edges : List[ConfigGraphEdgeDTO] = getConfigGraphEdgesDTO(eHasSteps, eHasComponents, configRid)
 
         val configGraphD3LinksDTO : List[ConfigGraphD3LinkDTO] = getConfigGraphD3LinksDTO(edges)
-
-        val configGraphD3NodesDTO : List[ConfigGraphD3NodeDTO] = getConfigGraphD3NodesDTO(configRid, screenHeight, screenWidth)
-
-        ConfigGraphDTO(
+        Logger.info("eSteps : " + eSteps)
+        val configGraphD3NodesDTO : List[ConfigGraphD3NodeDTO] = if(eSteps.isEmpty) {
+          List()
+        }else {
+          getConfigGraphD3NodesDTO(configRid, screenHeight, screenWidth)
+        }
+          ConfigGraphDTO(
           action = Actions.CONFIG_GRAPH,
           result = Some(ConfigGraphResultDTO(
             steps = Some(configGraphSteps),

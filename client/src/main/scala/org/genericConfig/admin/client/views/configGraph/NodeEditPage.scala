@@ -9,9 +9,14 @@ import org.scalajs.jquery.jQuery
  * Created by Gennadi Heimann 14.07.2020
  */
 class NodeEditPage {
-  def showNodeEditPage() : Unit = {
-    jQuery(HtmlElementIds.jQueryConfigGraphNodeEdit).remove()
-    val configGraphNodePage = HtmlElementText.configGraphNodePage("Konfigurationsgraph")
-    configGraphNodePage.appendTo(jQuery(HtmlElementIds.section))
+  def showNodeEditPage(graphIsEmpty : Boolean) : Unit = {
+    if(graphIsEmpty) {
+
+    }else {
+      jQuery(HtmlElementIds.jQueryConfigGraphNodeEdit).remove()
+      val configGraphNodePage = HtmlElementText.configGraphNodePage("Konfigurationsgraph")
+      configGraphNodePage.appendTo(jQuery(HtmlElementIds.section))
+    }
+
   }
 }

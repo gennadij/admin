@@ -53,9 +53,9 @@ object GraphCommon {
     * @param rId : String
     * @return Option[List[OrientElement]], Option[Error]
     */
-  def traverse(rId: String) : (Option[List[OrientElement]], Option[Error]) = {
+  def traverseOut(rId: String) : (Option[List[OrientElement]], Option[Error]) = {
     (Database.getFactory(): @unchecked) match {
-      case (Some(dbFactory), None) => new GraphCommon(dbFactory.getTx).traverse(rId)
+      case (Some(dbFactory), None) => new GraphCommon(dbFactory.getTx).traverseOut(rId)
       case (None, Some(ODBConnectionFail())) => (None, Some(ODBConnectionFail()))
     }
   }
@@ -131,10 +131,10 @@ class GraphCommon(graph: OrientGraph) {
    }
  }
 
-  private def traverse(rId: String): (Option[List[OrientElement]], Option[Error]) = {
+  private def traverseOut(rId: String): (Option[List[OrientElement]], Option[Error]) = {
     try {
       import scala.collection.JavaConverters._
-      val sql : String = s"traverse * from $rId"
+      val sql : String = s"traverse out() from $rId"
       val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
       (Some(res.asScala.toList.map(_.asInstanceOf[OrientElement])), None)
     } catch {
