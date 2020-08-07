@@ -1,6 +1,7 @@
 package org.genericConfig.admin.client.views.configGraph
 
 import org.genericConfig.admin.client.controllers.listner.Mouse
+import org.genericConfig.admin.client.models.Progress
 import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.configGraph.ConfigGraphComponentDTO
@@ -12,8 +13,20 @@ import org.scalajs.jquery.{JQuery, jQuery}
  * Created by Gennadi Heimann 02.08.2020
  */
 class NodeAddStepPage {
-  def drawAddStepPage(configGraphComponentDTO: ConfigGraphComponentDTO): Unit = {
+  def drawAddStepFromComponentPage(configGraphComponentDTO: ConfigGraphComponentDTO): Unit = {
 
+    val jQueryButtonAddComponent = drawAddStepPage(configGraphComponentDTO.componentId)
+
+    new Mouse().mouseClick(jQueryButtonAddComponent, Actions.ADD_STEP, Some(configGraphComponentDTO))
+  }
+
+  def drawAddFirstStepPage() : Unit = {
+    val id : String = Progress.getLastState.get.configDTO.get.params.get.configId.get
+
+    val jQueryButtonAddComponent = drawAddStepPage(id)
+  }
+
+  def drawAddStepPage(id : String): JQuery = {
     val configGraphNodePage = jQuery(HtmlElementIds.jQueryConfigGraphNodeEdit)
 
     jQuery(HtmlElementIds.jQueryEditGroupNodePage).remove
@@ -21,20 +34,20 @@ class NodeAddStepPage {
     val editGroup : JQuery = HtmlElementText.drawDiv(HtmlElementIds.htmlEditGroupNodePage, "Schritt hinzufuegen")
 
     val jQueryInputFieldNameToShow = HtmlElementText.drawInputField(
-      id = s"${configGraphComponentDTO.componentId}_addStepNameToShow",
+      id = s"${id}_addStepNameToShow",
       label = "Name"
     )
     val jQueryInputFieldSelectionCriterionMin = HtmlElementText.drawInputField(
-      id = s"${configGraphComponentDTO.componentId}_MIN",
+      id = s"${id}_MIN",
       label = "SelectionCriterionMIN",
       defaultText = "1"
     )
     val jQueryInputFieldSelectionCriterionMax = HtmlElementText.drawInputField(
-      id = s"${configGraphComponentDTO.componentId}_MAX",
+      id = s"${id}_MAX",
       label = "SelectionCriterionMAX",
       defaultText = "1"
     )
-    val jQueryButtonAddComponent = HtmlElementText.drawButton(s"${configGraphComponentDTO.componentId}_addStep", "Schritt hinzufuegen")
+    val jQueryButtonAddComponent = HtmlElementText.drawButton(s"${id}_addStep", "Schritt hinzufuegen")
 
     editGroup.appendTo(configGraphNodePage)
     jQueryInputFieldNameToShow.appendTo(editGroup)
@@ -42,6 +55,6 @@ class NodeAddStepPage {
     jQueryInputFieldSelectionCriterionMax.appendTo(editGroup)
     jQueryButtonAddComponent.appendTo(editGroup)
 
-    new Mouse().mouseClick(jQueryButtonAddComponent, Actions.ADD_STEP, Some(configGraphComponentDTO))
+    jQueryButtonAddComponent
   }
 }

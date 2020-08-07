@@ -7,7 +7,7 @@ import org.genericConfig.admin.models.persistence.orientdb.{GraphCommon, Propert
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.component.ComponentUserPropertiesDTO
-import org.genericConfig.admin.shared.configGraph.{ConfigGraphComponentDTO, ConfigGraphD3DTO, ConfigGraphD3LinkDTO, ConfigGraphD3NodeDTO, ConfigGraphD3PropertiesDTO, ConfigGraphDTO, ConfigGraphEdgeDTO, ConfigGraphResultDTO, ConfigGraphStepDTO}
+import org.genericConfig.admin.shared.configGraph._
 import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepPropertiesDTO}
 import play.api.Logger
 
@@ -60,8 +60,15 @@ class ConfigGraph() {
       case None =>
         val eSteps : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.VERTEX_STEP)
         val eComponents : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.VERTEX_COMPONENT)
-        val eHasSteps : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_STEP)
-        val eHasComponents : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_COMPONENT)
+//        val eHasSteps : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_STEP)
+//        val eHasComponents : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_COMPONENT)
+        val eHasSteps : List[OrientEdge] = eComponents.flatMap(sC => {
+          sC.asInstanceOf[OrientVertex].getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList.map(_.asInstanceOf[OrientEdge])
+        })
+
+        val eHasComponents : List[OrientEdge] = eSteps.flatMap(sC => {
+          sC.asInstanceOf[OrientVertex].getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT).asScala.toList.map(_.asInstanceOf[OrientEdge])
+        })
 
         val configGraphSteps : List[ConfigGraphStepDTO] = getConfigGraphStepsDTO(eSteps)
 
@@ -71,6 +78,9 @@ class ConfigGraph() {
 
         val configGraphD3LinksDTO : List[ConfigGraphD3LinkDTO] = getConfigGraphD3LinksDTO(edges)
         Logger.info("eSteps : " + eSteps)
+        Logger.info("eHasSteps" + eHasSteps)
+        Logger.info("eHasComponents" + eHasComponents)
+
         val configGraphD3NodesDTO : List[ConfigGraphD3NodeDTO] = if(eSteps.isEmpty) {
           List()
         }else {
@@ -250,18 +260,18 @@ class ConfigGraph() {
   }
 
   private def getConfigGraphEdgesDTO(
-                                      eHasSteps : List[OrientElement],
-                                      eHasComponents : List[OrientElement],
+                                      eHasSteps : List[OrientEdge],
+                                      eHasComponents : List[OrientEdge],
                                       configRid : String) : List[ConfigGraphEdgeDTO] = {
     val edgesHasStepsWithoutConfig =
-      eHasSteps.filterNot(_.asInstanceOf[OrientEdge].getOutVertex.getIdentity.toString().equals(configRid))
+      eHasSteps.filterNot(_.getOutVertex.getIdentity.toString().equals(configRid))
 
     val edgesHasSteps : List[ConfigGraphEdgeDTO] = edgesHasStepsWithoutConfig.map(hasStep => {
       val target : String = RidToHash.setIdAndHash(
-        hasStep.asInstanceOf[OrientEdge].getInVertex.getIdentity.toString
+        hasStep.getInVertex.getIdentity.toString
       )._2
       val source : String = RidToHash.setIdAndHash(
-        hasStep.asInstanceOf[OrientEdge].getOutVertex.getIdentity.toString
+        hasStep.getOutVertex.getIdentity.toString
       )._2
       ConfigGraphEdgeDTO(
         source = source,
@@ -271,10 +281,10 @@ class ConfigGraph() {
 
     val edgesHasComponents : List[ConfigGraphEdgeDTO] = eHasComponents.map(hasComponent => {
       val target : String = RidToHash.setIdAndHash(
-        hasComponent.asInstanceOf[OrientEdge].getInVertex.getIdentity.toString
+        hasComponent.getInVertex.getIdentity.toString
       )._2
       val source : String = RidToHash.setIdAndHash(
-        hasComponent.asInstanceOf[OrientEdge].getOutVertex.getIdentity.toString
+        hasComponent.getOutVertex.getIdentity.toString
       )._2
       ConfigGraphEdgeDTO(
         source = source,

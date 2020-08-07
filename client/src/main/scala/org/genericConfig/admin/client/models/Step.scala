@@ -23,10 +23,6 @@ class Step {
     val inputFieldSelectionCriterionMin : String = jQuery(s"#${componentDTO.componentId}_MIN").value().toString
     val inputFieldSelectionCriterionMax : String = jQuery(s"#${componentDTO.componentId}_MAX").value().toString
 
-    println("ADD_STEP " + componentDTO.properties.nameToShow)
-    println("ADD_STEP " + inputFieldNameToShow)
-    println("ADD_STEP " + inputFieldSelectionCriterionMax)
-    println("ADD_STEP " + inputFieldSelectionCriterionMin)
     val addStep: String = Json.toJson(StepDTO(
       action = Actions.ADD_STEP,
       params = Some(StepParamsDTO(
@@ -102,7 +98,7 @@ class Step {
 
   def showAddStepPage(param: Option[Any]): Unit = {
     val componentDTO: ConfigGraphComponentDTO = param.get.asInstanceOf[ConfigGraphComponentDTO]
-    new NodeAddStepPage().drawAddStepPage(componentDTO)
+    new NodeAddStepPage().drawAddStepFromComponentPage(componentDTO)
   }
 
 

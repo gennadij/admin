@@ -134,8 +134,9 @@ class GraphCommon(graph: OrientGraph) {
   private def traverseOut(rId: String): (Option[List[OrientElement]], Option[Error]) = {
     try {
       import scala.collection.JavaConverters._
-      val sql : String = s"traverse out() from $rId"
+      val sql = s"traverse out() from $rId limit 10000"
       val res: OrientDynaElementIterable = graph.command(new OCommandSQL(sql)).execute()
+      graph.commit()
       (Some(res.asScala.toList.map(_.asInstanceOf[OrientElement])), None)
     } catch {
       case e: ORecordDuplicatedException =>

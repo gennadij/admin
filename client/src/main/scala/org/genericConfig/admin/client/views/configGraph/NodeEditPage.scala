@@ -1,5 +1,7 @@
 package org.genericConfig.admin.client.views.configGraph
 
+
+import org.genericConfig.admin.client.models.Progress
 import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
 import org.scalajs.jquery.jQuery
 
@@ -10,8 +12,9 @@ import org.scalajs.jquery.jQuery
  */
 class NodeEditPage {
   def showNodeEditPage(graphIsEmpty : Boolean) : Unit = {
+    println("" + Progress.getStates)
     if(graphIsEmpty) {
-
+      new NodeAddStepPage().drawAddFirstStepPage()
     }else {
       jQuery(HtmlElementIds.jQueryConfigGraphNodeEdit).remove()
       val configGraphNodePage = HtmlElementText.configGraphNodePage("Konfigurationsgraph")
