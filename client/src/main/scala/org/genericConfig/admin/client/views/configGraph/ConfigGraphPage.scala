@@ -33,7 +33,7 @@ class ConfigGraphPage extends CommonFunction {
         (jQuery(s"#${configGraphComponentDTO.componentId}"), configGraphComponentDTO)
       })
 
-    if (configGraphResultDTO.steps.isEmpty) {
+    if (configGraphResultDTO.steps.get.isEmpty) {
       new NodeEditPage().showNodeEditPage(true)
     }else {
       new NodeEditPage().showNodeEditPage(false)

@@ -24,6 +24,8 @@ class NodeAddStepPage {
     val id : String = Progress.getLastState.get.configDTO.get.params.get.configId.get
 
     val jQueryButtonAddComponent = drawAddStepPage(id)
+
+    new Mouse().mouseClick(jQueryButtonAddComponent, Actions.ADD_STEP, Some(id))
   }
 
   def drawAddStepPage(id : String): JQuery = {

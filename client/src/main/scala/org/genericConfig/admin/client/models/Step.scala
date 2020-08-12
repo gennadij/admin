@@ -17,16 +17,22 @@ import play.api.libs.json.Json
 class Step {
 
   def addStepRequest(param: Option[Any]): Unit = {
-    val componentDTO: ConfigGraphComponentDTO = param.get.asInstanceOf[ConfigGraphComponentDTO]
+    val id : String = param.get match {
+      case param : ConfigGraphComponentDTO => param.componentId
+      case param : String => param.toString
+      case _ => "undefinedId"
+    }
+    println("addStepRequest " + id)
+//    val componentDTO: ConfigGraphComponentDTO = param.get.asInstanceOf[ConfigGraphComponentDTO]
 
-    val inputFieldNameToShow : String = jQuery(s"#${componentDTO.componentId}_addStepNameToShow").value().toString
-    val inputFieldSelectionCriterionMin : String = jQuery(s"#${componentDTO.componentId}_MIN").value().toString
-    val inputFieldSelectionCriterionMax : String = jQuery(s"#${componentDTO.componentId}_MAX").value().toString
+    val inputFieldNameToShow : String = jQuery(s"#${id}_addStepNameToShow").value().toString
+    val inputFieldSelectionCriterionMin : String = jQuery(s"#${id}_MIN").value().toString
+    val inputFieldSelectionCriterionMax : String = jQuery(s"#${id}_MAX").value().toString
 
     val addStep: String = Json.toJson(StepDTO(
       action = Actions.ADD_STEP,
       params = Some(StepParamsDTO(
-        outId = Some(componentDTO.componentId),
+        outId = Some(id),
         kind = Some(""),
         properties = Some(StepPropertiesDTO(
           nameToShow = Some(inputFieldNameToShow),

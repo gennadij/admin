@@ -114,7 +114,11 @@ class ConfigGraph() {
   private def getConfigGraphD3NodesDTO(configRid : String, screenHeight : Int, screenWidth : Int) : List[ConfigGraphD3NodeDTO] = {
     val nodes : List[D3Node] = calcPosition(configRid, screenHeight)
 
+    Logger.info("NODES " + nodes)
+
     val levels : List[Int] = nodes.map(_.level.value)
+
+    Logger.info("LEVELS " + levels)
 
     val maxLevel = levels.sortWith(_ < _).last
 
@@ -156,18 +160,25 @@ class ConfigGraph() {
 
     val componentsNode : List[D3Node] = getConfigGraphD3Nodes(vComponents, v, height, level)
 
+    Logger.info("calcPositionRecursive " + vComponents + "  " + vNextSteps + "   " + componentsNode)
+
     val currentNodes = componentsNode ++ n
 
-    val cN: Set[List[D3Node]] = for (i <- vNextSteps) yield {
-      val res = calcPositionRecursive(allElem, currentNodes, i, height, level)
-      res
+    if(componentsNode.length == 1){
+      allElem ++= currentNodes
+      currentNodes
+    }else {
+      val cN: Set[List[D3Node]] = for (i <- vNextSteps) yield {
+        val res = calcPositionRecursive(allElem, currentNodes, i, height, level)
+        res
+      }
+
+      val list = cN.flatten.to[ListBuffer]
+
+      allElem ++= list
+
+      currentNodes
     }
-
-    val list = cN.flatten.to[ListBuffer]
-
-    allElem ++= list
-
-    currentNodes
   }
 
   private def getComponents(step : OrientVertex) : List[OrientVertex] = {

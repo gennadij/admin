@@ -12,14 +12,16 @@ import org.scalajs.jquery.jQuery
  */
 class NodeEditPage {
   def showNodeEditPage(graphIsEmpty : Boolean) : Unit = {
-    println("" + Progress.getStates)
+    println("Progress.getStates" + Progress.getStates + "   " + graphIsEmpty)
     if(graphIsEmpty) {
+      jQuery(HtmlElementIds.jQueryConfigGraphNodeEdit).remove()
+      val configGraphNodePage = HtmlElementText.configGraphNodePage("Konfigurationsgraph")
+      configGraphNodePage.appendTo(jQuery(HtmlElementIds.section))
       new NodeAddStepPage().drawAddFirstStepPage()
     }else {
       jQuery(HtmlElementIds.jQueryConfigGraphNodeEdit).remove()
       val configGraphNodePage = HtmlElementText.configGraphNodePage("Konfigurationsgraph")
       configGraphNodePage.appendTo(jQuery(HtmlElementIds.section))
     }
-
   }
 }
