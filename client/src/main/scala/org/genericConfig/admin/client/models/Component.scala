@@ -1,7 +1,7 @@
 package org.genericConfig.admin.client.models
 
 import org.genericConfig.admin.client.controllers.websocket.WebSocketListner
-import org.genericConfig.admin.client.views.configGraph.{NodeAddComponentPage, NodeEditComponentPage}
+import org.genericConfig.admin.client.views.configGraph.{NodeAddComponentPage, NodeConnectComponentToStepPage, NodeEditComponentPage}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.component.{ComponentConfigPropertiesDTO, ComponentDTO, ComponentParamsDTO, ComponentUserPropertiesDTO}
 import org.genericConfig.admin.shared.config.UserConfigDTO
@@ -74,5 +74,26 @@ class Component() {
 
   def showComponentPage(param: Option[Any]): Unit = {
     new NodeEditComponentPage().drawComponentPage(param.get.asInstanceOf[ConfigGraphComponentDTO])
+  }
+
+  def showConnectComponentToStepPage(param: Option[Any]) : Unit= {
+    new NodeConnectComponentToStepPage().drawConnectComponentToStepPage(param.get.asInstanceOf[ConfigGraphComponentDTO])
+  }
+
+  def connectComponentToStepRequest(param: Option[Any]) : Unit = {
+    val connectComponentToStep: String = Json.toJson(param.get.asInstanceOf[ComponentDTO]).toString()
+
+    println("OUT -> " + connectComponentToStep)
+    WebSocketListner.webSocket.send(connectComponentToStep)
+  }
+
+  def connectComponentToStepResponse(componentDTO: Option[ComponentDTO]): Unit = {
+    val state : State = Progress.getLastState.get
+
+    val userConfigDTO = UserConfigDTO(
+      configId = state.configDTO.get.params.get.configId
+    )
+    //TODO Progress zuruecksetzen
+    new ConfigGraph().configGraph(Some(userConfigDTO))
   }
 }

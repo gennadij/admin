@@ -18,6 +18,10 @@ object ConverterFromJsonForComponent {
   def addComponent(receivedMessage: JsValue): Unit = {
     new ConverterFromJsonForComponent().addComponent(receivedMessage)
   }
+
+  def connectComponent(receivedMessage: JsValue): Unit = {
+    new ConverterFromJsonForComponent().connectComponentToStep(receivedMessage)
+  }
 }
 
 class ConverterFromJsonForComponent() {
@@ -31,6 +35,13 @@ class ConverterFromJsonForComponent() {
   def addComponent(receivedMessage: JsValue): Unit = {
     Json.fromJson[ComponentDTO](receivedMessage) match {
       case addComponentResult : JsSuccess[ComponentDTO] => new Component().updateGraphResponse(Some(addComponentResult.value))
+      case e: JsError => println("Errors -> : " + Actions.ADD_COMPONENT + JsError.toJson(e).toString())
+    }
+  }
+
+  def connectComponentToStep(receivedMessage: JsValue): Unit = {
+    Json.fromJson[ComponentDTO](receivedMessage) match {
+      case connectComponentToStepResult : JsSuccess[ComponentDTO] => new Component().connectComponentToStepResponse(Some(connectComponentToStepResult.value))
       case e: JsError => println("Errors -> : " + Actions.ADD_COMPONENT + JsError.toJson(e).toString())
     }
   }

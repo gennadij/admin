@@ -28,18 +28,21 @@ class NodeEditComponentPage() {
 
     val jQueryButtonSave = HtmlElementText.drawButton(id = s"${configGraphComponentDTO.componentId}_save", "Speichern")
     val jQueryButtonAddComponent = HtmlElementText.drawButton(id = s"${configGraphComponentDTO.componentId}_update_component", "Schritt hinzufuegen")
+    val jQueryButtonConnectComponentToStep = HtmlElementText.drawButton(id = s"${configGraphComponentDTO.componentId}_connect_component_to_step", "Komponente mit dem Schritt verbinden")
     val jQueryButtonDeleteComponent = HtmlElementText.drawButton(id = s"${configGraphComponentDTO.componentId}_deleteComponent", "Component entfernen")
 
     editGroup.appendTo(configGraphNodePage)
     jQueryInputFieldNameToShow.appendTo(editGroup)
     jQueryButtonSave.appendTo(editGroup)
     jQueryButtonAddComponent.appendTo(editGroup)
-    jQueryButtonDeleteComponent.appendTo((editGroup))
+    jQueryButtonDeleteComponent.appendTo(editGroup)
+    jQueryButtonConnectComponentToStep.appendTo((editGroup))
     configGraphNodePage.appendTo(jQuery(HtmlElementIds.section))
 
     new Mouse().mouseClick(jQueryButtonSave, Actions.UPDATE_COMPONENT, Some(configGraphComponentDTO))
     new Mouse().mouseClick(jQueryButtonAddComponent, ActionsForClient.ADD_STEP_PAGE, Some(configGraphComponentDTO))
     new Mouse().mouseClick(jQueryButtonDeleteComponent, Actions.DELETE_COMPONENT, Some(configGraphComponentDTO))
+    new Mouse().mouseClick(jQueryButtonConnectComponentToStep, ActionsForClient.CONNECT_COMPONENT_TO_STEP_PAGE, Some(configGraphComponentDTO))
 
 
     jQuery(s"#${configGraphComponentDTO.componentId}").css("fill", "#163183")

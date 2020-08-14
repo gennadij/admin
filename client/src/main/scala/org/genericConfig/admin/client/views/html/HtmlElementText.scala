@@ -34,7 +34,7 @@ object HtmlElementText {
     jQuery(s"<div id='$id' class='button'>$text</div>")
   }
 
-  def drawDiv(id : String, title : String = ""): JQuery = {
-    jQuery(s"<div id='$id'><h2 align='center'>$title</h2></div>")
+  def drawDiv(id : String, title : String = "", hValue : String = "2"): JQuery = {
+    jQuery(s"<div id='$id'><h$hValue align='center'>$title</h$hValue></div>")
   }
 }

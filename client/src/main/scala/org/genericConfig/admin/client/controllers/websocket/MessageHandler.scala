@@ -27,7 +27,7 @@ class MessageHandler() {
       case Some(Actions.ADD_STEP) => ConverterFromJsonForStep.addStep(receivedMessage)
       case Some(Actions.DELETE_STEP) => ConverterFromJsonForStep.deleteStep(receivedMessage)
       case Some(Actions.UPDATE_STEP) => ConverterFromJsonForStep.updateStep(receivedMessage)
-//      case Some(JsonNames.CONNECT_COMPONENT_TO_STEP) => ??? //connectComponentToStep(receivedMessage, admin)
+      case Some(Actions.CONNECT_COMPONENT_TO_STEP) => ConverterFromJsonForComponent.connectComponent(receivedMessage)
 //      case Some(JsonNames.CREATE_DEPENDENCY) => ??? //createDependency(receivedMessage, admin)
 //      case Some(JsonNames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL) => ???
 //        visualProposalForAdditionalStepsInOneLevel(receivedMessage, admin)
