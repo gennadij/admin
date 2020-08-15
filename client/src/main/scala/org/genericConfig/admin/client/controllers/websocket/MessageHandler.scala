@@ -24,22 +24,14 @@ class MessageHandler() {
       case Some(Actions.CONFIG_GRAPH) => ConverterJsonDTOForConfigGraph.configGraph(receivedMessage)
       case Some(Actions.ADD_COMPONENT) => ConverterFromJsonForComponent.addComponent(receivedMessage)
       case Some(Actions.DELETE_COMPONENT) => ConverterFromJsonForComponent.deleteComponent(receivedMessage)
-      case Some(Actions.UPDATE_COMPONENT) => ConverterFromJsonForComponent.updateComponent(receivedMessage)
-//      case Some(JsonNames.ADD_STEP) => addStep(receivedMessage)
-//      case Some(JsonNames.ADD_COMPONENT) => addComponent(receivedMessage)
-//      case Some(JsonNames.CONNECT_COMPONENT_TO_STEP) => ??? //connectComponentToStep(receivedMessage, admin)
+      case Some(Actions.ADD_STEP) => ConverterFromJsonForStep.addStep(receivedMessage)
+      case Some(Actions.DELETE_STEP) => ConverterFromJsonForStep.deleteStep(receivedMessage)
+      case Some(Actions.UPDATE_STEP) => ConverterFromJsonForStep.updateStep(receivedMessage)
+      case Some(Actions.CONNECT_COMPONENT_TO_STEP) => ConverterFromJsonForComponent.connectComponent(receivedMessage)
 //      case Some(JsonNames.CREATE_DEPENDENCY) => ??? //createDependency(receivedMessage, admin)
 //      case Some(JsonNames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL) => ???
 //        visualProposalForAdditionalStepsInOneLevel(receivedMessage, admin)
       case _ => Json.obj("error" -> "keinen Treffer")
     }
   }
-
-//  private def addComponent(receivedMessage: JsValue): Unit = {
-//    val jsonComponentOut: JsResult[JsonComponentOut] = Json.fromJson[JsonComponentOut](receivedMessage)
-//    jsonComponentOut match {
-//      case jCOut: JsSuccess[JsonComponentOut] => new Component(webSocket).updateStatus(jCOut.value)
-//      case e: JsError => println("Errors -> " + JsonNames.ADD_COMPONENT + ": " + JsError.toJson(e).toString())
-//    }
-//  }
 }

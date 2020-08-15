@@ -19,7 +19,7 @@ case class StepParamsDTO(
 object StepParamsDTO{
   implicit val format: Format[StepParamsDTO] = (
       (JsPath \ "stepId").format(Format.optionWithNull[String]) and
-      (JsPath \ "fromId").format(Format.optionWithNull[String]) and
+      (JsPath \ "outId").format(Format.optionWithNull[String]) and
       (JsPath \ "kind").format(Format.optionWithNull[String]) and
       (JsPath \ "properties").format(Format.optionWithNull[StepPropertiesDTO])
     )(StepParamsDTO.apply, unlift(StepParamsDTO.unapply))

@@ -74,6 +74,7 @@ class GraphStep(graph : OrientGraph) {
       val eHasSteps : List[Edge] =
         graph.getVertex(rId).getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList
       graph.commit()
+      Logger.info("Anzahl der edges : "  + eHasSteps)
       eHasSteps.size match {
         case size if size > 0 => Some(StepAlreadyExistError())
         case _ => None

@@ -1,5 +1,6 @@
 package org.genericConfig.admin.client.models
 
+import org.genericConfig.admin.shared.component.ComponentDTO
 import org.genericConfig.admin.shared.config.ConfigDTO
 import org.genericConfig.admin.shared.step.StepDTO
 import org.genericConfig.admin.shared.user.UserDTO
@@ -35,7 +36,8 @@ object Progress {
 }
 
 case class State(
-                      userDTO : Option[UserDTO] = None,
-                      configDTO: Option[ConfigDTO] = None,
-                      stepDTO: Option[StepDTO] = None
-                    )
+  userDTO : Option[UserDTO] = None,
+  configDTO: Option[ConfigDTO] = None,
+  stepDTO: Option[StepDTO] = None,
+  componentDTO : Option[ComponentDTO] = None
+)

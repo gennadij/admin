@@ -19,6 +19,10 @@ object ConverterFromJsonForComponent {
     new ConverterFromJsonForComponent().addComponent(receivedMessage)
   }
 
+  def connectComponent(receivedMessage: JsValue): Unit = {
+    new ConverterFromJsonForComponent().connectComponentToStep(receivedMessage)
+  }
+
   def updateComponent(receivedMessage: JsValue): Unit = {
     new ConverterFromJsonForComponent().updateComponent(receivedMessage)
   }
@@ -27,14 +31,21 @@ object ConverterFromJsonForComponent {
 class ConverterFromJsonForComponent() {
   def deleteComponent(receivedMessage: JsValue): Any = {
     Json.fromJson[ComponentDTO](receivedMessage) match {
-      case addComponentResult : JsSuccess[ComponentDTO] => new Component().deleteComponentResponse(Some(addComponentResult.value))
+      case addComponentResult : JsSuccess[ComponentDTO] => new Component().updateGraphResponse(Some(addComponentResult.value))
       case e: JsError => println("Errors -> : " + Actions.DELETE_COMPONENT + JsError.toJson(e).toString())
     }
   }
 
   def addComponent(receivedMessage: JsValue): Unit = {
     Json.fromJson[ComponentDTO](receivedMessage) match {
-      case addComponentResult : JsSuccess[ComponentDTO] => new Component().addComponentResponse(Some(addComponentResult.value))
+      case addComponentResult : JsSuccess[ComponentDTO] => new Component().updateGraphResponse(Some(addComponentResult.value))
+      case e: JsError => println("Errors -> : " + Actions.ADD_COMPONENT + JsError.toJson(e).toString())
+    }
+  }
+
+  def connectComponentToStep(receivedMessage: JsValue): Unit = {
+    Json.fromJson[ComponentDTO](receivedMessage) match {
+      case connectComponentToStepResult : JsSuccess[ComponentDTO] => new Component().connectComponentToStepResponse(Some(connectComponentToStepResult.value))
       case e: JsError => println("Errors -> : " + Actions.ADD_COMPONENT + JsError.toJson(e).toString())
     }
   }

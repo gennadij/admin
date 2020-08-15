@@ -33,7 +33,12 @@ class ConfigGraphPage extends CommonFunction {
         (jQuery(s"#${configGraphComponentDTO.componentId}"), configGraphComponentDTO)
       })
 
-    new NodeEditPage().showNodeEditPage()
+    if (configGraphResultDTO.steps.get.isEmpty) {
+      new NodeEditPage().showNodeEditPage(true)
+    }else {
+      new NodeEditPage().showNodeEditPage(false)
+    }
+
 
     steps.foreach(jQS => {
       new Mouse().mouseClick(jQS._1, ActionsForClient.STEP_PAGE, Some(jQS._2))

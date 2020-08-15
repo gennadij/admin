@@ -7,7 +7,7 @@ import org.genericConfig.admin.models.persistence.orientdb.{GraphCommon, Propert
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.component.ComponentUserPropertiesDTO
-import org.genericConfig.admin.shared.configGraph.{ConfigGraphComponentDTO, ConfigGraphD3DTO, ConfigGraphD3LinkDTO, ConfigGraphD3NodeDTO, ConfigGraphD3PropertiesDTO, ConfigGraphDTO, ConfigGraphEdgeDTO, ConfigGraphResultDTO, ConfigGraphStepDTO}
+import org.genericConfig.admin.shared.configGraph._
 import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepPropertiesDTO}
 import play.api.Logger
 
@@ -51,55 +51,54 @@ class ConfigGraph() {
   def configGraph(configGraphDTO: ConfigGraphDTO) : ConfigGraphDTO = {
 
     val configRid : String = RidToHash.getRId(configGraphDTO.params.get.configId).get
-    Logger.info("ConfigRId " + configRid)
     val screenHeight : Int = (configGraphDTO.params.get.screenHeight.toDouble * 0.66).toInt
     //TODO Den Faktor globalisieren
     val screenWidth : Int  = (configGraphDTO.params.get.screenWidth.toDouble * 0.69).toInt
-    val (orientElems, error) : (Option[List[OrientElement]], Option[Error]) = GraphCommon.traverse(configRid)
+    val (orientElems, error) : (Option[List[OrientElement]], Option[Error]) = GraphCommon.traverseOut(configRid)
 
     error match {
       case None =>
         val eSteps : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.VERTEX_STEP)
-        Logger.info("eSteps length " +  eSteps)
-        if(eSteps.isEmpty){
-          ConfigGraphDTO(
-            action = Actions.CONFIG_GRAPH,
-            result = Some(ConfigGraphResultDTO(
-              errors = None
-            ))
-          )
+        val eComponents : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.VERTEX_COMPONENT)
+//        val eHasSteps : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_STEP)
+//        val eHasComponents : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_COMPONENT)
+        val eHasSteps : List[OrientEdge] = eComponents.flatMap(sC => {
+          sC.asInstanceOf[OrientVertex].getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList.map(_.asInstanceOf[OrientEdge])
+        })
+
+        val eHasComponents : List[OrientEdge] = eSteps.flatMap(sC => {
+          sC.asInstanceOf[OrientVertex].getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_COMPONENT).asScala.toList.map(_.asInstanceOf[OrientEdge])
+        })
+
+        val configGraphSteps : List[ConfigGraphStepDTO] = getConfigGraphStepsDTO(eSteps)
+
+        val configGraphComponents : List[ConfigGraphComponentDTO] = getConfigGraphComponentsDTO(eComponents)
+
+        val edges : List[ConfigGraphEdgeDTO] = getConfigGraphEdgesDTO(eHasSteps, eHasComponents, configRid)
+
+        val configGraphD3LinksDTO : List[ConfigGraphD3LinkDTO] = getConfigGraphD3LinksDTO(edges)
+
+        val configGraphD3NodesDTO : List[ConfigGraphD3NodeDTO] = if(eSteps.isEmpty) {
+          List()
         }else {
-          val eComponents : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.VERTEX_COMPONENT)
-          val eHasSteps : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_STEP)
-          val eHasComponents : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_COMPONENT)
-
-          val configGraphSteps : List[ConfigGraphStepDTO] = getConfigGraphStepsDTO(eSteps)
-
-          val configGraphComponents : List[ConfigGraphComponentDTO] = getConfigGraphComponentsDTO(eComponents)
-
-          val edges : List[ConfigGraphEdgeDTO] = getConfigGraphEdgesDTO(eHasSteps, eHasComponents, configRid)
-
-          val configGraphD3LinksDTO : List[ConfigGraphD3LinkDTO] = getConfigGraphD3LinksDTO(edges)
-
-          val configGraphD3NodesDTO : List[ConfigGraphD3NodeDTO] = getConfigGraphD3NodesDTO(configRid, screenHeight, screenWidth)
-
-          ConfigGraphDTO(
-            action = Actions.CONFIG_GRAPH,
-            result = Some(ConfigGraphResultDTO(
-              steps = Some(configGraphSteps),
-              components = Some(configGraphComponents),
-              d3Data = Some(ConfigGraphD3DTO(
-                nodes = configGraphD3NodesDTO,
-                links = configGraphD3LinksDTO,
-                properties = ConfigGraphD3PropertiesDTO(
-                  svgHeight = screenHeight,
-                  svgWidth = screenWidth
-                )
-              )),
-              errors = None
-            )
-            ))
+          getConfigGraphD3NodesDTO(configRid, screenHeight, screenWidth)
         }
+        ConfigGraphDTO(
+          action = Actions.CONFIG_GRAPH,
+          result = Some(ConfigGraphResultDTO(
+            steps = Some(configGraphSteps),
+            components = Some(configGraphComponents),
+            d3Data = Some(ConfigGraphD3DTO(
+              nodes = configGraphD3NodesDTO,
+              links = configGraphD3LinksDTO,
+              properties = ConfigGraphD3PropertiesDTO(
+                svgHeight = screenHeight,
+                svgWidth = screenWidth
+              )
+            )),
+            errors = None
+          )
+        ))
       case Some(error) => ConfigGraphDTO(
         action = Actions.CONFIG_GRAPH,
         result = Some(ConfigGraphResultDTO(
@@ -142,8 +141,19 @@ class ConfigGraph() {
 
     val allElem = ListBuffer[D3Node]()
 
-    calcPositionRecursive(allElem, Nil, vFirstStep, screenHeight, MutableInt(1))
+    val vComponents: List[OrientVertex] = getComponents(vFirstStep)
 
+    val vNextSteps : Set[OrientVertex] = getNextStep(vComponents)
+
+    val componentsNode : List[D3Node] = getConfigGraphD3Nodes(vComponents, vFirstStep, screenHeight, MutableInt(1))
+
+    if(vNextSteps.size == 0){
+      allElem ++= componentsNode
+    }else {
+      //TODO calcPositionRecursive aufrufen nur wenn vNextSteps != 0 ist
+      //Erste Step und deren Components werden ohne Reqursion gelesen
+      calcPositionRecursive(allElem, Nil, vFirstStep, screenHeight, MutableInt(1))
+    }
     allElem.toList
   }
 
@@ -160,7 +170,6 @@ class ConfigGraph() {
       val res = calcPositionRecursive(allElem, currentNodes, i, height, level)
       res
     }
-
     val list = cN.flatten.to[ListBuffer]
 
     allElem ++= list
@@ -258,18 +267,18 @@ class ConfigGraph() {
   }
 
   private def getConfigGraphEdgesDTO(
-                                      eHasSteps : List[OrientElement],
-                                      eHasComponents : List[OrientElement],
+                                      eHasSteps : List[OrientEdge],
+                                      eHasComponents : List[OrientEdge],
                                       configRid : String) : List[ConfigGraphEdgeDTO] = {
     val edgesHasStepsWithoutConfig =
-      eHasSteps.filterNot(_.asInstanceOf[OrientEdge].getOutVertex.getIdentity.toString().equals(configRid))
+      eHasSteps.filterNot(_.getOutVertex.getIdentity.toString().equals(configRid))
 
     val edgesHasSteps : List[ConfigGraphEdgeDTO] = edgesHasStepsWithoutConfig.map(hasStep => {
       val target : String = RidToHash.setIdAndHash(
-        hasStep.asInstanceOf[OrientEdge].getInVertex.getIdentity.toString
+        hasStep.getInVertex.getIdentity.toString
       )._2
       val source : String = RidToHash.setIdAndHash(
-        hasStep.asInstanceOf[OrientEdge].getOutVertex.getIdentity.toString
+        hasStep.getOutVertex.getIdentity.toString
       )._2
       ConfigGraphEdgeDTO(
         source = source,
@@ -279,10 +288,10 @@ class ConfigGraph() {
 
     val edgesHasComponents : List[ConfigGraphEdgeDTO] = eHasComponents.map(hasComponent => {
       val target : String = RidToHash.setIdAndHash(
-        hasComponent.asInstanceOf[OrientEdge].getInVertex.getIdentity.toString
+        hasComponent.getInVertex.getIdentity.toString
       )._2
       val source : String = RidToHash.setIdAndHash(
-        hasComponent.asInstanceOf[OrientEdge].getOutVertex.getIdentity.toString
+        hasComponent.getOutVertex.getIdentity.toString
       )._2
       ConfigGraphEdgeDTO(
         source = source,
