@@ -105,8 +105,6 @@ class Component() {
 
   def connectComponentToStepRequest(param: Option[Any]) : Unit = {
     val connectComponentToStep: String = Json.toJson(param.get.asInstanceOf[ComponentDTO]).toString()
-
-    println("OUT -> " + connectComponentToStep)
     WebSocketListner.webSocket.send(connectComponentToStep)
   }
 

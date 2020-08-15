@@ -9,8 +9,6 @@ import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.component.ComponentUserPropertiesDTO
 import org.genericConfig.admin.shared.configGraph._
 import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepPropertiesDTO}
-import play.api.Logger
-
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 
@@ -34,25 +32,10 @@ object ConfigGraph {
 
 class ConfigGraph() {
 
-  case class D3Node(
-                     id : String,
-                     nameToShow : String = "",
-                     level : MutableInt,
-                     orderNumber : Int,
-                     x : Double,
-                     y : Double
-                   )
-
-  implicit class MutableInt(var value : Int){
-    def get(): Int = value
-    def +(x : Int): Unit = {value = value + x}
-  }
-
   def configGraph(configGraphDTO: ConfigGraphDTO) : ConfigGraphDTO = {
 
     val configRid : String = RidToHash.getRId(configGraphDTO.params.get.configId).get
     val screenHeight : Int = (configGraphDTO.params.get.screenHeight.toDouble * 0.66).toInt
-    //TODO Den Faktor globalisieren
     val screenWidth : Int  = (configGraphDTO.params.get.screenWidth.toDouble * 0.69).toInt
     val (orientElems, error) : (Option[List[OrientElement]], Option[Error]) = GraphCommon.traverseOut(configRid)
 
@@ -60,8 +43,6 @@ class ConfigGraph() {
       case None =>
         val eSteps : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.VERTEX_STEP)
         val eComponents : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.VERTEX_COMPONENT)
-//        val eHasSteps : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_STEP)
-//        val eHasComponents : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_COMPONENT)
         val eHasSteps : List[OrientEdge] = eComponents.flatMap(sC => {
           sC.asInstanceOf[OrientVertex].getEdges(Direction.OUT, PropertyKeys.EDGE_HAS_STEP).asScala.toList.map(_.asInstanceOf[OrientEdge])
         })
@@ -108,6 +89,15 @@ class ConfigGraph() {
     }
   }
 
+  case class D3Node(
+                     id : String,
+                     nameToShow : String = "",
+                     level : MutableInt,
+                     orderNumber : Int,
+                     x : Double,
+                     y : Double
+                   )
+
   private def getConfigGraphD3NodesDTO(configRid : String, screenHeight : Int, screenWidth : Int) : List[ConfigGraphD3NodeDTO] = {
     val nodes : List[D3Node] = calcPosition(configRid, screenHeight)
 
@@ -143,15 +133,9 @@ class ConfigGraph() {
 
     val vComponents: List[OrientVertex] = getComponents(vFirstStep)
 
-    val vNextSteps : Set[OrientVertex] = getNextStep(vComponents)
-
-    val componentsNode : List[D3Node] = getConfigGraphD3Nodes(vComponents, vFirstStep, screenHeight, MutableInt(1))
-
-    if(vNextSteps.size == 0){
-      allElem ++= componentsNode
+    if(getNextStep(vComponents).isEmpty){
+      allElem ++= getConfigGraphD3Nodes(vComponents, vFirstStep, screenHeight, MutableInt(1))
     }else {
-      //TODO calcPositionRecursive aufrufen nur wenn vNextSteps != 0 ist
-      //Erste Step und deren Components werden ohne Reqursion gelesen
       calcPositionRecursive(allElem, Nil, vFirstStep, screenHeight, MutableInt(1))
     }
     allElem.toList
@@ -309,5 +293,10 @@ class ConfigGraph() {
         target = e.target
       )
     })
+  }
+
+  implicit class MutableInt(var value : Int){
+    def get(): Int = value
+    def +(x : Int): Unit = {value = value + x}
   }
 }

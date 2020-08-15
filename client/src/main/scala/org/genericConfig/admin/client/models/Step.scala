@@ -19,11 +19,9 @@ class Step {
   def addStepRequest(param: Option[Any]): Unit = {
     val id : String = param.get match {
       case param : ConfigGraphComponentDTO => param.componentId
-      case param : String => param.toString
+      case param : String => param
       case _ => "undefinedId"
     }
-    println("addStepRequest " + id)
-//    val componentDTO: ConfigGraphComponentDTO = param.get.asInstanceOf[ConfigGraphComponentDTO]
 
     val inputFieldNameToShow : String = jQuery(s"#${id}_addStepNameToShow").value().toString
     val inputFieldSelectionCriterionMin : String = jQuery(s"#${id}_MIN").value().toString

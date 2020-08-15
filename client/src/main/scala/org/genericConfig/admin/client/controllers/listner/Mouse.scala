@@ -42,7 +42,7 @@ class Mouse {
       case ActionsForClient.ADD_COMPONENT_PAGE => jQueryElem.on("click", () => new Component().showAddComponentPage(param))
       case ActionsForClient.ADD_STEP_PAGE => jQueryElem.on("click", () => new Step().showAddStepPage(param))
       case ActionsForClient.CONNECT_COMPONENT_TO_STEP_PAGE => jQueryElem.on("click", () => new Component().showConnectComponentToStepPage(param))
-      case _ => jQueryElem.on("click", () => new Start().actionGetUser()) //TODO eine Fehlerpage erstellen
+      case _ => jQueryElem.on("click", () => new Start().actionGetUser())
     }
   }
 }
