@@ -7,7 +7,7 @@ import org.genericConfig.admin.shared.component.{ComponentConfigPropertiesDTO, C
 import org.genericConfig.admin.shared.config.UserConfigDTO
 import org.genericConfig.admin.shared.configGraph.{ConfigGraphComponentDTO, ConfigGraphStepDTO}
 import org.scalajs.jquery.jQuery
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -77,9 +77,32 @@ class Component() {
     new NodeAddComponentPage().drawAddComponentPage(configGraphStepDTO)
   }
 
-  def updateComponent(param: Option[Any]) = {
+  def updateComponentRequest(param: Option[Any]) = {
     val componentDTO: ConfigGraphComponentDTO = param.get.asInstanceOf[ConfigGraphComponentDTO]
-    println("UPDATE_COMPONENT " + componentDTO.properties.nameToShow)
+    val inputFieldNameToShow : String = jQuery(s"#${componentDTO.componentId}_nameToShow").value().toString
+    val updateComponent: String = Json.toJson(ComponentDTO(
+      action = Actions.UPDATE_COMPONENT,
+      params = Some(ComponentParamsDTO(
+        configProperties = Some(ComponentConfigPropertiesDTO(
+          componentId = Some(componentDTO.componentId)
+        )),
+        userProperties = Some(ComponentUserPropertiesDTO(
+          nameToShow = Some(inputFieldNameToShow)
+        ))
+      ))
+    )).toString
+    println("OUT -> " + updateComponent)
+    WebSocketListner.webSocket.send(updateComponent)
+  }
+
+  def updateComponentResponse() : Unit = {
+    val state : State = Progress.getLastState.get
+
+    val userConfigDTO = UserConfigDTO(
+      configId = state.configDTO.get.params.get.configId
+    )
+
+    new ConfigGraph().configGraph(Some(userConfigDTO))
   }
 
   def addStep(param: Option[Any]) = {

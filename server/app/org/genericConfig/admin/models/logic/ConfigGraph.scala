@@ -9,6 +9,7 @@ import org.genericConfig.admin.shared.common.ErrorDTO
 import org.genericConfig.admin.shared.component.ComponentUserPropertiesDTO
 import org.genericConfig.admin.shared.configGraph.{ConfigGraphComponentDTO, ConfigGraphD3DTO, ConfigGraphD3LinkDTO, ConfigGraphD3NodeDTO, ConfigGraphD3PropertiesDTO, ConfigGraphDTO, ConfigGraphEdgeDTO, ConfigGraphResultDTO, ConfigGraphStepDTO}
 import org.genericConfig.admin.shared.step.{SelectionCriterionDTO, StepPropertiesDTO}
+import play.api.Logger
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
@@ -50,6 +51,7 @@ class ConfigGraph() {
   def configGraph(configGraphDTO: ConfigGraphDTO) : ConfigGraphDTO = {
 
     val configRid : String = RidToHash.getRId(configGraphDTO.params.get.configId).get
+    Logger.info("ConfigRId " + configRid)
     val screenHeight : Int = (configGraphDTO.params.get.screenHeight.toDouble * 0.66).toInt
     //TODO Den Faktor globalisieren
     val screenWidth : Int  = (configGraphDTO.params.get.screenWidth.toDouble * 0.69).toInt
@@ -58,36 +60,46 @@ class ConfigGraph() {
     error match {
       case None =>
         val eSteps : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.VERTEX_STEP)
-        val eComponents : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.VERTEX_COMPONENT)
-        val eHasSteps : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_STEP)
-        val eHasComponents : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_COMPONENT)
-
-        val configGraphSteps : List[ConfigGraphStepDTO] = getConfigGraphStepsDTO(eSteps)
-
-        val configGraphComponents : List[ConfigGraphComponentDTO] = getConfigGraphComponentsDTO(eComponents)
-
-        val edges : List[ConfigGraphEdgeDTO] = getConfigGraphEdgesDTO(eHasSteps, eHasComponents, configRid)
-
-        val configGraphD3LinksDTO : List[ConfigGraphD3LinkDTO] = getConfigGraphD3LinksDTO(edges)
-
-        val configGraphD3NodesDTO : List[ConfigGraphD3NodeDTO] = getConfigGraphD3NodesDTO(configRid, screenHeight, screenWidth)
-
-        ConfigGraphDTO(
-          action = Actions.CONFIG_GRAPH,
-          result = Some(ConfigGraphResultDTO(
-            steps = Some(configGraphSteps),
-            components = Some(configGraphComponents),
-            d3Data = Some(ConfigGraphD3DTO(
-              nodes = configGraphD3NodesDTO,
-              links = configGraphD3LinksDTO,
-              properties = ConfigGraphD3PropertiesDTO(
-                svgHeight = screenHeight,
-                svgWidth = screenWidth
-              )
-            )),
-            errors = None
+        Logger.info("eSteps length " +  eSteps)
+        if(eSteps.isEmpty){
+          ConfigGraphDTO(
+            action = Actions.CONFIG_GRAPH,
+            result = Some(ConfigGraphResultDTO(
+              errors = None
+            ))
           )
-        ))
+        }else {
+          val eComponents : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.VERTEX_COMPONENT)
+          val eHasSteps : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_STEP)
+          val eHasComponents : List[OrientElement] = orientElems.get.filter(_.getRecord.getClassName == PropertyKeys.EDGE_HAS_COMPONENT)
+
+          val configGraphSteps : List[ConfigGraphStepDTO] = getConfigGraphStepsDTO(eSteps)
+
+          val configGraphComponents : List[ConfigGraphComponentDTO] = getConfigGraphComponentsDTO(eComponents)
+
+          val edges : List[ConfigGraphEdgeDTO] = getConfigGraphEdgesDTO(eHasSteps, eHasComponents, configRid)
+
+          val configGraphD3LinksDTO : List[ConfigGraphD3LinkDTO] = getConfigGraphD3LinksDTO(edges)
+
+          val configGraphD3NodesDTO : List[ConfigGraphD3NodeDTO] = getConfigGraphD3NodesDTO(configRid, screenHeight, screenWidth)
+
+          ConfigGraphDTO(
+            action = Actions.CONFIG_GRAPH,
+            result = Some(ConfigGraphResultDTO(
+              steps = Some(configGraphSteps),
+              components = Some(configGraphComponents),
+              d3Data = Some(ConfigGraphD3DTO(
+                nodes = configGraphD3NodesDTO,
+                links = configGraphD3LinksDTO,
+                properties = ConfigGraphD3PropertiesDTO(
+                  svgHeight = screenHeight,
+                  svgWidth = screenWidth
+                )
+              )),
+              errors = None
+            )
+            ))
+        }
       case Some(error) => ConfigGraphDTO(
         action = Actions.CONFIG_GRAPH,
         result = Some(ConfigGraphResultDTO(

@@ -26,7 +26,7 @@ class Mouse {
       case Actions.UPDATE_STEP => jQueryElem.on("click" , () => new Step().updateStep(param))
       case Actions.ADD_COMPONENT => jQueryElem.on("click", () => new Component().addComponentRequest(param))
       case Actions.ADD_STEP => jQueryElem.on("click", () => new Component().addStep(param))
-      case Actions.UPDATE_COMPONENT => jQueryElem.on("click", () => new Component().updateComponent(param))
+      case Actions.UPDATE_COMPONENT => jQueryElem.on("click", () => new Component().updateComponentRequest(param))
       case Actions.DELETE_COMPONENT => jQueryElem.on("click", () => new Component().deleteComponentRequest(param))
         //Actions internal
       case ActionsForClient.REGISTER_PAGE => jQueryElem.on("click", () => new Register().register())
