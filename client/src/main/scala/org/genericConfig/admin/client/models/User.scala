@@ -15,7 +15,7 @@ import play.api.libs.json.Json
   */
 
 class User {
-  def showUser(param: Option[Any]): Unit = {
+  def getUserResponse(param: Option[Any]): Unit = {
     new UserPage().drawUserPageWithConfigPage(userDTO = Some(param.get.asInstanceOf[UserDTO]))
   }
 

@@ -14,16 +14,15 @@ import util.CommonFunction
  * Created by Gennadi Heimann 12.04.2018
  */
 
-class RegistrationPage() extends CommonFunction {
+class AddUserPage() extends CommonFunction {
 
-  def drawRegistrationPage(errors: Option[List[ErrorDTO]]): Unit = {
+  def drawAddUserPage(errors: Option[List[ErrorDTO]]): Unit = {
 
     cleanPage
 
     errors match {
-      case Some(errors) => drawNewStatus(errors.head.name)
-      case None =>
-        drawNewStatus("Kein Fehler")
+      case Some(errors) => HtmlElementText.drawAlert(errors.head)
+      case None => drawNewStatus("Kein Fehler")
     }
 
     val main : JQuery = HtmlElementText.mainPage("Registrierung")

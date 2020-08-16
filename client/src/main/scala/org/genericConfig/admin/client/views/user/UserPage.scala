@@ -25,8 +25,6 @@ class UserPage() extends CommonFunction{
 
     userDTO.result.get.errors match {
       case None =>
-        drawNewStatus("Kein Fehler")
-
         val main : JQuery = HtmlElementText.mainPage(s"Benutzer : ${userDTO.result.get.username.get}" )
         val jQueryButtonUpdateUser : JQuery = HtmlElementText.drawButton("updateUser", "Benutzer bearbeiten")
         val jQueryButtonDeleteUser : JQuery = HtmlElementText.drawButton("deleteUser", "Benutzer löschen")
@@ -40,7 +38,10 @@ class UserPage() extends CommonFunction{
 
         new Mouse().mouseClick(jQueryButtonUpdateUser, ActionsForClient.UPDATE_USER_PAGE, Some(userDTO))
         new Mouse().mouseClick(jQueryButtonLogout, ActionsForClient.START_PAGE)
-      case _ =>
+
+        new Config().getConfigs(Some(userDTO))
+      case Some(e) =>
+        HtmlElementText.drawAlert(e.head)
         new StartPage().drawStartPage(userDTO.result.get.errors)
     }
   }
@@ -49,7 +50,6 @@ class UserPage() extends CommonFunction{
     (userDTO, configDTO) match {
       case (Some(userDTO), None) =>
         drawUserPage(userDTO)
-        new Config().getConfigs(Some(userDTO))
       case (None, Some(configDTO)) =>
         new Config().showAllConfigsInUserPage(Some(configDTO))
       case (_) => println("Undefinierter Zustand") //TODO Fehlerseite darstellen

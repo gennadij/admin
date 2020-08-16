@@ -1,7 +1,7 @@
 package org.genericConfig.admin.client.models
 
 import org.genericConfig.admin.client.controllers.websocket.WebSocketListner
-import org.genericConfig.admin.client.views.user.RegistrationPage
+import org.genericConfig.admin.client.views.user.AddUserPage
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import org.scalajs.jquery.jQuery
@@ -14,8 +14,8 @@ import play.api.libs.json.Json
   */
 
 class Register {
-  def register(): Unit = {
-    new RegistrationPage().drawRegistrationPage(None)
+  def showAddUser(): Unit = {
+    new AddUserPage().drawAddUserPage(None)
   }
 
   def actionAddUser(): Unit = {

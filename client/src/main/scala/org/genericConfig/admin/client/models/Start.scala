@@ -18,7 +18,7 @@ class Start {
     new StartPage().drawStartPage(None)
   }
 
-  def actionGetUser(): Unit = {
+  def getUserRequest(): Unit = {
     val getUser = Json.toJson(UserDTO(
       action = Actions.GET_USER,
       params = Some(UserParamsDTO(

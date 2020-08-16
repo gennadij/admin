@@ -1,5 +1,6 @@
 package org.genericConfig.admin.client.views.html
 
+import org.genericConfig.admin.shared.common.ErrorDTO
 import org.scalajs.jquery.{JQuery, jQuery}
 
 /**
@@ -36,5 +37,10 @@ object HtmlElementText {
 
   def drawDiv(id : String, title : String = "", hValue : String = "2"): JQuery = {
     jQuery(s"<div id='$id'><h$hValue align='center'>$title</h$hValue></div>")
+  }
+
+  def drawAlert(e : ErrorDTO) = {
+    import org.scalajs.dom
+    dom.window.alert(s"message : ${e.message} | name : ${e.name} | code : ${e.code}")
   }
 }

@@ -1,7 +1,7 @@
 package org.genericConfig.admin.client.controllers.websocket
 
 import org.genericConfig.admin.client.models.{Start, User}
-import org.genericConfig.admin.client.views.user.RegistrationPage
+import org.genericConfig.admin.client.views.user.AddUserPage
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.user.UserDTO
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
@@ -35,14 +35,14 @@ class ConverterFromJsonForUser() {
   private def addUser(receivedMessage: JsValue): Unit = {
     Json.fromJson[UserDTO](receivedMessage) match {
       case addUserResult: JsSuccess[UserDTO] =>
-        new RegistrationPage().drawRegistrationPage(addUserResult.get.result.get.errors)
+        new AddUserPage().drawAddUserPage(addUserResult.get.result.get.errors)
       case e: JsError => println("Errors -> " + Actions.ADD_USER + ": " + JsError.toJson(e).toString())
     }
   }
 
   private def getUser(receivedMessage: JsValue): Unit = {
     Json.fromJson[UserDTO](receivedMessage) match {
-      case getUserResult: JsSuccess[UserDTO] => new User().showUser(Some(getUserResult.value))
+      case getUserResult: JsSuccess[UserDTO] => new User().getUserResponse(Some(getUserResult.value))
       case e: JsError => println("Errors -> " + Actions.GET_USER + ": " + JsError.toJson(e).toString())
     }
   }
@@ -56,7 +56,7 @@ class ConverterFromJsonForUser() {
 
   private def updateUser(receivedMessage: JsValue): Unit = {
     Json.fromJson[UserDTO](receivedMessage) match {
-      case updateUserResult: JsSuccess[UserDTO] => new User().showUser(Some(updateUserResult.value))
+      case updateUserResult: JsSuccess[UserDTO] => new User().getUserResponse(Some(updateUserResult.value))
       case e: JsError => println("Errors -> " + Actions.DELETE_USER + ": " + JsError.toJson(e).toString())
     }
   }

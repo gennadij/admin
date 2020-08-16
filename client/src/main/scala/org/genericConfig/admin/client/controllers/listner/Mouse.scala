@@ -16,7 +16,7 @@ class Mouse {
     //Param auf none Prüfen mit Exception
     action match {
         //Actions to Server
-      case Actions.GET_USER => jQueryElem.on("click", () => new Start().actionGetUser())
+      case Actions.GET_USER => jQueryElem.on("click", () => new Start().getUserRequest())
       case Actions.ADD_USER => jQueryElem.on("click", () => new Register().actionAddUser())
       case Actions.GET_CONFIGS => jQueryElem.on("click", () => new Config().getConfigs(param))
       case Actions.UPDATE_USER => jQueryElem.on("click", () => new User().updateUsername(param))
@@ -31,9 +31,9 @@ class Mouse {
       case Actions.DELETE_COMPONENT => jQueryElem.on("click", () => new Component().deleteComponentRequest(param))
       case Actions.CONNECT_COMPONENT_TO_STEP => jQueryElem.on("click", () => new Component().connectComponentToStepRequest(param))
         //Actions internal
-      case ActionsForClient.REGISTER_PAGE => jQueryElem.on("click", () => new Register().register())
+      case ActionsForClient.REGISTER_PAGE => jQueryElem.on("click", () => new Register().showAddUser())
       case ActionsForClient.START_PAGE => jQueryElem.on("click", () => new Start().start())
-      case ActionsForClient.USER_PAGE => jQueryElem.on("click", () => new User().showUser(param))
+      case ActionsForClient.USER_PAGE => jQueryElem.on("click", () => new User().getUserResponse(param))
       case ActionsForClient.UPDATE_USER_PAGE => jQueryElem.on("click", () => new User().showUpdateUserPage(param))
       case ActionsForClient.ADD_CONFIG_PAGE => jQueryElem.on("click", () => new Config().showAddConfigPage(param))
       case ActionsForClient.CONFIG_PAGE => jQueryElem.on("click", () => new Config().showConfigPage(param))
@@ -42,7 +42,7 @@ class Mouse {
       case ActionsForClient.ADD_COMPONENT_PAGE => jQueryElem.on("click", () => new Component().showAddComponentPage(param))
       case ActionsForClient.ADD_STEP_PAGE => jQueryElem.on("click", () => new Step().showAddStepPage(param))
       case ActionsForClient.CONNECT_COMPONENT_TO_STEP_PAGE => jQueryElem.on("click", () => new Component().showConnectComponentToStepPage(param))
-      case _ => jQueryElem.on("click", () => new Start().actionGetUser())
+      case _ => jQueryElem.on("click", () => new Start().getUserRequest())
     }
   }
 }
