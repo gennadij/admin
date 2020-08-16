@@ -114,7 +114,6 @@ class Component() {
     val userConfigDTO = UserConfigDTO(
       configId = state.configDTO.get.params.get.configId
     )
-    //TODO Progress zuruecksetzen
     new ConfigGraph().configGraph(Some(userConfigDTO))
   }
 }

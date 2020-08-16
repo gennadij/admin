@@ -17,7 +17,6 @@ class ConfigGraph {
   def configGraph(param: Option[Any]) = {
     val configId : String = param.get.asInstanceOf[UserConfigDTO].configId.get
 
-    //TODO dynamische SVG Anpassung damit gesamten ConfigGraph gut sichtbar ist
     val height = screen.height
     val width = screen.width
 

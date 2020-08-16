@@ -43,6 +43,10 @@ class UpdateStepSpecs extends Specification
   var stepIdOnlySCMax: Option[String] = _
   var uSOnlySCMaxResult : JsResult[StepDTO] = _
 
+  val configUrlOnlySCMax_2 = "updateStep_OnlySCMax_2"
+  var stepIdOnlySCMax_2 : Option[String] = _
+  var uSOnlySCMaxResult_2 : JsResult[StepDTO] = _
+
   def beforeAll(): Unit = {
     before()
   }
@@ -53,11 +57,11 @@ class UpdateStepSpecs extends Specification
     val errorSC = deleteVertex(RidToHash.getRId(stepIdOnlySC.get).get, PropertyKeys.VERTEX_STEP)
     val errorSCMIN = deleteVertex(RidToHash.getRId(stepIdOnlySCMin.get).get, PropertyKeys.VERTEX_STEP)
     val errorSCMax = deleteVertex(RidToHash.getRId(stepIdOnlySCMax.get).get, PropertyKeys.VERTEX_STEP)
-    Logger("Deleted Step error : " + errorAll)
-    Logger("Deleted Step error : " + errorNTS)
-    Logger("Deleted Step error : " + errorSC)
-    Logger("Deleted Step error : " + errorSCMIN)
-    Logger("Deleted Step error : " + errorSCMax)
+    Logger.info("Deleted Step error : " + errorAll)
+    Logger.info("Deleted Step error : " + errorNTS)
+    Logger.info("Deleted Step error : " + errorSC)
+    Logger.info("Deleted Step error : " + errorSCMIN)
+    Logger.info("Deleted Step error : " + errorSCMax)
   }
 
   "Der User aendert den Name und Auswahlkriterium bei dem Schritt" >> {
@@ -78,21 +82,21 @@ class UpdateStepSpecs extends Specification
     "User aendert Name Auswahlkriterium" >> {
       "action = UPDATE_STEP" >> {uSOnlySCResult.get.action === Actions.UPDATE_STEP}
       "stepId < 32 && > 10" >> {uSOnlySCResult.get.result.get.stepId.get.length must be_<=(32) and be_>(10)}
-      "Name = FirstStepToUpdate" >> {uSOnlySCResult.get.result.get.properties.get.nameToShow.get === "FirstStepToUpdate"}
+      "Name = FirstStepToUpdateOnlySC" >> {uSOnlySCResult.get.result.get.properties.get.nameToShow.get === "FirstStepToUpdateOnlySC"}
       "MIN = 2" >> {uSOnlySCResult.get.result.get.properties.get.selectionCriterion.get.min.get === 2}
       "MAX = 2" >> {uSOnlySCResult.get.result.get.properties.get.selectionCriterion.get.max.get === 2}
     }
     "User aendert Name Auswahlkriterium nur Min" >> {
       "action = UPDATE_STEP" >> {uSOnlySCMinResult.get.action === Actions.UPDATE_STEP}
       "stepId < 32 && > 10" >> {uSOnlySCMinResult.get.result.get.stepId.get.length must be_<=(32) and be_>(10)}
-      "Name = FirstStepToUpdate" >> {uSOnlySCMinResult.get.result.get.properties.get.nameToShow.get === "FirstStepToUpdate"}
+      "Name = FirstStepToUpdateOnlySCMin" >> {uSOnlySCMinResult.get.result.get.properties.get.nameToShow.get === "FirstStepToUpdateOnlySCMin"}
       "MIN = 2" >> {uSOnlySCMinResult.get.result.get.properties.get.selectionCriterion.get.min.get === 2}
       "MAX = 1" >> {uSOnlySCMinResult.get.result.get.properties.get.selectionCriterion.get.max.get === 1}
     }
     "User aendert Name Auswahlkriterium nur Max" >> {
       "action = UPDATE_STEP" >> {uSOnlySCMaxResult.get.action === Actions.UPDATE_STEP}
       "stepId < 32 && > 10" >> {uSOnlySCMaxResult.get.result.get.stepId.get.length must be_<=(32) and be_>(10)}
-      "Name = FirstStepToUpdate" >> {uSOnlySCMaxResult.get.result.get.properties.get.nameToShow.get === "FirstStepToUpdate"}
+      "Name = FirstStepToUpdateOnlySCMax" >> {uSOnlySCMaxResult.get.result.get.properties.get.nameToShow.get === "FirstStepToUpdateOnlySCMax"}
       "MIN = 1" >> {uSOnlySCMaxResult.get.result.get.properties.get.selectionCriterion.get.min.get === 1}
       "MAX = 2" >> {uSOnlySCMaxResult.get.result.get.properties.get.selectionCriterion.get.max.get === 2}
     }
@@ -106,6 +110,7 @@ class UpdateStepSpecs extends Specification
     createStepForUpdateOnlySC(userId)
     createStepForUpdateOnlySCMin(userId)
     createStepForUpdateOnlySCMax(userId)
+    createStepForUpdateOnlySCMax_2(userId)
   }
 
   def createStepForUpdateAll(userId : String): Unit = {
@@ -156,7 +161,7 @@ class UpdateStepSpecs extends Specification
 
   def createStepForUpdateOnlySC(userId : String): Unit = {
     val configId = createConfig(userId, s"http://contig/$configUrlOnlySC")
-    val nameToShow: Option[String] = Some("FirstStepToUpdate")
+    val nameToShow: Option[String] = Some("FirstStepToUpdateOnlySC")
     val kind : Option[String] = Some("first")
 
     stepIdOnlySC = addStep(nameToShow, Some(configId), kind, 1, 1, wC)
@@ -180,7 +185,7 @@ class UpdateStepSpecs extends Specification
 
   def createStepForUpdateOnlySCMin(userId : String): Unit = {
     val configId = createConfig(userId, s"http://contig/$configUrlOnlySCMin")
-    val nameToShow: Option[String] = Some("FirstStepToUpdate")
+    val nameToShow: Option[String] = Some("FirstStepToUpdateOnlySCMin")
     val kind : Option[String] = Some("first")
 
     stepIdOnlySCMin = addStep(nameToShow, Some(configId), kind, 1, 1, wC)
@@ -203,7 +208,7 @@ class UpdateStepSpecs extends Specification
 
   def createStepForUpdateOnlySCMax(userId : String): Unit = {
     val configId = createConfig(userId, s"http://contig/$configUrlOnlySCMax")
-    val nameToShow: Option[String] = Some("FirstStepToUpdate")
+    val nameToShow: Option[String] = Some("FirstStepToUpdateOnlySCMax")
     val kind : Option[String] = Some("first")
 
     stepIdOnlySCMax = addStep(nameToShow, Some(configId), kind, 1, 1, wC)
@@ -222,5 +227,29 @@ class UpdateStepSpecs extends Specification
     Logger.info("UPDATE_STEP_MAX -> " + updateFirstStepParams)
     uSOnlySCMaxResult = Json.fromJson[StepDTO](wC.handleMessage(updateFirstStepParams))
     Logger.info("UPDATE_STEP_MAX <- " + Json.toJson[StepDTO](uSOnlySCMaxResult.get))
+  }
+
+  def createStepForUpdateOnlySCMax_2(userId : String): Unit = {
+//    val configId = createConfig(userId, s"http://contig/$configUrlOnlySCMax_2")
+//    val nameToShow: Option[String] = Some("FirstStepToUpdateOnlySCMax")
+//    val kind : Option[String] = Some("first")
+
+//    stepIdOnlySCMax = addStep(nameToShow, Some(configId), kind, 1, 1, wC)
+
+    val updateFirstStepParams: JsValue = Json.toJson(StepDTO(
+      action = Actions.UPDATE_STEP,
+      params = Some(StepParamsDTO(
+        stepId = stepIdOnlySCMax,
+        properties = Some(StepPropertiesDTO(
+          selectionCriterion = Some(SelectionCriterionDTO(
+            max = Some(3),
+            min = Some(4)
+          ))
+        ))
+      ))
+    ))
+    Logger.info("UPDATE_STEP_MAX -> " + updateFirstStepParams)
+    uSOnlySCMaxResult_2 = Json.fromJson[StepDTO](wC.handleMessage(updateFirstStepParams))
+    Logger.info("UPDATE_STEP_MAX <- " + Json.toJson[StepDTO](uSOnlySCMaxResult_2.get))
   }
 }

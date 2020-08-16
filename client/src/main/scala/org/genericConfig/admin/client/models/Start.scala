@@ -5,6 +5,7 @@ import org.genericConfig.admin.client.views.StartPage
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO}
 import play.api.libs.json.Json
+import org.scalajs.jquery.jQuery
 
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
@@ -21,8 +22,8 @@ class Start {
     val getUser = Json.toJson(UserDTO(
       action = Actions.GET_USER,
       params = Some(UserParamsDTO(
-        username = "configGraph_V0.1", //jQuery("#username").value().toString,
-        password = "configGraph_V0.1", //jQuery("#password").value().toString,
+        username = jQuery("#username").value().toString,
+        password = jQuery("#password").value().toString,
         update = None,
 
       )),
@@ -31,8 +32,4 @@ class Start {
     println("OUT -> " + getUser)
     WebSocketListner.webSocket.send(getUser)
   }
-
-//  def showUserPage(param : Option[Any]): Unit = {
-//    new UserPage().drawUserPage(param.get.asInstanceOf[UserDTO])
-//  }
 }
