@@ -1,11 +1,21 @@
 package org.genericConfig.admin.controllers.converter
 
+import org.genericConfig.admin.shared.Actions
+import org.genericConfig.admin.shared.dependency.DependencyDTO
+import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
+
 /**
  * Copyright (C) 2016 Gennadi Heimann genaheimann@gmail.com
  *
  * Created by Gennadi Heimann 19.05.2020
  */
-trait ConverterJsonDTOForDependency {
+trait ConverterJsonDTOForDependency extends ConverterJsonDTOForCommon{
+  private[converter] def addConfig(receivedMessage: JsValue): JsValue = {
+    Json.fromJson[DependencyDTO](receivedMessage) match {
+      case addDependencyParams : JsSuccess[DependencyDTO] => Json.toJson(Dependency.addDependency(addDependencyParams.value))
+      case e: JsError => jsonError(Actions.DELETE_DEPENDENCY, e)
+    }
+  }
   //  private def createDependency(receivedMessage: JsValue, admin: Admin): JsValue = {
   //    val dependencyIn: JsResult[JsonDependencyIn] = Json.fromJson[JsonDependencyIn](receivedMessage)
   //    dependencyIn match {

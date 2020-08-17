@@ -40,7 +40,10 @@ trait MessageHandler
 
       case Some(Actions.CONNECT_COMPONENT_TO_STEP) => connectComponentToStep(receivedMessage)
 
-      //      case Some(JsonNames.CREATE_DEPENDENCY) => createDependency(receivedMessage, admin)
+      case Some(Actions.ADD_DEPENDENCY) => ???
+      case Some(Actions.DELETE_DEPENDENCY) => ???
+      case Some(Actions.UPDATE_DEPENDENCY) => ???
+
       //      case Some(JsonNames.VISUAL_PROPOSAL_FOR_ADDITIONAL_STEPS_IN_ON_LEVEL) =>
       //        visualProposalForAdditionalStepsInOneLevel(receivedMessage, admin)
       case _ => Json.obj("error" -> "keinen Treffer")
