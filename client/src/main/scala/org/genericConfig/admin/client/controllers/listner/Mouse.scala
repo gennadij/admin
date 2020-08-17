@@ -16,8 +16,8 @@ class Mouse {
     //Param auf none Prüfen mit Exception
     action match {
         //Actions to Server
-      case Actions.GET_USER => jQueryElem.on("click", () => new Start().getUserRequest())
-      case Actions.ADD_USER => jQueryElem.on("click", () => new Register().actionAddUser())
+      case Actions.GET_USER => jQueryElem.on("click", () => new User().getUserRequest())
+      case Actions.ADD_USER => jQueryElem.on("click", () => new User().addUserRequest())
       case Actions.GET_CONFIGS => jQueryElem.on("click", () => new Config().getConfigs(param))
       case Actions.UPDATE_USER => jQueryElem.on("click", () => new User().updateUsername(param))
       case Actions.DELETE_USER => jQueryElem.on("click", () => new User().deleteUser(param))
@@ -42,7 +42,7 @@ class Mouse {
       case ActionsForClient.ADD_COMPONENT_PAGE => jQueryElem.on("click", () => new Component().showAddComponentPage(param))
       case ActionsForClient.ADD_STEP_PAGE => jQueryElem.on("click", () => new Step().showAddStepPage(param))
       case ActionsForClient.CONNECT_COMPONENT_TO_STEP_PAGE => jQueryElem.on("click", () => new Component().showConnectComponentToStepPage(param))
-      case _ => jQueryElem.on("click", () => new Start().getUserRequest())
+      case _ => jQueryElem.on("click", () => new User().getUserRequest())
     }
   }
 }

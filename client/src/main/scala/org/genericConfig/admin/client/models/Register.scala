@@ -18,19 +18,5 @@ class Register {
     new AddUserPage().drawAddUserPage(None)
   }
 
-  def actionAddUser(): Unit = {
-    val addUser = Json.toJson(
-      UserDTO(
-        action = Actions.ADD_USER,
-        params = Some(UserParamsDTO(
-          username = jQuery("#username").value().toString,
-          password = jQuery("#password").value().toString,
-          update = None,
-        )),
-        result = None
-      )
-    ).toString
-    println("OUT -> " + addUser)
-    WebSocketListner.webSocket.send(addUser)
-  }
+
 }

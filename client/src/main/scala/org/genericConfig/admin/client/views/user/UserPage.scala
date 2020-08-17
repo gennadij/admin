@@ -41,7 +41,7 @@ class UserPage() extends CommonFunction{
 
         new Config().getConfigs(Some(userDTO))
       case Some(e) =>
-        HtmlElementText.drawAlert(e.head)
+        HtmlElementText.drawErrorAlert(e.head)
         new StartPage().drawStartPage(userDTO.result.get.errors)
     }
   }

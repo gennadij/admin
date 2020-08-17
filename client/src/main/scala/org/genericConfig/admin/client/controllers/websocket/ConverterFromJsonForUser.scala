@@ -34,8 +34,7 @@ object ConverterFromJsonForUser {
 class ConverterFromJsonForUser() {
   private def addUser(receivedMessage: JsValue): Unit = {
     Json.fromJson[UserDTO](receivedMessage) match {
-      case addUserResult: JsSuccess[UserDTO] =>
-        new AddUserPage().drawAddUserPage(addUserResult.get.result.get.errors)
+      case addUserResult: JsSuccess[UserDTO] => new User().addUserResponse(Some(addUserResult.value))
       case e: JsError => println("Errors -> " + Actions.ADD_USER + ": " + JsError.toJson(e).toString())
     }
   }

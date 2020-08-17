@@ -1,8 +1,9 @@
 package org.genericConfig.admin.client.models
 
 import org.genericConfig.admin.client.controllers.websocket.WebSocketListner
-import org.genericConfig.admin.client.views.html.HtmlElementIds
-import org.genericConfig.admin.client.views.user.{UpdateUserPage, UserPage}
+import org.genericConfig.admin.client.views.StartPage
+import org.genericConfig.admin.client.views.html.{HtmlElementIds, HtmlElementText}
+import org.genericConfig.admin.client.views.user.{AddUserPage, UpdateUserPage, UserPage}
 import org.genericConfig.admin.shared.Actions
 import org.genericConfig.admin.shared.user.{UserDTO, UserParamsDTO, UserUpdateDTO}
 import org.scalajs.jquery.jQuery
@@ -15,9 +16,46 @@ import play.api.libs.json.Json
   */
 
 class User {
+  def getUserRequest(): Unit = {
+    val getUser = Json.toJson(UserDTO(
+      action = Actions.GET_USER,
+      params = Some(UserParamsDTO(
+        username = jQuery("#username").value().toString,
+        password = jQuery("#password").value().toString,
+        update = None,
+
+      )),
+      result = None
+    )).toString
+    println("OUT -> " + getUser)
+    WebSocketListner.webSocket.send(getUser)
+  }
+
   def getUserResponse(param: Option[Any]): Unit = {
     new UserPage().drawUserPageWithConfigPage(userDTO = Some(param.get.asInstanceOf[UserDTO]))
   }
+
+  def addUserRequest(): Unit = {
+    val addUser = Json.toJson(
+      UserDTO(
+        action = Actions.ADD_USER,
+        params = Some(UserParamsDTO(
+          username = jQuery("#username").value().toString,
+          password = jQuery("#password").value().toString,
+          update = None,
+        )),
+        result = None
+      )
+    ).toString
+    println("OUT -> " + addUser)
+    WebSocketListner.webSocket.send(addUser)
+  }
+
+  def addUserResponse(param: Option[Any]): Unit = {
+    HtmlElementText.drawAlert("User : " + param.get.asInstanceOf[UserDTO].result.head.username.get + " wurde regestriert")
+    new StartPage().drawStartPage(None)
+  }
+
 
   def showUpdateUserPage(param : Option[Any]) : Unit = {
     new UpdateUserPage().drawUpdateUserPage(param.get.asInstanceOf[UserDTO])

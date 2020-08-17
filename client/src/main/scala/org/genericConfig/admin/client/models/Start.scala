@@ -17,19 +17,4 @@ class Start {
   def start(): Unit = {
     new StartPage().drawStartPage(None)
   }
-
-  def getUserRequest(): Unit = {
-    val getUser = Json.toJson(UserDTO(
-      action = Actions.GET_USER,
-      params = Some(UserParamsDTO(
-        username = jQuery("#username").value().toString,
-        password = jQuery("#password").value().toString,
-        update = None,
-
-      )),
-      result = None
-    )).toString
-    println("OUT -> " + getUser)
-    WebSocketListner.webSocket.send(getUser)
-  }
 }

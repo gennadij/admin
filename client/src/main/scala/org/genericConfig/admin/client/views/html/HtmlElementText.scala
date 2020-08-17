@@ -39,8 +39,12 @@ object HtmlElementText {
     jQuery(s"<div id='$id'><h$hValue align='center'>$title</h$hValue></div>")
   }
 
-  def drawAlert(e : ErrorDTO) = {
+  def drawErrorAlert(e : ErrorDTO): Unit = {
     import org.scalajs.dom
     dom.window.alert(s"message : ${e.message} | name : ${e.name} | code : ${e.code}")
+  }
+  def drawAlert(text: String): Unit = {
+    import org.scalajs.dom
+    dom.window.alert(s"$text")
   }
 }
