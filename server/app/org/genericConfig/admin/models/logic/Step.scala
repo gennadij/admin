@@ -53,7 +53,7 @@ class Step {
       case Some(outRid) =>
         GraphStep.isStepAlone(outRid) match {
           case None => (GraphStep.addStep(stepDTO) : @unchecked) match {
-            case (Some(vStep), None) => GraphCommon.appendTo(
+            case (Some(vStep), None) => GraphCommon.addEdge(
               outRid, vStep.getIdentity.toString(), PropertyKeys.EDGE_HAS_STEP
             ) match {
               case None => createStepDTO(

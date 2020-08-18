@@ -66,7 +66,7 @@ class Component {
       case None =>
         val inRid: String = vComponent.get.getIdentity.toString
         val label: String = PropertyKeys.EDGE_HAS_COMPONENT
-        GraphCommon.appendTo(stepRid, inRid, label) match {
+        GraphCommon.addEdge(stepRid, inRid, label) match {
           case None => createComponentDTO(
             Actions.ADD_COMPONENT,
             Some(vComponent.get.getIdentity.toString),
@@ -113,7 +113,7 @@ class Component {
     val stepRid : String = RidToHash.getRId(componentDTO.params.get.configProperties.get.stepId.get).get
     val componentRid : String = RidToHash.getRId(componentDTO.params.get.configProperties.get.componentId.get).get
 
-    val error : Option[Error] = GraphCommon.appendTo(componentRid, stepRid, PropertyKeys.EDGE_HAS_STEP)
+    val error : Option[Error] = GraphCommon.addEdge(componentRid, stepRid, PropertyKeys.EDGE_HAS_STEP)
 
     error match {
       case None => createComponentDTO(

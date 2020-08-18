@@ -2,7 +2,7 @@ package org.genericConfig.admin.models.persistence.orientdb
 
 import com.orientechnologies.orient.core.sql.{OCommandSQL, OCommandSQLParsingException}
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
-import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientElement, OrientGraph, OrientVertex}
+import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientEdge, OrientElement, OrientGraph, OrientVertex}
 import org.genericConfig.admin.models.common.{DefectRIdError, Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBWriteError}
 import org.genericConfig.admin.models.persistence.Database
 import play.api.Logger
@@ -21,11 +21,11 @@ object GraphCommon {
     * @param outRid : String, inRid: String. label : String
     * @return Option[Error)
     */
-  def appendTo(outRid: String, inRid: String, label: String): Option[Error] = {
+  def addEdge(outRid: String, inRid: String, label: String): Option[Error] = {
     (Database.getFactory(): @unchecked) match {
       case (Some(dbFactory), None) =>
         val graph: OrientGraph = dbFactory.getTx
-        new GraphCommon(graph).appendTo(outRid, inRid, label)
+        new GraphCommon(graph).addEdge(outRid, inRid, label)
       case (None, Some(ODBConnectionFail())) =>
         Some(ODBConnectionFail())
     }
@@ -79,11 +79,47 @@ object GraphCommon {
 
 class GraphCommon(graph: OrientGraph) {
 
-  private def appendTo(outRid: String, inRid: String, label : String) : Option[Error] = {
+  private def addEdge(outRid: String, inRid: String, label : String) : Option[Error] = {
     try {
       val vOut : OrientVertex = graph.getVertex(outRid)
       val vIn : OrientVertex = graph.getVertex(inRid)
       graph.addEdge(PropertyKeys.CLASS + label, vOut, vIn, label)
+      graph.commit()
+      None
+    } catch {
+      case e: ORecordDuplicatedException =>
+        Logger.error(e.printStackTrace().toString)
+        graph.rollback()
+        Some(ODBRecordDuplicated())
+      case e: ClassCastException =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        Some(ODBClassCastError())
+      case e: Exception =>
+        graph.rollback()
+        Logger.error(e.printStackTrace().toString)
+        Some(ODBWriteError())
+    }
+  }
+
+  private def addEdge_2(
+                         outRid: String,
+                         inRid: String,
+                         label : String,
+                         properties : Option[List[(String, Option[String])]]) : Option[Error] = {
+    try {
+      val vOut : OrientVertex = graph.getVertex(outRid)
+      val vIn : OrientVertex = graph.getVertex(inRid)
+
+
+      val props : Map[String, Object] = properties.get.map(p => {
+        (p._1, p._2.get)
+      }).toMap
+
+      // CREATE EDGE E1 FROM #10:3 TO #11:4 SET brand = 'fiat', name = 'wow'
+
+      val edge : OrientEdge = graph.addEdge(PropertyKeys.CLASS + label, vOut, vIn, label)
+
       graph.commit()
       None
     } catch {
@@ -177,6 +213,8 @@ class GraphCommon(graph: OrientGraph) {
         (None, Some(ODBWriteError()))
     }
   }
+
+
 //  /**
 //    * @author Gennadi Heimann
 //    * @version 0.1.6
