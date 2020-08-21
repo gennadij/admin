@@ -2,7 +2,7 @@ package org.genericConfig.admin.models.persistence.orientdb
 
 import com.orientechnologies.orient.core.sql.{OCommandSQL, OCommandSQLParsingException}
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
-import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientEdge, OrientElement, OrientGraph, OrientVertex}
+import com.tinkerpop.blueprints.impls.orient.{OrientDynaElementIterable, OrientElement, OrientGraph, OrientVertex}
 import org.genericConfig.admin.models.common.{DefectRIdError, Error, ODBClassCastError, ODBConnectionFail, ODBRecordDuplicated, ODBWriteError}
 import org.genericConfig.admin.models.persistence.Database
 import play.api.Logger
@@ -26,6 +26,16 @@ object GraphCommon {
       case (Some(dbFactory), None) =>
         val graph: OrientGraph = dbFactory.getTx
         new GraphCommon(graph).addEdge(outRid, inRid, label)
+      case (None, Some(ODBConnectionFail())) =>
+        Some(ODBConnectionFail())
+    }
+  }
+
+  def addEdge_2(outRid: String, inRid: String, label: String, properties : Option[List[(String, Option[String])]]): Option[Error] = {
+    (Database.getFactory(): @unchecked) match {
+      case (Some(dbFactory), None) =>
+        val graph: OrientGraph = dbFactory.getTx
+        new GraphCommon(graph).addEdge_2(outRid, inRid, label, properties)
       case (None, Some(ODBConnectionFail())) =>
         Some(ODBConnectionFail())
     }
@@ -105,20 +115,23 @@ class GraphCommon(graph: OrientGraph) {
   private def addEdge_2(
                          outRid: String,
                          inRid: String,
-                         label : String,
+                         clazz : String,
                          properties : Option[List[(String, Option[String])]]) : Option[Error] = {
     try {
       val vOut : OrientVertex = graph.getVertex(outRid)
       val vIn : OrientVertex = graph.getVertex(inRid)
 
-
-      val props : Map[String, Object] = properties.get.map(p => {
-        (p._1, p._2.get)
-      }).toMap
-
       // CREATE EDGE E1 FROM #10:3 TO #11:4 SET brand = 'fiat', name = 'wow'
+      //Vertex #50:105
+      //Vertex #52:94
+      //Edge #53:2
 
-      val edge : OrientEdge = graph.addEdge(PropertyKeys.CLASS + label, vOut, vIn, label)
+//      create Edge hasDependency from #50:105 to #52:94 set dependencyType="exclude",
+//      visualization="auto", strategyOfDependencyResolver="auto"
+
+      val sql: String = s"create Edge ${clazz} from ${outRid} to ${inRid} set ${assemblePropForUpdateStep(properties.get)}"
+      Logger.info("SQL : " + sql)
+//      val edge : OrientEdge = graph.addEdge(PropertyKeys.CLASS + clazz, vOut, vIn, clazz)
 
       graph.commit()
       None
@@ -211,6 +224,24 @@ class GraphCommon(graph: OrientGraph) {
         graph.rollback()
         Logger.error(e.printStackTrace().toString)
         (None, Some(ODBWriteError()))
+    }
+  }
+
+  //TODO Function verallgemeinern
+  def assemblePropForUpdateStep(params : List[(String, Option[String])]) : String = params match {
+    case param :: rest => param._2 match {
+      case Some(p) =>
+        s"${param._1}='$p'${detectComa(rest)} ${assemblePropForUpdateStep(rest)}"
+      case None => assemblePropForUpdateStep(rest)
+    }
+    case Nil => ""
+  }
+  //TODO Function verallgemeinern
+  def detectComa(rest : List[(String, Option[String])]) : String = rest match {
+    case Nil => ""
+    case param :: rest  =>  param._2 match {
+      case Some(p) => ","
+      case None => ""
     }
   }
 
